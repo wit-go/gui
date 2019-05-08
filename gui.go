@@ -224,9 +224,9 @@ func setupUI() {
 	mainwin.SetChild(maintab)
 	mainwin.SetMargined(true)
 
-	maintab.Append("List examples", makeNumbersPage())
+	// maintab.Append("List examples", makeNumbersPage())
 	tabcount = 0
-	maintab.SetMargined(tabcount, true)
+	// maintab.SetMargined(tabcount, true)
 
 /*
 	maintab.Append("Choosers examples", makeDataChoosersPage())
@@ -243,8 +243,8 @@ func setupUI() {
 
 func AddChoosersDemo() {
 	maintab.Append("Choosers examples", makeDataChoosersPage())
-	tabcount += 1
 	maintab.SetMargined(tabcount, true)
+	tabcount += 1
 }
 
 // This hangs on GTK
@@ -287,9 +287,9 @@ func AddTableTab(name string, rowcount int, row1name string) {
 	appendTextColumn        (mh, table, 8, "jwc8col")
 	table.AppendButtonColumn("button9", 9, ui.TableModelColumnAlwaysEditable)
 
-	tabcount += 1
 	maintab.Append(name, table)
 	maintab.SetMargined(tabcount, true)
+	tabcount += 1
 }
 
 func DoGUI() {
