@@ -256,10 +256,10 @@ func AddEntriesDemo() {
 
 func initRow(mh *tableData, row int) {
 	initRowBTcolor        (mh, row, 0)
-	initRowTextColorColumn(mh, row, 1, 2, "diff1", ui.TableColor{0.9, 0, 0, 1})
+	initRowTextColorColumn(mh, row, 1, 2, "diff1", ui.TableColor{0.0, 0, 0.9, 1})
 	initRowButtonColumn   (mh, row, 3,    "diff2")
-	initRowTextColorColumn(mh, row, 4, 5, "diff3", ui.TableColor{0.0, 0.9, 0.4, 1})
-	initRowTextColorColumn(mh, row, 6, 7, "diff4", ui.TableColor{0.3, 0.1, 0.9, 1})
+	initRowTextColorColumn(mh, row, 4, 5, "diff3", ui.TableColor{0.4, 0.9, 0.0, 1})
+	initRowTextColorColumn(mh, row, 6, 7, "diff4", ui.TableColor{0.9, 0.3, 0.1, 1})
 	initRowTextColumn     (mh, row, 8,    "diff5")
 	initRowButtonColumn   (mh, row, 9,    "diff6")
 }
@@ -288,6 +288,7 @@ func AddTableTab(name string, rowcount int, row1name string) {
 	b := make([]rowData, 5)
 	mh.rows = append(mh.rows, b...)
 
+	initRow(mh, 2)
 	initRow(mh, mh.rowcount)
 	mh.rowcount    = rowcount + 1
 
