@@ -7,6 +7,8 @@ import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
+// import "github.com/davecgh/go-spew/spew"
+
 var img [2]*ui.Image
 
 type cellData struct {
@@ -55,6 +57,17 @@ func initBTcolor(mh *tableData, intBG int) {
 	}
 }
 
+func initRowBTcolor(mh *tableData, row int, intBG int) {
+	// alternate background of each row light and dark
+	if (row % 2) == 1 {
+		mh.rows[row].cells[intBG].value = ui.TableColor{0.5, 0.5, 0.5, .7}
+		mh.rows[row].cells[intBG].name = "BG"
+	} else {
+		mh.rows[row].cells[intBG].value = ui.TableColor{0.1, 0.1, 0.1, .1}
+		mh.rows[row].cells[intBG].name = "BG"
+	}
+}
+
 func initButtonColumn(mh *tableData, buttonID int, junk string) {
 	mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableString(""))
 
@@ -63,6 +76,12 @@ func initButtonColumn(mh *tableData, buttonID int, junk string) {
 		mh.rows[i].cells[buttonID].value = ui.TableString(fmt.Sprintf("%s %d", junk, i))
 		mh.rows[i].cells[buttonID].name = "BUTTON"
 	}
+}
+
+func initRowButtonColumn(mh *tableData, row int, buttonID int, junk string) {
+	// set the button text for Column ?
+	mh.rows[row].cells[buttonID].value = ui.TableString(fmt.Sprintf("%s %d", junk, row))
+	mh.rows[row].cells[buttonID].name = "BUTTON"
 }
 
 func initTextColorColumn(mh *tableData, stringID int, colorID int, junk string, color ui.TableColor) {
@@ -82,6 +101,16 @@ func initTextColorColumn(mh *tableData, stringID int, colorID int, junk string, 
 	}
 }
 
+func initRowTextColorColumn(mh *tableData, row int, stringID int, colorID int, junk string, color ui.TableColor) {
+	// text for Column ?
+	mh.rows[row].cells[stringID].value = ui.TableString(fmt.Sprintf("%s %d", junk, row))
+	mh.rows[row].cells[stringID].name = "EDIT"
+
+	// text color for Column ?
+	mh.rows[row].cells[colorID].value = color
+	mh.rows[row].cells[colorID].name = "COLOR"
+}
+
 func initTextColumn(mh *tableData, stringID int, junk string) {
 	mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableString(""))
 
@@ -92,6 +121,11 @@ func initTextColumn(mh *tableData, stringID int, junk string) {
 		mh.rows[i].cells[stringID].value = ui.TableString(fmt.Sprintf("%s %d", junk, i))
 		mh.rows[i].cells[stringID].name = "EDIT"
 	}
+}
+
+func initRowTextColumn(mh *tableData, row int, stringID int, junk string) {
+	mh.rows[row].cells[stringID].value = ui.TableString(fmt.Sprintf("%s %d", junk, row))
+	mh.rows[row].cells[stringID].name = "EDIT"
 }
 
 func appendTextColorColumn(mh *tableData, table *ui.Table, stringID int, colorID int, columnName string) {

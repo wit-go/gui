@@ -254,6 +254,16 @@ func AddEntriesDemo() {
 	maintab.SetMargined(tabcount, true)
 }
 
+func initRow(mh *tableData, row int) {
+	initRowBTcolor        (mh, row, 0)
+	initRowTextColorColumn(mh, row, 1, 2, "diff1", ui.TableColor{0.9, 0, 0, 1})
+	initRowButtonColumn   (mh, row, 3,    "diff2")
+	initRowTextColorColumn(mh, row, 4, 5, "diff3", ui.TableColor{0.0, 0.9, 0.4, 1})
+	initRowTextColorColumn(mh, row, 6, 7, "diff4", ui.TableColor{0.3, 0.1, 0.9, 1})
+	initRowTextColumn     (mh, row, 8,    "diff5")
+	initRowButtonColumn   (mh, row, 9,    "diff6")
+}
+
 func AddTableTab(name string, rowcount int, row1name string) {
 	mh := new(tableData)
 
@@ -271,6 +281,24 @@ func AddTableTab(name string, rowcount int, row1name string) {
 	initTextColorColumn(mh, 6, 7, "jwc67blah", ui.TableColor{0.3, 0.1, 0.9, 1})
 	initTextColumn     (mh, 8,    "jwc8blah")
 	initButtonColumn   (mh, 9,    "but9ton")
+
+	// spew.Dump(mh)
+	log.Println(mh)
+
+	b := make([]rowData, 5)
+	mh.rows = append(mh.rows, b...)
+
+	initRow(mh, mh.rowcount)
+	mh.rowcount    = rowcount + 1
+
+	log.Println(mh)
+
+/*
+	mh.rowcount    = rowcount
+	initRow(mh, mh.rowcount)
+
+	spew.Dump(mh)
+*/
 
 	model := ui.NewTableModel(mh)
 
