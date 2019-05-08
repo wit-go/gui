@@ -11,6 +11,11 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 var img [2]*ui.Image
 
+/*
+        img[0] = ui.NewImage(16, 16)
+        img[1] = ui.NewImage(16, 16)
+*/
+
 type cellData struct {
 	index		int
 	value		ui.TableValue
@@ -32,29 +37,10 @@ type rowData struct {
 
 type tableData struct {
 	rowcount		int			// This is the number of 'rows' which really means data elements not what the human sees
+	rowWidth		int			// This is how wide each row is
 	rows			[]rowData		// This is all the table data by row
 	generatedColumnTypes	[]ui.TableValue		// generate this dynamically
 	libUIevent 	 	func(*tableData, *ui.TableModel, int, int, ui.TableValue)
-}
-
-func initBTcolor(mh *tableData, intBG int) {
-        img[0] = ui.NewImage(16, 16)
-        img[1] = ui.NewImage(16, 16)
-
-	mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableColor{})
-
-	for i := 0; i < mh.rowcount; i++ {
-		log.Println("i=",i)
-
-		// alternate background of each row light and dark
-		if (i % 2) == 1 {
-			mh.rows[i].cells[intBG].value = ui.TableColor{0.5, 0.5, 0.5, .7}
-			mh.rows[i].cells[intBG].name = "BG"
-		} else {
-			mh.rows[i].cells[intBG].value = ui.TableColor{0.1, 0.1, 0.1, .1}
-			mh.rows[i].cells[intBG].name = "BG"
-		}
-	}
 }
 
 func initRowBTcolor(mh *tableData, row int, intBG int) {
@@ -68,37 +54,10 @@ func initRowBTcolor(mh *tableData, row int, intBG int) {
 	}
 }
 
-func initButtonColumn(mh *tableData, buttonID int, junk string) {
-	mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableString(""))
-
-	for i := 0; i < mh.rowcount; i++ {
-		// set the button text for Column ?
-		mh.rows[i].cells[buttonID].value = ui.TableString(fmt.Sprintf("%s %d", junk, i))
-		mh.rows[i].cells[buttonID].name = "BUTTON"
-	}
-}
-
 func initRowButtonColumn(mh *tableData, row int, buttonID int, junk string) {
 	// set the button text for Column ?
 	mh.rows[row].cells[buttonID].value = ui.TableString(fmt.Sprintf("%s %d", junk, row))
 	mh.rows[row].cells[buttonID].name = "BUTTON"
-}
-
-func initTextColorColumn(mh *tableData, stringID int, colorID int, junk string, color ui.TableColor) {
-	mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableString(""))
-	mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableColor{})
-
-	for i := 0; i < mh.rowcount; i++ {
-		log.Println("i=",i)
-
-		// text for Column ?
-		mh.rows[i].cells[stringID].value = ui.TableString(fmt.Sprintf("%s %d", junk, i))
-		mh.rows[i].cells[stringID].name = "EDIT"
-
-		// text color for Column ?
-		mh.rows[i].cells[colorID].value = color
-		mh.rows[i].cells[colorID].name = "COLOR"
-	}
 }
 
 func initRowTextColorColumn(mh *tableData, row int, stringID int, colorID int, junk string, color ui.TableColor) {
@@ -109,18 +68,6 @@ func initRowTextColorColumn(mh *tableData, row int, stringID int, colorID int, j
 	// text color for Column ?
 	mh.rows[row].cells[colorID].value = color
 	mh.rows[row].cells[colorID].name = "COLOR"
-}
-
-func initTextColumn(mh *tableData, stringID int, junk string) {
-	mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableString(""))
-
-	for i := 0; i < mh.rowcount; i++ {
-		log.Println("i=",i)
-
-		// text for Column ?
-		mh.rows[i].cells[stringID].value = ui.TableString(fmt.Sprintf("%s %d", junk, i))
-		mh.rows[i].cells[stringID].name = "EDIT"
-	}
 }
 
 func initRowTextColumn(mh *tableData, row int, stringID int, junk string) {

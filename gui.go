@@ -254,6 +254,21 @@ func AddEntriesDemo() {
 	maintab.SetMargined(tabcount, true)
 }
 
+func initColumnNames(mh *tableData, cellJWC string) {
+	if (cellJWC == "BG") {
+		mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableColor{})
+	} else if (cellJWC == "BUTTON") {
+		mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableString(""))
+	} else if (cellJWC == "TEXTCOLOR") {
+		mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableString(""))
+		mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableColor{})
+	} else if (cellJWC == "TEXT") {
+		mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableString(""))
+	} else {
+		panic("I don't know what this is in initColumnNames")
+	}
+}
+
 func initRow(mh *tableData, row int) {
 	initRowBTcolor        (mh, row, 0)
 	initRowTextColorColumn(mh, row, 1, 2, "diff1", ui.TableColor{0.0, 0, 0.9, 1})
@@ -274,6 +289,16 @@ func AddTableTab(name string, rowcount int, row1name string) {
 	mh.libUIevent      = defaultSetCellValue
 
 	tmpBTindex := 0
+
+	initColumnNames(mh, "BG")
+	initColumnNames(mh, "TEXTCOLOR")
+	initColumnNames(mh, "BUTTON")
+	initColumnNames(mh, "TEXTCOLOR")
+	initColumnNames(mh, "TEXTCOLOR")
+	initColumnNames(mh, "TEXT")
+	initColumnNames(mh, "BUTTON")
+
+/*
 	initBTcolor        (mh, 0)
 	initTextColorColumn(mh, 1, 2, "really fun", ui.TableColor{0.9, 0, 0, 1})
 	initButtonColumn   (mh, 3,    "but3ton")
@@ -281,6 +306,7 @@ func AddTableTab(name string, rowcount int, row1name string) {
 	initTextColorColumn(mh, 6, 7, "jwc67blah", ui.TableColor{0.3, 0.1, 0.9, 1})
 	initTextColumn     (mh, 8,    "jwc8blah")
 	initButtonColumn   (mh, 9,    "but9ton")
+*/
 
 	// spew.Dump(mh)
 	log.Println(mh)
@@ -288,10 +314,12 @@ func AddTableTab(name string, rowcount int, row1name string) {
 	b := make([]rowData, 5)
 	mh.rows = append(mh.rows, b...)
 
-	initRow(mh, 2)
+	for row := 0; row < mh.rowcount; row++ {
+		initRow(mh, row)
+	}
+
 	initRow(mh, mh.rowcount)
 	mh.rowcount    = rowcount + 1
-
 	log.Println(mh)
 
 /*
