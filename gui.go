@@ -1,4 +1,4 @@
-package main
+package gui
 
 import "log"
 // import "fmt"
@@ -239,7 +239,7 @@ func setupUI() {
 	mainwin.Show()
 }
 
-func addTableTab(name string, rowcount int, row1name string) {
+func AddTableTab(name string, rowcount int, row1name string) {
 	mh := new(tableData)
 
 	mh.rowcount    = rowcount
@@ -277,10 +277,11 @@ func addTableTab(name string, rowcount int, row1name string) {
 	maintab.SetMargined(tabcount, true)
 }
 
-func doGUI() {
+func DoGUI() {
 	ui.Main(setupUI)
 
 	log.Println("GUI exited. Not sure what to do here. os.Exit() ?")
 
-	onExit()
+	// not sure how to pass this back to the main program
+	// onExit()
 }

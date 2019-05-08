@@ -1,4 +1,4 @@
-package main
+package gui
 
 //
 // These functions are the hooks to the andlabs libui

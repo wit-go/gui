@@ -1,6 +1,6 @@
 // based off andlabs/ui/examples/table.go
 
-package main
+package gui
 
 import "fmt"
 import "log"
