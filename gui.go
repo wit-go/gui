@@ -228,6 +228,7 @@ func setupUI() {
 	tabcount = 0
 	maintab.SetMargined(tabcount, true)
 
+/*
 	maintab.Append("Choosers examples", makeDataChoosersPage())
 	tabcount += 1
 	maintab.SetMargined(tabcount, true)
@@ -235,8 +236,22 @@ func setupUI() {
 	maintab.Append("Group examples", makeGroupEntries())
 	tabcount += 1
 	maintab.SetMargined(tabcount, true)
+*/
 
 	mainwin.Show()
+}
+
+func AddChoosersDemo() {
+	maintab.Append("Choosers examples", makeDataChoosersPage())
+	tabcount += 1
+	maintab.SetMargined(tabcount, true)
+}
+
+// This hangs on GTK
+func AddEntriesDemo() {
+	maintab.Append("Group examples", makeGroupEntries())
+	tabcount += 1
+	maintab.SetMargined(tabcount, true)
 }
 
 func AddTableTab(name string, rowcount int, row1name string) {
