@@ -1,6 +1,7 @@
 package gui
 
 import "log"
+import "time"
 // import "fmt"
 
 import "github.com/gookit/config"
@@ -254,7 +255,7 @@ func AddEntriesDemo() {
 	maintab.SetMargined(tabcount, true)
 }
 
-func initColumnNames(mh *tableData, cellJWC string) {
+func initColumnNames(mh *tableData, cellJWC string, junk string) {
 	if (cellJWC == "BG") {
 		mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableColor{})
 	} else if (cellJWC == "BUTTON") {
@@ -279,7 +280,14 @@ func initRow(mh *tableData, row int) {
 	initRowButtonColumn   (mh, row, 9,    "diff6")
 }
 
-func AddTableTab(name string, rowcount int, row1name string) {
+type InputData struct {
+	Index		int
+	CellType	string
+	Heading		string
+	Color		string
+}
+
+func AddTableTab(name string, rowcount int, parts []InputData) {
 	mh := new(tableData)
 
 	mh.rowcount    = rowcount
@@ -290,13 +298,22 @@ func AddTableTab(name string, rowcount int, row1name string) {
 
 	tmpBTindex := 0
 
-	initColumnNames(mh, "BG")
-	initColumnNames(mh, "TEXTCOLOR")
-	initColumnNames(mh, "BUTTON")
-	initColumnNames(mh, "TEXTCOLOR")
-	initColumnNames(mh, "TEXTCOLOR")
-	initColumnNames(mh, "TEXT")
-	initColumnNames(mh, "BUTTON")
+	for key, foo := range parts {
+		log.Println(key, foo)
+		initColumnNames(mh, foo.CellType, foo.Heading)
+	}
+
+	time.Sleep(1 * 1000 * 1000 * 1000)
+
+/*
+	initColumnNames(mh, "BG",		"")
+	initColumnNames(mh, "TEXTCOLOR",	"header1")
+	initColumnNames(mh, "BUTTON",		"header2")
+	initColumnNames(mh, "TEXTCOLOR",	"header3")
+	initColumnNames(mh, "TEXTCOLOR",	"header4")
+	initColumnNames(mh, "TEXT",		"header5")
+	initColumnNames(mh, "BUTTON",		"header6")
+*/
 
 /*
 	initBTcolor        (mh, 0)
