@@ -270,7 +270,8 @@ func initColumnNames(mh *tableData, cellJWC string, junk string) {
 	}
 }
 
-func initRow(mh *tableData, row int) {
+func initRow(mh *tableData, row int, parts []InputData) {
+/*
 	initRowBTcolor        (mh, row, 0)
 	initRowTextColorColumn(mh, row, 1, 2, "diff1", ui.TableColor{0.0, 0, 0.9, 1})
 	initRowButtonColumn   (mh, row, 3,    "diff2")
@@ -278,6 +279,27 @@ func initRow(mh *tableData, row int) {
 	initRowTextColorColumn(mh, row, 6, 7, "diff4", ui.TableColor{0.9, 0.3, 0.1, 1})
 	initRowTextColumn     (mh, row, 8,    "diff5")
 	initRowButtonColumn   (mh, row, 9,    "diff6")
+*/
+
+	tmpBTindex := 0
+	for key, foo := range parts {
+		log.Println(key, foo)
+		if (foo.CellType == "BG") {
+			initRowBTcolor        (mh, row, tmpBTindex)
+			tmpBTindex += 1
+		} else if (foo.CellType == "BUTTON") {
+			initRowButtonColumn   (mh, row, tmpBTindex,    "diff2")
+			tmpBTindex += 1
+		} else if (foo.CellType == "TEXTCOLOR") {
+			initRowTextColorColumn(mh, row, tmpBTindex, tmpBTindex + 1, "diff1", ui.TableColor{0.0, 0, 0.9, 1})
+			tmpBTindex += 2
+		} else if (foo.CellType == "TEXT") {
+			initRowTextColumn     (mh, row, tmpBTindex,    "diff5")
+			tmpBTindex += 1
+		} else {
+			panic("I don't know what this is in initColumnNames")
+		}
+	}
 }
 
 type InputData struct {
@@ -312,10 +334,10 @@ func AddTableTab(name string, rowcount int, parts []InputData) {
 	mh.rows = append(mh.rows, b...)
 
 	for row := 0; row < mh.rowcount; row++ {
-		initRow(mh, row)
+		initRow(mh, row, parts)
 	}
 
-	initRow(mh, mh.rowcount)
+	initRow(mh, mh.rowcount, parts)
 	mh.rowcount    = rowcount + 1
 	log.Println(mh)
 
