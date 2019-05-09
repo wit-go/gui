@@ -305,26 +305,6 @@ func AddTableTab(name string, rowcount int, parts []InputData) {
 
 	time.Sleep(1 * 1000 * 1000 * 1000)
 
-/*
-	initColumnNames(mh, "BG",		"")
-	initColumnNames(mh, "TEXTCOLOR",	"header1")
-	initColumnNames(mh, "BUTTON",		"header2")
-	initColumnNames(mh, "TEXTCOLOR",	"header3")
-	initColumnNames(mh, "TEXTCOLOR",	"header4")
-	initColumnNames(mh, "TEXT",		"header5")
-	initColumnNames(mh, "BUTTON",		"header6")
-*/
-
-/*
-	initBTcolor        (mh, 0)
-	initTextColorColumn(mh, 1, 2, "really fun", ui.TableColor{0.9, 0, 0, 1})
-	initButtonColumn   (mh, 3,    "but3ton")
-	initTextColorColumn(mh, 4, 5, "jwc45blah", ui.TableColor{0.0, 0.9, 0.4, 1})
-	initTextColorColumn(mh, 6, 7, "jwc67blah", ui.TableColor{0.3, 0.1, 0.9, 1})
-	initTextColumn     (mh, 8,    "jwc8blah")
-	initButtonColumn   (mh, 9,    "but9ton")
-*/
-
 	// spew.Dump(mh)
 	log.Println(mh)
 
@@ -354,12 +334,24 @@ func AddTableTab(name string, rowcount int, parts []InputData) {
 			RowBackgroundColorModelColumn:	tmpBTindex,
 	})
 
-	appendTextColumn        (mh, table, 1, "jwc1col")
-	table.AppendButtonColumn("button3", 3, ui.TableModelColumnAlwaysEditable)
-	appendTextColorColumn   (mh, table, 4, 5, "testcolor")
-	appendTextColorColumn   (mh, table, 6, 7, "appendTest")
-	appendTextColumn        (mh, table, 8, "jwc8col")
-	table.AppendButtonColumn("button9", 9, ui.TableModelColumnAlwaysEditable)
+	for key, foo := range parts {
+		log.Println(key, foo)
+		initColumnNames(mh, foo.CellType, foo.Heading)
+		if (foo.CellType == "BG") {
+		} else if (foo.CellType == "BUTTON") {
+			tmpBTindex += 1
+			table.AppendButtonColumn("button3", tmpBTindex, ui.TableModelColumnAlwaysEditable)
+		} else if (foo.CellType == "TEXTCOLOR") {
+			tmpBTindex += 1
+			appendTextColorColumn   (mh, table, tmpBTindex, tmpBTindex + 1, "testcolor")
+			tmpBTindex += 1
+		} else if (foo.CellType == "TEXT") {
+			tmpBTindex += 1
+			appendTextColumn        (mh, table, tmpBTindex, "jwc1col")
+		} else {
+			panic("I don't know what this is in initColumnNames")
+		}
+	}
 
 	maintab.Append(name, table)
 	maintab.SetMargined(tabcount, true)
