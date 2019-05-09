@@ -271,16 +271,6 @@ func initColumnNames(mh *tableData, cellJWC string, junk string) {
 }
 
 func initRow(mh *tableData, row int, parts []InputData) {
-/*
-	initRowBTcolor        (mh, row, 0)
-	initRowTextColorColumn(mh, row, 1, 2, "diff1", ui.TableColor{0.0, 0, 0.9, 1})
-	initRowButtonColumn   (mh, row, 3,    "diff2")
-	initRowTextColorColumn(mh, row, 4, 5, "diff3", ui.TableColor{0.4, 0.9, 0.0, 1})
-	initRowTextColorColumn(mh, row, 6, 7, "diff4", ui.TableColor{0.9, 0.3, 0.1, 1})
-	initRowTextColumn     (mh, row, 8,    "diff5")
-	initRowButtonColumn   (mh, row, 9,    "diff6")
-*/
-
 	tmpBTindex := 0
 	for key, foo := range parts {
 		log.Println(key, foo)
@@ -327,29 +317,12 @@ func AddTableTab(name string, rowcount int, parts []InputData) {
 
 	time.Sleep(1 * 1000 * 1000 * 1000)
 
-	// spew.Dump(mh)
-	log.Println(mh)
-
-	b := make([]rowData, 5)
-	mh.rows = append(mh.rows, b...)
-
 	for row := 0; row < mh.rowcount; row++ {
 		initRow(mh, row, parts)
 	}
-
-	initRow(mh, mh.rowcount, parts)
-	mh.rowcount    = rowcount + 1
 	log.Println(mh)
 
-/*
-	mh.rowcount    = rowcount
-	initRow(mh, mh.rowcount)
-
-	spew.Dump(mh)
-*/
-
 	model := ui.NewTableModel(mh)
-
 	table := ui.NewTable(
 		&ui.TableParams{
 			Model:	model,
