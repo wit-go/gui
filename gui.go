@@ -248,10 +248,9 @@ func AddChoosersDemo() {
 	tabcount += 1
 }
 
-func AddNewTab(newbox ui.Control) {
-	maintab.Append("Cloud Info", newbox)
-	maintab.SetMargined(tabcount, true)
-	tabcount += 1
+func AddNewTab(mytab *ui.Tab, newbox ui.Control, tabOffset int) {
+	mytab.Append("Cloud Info", newbox)
+	mytab.SetMargined(tabOffset, true)
 }
 
 // This hangs on GTK
@@ -305,7 +304,7 @@ type InputData struct {
 	Color		string
 }
 
-func AddTableTab(name string, rowcount int, parts []InputData) {
+func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts []InputData) {
 	mh := new(tableData)
 
 	mh.rowcount    = rowcount
@@ -354,9 +353,8 @@ func AddTableTab(name string, rowcount int, parts []InputData) {
 		}
 	}
 
-	maintab.Append(name, table)
-	maintab.SetMargined(tabcount, true)
-	tabcount += 1
+	mytab.Append(name, table)
+	mytab.SetMargined(mytabcount, true)
 }
 
 func DoGUI() {
