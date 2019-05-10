@@ -248,6 +248,12 @@ func AddChoosersDemo() {
 	tabcount += 1
 }
 
+func AddNewTab(newbox ui.Control) {
+	maintab.Append("Cloud Info", newbox)
+	maintab.SetMargined(tabcount, true)
+	tabcount += 1
+}
+
 // This hangs on GTK
 func AddEntriesDemo() {
 	maintab.Append("Group examples", makeGroupEntries())
