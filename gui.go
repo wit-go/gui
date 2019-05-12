@@ -304,7 +304,7 @@ type InputData struct {
 	Color		string
 }
 
-func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts []InputData) {
+func AddSampleTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts []InputData) {
 	mh := new(tableData)
 
 	mh.rowcount    = rowcount
@@ -348,6 +348,59 @@ func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts
 		} else if (foo.CellType == "TEXT") {
 			tmpBTindex += 1
 			appendTextColumn        (mh, table, tmpBTindex, "jwc1col")
+		} else {
+			panic("I don't know what this is in initColumnNames")
+		}
+	}
+
+	mytab.Append(name, table)
+	mytab.SetMargined(mytabcount, true)
+}
+
+func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts []InputData) {
+	mh := new(tableData)
+
+	mh.rowcount    = rowcount
+	mh.rows        = make([]rowData, mh.rowcount)
+
+	// This is the standard callback function from libUI when the user does something
+	mh.libUIevent      = defaultSetCellValue
+
+	tmpBTindex := 0
+
+	for key, foo := range parts {
+		log.Println(key, foo)
+		initColumnNames(mh, foo.CellType, foo.Heading)
+	}
+
+	// time.Sleep(1 * 1000 * 1000 * 1000)
+
+	for row := 0; row < mh.rowcount; row++ {
+		initRow(mh, row, parts)
+	}
+	log.Println(mh)
+
+	model := ui.NewTableModel(mh)
+	table := ui.NewTable(
+		&ui.TableParams{
+			Model:	model,
+			RowBackgroundColorModelColumn:	tmpBTindex,
+	})
+
+	for key, foo := range parts {
+		log.Println(key, foo)
+		initColumnNames(mh, foo.CellType, foo.Heading)
+		if (foo.CellType == "BG") {
+		} else if (foo.CellType == "BUTTON") {
+			tmpBTindex += 1
+			table.AppendButtonColumn(foo.Heading, tmpBTindex, ui.TableModelColumnAlwaysEditable)
+		} else if (foo.CellType == "TEXTCOLOR") {
+			tmpBTindex += 1
+			appendTextColorColumn   (mh, table, tmpBTindex, tmpBTindex + 1, foo.Heading)
+			tmpBTindex += 1
+		} else if (foo.CellType == "TEXT") {
+			tmpBTindex += 1
+			appendTextColumn        (mh, table, tmpBTindex, foo.Heading)
 		} else {
 			panic("I don't know what this is in initColumnNames")
 		}
