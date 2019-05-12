@@ -260,7 +260,7 @@ func AddEntriesDemo() {
 	maintab.SetMargined(tabcount, true)
 }
 
-func initColumnNames(mh *tableData, cellJWC string, junk string) {
+func initColumnNames(mh *TableData, cellJWC string, junk string) {
 	if (cellJWC == "BG") {
 		mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableColor{})
 	} else if (cellJWC == "BUTTON") {
@@ -275,7 +275,7 @@ func initColumnNames(mh *tableData, cellJWC string, junk string) {
 	}
 }
 
-func initRow(mh *tableData, row int, parts []InputData) {
+func initRow(mh *TableData, row int, parts []InputData) {
 	tmpBTindex := 0
 	for key, foo := range parts {
 		log.Println(key, foo)
@@ -305,10 +305,10 @@ type InputData struct {
 }
 
 func AddSampleTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts []InputData) {
-	mh := new(tableData)
+	mh := new(TableData)
 
-	mh.rowcount    = rowcount
-	mh.rows        = make([]rowData, mh.rowcount)
+	mh.RowCount    = rowcount
+	mh.Rows        = make([]RowData, mh.RowCount)
 
 	// This is the standard callback function from libUI when the user does something
 	mh.libUIevent      = defaultSetCellValue
@@ -322,7 +322,7 @@ func AddSampleTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int,
 
 	time.Sleep(1 * 1000 * 1000 * 1000)
 
-	for row := 0; row < mh.rowcount; row++ {
+	for row := 0; row < mh.RowCount; row++ {
 		initRow(mh, row, parts)
 	}
 	log.Println(mh)
@@ -357,11 +357,11 @@ func AddSampleTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int,
 	mytab.SetMargined(mytabcount, true)
 }
 
-func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts []InputData) {
-	mh := new(tableData)
+func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts []InputData) *TableData {
+	mh := new(TableData)
 
-	mh.rowcount    = rowcount
-	mh.rows        = make([]rowData, mh.rowcount)
+	mh.RowCount    = rowcount
+	mh.Rows        = make([]RowData, mh.RowCount)
 
 	// This is the standard callback function from libUI when the user does something
 	mh.libUIevent      = defaultSetCellValue
@@ -373,9 +373,7 @@ func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts
 		initColumnNames(mh, foo.CellType, foo.Heading)
 	}
 
-	// time.Sleep(1 * 1000 * 1000 * 1000)
-
-	for row := 0; row < mh.rowcount; row++ {
+	for row := 0; row < mh.RowCount; row++ {
 		initRow(mh, row, parts)
 	}
 	log.Println(mh)
@@ -408,6 +406,8 @@ func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts
 
 	mytab.Append(name, table)
 	mytab.SetMargined(mytabcount, true)
+
+	return mh
 }
 
 func DoGUI() {
