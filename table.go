@@ -19,6 +19,7 @@ var img [2]*ui.Image
 type CellData struct {
 	Index		int
 	Value		ui.TableValue
+	Raw		string			// shove stuff in here and figure out how to make a ui.TableValue later
 	Name		string			// what type of cell is this?
 	Event		func()			// what function to call if there is an event on this
 }
