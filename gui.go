@@ -91,9 +91,6 @@ func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts
 	mh.RowCount    = rowcount
 	mh.Rows        = make([]RowData, mh.RowCount)
 
-	// This is the standard callback function from libUI when the user does something
-	// mh.libUIevent      = defaultSetCellValue
-
 	tmpBTindex := 0
 
 	for key, foo := range parts {

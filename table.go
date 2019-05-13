@@ -23,7 +23,7 @@ type RowData struct {
 	click		func()			// what function to call if the user clicks on it
 	doubleclick	func()			// what function to call if the user double clicks on it
 */
-	Cells		[20]CellData
+	// Cells		[20]CellData
 	Human		[20]HumanCellData
 }
 
@@ -43,6 +43,8 @@ type TableData struct {
 	generatedColumnTypes	[]ui.TableValue		// generate this dynamically
 	// libUIevent 	 	func(*TableData, *ui.TableModel, int, int, ui.TableValue)
 	cellChangeEvent  	func(int, int, ui.TableValue)
+
+	Cells		[20]CellData
 }
 
 func initRowBTcolor(mh *TableData, row int, intBG int, cell InputData) {
@@ -53,8 +55,8 @@ func initRowBTcolor(mh *TableData, row int, intBG int, cell InputData) {
 	mh.Rows[row].Human[humanInt].ColorID = intBG
 	mh.Rows[row].Human[humanInt].TextID  = -1
 
-	mh.Rows[row].Cells[intBG].Name       = "BG"
-	mh.Rows[row].Cells[intBG].HumanID    = humanInt
+	mh.Cells[intBG].Name       = "BG"
+	mh.Cells[intBG].HumanID    = humanInt
 
 	log.Println("HumanID = row, intBG, humanInt", row, intBG, humanInt)
 }
@@ -67,8 +69,8 @@ func initRowButtonColumn(mh *TableData, row int, buttonID int, junk string, cell
 	mh.Rows[row].Human[humanInt].ColorID = -1
 	mh.Rows[row].Human[humanInt].TextID  = buttonID
 
-	mh.Rows[row].Cells[buttonID].Name    = "BUTTON"
-	mh.Rows[row].Cells[buttonID].HumanID = humanInt
+	mh.Cells[buttonID].Name    = "BUTTON"
+	mh.Cells[buttonID].HumanID = humanInt
 
 	log.Println("HumanID = row, buttonID, humanInt", row, buttonID, humanInt)
 }
@@ -82,11 +84,11 @@ func initRowTextColorColumn(mh *TableData, row int, stringID int, colorID int, j
 	mh.Rows[row].Human[humanInt].TextID  = stringID
 
 	// text for Column humanInt
-	mh.Rows[row].Cells[stringID].Name    = "EDIT"
-	mh.Rows[row].Cells[stringID].HumanID = humanInt
+	mh.Cells[stringID].Name    = "EDIT"
+	mh.Cells[stringID].HumanID = humanInt
 
-	mh.Rows[row].Cells[colorID].Name     = "COLOR"
-	mh.Rows[row].Cells[colorID].HumanID  = humanInt
+	mh.Cells[colorID].Name     = "COLOR"
+	mh.Cells[colorID].HumanID  = humanInt
 }
 
 func initRowTextColumn(mh *TableData, row int, stringID int, junk string, cell InputData) {
@@ -97,22 +99,6 @@ func initRowTextColumn(mh *TableData, row int, stringID int, junk string, cell I
 	mh.Rows[row].Human[humanInt].ColorID = -1
 	mh.Rows[row].Human[humanInt].TextID  = stringID
 
-	mh.Rows[row].Cells[stringID].Name    = "EDIT"
-	mh.Rows[row].Cells[stringID].HumanID = humanInt
+	mh.Cells[stringID].Name    = "EDIT"
+	mh.Cells[stringID].HumanID = humanInt
 }
-
-/*
-func defaultSetCellValue(mh *TableData, m *ui.TableModel, row, column int, value ui.TableValue) {
-	if (mh.Rows[row].Cells[column].Name == "BUTTON") {
-		log.Println("defaultSetCellValue() FOUND THE BUTTON!!!!!!!   Button was pressed START", row, column)
-	}
-	return
-}
-
-func simpleSetCellValue(mh *TableData, row, column int, value string) {
-	if (mh.Rows[row].Cells[column].Name == "BUTTON") {
-		log.Println("simpleSetCellValue() FOUND THE BUTTON!!!!!!!  Button was pressed:", row, column)
-	}
-	return
-}
-*/

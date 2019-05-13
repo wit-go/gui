@@ -23,7 +23,7 @@ func (mh *TableData) ColumnTypes(m *ui.TableModel) []ui.TableValue {
 // TODO: Figure out why this is being called 1000 times a second (10 times for each row & column)
 // Nevermind this TODO. Who gives a shit. This is a really smart way to treat the OS toolkits
 func (mh *TableData) CellValue(m *ui.TableModel, row, column int) ui.TableValue {
-	humanID := mh.Rows[row].Cells[column].HumanID
+	humanID := mh.Cells[column].HumanID
 	if (column == mh.Rows[row].Human[humanID].TextID) {
 		return mh.Rows[row].Human[humanID].Text
 	}
@@ -43,10 +43,10 @@ func (mh *TableData) SetCellValue(m *ui.TableModel, row, column int, value ui.Ta
 		mh.cellChangeEvent(row, column, value)
 	}
 
-	log.Println("mh.Rows[0].Cells[column].HumanID =", mh.Rows[0].Cells[column].HumanID)
-	log.Println("mh.Rows[row].Cells[column].HumanID =", mh.Rows[row].Cells[column].HumanID)
+	log.Println("mh.Cells[column].HumanID =", mh.Cells[column].HumanID)
+	// log.Println("mh.Rows[row].Cells[column].HumanID =", mh.Rows[row].Cells[column].HumanID)
 
-	humanID := mh.Rows[row].Cells[column].HumanID
+	humanID := mh.Cells[column].HumanID
 	log.Println("mh.Rows[row].Human[humanID].ColorID =", mh.Rows[row].Human[humanID].ColorID)
 	log.Println("mh.Rows[row].Human[humanID].TextID =",  mh.Rows[row].Human[humanID].TextID)
 
@@ -54,7 +54,7 @@ func (mh *TableData) SetCellValue(m *ui.TableModel, row, column int, value ui.Ta
 }
 
 func defaultSetCellValue(mh *TableData, row int, column int) {
-	if (mh.Rows[row].Cells[column].Name == "BUTTON") {
+	if (mh.Cells[column].Name == "BUTTON") {
 		log.Println("defaultSetCellValue() FOUND THE BUTTON!!!!!!!   Button was pressed START", row, column)
 	}
 }
