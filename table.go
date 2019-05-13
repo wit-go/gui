@@ -68,6 +68,8 @@ func initRowBTcolor(mh *TableData, row int, intBG int, cell InputData) {
 	mh.Rows[row].Cells[intBG].Name       = "BG"
 	mh.Rows[row].Cells[intBG].HumanID    = humanInt
 
+	log.Println("HumanID = row, intBG, humanInt", row, intBG, humanInt)
+
 	// alternate background of each row light and dark
 	if (row % 2) == 1 {
 		mh.Rows[row].Cells[intBG].Value   = ui.TableColor{0.5, 0.5, 0.5, .7}
@@ -87,6 +89,8 @@ func initRowButtonColumn(mh *TableData, row int, buttonID int, junk string, cell
 	mh.Rows[row].Cells[buttonID].Value   = ui.TableString(fmt.Sprintf("%s %d", junk, row))
 	mh.Rows[row].Cells[buttonID].Name    = "BUTTON"
 	mh.Rows[row].Cells[buttonID].HumanID = humanInt
+
+	log.Println("HumanID = row, buttonID, humanInt", row, buttonID, humanInt)
 }
 
 func initRowTextColorColumn(mh *TableData, row int, stringID int, colorID int, junk string, color ui.TableColor, cell InputData) {

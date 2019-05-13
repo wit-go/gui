@@ -91,8 +91,13 @@ func initColumnNames(mh *TableData, cellJWC string, junk string) {
 
 func initRow(mh *TableData, row int, parts []InputData) {
 	tmpBTindex := 0
+	humanID := 0
 	for key, foo := range parts {
 		log.Println(key, foo)
+
+		parts[key].Index = humanID
+		humanID += 1
+
 		if (foo.CellType == "BG") {
 			initRowBTcolor        (mh, row, tmpBTindex, parts[key])
 			tmpBTindex += 1

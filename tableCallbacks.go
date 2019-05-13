@@ -28,17 +28,29 @@ func (mh *TableData) CellValue(m *ui.TableModel, row, column int) ui.TableValue 
 }
 
 func (mh *TableData) SetCellValue(m *ui.TableModel, row, column int, value ui.TableValue) {
-	log.Println("SetCallValue() START row=", row, "column=", column, "value=", value)
-	// spew.Dump(m)
-	// spew.Dump(mh)
+	log.Println("SetCellValue() START row=", row, "column=", column, "value=", value)
+
 	if (mh.libUIevent == nil) {
 		log.Println("CellValue NOT DEFINED. This table wasn't setup correctly! mh.scanCellValue == nil")
 		os.Exit(-1)
 	}
-	// spew.Dump(m)
+
 	mh.libUIevent(mh, m, row, column, value)
 	if (mh.cellChangeEvent != nil) {
 		mh.cellChangeEvent(row, column, value)
 	}
-	log.Println("SetCallValue() END")
+
+	log.Println("mh.Rows[0].Cells[column].HumanID =", mh.Rows[0].Cells[column].HumanID)
+	log.Println("mh.Rows[row].Cells[column].HumanID =", mh.Rows[row].Cells[column].HumanID)
+
+	humanID := mh.Rows[row].Cells[column].HumanID
+	log.Println("mh.Rows[row].Human[humanID].ColorID =", mh.Rows[row].Human[humanID].ColorID)
+	log.Println("mh.Rows[row].Human[humanID].TextID =",  mh.Rows[row].Human[humanID].TextID)
+
+	if (column == mh.Rows[row].Human[humanID].TextID) {
+		log.Println("THIS COLUMN IS A TEXT COLUMN")
+		mh.Rows[row].Cells[column].Value = mh.Rows[row].Human[humanID].Text
+	}
+
+	log.Println("SetCellValue() END")
 }
