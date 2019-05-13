@@ -9,20 +9,11 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 // import "github.com/davecgh/go-spew/spew"
 
-var img [2]*ui.Image
-
-/*
-        img[0] = ui.NewImage(16, 16)
-        img[1] = ui.NewImage(16, 16)
-*/
-
 type CellData struct {
 	Index		int
 	HumanID		int
 	Value		ui.TableValue
-	Raw		string			// shove stuff in here and figure out how to make a ui.TableValue later
 	Name		string			// what type of cell is this?
-	Event		func()			// what function to call if there is an event on this
 }
 
 // hmm. will this stand the test of time?
@@ -45,7 +36,7 @@ type HumanCellData struct {
 	TextID		int
 	Color		ui.TableColor
 	ColorID		int
-	Event		func()			// what function to call if there is an event on this
+//	Event		func()			// what function to call if there is an event on this
 }
 
 type TableData struct {
