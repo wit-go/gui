@@ -43,18 +43,37 @@ func AddNewTab(mytab *ui.Tab, newbox ui.Control, tabOffset int) {
 	mytab.SetMargined(tabOffset, true)
 }
 
-func initColumnNames(mh *TableData, cellJWC string, junk string) {
-	if (cellJWC == "BG") {
-		mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableColor{})
-	} else if (cellJWC == "BUTTON") {
-		mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableString(""))
-	} else if (cellJWC == "TEXTCOLOR") {
-		mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableString(""))
-		mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableColor{})
-	} else if (cellJWC == "TEXT") {
-		mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableString(""))
-	} else {
-		panic("I don't know what this is in initColumnNames")
+func InitColumns(mh *TableData, parts []InputData) {
+	tmpBTindex := 0
+	humanID := 0
+	for key, foo := range parts {
+		log.Println("key, foo =", key, foo)
+		// log.Println("mh.Cells =", mh.Cells)
+		// log.Println("mh.Human =", mh.Human)
+
+		parts[key].Index = humanID
+		humanID += 1
+
+		if (foo.CellType == "BG") {
+			mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableColor{})
+			initRowBTcolor        (mh, tmpBTindex, parts[key])
+			tmpBTindex += 1
+		} else if (foo.CellType == "BUTTON") {
+			mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableString(""))
+			initRowButtonColumn   (mh, tmpBTindex,    parts[key].Heading, parts[key])
+			tmpBTindex += 1
+		} else if (foo.CellType == "TEXTCOLOR") {
+			mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableString(""))
+			mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableColor{})
+			initRowTextColorColumn(mh, tmpBTindex, tmpBTindex + 1, parts[key].Heading, ui.TableColor{0.0, 0, 0.9, 1}, parts[key])
+			tmpBTindex += 2
+		} else if (foo.CellType == "TEXT") {
+			mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableString(""))
+			initRowTextColumn     (mh, tmpBTindex,    parts[key].Heading, parts[key])
+			tmpBTindex += 1
+		} else {
+			panic("I don't know what this is in initColumnNames")
+		}
 	}
 }
 
@@ -64,47 +83,18 @@ func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts
 	mh.RowCount    = rowcount
 	mh.Rows        = make([]RowData, mh.RowCount)
 
-	tmpBTindex := 0
-	humanID := 0
-	for key, foo := range parts {
-		log.Println("key, foo =", key, foo)
-		// log.Println("mh.Cells =", mh.Cells)
-		// log.Println("mh.Human =", mh.Human)
-
-		initColumnNames(mh, foo.CellType, foo.Heading)
-
-		parts[key].Index = humanID
-		humanID += 1
-
-		if (foo.CellType == "BG") {
-			initRowBTcolor        (mh, tmpBTindex, parts[key])
-			tmpBTindex += 1
-		} else if (foo.CellType == "BUTTON") {
-			initRowButtonColumn   (mh, tmpBTindex,    parts[key].Heading, parts[key])
-			tmpBTindex += 1
-		} else if (foo.CellType == "TEXTCOLOR") {
-			initRowTextColorColumn(mh, tmpBTindex, tmpBTindex + 1, parts[key].Heading, ui.TableColor{0.0, 0, 0.9, 1}, parts[key])
-			tmpBTindex += 2
-		} else if (foo.CellType == "TEXT") {
-			initRowTextColumn     (mh, tmpBTindex,    parts[key].Heading, parts[key])
-			tmpBTindex += 1
-		} else {
-			panic("I don't know what this is in initColumnNames")
-		}
-	}
-	tmpBTindex = 0
-	humanID = 0
+	InitColumns(mh, parts)
 
 	model := ui.NewTableModel(mh)
 	table := ui.NewTable(
 		&ui.TableParams{
 			Model:	model,
-			RowBackgroundColorModelColumn:	tmpBTindex,
+			RowBackgroundColorModelColumn:	0,	// Row Background color is always index zero
 	})
 
+	tmpBTindex := 0
 	for key, foo := range parts {
 		log.Println(key, foo)
-		initColumnNames(mh, foo.CellType, foo.Heading)
 		if (foo.CellType == "BG") {
 		} else if (foo.CellType == "BUTTON") {
 			tmpBTindex += 1
