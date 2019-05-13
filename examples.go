@@ -8,6 +8,9 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 import "github.com/davecgh/go-spew/spew"
 
+var jcarrButton *ui.Button
+var jcarrEntry  *ui.MultilineEntry
+
 func buttonClick(button *ui.Button) {
 	log.Println("hostname =", config.String("hostname"), button)
 	spew.Dump(button)
@@ -199,4 +202,17 @@ func makeDataChoosersPage() ui.Control {
 		false, ui.AlignFill, false, ui.AlignFill)
 
 	return hbox
+}
+
+func AddChoosersDemo() {
+	maintab.Append("Choosers examples", makeDataChoosersPage())
+	maintab.SetMargined(tabcount, true)
+	tabcount += 1
+}
+
+// This hangs on GTK
+func AddEntriesDemo() {
+	maintab.Append("Group examples", makeGroupEntries())
+	tabcount += 1
+	maintab.SetMargined(tabcount, true)
 }
