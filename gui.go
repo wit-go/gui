@@ -17,6 +17,13 @@ var tabcount int
 var jcarrButton *ui.Button
 var jcarrEntry  *ui.MultilineEntry
 
+type InputData struct {
+	Index		int
+	CellType	string
+	Heading		string
+	Color		string
+}
+
 func buttonClick(button *ui.Button) {
 	log.Println("hostname =", config.String("hostname"), button)
 	spew.Dump(button)
@@ -280,28 +287,21 @@ func initRow(mh *TableData, row int, parts []InputData) {
 	for key, foo := range parts {
 		log.Println(key, foo)
 		if (foo.CellType == "BG") {
-			initRowBTcolor        (mh, row, tmpBTindex)
+			initRowBTcolor        (mh, row, tmpBTindex, parts[key])
 			tmpBTindex += 1
 		} else if (foo.CellType == "BUTTON") {
-			initRowButtonColumn   (mh, row, tmpBTindex,    "diff2")
+			initRowButtonColumn   (mh, row, tmpBTindex,    parts[key].Heading, parts[key])
 			tmpBTindex += 1
 		} else if (foo.CellType == "TEXTCOLOR") {
-			initRowTextColorColumn(mh, row, tmpBTindex, tmpBTindex + 1, "diff1", ui.TableColor{0.0, 0, 0.9, 1})
+			initRowTextColorColumn(mh, row, tmpBTindex, tmpBTindex + 1, parts[key].Heading, ui.TableColor{0.0, 0, 0.9, 1}, parts[key])
 			tmpBTindex += 2
 		} else if (foo.CellType == "TEXT") {
-			initRowTextColumn     (mh, row, tmpBTindex,    "diff5")
+			initRowTextColumn     (mh, row, tmpBTindex,    parts[key].Heading, parts[key])
 			tmpBTindex += 1
 		} else {
 			panic("I don't know what this is in initColumnNames")
 		}
 	}
-}
-
-type InputData struct {
-	Index		int
-	CellType	string
-	Heading		string
-	Color		string
 }
 
 func AddSampleTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts []InputData) {

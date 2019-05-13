@@ -34,6 +34,17 @@ type RowData struct {
 	doubleclick	func()			// what function to call if the user double clicks on it
 */
 	Cells		[20]CellData
+	Human		[20]HumanCellData
+}
+
+// hmm. will this stand the test of time?
+type HumanCellData struct {
+	Name		string			// what kind of row is this?
+	Text		ui.TableString
+	TextID		int
+	Color		ui.TableColor
+	ColorID		int
+	Event		func()			// what function to call if there is an event on this
 }
 
 type TableData struct {
@@ -45,7 +56,28 @@ type TableData struct {
 	cellChangeEvent  	func(int, int, ui.TableValue)
 }
 
-func initRowBTcolor(mh *TableData, row int, intBG int) {
+/*
+func initHumanCell(mh *TableData, row int, cell InputData) {
+	humanInt := cell.Index
+
+	intBG := cell.ColorID
+	mh.Rows[row].Human[humanInt].Name    = cell.CellType
+	mh.Rows[row].Human[humanInt].Color   = cell.Color
+	mh.Rows[row].Human[humanInt].ColorID = intBG
+	mh.Rows[row].Human[humanInt].Text    = ui.TableValue{}
+	mh.Rows[row].Human[humanInt].TextID  = -1
+}
+*/
+
+func initRowBTcolor(mh *TableData, row int, intBG int, cell InputData) {
+	humanInt := cell.Index
+
+	mh.Rows[row].Human[humanInt].Name    = "BG"
+	mh.Rows[row].Human[humanInt].Color   = ui.TableColor{0.5, 0.5, 0.5, .7}
+	mh.Rows[row].Human[humanInt].ColorID = intBG
+	// mh.Rows[row].Human[humanInt].Text    = ui.TableValue{}
+	mh.Rows[row].Human[humanInt].TextID  = -1
+
 	// alternate background of each row light and dark
 	if (row % 2) == 1 {
 		mh.Rows[row].Cells[intBG].Value = ui.TableColor{0.5, 0.5, 0.5, .7}
@@ -56,13 +88,13 @@ func initRowBTcolor(mh *TableData, row int, intBG int) {
 	}
 }
 
-func initRowButtonColumn(mh *TableData, row int, buttonID int, junk string) {
+func initRowButtonColumn(mh *TableData, row int, buttonID int, junk string, cell InputData) {
 	// set the button text for Column ?
 	mh.Rows[row].Cells[buttonID].Value = ui.TableString(fmt.Sprintf("%s %d", junk, row))
 	mh.Rows[row].Cells[buttonID].Name = "BUTTON"
 }
 
-func initRowTextColorColumn(mh *TableData, row int, stringID int, colorID int, junk string, color ui.TableColor) {
+func initRowTextColorColumn(mh *TableData, row int, stringID int, colorID int, junk string, color ui.TableColor, cell InputData) {
 	// text for Column ?
 	mh.Rows[row].Cells[stringID].Value = ui.TableString(fmt.Sprintf("%s %d", junk, row))
 	mh.Rows[row].Cells[stringID].Name = "EDIT"
@@ -72,7 +104,7 @@ func initRowTextColorColumn(mh *TableData, row int, stringID int, colorID int, j
 	mh.Rows[row].Cells[colorID].Name = "COLOR"
 }
 
-func initRowTextColumn(mh *TableData, row int, stringID int, junk string) {
+func initRowTextColumn(mh *TableData, row int, stringID int, junk string, cell InputData) {
 	mh.Rows[row].Cells[stringID].Value = ui.TableString(fmt.Sprintf("%s %d", junk, row))
 	mh.Rows[row].Cells[stringID].Name = "EDIT"
 }
