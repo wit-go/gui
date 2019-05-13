@@ -6,7 +6,6 @@ package gui
 // and feed back user interaction with the GUI
 //
 
-import "os"
 import "log"
 
 import "github.com/andlabs/ui"
@@ -38,12 +37,8 @@ func (mh *TableData) CellValue(m *ui.TableModel, row, column int) ui.TableValue 
 func (mh *TableData) SetCellValue(m *ui.TableModel, row, column int, value ui.TableValue) {
 	log.Println("SetCellValue() START row=", row, "column=", column, "value=", value)
 
-	if (mh.libUIevent == nil) {
-		log.Println("CellValue NOT DEFINED. This table wasn't setup correctly! mh.scanCellValue == nil")
-		os.Exit(-1)
-	}
+	defaultSetCellValue(mh, row, column)
 
-	mh.libUIevent(mh, m, row, column, value)
 	if (mh.cellChangeEvent != nil) {
 		mh.cellChangeEvent(row, column, value)
 	}
@@ -56,4 +51,10 @@ func (mh *TableData) SetCellValue(m *ui.TableModel, row, column int, value ui.Ta
 	log.Println("mh.Rows[row].Human[humanID].TextID =",  mh.Rows[row].Human[humanID].TextID)
 
 	log.Println("SetCellValue() END")
+}
+
+func defaultSetCellValue(mh *TableData, row int, column int) {
+	if (mh.Rows[row].Cells[column].Name == "BUTTON") {
+		log.Println("defaultSetCellValue() FOUND THE BUTTON!!!!!!!   Button was pressed START", row, column)
+	}
 }

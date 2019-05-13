@@ -92,7 +92,7 @@ func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts
 	mh.Rows        = make([]RowData, mh.RowCount)
 
 	// This is the standard callback function from libUI when the user does something
-	mh.libUIevent      = defaultSetCellValue
+	// mh.libUIevent      = defaultSetCellValue
 
 	tmpBTindex := 0
 
@@ -122,11 +122,14 @@ func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts
 			table.AppendButtonColumn(foo.Heading, tmpBTindex, ui.TableModelColumnAlwaysEditable)
 		} else if (foo.CellType == "TEXTCOLOR") {
 			tmpBTindex += 1
-			appendTextColorColumn   (mh, table, tmpBTindex, tmpBTindex + 1, foo.Heading)
+			table.AppendTextColumn(foo.Heading, tmpBTindex, ui.TableModelColumnAlwaysEditable,
+					&ui.TableTextColumnOptionalParams{
+						ColorModelColumn:   tmpBTindex + 1,
+			});
 			tmpBTindex += 1
 		} else if (foo.CellType == "TEXT") {
 			tmpBTindex += 1
-			appendTextColumn        (mh, table, tmpBTindex, foo.Heading)
+			table.AppendTextColumn(foo.Heading, tmpBTindex, ui.TableModelColumnAlwaysEditable, nil)
 		} else {
 			panic("I don't know what this is in initColumnNames")
 		}

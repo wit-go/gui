@@ -41,7 +41,7 @@ type TableData struct {
 	RowWidth		int			// This is how wide each row is
 	Rows			[]RowData		// This is all the table data by row
 	generatedColumnTypes	[]ui.TableValue		// generate this dynamically
-	libUIevent 	 	func(*TableData, *ui.TableModel, int, int, ui.TableValue)
+	// libUIevent 	 	func(*TableData, *ui.TableModel, int, int, ui.TableValue)
 	cellChangeEvent  	func(int, int, ui.TableValue)
 }
 
@@ -101,17 +101,7 @@ func initRowTextColumn(mh *TableData, row int, stringID int, junk string, cell I
 	mh.Rows[row].Cells[stringID].HumanID = humanInt
 }
 
-func appendTextColorColumn(mh *TableData, table *ui.Table, stringID int, colorID int, columnName string) {
-	table.AppendTextColumn(columnName, stringID, ui.TableModelColumnAlwaysEditable,
-		&ui.TableTextColumnOptionalParams{
-			ColorModelColumn:               colorID,
-	});
-}
-
-func appendTextColumn(mh *TableData, table *ui.Table, stringID int, columnName string) {
-	table.AppendTextColumn(columnName, stringID, ui.TableModelColumnAlwaysEditable, nil)
-}
-
+/*
 func defaultSetCellValue(mh *TableData, m *ui.TableModel, row, column int, value ui.TableValue) {
 	if (mh.Rows[row].Cells[column].Name == "BUTTON") {
 		log.Println("defaultSetCellValue() FOUND THE BUTTON!!!!!!!   Button was pressed START", row, column)
@@ -125,3 +115,4 @@ func simpleSetCellValue(mh *TableData, row, column int, value string) {
 	}
 	return
 }
+*/
