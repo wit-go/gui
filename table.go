@@ -18,6 +18,7 @@ var img [2]*ui.Image
 
 type CellData struct {
 	Index		int
+	HumanID		int
 	Value		ui.TableValue
 	Raw		string			// shove stuff in here and figure out how to make a ui.TableValue later
 	Name		string			// what type of cell is this?
@@ -56,57 +57,67 @@ type TableData struct {
 	cellChangeEvent  	func(int, int, ui.TableValue)
 }
 
-/*
-func initHumanCell(mh *TableData, row int, cell InputData) {
-	humanInt := cell.Index
-
-	intBG := cell.ColorID
-	mh.Rows[row].Human[humanInt].Name    = cell.CellType
-	mh.Rows[row].Human[humanInt].Color   = cell.Color
-	mh.Rows[row].Human[humanInt].ColorID = intBG
-	mh.Rows[row].Human[humanInt].Text    = ui.TableValue{}
-	mh.Rows[row].Human[humanInt].TextID  = -1
-}
-*/
-
 func initRowBTcolor(mh *TableData, row int, intBG int, cell InputData) {
 	humanInt := cell.Index
 
+	// setup mapping from human readable indexes to internal libUI indexes
 	mh.Rows[row].Human[humanInt].Name    = "BG"
-	mh.Rows[row].Human[humanInt].Color   = ui.TableColor{0.5, 0.5, 0.5, .7}
 	mh.Rows[row].Human[humanInt].ColorID = intBG
-	// mh.Rows[row].Human[humanInt].Text    = ui.TableValue{}
 	mh.Rows[row].Human[humanInt].TextID  = -1
+
+	mh.Rows[row].Cells[intBG].Name       = "BG"
+	mh.Rows[row].Cells[intBG].HumanID    = humanInt
 
 	// alternate background of each row light and dark
 	if (row % 2) == 1 {
-		mh.Rows[row].Cells[intBG].Value = ui.TableColor{0.5, 0.5, 0.5, .7}
-		mh.Rows[row].Cells[intBG].Name = "BG"
+		mh.Rows[row].Cells[intBG].Value   = ui.TableColor{0.5, 0.5, 0.5, .7}
 	} else {
-		mh.Rows[row].Cells[intBG].Value = ui.TableColor{0.1, 0.1, 0.1, .1}
-		mh.Rows[row].Cells[intBG].Name = "BG"
+		mh.Rows[row].Cells[intBG].Value   = ui.TableColor{0.1, 0.1, 0.1, .1}
 	}
 }
 
 func initRowButtonColumn(mh *TableData, row int, buttonID int, junk string, cell InputData) {
-	// set the button text for Column ?
-	mh.Rows[row].Cells[buttonID].Value = ui.TableString(fmt.Sprintf("%s %d", junk, row))
-	mh.Rows[row].Cells[buttonID].Name = "BUTTON"
+	humanInt := cell.Index
+
+	// setup mapping from human readable indexes to internal libUI indexes
+	mh.Rows[row].Human[humanInt].Name    = "BUTTON"
+	mh.Rows[row].Human[humanInt].ColorID = -1
+	mh.Rows[row].Human[humanInt].TextID  = buttonID
+
+	mh.Rows[row].Cells[buttonID].Value   = ui.TableString(fmt.Sprintf("%s %d", junk, row))
+	mh.Rows[row].Cells[buttonID].Name    = "BUTTON"
+	mh.Rows[row].Cells[buttonID].HumanID = humanInt
 }
 
 func initRowTextColorColumn(mh *TableData, row int, stringID int, colorID int, junk string, color ui.TableColor, cell InputData) {
-	// text for Column ?
-	mh.Rows[row].Cells[stringID].Value = ui.TableString(fmt.Sprintf("%s %d", junk, row))
-	mh.Rows[row].Cells[stringID].Name = "EDIT"
+	humanInt := cell.Index
 
-	// text color for Column ?
-	mh.Rows[row].Cells[colorID].Value = color
-	mh.Rows[row].Cells[colorID].Name = "COLOR"
+	// setup mapping from human readable indexes to internal libUI indexes
+	mh.Rows[row].Human[humanInt].Name    = "EDIT"
+	mh.Rows[row].Human[humanInt].ColorID = colorID
+	mh.Rows[row].Human[humanInt].TextID  = stringID
+
+	// text for Column humanInt
+	mh.Rows[row].Cells[stringID].Value   = ui.TableString(fmt.Sprintf("%s %d", junk, row))
+	mh.Rows[row].Cells[stringID].Name    = "EDIT"
+	mh.Rows[row].Cells[stringID].HumanID = humanInt
+
+	mh.Rows[row].Cells[colorID].Value    = color
+	mh.Rows[row].Cells[colorID].Name     = "COLOR"
+	mh.Rows[row].Cells[colorID].HumanID  = humanInt
 }
 
 func initRowTextColumn(mh *TableData, row int, stringID int, junk string, cell InputData) {
-	mh.Rows[row].Cells[stringID].Value = ui.TableString(fmt.Sprintf("%s %d", junk, row))
-	mh.Rows[row].Cells[stringID].Name = "EDIT"
+	humanInt := cell.Index
+
+	// setup mapping from human readable indexes to internal libUI indexes
+	mh.Rows[row].Human[humanInt].Name    = "EDIT"
+	mh.Rows[row].Human[humanInt].ColorID = -1
+	mh.Rows[row].Human[humanInt].TextID  = stringID
+
+	mh.Rows[row].Cells[stringID].Name    = "EDIT"
+	mh.Rows[row].Cells[stringID].Value   = ui.TableString(fmt.Sprintf("%s %d", junk, row))
+	mh.Rows[row].Cells[stringID].HumanID = humanInt
 }
 
 func appendTextColorColumn(mh *TableData, table *ui.Table, stringID int, colorID int, columnName string) {
@@ -135,7 +146,7 @@ func simpleSetCellValue(mh *TableData, row, column int, value string) {
 		mh.Rows[row].Cells[column].Value = ui.TableString(value)
 	}
 	if (mh.Rows[row].Cells[column].Name == "BUTTON") {
-		log.Println("FOUND THE BUTTON!!!!!!!   Button was pressed START", row, column)
+		log.Println("simpleSetCellValue() FOUND THE BUTTON!!!!!!!  Button was pressed:", row, column)
 	}
 	return
 }
