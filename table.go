@@ -23,8 +23,7 @@ type RowData struct {
 	click		func()			// what function to call if the user clicks on it
 	doubleclick	func()			// what function to call if the user double clicks on it
 */
-	// Cells		[20]CellData
-	Human		[20]HumanCellData
+	HumanData	[20]HumanCellData
 }
 
 // hmm. will this stand the test of time?
@@ -33,6 +32,12 @@ type HumanCellData struct {
 	Text		ui.TableString
 	TextID		int
 	Color		ui.TableColor
+	ColorID		int
+}
+
+type HumanMap struct {
+	Name		string			// what kind of row is this?
+	TextID		int
 	ColorID		int
 }
 
@@ -45,15 +50,16 @@ type TableData struct {
 	cellChangeEvent  	func(int, int, ui.TableValue)
 
 	Cells		[20]CellData
+	Human		[20]HumanMap
 }
 
 func initRowBTcolor(mh *TableData, row int, intBG int, cell InputData) {
 	humanInt := cell.Index
 
 	// setup mapping from human readable indexes to internal libUI indexes
-	mh.Rows[row].Human[humanInt].Name    = "BG"
-	mh.Rows[row].Human[humanInt].ColorID = intBG
-	mh.Rows[row].Human[humanInt].TextID  = -1
+	mh.Human[humanInt].Name    = "BG"
+	mh.Human[humanInt].ColorID = intBG
+	mh.Human[humanInt].TextID  = -1
 
 	mh.Cells[intBG].Name       = "BG"
 	mh.Cells[intBG].HumanID    = humanInt
@@ -65,9 +71,9 @@ func initRowButtonColumn(mh *TableData, row int, buttonID int, junk string, cell
 	humanInt := cell.Index
 
 	// setup mapping from human readable indexes to internal libUI indexes
-	mh.Rows[row].Human[humanInt].Name    = "BUTTON"
-	mh.Rows[row].Human[humanInt].ColorID = -1
-	mh.Rows[row].Human[humanInt].TextID  = buttonID
+	mh.Human[humanInt].Name    = "BUTTON"
+	mh.Human[humanInt].ColorID = -1
+	mh.Human[humanInt].TextID  = buttonID
 
 	mh.Cells[buttonID].Name    = "BUTTON"
 	mh.Cells[buttonID].HumanID = humanInt
@@ -79,9 +85,9 @@ func initRowTextColorColumn(mh *TableData, row int, stringID int, colorID int, j
 	humanInt := cell.Index
 
 	// setup mapping from human readable indexes to internal libUI indexes
-	mh.Rows[row].Human[humanInt].Name    = "EDIT"
-	mh.Rows[row].Human[humanInt].ColorID = colorID
-	mh.Rows[row].Human[humanInt].TextID  = stringID
+	mh.Human[humanInt].Name    = "EDIT"
+	mh.Human[humanInt].ColorID = colorID
+	mh.Human[humanInt].TextID  = stringID
 
 	// text for Column humanInt
 	mh.Cells[stringID].Name    = "EDIT"
@@ -95,9 +101,9 @@ func initRowTextColumn(mh *TableData, row int, stringID int, junk string, cell I
 	humanInt := cell.Index
 
 	// setup mapping from human readable indexes to internal libUI indexes
-	mh.Rows[row].Human[humanInt].Name    = "EDIT"
-	mh.Rows[row].Human[humanInt].ColorID = -1
-	mh.Rows[row].Human[humanInt].TextID  = stringID
+	mh.Human[humanInt].Name    = "EDIT"
+	mh.Human[humanInt].ColorID = -1
+	mh.Human[humanInt].TextID  = stringID
 
 	mh.Cells[stringID].Name    = "EDIT"
 	mh.Cells[stringID].HumanID = humanInt

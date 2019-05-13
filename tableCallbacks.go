@@ -24,11 +24,11 @@ func (mh *TableData) ColumnTypes(m *ui.TableModel) []ui.TableValue {
 // Nevermind this TODO. Who gives a shit. This is a really smart way to treat the OS toolkits
 func (mh *TableData) CellValue(m *ui.TableModel, row, column int) ui.TableValue {
 	humanID := mh.Cells[column].HumanID
-	if (column == mh.Rows[row].Human[humanID].TextID) {
-		return mh.Rows[row].Human[humanID].Text
+	if (column == mh.Human[humanID].TextID) {
+		return mh.Rows[row].HumanData[humanID].Text
 	}
-	if (column == mh.Rows[row].Human[humanID].ColorID) {
-		return mh.Rows[row].Human[humanID].Color
+	if (column == mh.Human[humanID].ColorID) {
+		return mh.Rows[row].HumanData[humanID].Color
 	}
 	panic("not sure what sort of ui.TableValue to return in CellValue()")
 	return ui.TableString("")
@@ -47,8 +47,8 @@ func (mh *TableData) SetCellValue(m *ui.TableModel, row, column int, value ui.Ta
 	// log.Println("mh.Rows[row].Cells[column].HumanID =", mh.Rows[row].Cells[column].HumanID)
 
 	humanID := mh.Cells[column].HumanID
-	log.Println("mh.Rows[row].Human[humanID].ColorID =", mh.Rows[row].Human[humanID].ColorID)
-	log.Println("mh.Rows[row].Human[humanID].TextID =",  mh.Rows[row].Human[humanID].TextID)
+	log.Println("mh.Human[humanID].ColorID =", mh.Human[humanID].ColorID)
+	log.Println("mh.Human[humanID].TextID =",  mh.Human[humanID].TextID)
 
 	log.Println("SetCellValue() END")
 }
