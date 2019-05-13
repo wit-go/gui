@@ -53,7 +53,7 @@ type TableData struct {
 	Human		[20]HumanMap
 }
 
-func initRowBTcolor(mh *TableData, row int, intBG int, cell InputData) {
+func initRowBTcolor(mh *TableData, intBG int, cell InputData) {
 	humanInt := cell.Index
 
 	// setup mapping from human readable indexes to internal libUI indexes
@@ -64,10 +64,10 @@ func initRowBTcolor(mh *TableData, row int, intBG int, cell InputData) {
 	mh.Cells[intBG].Name       = "BG"
 	mh.Cells[intBG].HumanID    = humanInt
 
-	log.Println("HumanID = row, intBG, humanInt", row, intBG, humanInt)
+	log.Println("intBG, humanInt", intBG, humanInt)
 }
 
-func initRowButtonColumn(mh *TableData, row int, buttonID int, junk string, cell InputData) {
+func initRowButtonColumn(mh *TableData, buttonID int, junk string, cell InputData) {
 	humanInt := cell.Index
 
 	// setup mapping from human readable indexes to internal libUI indexes
@@ -78,10 +78,10 @@ func initRowButtonColumn(mh *TableData, row int, buttonID int, junk string, cell
 	mh.Cells[buttonID].Name    = "BUTTON"
 	mh.Cells[buttonID].HumanID = humanInt
 
-	log.Println("HumanID = row, buttonID, humanInt", row, buttonID, humanInt)
+	log.Println("buttonID, humanInt", buttonID, humanInt)
 }
 
-func initRowTextColorColumn(mh *TableData, row int, stringID int, colorID int, junk string, color ui.TableColor, cell InputData) {
+func initRowTextColorColumn(mh *TableData, stringID int, colorID int, junk string, color ui.TableColor, cell InputData) {
 	humanInt := cell.Index
 
 	// setup mapping from human readable indexes to internal libUI indexes
@@ -97,7 +97,7 @@ func initRowTextColorColumn(mh *TableData, row int, stringID int, colorID int, j
 	mh.Cells[colorID].HumanID  = humanInt
 }
 
-func initRowTextColumn(mh *TableData, row int, stringID int, junk string, cell InputData) {
+func initRowTextColumn(mh *TableData, stringID int, junk string, cell InputData) {
 	humanInt := cell.Index
 
 	// setup mapping from human readable indexes to internal libUI indexes

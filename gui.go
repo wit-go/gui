@@ -58,7 +58,7 @@ func initColumnNames(mh *TableData, cellJWC string, junk string) {
 	}
 }
 
-func initRow(mh *TableData, row int, parts []InputData) {
+func initRow(mh *TableData, parts []InputData) {
 	tmpBTindex := 0
 	humanID := 0
 	for key, foo := range parts {
@@ -68,16 +68,16 @@ func initRow(mh *TableData, row int, parts []InputData) {
 		humanID += 1
 
 		if (foo.CellType == "BG") {
-			initRowBTcolor        (mh, row, tmpBTindex, parts[key])
+			initRowBTcolor        (mh, tmpBTindex, parts[key])
 			tmpBTindex += 1
 		} else if (foo.CellType == "BUTTON") {
-			initRowButtonColumn   (mh, row, tmpBTindex,    parts[key].Heading, parts[key])
+			initRowButtonColumn   (mh, tmpBTindex,    parts[key].Heading, parts[key])
 			tmpBTindex += 1
 		} else if (foo.CellType == "TEXTCOLOR") {
-			initRowTextColorColumn(mh, row, tmpBTindex, tmpBTindex + 1, parts[key].Heading, ui.TableColor{0.0, 0, 0.9, 1}, parts[key])
+			initRowTextColorColumn(mh, tmpBTindex, tmpBTindex + 1, parts[key].Heading, ui.TableColor{0.0, 0, 0.9, 1}, parts[key])
 			tmpBTindex += 2
 		} else if (foo.CellType == "TEXT") {
-			initRowTextColumn     (mh, row, tmpBTindex,    parts[key].Heading, parts[key])
+			initRowTextColumn     (mh, tmpBTindex,    parts[key].Heading, parts[key])
 			tmpBTindex += 1
 		} else {
 			panic("I don't know what this is in initColumnNames")
@@ -98,10 +98,34 @@ func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts
 		initColumnNames(mh, foo.CellType, foo.Heading)
 	}
 
-	for row := 0; row < mh.RowCount; row++ {
-		initRow(mh, row, parts)
+/*
+	tmpBTindex = 0
+	humanID = 0
+
+	for key, foo := range parts {
+		log.Println(key, foo)
+
+		parts[key].Index = humanID
+		humanID += 1
+
+		if (foo.CellType == "BG") {
+			initRowBTcolor        (mh, tmpBTindex, parts[key])
+			tmpBTindex += 1
+		} else if (foo.CellType == "BUTTON") {
+			initRowButtonColumn   (mh, tmpBTindex,    parts[key].Heading, parts[key])
+			tmpBTindex += 1
+		} else if (foo.CellType == "TEXTCOLOR") {
+			initRowTextColorColumn(mh, tmpBTindex, tmpBTindex + 1, parts[key].Heading, ui.TableColor{0.0, 0, 0.9, 1}, parts[key])
+			tmpBTindex += 2
+		} else if (foo.CellType == "TEXT") {
+			initRowTextColumn     (mh, tmpBTindex,    parts[key].Heading, parts[key])
+			tmpBTindex += 1
+		} else {
+			panic("I don't know what this is in initColumnNames")
+		}
 	}
-	log.Println(mh)
+*/
+	initRow(mh, parts)
 
 	model := ui.NewTableModel(mh)
 	table := ui.NewTable(
