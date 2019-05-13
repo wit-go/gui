@@ -2,7 +2,6 @@
 
 package gui
 
-import "fmt"
 import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
@@ -12,7 +11,6 @@ import _ "github.com/andlabs/ui/winmanifest"
 type CellData struct {
 	Index		int
 	HumanID		int
-	Value		ui.TableValue
 	Name		string			// what type of cell is this?
 }
 
@@ -36,7 +34,6 @@ type HumanCellData struct {
 	TextID		int
 	Color		ui.TableColor
 	ColorID		int
-//	Event		func()			// what function to call if there is an event on this
 }
 
 type TableData struct {
@@ -60,13 +57,6 @@ func initRowBTcolor(mh *TableData, row int, intBG int, cell InputData) {
 	mh.Rows[row].Cells[intBG].HumanID    = humanInt
 
 	log.Println("HumanID = row, intBG, humanInt", row, intBG, humanInt)
-
-	// alternate background of each row light and dark
-	if (row % 2) == 1 {
-		mh.Rows[row].Cells[intBG].Value   = ui.TableColor{0.5, 0.5, 0.5, .7}
-	} else {
-		mh.Rows[row].Cells[intBG].Value   = ui.TableColor{0.1, 0.1, 0.1, .1}
-	}
 }
 
 func initRowButtonColumn(mh *TableData, row int, buttonID int, junk string, cell InputData) {
@@ -77,7 +67,6 @@ func initRowButtonColumn(mh *TableData, row int, buttonID int, junk string, cell
 	mh.Rows[row].Human[humanInt].ColorID = -1
 	mh.Rows[row].Human[humanInt].TextID  = buttonID
 
-	mh.Rows[row].Cells[buttonID].Value   = ui.TableString(fmt.Sprintf("%s %d", junk, row))
 	mh.Rows[row].Cells[buttonID].Name    = "BUTTON"
 	mh.Rows[row].Cells[buttonID].HumanID = humanInt
 
@@ -93,11 +82,9 @@ func initRowTextColorColumn(mh *TableData, row int, stringID int, colorID int, j
 	mh.Rows[row].Human[humanInt].TextID  = stringID
 
 	// text for Column humanInt
-	mh.Rows[row].Cells[stringID].Value   = ui.TableString(fmt.Sprintf("%s %d", junk, row))
 	mh.Rows[row].Cells[stringID].Name    = "EDIT"
 	mh.Rows[row].Cells[stringID].HumanID = humanInt
 
-	mh.Rows[row].Cells[colorID].Value    = color
 	mh.Rows[row].Cells[colorID].Name     = "COLOR"
 	mh.Rows[row].Cells[colorID].HumanID  = humanInt
 }
@@ -111,7 +98,6 @@ func initRowTextColumn(mh *TableData, row int, stringID int, junk string, cell I
 	mh.Rows[row].Human[humanInt].TextID  = stringID
 
 	mh.Rows[row].Cells[stringID].Name    = "EDIT"
-	mh.Rows[row].Cells[stringID].Value   = ui.TableString(fmt.Sprintf("%s %d", junk, row))
 	mh.Rows[row].Cells[stringID].HumanID = humanInt
 }
 
@@ -127,19 +113,13 @@ func appendTextColumn(mh *TableData, table *ui.Table, stringID int, columnName s
 }
 
 func defaultSetCellValue(mh *TableData, m *ui.TableModel, row, column int, value ui.TableValue) {
-	if (mh.Rows[row].Cells[column].Name == "EDIT") {
-		mh.Rows[row].Cells[column].Value = value
-	}
 	if (mh.Rows[row].Cells[column].Name == "BUTTON") {
-		log.Println("FOUND THE BUTTON!!!!!!!   Button was pressed START", row, column)
+		log.Println("defaultSetCellValue() FOUND THE BUTTON!!!!!!!   Button was pressed START", row, column)
 	}
 	return
 }
 
 func simpleSetCellValue(mh *TableData, row, column int, value string) {
-	if (mh.Rows[row].Cells[column].Name == "EDIT") {
-		mh.Rows[row].Cells[column].Value = ui.TableString(value)
-	}
 	if (mh.Rows[row].Cells[column].Name == "BUTTON") {
 		log.Println("simpleSetCellValue() FOUND THE BUTTON!!!!!!!  Button was pressed:", row, column)
 	}

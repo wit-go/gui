@@ -31,7 +31,8 @@ func (mh *TableData) CellValue(m *ui.TableModel, row, column int) ui.TableValue 
 	if (column == mh.Rows[row].Human[humanID].ColorID) {
 		return mh.Rows[row].Human[humanID].Color
 	}
-	return mh.Rows[row].Cells[column].Value
+	panic("not sure what sort of ui.TableValue to return in CellValue()")
+	return ui.TableString("")
 }
 
 func (mh *TableData) SetCellValue(m *ui.TableModel, row, column int, value ui.TableValue) {
@@ -53,11 +54,6 @@ func (mh *TableData) SetCellValue(m *ui.TableModel, row, column int, value ui.Ta
 	humanID := mh.Rows[row].Cells[column].HumanID
 	log.Println("mh.Rows[row].Human[humanID].ColorID =", mh.Rows[row].Human[humanID].ColorID)
 	log.Println("mh.Rows[row].Human[humanID].TextID =",  mh.Rows[row].Human[humanID].TextID)
-
-	if (column == mh.Rows[row].Human[humanID].TextID) {
-		log.Println("THIS COLUMN IS A TEXT COLUMN")
-		mh.Rows[row].Cells[column].Value = mh.Rows[row].Human[humanID].Text
-	}
 
 	log.Println("SetCellValue() END")
 }
