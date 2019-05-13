@@ -28,6 +28,9 @@ func (mh *TableData) CellValue(m *ui.TableModel, row, column int) ui.TableValue 
 	if (column == mh.Rows[row].Human[humanID].TextID) {
 		return mh.Rows[row].Human[humanID].Text
 	}
+	if (column == mh.Rows[row].Human[humanID].ColorID) {
+		return mh.Rows[row].Human[humanID].Color
+	}
 	return mh.Rows[row].Cells[column].Value
 }
 
