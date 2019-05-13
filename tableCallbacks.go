@@ -24,6 +24,10 @@ func (mh *TableData) ColumnTypes(m *ui.TableModel) []ui.TableValue {
 // TODO: Figure out why this is being called 1000 times a second (10 times for each row & column)
 // Nevermind this TODO. Who gives a shit. This is a really smart way to treat the OS toolkits
 func (mh *TableData) CellValue(m *ui.TableModel, row, column int) ui.TableValue {
+	humanID := mh.Rows[row].Cells[column].HumanID
+	if (column == mh.Rows[row].Human[humanID].TextID) {
+		return mh.Rows[row].Human[humanID].Text
+	}
 	return mh.Rows[row].Cells[column].Value
 }
 
