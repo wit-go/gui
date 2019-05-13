@@ -30,7 +30,14 @@ func (mh *TableData) CellValue(m *ui.TableModel, row, column int) ui.TableValue 
 	if (column == mh.Human[humanID].ColorID) {
 		return mh.Rows[row].HumanData[humanID].Color
 	}
-	panic("not sure what sort of ui.TableValue to return in CellValue()")
+	log.Println("CellValue() FAILURE")
+	log.Println("CellValue() FAILURE")
+	log.Println("CellValue() row, column = ", row, column)
+	log.Println("CellValue() FAILURE")
+	log.Println("CellValue() FAILURE")
+	log.Println("CellValue() mh.Cells", mh.Cells)
+	log.Println("CellValue() mh.Human", mh.Human)
+	panic("CellValue() not sure what sort of ui.TableValue to return in CellValue()")
 	return ui.TableString("")
 }
 
@@ -38,10 +45,6 @@ func (mh *TableData) SetCellValue(m *ui.TableModel, row, column int, value ui.Ta
 	log.Println("SetCellValue() START row=", row, "column=", column, "value=", value)
 
 	defaultSetCellValue(mh, row, column)
-
-	if (mh.cellChangeEvent != nil) {
-		mh.cellChangeEvent(row, column, value)
-	}
 
 	log.Println("mh.Cells[column].HumanID =", mh.Cells[column].HumanID)
 	// log.Println("mh.Rows[row].Cells[column].HumanID =", mh.Rows[row].Cells[column].HumanID)

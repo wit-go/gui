@@ -46,11 +46,9 @@ type TableData struct {
 	RowWidth		int			// This is how wide each row is
 	Rows			[]RowData		// This is all the table data by row
 	generatedColumnTypes	[]ui.TableValue		// generate this dynamically
-	// libUIevent 	 	func(*TableData, *ui.TableModel, int, int, ui.TableValue)
-	cellChangeEvent  	func(int, int, ui.TableValue)
 
-	Cells		[20]CellData
-	Human		[20]HumanMap
+	Cells			[20]CellData
+	Human			[20]HumanMap
 }
 
 func initRowBTcolor(mh *TableData, intBG int, cell InputData) {
