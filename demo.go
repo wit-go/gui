@@ -38,3 +38,10 @@ func SetupDemoUI() {
 
 	demowin.Show()
 }
+
+func CloseDemoUI() {
+	if demowin != nil {
+		demowin.Destroy()
+	}
+	demowin = nil
+}
