@@ -7,9 +7,12 @@ package gui
 //
 
 import "log"
+import "fmt"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
+
+var CurrentVM string
 
 func (mh *TableData) NumRows(m *ui.TableModel) int {
 	return mh.RowCount
@@ -58,6 +61,12 @@ func (mh *TableData) SetCellValue(m *ui.TableModel, row, column int, value ui.Ta
 
 func defaultSetCellValue(mh *TableData, row int, column int) {
 	if (mh.Cells[column].Name == "BUTTON") {
+		humanID := mh.Cells[column].HumanID
+		vmname := mh.Rows[row].HumanData[humanID].Text
+		log.Println("vmname =",  vmname)
 		log.Println("defaultSetCellValue() FOUND THE BUTTON!!!!!!!   Button was pressed START", row, column)
+		CurrentVM = fmt.Sprintf("%s",vmname)
+		log.Println("CurrentVM =", CurrentVM)
+		go ui.Main(ShowVM)
 	}
 }
