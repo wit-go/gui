@@ -12,7 +12,7 @@ func SetupDemoUI() {
 	log.Println("setupDemoUI() START")
 	demowin = ui.NewWindow("Demo GUI Widgets", 500, 300, false)
 	demowin.OnClosing(func(*ui.Window) bool {
-		ui.Quit()
+		// ui.Quit()
 		return true
 	})
 	ui.OnShouldQuit(func() bool {
