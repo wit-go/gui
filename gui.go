@@ -5,6 +5,9 @@ import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
+import "github.com/gookit/config"
+import "github.com/davecgh/go-spew/spew"
+
 var mainwin	*ui.Window
 var maintab	*ui.Tab
 var tabcount	int
@@ -12,11 +15,15 @@ var tabcount	int
 var Width	int
 var Height	int
 
-type InputData struct {
+type TableColumnData struct {
 	Index		int
 	CellType	string
 	Heading		string
 	Color		string
+}
+
+type ButtonMap struct {
+	B		*ui.Button
 }
 
 func setupUI() {
@@ -43,7 +50,7 @@ func AddNewTab(mytab *ui.Tab, newbox ui.Control, tabOffset int) {
 	mytab.SetMargined(tabOffset, true)
 }
 
-func InitColumns(mh *TableData, parts []InputData) {
+func InitColumns(mh *TableData, parts []TableColumnData) {
 	tmpBTindex := 0
 	humanID := 0
 	for key, foo := range parts {
@@ -77,7 +84,7 @@ func InitColumns(mh *TableData, parts []InputData) {
 	}
 }
 
-func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts []InputData) *TableData {
+func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts []TableColumnData) *TableData {
 	mh := new(TableData)
 
 	mh.RowCount    = rowcount
@@ -114,8 +121,25 @@ func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts
 		}
 	}
 
-	mytab.Append(name, table)
+	vbox := ui.NewVerticalBox()
+	vbox.SetPadded(true)
+
+	vbox.Append(table, true)
+	mytab.Append(name, vbox)
 	mytab.SetMargined(mytabcount, true)
+
+	vbox.Append(ui.NewVerticalSeparator(), false)
+
+	hbox := ui.NewHorizontalBox()
+	hbox.SetPadded(true)
+
+	myAddVM := addVmButton("Add Virtual Machine")
+	hbox.Append(myAddVM, false)
+
+	myClose := closeButton("Close", mytab)
+	hbox.Append(myClose, false)
+
+	vbox.Append(hbox, false)
 
 	return mh
 }
@@ -125,4 +149,28 @@ func DoGUI() {
 		ui.Main(setupUI)
 		log.Println("GUI exited. Not sure what to do here. os.Exit() ?")
 	}
+}
+
+func closeButtonClick(button *ui.Button) {
+	log.Println("closeButtonClick() hostname =", config.String("hostname"), button)
+	spew.Dump(button)
+}
+
+func closeButton(name string, mytab *ui.Tab) ui.Control {
+	tmpButton := ui.NewButton(name)
+	tmpButton.OnClicked(buttonClick)
+
+	return tmpButton
+}
+
+func addVmButtonClick(button *ui.Button) {
+	log.Println("addVMButtonClick()")
+	spew.Dump(button)
+}
+
+func addVmButton(name string) ui.Control {
+	tmpButton := ui.NewButton(name)
+	tmpButton.OnClicked(addVmButtonClick)
+
+	return tmpButton
 }
