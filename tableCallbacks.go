@@ -28,7 +28,7 @@ func (mh *TableData) ColumnTypes(m *ui.TableModel) []ui.TableValue {
 func (mh *TableData) CellValue(m *ui.TableModel, row, column int) ui.TableValue {
 	humanID := mh.Cells[column].HumanID
 	if (column == mh.Human[humanID].TextID) {
-		return mh.Rows[row].HumanData[humanID].Text
+		return ui.TableString(mh.Rows[row].HumanData[humanID].Text)
 	}
 	if (column == mh.Human[humanID].ColorID) {
 		return mh.Rows[row].HumanData[humanID].Color

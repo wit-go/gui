@@ -29,7 +29,8 @@ type RowData struct {
 // hmm. will this stand the test of time?
 type HumanCellData struct {
 	Name		string			// what kind of row is this?
-	Text		ui.TableString
+	// Text		ui.TableString
+	Text		string
 	TextID		int
 	Color		ui.TableColor
 	ColorID		int
