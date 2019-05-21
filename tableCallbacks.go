@@ -8,6 +8,7 @@ package gui
 
 import "log"
 import "fmt"
+import "image/color"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
@@ -23,6 +24,10 @@ func (mh *TableData) ColumnTypes(m *ui.TableModel) []ui.TableValue {
 	return mh.generatedColumnTypes
 }
 
+func libuiColorToGOlangColor(rgba color.RGBA) ui.TableColor {
+	return ui.TableColor{float64(rgba.R) / 256, float64(rgba.G) / 256, float64(rgba.B) / 256, float64(rgba.A) / 256}
+}
+
 // TODO: Figure out why this is being called 1000 times a second (10 times for each row & column)
 // Nevermind this TODO. Who gives a shit. This is a really smart way to treat the OS toolkits
 func (mh *TableData) CellValue(m *ui.TableModel, row, column int) ui.TableValue {
@@ -31,7 +36,7 @@ func (mh *TableData) CellValue(m *ui.TableModel, row, column int) ui.TableValue 
 		return ui.TableString(mh.Rows[row].HumanData[humanID].Text)
 	}
 	if (column == mh.Human[humanID].ColorID) {
-		return mh.Rows[row].HumanData[humanID].Color
+		return libuiColorToGOlangColor(mh.Rows[row].HumanData[humanID].Color)
 	}
 	log.Println("CellValue() FAILURE")
 	log.Println("CellValue() FAILURE")

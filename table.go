@@ -3,6 +3,8 @@
 package gui
 
 import "log"
+import "image/color"
+
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
@@ -32,7 +34,8 @@ type HumanCellData struct {
 	// Text		ui.TableString
 	Text		string
 	TextID		int
-	Color		ui.TableColor
+	// Color		ui.TableColor
+	Color		color.RGBA
 	ColorID		int
 }
 
