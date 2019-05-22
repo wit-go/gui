@@ -15,6 +15,8 @@ var tabcount	int
 var Width	int
 var Height	int
 
+var allButtons	[]ButtonMap
+
 type TableColumnData struct {
 	Index		int
 	CellType	string
@@ -24,6 +26,12 @@ type TableColumnData struct {
 
 type ButtonMap struct {
 	B		*ui.Button
+	FB		*ui.FontButton
+	onClick		func (int, string)
+	onChanged	func (int, string)
+	custom		func (int, string)
+	name		string	// the text on the button
+	note		string	// what type of button
 }
 
 func setupUI() {
@@ -149,6 +157,59 @@ func DoGUI() {
 		ui.Main(setupUI)
 		log.Println("GUI exited. Not sure what to do here. os.Exit() ?")
 	}
+}
+
+func defaultMouseEvent() {
+}
+
+func defaultButtonClick(button *ui.Button) {
+	log.Println("defaultButtonClick() button =", button)
+	for key, foo := range allButtons {
+		log.Println("allButtons =", key, foo)
+		if allButtons[key].B == button {
+			log.Println("\tBUTTON MATCHED")
+			if allButtons[key].custom != nil {
+				allButtons[key].custom(42, "something foo")
+			}
+		}
+	}
+}
+
+func defaultFontButtonClick(button *ui.FontButton) {
+	log.Println("defaultButtonClick() button =", button)
+	for key, foo := range allButtons {
+		log.Println("allButtons =", key, foo)
+	}
+}
+
+func CreateButton(name string, note string, custom func(int, string)) *ui.Button {
+	newB := ui.NewButton("OK")
+
+	newB.OnClicked(defaultButtonClick)
+
+	var newmap ButtonMap
+	newmap.B = newB
+	newmap.note = note
+	newmap.name = name
+	newmap.custom = custom
+	allButtons = append(allButtons, newmap)
+
+	return newB
+}
+
+func CreateFontButton(name string, note string, custom func(int, string)) *ui.FontButton {
+	newB := ui.NewFontButton()
+
+	newB.OnChanged(defaultFontButtonClick)
+
+	var newmap ButtonMap
+	newmap.FB = newB
+	newmap.note = note
+	newmap.name = name
+	newmap.custom = custom
+	allButtons = append(allButtons, newmap)
+
+	return newB
 }
 
 func closeButtonClick(button *ui.Button) {
