@@ -13,14 +13,22 @@ import "image/color"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
+import "github.com/gookit/config"
+
 var CurrentVM string
 
 func (mh *TableData) NumRows(m *ui.TableModel) int {
+	if (config.String("debugging") == "true") {
+		log.Println("NumRows = mh.RowCount = ", mh.RowCount)
+	}
 	return mh.RowCount
 }
 
 // FYI: this routine seems to be called around 10 to 100 times a second for each table
 func (mh *TableData) ColumnTypes(m *ui.TableModel) []ui.TableValue {
+	if (config.String("debugging") == "true") {
+		log.Println("ColumnTypes = ", mh.generatedColumnTypes)
+	}
 	return mh.generatedColumnTypes
 }
 
