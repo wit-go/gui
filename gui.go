@@ -183,7 +183,7 @@ func defaultFontButtonClick(button *ui.FontButton) {
 }
 
 func CreateButton(name string, note string, custom func(int, string)) *ui.Button {
-	newB := ui.NewButton("OK")
+	newB := ui.NewButton(name)
 
 	newB.OnClicked(defaultButtonClick)
 
