@@ -9,6 +9,7 @@ package gui
 import "log"
 import "fmt"
 import "image/color"
+import "runtime"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
@@ -52,8 +53,11 @@ func (mh *TableData) CellValue(m *ui.TableModel, row, column int) ui.TableValue 
 	}
 	if (column == mh.Human[humanID].ColorID) {
 		if (column == 0) {
-			log.Println("CellValue() is BG COLOR row, column =", row, column)
-			return nil
+			// ignore BG color on windows for now
+			if (runtime.GOOS == "windows") {
+				log.Println("CellValue() is BG COLOR row, column =", row, column)
+				return nil
+			}
 		}
 		return libuiColorToGOlangColor(mh.Rows[row].HumanData[humanID].Color)
 	}
