@@ -13,10 +13,8 @@ import "image/color"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-import "github.com/gookit/config"
-
 func (mh *TableData) NumRows(m *ui.TableModel) int {
-	if (config.String("debugging") == "true") {
+	if (Data.Debug) {
 		log.Println("NumRows = mh.RowCount = ", mh.RowCount)
 	}
 	return mh.RowCount
@@ -24,7 +22,7 @@ func (mh *TableData) NumRows(m *ui.TableModel) int {
 
 // FYI: this routine seems to be called around 10 to 100 times a second for each table
 func (mh *TableData) ColumnTypes(m *ui.TableModel) []ui.TableValue {
-	if (config.String("debugging") == "true") {
+	if (Data.Debug) {
 		log.Println("ColumnTypes = ", mh.generatedColumnTypes)
 	}
 	return mh.generatedColumnTypes
@@ -37,7 +35,7 @@ func libuiColorToGOlangColor(rgba color.RGBA) ui.TableColor {
 // TODO: Figure out why this is being called 1000 times a second (10 times for each row & column)
 // Nevermind this TODO. Who gives a shit. This is a really smart way to treat the OS toolkits
 func (mh *TableData) CellValue(m *ui.TableModel, row, column int) ui.TableValue {
-	if (config.String("debugging") == "true") {
+	if (Data.Debug) {
 		log.Println("CellValue() row, column =", row, column)
 	}
 	humanID := mh.Cells[column].HumanID
