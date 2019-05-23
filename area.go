@@ -19,7 +19,14 @@ func makeSplashArea(custom func(int, string)) *ui.Area {
 	makeAttributedString()
 	Data.splashArea = ui.NewArea(myAH)
 
-	spew.Dump(Data.splashArea)
+	if (Data.Debug) {
+		spew.Dump(Data.splashArea)
+		log.Println("DEBUGGING", Data.Debug)
+	} else {
+		log.Println("NOT DEBUGGING", Data.Debug)
+		log.Println("NOT DEBUGGING", Data.Debug)
+		log.Println("NOT DEBUGGING", Data.Debug)
+	}
 	return Data.splashArea
 }
 

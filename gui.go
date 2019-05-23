@@ -28,6 +28,7 @@ type GuiDataStructure struct {
 	GitCommit	string
 	GoVersion	string
 	HomeDir		string
+	Debug		bool
 
 	// account entry textboxes
 	AccNick	string
