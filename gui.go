@@ -22,12 +22,20 @@ type GuiDataStructure struct {
 	Height		int
 	ButtonClick	func(int, string)
 	CurrentVM	string
+	MyArea		*ui.Area
 
+	// stuff for the splash screen / setup tabs
 	cloudWindow	*ui.Window
+	cloudTab	*ui.Tab
+	cloudBox	*ui.Box
+	smallBox	*ui.Box
+
 	mainwin		*ui.Window
 	maintab		*ui.Tab
 	tabcount	int
 	allButtons	[]ButtonMap
+
+
 
 	// stuff for the 'area'
 	fontButton	*ui.FontButton

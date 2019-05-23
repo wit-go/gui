@@ -8,12 +8,6 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 // import "github.com/davecgh/go-spew/spew"
 
-// var cloudWindow *ui.Window
-var cloudTab *ui.Tab
-var cloudBox *ui.Box
-var smallBox *ui.Box
-var state string
-
 func buttonClick(i int, s string) {
 	log.Println("gui.buttonClick() i, s =", i, s)
 	log.Println("Figure out what to do here")
@@ -27,25 +21,25 @@ func buttonClick(i int, s string) {
 }
 
 func ShowAccountQuestionTab() {
-	cloudTab.Delete(0)
+	Data.cloudTab.Delete(0)
 
 	log.Println("Sleep(1000)")
 	time.Sleep(1000 * time.Millisecond)
 
-	smallBox = AddAccountQuestionBox(nil, buttonClick)
-	cloudTab.InsertAt("New Account?", 0, smallBox)
-	cloudTab.SetMargined(0, true)
+	Data.smallBox = AddAccountQuestionBox(nil, buttonClick)
+	Data.cloudTab.InsertAt("New Account?", 0, Data.smallBox)
+	Data.cloudTab.SetMargined(0, true)
 }
 
 func ShowAccountTab() {
-	cloudTab.Delete(0)
+	Data.cloudTab.Delete(0)
 
 	log.Println("Sleep(1000)")
 	time.Sleep(1000 * time.Millisecond)
 
-	smallBox = AddAccountBox(buttonClick)
-	cloudTab.InsertAt("Add Account", 0, smallBox)
-	cloudTab.SetMargined(0, true)
+	Data.smallBox = AddAccountBox(buttonClick)
+	Data.cloudTab.InsertAt("Add Account", 0, Data.smallBox)
+	Data.cloudTab.SetMargined(0, true)
 }
 
 func GoMainWindow() {
@@ -64,14 +58,14 @@ func makeCloudWindow() {
 		return true
 	})
 
-	cloudTab = ui.NewTab()
-	Data.cloudWindow.SetChild(cloudTab)
+	Data.cloudTab = ui.NewTab()
+	Data.cloudWindow.SetChild(Data.cloudTab)
 	Data.cloudWindow.SetMargined(true)
 
-	cloudBox = ShowSplashBox(nil, nil, buttonClick)
+	Data.cloudBox = ShowSplashBox(nil, nil, buttonClick)
 
-	cloudTab.Append("WIT Splash", cloudBox)
-	cloudTab.SetMargined(0, true)
+	Data.cloudTab.Append("WIT Splash", Data.cloudBox)
+	Data.cloudTab.SetMargined(0, true)
 
 	Data.cloudWindow.Show()
 	Data.State = "splash"
