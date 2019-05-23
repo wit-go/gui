@@ -8,7 +8,7 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 // import "github.com/davecgh/go-spew/spew"
 
-var cloudWindow *ui.Window
+// var cloudWindow *ui.Window
 var cloudTab *ui.Tab
 var cloudBox *ui.Box
 var smallBox *ui.Box
@@ -26,7 +26,11 @@ func splashClose(a int, b string) {
 }
 
 func buttonClick(i int, s string) {
-	log.Println("test2 buttonClick() i, s =", i, s)
+	log.Println("gui.buttonClick() i, s =", i, s)
+	log.Println("Figure out what to do here")
+	log.Println("Figure out what to do here")
+	log.Println("Figure out what to do here")
+	/*
 	cloudTab.Delete(0)
 
 	log.Println("Sleep(2000)")
@@ -35,6 +39,7 @@ func buttonClick(i int, s string) {
 	smallBox = AddAccountBox(nil, splashClose)
 	cloudTab.InsertAt("Intro", 0, smallBox)
 	cloudTab.SetMargined(0, true)
+	*/
 }
 
 func ShowAccountTab() {
@@ -53,31 +58,26 @@ func GoMainWindow() {
 }
 
 func makeCloudWindow() {
-	cloudWindow := ui.NewWindow("", 640, 480, true)
+	Data.cloudWindow = ui.NewWindow("", 640, 480, true)
 	// cloudWindow.SetBorderless(true)
-	cloudWindow.OnClosing(func(*ui.Window) bool {
+	Data.cloudWindow.OnClosing(func(*ui.Window) bool {
 		ui.Quit()
 		return true
 	})
 	ui.OnShouldQuit(func() bool {
-		cloudWindow.Destroy()
+		Data.cloudWindow.Destroy()
 		return true
 	})
 
-//	cloudBox = ui.NewVerticalBox()
-//	cloudBox.SetPadded(true)
-//	cloudWindow.SetChild(cloudBox)
-//	cloudWindow.SetMargined(true)
-
 	cloudTab = ui.NewTab()
-	cloudWindow.SetChild(cloudTab)
-	cloudWindow.SetMargined(true)
+	Data.cloudWindow.SetChild(cloudTab)
+	Data.cloudWindow.SetMargined(true)
 
 	cloudBox = ShowSplashBox(nil, nil, buttonClick)
 
 	cloudTab.Append("WIT Splash", cloudBox)
 	cloudTab.SetMargined(0, true)
 
-	cloudWindow.Show()
-	// state = "done"
+	Data.cloudWindow.Show()
+	Data.State = "splash done"
 }

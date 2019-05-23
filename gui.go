@@ -12,22 +12,24 @@ var mainwin	*ui.Window
 var maintab	*ui.Tab
 var tabcount	int
 
-var Width	int
 var Height	int
 
 var allButtons	[]ButtonMap
 
-var internalDS	GuiDS
 
-func GetDataStructures() *GuiDS {
-	return &internalDS
-}
+//
+// All GUI Data Structures and functions that are external
+// If you need cross platform support, these might only
+// be the safe way to interact with the GUI
+//
+var Data	GuiDataStructure
 
-// All GUI Data Structures that are external
-type GuiDS struct {
+type GuiDataStructure struct {
 	State		string
 	MainWindow	*ui.Window
+	Width		int
 	ButtonClick	func(int, string)
+	cloudWindow	*ui.Window
 }
 
 type TableColumnData struct {
@@ -48,7 +50,7 @@ type ButtonMap struct {
 }
 
 func setupUI() {
-	mainwin = ui.NewWindow("Cloud Control Panel", Width, Height, false)
+	mainwin = ui.NewWindow("Cloud Control Panel", Data.Width, Height, false)
 	mainwin.OnClosing(func(*ui.Window) bool {
 		ui.Quit()
 		return true
@@ -170,9 +172,6 @@ func DoGUI() {
 		ui.Main(setupUI)
 		log.Println("GUI exited. Not sure what to do here. os.Exit() ?")
 	}
-}
-
-func defaultMouseEvent() {
 }
 
 func defaultButtonClick(button *ui.Button) {
