@@ -28,6 +28,11 @@ type GuiDataStructure struct {
 	GitCommit	string
 	GoVersion	string
 
+	// account entry textboxes
+	AccNick	string
+	AccUser	string
+	AccPass	string
+
 	// stuff for the splash screen / setup tabs
 	cloudWindow	*ui.Window
 	cloudTab	*ui.Tab
@@ -38,8 +43,6 @@ type GuiDataStructure struct {
 	maintab		*ui.Tab
 	tabcount	int
 	allButtons	[]ButtonMap
-
-
 
 	// stuff for the 'area'
 	fontButton	*ui.FontButton

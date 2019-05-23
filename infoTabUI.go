@@ -26,20 +26,9 @@ func makeCloudInfoBox(custom func(int, string)) *ui.Box {
 	vbox.Append(ui.NewColorButton(), false)
 
 	addXbutton := CreateButton("Show bmath's Account", "BMATH", custom)
-/*
-	addXbutton := ui.NewButton("Show bmath's Account")
-	addXbutton.OnClicked(func(*ui.Button) {
-		log.Println("gorillaSendProtobuf()")
-		gorillaSendProtobuf()
-	})
-*/
 	vbox.Append(addXbutton, false)
 
-	addButton := ui.NewButton("Add Account")
-	addButton.OnClicked(func(*ui.Button) {
-		log.Println("Not Implemented Yet. Try adding --debugging")
-	})
-	vbox.Append(addButton, false)
+	vbox.Append(CreateButton("Add Account", "ADD", custom), false)
 
 	if (config.String("debugging") == "true") {
 		addDebuggingButtons(vbox, custom)
@@ -80,7 +69,8 @@ func makeCloudInfoBox(custom func(int, string)) *ui.Box {
 		hostname	:= config.String("accounts." + account + ".hostname")
 		domainname	:= config.String("accounts." + account + ".domainname")
 		port		:= config.String("accounts." + account + ".port")
-		a := account + " " + hostname + " " + domainname + " " + port
+		username	:= config.String("accounts." + account + ".username")
+		a := account + " " + hostname + " " + domainname + " " + port + " " + username
 		log.Println("ACCOUNT: ", a)
 		vbox.Append(ui.NewLabel(a), false)
 	}
