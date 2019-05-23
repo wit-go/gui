@@ -7,10 +7,6 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 import "github.com/davecgh/go-spew/spew"
 
-func areaClick(a int, b string) {
-	log.Println("GOT areaClick(a,b) =", a, b)
-}
-
 func makeSplashArea(custom func(int, string)) *ui.Area {
 	// make this button just to get the default font (but don't display the button)
 	// There should be another way to do this (?)
@@ -80,7 +76,9 @@ func (ah areaHandler) Draw(a *ui.Area, p *ui.AreaDrawParams) {
 
 func (ah areaHandler) MouseEvent(a *ui.Area, me *ui.AreaMouseEvent) {
 	log.Println("GOT MouseEvent()")
-	spew.Dump(me)
+	if (Data.Debug) {
+		spew.Dump(me)
+	}
 	if (me.Down == 1) {
 		log.Println("GOT MOUSE DOWN")
 		log.Println("GOT MOUSE DOWN")
@@ -90,10 +88,10 @@ func (ah areaHandler) MouseEvent(a *ui.Area, me *ui.AreaMouseEvent) {
 		log.Println("GOT MOUSE UP")
 		log.Println("GOT MOUSE UP")
 		log.Println("GOT MOUSE UP")
-		// splashWin.Destroy()
-		// ui.Quit()
+		if (Data.ButtonClickNew != nil) {
+			Data.ButtonClickNew(nil)
+		}
 	}
-	areaClick(1, "done")
 }
 
 func (ah areaHandler) MouseCrossed(a *ui.Area, left bool) {

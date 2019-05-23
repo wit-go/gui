@@ -30,13 +30,15 @@ func ShowSplashBox(vbox *ui.Box, atest chan int, custom func(int, string)) *ui.B
 	version := "Version: " + Data.Version
 	newbox.Append(ui.NewLabel(version), false)
 
-	if (Data.GitCommit != "") {
-		tmp := "git rev-list: " + Data.GitCommit
-		newbox.Append(ui.NewLabel(tmp), false)
-	}
-	if (Data.GoVersion != "") {
-		tmp := "go build version: " + Data.GoVersion
-		newbox.Append(ui.NewLabel(tmp), false)
+	if (Data.Debug) {
+		if (Data.GitCommit != "") {
+			tmp := "git rev-list: " + Data.GitCommit
+			newbox.Append(ui.NewLabel(tmp), false)
+		}
+		if (Data.GoVersion != "") {
+			tmp := "go build version: " + Data.GoVersion
+			newbox.Append(ui.NewLabel(tmp), false)
+		}
 	}
 
 	okButton := CreateButton("OK", "DONE", custom)

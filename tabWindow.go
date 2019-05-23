@@ -61,11 +61,21 @@ func makeCloudWindow() {
 	Data.cloudWindow = ui.NewWindow("", 640, 480, true)
 	// cloudWindow.SetBorderless(true)
 	Data.cloudWindow.OnClosing(func(*ui.Window) bool {
-		ui.Quit()
+		if (Data.ButtonClickNew != nil) {
+			log.Println("Data.ButtonClickNew() START QUIT")
+			Data.State = "QUIT"
+			Data.ButtonClickNew(nil)
+		}
+		// ui.Quit()
 		return true
 	})
 	ui.OnShouldQuit(func() bool {
-		Data.cloudWindow.Destroy()
+		if (Data.ButtonClickNew != nil) {
+			log.Println("Data.ButtonClickNew() START QUIT")
+			Data.State = "QUIT"
+			Data.ButtonClickNew(nil)
+		}
+		// Data.cloudWindow.Destroy()
 		return true
 	})
 
