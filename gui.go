@@ -25,6 +25,8 @@ type GuiDataStructure struct {
 	CurrentVM	string
 	MyArea		*ui.Area
 	Version		string
+	GitCommit	string
+	GoVersion	string
 
 	// stuff for the splash screen / setup tabs
 	cloudWindow	*ui.Window
