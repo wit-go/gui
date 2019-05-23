@@ -30,6 +30,8 @@ func makeCloudInfoBox(custom func(int, string)) *ui.Box {
 
 	vbox.Append(CreateButton("Add Account", "ADD", custom), false)
 
+	vbox.Append(CreateButton("Quit", "QUIT", custom), false)
+
 	if (config.String("debugging") == "true") {
 		addDebuggingButtons(vbox, custom)
 	}

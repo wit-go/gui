@@ -39,7 +39,7 @@ func ShowSplashBox(vbox *ui.Box, atest chan int, custom func(int, string)) *ui.B
 		newbox.Append(ui.NewLabel(tmp), false)
 	}
 
-	okButton := CreateButton("OK", "CLOSE", custom)
+	okButton := CreateButton("OK", "DONE", custom)
 	newbox.Append(okButton, false)
 
 	if (vbox != nil) {

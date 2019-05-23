@@ -9,12 +9,12 @@ func AddAccountQuestionBox(junk *ui.Box, custom func(int, string)) *ui.Box {
 	newbox := ui.NewVerticalBox()
 	newbox.SetPadded(true)
 
-	newButton := CreateButton("Create New Account", "CLOSE", custom)
+	newButton := CreateButton("Create New Account", "DONE", custom)
 	newbox.Append(newButton, false)
 
 	newbox.Append(ui.NewHorizontalSeparator(), false)
 
-	okButton := CreateButton("I Have an Account", "CLOSE", custom)
+	okButton := CreateButton("I Have an Account", "DONE", custom)
 	newbox.Append(okButton, false)
 
 	return newbox
