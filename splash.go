@@ -27,7 +27,8 @@ func ShowSplashBox(vbox *ui.Box, atest chan int, custom func(int, string)) *ui.B
 		newbox.Append(ui.NewLabel("OS: " + runtime.GOOS), false)
 	}
 
-	newbox.Append(ui.NewLabel("Version: v0.3"), false)
+	version := "Version: " + Data.Version
+	newbox.Append(ui.NewLabel(version), false)
 	okButton := CreateButton("OK", "CLOSE", custom)
 	newbox.Append(okButton, false)
 

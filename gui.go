@@ -24,6 +24,7 @@ type GuiDataStructure struct {
 	ButtonClickNew	func(*ButtonMap)
 	CurrentVM	string
 	MyArea		*ui.Area
+	Version		string
 
 	// stuff for the splash screen / setup tabs
 	cloudWindow	*ui.Window
