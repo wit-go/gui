@@ -15,10 +15,6 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 // import "github.com/davecgh/go-spew/spew"
 
-var cloudwin *ui.Window
-var cloudtab *ui.Tab
-var tabcount int
-
 func makeCloudInfoBox(custom func(int, string)) *ui.Box {
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
@@ -79,25 +75,25 @@ func makeCloudInfoBox(custom func(int, string)) *ui.Box {
 
 // can not pass any args to this (?)
 func setupCloudUI() {
-	cloudwin = ui.NewWindow("Cloud Control Panel", config.Int("width"), config.Int("height"), false)
-	cloudwin.OnClosing(func(*ui.Window) bool {
+	Data.cloudWindow = ui.NewWindow("Cloud Control Panel", config.Int("width"), config.Int("height"), false)
+	Data.cloudWindow.OnClosing(func(*ui.Window) bool {
 		ui.Quit()
 		return true
 	})
 	ui.OnShouldQuit(func() bool {
-		cloudwin.Destroy()
+		Data.cloudWindow.Destroy()
 		return true
 	})
 
-	cloudtab = ui.NewTab()
-	cloudwin.SetChild(cloudtab)
-	cloudwin.SetMargined(true)
+	Data.cloudTab = ui.NewTab()
+	Data.cloudWindow.SetChild(Data.cloudTab)
+	Data.cloudWindow.SetMargined(true)
 
-	tabcount = 0
-	cloudtab.Append("Cloud Info", makeCloudInfoBox(nil))
-	cloudtab.SetMargined(tabcount, true)
+	Data.tabcount = 0
+	Data.cloudTab.Append("Cloud Info", makeCloudInfoBox(nil))
+	Data.cloudTab.SetMargined(Data.tabcount, true)
 
-	cloudwin.Show()
+	Data.cloudWindow.Show()
 }
 
 func addTableTab() {
@@ -114,10 +110,10 @@ func addTableTab() {
 
 	log.Println("Sleep for 2 seconds, then try to add new tabs")
 	time.Sleep(1 * 1000 * 1000 * 1000)
-	AddTableTab(cloudtab, 1, "test seven", 7, parts)
+	AddTableTab(Data.cloudTab, 1, "test seven", 7, parts)
 }
 
-func addVmsTab(count int) *TableData {
+func AddVmsTab(count int) *TableData {
 	var parts []TableColumnData
 
 	human := 0
@@ -171,7 +167,7 @@ func addVmsTab(count int) *TableData {
 	parts = append(parts, tmp)
 	human += 1
 
-	mh := AddTableTab(cloudtab, 1, "Virtual Machines", count, parts)
+	mh := AddTableTab(Data.cloudTab, 1, "Virtual Machines", count, parts)
 	return mh
 }
 
