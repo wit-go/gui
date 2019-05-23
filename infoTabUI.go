@@ -5,7 +5,6 @@ import "time"
 import "fmt"
 import "runtime/debug"
 import "runtime"
-import "os"
 
 import "github.com/gookit/config"
 
