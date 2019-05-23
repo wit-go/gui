@@ -5,54 +5,10 @@ import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-// import "github.com/davecgh/go-spew/spew"
-
-func AddAccountWindow() {
-	accounthWin := ui.NewWindow("Add Account", 400, 300, false)
-	accounthWin.OnClosing(func(*ui.Window) bool {
-		ui.Quit()
-		return true
-	})
-	ui.OnShouldQuit(func() bool {
-		accounthWin.Destroy()
-		return true
-	})
-
-	vbox := ui.NewVerticalBox()
-	vbox.SetPadded(true)
-	accounthWin.SetChild(vbox)
-	accounthWin.SetMargined(true)
-
-	// This displays the window
-	accounthWin.Show()
-
-	// START create new account button
-	newAccountButton := ui.NewButton("Create New Account")
-		newAccountButton.OnClicked(func(*ui.Button) {
-		log.Println("OK. Closing window.")
-		accounthWin.Destroy()
-		ui.Quit()
-	})
-	vbox.Append(newAccountButton, false)
-	// END create new account button
-
-	vbox.Append(ui.NewHorizontalSeparator(), false)
-
-	okButton := ui.NewButton("I Have an Account")
-	okButton.OnClicked(func(*ui.Button) {
-		log.Println("OK. Closing window.")
-		accounthWin.Destroy()
-		ui.Quit()
-	})
-	vbox.Append(okButton, false)
-	// END add account hbox
-}
-
-func AddAccountBox(junk *ui.Box, custom func(int, string)) *ui.Box {
+func AddAccountQuestionBox(junk *ui.Box, custom func(int, string)) *ui.Box {
 	newbox := ui.NewVerticalBox()
 	newbox.SetPadded(true)
 
-	// create new account button
 	newButton := CreateButton("Create New Account", "CLOSE", custom)
 	newbox.Append(newButton, false)
 
@@ -62,4 +18,109 @@ func AddAccountBox(junk *ui.Box, custom func(int, string)) *ui.Box {
 	newbox.Append(okButton, false)
 
 	return newbox
+}
+
+func AddAccountBox(custom func(int, string)) *ui.Box {
+	vbox := ui.NewVerticalBox()
+	vbox.SetPadded(true)
+
+	hboxAccount := ui.NewHorizontalBox()
+	hboxAccount.SetPadded(true)
+	vbox.Append(hboxAccount, false)
+
+	// Start 'Provider' vertical box
+	vboxC := ui.NewVerticalBox()
+	vboxC.SetPadded(true)
+	vboxC.Append(ui.NewLabel("Cloud Provider:"), false)
+
+	cbox := ui.NewCombobox()
+	cbox.Append("WIT")
+	cbox.Append("Evocative")
+	vboxC.Append(cbox, false)
+	cbox.SetSelected(0)
+
+	cbox.OnSelected(func(*ui.Combobox) {
+		log.Println("OK. Selected Cloud Provider =", cbox.Selected())
+	})
+	hboxAccount.Append(vboxC, false)
+	// End 'Cloud Provider' vertical box
+
+	// Start 'Region' vertical box
+	vboxR := ui.NewVerticalBox()
+	vboxR.SetPadded(true)
+	vboxR.Append(ui.NewLabel("Region:"), false)
+
+	regbox := ui.NewCombobox()
+	regbox.Append("Any")
+	regbox.Append("SF")
+	vboxR.Append(regbox, false)
+	regbox.SetSelected(0)
+
+	regbox.OnSelected(func(*ui.Combobox) {
+		log.Println("OK. Selected something =", regbox.Selected())
+	})
+	hboxAccount.Append(vboxR, false)
+	// End 'Region' vertical box
+
+	// Start 'Nickname' vertical box
+	vboxN := ui.NewVerticalBox()
+	vboxN.SetPadded(true)
+	vboxN.Append(ui.NewLabel("Account Nickname:"), false)
+
+	entryNick := ui.NewEntry()
+	entryNick.SetReadOnly(false)
+
+	vboxN.Append(entryNick, false)
+
+	entryNick.OnChanged(func(*ui.Entry) {
+		log.Println("OK. nickname =", entryNick.Text())
+	})
+	hboxAccount.Append(vboxN, false)
+	// End 'Nickname' vertical box
+
+	// Start 'Username' vertical box
+	vboxU := ui.NewVerticalBox()
+	vboxU.SetPadded(true)
+	vboxU.Append(ui.NewLabel("Account Username:"), false)
+
+	entryUser := ui.NewEntry()
+	entryUser.SetReadOnly(false)
+
+	vboxU.Append(entryUser, false)
+
+	entryUser.OnChanged(func(*ui.Entry) {
+		log.Println("OK. username =", entryUser.Text())
+	})
+	hboxAccount.Append(vboxU, false)
+	// End 'Username' vertical box
+
+	// Start 'Password' vertical box
+	vboxP := ui.NewVerticalBox()
+	vboxP.SetPadded(true)
+	vboxP.Append(ui.NewLabel("Account Password:"), false)
+
+	entryPass := ui.NewEntry()
+	entryPass.SetReadOnly(false)
+
+	vboxP.Append(entryPass, false)
+
+	entryPass.OnChanged(func(*ui.Entry) {
+		log.Println("OK. password =", entryPass.Text())
+	})
+	hboxAccount.Append(vboxP, false)
+	// End 'Password' vertical box
+
+	vbox.Append(ui.NewHorizontalSeparator(), false)
+
+	hboxButtons := ui.NewHorizontalBox()
+	hboxButtons.SetPadded(true)
+	vbox.Append(hboxButtons, false)
+
+	okButton := CreateButton("Add Account", "ADD", custom)
+	hboxButtons.Append(okButton, false)
+
+	backButton := CreateButton("Back", "BACK", custom)
+	hboxButtons.Append(backButton, false)
+
+	return vbox
 }

@@ -14,17 +14,6 @@ var cloudBox *ui.Box
 var smallBox *ui.Box
 var state string
 
-func splashClose(a int, b string) {
-	log.Println("GOT splashClose(a,b) =", a, b)
-
-	log.Println("cloudBox Delete(0) START")
-	cloudBox.Delete(0)
-	log.Println("smallBox.Hide() START")
-	smallBox.Hide()
-
-	state = "kill"
-}
-
 func buttonClick(i int, s string) {
 	log.Println("gui.buttonClick() i, s =", i, s)
 	log.Println("Figure out what to do here")
@@ -37,14 +26,25 @@ func buttonClick(i int, s string) {
 	}
 }
 
+func ShowAccountQuestionTab() {
+	cloudTab.Delete(0)
+
+	log.Println("Sleep(1000)")
+	time.Sleep(1000 * time.Millisecond)
+
+	smallBox = AddAccountQuestionBox(nil, buttonClick)
+	cloudTab.InsertAt("New Account?", 0, smallBox)
+	cloudTab.SetMargined(0, true)
+}
+
 func ShowAccountTab() {
 	cloudTab.Delete(0)
 
 	log.Println("Sleep(1000)")
 	time.Sleep(1000 * time.Millisecond)
 
-	smallBox = AddAccountBox(nil, splashClose)
-	cloudTab.InsertAt("Intro", 0, smallBox)
+	smallBox = AddAccountBox(buttonClick)
+	cloudTab.InsertAt("Add Account", 0, smallBox)
 	cloudTab.SetMargined(0, true)
 }
 
@@ -74,5 +74,5 @@ func makeCloudWindow() {
 	cloudTab.SetMargined(0, true)
 
 	Data.cloudWindow.Show()
-	Data.State = "splash done"
+	Data.State = "splash"
 }
