@@ -62,20 +62,38 @@ func makeCloudInfoBox(custom func(int, string)) *ui.Box {
 
 	vbox.Append(ui.NewHorizontalSeparator(), false)
 
-	vbox.Append(ui.NewLabel("Accounts:"), false)
-
 	agrid := ui.NewGrid()
 	agrid.SetPadded(true)
 
+	agrid.Append(ui.NewLabel("Accounts:"),   0, 0, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+	agrid.Append(ui.NewLabel("Nickname"),    1, 0, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+	agrid.Append(ui.NewLabel("Username"),    2, 0, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+	agrid.Append(ui.NewLabel("Domain Name"), 3, 0, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+
+	row := 1
 	for account, _ := range config.StringMap("accounts") {
-		hostname	:= config.String("accounts." + account + ".hostname")
-		domainname	:= config.String("accounts." + account + ".domainname")
-		port		:= config.String("accounts." + account + ".port")
+		// nickname	:= config.String("accounts." + account + ".nickname")
 		username	:= config.String("accounts." + account + ".username")
+		domainname	:= config.String("accounts." + account + ".domainname")
+
+		hostname	:= config.String("accounts." + account + ".hostname")
+		port		:= config.String("accounts." + account + ".port")
+
 		a := account + " " + hostname + " " + domainname + " " + port + " " + username
 		log.Println("ACCOUNT: ", a)
-		vbox.Append(ui.NewLabel(a), false)
+
+		agrid.Append(ui.NewLabel(account),    1, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+		agrid.Append(ui.NewLabel(username),   2, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+		agrid.Append(ui.NewLabel(domainname), 3, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+		bname := "Open " + account
+		b := CreateButton(bname, "SHOW", custom)
+		agrid.Append(b, 4, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+
+		// vbox.Append(ui.NewLabel(a), false)
+		row += 1
 	}
+
+	vbox.Append(agrid, false)
 	return hbox
 }
 
