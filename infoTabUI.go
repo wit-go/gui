@@ -5,6 +5,7 @@ import "time"
 import "fmt"
 import "runtime/debug"
 import "runtime"
+import "os"
 
 import "github.com/gookit/config"
 
@@ -51,12 +52,11 @@ func makeCloudInfoBox(custom func(int, string)) *ui.Box {
 	vbox.SetPadded(true)
 	hbox.Append(vbox, true)
 
+	/*
 	grid := ui.NewGrid()
 	grid.SetPadded(true)
 	vbox.Append(grid, false)
-
-	msggrid := ui.NewGrid()
-	msggrid.SetPadded(true)
+	*/
 
 	entryForm := ui.NewForm()
 	entryForm.SetPadded(true)
@@ -70,6 +70,22 @@ func makeCloudInfoBox(custom func(int, string)) *ui.Box {
 	entryForm.Append("IPv6:", IPv6entry, false)
 	IPv6entry.SetText("2604:bbc0:3:3:0:10:0:1003")
 
+	vbox.Append(ui.NewHorizontalSeparator(), false)
+
+	vbox.Append(ui.NewLabel("Accounts:"), false)
+
+	agrid := ui.NewGrid()
+	agrid.SetPadded(true)
+
+	for account, _ := range config.StringMap("accounts") {
+		hostname	:= config.String("cloud." + account + ".hostname")
+		domainname	:= config.String("cloud." + account + ".hostname")
+		port		:= config.String("cloud." + account + ".port")
+		a := account + " " + hostname + " " + domainname + " " + port
+		log.Println("ACCOUNT: ", a)
+		vbox.Append(ui.NewLabel(a), false)
+	}
+	os.Exit(0)
 	return hbox
 }
 

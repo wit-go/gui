@@ -64,29 +64,12 @@ type ButtonMap struct {
 	Note		string	// what type of button
 }
 
-func setupUI() {
-	Data.mainwin = ui.NewWindow("Cloud Control Panel", Data.Width, Data.Height, false)
-	Data.mainwin.OnClosing(func(*ui.Window) bool {
-		ui.Quit()
-		return true
-	})
-	ui.OnShouldQuit(func() bool {
-		Data.mainwin.Destroy()
-		return true
-	})
-
-	Data.maintab = ui.NewTab()
-	Data.mainwin.SetChild(Data.maintab)
-	Data.mainwin.SetMargined(true)
-
-	Data.tabcount = 0
-	Data.mainwin.Show()
-}
-
+/*
 func AddNewTab(mytab *ui.Tab, newbox ui.Control, tabOffset int) {
 	mytab.Append("Cloud Info", newbox)
 	mytab.SetMargined(tabOffset, true)
 }
+*/
 
 func InitColumns(mh *TableData, parts []TableColumnData) {
 	tmpBTindex := 0
@@ -180,13 +163,6 @@ func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts
 	vbox.Append(hbox, false)
 
 	return mh
-}
-
-func DoGUI() {
-	for {
-		ui.Main(setupUI)
-		log.Println("GUI exited. Not sure what to do here. os.Exit() ?")
-	}
 }
 
 func defaultButtonClick(button *ui.Button) {
