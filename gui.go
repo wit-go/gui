@@ -17,6 +17,19 @@ var Height	int
 
 var allButtons	[]ButtonMap
 
+var internalDS	GuiDS
+
+func GetDataStructures() *GuiDS {
+	return &internalDS
+}
+
+// All GUI Data Structures that are external
+type GuiDS struct {
+	State		string
+	MainWindow	*ui.Window
+	ButtonClick	func(int, string)
+}
+
 type TableColumnData struct {
 	Index		int
 	CellType	string
@@ -219,7 +232,7 @@ func closeButtonClick(button *ui.Button) {
 
 func closeButton(name string, mytab *ui.Tab) ui.Control {
 	tmpButton := ui.NewButton(name)
-	tmpButton.OnClicked(buttonClick)
+	tmpButton.OnClicked(defaultButtonClick)
 
 	return tmpButton
 }

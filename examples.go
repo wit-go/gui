@@ -1,27 +1,15 @@
 package gui
 
-import "log"
+// import "log"
 
-import "github.com/gookit/config"
+// import "github.com/gookit/config"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-import "github.com/davecgh/go-spew/spew"
+// import "github.com/davecgh/go-spew/spew"
 
 var jcarrButton *ui.Button
 var jcarrEntry  *ui.MultilineEntry
-
-func buttonClick(button *ui.Button) {
-	log.Println("hostname =", config.String("hostname"), button)
-	spew.Dump(button)
-	if (jcarrButton == button) {
-		log.Println("This is the jcarrButton")
-		cur := jcarrEntry.Text()
-		jcarrEntry.SetText(cur + "THIS IS A GREAT IDEA\n")
-	} else {
-		log.Println("This is NOT the jcarrButton")
-	}
-}
 
 func hostnameButton(hostname string) ui.Control {
 	tmpbox := ui.NewHorizontalBox()
@@ -29,7 +17,7 @@ func hostnameButton(hostname string) ui.Control {
 
 	tmpButton := ui.NewButton(hostname)
 	tmpbox.Append(tmpButton, false)
-	tmpButton.OnClicked(buttonClick)
+	tmpButton.OnClicked(defaultButtonClick)
 
 	jcarrButton = tmpButton
 
