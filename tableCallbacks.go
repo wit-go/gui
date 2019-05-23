@@ -58,6 +58,9 @@ func (mh *TableData) CellValue(m *ui.TableModel, row, column int) ui.TableValue 
 				log.Println("CellValue() is BG COLOR row, column =", row, column)
 				return nil
 			}
+			bgcolor := libuiColorToGOlangColor(mh.Rows[row].HumanData[humanID].Color)
+			log.Println("CellValue() BGCOLOR =", bgcolor)
+			return bgcolor
 		}
 		return libuiColorToGOlangColor(mh.Rows[row].HumanData[humanID].Color)
 	}
