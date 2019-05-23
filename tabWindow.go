@@ -42,6 +42,17 @@ func ShowAccountTab() {
 	Data.cloudTab.SetMargined(0, true)
 }
 
+func ShowMainTab() {
+	Data.cloudTab.Delete(0)
+
+	log.Println("Sleep(1000)")
+	time.Sleep(1000 * time.Millisecond)
+
+	Data.smallBox = makeCloudInfoBox(buttonClick)
+	Data.cloudTab.InsertAt("Main", 0, Data.smallBox)
+	Data.cloudTab.SetMargined(0, true)
+}
+
 func GoMainWindow() {
 	ui.Main(makeCloudWindow)
 }
