@@ -78,14 +78,13 @@ func makeCloudInfoBox(custom func(int, string)) *ui.Box {
 	agrid.SetPadded(true)
 
 	for account, _ := range config.StringMap("accounts") {
-		hostname	:= config.String("cloud." + account + ".hostname")
-		domainname	:= config.String("cloud." + account + ".hostname")
-		port		:= config.String("cloud." + account + ".port")
+		hostname	:= config.String("accounts." + account + ".hostname")
+		domainname	:= config.String("accounts." + account + ".domainname")
+		port		:= config.String("accounts." + account + ".port")
 		a := account + " " + hostname + " " + domainname + " " + port
 		log.Println("ACCOUNT: ", a)
 		vbox.Append(ui.NewLabel(a), false)
 	}
-	os.Exit(0)
 	return hbox
 }
 
