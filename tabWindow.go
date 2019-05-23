@@ -23,8 +23,8 @@ func buttonClick(i int, s string) {
 func ShowAccountQuestionTab() {
 	Data.cloudTab.Delete(0)
 
-	log.Println("Sleep(1000)")
-	time.Sleep(1000 * time.Millisecond)
+	log.Println("Sleep(200)")
+	time.Sleep(200 * time.Millisecond)
 
 	Data.smallBox = AddAccountQuestionBox(nil, buttonClick)
 	Data.cloudTab.InsertAt("New Account?", 0, Data.smallBox)
@@ -34,8 +34,8 @@ func ShowAccountQuestionTab() {
 func ShowAccountTab() {
 	Data.cloudTab.Delete(0)
 
-	log.Println("Sleep(1000)")
-	time.Sleep(1000 * time.Millisecond)
+	log.Println("Sleep(200)")
+	time.Sleep(200 * time.Millisecond)
 
 	Data.smallBox = AddAccountBox(buttonClick)
 	Data.cloudTab.InsertAt("Add Account", 0, Data.smallBox)
@@ -45,8 +45,8 @@ func ShowAccountTab() {
 func ShowMainTab() {
 	Data.cloudTab.Delete(0)
 
-	log.Println("Sleep(1000)")
-	time.Sleep(1000 * time.Millisecond)
+	log.Println("Sleep(200)")
+	time.Sleep(200 * time.Millisecond)
 
 	Data.smallBox = makeCloudInfoBox(buttonClick)
 	Data.cloudTab.InsertAt("Main", 0, Data.smallBox)

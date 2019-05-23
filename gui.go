@@ -191,8 +191,16 @@ func defaultButtonClick(button *ui.Button) {
 		log.Println("Data.allButtons =", key, foo)
 		if Data.allButtons[key].B == button {
 			log.Println("\tBUTTON MATCHED")
+			log.Println("\tData.allButtons[key].name", Data.allButtons[key].name)
+			log.Println("\tData.allButtons[key].note", Data.allButtons[key].note)
 			if Data.allButtons[key].custom != nil {
-				Data.allButtons[key].custom(42, "something foo")
+				if Data.allButtons[key].note == "BACK" {
+					Data.allButtons[key].custom(42, "BACK")
+				} else if Data.allButtons[key].note == "CLOSE" {
+					Data.allButtons[key].custom(42, "CLOSE")
+				} else {
+					Data.allButtons[key].custom(42, "something foo")
+				}
 			}
 		}
 	}
