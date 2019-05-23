@@ -246,3 +246,9 @@ func addVmButton(name string) ui.Control {
 
 	return tmpButton
 }
+
+func SocketError() {
+	ui.MsgBoxError(Data.cloudWindow,
+		"There was a socket error",
+		"More detailed information can be shown here.")
+}

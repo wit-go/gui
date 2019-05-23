@@ -3,8 +3,6 @@ package gui
 import "log"
 import "time"
 import "fmt"
-import "runtime/debug"
-import "runtime"
 
 import "github.com/gookit/config"
 
@@ -233,11 +231,7 @@ func addDebuggingButtons(vbox *ui.Box, custom func(int, string)) {
 */
 	vbox.Append(add4button, false)
 
-	add4abutton := ui.NewButton("Close Demo GUI")
-	add4abutton.OnClicked(func(*ui.Button) {
-		CloseDemoUI()
-	})
-	vbox.Append(add4abutton, false)
+	vbox.Append(CreateButton("Close GUI", "QUIT", custom), false)
 
 	// Send a protobuf Event over the WIT socket
 	add5button := CreateButton("Send protobuf to localhost", "SEND PROTOBUF TO LOCALHOST", custom)
@@ -250,29 +244,5 @@ func addDebuggingButtons(vbox *ui.Box, custom func(int, string)) {
 */
 	vbox.Append(add5button, false)
 
-	// Send a protobuf over a gorilla websocket
-	add6button := CreateButton("gorillaSendProtobuf()", "SEND PROTOBUF TO GORILLA SOCKET", custom)
-/*
-	add6button := ui.NewButton("gorillaSendProtobuf()")
-	add6button.OnClicked(func(*ui.Button) {
-		log.Println("gorillaSendProtobuf()")
-		gorillaSendProtobuf()
-	})
-*/
-	vbox.Append(add6button, false)
-
-	// debug all the golang goroutines
-	add7button := ui.NewButton("debug.PrintStack()")
-	add7button.OnClicked(func(*ui.Button) {
-		log.Println("debug.PrintStack() (SHOULD BE JUST THIS goroutine)")
-		debug.PrintStack()
-
-		log.Println("ATTEMPT FULL STACK DUMP")
-		log.Println("ATTEMPT FULL STACK DUMP")
-		log.Println("ATTEMPT FULL STACK DUMP")
-		buf := make([]byte, 1<<16)
-		runtime.Stack(buf, true)
-		fmt.Printf("%s", buf)
-	})
-	vbox.Append(add7button, false)
+	vbox.Append(CreateButton("DEBUG goroutines", "DEBUG", custom), false)
 }
