@@ -21,6 +21,7 @@ type GuiDataStructure struct {
 	Width		int
 	Height		int
 	ButtonClick	func(int, string)
+	ButtonClickNew	func(*ButtonMap)
 	CurrentVM	string
 	MyArea		*ui.Area
 
@@ -56,8 +57,8 @@ type ButtonMap struct {
 	onClick		func (int, string)
 	onChanged	func (int, string)
 	custom		func (int, string)
-	name		string	// the text on the button
-	note		string	// what type of button
+	Name		string	// the text on the button
+	Note		string	// what type of button
 }
 
 func setupUI() {
@@ -191,16 +192,12 @@ func defaultButtonClick(button *ui.Button) {
 		log.Println("Data.allButtons =", key, foo)
 		if Data.allButtons[key].B == button {
 			log.Println("\tBUTTON MATCHED")
-			log.Println("\tData.allButtons[key].name", Data.allButtons[key].name)
-			log.Println("\tData.allButtons[key].note", Data.allButtons[key].note)
-			if Data.allButtons[key].custom != nil {
-				if Data.allButtons[key].note == "BACK" {
-					Data.allButtons[key].custom(42, "BACK")
-				} else if Data.allButtons[key].note == "CLOSE" {
-					Data.allButtons[key].custom(42, "CLOSE")
-				} else {
-					Data.allButtons[key].custom(42, "something foo")
-				}
+			log.Println("\tData.allButtons[key].Name", Data.allButtons[key].Name)
+			log.Println("\tData.allButtons[key].Note", Data.allButtons[key].Note)
+			if (Data.ButtonClickNew != nil) {
+				Data.ButtonClickNew( &Data.allButtons[key])
+			} else if Data.allButtons[key].custom != nil {
+				Data.allButtons[key].custom(42, "BUTTON DOES NOTHING")
 			}
 		}
 	}
@@ -220,8 +217,8 @@ func CreateButton(name string, note string, custom func(int, string)) *ui.Button
 
 	var newmap ButtonMap
 	newmap.B = newB
-	newmap.note = note
-	newmap.name = name
+	newmap.Note = note
+	newmap.Name = name
 	newmap.custom = custom
 	Data.allButtons = append(Data.allButtons, newmap)
 
@@ -235,8 +232,8 @@ func CreateFontButton(name string, note string, custom func(int, string)) *ui.Fo
 
 	var newmap ButtonMap
 	newmap.FB = newB
-	newmap.note = note
-	newmap.name = name
+	newmap.Note = note
+	newmap.Name = name
 	newmap.custom = custom
 	Data.allButtons = append(Data.allButtons, newmap)
 
