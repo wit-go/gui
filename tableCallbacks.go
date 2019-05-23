@@ -51,7 +51,10 @@ func (mh *TableData) CellValue(m *ui.TableModel, row, column int) ui.TableValue 
 		return ui.TableString(mh.Rows[row].HumanData[humanID].Text)
 	}
 	if (column == mh.Human[humanID].ColorID) {
-		return libuiColorToGOlangColor(mh.Rows[row].HumanData[humanID].Color)
+		if (column == 0) {
+			log.Println("CellValue() is BG COLOR row, column =", row, column)
+			return nil
+		}
 		return libuiColorToGOlangColor(mh.Rows[row].HumanData[humanID].Color)
 	}
 	log.Println("CellValue() FAILURE")
