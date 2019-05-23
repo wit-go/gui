@@ -10,7 +10,6 @@ import "runtime"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-// var splashWin *ui.Window
 var MyArea	*ui.Area
 
 func ShowSplash() *ui.Window {

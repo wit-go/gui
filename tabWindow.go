@@ -30,16 +30,11 @@ func buttonClick(i int, s string) {
 	log.Println("Figure out what to do here")
 	log.Println("Figure out what to do here")
 	log.Println("Figure out what to do here")
-	/*
-	cloudTab.Delete(0)
 
-	log.Println("Sleep(2000)")
-	time.Sleep(2000 * time.Millisecond)
-
-	smallBox = AddAccountBox(nil, splashClose)
-	cloudTab.InsertAt("Intro", 0, smallBox)
-	cloudTab.SetMargined(0, true)
-	*/
+	if (Data.ButtonClick != nil) {
+		log.Println("Data.ButtonClick() START")
+		Data.ButtonClick(i, s)
+	}
 }
 
 func ShowAccountTab() {

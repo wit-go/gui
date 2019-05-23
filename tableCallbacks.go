@@ -15,8 +15,6 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 import "github.com/gookit/config"
 
-var CurrentVM string
-
 func (mh *TableData) NumRows(m *ui.TableModel) int {
 	if (config.String("debugging") == "true") {
 		log.Println("NumRows = mh.RowCount = ", mh.RowCount)
@@ -81,8 +79,8 @@ func defaultSetCellValue(mh *TableData, row int, column int) {
 		vmname := mh.Rows[row].HumanData[humanID].Text
 		log.Println("vmname =",  vmname)
 		log.Println("defaultSetCellValue() FOUND THE BUTTON!!!!!!!   Button was pressed START", row, column)
-		CurrentVM = fmt.Sprintf("%s",vmname)
-		log.Println("CurrentVM =", CurrentVM)
+		Data.CurrentVM = fmt.Sprintf("%s",vmname)
+		log.Println("Data.CurrentVM =", Data.CurrentVM)
 		go ui.Main(ShowVM)
 	}
 }

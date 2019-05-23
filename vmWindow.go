@@ -6,8 +6,8 @@ import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
 func ShowVM() {
-	name := CurrentVM
-	log.Println("setupDemoUI() START CurrentVM=", CurrentVM)
+	name := Data.CurrentVM
+	log.Println("setupDemoUI() START Data.CurrentVM=", Data.CurrentVM)
 	VMwin := ui.NewWindow("VM " + name, 500, 300, false)
 	VMwin.OnClosing(func(*ui.Window) bool {
 		return true

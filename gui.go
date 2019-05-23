@@ -21,6 +21,7 @@ type GuiDataStructure struct {
 	Width		int
 	Height		int
 	ButtonClick	func(int, string)
+	CurrentVM	string
 
 	cloudWindow	*ui.Window
 	mainwin		*ui.Window
