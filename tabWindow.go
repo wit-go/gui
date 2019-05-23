@@ -16,7 +16,7 @@ func buttonClick(i int, s string) {
 
 	if (Data.ButtonClick != nil) {
 		log.Println("Data.ButtonClick() START")
-		Data.ButtonClick(i, s)
+		Data.ButtonClick(nil)
 	}
 }
 
@@ -61,19 +61,19 @@ func makeCloudWindow() {
 	Data.cloudWindow = ui.NewWindow("", 640, 480, true)
 	// cloudWindow.SetBorderless(true)
 	Data.cloudWindow.OnClosing(func(*ui.Window) bool {
-		if (Data.ButtonClickNew != nil) {
-			log.Println("Data.ButtonClickNew() START QUIT")
+		if (Data.ButtonClick != nil) {
+			log.Println("Data.ButtonClick() START QUIT")
 			Data.State = "QUIT"
-			Data.ButtonClickNew(nil)
+			Data.ButtonClick(nil)
 		}
 		// ui.Quit()
 		return true
 	})
 	ui.OnShouldQuit(func() bool {
-		if (Data.ButtonClickNew != nil) {
-			log.Println("Data.ButtonClickNew() START QUIT")
+		if (Data.ButtonClick != nil) {
+			log.Println("Data.ButtonClick() START QUIT")
 			Data.State = "QUIT"
-			Data.ButtonClickNew(nil)
+			Data.ButtonClick(nil)
 		}
 		// Data.cloudWindow.Destroy()
 		return true

@@ -20,8 +20,7 @@ type GuiDataStructure struct {
 	MainWindow	*ui.Window
 	Width		int
 	Height		int
-	ButtonClick	func(int, string)
-	ButtonClickNew	func(*ButtonMap)
+	ButtonClick	func(*ButtonMap)
 	CurrentVM	string
 	MyArea		*ui.Area
 	Version		string
@@ -178,8 +177,8 @@ func defaultButtonClick(button *ui.Button) {
 			log.Println("\tBUTTON MATCHED")
 			log.Println("\tData.allButtons[key].Name", Data.allButtons[key].Name)
 			log.Println("\tData.allButtons[key].Note", Data.allButtons[key].Note)
-			if (Data.ButtonClickNew != nil) {
-				Data.ButtonClickNew( &Data.allButtons[key])
+			if (Data.ButtonClick != nil) {
+				Data.ButtonClick( &Data.allButtons[key])
 			} else if Data.allButtons[key].custom != nil {
 				Data.allButtons[key].custom(42, "BUTTON DOES NOTHING")
 			}
