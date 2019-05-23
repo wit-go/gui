@@ -8,15 +8,6 @@ import _ "github.com/andlabs/ui/winmanifest"
 import "github.com/gookit/config"
 import "github.com/davecgh/go-spew/spew"
 
-var mainwin	*ui.Window
-var maintab	*ui.Tab
-var tabcount	int
-
-var Height	int
-
-var allButtons	[]ButtonMap
-
-
 //
 // All GUI Data Structures and functions that are external
 // If you need cross platform support, these might only
@@ -28,8 +19,19 @@ type GuiDataStructure struct {
 	State		string
 	MainWindow	*ui.Window
 	Width		int
+	Height		int
 	ButtonClick	func(int, string)
+
 	cloudWindow	*ui.Window
+	mainwin		*ui.Window
+	maintab		*ui.Tab
+	tabcount	int
+	allButtons	[]ButtonMap
+
+	// stuff for the 'area'
+	fontButton	*ui.FontButton
+	attrstr		*ui.AttributedString
+	splashArea	*ui.Area
 }
 
 type TableColumnData struct {
@@ -50,22 +52,22 @@ type ButtonMap struct {
 }
 
 func setupUI() {
-	mainwin = ui.NewWindow("Cloud Control Panel", Data.Width, Height, false)
-	mainwin.OnClosing(func(*ui.Window) bool {
+	Data.mainwin = ui.NewWindow("Cloud Control Panel", Data.Width, Data.Height, false)
+	Data.mainwin.OnClosing(func(*ui.Window) bool {
 		ui.Quit()
 		return true
 	})
 	ui.OnShouldQuit(func() bool {
-		mainwin.Destroy()
+		Data.mainwin.Destroy()
 		return true
 	})
 
-	maintab = ui.NewTab()
-	mainwin.SetChild(maintab)
-	mainwin.SetMargined(true)
+	Data.maintab = ui.NewTab()
+	Data.mainwin.SetChild(Data.maintab)
+	Data.mainwin.SetMargined(true)
 
-	tabcount = 0
-	mainwin.Show()
+	Data.tabcount = 0
+	Data.mainwin.Show()
 }
 
 func AddNewTab(mytab *ui.Tab, newbox ui.Control, tabOffset int) {
@@ -176,12 +178,12 @@ func DoGUI() {
 
 func defaultButtonClick(button *ui.Button) {
 	log.Println("defaultButtonClick() button =", button)
-	for key, foo := range allButtons {
-		log.Println("allButtons =", key, foo)
-		if allButtons[key].B == button {
+	for key, foo := range Data.allButtons {
+		log.Println("Data.allButtons =", key, foo)
+		if Data.allButtons[key].B == button {
 			log.Println("\tBUTTON MATCHED")
-			if allButtons[key].custom != nil {
-				allButtons[key].custom(42, "something foo")
+			if Data.allButtons[key].custom != nil {
+				Data.allButtons[key].custom(42, "something foo")
 			}
 		}
 	}
@@ -189,8 +191,8 @@ func defaultButtonClick(button *ui.Button) {
 
 func defaultFontButtonClick(button *ui.FontButton) {
 	log.Println("defaultButtonClick() button =", button)
-	for key, foo := range allButtons {
-		log.Println("allButtons =", key, foo)
+	for key, foo := range Data.allButtons {
+		log.Println("Data.allButtons =", key, foo)
 	}
 }
 
@@ -204,7 +206,7 @@ func CreateButton(name string, note string, custom func(int, string)) *ui.Button
 	newmap.note = note
 	newmap.name = name
 	newmap.custom = custom
-	allButtons = append(allButtons, newmap)
+	Data.allButtons = append(Data.allButtons, newmap)
 
 	return newB
 }
@@ -219,7 +221,7 @@ func CreateFontButton(name string, note string, custom func(int, string)) *ui.Fo
 	newmap.note = note
 	newmap.name = name
 	newmap.custom = custom
-	allButtons = append(allButtons, newmap)
+	Data.allButtons = append(Data.allButtons, newmap)
 
 	return newB
 }

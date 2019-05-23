@@ -7,10 +7,6 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 import "github.com/davecgh/go-spew/spew"
 
-var fontButton *ui.FontButton
-var attrstr *ui.AttributedString
-var splashArea *ui.Area
-
 func areaClick(a int, b string) {
 	log.Println("GOT areaClick(a,b) =", a, b)
 }
@@ -18,26 +14,26 @@ func areaClick(a int, b string) {
 func makeSplashArea(custom func(int, string)) *ui.Area {
 	// make this button just to get the default font (but don't display the button)
 	// There should be another way to do this (?)
-	fontButton = CreateFontButton("SplashFont", "CLOSE", custom)
+	Data.fontButton = CreateFontButton("SplashFont", "CLOSE", custom)
 
 	makeAttributedString()
-	splashArea = ui.NewArea(myAH)
+	Data.splashArea = ui.NewArea(myAH)
 
-	spew.Dump(splashArea)
-	return splashArea
+	spew.Dump(Data.splashArea)
+	return Data.splashArea
 }
 
 func appendWithAttributes(what string, attrs ...ui.Attribute) {
-	start := len(attrstr.String())
+	start := len(Data.attrstr.String())
 	end := start + len(what)
-	attrstr.AppendUnattributed(what)
+	Data.attrstr.AppendUnattributed(what)
 	for _, a := range attrs {
-		attrstr.SetAttribute(a, start, end)
+		Data.attrstr.SetAttribute(a, start, end)
 	}
 }
 
 func makeAttributedString() {
-	attrstr = ui.NewAttributedString("")
+	Data.attrstr = ui.NewAttributedString("")
 
 	appendWithAttributes("Welcome to the Cloud Control Panel\n", ui.TextSize(16), ui.TextColor{0.0, 0.0, 0.8, .8}) // "RGBT"
 
@@ -46,13 +42,13 @@ func makeAttributedString() {
 	appendWithAttributes("This control panel was designed to be an interface to your 'private' cloud. ", ui.TextWeightBold)
 	appendWithAttributes("The concept of a private cloud means that you can use a providers system, or, seemlessly, use your own hardware in your own datacenter. ", ui.TextWeightBold)
 
-	attrstr.AppendUnattributed("\n")
-	attrstr.AppendUnattributed("\n")
+	Data.attrstr.AppendUnattributed("\n")
+	Data.attrstr.AppendUnattributed("\n")
 	appendWithAttributes("This control panel requires:\n")
-	attrstr.AppendUnattributed("\n")
+	Data.attrstr.AppendUnattributed("\n")
 	appendWithAttributes("IPv6\n")
 	appendWithAttributes("Your hostname in DNS\n")
-	attrstr.AppendUnattributed("\n\n\n\n\n")
+	Data.attrstr.AppendUnattributed("\n\n\n\n\n")
 
 	appendWithAttributes("<click or press any key>\n", ui.TextSize(10))
 }
@@ -66,8 +62,8 @@ var myAH areaHandler
 
 func (ah areaHandler) Draw(a *ui.Area, p *ui.AreaDrawParams) {
 	tl := ui.DrawNewTextLayout(&ui.DrawTextLayoutParams{
-		String:		attrstr,
-		DefaultFont:	fontButton.Font(),
+		String:		Data.attrstr,
+		DefaultFont:	Data.fontButton.Font(),
 		Width:		p.AreaWidth,
 		Align:		ui.DrawTextAlign(1),
 	})

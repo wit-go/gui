@@ -8,9 +8,6 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 // import "github.com/davecgh/go-spew/spew"
 
-var jcarrButton *ui.Button
-var jcarrEntry  *ui.MultilineEntry
-
 func hostnameButton(hostname string) ui.Control {
 	tmpbox := ui.NewHorizontalBox()
 	tmpbox.SetPadded(true)
@@ -18,8 +15,6 @@ func hostnameButton(hostname string) ui.Control {
 	tmpButton := ui.NewButton(hostname)
 	tmpbox.Append(tmpButton, false)
 	tmpButton.OnClicked(defaultButtonClick)
-
-	jcarrButton = tmpButton
 
 	return tmpbox
 }
@@ -34,7 +29,7 @@ func makeGroupEntries() ui.Control {
 	entryForm.SetPadded(true)
 	group.SetChild(entryForm)
 
-	jcarrEntry = ui.NewMultilineEntry()
+	jcarrEntry := ui.NewMultilineEntry()
 	entryForm.Append("Entry", ui.NewEntry(), false)
 	entryForm.Append("Password Entry", ui.NewPasswordEntry(), false)
 	entryForm.Append("Search Entry", ui.NewSearchEntry(), false)
@@ -134,7 +129,7 @@ func makeDataChoosersPage() ui.Control {
 	entry := ui.NewEntry()
 	entry.SetReadOnly(true)
 	button.OnClicked(func(*ui.Button) {
-		filename := ui.OpenFile(mainwin)
+		filename := ui.OpenFile(Data.mainwin)
 		if filename == "" {
 			filename = "(cancelled)"
 		}
@@ -151,7 +146,7 @@ func makeDataChoosersPage() ui.Control {
 	entry2 := ui.NewEntry()
 	entry2.SetReadOnly(true)
 	button.OnClicked(func(*ui.Button) {
-		filename := ui.SaveFile(mainwin)
+		filename := ui.SaveFile(Data.mainwin)
 		if filename == "" {
 			filename = "(cancelled)"
 		}
@@ -172,7 +167,7 @@ func makeDataChoosersPage() ui.Control {
 
 	button = ui.NewButton("Message Box")
 	button.OnClicked(func(*ui.Button) {
-		ui.MsgBox(mainwin,
+		ui.MsgBox(Data.mainwin,
 			"This is a normal message box.",
 			"More detailed information can be shown here.")
 	})
@@ -181,7 +176,7 @@ func makeDataChoosersPage() ui.Control {
 		false, ui.AlignFill, false, ui.AlignFill)
 	button = ui.NewButton("Error Box")
 	button.OnClicked(func(*ui.Button) {
-		ui.MsgBoxError(mainwin,
+		ui.MsgBoxError(Data.mainwin,
 			"This message box describes an error.",
 			"More detailed information can be shown here.")
 	})
@@ -193,14 +188,14 @@ func makeDataChoosersPage() ui.Control {
 }
 
 func AddChoosersDemo() {
-	maintab.Append("Choosers examples", makeDataChoosersPage())
-	maintab.SetMargined(tabcount, true)
-	tabcount += 1
+	Data.maintab.Append("Choosers examples", makeDataChoosersPage())
+	Data.maintab.SetMargined(Data.tabcount, true)
+	Data.tabcount += 1
 }
 
 // This hangs on GTK
 func AddEntriesDemo() {
-	maintab.Append("Group examples", makeGroupEntries())
-	tabcount += 1
-	maintab.SetMargined(tabcount, true)
+	Data.maintab.Append("Group examples", makeGroupEntries())
+	Data.tabcount += 1
+	Data.maintab.SetMargined(Data.tabcount, true)
 }
