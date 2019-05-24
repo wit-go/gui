@@ -5,6 +5,10 @@ import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
+import "github.com/davecgh/go-spew/spew"
+
+import pb "git.wit.com/wit/witProtobuf"
+
 func ShowVM() {
 	name := Data.CurrentVM
 	log.Println("ShowVM() START Data.CurrentVM=", Data.CurrentVM)
@@ -22,7 +26,7 @@ func ShowVM() {
 	VMwin.SetChild(VMtab)
 	VMwin.SetMargined(true)
 
-	createVmBox(VMtab, buttonVmClick)
+	createVmBox(VMtab, buttonVmClick, Data.CurrentPbVM)
 //	vmBox := createVmBox(buttonVmClick)
 //	VMtab.Append(Data.CurrentVM, vmBox)
 //	VMtab.SetMargined(0, true)
@@ -30,14 +34,41 @@ func ShowVM() {
 	VMwin.Show()
 }
 
-func AddVmConfigureTab(name string) {
-	createVmBox(Data.cloudTab, buttonVmClick)
+func AddVmConfigureTab(name string, pbVM *pb.Event_VM) {
+	createVmBox(Data.cloudTab, buttonVmClick, Data.CurrentPbVM)
 //	vmBox := createVmBox(Data.cloudTab, buttonVmClick)
 //	Data.cloudTab.Append(name, vmBox)
 //	Data.cloudTab.SetMargined(0, true)
 }
 
-func createVmBox(tab *ui.Tab, custom func(b *ButtonMap,s string)) {
+// makeEntryBox(box, "hostname:", "blah.foo.org") {
+func makeEntryBox(hbox *ui.Box, a string, b string) {
+	// Start 'Nickname' vertical box
+	vboxN := ui.NewVerticalBox()
+	vboxN.SetPadded(true)
+	vboxN.Append(ui.NewLabel(a), false)
+
+	entryNick := ui.NewEntry()
+	entryNick.SetText(b)
+	entryNick.SetReadOnly(false)
+
+	vboxN.Append(entryNick, false)
+
+	entryNick.OnChanged(func(*ui.Entry) {
+		log.Println("OK. TEXT WAS CHANGED TO =", entryNick.Text())
+		// Data.AccNick = entryNick.Text()
+	})
+	hbox.Append(vboxN, false)
+	// End 'Nickname' vertical box
+}
+
+func createVmBox(tab *ui.Tab, custom func(b *ButtonMap,s string), pbVM *pb.Event_VM) {
+	log.Println("createVmBox() START")
+	log.Println("createVmBox() pbVM.Name", pbVM.Name)
+	spew.Dump(pbVM)
+	if (Data.Debug) {
+		spew.Dump(pbVM)
+	}
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
 
@@ -45,90 +76,11 @@ func createVmBox(tab *ui.Tab, custom func(b *ButtonMap,s string)) {
 	hboxAccount.SetPadded(true)
 	vbox.Append(hboxAccount, false)
 
-	// Start 'Provider' vertical box
-	vboxC := ui.NewVerticalBox()
-	vboxC.SetPadded(true)
-	vboxC.Append(ui.NewLabel("Cloud Provider:"), false)
-
-	cbox := ui.NewCombobox()
-	cbox.Append("WIT")
-	cbox.Append("Evocative")
-	vboxC.Append(cbox, false)
-	cbox.SetSelected(0)
-
-	cbox.OnSelected(func(*ui.Combobox) {
-		log.Println("OK. Selected Cloud Provider =", cbox.Selected())
-	})
-	hboxAccount.Append(vboxC, false)
-	// End 'Cloud Provider' vertical box
-
-	// Start 'Region' vertical box
-	vboxR := ui.NewVerticalBox()
-	vboxR.SetPadded(true)
-	vboxR.Append(ui.NewLabel("Region:"), false)
-
-	regbox := ui.NewCombobox()
-	regbox.Append("Any")
-	regbox.Append("SF")
-	vboxR.Append(regbox, false)
-	regbox.SetSelected(0)
-
-	regbox.OnSelected(func(*ui.Combobox) {
-		log.Println("OK. Selected something =", regbox.Selected())
-	})
-	hboxAccount.Append(vboxR, false)
-	// End 'Region' vertical box
-
-	// Start 'Nickname' vertical box
-	vboxN := ui.NewVerticalBox()
-	vboxN.SetPadded(true)
-	vboxN.Append(ui.NewLabel("Account Nickname:"), false)
-
-	entryNick := ui.NewEntry()
-	entryNick.SetReadOnly(false)
-
-	vboxN.Append(entryNick, false)
-
-	entryNick.OnChanged(func(*ui.Entry) {
-		log.Println("OK. nickname =", entryNick.Text())
-		Data.AccNick = entryNick.Text()
-	})
-	hboxAccount.Append(vboxN, false)
-	// End 'Nickname' vertical box
-
-	// Start 'Username' vertical box
-	vboxU := ui.NewVerticalBox()
-	vboxU.SetPadded(true)
-	vboxU.Append(ui.NewLabel("Account Username:"), false)
-
-	entryUser := ui.NewEntry()
-	entryUser.SetReadOnly(false)
-
-	vboxU.Append(entryUser, false)
-
-	entryUser.OnChanged(func(*ui.Entry) {
-		log.Println("OK. username =", entryUser.Text())
-		Data.AccUser = entryUser.Text()
-	})
-	hboxAccount.Append(vboxU, false)
-	// End 'Username' vertical box
-
-	// Start 'Password' vertical box
-	vboxP := ui.NewVerticalBox()
-	vboxP.SetPadded(true)
-	vboxP.Append(ui.NewLabel("Account Password:"), false)
-
-	entryPass := ui.NewEntry()
-	entryPass.SetReadOnly(false)
-
-	vboxP.Append(entryPass, false)
-
-	entryPass.OnChanged(func(*ui.Entry) {
-		log.Println("OK. password =", entryPass.Text())
-		Data.AccPass = entryPass.Text()
-	})
-	hboxAccount.Append(vboxP, false)
-	// End 'Password' vertical box
+	// Add hostname entry box
+	makeEntryBox(hboxAccount, "hostname:",	pbVM.Hostname)
+	makeEntryBox(hboxAccount, "IPv6:",	pbVM.IPv6)
+	makeEntryBox(hboxAccount, "RAM:",	string(pbVM.Memory))
+	makeEntryBox(hboxAccount, "CPU:",	string(pbVM.Cpus))
 
 	vbox.Append(ui.NewHorizontalSeparator(), false)
 
@@ -136,15 +88,11 @@ func createVmBox(tab *ui.Tab, custom func(b *ButtonMap,s string)) {
 	hboxButtons.SetPadded(true)
 	vbox.Append(hboxButtons, false)
 
-	okButton := CreateButton("Add Account", "ADD", custom)
-	hboxButtons.Append(okButton, false)
-
-	backButton := CreateButton("Back", "BACK", custom)
-	hboxButtons.Append(backButton, false)
-
 	hboxButtons.Append(CreateButton("Power On",  "POWERON",  custom), false)
 	hboxButtons.Append(CreateButton("Power Off", "POWEROFF", custom), false)
 	hboxButtons.Append(CreateButton("Destroy",   "DESTROY",  custom), false)
+	hboxButtons.Append(CreateButton("Console",   "XTERM",    runTestExecClick), false)
+	hboxButtons.Append(CreateButton("Done",      "DONE",     custom), false)
 
 	tab.Append(Data.CurrentVM, vbox)
 	tab.SetMargined(0, true)

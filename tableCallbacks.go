@@ -100,12 +100,13 @@ func defaultSetCellValue(mh *TableData, row int, column int) {
 		vmname := mh.Rows[row].HumanData[humanID].Text
 		log.Println("vmname =",  vmname)
 		log.Println("defaultSetCellValue() FOUND THE BUTTON!!!!!!!   Button was pressed START", row, column)
-		Data.CurrentVM = fmt.Sprintf("%s",vmname)
+		Data.CurrentVM   = fmt.Sprintf("%s",vmname)
+		Data.CurrentPbVM = mh.Rows[row].PbVM
 		log.Println("User last clicked on Data.CurrentVM =", Data.CurrentVM)
 		if (Data.Debug) {
 			go ui.Main(ShowVM)
 		} else {
-			AddVmConfigureTab(vmname)
+			AddVmConfigureTab(vmname, mh.Rows[row].PbVM)
 		}
 	}
 }

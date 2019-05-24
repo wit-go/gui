@@ -5,6 +5,7 @@ import "time"
 import "fmt"
 import "strings"
 import "os/exec"
+import "runtime"
 
 import "github.com/gookit/config"
 
@@ -17,7 +18,7 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 // can not pass any args to this (?)
 func setupCloudUI() {
-	Data.cloudWindow = ui.NewWindow("Cloud Control Panel", config.Int("width"), config.Int("height"), false)
+	Data.cloudWindow = ui.NewWindow("Cloud Control Panel", Data.Width, config.Int("height"), false)
 	Data.cloudWindow.OnClosing(func(*ui.Window) bool {
 		ui.Quit()
 		return true
@@ -112,11 +113,18 @@ func addDebuggingButtons(vbox *ui.Box, custom func(*ButtonMap, string)) {
 
 	vbox.Append(CreateButton("DEBUG goroutines", "DEBUG", custom), false)
 	vbox.Append(CreateButton("xterm", "XTERM", runTestExecClick), false)
+	vbox.Append(CreateButton("Load test.json config file", "CONFIG", custom), false)
 }
 
 func runTestExecClick(b *ButtonMap, msg string) {
 	log.Println("runTestExecClick START")
-	go runCommand("xterm -report-fonts")
+	if runtime.GOOS == "linux" {
+		go runCommand("xterm -report-fonts")
+	} else if runtime.GOOS == "windows" { 
+		go runCommand("cmd.exe")
+	} else {
+		go runCommand("xterm")
+	}
 	log.Println("runTestExecClick END")
 }
 
