@@ -59,7 +59,9 @@ func (mh *TableData) CellValue(m *ui.TableModel, row, column int) ui.TableValue 
 				return nil
 			}
 			bgcolor := libuiColorToGOlangColor(mh.Rows[row].HumanData[humanID].Color)
-			log.Println("CellValue() BGCOLOR =", bgcolor)
+			if (Data.Debug) {
+				log.Println("CellValue() BGCOLOR =", bgcolor)
+			}
 			return bgcolor
 		}
 		return libuiColorToGOlangColor(mh.Rows[row].HumanData[humanID].Color)
@@ -98,6 +100,10 @@ func defaultSetCellValue(mh *TableData, row int, column int) {
 		log.Println("defaultSetCellValue() FOUND THE BUTTON!!!!!!!   Button was pressed START", row, column)
 		Data.CurrentVM = fmt.Sprintf("%s",vmname)
 		log.Println("Data.CurrentVM =", Data.CurrentVM)
-		go ui.Main(ShowVM)
+		if (Data.Debug) {
+			go ui.Main(ShowVM)
+		} else {
+			AddVmConfigureTab(vmname)
+		}
 	}
 }
