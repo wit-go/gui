@@ -51,6 +51,7 @@ func makeCloudWindow() {
 	Data.cloudWindow.OnClosing(func(*ui.Window) bool {
 		if (Data.MouseClick != nil) {
 			log.Println("SIMULATE Data.MouseClick(QUIT)")
+			Data.State = "QUIT"
 			Data.MouseClick(nil)
 		}
 		return true
