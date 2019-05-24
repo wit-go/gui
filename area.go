@@ -88,8 +88,8 @@ func (ah areaHandler) MouseEvent(a *ui.Area, me *ui.AreaMouseEvent) {
 		log.Println("GOT MOUSE UP")
 		log.Println("GOT MOUSE UP")
 		log.Println("GOT MOUSE UP")
-		if (Data.ButtonClick != nil) {
-			Data.ButtonClick(nil)
+		if (Data.MouseClick != nil) {
+			Data.MouseClick(nil)
 		}
 	}
 }

@@ -15,14 +15,30 @@ import "github.com/davecgh/go-spew/spew"
 //
 var Data	GuiDataStructure
 
+type GuiTabStructure struct {
+	me		*ui.Tab
+	parentWindow	*ui.Window
+	firstBox	*ui.Box
+	tabOffset	int
+
+	// this means only one table per tab
+	mh		*TableData
+
+	// stuff for the 'area'
+	// this means only one area per tab
+	fontButton	*ui.FontButton
+	attrstr		*ui.AttributedString
+	splashArea	*ui.Area
+}
+
 type GuiDataStructure struct {
 	State		string
-	MainWindow	*ui.Window
 	Width		int
 	Height		int
-	ButtonClick	func(*ButtonMap)
-	CurrentVM	string
-	MyArea		*ui.Area
+
+	// a fallback default function to handle mouse events 
+	// if nothing else is defined to handle them
+	MouseClick	func(*ButtonMap)
 
 	// general information
 	Version		string
@@ -31,6 +47,7 @@ type GuiDataStructure struct {
 	Buildtime	string
 	HomeDir		string
 	Debug		bool
+	DebugTable	bool
 
 	// official hostname and IPv6 address for this box
 	Hostname	string
@@ -41,7 +58,21 @@ type GuiDataStructure struct {
 	AccUser	string
 	AccPass	string
 
+	// A map of all buttons everywhere on all
+	// windows, all tabs, across all goroutines
+	// This is "GLOBAL"
+	AllButtons	[]ButtonMap
+
+	// a tab (maybe the one the user is playing with?)
+	CurrentTab	*GuiTabStructure
+	// a VM (maybe the one the user is playing with?)
+	CurrentVM	string
+
+	// All the tabs
+	Tabs		[]GuiTabStructure
+
 	// stuff for the splash screen / setup tabs
+	// MainWindow	*ui.Window
 	cloudWindow	*ui.Window
 	cloudTab	*ui.Tab
 	cloudBox	*ui.Box
@@ -50,9 +81,9 @@ type GuiDataStructure struct {
 	mainwin		*ui.Window
 	maintab		*ui.Tab
 	tabcount	int
-	allButtons	[]ButtonMap
 
 	// stuff for the 'area'
+	MyArea		*ui.Area
 	fontButton	*ui.FontButton
 	attrstr		*ui.AttributedString
 	splashArea	*ui.Area
@@ -88,8 +119,6 @@ func InitColumns(mh *TableData, parts []TableColumnData) {
 	humanID := 0
 	for key, foo := range parts {
 		log.Println("key, foo =", key, foo)
-		// log.Println("mh.Cells =", mh.Cells)
-		// log.Println("mh.Human =", mh.Human)
 
 		parts[key].Index = humanID
 		humanID += 1
@@ -177,29 +206,50 @@ func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts
 	return mh
 }
 
+// This is the default mouse click handler
+// Every mouse click that hasn't been assigned to
+// something specific will fall into this routine
+// By default, all it runs is the call back to
+// the main program that is using this library
+func mouseClick(b *ButtonMap, s string) {
+	log.Println("gui.mouseClick() START b, s =", b, s)
+
+	if (Data.MouseClick != nil) {
+		log.Println("\tData.MouseClick() START")
+		Data.MouseClick(b)
+	}
+}
+
 func defaultButtonClick(button *ui.Button) {
 	log.Println("defaultButtonClick() button =", button)
-	for key, foo := range Data.allButtons {
-		log.Println("Data.allButtons =", key, foo)
-		if Data.allButtons[key].B == button {
+	for key, foo := range Data.AllButtons {
+		log.Println("Data.AllButtons =", key, foo)
+		if Data.AllButtons[key].B == button {
 			log.Println("\tBUTTON MATCHED")
-			log.Println("\tData.allButtons[key].Name", Data.allButtons[key].Name)
-			log.Println("\tData.allButtons[key].Note", Data.allButtons[key].Note)
-			if (Data.ButtonClick != nil) {
-				Data.ButtonClick( &Data.allButtons[key])
-			} else if Data.allButtons[key].custom != nil {
-				Data.allButtons[key].custom(nil, "BUTTON DOES NOTHING")
+			log.Println("\tData.AllButtons[key].Name", Data.AllButtons[key].Name)
+			log.Println("\tData.AllButtons[key].Note", Data.AllButtons[key].Note)
+			if Data.AllButtons[key].custom != nil {
+				log.Println("\tDOING CUSTOM FUNCTION")
+				Data.AllButtons[key].custom(&Data.AllButtons[key], "SOMETHING CUSTOM")
+				return
+			}
+			if (Data.MouseClick != nil) {
+				Data.MouseClick( &Data.AllButtons[key])
 			}
 			return
 		}
 	}
 	log.Println("\tBUTTON NOT FOUND")
+	// still run the mouse click handler
+	if (Data.MouseClick != nil) {
+		Data.MouseClick(nil)
+	}
 }
 
 func defaultFontButtonClick(button *ui.FontButton) {
 	log.Println("defaultButtonClick() button =", button)
-	for key, foo := range Data.allButtons {
-		log.Println("Data.allButtons =", key, foo)
+	for key, foo := range Data.AllButtons {
+		log.Println("Data.AllButtons =", key, foo)
 	}
 }
 
@@ -213,7 +263,7 @@ func CreateButton(name string, note string, custom func(*ButtonMap, string)) *ui
 	newmap.Note = note
 	newmap.Name = name
 	newmap.custom = custom
-	Data.allButtons = append(Data.allButtons, newmap)
+	Data.AllButtons = append(Data.AllButtons, newmap)
 
 	return newB
 }
@@ -230,7 +280,7 @@ func CreateAccountButton(account string, custom func(*ButtonMap, string)) *ui.Bu
 	newmap.Name = name
 	newmap.AccNick = account
 	newmap.custom = custom
-	Data.allButtons = append(Data.allButtons, newmap)
+	Data.AllButtons = append(Data.AllButtons, newmap)
 
 	return newB
 }
@@ -247,7 +297,7 @@ func CreateLoginButton(account string, custom func(*ButtonMap, string)) *ui.Butt
 	newmap.Name = name
 	newmap.AccNick = account
 	newmap.custom = custom
-	Data.allButtons = append(Data.allButtons, newmap)
+	Data.AllButtons = append(Data.AllButtons, newmap)
 
 	return newB
 }
@@ -261,7 +311,7 @@ func CreateFontButton(name string, note string, custom func(*ButtonMap, string))
 	newmap.FB = newB
 	newmap.Note = note
 	newmap.custom = custom
-	Data.allButtons = append(Data.allButtons, newmap)
+	Data.AllButtons = append(Data.AllButtons, newmap)
 
 	return newB
 }

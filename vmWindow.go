@@ -152,8 +152,8 @@ func createVmBox(tab *ui.Tab, custom func(b *ButtonMap,s string)) {
 
 func buttonVmClick(b *ButtonMap, s string) {
 	log.Println("gui.buttonVmClick() START")
-	if (Data.ButtonClick != nil) {
+	if (Data.MouseClick != nil) {
 		log.Println("Data.ButtonClick() START")
-		Data.ButtonClick(nil)
+		Data.MouseClick(nil)
 	}
 }

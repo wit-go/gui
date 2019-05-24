@@ -3,6 +3,8 @@ package gui
 import "log"
 import "time"
 import "fmt"
+import "strings"
+import "os/exec"
 
 import "github.com/gookit/config"
 
@@ -109,4 +111,27 @@ func addDebuggingButtons(vbox *ui.Box, custom func(*ButtonMap, string)) {
 	vbox.Append(add5button, false)
 
 	vbox.Append(CreateButton("DEBUG goroutines", "DEBUG", custom), false)
+	vbox.Append(CreateButton("xterm", "XTERM", runTestExecClick), false)
+}
+
+func runTestExecClick(b *ButtonMap, msg string) {
+	log.Println("runTestExecClick START")
+	go runCommand("xterm -report-fonts")
+	log.Println("runTestExecClick END")
+}
+
+func runCommand(s string) {
+	log.Println("runXterm START")
+	log.Println("runXterm START")
+	log.Println("runXterm START")
+	cmd := strings.TrimSpace(s) // this is like 'chomp' in perl
+        cmdArgs := strings.Fields(cmd)
+	process := exec.Command(cmdArgs[0], cmdArgs[1:len(cmdArgs)]...)
+	log.Println("runXterm process.Start()")
+	process.Start()
+	log.Println("runXterm process.Wait()")
+	process.Wait()
+	log.Println("runXterm END")
+	log.Println("runXterm END")
+	log.Println("runXterm END")
 }

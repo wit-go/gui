@@ -28,13 +28,25 @@ type RowData struct {
 	HumanData	[20]HumanCellData
 }
 
-// hmm. will this stand the test of time?
+//
+// This maps the andlabs/ui & libui components into a "human"
+// readable cell reference list. The reason is that there
+// are potentially 3 values for each cell. The Text, the Color
+// and an image. These are not always needed so the number
+// of fields varies between 1 and 3. Internally, the toolkit
+// GUI abstraction needs to list all of them, but it's then
+// hard to figure out which column goes with the columns that
+// you see when you visually are looking at it like a spreadsheet
+//
+// This makes a map so that we can say "give me the value at
+// row 4 and column 2" and find the fields that are needed
+//
+// TODO: add back image support and the progress bar
+//
 type HumanCellData struct {
 	Name		string			// what kind of row is this?
-	// Text		ui.TableString
 	Text		string
 	TextID		int
-	// Color		ui.TableColor
 	Color		color.RGBA
 	ColorID		int
 }
@@ -45,6 +57,10 @@ type HumanMap struct {
 	ColorID		int
 }
 
+//
+// This is the structure that andlabs/ui uses to pass information
+// to the GUI. This is the "authoritative" data.
+//
 type TableData struct {
 	RowCount		int			// This is the number of 'rows' which really means data elements not what the human sees
 	RowWidth		int			// This is how wide each row is
@@ -53,6 +69,9 @@ type TableData struct {
 
 	Cells			[20]CellData
 	Human			[20]HumanMap
+
+	lastRow			int
+	lastColumn		int
 }
 
 func initRowBTcolor(mh *TableData, intBG int, cell TableColumnData) {

@@ -16,14 +16,14 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 func (mh *TableData) NumRows(m *ui.TableModel) int {
 	if (Data.Debug) {
-		log.Println("NumRows = mh.RowCount = ", mh.RowCount)
+		log.Println("NumRows = mh.RowCount = ", mh.RowCount, "(last Row & Column =", mh.lastRow, mh.lastColumn, ")")
 	}
 	return mh.RowCount
 }
 
 // FYI: this routine seems to be called around 10 to 100 times a second for each table
 func (mh *TableData) ColumnTypes(m *ui.TableModel) []ui.TableValue {
-	if (Data.Debug) {
+	if (Data.DebugTable) {
 		log.Println("ColumnTypes = ", mh.generatedColumnTypes)
 	}
 	return mh.generatedColumnTypes
@@ -44,9 +44,11 @@ func libuiColorToGOlangColor(rgba color.RGBA) ui.TableColor {
 // TODO: Figure out why this is being called 1000 times a second (10 times for each row & column)
 // Nevermind this TODO. Who gives a shit. This is a really smart way to treat the OS toolkits
 func (mh *TableData) CellValue(m *ui.TableModel, row, column int) ui.TableValue {
-	if (Data.Debug) {
+	if (Data.DebugTable) {
 		log.Println("CellValue() row, column =", row, column)
 	}
+	mh.lastRow = row
+	mh.lastColumn = column
 	humanID := mh.Cells[column].HumanID
 	if (column == mh.Human[humanID].TextID) {
 		return ui.TableString(mh.Rows[row].HumanData[humanID].Text)
@@ -99,7 +101,7 @@ func defaultSetCellValue(mh *TableData, row int, column int) {
 		log.Println("vmname =",  vmname)
 		log.Println("defaultSetCellValue() FOUND THE BUTTON!!!!!!!   Button was pressed START", row, column)
 		Data.CurrentVM = fmt.Sprintf("%s",vmname)
-		log.Println("Data.CurrentVM =", Data.CurrentVM)
+		log.Println("User last clicked on Data.CurrentVM =", Data.CurrentVM)
 		if (Data.Debug) {
 			go ui.Main(ShowVM)
 		} else {
