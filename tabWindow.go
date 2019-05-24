@@ -8,8 +8,8 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 // import "github.com/davecgh/go-spew/spew"
 
-func buttonClick(i int, s string) {
-	log.Println("gui.buttonClick() i, s =", i, s)
+func buttonClick(b *ButtonMap, s string) {
+	log.Println("gui.buttonClick() b, s =", b, s)
 	log.Println("Figure out what to do here")
 	log.Println("Figure out what to do here")
 	log.Println("Figure out what to do here")

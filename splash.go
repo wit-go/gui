@@ -10,7 +10,7 @@ import "runtime"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-func ShowSplashBox(vbox *ui.Box, atest chan int, custom func(int, string)) *ui.Box {
+func ShowSplashBox(vbox *ui.Box, atest chan int, custom func(*ButtonMap, string)) *ui.Box {
 	newbox := ui.NewVerticalBox()
 	newbox.SetPadded(true)
 

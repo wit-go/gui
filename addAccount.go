@@ -5,7 +5,7 @@ import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-func AddAccountQuestionBox(junk *ui.Box, custom func(int, string)) *ui.Box {
+func AddAccountQuestionBox(junk *ui.Box, custom func(*ButtonMap, string)) *ui.Box {
 	newbox := ui.NewVerticalBox()
 	newbox.SetPadded(true)
 
@@ -20,7 +20,7 @@ func AddAccountQuestionBox(junk *ui.Box, custom func(int, string)) *ui.Box {
 	return newbox
 }
 
-func AddAccountBox(custom func(int, string)) *ui.Box {
+func AddAccountBox(custom func(*ButtonMap, string)) *ui.Box {
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
 

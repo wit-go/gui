@@ -22,20 +22,22 @@ func ShowVM() {
 	VMwin.SetChild(VMtab)
 	VMwin.SetMargined(true)
 
-	vmBox := createVmBox(buttonClick)
-	VMtab.Append(Data.CurrentVM, vmBox)
-	VMtab.SetMargined(0, true)
+	createVmBox(VMtab, buttonVmClick)
+//	vmBox := createVmBox(buttonVmClick)
+//	VMtab.Append(Data.CurrentVM, vmBox)
+//	VMtab.SetMargined(0, true)
 
 	VMwin.Show()
 }
 
 func AddVmConfigureTab(name string) {
-	vmBox := createVmBox(buttonClick)
-	Data.cloudTab.Append(name, vmBox)
-	Data.cloudTab.SetMargined(0, true)
+	createVmBox(Data.cloudTab, buttonVmClick)
+//	vmBox := createVmBox(Data.cloudTab, buttonVmClick)
+//	Data.cloudTab.Append(name, vmBox)
+//	Data.cloudTab.SetMargined(0, true)
 }
 
-func createVmBox(custom func(int, string)) *ui.Box {
+func createVmBox(tab *ui.Tab, custom func(b *ButtonMap,s string)) {
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
 
@@ -140,5 +142,18 @@ func createVmBox(custom func(int, string)) *ui.Box {
 	backButton := CreateButton("Back", "BACK", custom)
 	hboxButtons.Append(backButton, false)
 
-	return vbox
+	hboxButtons.Append(CreateButton("Power On",  "POWERON",  custom), false)
+	hboxButtons.Append(CreateButton("Power Off", "POWEROFF", custom), false)
+	hboxButtons.Append(CreateButton("Destroy",   "DESTROY",  custom), false)
+
+	tab.Append(Data.CurrentVM, vbox)
+	tab.SetMargined(0, true)
+}
+
+func buttonVmClick(b *ButtonMap, s string) {
+	log.Println("gui.buttonVmClick() START")
+	if (Data.ButtonClick != nil) {
+		log.Println("Data.ButtonClick() START")
+		Data.ButtonClick(nil)
+	}
 }

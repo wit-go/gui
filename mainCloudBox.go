@@ -11,7 +11,7 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 // import "github.com/davecgh/go-spew/spew"
 
-func makeCloudInfoBox(custom func(int, string)) *ui.Box {
+func makeCloudInfoBox(custom func(*ButtonMap, string)) *ui.Box {
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 

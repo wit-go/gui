@@ -53,7 +53,7 @@ func addTableTab() {
 	AddTableTab(Data.cloudTab, 1, "test seven", 7, parts)
 }
 
-func addDebuggingButtons(vbox *ui.Box, custom func(int, string)) {
+func addDebuggingButtons(vbox *ui.Box, custom func(*ButtonMap, string)) {
 	vbox.Append(ui.NewLabel("Debugging:"), false)
 
 	vbox.Append(ui.NewColorButton(), false)

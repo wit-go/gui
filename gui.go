@@ -70,7 +70,7 @@ type ButtonMap struct {
 	FB		*ui.FontButton
 	onClick		func (int, string)
 	onChanged	func (int, string)
-	custom		func (int, string)
+	custom		func (*ButtonMap, string)
 	Name		string	// the text on the button
 	Note		string	// what type of button
 	AccNick		string  // what account this button is for
@@ -188,7 +188,7 @@ func defaultButtonClick(button *ui.Button) {
 			if (Data.ButtonClick != nil) {
 				Data.ButtonClick( &Data.allButtons[key])
 			} else if Data.allButtons[key].custom != nil {
-				Data.allButtons[key].custom(42, "BUTTON DOES NOTHING")
+				Data.allButtons[key].custom(nil, "BUTTON DOES NOTHING")
 			}
 			return
 		}
@@ -203,7 +203,7 @@ func defaultFontButtonClick(button *ui.FontButton) {
 	}
 }
 
-func CreateButton(name string, note string, custom func(int, string)) *ui.Button {
+func CreateButton(name string, note string, custom func(*ButtonMap, string)) *ui.Button {
 	newB := ui.NewButton(name)
 
 	newB.OnClicked(defaultButtonClick)
@@ -218,7 +218,7 @@ func CreateButton(name string, note string, custom func(int, string)) *ui.Button
 	return newB
 }
 
-func CreateAccountButton(account string, custom func(int, string)) *ui.Button {
+func CreateAccountButton(account string, custom func(*ButtonMap, string)) *ui.Button {
 	name := "Show " + account
 	newB := ui.NewButton(name)
 
@@ -235,7 +235,7 @@ func CreateAccountButton(account string, custom func(int, string)) *ui.Button {
 	return newB
 }
 
-func CreateLoginButton(account string, custom func(int, string)) *ui.Button {
+func CreateLoginButton(account string, custom func(*ButtonMap, string)) *ui.Button {
 	name := "Login " + account
 	newB := ui.NewButton(name)
 
@@ -252,7 +252,7 @@ func CreateLoginButton(account string, custom func(int, string)) *ui.Button {
 	return newB
 }
 
-func CreateFontButton(name string, note string, custom func(int, string)) *ui.FontButton {
+func CreateFontButton(name string, note string, custom func(*ButtonMap, string)) *ui.FontButton {
 	newB := ui.NewFontButton()
 
 	newB.OnChanged(defaultFontButtonClick)

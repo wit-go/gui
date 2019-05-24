@@ -7,7 +7,7 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 import "github.com/davecgh/go-spew/spew"
 
-func makeSplashArea(custom func(int, string)) *ui.Area {
+func makeSplashArea(custom func(*ButtonMap, string)) *ui.Area {
 	// make this button just to get the default font (but don't display the button)
 	// There should be another way to do this (?)
 	Data.fontButton = CreateFontButton("SplashFont", "DONE", custom)
@@ -75,8 +75,8 @@ func (ah areaHandler) Draw(a *ui.Area, p *ui.AreaDrawParams) {
 }
 
 func (ah areaHandler) MouseEvent(a *ui.Area, me *ui.AreaMouseEvent) {
-	log.Println("GOT MouseEvent()")
 	if (Data.Debug) {
+		log.Println("GOT MouseEvent()")
 		spew.Dump(me)
 	}
 	if (me.Down == 1) {
