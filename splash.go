@@ -39,6 +39,10 @@ func ShowSplashBox(vbox *ui.Box, atest chan int, custom func(int, string)) *ui.B
 			tmp := "go build version: " + Data.GoVersion
 			newbox.Append(ui.NewLabel(tmp), false)
 		}
+		if (Data.Buildtime != "") {
+			tmp := "build date: " + Data.Buildtime
+			newbox.Append(ui.NewLabel(tmp), false)
+		}
 	}
 
 	okButton := CreateButton("OK", "DONE", custom)
