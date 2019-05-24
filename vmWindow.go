@@ -27,19 +27,12 @@ func ShowVM() {
 	VMwin.SetChild(VMtab)
 	VMwin.SetMargined(true)
 
-	createVmBox(VMtab, buttonMapClick, Data.CurrentPbVM)
-//	vmBox := createVmBox(buttonVmClick)
-//	VMtab.Append(Data.CurrentVM, vmBox)
-//	VMtab.SetMargined(0, true)
-
+	createVmBox(VMtab, mouseClick, Data.CurrentPbVM)
 	VMwin.Show()
 }
 
 func AddVmConfigureTab(name string, pbVM *pb.Event_VM) {
-	createVmBox(Data.cloudTab, buttonMapClick, Data.CurrentPbVM)
-//	vmBox := createVmBox(Data.cloudTab, buttonVmClick)
-//	Data.cloudTab.Append(name, vmBox)
-//	Data.cloudTab.SetMargined(0, true)
+	createVmBox(Data.cloudTab, mouseClick, Data.CurrentPbVM)
 }
 
 // makeEntryBox(box, "hostname:", "blah.foo.org") {
@@ -87,7 +80,7 @@ func makeEntryHbox(hbox *ui.Box, a string, b string, edit bool) {
 	// End 'Nickname' vertical box
 }
 
-func createVmBox(tab *ui.Tab, custom func(b *ButtonMap,s string), pbVM *pb.Event_VM) {
+func createVmBox(tab *ui.Tab, custom func(*ButtonMap), pbVM *pb.Event_VM) {
 	log.Println("createVmBox() START")
 	log.Println("createVmBox() pbVM.Name", pbVM.Name)
 	spew.Dump(pbVM)
@@ -126,7 +119,7 @@ func createVmBox(tab *ui.Tab, custom func(b *ButtonMap,s string), pbVM *pb.Event
 	tab.SetMargined(0, true)
 }
 
-func createAddVmBox(tab *ui.Tab, name string, custom func(b *ButtonMap,s string)) {
+func createAddVmBox(tab *ui.Tab, name string, custom func(*ButtonMap)) {
 	log.Println("createAddVmBox() START")
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
@@ -150,13 +143,3 @@ func createAddVmBox(tab *ui.Tab, name string, custom func(b *ButtonMap,s string)
 	tab.Append(name, vbox)
 	tab.SetMargined(0, true)
 }
-
-/*
-func buttonVmClick(b *ButtonMap, s string) {
-	log.Println("gui.buttonVmClick() START")
-	if (Data.MouseClick != nil) {
-		log.Println("Data.ButtonClick() START")
-		Data.MouseClick(nil)
-	}
-}
-*/

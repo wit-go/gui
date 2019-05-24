@@ -105,25 +105,33 @@ func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts
 // something specific will fall into this routine
 // By default, all it runs is the call back to
 // the main program that is using this library
-func mouseClick(b *ButtonMap, s string) {
-	log.Println("gui.mouseClick() START b, s =", b, s)
 
-	if (Data.MouseClick != nil) {
+// This is one of the routines that is called from the
+// defaultButtonClick() below when the button is found
+// in the AllButtons %map
+// TODO: clean up the text above
+func mouseClick(b *ButtonMap) {
+	log.Println("gui.mouseClick() START b =", b)
+
+	if (Data.MouseClick == nil) {
+		log.Println("Data.MouseClick() IS nil. NOT DOING ANYTHING")
+	} else {
 		log.Println("\tData.MouseClick() START")
 		Data.MouseClick(b)
 	}
 }
 
-// This is one of the routines that is called from the
-// defaultButtonClick() below when the button is found
-// in the AllButtons %map
-func buttonMapClick(b *ButtonMap, s string) {
+/*
+func buttonMapClick(b *ButtonMap) {
 	log.Println("gui.buttonVmClick() START")
-	if (Data.MouseClick != nil) {
-		log.Println("Data.ButtonClick() START")
-		Data.MouseClick(nil)
+	if (Data.MouseClick == nil) {
+		log.Println("Data.MouseClick() IS nil. NOT DOING ANYTHING")
+	} else {
+		log.Println("Data.MouseClick() START")
+		Data.MouseClick(b)
 	}
 }
+*/
 
 // This is the raw routine passed to every button in andlabs libui / ui
 func defaultButtonClick(button *ui.Button) {
@@ -132,11 +140,14 @@ func defaultButtonClick(button *ui.Button) {
 		log.Println("Data.AllButtons =", key, foo)
 		if Data.AllButtons[key].B == button {
 			log.Println("\tBUTTON MATCHED")
-			log.Println("\tData.AllButtons[key].Name", Data.AllButtons[key].Name)
-			log.Println("\tData.AllButtons[key].Note", Data.AllButtons[key].Note)
+			log.Println("\tData.AllButtons[key].Name =", Data.AllButtons[key].Name)
+			log.Println("\tData.AllButtons[key].Note =", Data.AllButtons[key].Note)
 			if Data.AllButtons[key].custom != nil {
 				log.Println("\tDOING CUSTOM FUNCTION")
-				Data.AllButtons[key].custom(&Data.AllButtons[key], "SOMETHING CUSTOM")
+				var tmp ButtonMap
+				tmp = Data.AllButtons[key]
+				spew.Dump(tmp)
+				Data.AllButtons[key].custom(&tmp)
 				return
 			}
 			if (Data.MouseClick != nil) {
@@ -162,7 +173,7 @@ func defaultFontButtonClick(button *ui.FontButton) {
 	}
 }
 
-func CreateButton(name string, note string, custom func(*ButtonMap, string)) *ui.Button {
+func CreateButton(name string, note string, custom func(*ButtonMap)) *ui.Button {
 	newB := ui.NewButton(name)
 
 	newB.OnClicked(defaultButtonClick)
@@ -177,7 +188,7 @@ func CreateButton(name string, note string, custom func(*ButtonMap, string)) *ui
 	return newB
 }
 
-func CreateAccountButton(account string, custom func(*ButtonMap, string)) *ui.Button {
+func CreateAccountButton(account string, custom func(*ButtonMap)) *ui.Button {
 	name := "Show " + account
 	newB := ui.NewButton(name)
 
@@ -194,7 +205,7 @@ func CreateAccountButton(account string, custom func(*ButtonMap, string)) *ui.Bu
 	return newB
 }
 
-func CreateLoginButton(account string, custom func(*ButtonMap, string)) *ui.Button {
+func CreateLoginButton(account string, custom func(*ButtonMap)) *ui.Button {
 	name := "Login " + account
 	newB := ui.NewButton(name)
 
@@ -211,7 +222,7 @@ func CreateLoginButton(account string, custom func(*ButtonMap, string)) *ui.Butt
 	return newB
 }
 
-func CreateFontButton(name string, note string, custom func(*ButtonMap, string)) *ui.FontButton {
+func CreateFontButton(name string, note string, custom func(*ButtonMap)) *ui.FontButton {
 	newB := ui.NewFontButton()
 
 	newB.OnChanged(defaultFontButtonClick)
@@ -242,7 +253,7 @@ func addVmButtonClick(button *ui.Button) {
 	if (Data.Debug) {
 		spew.Dump(button)
 	}
-	createAddVmBox(Data.cloudTab, "Create New Virtual Machine", buttonMapClick)
+	createAddVmBox(Data.cloudTab, "Create New Virtual Machine", mouseClick)
 }
 
 func addVmButton(name string) ui.Control {

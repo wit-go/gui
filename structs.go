@@ -101,7 +101,7 @@ type ButtonMap struct {
 	FB		*ui.FontButton
 	onClick		func (int, string)
 	onChanged	func (int, string)
-	custom		func (*ButtonMap, string)
+	custom		func (*ButtonMap)
 	Name		string	// the text on the button
 	Note		string	// what type of button
 	AccNick		string  // what account this button is for

@@ -56,7 +56,7 @@ func addTableTab() {
 	AddTableTab(Data.cloudTab, 1, "test seven", 7, parts)
 }
 
-func addDebuggingButtons(vbox *ui.Box, custom func(*ButtonMap, string)) {
+func addDebuggingButtons(vbox *ui.Box, custom func(*ButtonMap)) {
 	vbox.Append(ui.NewLabel("Debugging:"), false)
 
 	vbox.Append(ui.NewColorButton(), false)
@@ -116,7 +116,7 @@ func addDebuggingButtons(vbox *ui.Box, custom func(*ButtonMap, string)) {
 	vbox.Append(CreateButton("Load test.json config file", "CONFIG", custom), false)
 }
 
-func runTestExecClick(b *ButtonMap, msg string) {
+func runTestExecClick(b *ButtonMap) {
 	log.Println("runTestExecClick START")
 	if runtime.GOOS == "linux" {
 		go runCommand("xterm -report-fonts")

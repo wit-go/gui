@@ -108,7 +108,7 @@ func defaultSetCellValue(mh *TableData, row int, column int) {
 		} else {
 			// AddVmConfigureTab(vmname, mh.Rows[row].PbVM)
 			// createVmBox(Data.cloudTab, buttonVmClick, mh.Rows[row].PbVM)
-			createVmBox(Data.cloudTab, buttonMapClick, mh.Rows[row].PbVM)
+			createVmBox(Data.cloudTab, mouseClick, mh.Rows[row].PbVM)
 		}
 	}
 }
