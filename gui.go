@@ -66,6 +66,7 @@ type ButtonMap struct {
 	custom		func (int, string)
 	Name		string	// the text on the button
 	Note		string	// what type of button
+	AccNick		string  // what account this button is for
 }
 
 /*
@@ -182,8 +183,10 @@ func defaultButtonClick(button *ui.Button) {
 			} else if Data.allButtons[key].custom != nil {
 				Data.allButtons[key].custom(42, "BUTTON DOES NOTHING")
 			}
+			return
 		}
 	}
+	log.Println("\tBUTTON NOT FOUND")
 }
 
 func defaultFontButtonClick(button *ui.FontButton) {
@@ -208,6 +211,23 @@ func CreateButton(name string, note string, custom func(int, string)) *ui.Button
 	return newB
 }
 
+func CreateAccountButton(account string, custom func(int, string)) *ui.Button {
+	name := "Show " + account
+	newB := ui.NewButton(name)
+
+	newB.OnClicked(defaultButtonClick)
+
+	var newmap ButtonMap
+	newmap.B = newB
+	newmap.Note = "SHOW"
+	newmap.Name = name
+	newmap.AccNick = account
+	newmap.custom = custom
+	Data.allButtons = append(Data.allButtons, newmap)
+
+	return newB
+}
+
 func CreateFontButton(name string, note string, custom func(int, string)) *ui.FontButton {
 	newB := ui.NewFontButton()
 
@@ -216,7 +236,6 @@ func CreateFontButton(name string, note string, custom func(int, string)) *ui.Fo
 	var newmap ButtonMap
 	newmap.FB = newB
 	newmap.Note = note
-	newmap.Name = name
 	newmap.custom = custom
 	Data.allButtons = append(Data.allButtons, newmap)
 

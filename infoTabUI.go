@@ -83,11 +83,10 @@ func makeCloudInfoBox(custom func(int, string)) *ui.Box {
 		agrid.Append(ui.NewLabel(account),    1, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 		agrid.Append(ui.NewLabel(username),   2, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 		agrid.Append(ui.NewLabel(domainname), 3, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
-		bname := "Open " + account
-		b := CreateButton(bname, "SHOW", custom)
+
+		b := CreateAccountButton(account, custom)
 		agrid.Append(b, 4, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
-		// vbox.Append(ui.NewLabel(a), false)
 		row += 1
 	}
 
@@ -135,7 +134,7 @@ func addTableTab() {
 	AddTableTab(Data.cloudTab, 1, "test seven", 7, parts)
 }
 
-func AddVmsTab(count int) *TableData {
+func AddVmsTab(name string, count int) *TableData {
 	var parts []TableColumnData
 
 	human := 0
@@ -189,7 +188,7 @@ func AddVmsTab(count int) *TableData {
 	parts = append(parts, tmp)
 	human += 1
 
-	mh := AddTableTab(Data.cloudTab, 1, "Virtual Machines", count, parts)
+	mh := AddTableTab(Data.cloudTab, 1, name, count, parts)
 	return mh
 }
 
