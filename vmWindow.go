@@ -1,6 +1,7 @@
 package gui
 
 import "log"
+import "fmt"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
@@ -42,7 +43,7 @@ func AddVmConfigureTab(name string, pbVM *pb.Event_VM) {
 }
 
 // makeEntryBox(box, "hostname:", "blah.foo.org") {
-func makeEntryBox(hbox *ui.Box, a string, b string) {
+func makeEntryBox(hbox *ui.Box, a string, b string, edit bool) {
 	// Start 'Nickname' vertical box
 	vboxN := ui.NewVerticalBox()
 	vboxN.SetPadded(true)
@@ -50,7 +51,9 @@ func makeEntryBox(hbox *ui.Box, a string, b string) {
 
 	entryNick := ui.NewEntry()
 	entryNick.SetText(b)
-	entryNick.SetReadOnly(false)
+	if (edit == false) {
+		entryNick.SetReadOnly(true)
+	}
 
 	vboxN.Append(entryNick, false)
 
@@ -77,10 +80,12 @@ func createVmBox(tab *ui.Tab, custom func(b *ButtonMap,s string), pbVM *pb.Event
 	vbox.Append(hboxAccount, false)
 
 	// Add hostname entry box
-	makeEntryBox(hboxAccount, "hostname:",	pbVM.Hostname)
-	makeEntryBox(hboxAccount, "IPv6:",	pbVM.IPv6)
-	makeEntryBox(hboxAccount, "RAM:",	string(pbVM.Memory))
-	makeEntryBox(hboxAccount, "CPU:",	string(pbVM.Cpus))
+	makeEntryBox(hboxAccount, "hostname:",	pbVM.Hostname,			true)
+	makeEntryBox(hboxAccount, "IPv6:",	pbVM.IPv6,			true)
+	makeEntryBox(hboxAccount, "RAM:",	fmt.Sprintf("%d",pbVM.Memory),	true)
+	makeEntryBox(hboxAccount, "CPU:",	fmt.Sprintf("%d",pbVM.Cpus),	true)
+	makeEntryBox(hboxAccount, "Disk (GB):",	fmt.Sprintf("%d",pbVM.Disk),	true)
+	makeEntryBox(hboxAccount, "OS Image:",	pbVM.BaseImage,			true)
 
 	vbox.Append(ui.NewHorizontalSeparator(), false)
 
@@ -92,6 +97,7 @@ func createVmBox(tab *ui.Tab, custom func(b *ButtonMap,s string), pbVM *pb.Event
 	hboxButtons.Append(CreateButton("Power Off", "POWEROFF", custom), false)
 	hboxButtons.Append(CreateButton("Destroy",   "DESTROY",  custom), false)
 	hboxButtons.Append(CreateButton("Console",   "XTERM",    runTestExecClick), false)
+	hboxButtons.Append(CreateButton("Save",      "SAVE",     custom), false)
 	hboxButtons.Append(CreateButton("Done",      "DONE",     custom), false)
 
 	tab.Append(Data.CurrentVM, vbox)
