@@ -28,6 +28,7 @@ type GuiDataStructure struct {
 	Version		string
 	GitCommit	string
 	GoVersion	string
+	Buildtime	string
 	HomeDir		string
 	Debug		bool
 
@@ -293,6 +294,10 @@ func SocketError() {
 	ui.MsgBoxError(Data.cloudWindow,
 		"There was a socket error",
 		"More detailed information can be shown here.")
+}
+
+func MessageWindow(msg1 string, msg2 string) {
+	ui.MsgBox(Data.cloudWindow, msg1, msg2)
 }
 
 func ErrorWindow(msg1 string, msg2 string) {
