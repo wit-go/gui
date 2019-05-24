@@ -23,11 +23,17 @@ type GuiDataStructure struct {
 	ButtonClick	func(*ButtonMap)
 	CurrentVM	string
 	MyArea		*ui.Area
+
+	// general information
 	Version		string
 	GitCommit	string
 	GoVersion	string
 	HomeDir		string
 	Debug		bool
+
+	// official hostname and IPv6 address for this box
+	Hostname	string
+	IPv6		string
 
 	// account entry textboxes
 	AccNick	string
@@ -228,6 +234,23 @@ func CreateAccountButton(account string, custom func(int, string)) *ui.Button {
 	return newB
 }
 
+func CreateLoginButton(account string, custom func(int, string)) *ui.Button {
+	name := "Login " + account
+	newB := ui.NewButton(name)
+
+	newB.OnClicked(defaultButtonClick)
+
+	var newmap ButtonMap
+	newmap.B = newB
+	newmap.Note = "LOGIN"
+	newmap.Name = name
+	newmap.AccNick = account
+	newmap.custom = custom
+	Data.allButtons = append(Data.allButtons, newmap)
+
+	return newB
+}
+
 func CreateFontButton(name string, note string, custom func(int, string)) *ui.FontButton {
 	newB := ui.NewFontButton()
 
@@ -270,4 +293,8 @@ func SocketError() {
 	ui.MsgBoxError(Data.cloudWindow,
 		"There was a socket error",
 		"More detailed information can be shown here.")
+}
+
+func ErrorWindow(msg1 string, msg2 string) {
+	ui.MsgBoxError(Data.cloudWindow, msg1, msg2)
 }

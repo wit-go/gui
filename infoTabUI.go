@@ -43,17 +43,21 @@ func makeCloudInfoBox(custom func(int, string)) *ui.Box {
 	vbox.Append(grid, false)
 	*/
 
+	hostnamebox := ui.NewHorizontalBox()
+	hostnamebox.SetPadded(true)
+	vbox.Append(hostnamebox, false)
+
 	entryForm := ui.NewForm()
 	entryForm.SetPadded(true)
-	vbox.Append(entryForm, false)
+	hostnamebox.Append(entryForm, true)
 
 	hostnameEntry :=  ui.NewEntry()
 	entryForm.Append("hostname:", hostnameEntry, false)
-	hostnameEntry.SetText("librem15.lab.wit.com")
+	tmp := Data.Hostname + " (" + Data.IPv6 + ")"
+	hostnameEntry.SetText(tmp)
+	hostnameEntry.SetReadOnly(true)
 
-	IPv6entry :=  ui.NewEntry()
-	entryForm.Append("IPv6:", IPv6entry, false)
-	IPv6entry.SetText("2604:bbc0:3:3:0:10:0:1003")
+	hostnamebox.Append(CreateButton("Edit", "EDIT", custom), false)
 
 	vbox.Append(ui.NewHorizontalSeparator(), false)
 
@@ -81,8 +85,11 @@ func makeCloudInfoBox(custom func(int, string)) *ui.Box {
 		agrid.Append(ui.NewLabel(username),   2, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 		agrid.Append(ui.NewLabel(domainname), 3, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
+		l := CreateLoginButton(account, custom)
+		agrid.Append(l, 4, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+
 		b := CreateAccountButton(account, custom)
-		agrid.Append(b, 4, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+		agrid.Append(b, 5, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 		row += 1
 	}
