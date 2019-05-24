@@ -17,23 +17,23 @@ func makeCloudInfoBox(custom func(int, string)) *ui.Box {
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 
-	vbox := ui.NewVerticalBox()
-	vbox.SetPadded(true)
-	hbox.Append(vbox, false)
-
-	vbox.Append(ui.NewColorButton(), false)
-
-	vbox.Append(CreateButton("Add Account", "ADD", custom), false)
-
-	vbox.Append(CreateButton("Quit", "QUIT", custom), false)
-
 	if (config.String("debugging") == "true") {
+		vbox := ui.NewVerticalBox()
+		vbox.SetPadded(true)
+		hbox.Append(vbox, false)
+
+		vbox.Append(ui.NewLabel("Debugging:"), false)
+
+		vbox.Append(ui.NewColorButton(), false)
+		vbox.Append(CreateButton("Add Account", "ADD", custom), false)
+		vbox.Append(CreateButton("Quit", "QUIT", custom), false)
+
 		addDebuggingButtons(vbox, custom)
+
+		hbox.Append(ui.NewVerticalSeparator(), false)
 	}
 
-	hbox.Append(ui.NewVerticalSeparator(), false)
-
-	vbox = ui.NewVerticalBox()
+	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
 	hbox.Append(vbox, true)
 
@@ -93,11 +93,19 @@ func makeCloudInfoBox(custom func(int, string)) *ui.Box {
 
 		row += 1
 	}
+	row += 1
+	agrid.Append(ui.NewLabel(""),    1, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+	row += 1
+	a := CreateButton("Add Account", "ADD", custom)
+	agrid.Append(a, 4, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+	q := CreateButton("Quit", "QUIT", custom)
+	agrid.Append(q, 5, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 	vbox.Append(agrid, false)
 	return hbox
 }
 
+/*
 // can not pass any args to this (?)
 func setupCloudUI() {
 	Data.cloudWindow = ui.NewWindow("Cloud Control Panel", config.Int("width"), config.Int("height"), false)
@@ -120,6 +128,7 @@ func setupCloudUI() {
 
 	Data.cloudWindow.Show()
 }
+*/
 
 func addTableTab() {
 	var parts []TableColumnData
@@ -197,8 +206,6 @@ func AddVmsTab(name string, count int) *TableData {
 }
 
 func addDebuggingButtons(vbox *ui.Box, custom func(int, string)) {
-	vbox.Append(ui.NewLabel("Debugging:"), false)
-
 	// ATTEMPT TO ADD THE TABLE HERE
 	add2button := ui.NewButton("Add a Test Table")
 	add2button.OnClicked(func(*ui.Button) {
