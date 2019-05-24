@@ -106,7 +106,9 @@ func defaultSetCellValue(mh *TableData, row int, column int) {
 		if (Data.Debug) {
 			go ui.Main(ShowVM)
 		} else {
-			AddVmConfigureTab(vmname, mh.Rows[row].PbVM)
+			// AddVmConfigureTab(vmname, mh.Rows[row].PbVM)
+			// createVmBox(Data.cloudTab, buttonVmClick, mh.Rows[row].PbVM)
+			createVmBox(Data.cloudTab, buttonMapClick, mh.Rows[row].PbVM)
 		}
 	}
 }

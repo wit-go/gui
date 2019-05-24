@@ -114,6 +114,18 @@ func mouseClick(b *ButtonMap, s string) {
 	}
 }
 
+// This is one of the routines that is called from the
+// defaultButtonClick() below when the button is found
+// in the AllButtons %map
+func buttonMapClick(b *ButtonMap, s string) {
+	log.Println("gui.buttonVmClick() START")
+	if (Data.MouseClick != nil) {
+		log.Println("Data.ButtonClick() START")
+		Data.MouseClick(nil)
+	}
+}
+
+// This is the raw routine passed to every button in andlabs libui / ui
 func defaultButtonClick(button *ui.Button) {
 	log.Println("defaultButtonClick() button =", button)
 	for key, foo := range Data.AllButtons {
@@ -128,7 +140,7 @@ func defaultButtonClick(button *ui.Button) {
 				return
 			}
 			if (Data.MouseClick != nil) {
-				Data.MouseClick( &Data.AllButtons[key])
+				Data.MouseClick(&Data.AllButtons[key])
 			}
 			return
 		}
@@ -140,6 +152,9 @@ func defaultButtonClick(button *ui.Button) {
 	}
 }
 
+// This is the raw routine passed to every button in andlabs libui / ui
+// (this has to be different for FontButtons)
+// TODO; merge the logic with the function above
 func defaultFontButtonClick(button *ui.FontButton) {
 	log.Println("defaultButtonClick() button =", button)
 	for key, foo := range Data.AllButtons {
@@ -224,7 +239,10 @@ func closeButton(name string, mytab *ui.Tab) ui.Control {
 
 func addVmButtonClick(button *ui.Button) {
 	log.Println("addVMButtonClick()")
-	spew.Dump(button)
+	if (Data.Debug) {
+		spew.Dump(button)
+	}
+	createAddVmBox(Data.cloudTab, "Create New Virtual Machine", buttonMapClick)
 }
 
 func addVmButton(name string) ui.Control {

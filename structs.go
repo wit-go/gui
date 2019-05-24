@@ -176,6 +176,7 @@ type TableData struct {
 
 	lastRow			int
 	lastColumn		int
+	parentTab		*ui.Tab
 }
 
 //
