@@ -102,6 +102,7 @@ type ButtonMap struct {
 	onClick		func (int, string)
 	onChanged	func (int, string)
 	custom		func (*ButtonMap)
+	pbVM		*pb.Event_VM
 	Name		string	// the text on the button
 	Note		string	// what type of button
 	AccNick		string  // what account this button is for

@@ -111,6 +111,7 @@ func createVmBox(tab *ui.Tab, custom func(*ButtonMap), pbVM *pb.Event_VM) {
 	hboxButtons.Append(CreateButton("Power On",  "POWERON",  custom), false)
 	hboxButtons.Append(CreateButton("Power Off", "POWEROFF", custom), false)
 	hboxButtons.Append(CreateButton("Destroy",   "DESTROY",  custom), false)
+	hboxButtons.Append(CreateButton("ping",      "PING",     runPingClick), false)
 	hboxButtons.Append(CreateButton("Console",   "XTERM",    runTestExecClick), false)
 	hboxButtons.Append(CreateButton("Save",      "SAVE",     custom), false)
 	hboxButtons.Append(CreateButton("Done",      "DONE",     custom), false)

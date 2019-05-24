@@ -12,9 +12,9 @@ import "github.com/gookit/config"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-// import pb "git.wit.com/wit/witProtobuf"
+import "github.com/davecgh/go-spew/spew"
 
-// import "github.com/davecgh/go-spew/spew"
+// import pb "git.wit.com/wit/witProtobuf"
 
 // can not pass any args to this (?)
 func setupCloudUI() {
@@ -72,69 +72,47 @@ func addDebuggingButtons(vbox *ui.Box, custom func(*ButtonMap)) {
 	vbox.Append(add2button, false)
 	// ATTEMPT TO ADD THE TABLE HERE END
 
-	// hbox.Append(ui.NewVerticalSeparator(), false)
-
-	// Send a test protobuf Event to localhost
-	add3button := CreateButton("Add buf to chan", "ADD CHAN BUF", custom)
-/*
-	add3button := ui.NewButton("Add buf to chann")
-	add3button.OnClicked(func(*ui.Button) {
-		log.Println("add protobuf event to the channel")
-		addSampleEvent()
-	})
-*/
-	vbox.Append(add3button, false)
-
-	add4button := CreateButton("Add Demo Event", "ADD DEMO EVENT", custom)
-/*
-	add4button := ui.NewButton("Add Demo Event")
-	add4button.OnClicked(func(*ui.Button) {
-		log.Println("add demo protobuf event to the channel")
-		msg := pb.CreateSampleEvent()
-		msg.Name = "generated in addSampleEvent()"
-		msg.Type = pb.Event_DEMO
-		addEvent(msg)
-	})
-*/
-	vbox.Append(add4button, false)
-
 	vbox.Append(CreateButton("Close GUI", "QUIT", custom), false)
-
-	// Send a protobuf Event over the WIT socket
-	add5button := CreateButton("Send protobuf to localhost", "SEND PROTOBUF TO LOCALHOST", custom)
-/*
-	add5button := ui.NewButton("Send protobuf to localhost")
-	add5button.OnClicked(func(*ui.Button) {
-		log.Println("sent a Marshal'd protobuf to a localhost socket")
-		sendDataToDest()
-	})
-*/
-	vbox.Append(add5button, false)
-
 	vbox.Append(CreateButton("DEBUG goroutines", "DEBUG", custom), false)
+	// vbox.Append(CreateButton("ping", "PING", runPingClick), false)
 	vbox.Append(CreateButton("xterm", "XTERM", runTestExecClick), false)
 	vbox.Append(CreateButton("Load test.json config file", "CONFIG", custom), false)
+}
+
+func runPingClick(b *ButtonMap) {
+	log.Println("runPingClick START")
+	spew.Dump(b)
+	var tmp []string
+	tmp = append(tmp, "xterm", "-e", "ping localhost")
+	runCommand(tmp)
+	log.Println("runPingClick END")
 }
 
 func runTestExecClick(b *ButtonMap) {
 	log.Println("runTestExecClick START")
 	if runtime.GOOS == "linux" {
-		go runCommand("xterm -report-fonts")
-	} else if runtime.GOOS == "windows" { 
-		go runCommand("cmd.exe")
+		go runSimpleCommand("xterm -report-fonts")
+	} else if runtime.GOOS == "windows" {
+		go runSimpleCommand("cmd.exe")
 	} else {
-		go runCommand("xterm")
+		go runSimpleCommand("xterm")
 	}
 	log.Println("runTestExecClick END")
 }
 
-func runCommand(s string) {
-	log.Println("runXterm START")
-	log.Println("runXterm START")
-	log.Println("runXterm START")
+func runSimpleCommand(s string) {
 	cmd := strings.TrimSpace(s) // this is like 'chomp' in perl
         cmdArgs := strings.Fields(cmd)
+	runCommand(cmdArgs)
+}
+
+func runCommand(cmdArgs []string) {
+	log.Println("runXterm START")
+	log.Println("runXterm START")
+	log.Println("runXterm START")
+	log.Println("runXterm START", cmdArgs)
 	process := exec.Command(cmdArgs[0], cmdArgs[1:len(cmdArgs)]...)
+	// process := exec.Command("xterm", "-e", "ping localhost")
 	log.Println("runXterm process.Start()")
 	process.Start()
 	log.Println("runXterm process.Wait()")
