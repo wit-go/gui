@@ -23,9 +23,6 @@ func makeCloudInfoBox(custom func(int, string)) *ui.Box {
 
 	vbox.Append(ui.NewColorButton(), false)
 
-	addXbutton := CreateButton("Show bmath's Account", "BMATH", custom)
-	vbox.Append(addXbutton, false)
-
 	vbox.Append(CreateButton("Add Account", "ADD", custom), false)
 
 	vbox.Append(CreateButton("Quit", "QUIT", custom), false)
