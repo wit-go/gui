@@ -5,7 +5,7 @@ import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-import "github.com/gookit/config"
+// import "github.com/gookit/config"
 import "github.com/davecgh/go-spew/spew"
 
 func InitColumns(mh *TableData, parts []TableColumnData) {
@@ -89,15 +89,26 @@ func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 
-	myAddVM := addVmButton("Add Virtual Machine")
-	hbox.Append(myAddVM, false)
-
-	myClose := closeButton("Close", mytab)
-	hbox.Append(myClose, false)
+	hbox.Append(CreateButton("Add Virtual Machine", "createAddVmBox", mouseClick), false)
+	hbox.Append(CreateButton("Close", "CLOSE", mouseClick), false)
 
 	vbox.Append(hbox, false)
 
 	return mh
+}
+
+func SocketError() {
+	ui.MsgBoxError(Data.cloudWindow,
+		"There was a socket error",
+		"More detailed information can be shown here.")
+}
+
+func MessageWindow(msg1 string, msg2 string) {
+	ui.MsgBox(Data.cloudWindow, msg1, msg2)
+}
+
+func ErrorWindow(msg1 string, msg2 string) {
+	ui.MsgBoxError(Data.cloudWindow, msg1, msg2)
 }
 
 // This is the default mouse click handler
@@ -112,6 +123,14 @@ func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts
 // TODO: clean up the text above
 func mouseClick(b *ButtonMap) {
 	log.Println("gui.mouseClick() START b =", b)
+
+	if (b != nil) {
+		if (b.Note == "createAddVmBox") {
+			log.Println("gui.mouseClick() createAddVmBox for b.AccNick =", b.AccNick)
+			createAddVmBox(Data.cloudTab, "Create New Virtual Machine", mouseClick)
+			return
+		}
+	}
 
 	if (Data.MouseClick == nil) {
 		log.Println("Data.MouseClick() IS nil. NOT DOING ANYTHING")
@@ -167,7 +186,7 @@ func defaultButtonClick(button *ui.Button) {
 // (this has to be different for FontButtons)
 // TODO; merge the logic with the function above
 func defaultFontButtonClick(button *ui.FontButton) {
-	log.Println("defaultButtonClick() button =", button)
+	log.Println("defaultFontButtonClick() button =", button)
 	for key, foo := range Data.AllButtons {
 		log.Println("Data.AllButtons =", key, foo)
 	}
@@ -234,45 +253,4 @@ func CreateFontButton(name string, note string, custom func(*ButtonMap)) *ui.Fon
 	Data.AllButtons = append(Data.AllButtons, newmap)
 
 	return newB
-}
-
-func closeButtonClick(button *ui.Button) {
-	log.Println("closeButtonClick() hostname =", config.String("hostname"), button)
-	spew.Dump(button)
-}
-
-func closeButton(name string, mytab *ui.Tab) ui.Control {
-	tmpButton := ui.NewButton(name)
-	tmpButton.OnClicked(defaultButtonClick)
-
-	return tmpButton
-}
-
-func addVmButtonClick(button *ui.Button) {
-	log.Println("addVMButtonClick()")
-	if (Data.Debug) {
-		spew.Dump(button)
-	}
-	createAddVmBox(Data.cloudTab, "Create New Virtual Machine", mouseClick)
-}
-
-func addVmButton(name string) ui.Control {
-	tmpButton := ui.NewButton(name)
-	tmpButton.OnClicked(addVmButtonClick)
-
-	return tmpButton
-}
-
-func SocketError() {
-	ui.MsgBoxError(Data.cloudWindow,
-		"There was a socket error",
-		"More detailed information can be shown here.")
-}
-
-func MessageWindow(msg1 string, msg2 string) {
-	ui.MsgBox(Data.cloudWindow, msg1, msg2)
-}
-
-func ErrorWindow(msg1 string, msg2 string) {
-	ui.MsgBoxError(Data.cloudWindow, msg1, msg2)
 }
