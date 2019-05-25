@@ -201,8 +201,9 @@ func CreateButton(a *pb.Config_Account, vm *pb.Event_VM,
 	var newmap ButtonMap
 	newmap.B = newB
 	newmap.Account = a
-	newmap.Action = note
-	newmap.custom = custom
+	newmap.Action  = note
+	newmap.custom  = custom
+	newmap.aTab    = Data.CurrentTab
 	Data.AllButtons = append(Data.AllButtons, newmap)
 
 	return newB

@@ -20,6 +20,10 @@ type GuiTabStructure struct {
 	firstBox	*ui.Box
 	tabOffset	int
 
+	EntryNick	*ui.Entry
+	EntryUser	*ui.Entry
+	EntryPass	*ui.Entry
+
 	// this means only one table per tab
 	mh		*TableData
 
@@ -101,6 +105,7 @@ type ButtonMap struct {
 	Account		*pb.Config_Account
 	VM		*pb.Event_VM
 	Action		string	// what type of button
+	aTab		*GuiTabStructure
 
 	custom		func (*ButtonMap)
 }

@@ -174,8 +174,18 @@ func ShowAccountTab() {
 	log.Println("Sleep(200)")
 	time.Sleep(200 * time.Millisecond)
 
-	Data.smallBox = AddAccountBox(mouseClick)
-	Data.cloudTab.InsertAt("Add Account", 0, Data.smallBox)
+	// Create the things for the Account Tab
+	var aTab GuiTabStructure
+	Data.CurrentTab = &aTab
+	AddAccountBox(&aTab)
+
+	// Set the parents and data structure links
+	aTab.me = Data.cloudTab
+	aTab.parentWindow = Data.cloudWindow
+	aTab.tabOffset = 0
+
+// Data.smallBox = aTab.firstBox
+	Data.cloudTab.InsertAt("Add Account", 0, aTab.firstBox)
 	Data.cloudTab.SetMargined(0, true)
 }
 
