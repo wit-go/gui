@@ -55,6 +55,7 @@ type GuiDataStructure struct {
 	// account entry textboxes
 	AccNick		string
 	Config		*pb.Config
+	Current		*pb.Config_Account
 
 	// A map of all buttons everywhere on all
 	// windows, all tabs, across all goroutines
