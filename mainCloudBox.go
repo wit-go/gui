@@ -1,14 +1,15 @@
 package gui
 
 import "log"
-
-// import "github.com/gookit/config"
+import "time"
+import "fmt"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
 import pb "git.wit.com/wit/witProtobuf"
-// import "github.com/davecgh/go-spew/spew"
+
+import "github.com/davecgh/go-spew/spew"
 
 func makeCloudInfoBox(custom func(*ButtonMap)) *ui.Box {
 	hbox := ui.NewHorizontalBox()
@@ -27,12 +28,6 @@ func makeCloudInfoBox(custom func(*ButtonMap)) *ui.Box {
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
 	hbox.Append(vbox, true)
-
-	/*
-	grid := ui.NewGrid()
-	grid.SetPadded(true)
-	vbox.Append(grid, false)
-	*/
 
 	hostnamebox := ui.NewHorizontalBox()
 	hostnamebox.SetPadded(true)
@@ -95,6 +90,15 @@ func makeCloudInfoBox(custom func(*ButtonMap)) *ui.Box {
 	return hbox
 }
 
+//
+// THIS IS THE STANDARD VM DISPLAY TABLE
+// This maps the 'human' indexed cells in the table
+// to the machine's andlabs/libui values. That way
+// if you want to work against column 4, then you
+// can just reference 4 instead of the internal number
+// which could be anything since TEXTCOLOR, TEXT, BG, etc
+// fields use between 1 and 3 values internally
+//
 func AddVmsTab(name string, count int, a *pb.Config_Account) *TableData {
 	var parts []TableColumnData
 
@@ -144,11 +148,216 @@ func AddVmsTab(name string, count int, a *pb.Config_Account) *TableData {
 
 	tmp = TableColumnData{}
 	tmp.CellType = "BUTTON"
-	tmp.Heading     = "Details"
+	tmp.Heading  = "Details"
 	tmp.Index    = human
 	parts = append(parts, tmp)
 	human += 1
 
 	mh := AddTableTab(Data.cloudTab, 1, name, count, parts, a)
 	return mh
+}
+
+func ShowAccountQuestionTab() {
+	Data.cloudTab.Delete(0)
+
+	log.Println("Sleep(200)")
+	time.Sleep(200 * time.Millisecond)
+
+	Data.smallBox = AddAccountQuestionBox(nil, mouseClick)
+	Data.cloudTab.InsertAt("New Account?", 0, Data.smallBox)
+	Data.cloudTab.SetMargined(0, true)
+}
+
+func ShowAccountTab() {
+	Data.cloudTab.Delete(0)
+
+	log.Println("Sleep(200)")
+	time.Sleep(200 * time.Millisecond)
+
+	Data.smallBox = AddAccountBox(mouseClick)
+	Data.cloudTab.InsertAt("Add Account", 0, Data.smallBox)
+	Data.cloudTab.SetMargined(0, true)
+}
+
+func ShowMainTab() {
+	Data.cloudTab.Delete(0)
+
+	log.Println("Sleep(200)")
+	time.Sleep(200 * time.Millisecond)
+
+	Data.smallBox = makeCloudInfoBox(mouseClick)
+	Data.cloudTab.InsertAt("Main", 0, Data.smallBox)
+	Data.cloudTab.SetMargined(0, true)
+}
+
+func GoMainWindow() {
+	ui.Main(makeCloudWindow)
+}
+
+func makeCloudWindow() {
+	Data.cloudWindow = ui.NewWindow("", Data.Width, Data.Height, true)
+	// cloudWindow.SetBorderless(true)
+	Data.cloudWindow.OnClosing(func(*ui.Window) bool {
+		if (Data.MouseClick != nil) {
+			log.Println("SIMULATE Data.MouseClick(QUIT)")
+			Data.State = "QUIT"
+			Data.MouseClick(nil)
+		}
+		return true
+	})
+	ui.OnShouldQuit(func() bool {
+		if (Data.MouseClick != nil) {
+			log.Println("SIMULATE Data.MouseClick(QUIT)")
+			Data.State = "QUIT"
+			Data.MouseClick(nil)
+		}
+		return true
+	})
+
+	Data.cloudTab = ui.NewTab()
+	Data.cloudWindow.SetChild(Data.cloudTab)
+	Data.cloudWindow.SetMargined(true)
+
+	Data.cloudBox = ShowSplashBox(nil, nil, mouseClick)
+
+	Data.cloudTab.Append("WIT Splash", Data.cloudBox)
+	Data.cloudTab.SetMargined(0, true)
+
+	Data.cloudWindow.Show()
+	Data.State = "splash"
+}
+
+func ShowVM() {
+	name := Data.CurrentVM.Name
+	log.Println("ShowVM() START Data.CurrentVM=", Data.CurrentVM)
+	VMwin := ui.NewWindow("VM " + name, 500, 300, false)
+	VMwin.OnClosing(func(*ui.Window) bool {
+		return true
+	})
+	ui.OnShouldQuit(func() bool {
+		VMwin.Destroy()
+		VMwin = nil
+		return true
+	})
+
+	VMtab := ui.NewTab()
+	VMwin.SetChild(VMtab)
+	VMwin.SetMargined(true)
+
+	createVmBox(VMtab, mouseClick, Data.CurrentVM)
+	VMwin.Show()
+}
+
+func AddVmConfigureTab(name string, pbVM *pb.Event_VM) {
+	createVmBox(Data.cloudTab, mouseClick, Data.CurrentVM)
+}
+
+// makeEntryBox(box, "hostname:", "blah.foo.org") {
+func makeEntryVbox(hbox *ui.Box, a string, b string, edit bool) {
+	// Start 'Nickname' vertical box
+	vboxN := ui.NewVerticalBox()
+	vboxN.SetPadded(true)
+	vboxN.Append(ui.NewLabel(a), false)
+
+	entryNick := ui.NewEntry()
+	entryNick.SetText(b)
+	if (edit == false) {
+		entryNick.SetReadOnly(true)
+	}
+
+	vboxN.Append(entryNick, false)
+
+	entryNick.OnChanged(func(*ui.Entry) {
+		log.Println("OK. TEXT WAS CHANGED TO =", entryNick.Text())
+		// Data.AccNick = entryNick.Text()
+	})
+	hbox.Append(vboxN, false)
+	// End 'Nickname' vertical box
+}
+
+func makeEntryHbox(hbox *ui.Box, a string, b string, edit bool) {
+	// Start 'Nickname' vertical box
+	hboxN := ui.NewHorizontalBox()
+	hboxN.SetPadded(true)
+	hboxN.Append(ui.NewLabel(a), false)
+
+	entryNick := ui.NewEntry()
+	entryNick.SetText(b)
+	if (edit == false) {
+		entryNick.SetReadOnly(true)
+	}
+
+	hboxN.Append(entryNick, false)
+
+	entryNick.OnChanged(func(*ui.Entry) {
+		log.Println("OK. TEXT WAS CHANGED TO =", entryNick.Text())
+		// Data.AccNick = entryNick.Text()
+	})
+	hbox.Append(hboxN, false)
+	// End 'Nickname' vertical box
+}
+
+func createVmBox(tab *ui.Tab, custom func(*ButtonMap), pbVM *pb.Event_VM) {
+	log.Println("createVmBox() START")
+	log.Println("createVmBox() pbVM.Name", pbVM.Name)
+	spew.Dump(pbVM)
+	if (Data.Debug) {
+		spew.Dump(pbVM)
+	}
+	vbox := ui.NewVerticalBox()
+	vbox.SetPadded(true)
+
+	hboxAccount := ui.NewHorizontalBox()
+	hboxAccount.SetPadded(true)
+	vbox.Append(hboxAccount, false)
+
+	// Add hostname entry box
+	makeEntryVbox(hboxAccount, "hostname:",	pbVM.Hostname,			true)
+	makeEntryVbox(hboxAccount, "IPv6:",	pbVM.IPv6,			true)
+	makeEntryVbox(hboxAccount, "RAM:",	fmt.Sprintf("%d",pbVM.Memory),	true)
+	makeEntryVbox(hboxAccount, "CPU:",	fmt.Sprintf("%d",pbVM.Cpus),	true)
+	makeEntryVbox(hboxAccount, "Disk (GB):",	fmt.Sprintf("%d",pbVM.Disk),	true)
+	makeEntryVbox(hboxAccount, "OS Image:",	pbVM.BaseImage,			true)
+
+	vbox.Append(ui.NewHorizontalSeparator(), false)
+
+	hboxButtons := ui.NewHorizontalBox()
+	hboxButtons.SetPadded(true)
+	vbox.Append(hboxButtons, false)
+
+	hboxButtons.Append(CreateButton(nil, pbVM, "Power On",  "POWERON",  custom), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "Power Off", "POWEROFF", custom), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "Destroy",   "DESTROY",  custom), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "ping",      "PING",     runPingClick), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "Console",   "XTERM",    runTestExecClick), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "Save",      "SAVE",     custom), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "Done",      "DONE",     custom), false)
+
+	tab.Append(Data.CurrentVM.Name, vbox)
+	tab.SetMargined(0, true)
+}
+
+func createAddVmBox(tab *ui.Tab, name string, custom func(*ButtonMap)) {
+	log.Println("createAddVmBox() START")
+	vbox := ui.NewVerticalBox()
+	vbox.SetPadded(true)
+
+	hboxAccount := ui.NewHorizontalBox()
+	hboxAccount.SetPadded(true)
+	vbox.Append(hboxAccount, false)
+
+	// Add hostname entry box
+	makeEntryHbox(hboxAccount, "hostname:",	"", true)
+
+	vbox.Append(ui.NewHorizontalSeparator(), false)
+
+	hboxButtons := ui.NewHorizontalBox()
+	hboxButtons.SetPadded(true)
+	vbox.Append(hboxButtons, false)
+
+	hboxButtons.Append(CreateButton(nil, nil, "Add Virtual Machine",	"CREATE", custom), false)
+	hboxButtons.Append(CreateButton(nil, nil, "Cancel",		"DONE",   custom), false)
+
+	tab.Append(name, vbox)
+	tab.SetMargined(0, true)
 }
