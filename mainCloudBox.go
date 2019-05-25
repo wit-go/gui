@@ -3,6 +3,7 @@ package gui
 import "log"
 import "time"
 import "fmt"
+// import "os"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
@@ -335,6 +336,7 @@ func createVmBox(tab *ui.Tab, custom func(*ButtonMap), pbVM *pb.Event_VM) {
 	hboxButtons.SetPadded(true)
 	vbox.Append(hboxButtons, false)
 
+	log.Println("pbVM =", pbVM)
 	hboxButtons.Append(CreateButton(nil, pbVM, "Power On",  "POWERON",  custom), false)
 	hboxButtons.Append(CreateButton(nil, pbVM, "Power Off", "POWEROFF", custom), false)
 	hboxButtons.Append(CreateButton(nil, pbVM, "Destroy",   "DESTROY",  custom), false)

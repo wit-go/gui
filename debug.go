@@ -79,9 +79,14 @@ func addDebuggingButtons(vbox *ui.Box, custom func(*ButtonMap)) {
 
 func runPingClick(b *ButtonMap) {
 	log.Println("runPingClick START")
+	log.Println("runTestExecClick b.VM", b.VM)
+	hostname := "localhost"
+	if (b.VM != nil) {
+		hostname = b.VM.Hostname
+	}
 	spew.Dump(b)
 	var tmp []string
-	tmp = append(tmp, "xterm", "-e", "ping localhost")
+	tmp = append(tmp, "xterm", "-e", "ping " + hostname + ";bash")
 	runCommand(tmp)
 	log.Println("runPingClick END")
 }
@@ -91,7 +96,7 @@ func runTestExecClick(b *ButtonMap) {
 	if runtime.GOOS == "linux" {
 		go runSimpleCommand("xterm -report-fonts")
 	} else if runtime.GOOS == "windows" {
-		go runSimpleCommand("cmd.exe")
+		go runSimpleCommand("mintty.exe")
 	} else {
 		go runSimpleCommand("xterm")
 	}
@@ -115,6 +120,8 @@ func runCommand(cmdArgs []string) {
 	process.Start()
 	log.Println("runXterm process.Wait()")
 	process.Wait()
+	log.Println("runXterm NEED TO CHECK THE TIME HERE TO SEE IF THIS WORKED")
+	log.Println("runXterm OTHERWISE INFORM THE USER")
 	log.Println("runXterm END")
 	log.Println("runXterm END")
 	log.Println("runXterm END")
