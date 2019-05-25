@@ -41,7 +41,7 @@ func InitColumns(mh *TableData, parts []TableColumnData) {
 	}
 }
 
-func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts []TableColumnData) *TableData {
+func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts []TableColumnData, account *pb.Config_Account) *TableData {
 	mh := new(TableData)
 
 	mh.RowCount    = rowcount
@@ -90,8 +90,8 @@ func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 
-	hbox.Append(CreateButton("Add Virtual Machine", "createAddVmBox", mouseClick), false)
-	hbox.Append(CreateButton("Close", "CLOSE", mouseClick), false)
+	hbox.Append(CreateButton(account, nil, "Add Virtual Machine", "createAddVmBox", mouseClick), false)
+	hbox.Append(CreateButton(account, nil, "Close", "CLOSE", mouseClick), false)
 
 	vbox.Append(hbox, false)
 
@@ -193,48 +193,15 @@ func defaultFontButtonClick(button *ui.FontButton) {
 	}
 }
 
-func CreateButton(name string, note string, custom func(*ButtonMap)) *ui.Button {
+func CreateButton(a *pb.Config_Account, vm *pb.Event_VM,
+		name string, note string, custom func(*ButtonMap)) *ui.Button {
 	newB := ui.NewButton(name)
 	newB.OnClicked(defaultButtonClick)
 
 	var newmap ButtonMap
 	newmap.B = newB
+	newmap.Account = a
 	newmap.Action = note
-	// newmap.Name = name
-	newmap.custom = custom
-	Data.AllButtons = append(Data.AllButtons, newmap)
-
-	return newB
-}
-
-func CreateAccountButton(pbC *pb.Config_Account, custom func(*ButtonMap)) *ui.Button {
-	name := "Show " + pbC.Nick
-	newB := ui.NewButton(name)
-	newB.OnClicked(defaultButtonClick)
-
-	var newmap ButtonMap
-	newmap.B = newB
-	newmap.Account = pbC
-	newmap.Action = "SHOW"
-//	newmap.Name = name
-//	newmap.AccNick = account
-	newmap.custom = custom
-	Data.AllButtons = append(Data.AllButtons, newmap)
-
-	return newB
-}
-
-func CreateLoginButton(pbC *pb.Config_Account, custom func(*ButtonMap)) *ui.Button {
-	name := "Login " + pbC.Nick
-	newB := ui.NewButton(name)
-	newB.OnClicked(defaultButtonClick)
-
-	var newmap ButtonMap
-	newmap.B = newB
-	newmap.Account = pbC
-	newmap.Action = "LOGIN"
-//	newmap.Name = name
-//	newmap.AccNick = account
 	newmap.custom = custom
 	Data.AllButtons = append(Data.AllButtons, newmap)
 

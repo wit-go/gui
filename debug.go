@@ -51,15 +51,15 @@ func addTableTab() {
 
 	log.Println("Sleep for 2 seconds, then try to add new tabs")
 	time.Sleep(1 * 1000 * 1000 * 1000)
-	AddTableTab(Data.cloudTab, 1, "test seven", 7, parts)
+	AddTableTab(Data.cloudTab, 1, "test seven", 7, parts, nil)
 }
 
 func addDebuggingButtons(vbox *ui.Box, custom func(*ButtonMap)) {
 	vbox.Append(ui.NewLabel("Debugging:"), false)
 
 	vbox.Append(ui.NewColorButton(), false)
-	vbox.Append(CreateButton("Add Account", "ADD", custom), false)
-	vbox.Append(CreateButton("Quit", "QUIT", custom), false)
+	vbox.Append(CreateButton(nil, nil, "Add Account", "ADD", custom), false)
+	vbox.Append(CreateButton(nil, nil, "Quit", "QUIT", custom), false)
 
 	// ATTEMPT TO ADD THE TABLE HERE
 	add2button := ui.NewButton("Add a Test Table")
@@ -70,11 +70,11 @@ func addDebuggingButtons(vbox *ui.Box, custom func(*ButtonMap)) {
 	vbox.Append(add2button, false)
 	// ATTEMPT TO ADD THE TABLE HERE END
 
-	vbox.Append(CreateButton("Close GUI", "QUIT", custom), false)
-	vbox.Append(CreateButton("DEBUG goroutines", "DEBUG", custom), false)
+	vbox.Append(CreateButton(nil, nil, "Close GUI", "QUIT", custom), false)
+	vbox.Append(CreateButton(nil, nil, "DEBUG goroutines", "DEBUG", custom), false)
 	// vbox.Append(CreateButton("ping", "PING", runPingClick), false)
-	vbox.Append(CreateButton("xterm", "XTERM", runTestExecClick), false)
-	vbox.Append(CreateButton("Load test.json config file", "CONFIG", custom), false)
+	vbox.Append(CreateButton(nil, nil, "xterm", "XTERM", runTestExecClick), false)
+	vbox.Append(CreateButton(nil, nil, "Load test.json config file", "CONFIG", custom), false)
 }
 
 func runPingClick(b *ButtonMap) {

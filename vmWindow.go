@@ -11,7 +11,7 @@ import "github.com/davecgh/go-spew/spew"
 import pb "git.wit.com/wit/witProtobuf"
 
 func ShowVM() {
-	name := Data.CurrentVM
+	name := Data.CurrentVM.Name
 	log.Println("ShowVM() START Data.CurrentVM=", Data.CurrentVM)
 	VMwin := ui.NewWindow("VM " + name, 500, 300, false)
 	VMwin.OnClosing(func(*ui.Window) bool {
@@ -27,12 +27,12 @@ func ShowVM() {
 	VMwin.SetChild(VMtab)
 	VMwin.SetMargined(true)
 
-	createVmBox(VMtab, mouseClick, Data.CurrentPbVM)
+	createVmBox(VMtab, mouseClick, Data.CurrentVM)
 	VMwin.Show()
 }
 
 func AddVmConfigureTab(name string, pbVM *pb.Event_VM) {
-	createVmBox(Data.cloudTab, mouseClick, Data.CurrentPbVM)
+	createVmBox(Data.cloudTab, mouseClick, Data.CurrentVM)
 }
 
 // makeEntryBox(box, "hostname:", "blah.foo.org") {
@@ -108,15 +108,15 @@ func createVmBox(tab *ui.Tab, custom func(*ButtonMap), pbVM *pb.Event_VM) {
 	hboxButtons.SetPadded(true)
 	vbox.Append(hboxButtons, false)
 
-	hboxButtons.Append(CreateButton("Power On",  "POWERON",  custom), false)
-	hboxButtons.Append(CreateButton("Power Off", "POWEROFF", custom), false)
-	hboxButtons.Append(CreateButton("Destroy",   "DESTROY",  custom), false)
-	hboxButtons.Append(CreateButton("ping",      "PING",     runPingClick), false)
-	hboxButtons.Append(CreateButton("Console",   "XTERM",    runTestExecClick), false)
-	hboxButtons.Append(CreateButton("Save",      "SAVE",     custom), false)
-	hboxButtons.Append(CreateButton("Done",      "DONE",     custom), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "Power On",  "POWERON",  custom), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "Power Off", "POWEROFF", custom), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "Destroy",   "DESTROY",  custom), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "ping",      "PING",     runPingClick), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "Console",   "XTERM",    runTestExecClick), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "Save",      "SAVE",     custom), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "Done",      "DONE",     custom), false)
 
-	tab.Append(Data.CurrentVM, vbox)
+	tab.Append(Data.CurrentVM.Name, vbox)
 	tab.SetMargined(0, true)
 }
 
@@ -138,8 +138,8 @@ func createAddVmBox(tab *ui.Tab, name string, custom func(*ButtonMap)) {
 	hboxButtons.SetPadded(true)
 	vbox.Append(hboxButtons, false)
 
-	hboxButtons.Append(CreateButton("Add Virtual Machine",	"CREATE", custom), false)
-	hboxButtons.Append(CreateButton("Cancel",		"DONE",   custom), false)
+	hboxButtons.Append(CreateButton(nil, nil, "Add Virtual Machine",	"CREATE", custom), false)
+	hboxButtons.Append(CreateButton(nil, nil, "Cancel",		"DONE",   custom), false)
 
 	tab.Append(name, vbox)
 	tab.SetMargined(0, true)

@@ -7,7 +7,7 @@ package gui
 //
 
 import "log"
-import "fmt"
+// import "fmt"
 import "image/color"
 import "runtime"
 
@@ -100,15 +100,15 @@ func defaultSetCellValue(mh *TableData, row int, column int) {
 		vmname := mh.Rows[row].HumanData[humanID].Text
 		log.Println("vmname =",  vmname)
 		log.Println("defaultSetCellValue() FOUND THE BUTTON!!!!!!!   Button was pressed START", row, column)
-		Data.CurrentVM   = fmt.Sprintf("%s",vmname)
-		Data.CurrentPbVM = mh.Rows[row].PbVM
-		log.Println("User last clicked on Data.CurrentVM =", Data.CurrentVM)
+		// Data.CurrentVM   = fmt.Sprintf("%s",vmname)
+		Data.CurrentVM = mh.Rows[row].VM
+		log.Println("User last clicked on Data.CurrentVM =", mh.Rows[row].VM)
 		if (Data.Debug) {
 			go ui.Main(ShowVM)
 		} else {
 			// AddVmConfigureTab(vmname, mh.Rows[row].PbVM)
 			// createVmBox(Data.cloudTab, buttonVmClick, mh.Rows[row].PbVM)
-			createVmBox(Data.cloudTab, mouseClick, mh.Rows[row].PbVM)
+			createVmBox(Data.cloudTab, mouseClick, mh.Rows[row].VM)
 		}
 	}
 }

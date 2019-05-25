@@ -64,8 +64,8 @@ type GuiDataStructure struct {
 	// a tab (maybe the one the user is playing with?)
 	CurrentTab	*GuiTabStructure
 	// a VM (maybe the one the user is playing with?)
-	CurrentVM	string
-	CurrentPbVM	*pb.Event_VM
+//	CurrentVM	string
+	CurrentVM	*pb.Event_VM
 
 	// All the tabs
 	Tabs		[]GuiTabStructure
@@ -99,6 +99,7 @@ type ButtonMap struct {
 	B		*ui.Button
 	FB		*ui.FontButton
 	Account		*pb.Config_Account
+	VM		*pb.Event_VM
 	Action		string	// what type of button
 
 	custom		func (*ButtonMap)
@@ -126,7 +127,7 @@ type RowData struct {
 	HumanData	[20]HumanCellData
 
 	// The VM from the protobuf
-	PbVM	*pb.Event_VM
+	VM		*pb.Event_VM
 }
 
 //
@@ -170,6 +171,8 @@ type TableData struct {
 
 	Cells			[20]CellData
 	Human			[20]HumanMap
+
+	Account			*pb.Config_Account	// what account this table is for
 
 	lastRow			int
 	lastColumn		int

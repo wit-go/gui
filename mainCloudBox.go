@@ -7,7 +7,7 @@ import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-// import pb "git.wit.com/wit/witProtobuf"
+import pb "git.wit.com/wit/witProtobuf"
 // import "github.com/davecgh/go-spew/spew"
 
 func makeCloudInfoBox(custom func(*ButtonMap)) *ui.Box {
@@ -48,7 +48,7 @@ func makeCloudInfoBox(custom func(*ButtonMap)) *ui.Box {
 	hostnameEntry.SetText(tmp)
 	hostnameEntry.SetReadOnly(true)
 
-	hostnamebox.Append(CreateButton("Edit", "EDIT", custom), false)
+	hostnamebox.Append(CreateButton(nil, nil, "Edit", "EDIT", custom), false)
 
 	vbox.Append(ui.NewHorizontalSeparator(), false)
 
@@ -72,10 +72,12 @@ func makeCloudInfoBox(custom func(*ButtonMap)) *ui.Box {
 		agrid.Append(ui.NewLabel(Data.Config.Accounts[key].Username),   2, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 		agrid.Append(ui.NewLabel(Data.Config.Accounts[key].Domainname), 3, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
-		l := CreateLoginButton(Data.Config.Accounts[key], custom)
+		name := "Login " + Data.Config.Accounts[key].Nick
+		l := CreateButton(Data.Config.Accounts[key], nil, name, "LOGIN", custom)
 		agrid.Append(l, 4, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
-		b := CreateAccountButton(Data.Config.Accounts[key], custom)
+		name  = "Show " + Data.Config.Accounts[key].Nick
+		b := CreateButton(Data.Config.Accounts[key], nil, name, "SHOW", custom)
 		agrid.Append(b, 5, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 		row += 1
@@ -84,16 +86,16 @@ func makeCloudInfoBox(custom func(*ButtonMap)) *ui.Box {
 	row += 1
 	agrid.Append(ui.NewLabel(""),    1, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 	row += 1
-	a := CreateButton("Add Account", "ADD", custom)
+	a := CreateButton(nil, nil, "Add Account", "ADD", custom)
 	agrid.Append(a, 4, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
-	q := CreateButton("Quit", "QUIT", custom)
+	q := CreateButton(nil, nil, "Quit", "QUIT", custom)
 	agrid.Append(q, 5, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 	vbox.Append(agrid, false)
 	return hbox
 }
 
-func AddVmsTab(name string, count int) *TableData {
+func AddVmsTab(name string, count int, a *pb.Config_Account) *TableData {
 	var parts []TableColumnData
 
 	human := 0
@@ -147,6 +149,6 @@ func AddVmsTab(name string, count int) *TableData {
 	parts = append(parts, tmp)
 	human += 1
 
-	mh := AddTableTab(Data.cloudTab, 1, name, count, parts)
+	mh := AddTableTab(Data.cloudTab, 1, name, count, parts, a)
 	return mh
 }

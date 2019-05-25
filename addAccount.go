@@ -9,12 +9,12 @@ func AddAccountQuestionBox(junk *ui.Box, custom func(*ButtonMap)) *ui.Box {
 	newbox := ui.NewVerticalBox()
 	newbox.SetPadded(true)
 
-	newButton := CreateButton("Create New Account", "DONE", custom)
+	newButton := CreateButton(nil, nil, "Create New Account", "DONE", custom)
 	newbox.Append(newButton, false)
 
 	newbox.Append(ui.NewHorizontalSeparator(), false)
 
-	okButton := CreateButton("I Have an Account", "DONE", custom)
+	okButton := CreateButton(nil, nil, "I Have an Account", "DONE", custom)
 	newbox.Append(okButton, false)
 
 	return newbox
@@ -119,10 +119,10 @@ func AddAccountBox(custom func(*ButtonMap)) *ui.Box {
 	hboxButtons.SetPadded(true)
 	vbox.Append(hboxButtons, false)
 
-	okButton := CreateButton("Add Account", "ADD", custom)
+	okButton := CreateButton(nil, nil, "Add Account", "ADD", custom)
 	hboxButtons.Append(okButton, false)
 
-	backButton := CreateButton("Back", "BACK", custom)
+	backButton := CreateButton(nil, nil, "Back", "BACK", custom)
 	hboxButtons.Append(backButton, false)
 
 	return vbox
