@@ -99,9 +99,12 @@ type TableColumnData struct {
 type ButtonMap struct {
 	B		*ui.Button
 	FB		*ui.FontButton
-	onClick		func (int, string)
-	onChanged	func (int, string)
+	Account		*pb.Config_Account
+
+//	onClick		func (int, string)
+//	onChanged	func (int, string)
 	custom		func (*ButtonMap)
+
 	pbVM		*pb.Event_VM
 	Name		string	// the text on the button
 	Note		string	// what type of button

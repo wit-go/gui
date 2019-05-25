@@ -72,10 +72,10 @@ func makeCloudInfoBox(custom func(*ButtonMap)) *ui.Box {
 		agrid.Append(ui.NewLabel(Data.Config.Accounts[key].Username),   2, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 		agrid.Append(ui.NewLabel(Data.Config.Accounts[key].Domainname), 3, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
-		l := CreateLoginButton(Data.Config.Accounts[key].Nick, custom)
+		l := CreateLoginButton(Data.Config.Accounts[key], custom)
 		agrid.Append(l, 4, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
-		b := CreateAccountButton(Data.Config.Accounts[key].Nick, custom)
+		b := CreateAccountButton(Data.Config.Accounts[key], custom)
 		agrid.Append(b, 5, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 		row += 1

@@ -5,6 +5,8 @@ import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
+import pb "git.wit.com/wit/witProtobuf"
+
 import "github.com/davecgh/go-spew/spew"
 
 func InitColumns(mh *TableData, parts []TableColumnData) {
@@ -205,32 +207,34 @@ func CreateButton(name string, note string, custom func(*ButtonMap)) *ui.Button 
 	return newB
 }
 
-func CreateAccountButton(account string, custom func(*ButtonMap)) *ui.Button {
-	name := "Show " + account
+func CreateAccountButton(pbC *pb.Config_Account, custom func(*ButtonMap)) *ui.Button {
+	name := "Show " + pbC.Nick
 	newB := ui.NewButton(name)
 	newB.OnClicked(defaultButtonClick)
 
 	var newmap ButtonMap
 	newmap.B = newB
+	newmap.Account = pbC
 	newmap.Note = "SHOW"
-	newmap.Name = name
-	newmap.AccNick = account
+//	newmap.Name = name
+//	newmap.AccNick = account
 	newmap.custom = custom
 	Data.AllButtons = append(Data.AllButtons, newmap)
 
 	return newB
 }
 
-func CreateLoginButton(account string, custom func(*ButtonMap)) *ui.Button {
-	name := "Login " + account
+func CreateLoginButton(pbC *pb.Config_Account, custom func(*ButtonMap)) *ui.Button {
+	name := "Login " + pbC.Nick
 	newB := ui.NewButton(name)
 	newB.OnClicked(defaultButtonClick)
 
 	var newmap ButtonMap
 	newmap.B = newB
+	newmap.Account = pbC
 	newmap.Note = "LOGIN"
-	newmap.Name = name
-	newmap.AccNick = account
+//	newmap.Name = name
+//	newmap.AccNick = account
 	newmap.custom = custom
 	Data.AllButtons = append(Data.AllButtons, newmap)
 
