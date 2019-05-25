@@ -58,7 +58,7 @@ type GuiDataStructure struct {
 
 	// account entry textboxes
 	Config		*pb.Config
-	Current		*pb.Config_Account
+	Current		*pb.Account
 
 	// A map of all buttons everywhere on all
 	// windows, all tabs, across all goroutines
@@ -102,7 +102,7 @@ type TableColumnData struct {
 type ButtonMap struct {
 	B		*ui.Button
 	FB		*ui.FontButton
-	Account		*pb.Config_Account
+	Account		*pb.Account
 	VM		*pb.Event_VM
 	Action		string	// what type of button
 	aTab		*GuiTabStructure
@@ -177,7 +177,7 @@ type TableData struct {
 	Cells			[20]CellData
 	Human			[20]HumanMap
 
-	Account			*pb.Config_Account	// what account this table is for
+	Account			*pb.Account	// what account this table is for
 
 	lastRow			int
 	lastColumn		int

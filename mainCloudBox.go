@@ -99,7 +99,7 @@ func makeCloudInfoBox(custom func(*ButtonMap)) *ui.Box {
 // which could be anything since TEXTCOLOR, TEXT, BG, etc
 // fields use between 1 and 3 values internally
 //
-func AddVmsTab(name string, count int, a *pb.Config_Account) *TableData {
+func AddVmsTab(name string, count int, a *pb.Account) *TableData {
 	var parts []TableColumnData
 
 	human := 0

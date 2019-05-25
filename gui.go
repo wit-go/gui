@@ -41,7 +41,7 @@ func InitColumns(mh *TableData, parts []TableColumnData) {
 	}
 }
 
-func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts []TableColumnData, account *pb.Config_Account) *TableData {
+func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts []TableColumnData, account *pb.Account) *TableData {
 	mh := new(TableData)
 
 	mh.RowCount    = rowcount
@@ -193,7 +193,7 @@ func defaultFontButtonClick(button *ui.FontButton) {
 	}
 }
 
-func CreateButton(a *pb.Config_Account, vm *pb.Event_VM,
+func CreateButton(a *pb.Account, vm *pb.Event_VM,
 		name string, note string, custom func(*ButtonMap)) *ui.Button {
 	newB := ui.NewButton(name)
 	newB.OnClicked(defaultButtonClick)
