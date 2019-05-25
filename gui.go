@@ -126,8 +126,8 @@ func mouseClick(b *ButtonMap) {
 	log.Println("gui.mouseClick() START b =", b)
 
 	if (b != nil) {
-		if (b.Note == "createAddVmBox") {
-			log.Println("gui.mouseClick() createAddVmBox for b.AccNick =", b.AccNick)
+		if (b.Action == "createAddVmBox") {
+			log.Println("gui.mouseClick() createAddVmBox for b =", b)
 			createAddVmBox(Data.cloudTab, "Create New Virtual Machine", mouseClick)
 			return
 		}
@@ -160,8 +160,8 @@ func defaultButtonClick(button *ui.Button) {
 		log.Println("Data.AllButtons =", key, foo)
 		if Data.AllButtons[key].B == button {
 			log.Println("\tBUTTON MATCHED")
-			log.Println("\tData.AllButtons[key].Name =", Data.AllButtons[key].Name)
-			log.Println("\tData.AllButtons[key].Note =", Data.AllButtons[key].Note)
+			// log.Println("\tData.AllButtons[key].Name =", Data.AllButtons[key].Name)
+			log.Println("\tData.AllButtons[key].Action =", Data.AllButtons[key].Action)
 			if Data.AllButtons[key].custom != nil {
 				log.Println("\tDOING CUSTOM FUNCTION")
 				var tmp ButtonMap
@@ -199,8 +199,8 @@ func CreateButton(name string, note string, custom func(*ButtonMap)) *ui.Button 
 
 	var newmap ButtonMap
 	newmap.B = newB
-	newmap.Note = note
-	newmap.Name = name
+	newmap.Action = note
+	// newmap.Name = name
 	newmap.custom = custom
 	Data.AllButtons = append(Data.AllButtons, newmap)
 
@@ -215,7 +215,7 @@ func CreateAccountButton(pbC *pb.Config_Account, custom func(*ButtonMap)) *ui.Bu
 	var newmap ButtonMap
 	newmap.B = newB
 	newmap.Account = pbC
-	newmap.Note = "SHOW"
+	newmap.Action = "SHOW"
 //	newmap.Name = name
 //	newmap.AccNick = account
 	newmap.custom = custom
@@ -232,7 +232,7 @@ func CreateLoginButton(pbC *pb.Config_Account, custom func(*ButtonMap)) *ui.Butt
 	var newmap ButtonMap
 	newmap.B = newB
 	newmap.Account = pbC
-	newmap.Note = "LOGIN"
+	newmap.Action = "LOGIN"
 //	newmap.Name = name
 //	newmap.AccNick = account
 	newmap.custom = custom
@@ -248,7 +248,7 @@ func CreateFontButton(name string, note string, custom func(*ButtonMap)) *ui.Fon
 
 	var newmap ButtonMap
 	newmap.FB = newB
-	newmap.Note = note
+	newmap.Action = note
 	newmap.custom = custom
 	Data.AllButtons = append(Data.AllButtons, newmap)
 

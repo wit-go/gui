@@ -53,7 +53,6 @@ type GuiDataStructure struct {
 	IPv6		string
 
 	// account entry textboxes
-	AccNick		string
 	Config		*pb.Config
 	Current		*pb.Config_Account
 
@@ -100,15 +99,9 @@ type ButtonMap struct {
 	B		*ui.Button
 	FB		*ui.FontButton
 	Account		*pb.Config_Account
+	Action		string	// what type of button
 
-//	onClick		func (int, string)
-//	onChanged	func (int, string)
 	custom		func (*ButtonMap)
-
-	pbVM		*pb.Event_VM
-	Name		string	// the text on the button
-	Note		string	// what type of button
-	AccNick		string  // what account this button is for
 }
 
 //
@@ -126,7 +119,7 @@ type RowData struct {
 	Name		string			// what kind of row is this?
 	Status		string			// status of the row?
 /*
-	// These may or may not be implementable
+	// TODO: These may or may not be implementable
 	click		func()			// what function to call if the user clicks on it
 	doubleclick	func()			// what function to call if the user double clicks on it
 */
