@@ -53,9 +53,8 @@ type GuiDataStructure struct {
 	IPv6		string
 
 	// account entry textboxes
-	AccNick	string
-	AccUser	string
-	AccPass	string
+	AccNick		string
+	Config		*pb.Config
 
 	// A map of all buttons everywhere on all
 	// windows, all tabs, across all goroutines

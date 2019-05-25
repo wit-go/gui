@@ -46,7 +46,7 @@ func GoMainWindow() {
 }
 
 func makeCloudWindow() {
-	Data.cloudWindow = ui.NewWindow("", 640, 480, true)
+	Data.cloudWindow = ui.NewWindow("", Data.Width, Data.Height, true)
 	// cloudWindow.SetBorderless(true)
 	Data.cloudWindow.OnClosing(func(*ui.Window) bool {
 		if (Data.MouseClick != nil) {

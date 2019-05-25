@@ -74,7 +74,7 @@ func AddAccountBox(custom func(*ButtonMap)) *ui.Box {
 
 	entryNick.OnChanged(func(*ui.Entry) {
 		log.Println("OK. nickname =", entryNick.Text())
-		Data.AccNick = entryNick.Text()
+		// Data.AccNick = entryNick.Text()
 	})
 	hboxAccount.Append(vboxN, false)
 	// End 'Nickname' vertical box
@@ -91,7 +91,7 @@ func AddAccountBox(custom func(*ButtonMap)) *ui.Box {
 
 	entryUser.OnChanged(func(*ui.Entry) {
 		log.Println("OK. username =", entryUser.Text())
-		Data.AccUser = entryUser.Text()
+		// Data.AccUser = entryUser.Text()
 	})
 	hboxAccount.Append(vboxU, false)
 	// End 'Username' vertical box
@@ -108,7 +108,7 @@ func AddAccountBox(custom func(*ButtonMap)) *ui.Box {
 
 	entryPass.OnChanged(func(*ui.Entry) {
 		log.Println("OK. password =", entryPass.Text())
-		Data.AccPass = entryPass.Text()
+		// Data.AccPass = entryPass.Text()
 	})
 	hboxAccount.Append(vboxP, false)
 	// End 'Password' vertical box

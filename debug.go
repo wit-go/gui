@@ -7,8 +7,6 @@ import "strings"
 import "os/exec"
 import "runtime"
 
-import "github.com/gookit/config"
-
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
@@ -18,7 +16,7 @@ import "github.com/davecgh/go-spew/spew"
 
 // can not pass any args to this (?)
 func setupCloudUI() {
-	Data.cloudWindow = ui.NewWindow("Cloud Control Panel", Data.Width, config.Int("height"), false)
+	Data.cloudWindow = ui.NewWindow("Cloud Control Panel", Data.Width, Data.Height, false)
 	Data.cloudWindow.OnClosing(func(*ui.Window) bool {
 		ui.Quit()
 		return true

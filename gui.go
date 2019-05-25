@@ -5,7 +5,6 @@ import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-// import "github.com/gookit/config"
 import "github.com/davecgh/go-spew/spew"
 
 func InitColumns(mh *TableData, parts []TableColumnData) {
@@ -194,7 +193,6 @@ func defaultFontButtonClick(button *ui.FontButton) {
 
 func CreateButton(name string, note string, custom func(*ButtonMap)) *ui.Button {
 	newB := ui.NewButton(name)
-
 	newB.OnClicked(defaultButtonClick)
 
 	var newmap ButtonMap
@@ -210,7 +208,6 @@ func CreateButton(name string, note string, custom func(*ButtonMap)) *ui.Button 
 func CreateAccountButton(account string, custom func(*ButtonMap)) *ui.Button {
 	name := "Show " + account
 	newB := ui.NewButton(name)
-
 	newB.OnClicked(defaultButtonClick)
 
 	var newmap ButtonMap
@@ -227,7 +224,6 @@ func CreateAccountButton(account string, custom func(*ButtonMap)) *ui.Button {
 func CreateLoginButton(account string, custom func(*ButtonMap)) *ui.Button {
 	name := "Login " + account
 	newB := ui.NewButton(name)
-
 	newB.OnClicked(defaultButtonClick)
 
 	var newmap ButtonMap
