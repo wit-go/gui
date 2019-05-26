@@ -10,7 +10,7 @@ import "github.com/davecgh/go-spew/spew"
 func makeSplashArea() *ui.Area {
 	// make this button just to get the default font (but don't display the button)
 	// There should be another way to do this (?)
-	Data.fontButton = CreateFontButton("SplashFont", "DONE", mouseClick)
+	Data.fontButton = CreateFontButton("SplashFont", "DONE")
 
 	makeAttributedString()
 	splashArea     := ui.NewArea(myAH)

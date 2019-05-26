@@ -90,8 +90,8 @@ func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 
-	hbox.Append(CreateButton(account, nil, "Add Virtual Machine", "createAddVmBox", mouseClick), false)
-	hbox.Append(CreateButton(account, nil, "Close", "CLOSE", mouseClick), false)
+	hbox.Append(CreateButton(account, nil, "Add Virtual Machine", "createAddVmBox", nil), false)
+	hbox.Append(CreateButton(account, nil, "Close", "CLOSE", nil), false)
 
 	vbox.Append(hbox, false)
 
@@ -214,7 +214,7 @@ func CreateButton(a *pb.Account, vm *pb.Event_VM,
 	return newB
 }
 
-func CreateFontButton(action string, note string, custom func(*ButtonMap)) *ui.FontButton {
+func CreateFontButton(action string, note string) *ui.FontButton {
 	newB := ui.NewFontButton()
 
         // create a 'fake' button entry for the mouse clicks

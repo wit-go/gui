@@ -21,7 +21,7 @@ func makeCloudInfoBox() *ui.Box {
 		vbox.SetPadded(true)
 		hbox.Append(vbox, false)
 
-		addDebuggingButtons(vbox, mouseClick)
+		addDebuggingButtons(vbox)
 
 		hbox.Append(ui.NewVerticalSeparator(), false)
 	}
@@ -44,7 +44,7 @@ func makeCloudInfoBox() *ui.Box {
 	hostnameEntry.SetText(tmp)
 	hostnameEntry.SetReadOnly(true)
 
-	hostnamebox.Append(CreateButton(nil, nil, "Edit", "EDIT", mouseClick), false)
+	hostnamebox.Append(CreateButton(nil, nil, "Edit", "EDIT", nil), false)
 
 	vbox.Append(ui.NewHorizontalSeparator(), false)
 
@@ -70,11 +70,11 @@ func makeCloudInfoBox() *ui.Box {
 		agrid.Append(ui.NewLabel(Data.Config.Accounts[key].Domain),	3, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 		name := "Login " + Data.Config.Accounts[key].Nick
-		l := CreateButton(Data.Config.Accounts[key], nil, name, "LOGIN", mouseClick)
+		l := CreateButton(Data.Config.Accounts[key], nil, name, "LOGIN", nil)
 		agrid.Append(l, 4, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 		name  = "Show " + Data.Config.Accounts[key].Nick
-		b := CreateButton(Data.Config.Accounts[key], nil, name, "SHOW", mouseClick)
+		b := CreateButton(Data.Config.Accounts[key], nil, name, "SHOW", nil)
 		agrid.Append(b, 5, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 		row += 1
@@ -83,9 +83,9 @@ func makeCloudInfoBox() *ui.Box {
 	row += 1
 	agrid.Append(ui.NewLabel(""),    1, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 	row += 1
-	a := CreateButton(nil, nil, "Add Account", "ADD", mouseClick)
+	a := CreateButton(nil, nil, "Add Account", "ADD", nil)
 	agrid.Append(a, 4, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
-	q := CreateButton(nil, nil, "Quit", "QUIT", mouseClick)
+	q := CreateButton(nil, nil, "Quit", "QUIT", nil)
 	agrid.Append(q, 5, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 	vbox.Append(agrid, false)
@@ -165,7 +165,7 @@ func ShowAccountQuestionTab() {
 	log.Println("Sleep(200)")
 	time.Sleep(200 * time.Millisecond)
 
-	Data.smallBox = AddAccountQuestionBox(nil, mouseClick)
+	Data.smallBox = AddAccountQuestionBox()
 	Data.cloudTab.InsertAt("New Account?", 0, Data.smallBox)
 	Data.cloudTab.SetMargined(0, true)
 }
@@ -336,13 +336,13 @@ func createVmBox(tab *ui.Tab, pbVM *pb.Event_VM) {
 	vbox.Append(hboxButtons, false)
 
 	log.Println("pbVM =", pbVM)
-	hboxButtons.Append(CreateButton(nil, pbVM, "Power On",  "POWERON",  mouseClick), false)
-	hboxButtons.Append(CreateButton(nil, pbVM, "Power Off", "POWEROFF", mouseClick), false)
-	hboxButtons.Append(CreateButton(nil, pbVM, "Destroy",   "DESTROY",  mouseClick), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "Power On",  "POWERON",  nil), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "Power Off", "POWEROFF", nil), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "Destroy",   "DESTROY",  nil), false)
 	hboxButtons.Append(CreateButton(nil, pbVM, "ping",      "PING",     runPingClick), false)
 	hboxButtons.Append(CreateButton(nil, pbVM, "Console",   "XTERM",    runTestExecClick), false)
-	hboxButtons.Append(CreateButton(nil, pbVM, "Save",      "SAVE",     mouseClick), false)
-	hboxButtons.Append(CreateButton(nil, pbVM, "Done",      "DONE",     mouseClick), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "Save",      "SAVE",     nil), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "Done",      "DONE",     nil), false)
 
 	tab.Append(Data.CurrentVM.Name, vbox)
 	tab.SetMargined(0, true)
@@ -366,8 +366,8 @@ func createAddVmBox(tab *ui.Tab, name string) {
 	hboxButtons.SetPadded(true)
 	vbox.Append(hboxButtons, false)
 
-	hboxButtons.Append(CreateButton(nil, nil, "Add Virtual Machine",	"CREATE", mouseClick), false)
-	hboxButtons.Append(CreateButton(nil, nil, "Cancel",		"DONE",   mouseClick), false)
+	hboxButtons.Append(CreateButton(nil, nil, "Add Virtual Machine",	"CREATE", nil), false)
+	hboxButtons.Append(CreateButton(nil, nil, "Cancel",		"DONE",   nil), false)
 
 	tab.Append(name, vbox)
 	tab.SetMargined(0, true)

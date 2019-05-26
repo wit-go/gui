@@ -5,16 +5,16 @@ import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-func AddAccountQuestionBox(junk *ui.Box, custom func(*ButtonMap)) *ui.Box {
+func AddAccountQuestionBox() *ui.Box {
 	newbox := ui.NewVerticalBox()
 	newbox.SetPadded(true)
 
-	newButton := CreateButton(nil, nil, "Create New Account", "DONE", custom)
+	newButton := CreateButton(nil, nil, "Create New Account", "DONE", nil)
 	newbox.Append(newButton, false)
 
 	newbox.Append(ui.NewHorizontalSeparator(), false)
 
-	okButton := CreateButton(nil, nil, "I Have an Account", "DONE", custom)
+	okButton := CreateButton(nil, nil, "I Have an Account", "DONE", nil)
 	newbox.Append(okButton, false)
 
 	return newbox
@@ -120,9 +120,9 @@ func AddAccountBox(aTab *GuiTabStructure) {
 	hboxButtons.SetPadded(true)
 	vbox.Append(hboxButtons, false)
 
-	okButton := CreateButton(nil, nil, "Add Account", "ADD", mouseClick)
+	okButton := CreateButton(nil, nil, "Add Account", "ADD", nil)
 	hboxButtons.Append(okButton, false)
 
-	backButton := CreateButton(nil, nil, "Back", "BACK", mouseClick)
+	backButton := CreateButton(nil, nil, "Back", "BACK", nil)
 	hboxButtons.Append(backButton, false)
 }
