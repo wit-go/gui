@@ -185,18 +185,6 @@ func defaultButtonClick(button *ui.Button) {
 	}
 }
 
-/*
-// This is the raw routine passed to every button in andlabs libui / ui
-// (this has to be different for FontButtons)
-// TODO; merge the logic with the function above
-func defaultFontButtonClick(button *ui.FontButton) {
-	log.Println("defaultFontButtonClick() button =", button)
-	for key, foo := range Data.AllButtons {
-		log.Println("Data.AllButtons =", key, foo)
-	}
-}
-*/
-
 func CreateButton(a *pb.Account, vm *pb.Event_VM,
 		name string, note string, custom func(*ButtonMap)) *ui.Button {
 	newB := ui.NewButton(name)
