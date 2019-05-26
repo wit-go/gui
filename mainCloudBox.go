@@ -239,12 +239,19 @@ func ShowVM() {
 	name := Data.CurrentVM.Name
 	log.Println("ShowVM() START Data.CurrentVM=", Data.CurrentVM)
 	VMwin := ui.NewWindow("VM " + name, 500, 300, false)
+
+        // create a 'fake' button entry for the mouse clicks
+	var newButtonMap ButtonMap
+	newButtonMap.Action   = "WINDOW CLOSE"
+	newButtonMap.W        = VMwin
+	Data.AllButtons = append(Data.AllButtons, newButtonMap)
+
 	VMwin.OnClosing(func(*ui.Window) bool {
+		mouseClick(&newButtonMap)
 		return true
 	})
 	ui.OnShouldQuit(func() bool {
-		VMwin.Destroy()
-		VMwin = nil
+		mouseClick(&newButtonMap)
 		return true
 	})
 

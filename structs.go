@@ -101,6 +101,8 @@ type ButtonMap struct {
 	B		*ui.Button
 	FB		*ui.FontButton
 	A		*ui.Area
+	W		*ui.Window
+
 	Account		*pb.Account
 	VM		*pb.Event_VM
 	Action		string	// what type of button

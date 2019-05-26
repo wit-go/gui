@@ -142,6 +142,12 @@ func mouseClick(b *ButtonMap) {
 				createVmBox(Data.cloudTab, b.VM)
 			}
 		}
+		if (b.Action == "WINDOW CLOSE") {
+			b.W.Hide()
+			// TODO: fix this (seems to crash? maybe because we are in the button here?)
+			// b.W.Destroy()
+			return
+		}
 		if (b.Action == "ADD") {
 			log.Println("\tgui.mouseClick() SHOULD ADD VM HERE?")
 		}
