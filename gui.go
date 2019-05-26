@@ -130,7 +130,7 @@ func mouseClick(b *ButtonMap) {
 		log.Println("gui.mouseClick() START b.Action =", b.Action)
 		if (b.Action == "createAddVmBox") {
 			log.Println("gui.mouseClick() createAddVmBox for b =", b)
-			createAddVmBox(Data.cloudTab, "Create New Virtual Machine", mouseClick)
+			createAddVmBox(Data.cloudTab, "Create New Virtual Machine")
 			return
 		}
 	}

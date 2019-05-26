@@ -31,7 +31,7 @@ func setupCloudUI() {
 	Data.cloudWindow.SetMargined(true)
 
 	Data.tabcount = 0
-	Data.cloudTab.Append("Cloud Info", makeCloudInfoBox(nil))
+	Data.cloudTab.Append("Cloud Info", makeCloudInfoBox())
 	Data.cloudTab.SetMargined(Data.tabcount, true)
 
 	Data.cloudWindow.Show()
