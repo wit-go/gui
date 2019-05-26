@@ -209,20 +209,18 @@ func GoMainWindow() {
 func makeCloudWindow() {
 	Data.cloudWindow = ui.NewWindow("", Data.Width, Data.Height, true)
 	// cloudWindow.SetBorderless(true)
+
+        // create a 'fake' button entry for the mouse clicks
+	var newButtonMap ButtonMap
+	newButtonMap.Action   = "QUIT"
+	Data.AllButtons = append(Data.AllButtons, newButtonMap)
+
 	Data.cloudWindow.OnClosing(func(*ui.Window) bool {
-		if (Data.MouseClick != nil) {
-			log.Println("SIMULATE Data.MouseClick(QUIT)")
-			Data.State = "QUIT"
-			Data.MouseClick(nil)
-		}
+		mouseClick(&newButtonMap)
 		return true
 	})
 	ui.OnShouldQuit(func() bool {
-		if (Data.MouseClick != nil) {
-			log.Println("SIMULATE Data.MouseClick(QUIT)")
-			Data.State = "QUIT"
-			Data.MouseClick(nil)
-		}
+		mouseClick(&newButtonMap)
 		return true
 	})
 

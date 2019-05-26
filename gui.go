@@ -143,23 +143,19 @@ func mouseClick(b *ButtonMap) {
 	}
 }
 
-/*
-func buttonMapClick(b *ButtonMap) {
-	log.Println("gui.buttonVmClick() START")
-	if (Data.MouseClick == nil) {
-		log.Println("Data.MouseClick() IS nil. NOT DOING ANYTHING")
-	} else {
-		log.Println("Data.MouseClick() START")
-		Data.MouseClick(b)
-	}
-}
-*/
-
+//
+// This routine MUST be here as this is how the andlabs/ui works
 // This is the raw routine passed to every button in andlabs libui / ui
+//
+// There is a []ButtonMap which has all the buttons. We search
+// for the button and then call the function below
+//
 func defaultButtonClick(button *ui.Button) {
-	log.Println("defaultButtonClick() button =", button)
+	log.Println("defaultButtonClick() LOOK FOR BUTTON button =", button)
 	for key, foo := range Data.AllButtons {
-		log.Println("Data.AllButtons =", key, foo)
+		if (Data.Debug) {
+			log.Println("Data.AllButtons =", key, foo)
+		}
 		if Data.AllButtons[key].B == button {
 			log.Println("\tBUTTON MATCHED")
 			// log.Println("\tData.AllButtons[key].Name =", Data.AllButtons[key].Name)
@@ -179,12 +175,17 @@ func defaultButtonClick(button *ui.Button) {
 		}
 	}
 	log.Println("\tBUTTON NOT FOUND")
-	// still run the mouse click handler
+	if (Data.Debug) {
+		panic("SHOULD NOT HAVE UNMAPPED BUTTONS")
+	}
+	// still run the mouse click handler if you got here
+	// TODO: get rid of this to make sure everything is perfectly mapped
 	if (Data.MouseClick != nil) {
 		Data.MouseClick(nil)
 	}
 }
 
+/*
 // This is the raw routine passed to every button in andlabs libui / ui
 // (this has to be different for FontButtons)
 // TODO; merge the logic with the function above
@@ -194,6 +195,7 @@ func defaultFontButtonClick(button *ui.FontButton) {
 		log.Println("Data.AllButtons =", key, foo)
 	}
 }
+*/
 
 func CreateButton(a *pb.Account, vm *pb.Event_VM,
 		name string, note string, custom func(*ButtonMap)) *ui.Button {
@@ -212,16 +214,17 @@ func CreateButton(a *pb.Account, vm *pb.Event_VM,
 	return newB
 }
 
-func CreateFontButton(name string, note string, custom func(*ButtonMap)) *ui.FontButton {
+func CreateFontButton(action string, note string, custom func(*ButtonMap)) *ui.FontButton {
 	newB := ui.NewFontButton()
 
-	newB.OnChanged(defaultFontButtonClick)
+        // create a 'fake' button entry for the mouse clicks
+	var newButtonMap ButtonMap
+	newButtonMap.Action	= action
+	newButtonMap.FB		= newB
+	Data.AllButtons		= append(Data.AllButtons, newButtonMap)
 
-	var newmap ButtonMap
-	newmap.FB = newB
-	newmap.Action = note
-	newmap.custom = custom
-	Data.AllButtons = append(Data.AllButtons, newmap)
-
+	newB.OnChanged(func (*ui.FontButton) {
+		mouseClick(&newButtonMap)
+	})
 	return newB
 }
