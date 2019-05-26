@@ -59,7 +59,6 @@ type GuiDataStructure struct {
 
 	// account entry textboxes
 	Config		*pb.Config
-	Current		*pb.Account
 
 	// A map of all buttons everywhere on all
 	// windows, all tabs, across all goroutines
@@ -67,7 +66,6 @@ type GuiDataStructure struct {
 	AllButtons	[]ButtonMap
 
 	// a tab (maybe the one the user is playing with?)
-	CurrentTab	*GuiTabStructure
 	// a VM (maybe the one the user is playing with?)
 	CurrentVM	*pb.Event_VM
 
@@ -105,7 +103,6 @@ type ButtonMap struct {
 	Account		*pb.Account
 	VM		*pb.Event_VM
 	Action		string	// what type of button
-	aTab		*GuiTabStructure
 
 	custom		func (*ButtonMap)
 }

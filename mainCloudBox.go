@@ -178,7 +178,6 @@ func ShowAccountTab() {
 
 	// Create the things for the Account Tab
 	var aTab GuiTabStructure
-	Data.CurrentTab = &aTab
 	AddAccountBox(&aTab)
 
 	// Set the parents and data structure links
@@ -186,7 +185,6 @@ func ShowAccountTab() {
 	aTab.parentWindow = Data.cloudWindow
 	aTab.tabOffset = 0
 
-// Data.smallBox = aTab.firstBox
 	Data.cloudTab.InsertAt("Add Account", 0, aTab.firstBox)
 	Data.cloudTab.SetMargined(0, true)
 }
