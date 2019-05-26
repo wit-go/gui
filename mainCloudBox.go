@@ -228,7 +228,7 @@ func makeCloudWindow() {
 	Data.cloudWindow.SetChild(Data.cloudTab)
 	Data.cloudWindow.SetMargined(true)
 
-	Data.cloudBox = ShowSplashBox(nil, nil, mouseClick)
+	Data.cloudBox = ShowSplashBox()
 
 	Data.cloudTab.Append("WIT Splash", Data.cloudBox)
 	Data.cloudTab.SetMargined(0, true)
@@ -254,12 +254,12 @@ func ShowVM() {
 	VMwin.SetChild(VMtab)
 	VMwin.SetMargined(true)
 
-	createVmBox(VMtab, mouseClick, Data.CurrentVM)
+	createVmBox(VMtab, Data.CurrentVM)
 	VMwin.Show()
 }
 
 func AddVmConfigureTab(name string, pbVM *pb.Event_VM) {
-	createVmBox(Data.cloudTab, mouseClick, Data.CurrentVM)
+	createVmBox(Data.cloudTab, Data.CurrentVM)
 }
 
 // makeEntryBox(box, "hostname:", "blah.foo.org") {
@@ -307,7 +307,7 @@ func makeEntryHbox(hbox *ui.Box, a string, b string, edit bool) {
 	// End 'Nickname' vertical box
 }
 
-func createVmBox(tab *ui.Tab, custom func(*ButtonMap), pbVM *pb.Event_VM) {
+func createVmBox(tab *ui.Tab, pbVM *pb.Event_VM) {
 	log.Println("createVmBox() START")
 	log.Println("createVmBox() pbVM.Name", pbVM.Name)
 	spew.Dump(pbVM)
@@ -336,13 +336,13 @@ func createVmBox(tab *ui.Tab, custom func(*ButtonMap), pbVM *pb.Event_VM) {
 	vbox.Append(hboxButtons, false)
 
 	log.Println("pbVM =", pbVM)
-	hboxButtons.Append(CreateButton(nil, pbVM, "Power On",  "POWERON",  custom), false)
-	hboxButtons.Append(CreateButton(nil, pbVM, "Power Off", "POWEROFF", custom), false)
-	hboxButtons.Append(CreateButton(nil, pbVM, "Destroy",   "DESTROY",  custom), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "Power On",  "POWERON",  mouseClick), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "Power Off", "POWEROFF", mouseClick), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "Destroy",   "DESTROY",  mouseClick), false)
 	hboxButtons.Append(CreateButton(nil, pbVM, "ping",      "PING",     runPingClick), false)
 	hboxButtons.Append(CreateButton(nil, pbVM, "Console",   "XTERM",    runTestExecClick), false)
-	hboxButtons.Append(CreateButton(nil, pbVM, "Save",      "SAVE",     custom), false)
-	hboxButtons.Append(CreateButton(nil, pbVM, "Done",      "DONE",     custom), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "Save",      "SAVE",     mouseClick), false)
+	hboxButtons.Append(CreateButton(nil, pbVM, "Done",      "DONE",     mouseClick), false)
 
 	tab.Append(Data.CurrentVM.Name, vbox)
 	tab.SetMargined(0, true)

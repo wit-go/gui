@@ -7,10 +7,10 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 import "github.com/davecgh/go-spew/spew"
 
-func makeSplashArea(custom func(*ButtonMap)) *ui.Area {
+func makeSplashArea() *ui.Area {
 	// make this button just to get the default font (but don't display the button)
 	// There should be another way to do this (?)
-	Data.fontButton = CreateFontButton("SplashFont", "DONE", custom)
+	Data.fontButton = CreateFontButton("SplashFont", "DONE", mouseClick)
 
 	makeAttributedString()
 	splashArea     := ui.NewArea(myAH)
@@ -19,7 +19,6 @@ func makeSplashArea(custom func(*ButtonMap)) *ui.Area {
 	var newmap ButtonMap
 	newmap.Action	= "AREA"
 	newmap.A	= splashArea
-	newmap.custom	= custom
 
 	myAH.button	= &newmap
 	Data.AllButtons = append(Data.AllButtons, newmap)

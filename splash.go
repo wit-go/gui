@@ -10,12 +10,12 @@ import "runtime"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-func ShowSplashBox(vbox *ui.Box, atest chan int, custom func(*ButtonMap)) *ui.Box {
+func ShowSplashBox() *ui.Box {
 	newbox := ui.NewVerticalBox()
 	newbox.SetPadded(true)
 
 	makeAttributedString()
-	Data.MyArea = makeSplashArea(custom)
+	Data.MyArea = makeSplashArea()
 
 	newbox.Append(Data.MyArea, true)
 
@@ -45,12 +45,8 @@ func ShowSplashBox(vbox *ui.Box, atest chan int, custom func(*ButtonMap)) *ui.Bo
 		}
 	}
 
-	okButton := CreateButton(nil, nil, "OK", "DONE", custom)
+	okButton := CreateButton(nil, nil, "OK", "DONE", mouseClick)
 	newbox.Append(okButton, false)
-
-	if (vbox != nil) {
-		vbox.Append(newbox, true)
-	}
 
 	return newbox
 }
