@@ -122,10 +122,12 @@ func ErrorWindow(msg1 string, msg2 string) {
 // defaultButtonClick() below when the button is found
 // in the AllButtons %map
 // TODO: clean up the text above
+// TODO: remove this all together going only to main()
 func mouseClick(b *ButtonMap) {
-	log.Println("gui.mouseClick() START b =", b)
-
-	if (b != nil) {
+	if (b == nil) {
+		log.Println("gui.mouseClick() START b = nil")
+	} else {
+		log.Println("gui.mouseClick() START b.Action =", b.Action)
 		if (b.Action == "createAddVmBox") {
 			log.Println("gui.mouseClick() createAddVmBox for b =", b)
 			createAddVmBox(Data.cloudTab, "Create New Virtual Machine", mouseClick)

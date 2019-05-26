@@ -59,14 +59,15 @@ func makeCloudInfoBox(custom func(*ButtonMap)) *ui.Box {
 	row := 1
 
 	for key, foo := range Data.Config.Accounts {
-		log.Println("account.Nick = ",     Data.Config.Accounts[key].Nick)
+		log.Println("account =          ", key, foo)
+		log.Println("Accounts[key] =    ", Data.Config.Accounts[key])
+		log.Println("account.Nick =     ", Data.Config.Accounts[key].Nick)
 		log.Println("account.Username = ", Data.Config.Accounts[key].Username)
-		log.Println("account.Token = ",    Data.Config.Accounts[key].Token)
-		log.Println("account = ", key, foo)
+		log.Println("account.Token =    ", Data.Config.Accounts[key].Token)
 
-		agrid.Append(ui.NewLabel(Data.Config.Accounts[key].Nick),       1, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
-		agrid.Append(ui.NewLabel(Data.Config.Accounts[key].Username),   2, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
-		agrid.Append(ui.NewLabel(Data.Config.Accounts[key].Domainname), 3, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+		agrid.Append(ui.NewLabel(Data.Config.Accounts[key].Nick),	1, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+		agrid.Append(ui.NewLabel(Data.Config.Accounts[key].Username),	2, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+		agrid.Append(ui.NewLabel(Data.Config.Accounts[key].Domain),	3, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 		name := "Login " + Data.Config.Accounts[key].Nick
 		l := CreateButton(Data.Config.Accounts[key], nil, name, "LOGIN", custom)
