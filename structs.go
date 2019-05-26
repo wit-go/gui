@@ -65,8 +65,9 @@ type GuiDataStructure struct {
 	// This is "GLOBAL"
 	AllButtons	[]ButtonMap
 
-	// a tab (maybe the one the user is playing with?)
 	// a VM (maybe the one the user is playing with?)
+	// if opening a new window, this is a trick to
+	// pass it in
 	CurrentVM	*pb.Event_VM
 
 	// All the tabs
@@ -162,6 +163,8 @@ type HumanCellData struct {
 	TextID		int
 	Color		color.RGBA
 	ColorID		int
+	VM		*pb.Event_VM
+	Button		*ButtonMap
 }
 
 type HumanMap struct {

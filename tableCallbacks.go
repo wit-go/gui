@@ -97,18 +97,15 @@ func (mh *TableData) SetCellValue(m *ui.TableModel, row, column int, value ui.Ta
 func defaultSetCellValue(mh *TableData, row int, column int) {
 	if (mh.Cells[column].Name == "BUTTON") {
 		humanID := mh.Cells[column].HumanID
-		vmname := mh.Rows[row].HumanData[humanID].Text
-		log.Println("vmname =",  vmname)
-		log.Println("defaultSetCellValue() FOUND THE BUTTON!!!!!!!   Button was pressed START", row, column)
-		// Data.CurrentVM   = fmt.Sprintf("%s",vmname)
-		Data.CurrentVM = mh.Rows[row].VM
-		log.Println("User last clicked on Data.CurrentVM =", mh.Rows[row].VM)
+		log.Println("defaultSetCellValue() FOUND THE TABLE BUTTON ", row, humanID)
+
+		button := mh.Rows[row].HumanData[humanID].Button
+		if (button != nil) {
+			mouseClick(button)
+			return
+		}
 		if (Data.Debug) {
-			go ui.Main(ShowVM)
-		} else {
-			// AddVmConfigureTab(vmname, mh.Rows[row].PbVM)
-			// createVmBox(Data.cloudTab, buttonVmClick, mh.Rows[row].PbVM)
-			createVmBox(Data.cloudTab, mh.Rows[row].VM)
+			panic("defaultSetCellValue() GOT AN UNKNOWN BUTTON CLICK IN TABLE")
 		}
 	}
 }
