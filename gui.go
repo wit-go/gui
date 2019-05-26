@@ -134,6 +134,9 @@ func mouseClick(b *ButtonMap) {
 			createAddVmBox(Data.cloudTab, "Create New Virtual Machine")
 			return
 		}
+		if (b.Action == "ADD") {
+			log.Println("\tgui.mouseClick() SHOULD ADD VM HERE?")
+		}
 	}
 
 	if (Data.MouseClick == nil) {
