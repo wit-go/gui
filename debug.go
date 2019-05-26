@@ -91,6 +91,20 @@ func runPingClick(b *ButtonMap) {
 	log.Println("runPingClick END")
 }
 
+func runAddVmClick(b *ButtonMap) {
+	log.Println("runPingClick START")
+	log.Println("runTestExecClick b.VM", b.VM)
+	hostname := "localhost"
+	if (b.VM != nil) {
+		hostname = b.VM.Hostname
+	}
+	spew.Dump(b)
+	var tmp []string
+	tmp = append(tmp, "xterm", "-e", "ping " + hostname + ";bash")
+	runCommand(tmp)
+	log.Println("runPingClick END")
+}
+
 func runTestExecClick(b *ButtonMap) {
 	log.Println("runTestExecClick START")
 	if runtime.GOOS == "linux" {

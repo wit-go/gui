@@ -366,8 +366,8 @@ func createAddVmBox(tab *ui.Tab, name string) {
 	hboxButtons.SetPadded(true)
 	vbox.Append(hboxButtons, false)
 
-	hboxButtons.Append(CreateButton(nil, nil, "Add Virtual Machine",	"CREATE", nil), false)
-	hboxButtons.Append(CreateButton(nil, nil, "Cancel",		"DONE",   nil), false)
+	hboxButtons.Append(CreateButton(nil, nil, "Add Virtual Machine","createAddVmBox", nil), false)
+	hboxButtons.Append(CreateButton(nil, nil, "Cancel",		"CLOSE",	  nil), false)
 
 	tab.Append(name, vbox)
 	tab.SetMargined(0, true)

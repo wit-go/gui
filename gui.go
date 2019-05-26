@@ -124,21 +124,22 @@ func ErrorWindow(msg1 string, msg2 string) {
 // TODO: clean up the text above
 // TODO: remove this all together going only to main()
 func mouseClick(b *ButtonMap) {
+	log.Println("gui.mouseClick() START")
 	if (b == nil) {
-		log.Println("gui.mouseClick() START b = nil")
+		log.Println("\tgui.mouseClick() START b = nil")
 	} else {
-		log.Println("gui.mouseClick() START b.Action =", b.Action)
+		log.Println("\tgui.mouseClick() START b.Action =", b.Action)
 		if (b.Action == "createAddVmBox") {
-			log.Println("gui.mouseClick() createAddVmBox for b =", b)
+			log.Println("\tgui.mouseClick() createAddVmBox for b =", b)
 			createAddVmBox(Data.cloudTab, "Create New Virtual Machine")
 			return
 		}
 	}
 
 	if (Data.MouseClick == nil) {
-		log.Println("Data.MouseClick() IS nil. NOT DOING ANYTHING")
+		log.Println("\tgui.mouseClick() Data.MouseClick() IS nil. NOT DOING ANYTHING")
 	} else {
-		log.Println("\tData.MouseClick() START")
+		log.Println("\tgui.mouseClick() Data.MouseClick() START")
 		Data.MouseClick(b)
 	}
 }
@@ -154,39 +155,33 @@ func defaultButtonClick(button *ui.Button) {
 	log.Println("defaultButtonClick() LOOK FOR BUTTON button =", button)
 	for key, foo := range Data.AllButtons {
 		if (Data.Debug) {
-			log.Println("Data.AllButtons =", key, foo)
+			log.Println("defaultButtonClick() Data.AllButtons =", key, foo)
 		}
 		if Data.AllButtons[key].B == button {
-			log.Println("\tBUTTON MATCHED")
+			log.Println("\tdefaultButtonClick() BUTTON MATCHED")
 			// log.Println("\tData.AllButtons[key].Name =", Data.AllButtons[key].Name)
-			log.Println("\tData.AllButtons[key].Action =", Data.AllButtons[key].Action)
+			log.Println("\tdefaultButtonClick() Data.AllButtons[key].Action =", Data.AllButtons[key].Action)
 			if Data.AllButtons[key].custom != nil {
-				log.Println("\tDOING CUSTOM FUNCTION")
+				log.Println("\tdefaultButtonClick() DOING CUSTOM FUNCTION")
 				var tmp ButtonMap
 				tmp = Data.AllButtons[key]
 				spew.Dump(tmp)
 				Data.AllButtons[key].custom(&tmp)
 				return
 			}
-			if (Data.MouseClick != nil) {
-				Data.MouseClick(&Data.AllButtons[key])
-			}
+			mouseClick(&Data.AllButtons[key])
 			return
 		}
 	}
-	log.Println("\tBUTTON NOT FOUND")
+	log.Println("\tdefaultButtonClick() BUTTON NOT FOUND")
 	if (Data.Debug) {
-		panic("SHOULD NOT HAVE UNMAPPED BUTTONS")
+		panic("defaultButtonClick() SHOULD NOT HAVE UNMAPPED BUTTONS")
 	}
-	// still run the mouse click handler if you got here
-	// TODO: get rid of this to make sure everything is perfectly mapped
-	if (Data.MouseClick != nil) {
-		Data.MouseClick(nil)
-	}
+	mouseClick(nil)
 }
 
 func CreateButton(a *pb.Account, vm *pb.Event_VM,
-		name string, note string, custom func(*ButtonMap)) *ui.Button {
+		name string, action string, custom func(*ButtonMap)) *ui.Button {
 	newB := ui.NewButton(name)
 	newB.OnClicked(defaultButtonClick)
 
@@ -194,7 +189,7 @@ func CreateButton(a *pb.Account, vm *pb.Event_VM,
 	newmap.B = newB
 	newmap.Account = a
 	newmap.VM      = vm
-	newmap.Action  = note
+	newmap.Action  = action
 	newmap.custom  = custom
 	newmap.aTab    = Data.CurrentTab
 	Data.AllButtons = append(Data.AllButtons, newmap)
