@@ -13,6 +13,7 @@ import pb "git.wit.com/wit/witProtobuf"
 // be the safe way to interact with the GUI
 //
 var Data	GuiDataStructure
+var myAH	areaHandler
 
 type GuiTabStructure struct {
 	me		*ui.Tab
@@ -68,14 +69,12 @@ type GuiDataStructure struct {
 	// a tab (maybe the one the user is playing with?)
 	CurrentTab	*GuiTabStructure
 	// a VM (maybe the one the user is playing with?)
-//	CurrentVM	string
 	CurrentVM	*pb.Event_VM
 
 	// All the tabs
 	Tabs		[]GuiTabStructure
 
 	// stuff for the splash screen / setup tabs
-	// MainWindow	*ui.Window
 	cloudWindow	*ui.Window
 	cloudTab	*ui.Tab
 	cloudBox	*ui.Box
@@ -102,6 +101,7 @@ type TableColumnData struct {
 type ButtonMap struct {
 	B		*ui.Button
 	FB		*ui.FontButton
+	A		*ui.Area
 	Account		*pb.Account
 	VM		*pb.Event_VM
 	Action		string	// what type of button
@@ -109,6 +109,15 @@ type ButtonMap struct {
 
 	custom		func (*ButtonMap)
 }
+
+
+// AREA STRUCTURES START
+type areaHandler struct{
+	//	buttonFunc func(int, int)
+	//	closeFunc  func(int)
+	button	*ButtonMap
+}
+// AREA STRUCTURES END
 
 //
 // TABLE DATA STRUCTURES START

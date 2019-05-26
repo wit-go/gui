@@ -13,15 +13,25 @@ func makeSplashArea(custom func(*ButtonMap)) *ui.Area {
 	Data.fontButton = CreateFontButton("SplashFont", "DONE", custom)
 
 	makeAttributedString()
-	Data.splashArea = ui.NewArea(myAH)
+	splashArea     := ui.NewArea(myAH)
+
+	// create a 'fake' button entry for the mouse clicks
+	var newmap ButtonMap
+	newmap.Action	= "AREA"
+	newmap.A	= splashArea
+	newmap.custom	= custom
+
+	myAH.button	= &newmap
+	Data.AllButtons = append(Data.AllButtons, newmap)
+	Data.splashArea = splashArea
 
 	if (Data.Debug) {
 		spew.Dump(Data.splashArea)
 		log.Println("DEBUGGING", Data.Debug)
 	} else {
-		log.Println("NOT DEBUGGING", Data.Debug)
-		log.Println("NOT DEBUGGING", Data.Debug)
-		log.Println("NOT DEBUGGING", Data.Debug)
+		log.Println("NOT DEBUGGING AREA mhAH.button =", myAH.button)
+		log.Println("NOT DEBUGGING AREA mhAH.button =", myAH.button)
+		log.Println("NOT DEBUGGING AREA mhAH.button =", myAH.button)
 	}
 	return Data.splashArea
 }
@@ -56,13 +66,6 @@ func makeAttributedString() {
 	appendWithAttributes("<click or press any key>\n", ui.TextSize(10))
 }
 
-type areaHandler struct{
-	buttonFunc func(int, int)
-	closeFunc func(int)
-}
-
-var myAH areaHandler
-
 func (ah areaHandler) Draw(a *ui.Area, p *ui.AreaDrawParams) {
 	tl := ui.DrawNewTextLayout(&ui.DrawTextLayoutParams{
 		String:		Data.attrstr,
@@ -81,16 +84,12 @@ func (ah areaHandler) MouseEvent(a *ui.Area, me *ui.AreaMouseEvent) {
 	}
 	if (me.Down == 1) {
 		log.Println("GOT MOUSE DOWN")
-		log.Println("GOT MOUSE DOWN")
-		log.Println("GOT MOUSE DOWN")
 	}
 	if (me.Up == 1) {
 		log.Println("GOT MOUSE UP")
 		log.Println("GOT MOUSE UP")
 		log.Println("GOT MOUSE UP")
-		if (Data.MouseClick != nil) {
-			Data.MouseClick(nil)
-		}
+		mouseClick(myAH.button)
 	}
 }
 
