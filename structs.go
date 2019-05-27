@@ -102,6 +102,7 @@ type ButtonMap struct {
 	FB		*ui.FontButton
 	A		*ui.Area
 	W		*ui.Window
+	T		*ui.Tab
 
 	Account		*pb.Account
 	VM		*pb.Event_VM

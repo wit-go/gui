@@ -134,14 +134,16 @@ func mouseClick(b *ButtonMap) {
 			createAddVmBox(Data.cloudTab, "Create New Virtual Machine")
 			return
 		}
+		/*
 		if (b.Action == "SHOW VM") {
 			Data.CurrentVM = b.VM
 			if (Data.Debug) {
 				go ui.Main(ShowVM)
 			} else {
-				createVmBox(Data.cloudTab, b.VM)
+				CreateVmBox(Data.cloudTab, b.VM)
 			}
 		}
+		*/
 		if (b.Action == "WINDOW CLOSE") {
 			b.W.Hide()
 			// TODO: fix this (seems to crash? maybe because we are in the button here?)
@@ -203,12 +205,13 @@ func CreateButton(a *pb.Account, vm *pb.Event_VM,
 	newB.OnClicked(defaultButtonClick)
 
 	var newmap ButtonMap
-	newmap.B = newB
-	newmap.Account = a
-	newmap.VM      = vm
-	newmap.Action  = action
-	newmap.custom  = custom
-	Data.AllButtons = append(Data.AllButtons, newmap)
+	newmap.B	= newB
+	newmap.T	= Data.cloudTab
+	newmap.Account	= a
+	newmap.VM	= vm
+	newmap.Action	= action
+	newmap.custom	= custom
+	Data.AllButtons	= append(Data.AllButtons, newmap)
 
 	return newB
 }

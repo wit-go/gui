@@ -235,6 +235,10 @@ func makeCloudWindow() {
 	Data.State = "splash"
 }
 
+func GoShowVM() {
+	ui.Main(ShowVM)
+}
+
 func ShowVM() {
 	name := Data.CurrentVM.Name
 	log.Println("ShowVM() START Data.CurrentVM=", Data.CurrentVM)
@@ -259,12 +263,12 @@ func ShowVM() {
 	VMwin.SetChild(VMtab)
 	VMwin.SetMargined(true)
 
-	createVmBox(VMtab, Data.CurrentVM)
+	CreateVmBox(VMtab, Data.CurrentVM)
 	VMwin.Show()
 }
 
 func AddVmConfigureTab(name string, pbVM *pb.Event_VM) {
-	createVmBox(Data.cloudTab, Data.CurrentVM)
+	CreateVmBox(Data.cloudTab, Data.CurrentVM)
 }
 
 // makeEntryBox(box, "hostname:", "blah.foo.org") {
@@ -312,12 +316,12 @@ func makeEntryHbox(hbox *ui.Box, a string, b string, edit bool) {
 	// End 'Nickname' vertical box
 }
 
-func createVmBox(tab *ui.Tab, pbVM *pb.Event_VM) {
-	log.Println("createVmBox() START")
-	log.Println("createVmBox() pbVM.Name", pbVM.Name)
-	spew.Dump(pbVM)
+func CreateVmBox(tab *ui.Tab, vm *pb.Event_VM) {
+	log.Println("CreateVmBox() START")
+	log.Println("CreateVmBox() vm.Name", vm.Name)
+	spew.Dump(vm)
 	if (Data.Debug) {
-		spew.Dump(pbVM)
+		spew.Dump(vm)
 	}
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
@@ -327,12 +331,12 @@ func createVmBox(tab *ui.Tab, pbVM *pb.Event_VM) {
 	vbox.Append(hboxAccount, false)
 
 	// Add hostname entry box
-	makeEntryVbox(hboxAccount, "hostname:",	pbVM.Hostname,			true)
-	makeEntryVbox(hboxAccount, "IPv6:",	pbVM.IPv6,			true)
-	makeEntryVbox(hboxAccount, "RAM:",	fmt.Sprintf("%d",pbVM.Memory),	true)
-	makeEntryVbox(hboxAccount, "CPU:",	fmt.Sprintf("%d",pbVM.Cpus),	true)
-	makeEntryVbox(hboxAccount, "Disk (GB):",	fmt.Sprintf("%d",pbVM.Disk),	true)
-	makeEntryVbox(hboxAccount, "OS Image:",	pbVM.BaseImage,			true)
+	makeEntryVbox(hboxAccount, "hostname:",	vm.Hostname,			true)
+	makeEntryVbox(hboxAccount, "IPv6:",	vm.IPv6,			true)
+	makeEntryVbox(hboxAccount, "RAM:",	fmt.Sprintf("%d",vm.Memory),	true)
+	makeEntryVbox(hboxAccount, "CPU:",	fmt.Sprintf("%d",vm.Cpus),	true)
+	makeEntryVbox(hboxAccount, "Disk (GB):",	fmt.Sprintf("%d",vm.Disk),	true)
+	makeEntryVbox(hboxAccount, "OS Image:",	vm.BaseImage,			true)
 
 	vbox.Append(ui.NewHorizontalSeparator(), false)
 
@@ -340,14 +344,13 @@ func createVmBox(tab *ui.Tab, pbVM *pb.Event_VM) {
 	hboxButtons.SetPadded(true)
 	vbox.Append(hboxButtons, false)
 
-	log.Println("pbVM =", pbVM)
-	hboxButtons.Append(CreateButton(nil, pbVM, "Power On",  "POWERON",  nil), false)
-	hboxButtons.Append(CreateButton(nil, pbVM, "Power Off", "POWEROFF", nil), false)
-	hboxButtons.Append(CreateButton(nil, pbVM, "Destroy",   "DESTROY",  nil), false)
-	hboxButtons.Append(CreateButton(nil, pbVM, "ping",      "PING",     runPingClick), false)
-	hboxButtons.Append(CreateButton(nil, pbVM, "Console",   "XTERM",    runTestExecClick), false)
-	hboxButtons.Append(CreateButton(nil, pbVM, "Save",      "SAVE",     nil), false)
-	hboxButtons.Append(CreateButton(nil, pbVM, "Done",      "DONE",     nil), false)
+	hboxButtons.Append(CreateButton(nil, vm, "Power On",  "POWERON",  nil), false)
+	hboxButtons.Append(CreateButton(nil, vm, "Power Off", "POWEROFF", nil), false)
+	hboxButtons.Append(CreateButton(nil, vm, "Destroy",   "DESTROY",  nil), false)
+	hboxButtons.Append(CreateButton(nil, vm, "ping",      "PING",     runPingClick), false)
+	hboxButtons.Append(CreateButton(nil, vm, "Console",   "XTERM",    runTestExecClick), false)
+	hboxButtons.Append(CreateButton(nil, vm, "Save",      "SAVE",     nil), false)
+	hboxButtons.Append(CreateButton(nil, vm, "Done",      "DONE",     nil), false)
 
 	tab.Append(Data.CurrentVM.Name, vbox)
 	tab.SetMargined(0, true)
