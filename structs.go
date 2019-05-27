@@ -15,15 +15,12 @@ import pb "git.wit.com/wit/witProtobuf"
 var Data	GuiDataStructure
 var myAH	areaHandler
 
+/*
 type GuiTabStructure struct {
 	me		*ui.Tab
 	parentWindow	*ui.Window
 	firstBox	*ui.Box
 	tabOffset	int
-
-	EntryNick	*ui.Entry
-	EntryUser	*ui.Entry
-	EntryPass	*ui.Entry
 
 	// this means only one table per tab
 	mh		*TableData
@@ -34,6 +31,7 @@ type GuiTabStructure struct {
 	attrstr		*ui.AttributedString
 	splashArea	*ui.Area
 }
+*/
 
 type GuiDataStructure struct {
 	State		string
@@ -71,7 +69,11 @@ type GuiDataStructure struct {
 	CurrentVM	*pb.Event_VM
 
 	// All the tabs
-	Tabs		[]GuiTabStructure
+//	Tabs		[]GuiTabStructure
+
+	EntryNick	*ui.Entry
+	EntryUser	*ui.Entry
+	EntryPass	*ui.Entry
 
 	// stuff for the splash screen / setup tabs
 	cloudWindow	*ui.Window

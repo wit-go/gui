@@ -20,10 +20,11 @@ func AddAccountQuestionBox() *ui.Box {
 	return newbox
 }
 
-func AddAccountBox(aTab *GuiTabStructure) {
+// func AddAccountBox(aTab *GuiTabStructure) {
+func AddAccountBox() *ui.Box {
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
-	aTab.firstBox = vbox
+//	aTab.firstBox = vbox
 
 	hboxAccount := ui.NewHorizontalBox()
 	hboxAccount.SetPadded(true)
@@ -68,13 +69,13 @@ func AddAccountBox(aTab *GuiTabStructure) {
 	vboxN.SetPadded(true)
 	vboxN.Append(ui.NewLabel("Account Nickname:"), false)
 
-	aTab.EntryNick = ui.NewEntry()
-	aTab.EntryNick.SetReadOnly(false)
+	Data.EntryNick = ui.NewEntry()
+	Data.EntryNick.SetReadOnly(false)
 
-	vboxN.Append(aTab.EntryNick, false)
+	vboxN.Append(Data.EntryNick, false)
 
-	aTab.EntryNick.OnChanged(func(*ui.Entry) {
-		log.Println("OK. nickname =", aTab.EntryNick.Text())
+	Data.EntryNick.OnChanged(func(*ui.Entry) {
+		log.Println("OK. nickname =", Data.EntryNick.Text())
 		// Data.AccNick = entryNick.Text()
 	})
 	hboxAccount.Append(vboxN, false)
@@ -85,13 +86,13 @@ func AddAccountBox(aTab *GuiTabStructure) {
 	vboxU.SetPadded(true)
 	vboxU.Append(ui.NewLabel("Account Username:"), false)
 
-	aTab.EntryUser = ui.NewEntry()
-	aTab.EntryUser.SetReadOnly(false)
+	Data.EntryUser = ui.NewEntry()
+	Data.EntryUser.SetReadOnly(false)
 
-	vboxU.Append(aTab.EntryUser, false)
+	vboxU.Append(Data.EntryUser, false)
 
-	aTab.EntryUser.OnChanged(func(*ui.Entry) {
-		log.Println("OK. username =", aTab.EntryUser.Text())
+	Data.EntryUser.OnChanged(func(*ui.Entry) {
+		log.Println("OK. username =", Data.EntryUser.Text())
 		// Data.AccUser = entryUser.Text()
 	})
 	hboxAccount.Append(vboxU, false)
@@ -102,13 +103,13 @@ func AddAccountBox(aTab *GuiTabStructure) {
 	vboxP.SetPadded(true)
 	vboxP.Append(ui.NewLabel("Account Password:"), false)
 
-	aTab.EntryPass = ui.NewEntry()
-	aTab.EntryPass.SetReadOnly(false)
+	Data.EntryPass = ui.NewEntry()
+	Data.EntryPass.SetReadOnly(false)
 
-	vboxP.Append(aTab.EntryPass, false)
+	vboxP.Append(Data.EntryPass, false)
 
-	aTab.EntryPass.OnChanged(func(*ui.Entry) {
-		log.Println("OK. password =", aTab.EntryPass.Text())
+	Data.EntryPass.OnChanged(func(*ui.Entry) {
+		log.Println("OK. password =", Data.EntryPass.Text())
 		// Data.AccPass = entryPass.Text()
 	})
 	hboxAccount.Append(vboxP, false)
@@ -125,4 +126,6 @@ func AddAccountBox(aTab *GuiTabStructure) {
 
 	backButton := CreateButton(nil, nil, "Back", "BACK", nil)
 	hboxButtons.Append(backButton, false)
+
+	return vbox
 }

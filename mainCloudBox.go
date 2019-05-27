@@ -170,22 +170,27 @@ func ShowAccountQuestionTab() {
 	Data.cloudTab.SetMargined(0, true)
 }
 
-func ShowAccountTab() {
+func ShowAccountTab(i int) {
 	Data.cloudTab.Delete(0)
 
 	log.Println("Sleep(200)")
 	time.Sleep(200 * time.Millisecond)
 
 	// Create the things for the Account Tab
-	var aTab GuiTabStructure
-	AddAccountBox(&aTab)
+	abox := AddAccountBox()
 
 	// Set the parents and data structure links
-	aTab.me = Data.cloudTab
-	aTab.parentWindow = Data.cloudWindow
-	aTab.tabOffset = 0
+	// aTab.me = Data.cloudTab
+//	aTab.parentWindow = Data.cloudWindow
+//	aTab.tabOffset = 0
 
-	Data.cloudTab.InsertAt("Add Account", 0, aTab.firstBox)
+	if (i >= 0) {
+		Data.cloudTab.InsertAt("Add Account", 0, abox)
+	} else {
+		// this is going to crash, see TODO. This means index is -1
+		// TODO: Do append here and discover tab index #
+		Data.cloudTab.InsertAt("Add Account", 0, abox)
+	}
 	Data.cloudTab.SetMargined(0, true)
 }
 
@@ -374,7 +379,7 @@ func createAddVmBox(tab *ui.Tab, name string, b *ButtonMap) {
 	hboxButtons.SetPadded(true)
 	vbox.Append(hboxButtons, false)
 
-	hboxButtons.Append(CreateButton(nil, nil, "Add Virtual Machine","ADD",	nil), false)
+	hboxButtons.Append(CreateButton(nil, nil, "Add Virtual Machine","CREATE",nil), false)
 	hboxButtons.Append(CreateButton(nil, nil, "Cancel",		"CLOSE", nil), false)
 
 	name += " (" + b.Account.Nick + ")"
