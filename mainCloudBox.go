@@ -83,7 +83,7 @@ func makeCloudInfoBox() *ui.Box {
 	row += 1
 	agrid.Append(ui.NewLabel(""),    1, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 	row += 1
-	a := CreateButton(nil, nil, "Add Account", "ADD", nil)
+	a := CreateButton(nil, nil, "Add Account", "ADD TAB", nil)
 	agrid.Append(a, 4, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 	q := CreateButton(nil, nil, "Quit", "QUIT", nil)
 	agrid.Append(q, 5, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
@@ -171,7 +171,7 @@ func ShowAccountQuestionTab() {
 }
 
 func ShowAccountTab(i int) {
-	Data.cloudTab.Delete(0)
+	log.Println("ShowAccountTab() START")
 
 	log.Println("Sleep(200)")
 	time.Sleep(200 * time.Millisecond)
@@ -181,17 +181,19 @@ func ShowAccountTab(i int) {
 
 	// Set the parents and data structure links
 	// aTab.me = Data.cloudTab
-//	aTab.parentWindow = Data.cloudWindow
-//	aTab.tabOffset = 0
+	// aTab.parentWindow = Data.cloudWindow
+	// aTab.tabOffset = 0
 
 	if (i >= 0) {
-		Data.cloudTab.InsertAt("Add Account", 0, abox)
+		log.Println("ShowAccountTab() InsertAt i=", i)
+		Data.cloudTab.Delete(0)
+		Data.cloudTab.InsertAt("Add Account", i, abox)
+		Data.cloudTab.SetMargined(0, true)
 	} else {
-		// this is going to crash, see TODO. This means index is -1
-		// TODO: Do append here and discover tab index #
-		Data.cloudTab.InsertAt("Add Account", 0, abox)
+		// TODO: After append try to discover the tab index #
+		log.Println("ShowAccountTab() Append")
+		AddBoxToTab("Create New Account", Data.cloudTab, abox)
 	}
-	Data.cloudTab.SetMargined(0, true)
 }
 
 func ShowMainTab() {
@@ -321,6 +323,11 @@ func makeEntryHbox(hbox *ui.Box, a string, b string, edit bool) {
 	// End 'Nickname' vertical box
 }
 
+func AddBoxToTab(name string, tab *ui.Tab, box *ui.Box) {
+	tab.Append(name, box)
+	tab.SetMargined(0, true)
+}
+
 func CreateVmBox(tab *ui.Tab, vm *pb.Event_VM) {
 	log.Println("CreateVmBox() START")
 	log.Println("CreateVmBox() vm.Name", vm.Name)
@@ -357,8 +364,9 @@ func CreateVmBox(tab *ui.Tab, vm *pb.Event_VM) {
 	hboxButtons.Append(CreateButton(nil, vm, "Save",      "SAVE",     nil), false)
 	hboxButtons.Append(CreateButton(nil, vm, "Done",      "DONE",     nil), false)
 
-	tab.Append(Data.CurrentVM.Name, vbox)
-	tab.SetMargined(0, true)
+	AddBoxToTab(Data.CurrentVM.Name, tab, vbox)
+//	tab.Append(Data.CurrentVM.Name, vbox)
+//	tab.SetMargined(0, true)
 }
 
 func createAddVmBox(tab *ui.Tab, name string, b *ButtonMap) {
@@ -383,6 +391,7 @@ func createAddVmBox(tab *ui.Tab, name string, b *ButtonMap) {
 	hboxButtons.Append(CreateButton(nil, nil, "Cancel",		"CLOSE", nil), false)
 
 	name += " (" + b.Account.Nick + ")"
-	tab.Append(name, vbox)
-	tab.SetMargined(0, true)
+	AddBoxToTab(name, tab, vbox)
+//	tab.Append(name, vbox)
+//	tab.SetMargined(0, true)
 }
