@@ -15,24 +15,6 @@ import pb "git.wit.com/wit/witProtobuf"
 var Data	GuiDataStructure
 var myAH	areaHandler
 
-/*
-type GuiTabStructure struct {
-	me		*ui.Tab
-	parentWindow	*ui.Window
-	firstBox	*ui.Box
-	tabOffset	int
-
-	// this means only one table per tab
-	mh		*TableData
-
-	// stuff for the 'area'
-	// this means only one area per tab
-	fontButton	*ui.FontButton
-	attrstr		*ui.AttributedString
-	splashArea	*ui.Area
-}
-*/
-
 type GuiDataStructure struct {
 	State		string
 	Width		int
@@ -42,7 +24,10 @@ type GuiDataStructure struct {
 	// if nothing else is defined to handle them
 	MouseClick	func(*ButtonMap)
 
-	// general information
+	// account entry textboxes
+	Config		*pb.Config
+
+	// general information on the App
 	Version		string
 	GitCommit	string
 	GoVersion	string
@@ -55,21 +40,18 @@ type GuiDataStructure struct {
 	Hostname	string
 	IPv6		string
 
-	// account entry textboxes
-	Config		*pb.Config
-
 	// A map of all buttons everywhere on all
 	// windows, all tabs, across all goroutines
 	// This is "GLOBAL"
 	AllButtons	[]ButtonMap
 
+	// A map of all the entry boxes
+	AllEntries	[]EntryMap
+
 	// a VM (maybe the one the user is playing with?)
 	// if opening a new window, this is a trick to
 	// pass it in
 	CurrentVM	*pb.Event_VM
-
-	// All the tabs
-//	Tabs		[]GuiTabStructure
 
 	EntryNick	*ui.Entry
 	EntryUser	*ui.Entry
@@ -81,8 +63,8 @@ type GuiDataStructure struct {
 	cloudBox	*ui.Box
 	smallBox	*ui.Box
 
-	mainwin		*ui.Window
-	maintab		*ui.Tab
+//	mainwin		*ui.Window
+//	maintab		*ui.Tab
 	tabcount	int
 
 	// stuff for the 'area'
@@ -97,6 +79,25 @@ type TableColumnData struct {
 	CellType	string
 	Heading		string
 	Color		string
+}
+
+type EntryMap struct {
+	E		*ui.Entry
+	Edit		bool
+
+	Account		*pb.Account
+	VM		*pb.Event_VM
+
+	B		*ui.Button
+	FB		*ui.FontButton
+	A		*ui.Area
+	W		*ui.Window
+	T		*ui.Tab
+
+	Action		string	// what type of button
+
+	// custom callback function to your main application
+	custom		func (*EntryMap)
 }
 
 type ButtonMap struct {

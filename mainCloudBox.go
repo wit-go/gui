@@ -279,46 +279,59 @@ func AddVmConfigureTab(name string, pbVM *pb.Event_VM) {
 }
 
 // makeEntryBox(box, "hostname:", "blah.foo.org") {
-func makeEntryVbox(hbox *ui.Box, a string, b string, edit bool) {
+func makeEntryVbox(hbox *ui.Box, a string, startValue string, edit bool, action string) {
 	// Start 'Nickname' vertical box
 	vboxN := ui.NewVerticalBox()
 	vboxN.SetPadded(true)
 	vboxN.Append(ui.NewLabel(a), false)
 
-	entryNick := ui.NewEntry()
-	entryNick.SetText(b)
-	if (edit == false) {
-		entryNick.SetReadOnly(true)
-	}
+	entryNick := defaultMakeEntry(startValue, edit, action)
 
 	vboxN.Append(entryNick, false)
-
-	entryNick.OnChanged(func(*ui.Entry) {
-		log.Println("OK. TEXT WAS CHANGED TO =", entryNick.Text())
-		// Data.AccNick = entryNick.Text()
-	})
 	hbox.Append(vboxN, false)
 	// End 'Nickname' vertical box
 }
 
-func makeEntryHbox(hbox *ui.Box, a string, b string, edit bool) {
+func defaultEntryChange(e *ui.Entry) {
+	for key, foo := range Data.AllEntries {
+		if (Data.Debug) {
+			log.Println("\tdefaultEntryChange() Data.AllEntries =", key, foo)
+		}
+		if Data.AllEntries[key].E == e {
+			log.Println("defaultEntryChange() FOUND", "action =", Data.AllEntries[key].Action, "e.Text() =", e.Text())
+			return
+		}
+	}
+	log.Println("defaultEntryChange() ERROR. MISSING ENTRY MAP. e.Text() =", e.Text())
+}
+
+func defaultMakeEntry(startValue string, edit bool, action string) *ui.Entry {
+	e := ui.NewEntry()
+	e.SetText(startValue)
+	if (edit == false) {
+		e.SetReadOnly(true)
+	}
+	e.OnChanged(defaultEntryChange)
+
+	// add the entry field to the global map
+	var newEntryMap EntryMap
+	newEntryMap.E      = e
+	newEntryMap.Edit   = edit
+	newEntryMap.Action = action
+	Data.AllEntries = append(Data.AllEntries, newEntryMap)
+
+	return e
+}
+
+func makeEntryHbox(hbox *ui.Box, a string, startValue string, edit bool, action string) {
 	// Start 'Nickname' vertical box
 	hboxN := ui.NewHorizontalBox()
 	hboxN.SetPadded(true)
 	hboxN.Append(ui.NewLabel(a), false)
 
-	entryNick := ui.NewEntry()
-	entryNick.SetText(b)
-	if (edit == false) {
-		entryNick.SetReadOnly(true)
-	}
-
+	entryNick := defaultMakeEntry(startValue, edit, action)
 	hboxN.Append(entryNick, false)
 
-	entryNick.OnChanged(func(*ui.Entry) {
-		log.Println("OK. TEXT WAS CHANGED TO =", entryNick.Text())
-		// Data.AccNick = entryNick.Text()
-	})
 	hbox.Append(hboxN, false)
 	// End 'Nickname' vertical box
 }
@@ -343,12 +356,12 @@ func CreateVmBox(tab *ui.Tab, vm *pb.Event_VM) {
 	vbox.Append(hboxAccount, false)
 
 	// Add hostname entry box
-	makeEntryVbox(hboxAccount, "hostname:",	vm.Hostname,			true)
-	makeEntryVbox(hboxAccount, "IPv6:",	vm.IPv6,			true)
-	makeEntryVbox(hboxAccount, "RAM:",	fmt.Sprintf("%d",vm.Memory),	true)
-	makeEntryVbox(hboxAccount, "CPU:",	fmt.Sprintf("%d",vm.Cpus),	true)
-	makeEntryVbox(hboxAccount, "Disk (GB):",	fmt.Sprintf("%d",vm.Disk),	true)
-	makeEntryVbox(hboxAccount, "OS Image:",	vm.BaseImage,			true)
+	makeEntryVbox(hboxAccount, "hostname:",	vm.Hostname,			true, "Hostname")
+	makeEntryVbox(hboxAccount, "IPv6:",	vm.IPv6,			true, "IPv6")
+	makeEntryVbox(hboxAccount, "RAM:",	fmt.Sprintf("%d",vm.Memory),	true, "Memory")
+	makeEntryVbox(hboxAccount, "CPU:",	fmt.Sprintf("%d",vm.Cpus),	true, "Cpus")
+	makeEntryVbox(hboxAccount, "Disk (GB):",fmt.Sprintf("%d",vm.Disk),	true, "Disk")
+	makeEntryVbox(hboxAccount, "OS Image:",	vm.BaseImage,			true, "BaseImage")
 
 	vbox.Append(ui.NewHorizontalSeparator(), false)
 
@@ -379,7 +392,7 @@ func createAddVmBox(tab *ui.Tab, name string, b *ButtonMap) {
 	vbox.Append(hboxAccount, false)
 
 	// Add hostname entry box
-	makeEntryHbox(hboxAccount, "hostname:",	"", true)
+	makeEntryHbox(hboxAccount, "hostname:",	"", true, "Hostname")
 
 	vbox.Append(ui.NewHorizontalSeparator(), false)
 

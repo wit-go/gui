@@ -13,23 +13,19 @@ func makeSplashArea() *ui.Area {
 	Data.fontButton = CreateFontButton("SplashFont", "DONE")
 
 	makeAttributedString()
-	splashArea     := ui.NewArea(myAH)
+	Data.splashArea = ui.NewArea(myAH)
 
 	// create a 'fake' button entry for the mouse clicks
 	var newmap ButtonMap
 	newmap.Action	= "AREA"
-	newmap.A	= splashArea
-
+	newmap.A	= Data.splashArea
 	myAH.button	= &newmap
 	Data.AllButtons = append(Data.AllButtons, newmap)
-	Data.splashArea = splashArea
 
 	if (Data.Debug) {
 		spew.Dump(Data.splashArea)
 		log.Println("DEBUGGING", Data.Debug)
 	} else {
-		log.Println("NOT DEBUGGING AREA mhAH.button =", myAH.button)
-		log.Println("NOT DEBUGGING AREA mhAH.button =", myAH.button)
 		log.Println("NOT DEBUGGING AREA mhAH.button =", myAH.button)
 	}
 	return Data.splashArea
