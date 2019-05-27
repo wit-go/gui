@@ -356,7 +356,7 @@ func CreateVmBox(tab *ui.Tab, vm *pb.Event_VM) {
 	tab.SetMargined(0, true)
 }
 
-func createAddVmBox(tab *ui.Tab, name string) {
+func createAddVmBox(tab *ui.Tab, name string, b *ButtonMap) {
 	log.Println("createAddVmBox() START")
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
@@ -377,6 +377,7 @@ func createAddVmBox(tab *ui.Tab, name string) {
 	hboxButtons.Append(CreateButton(nil, nil, "Add Virtual Machine","ADD",	nil), false)
 	hboxButtons.Append(CreateButton(nil, nil, "Cancel",		"CLOSE", nil), false)
 
+	name += " (" + b.Account.Nick + ")"
 	tab.Append(name, vbox)
 	tab.SetMargined(0, true)
 }
