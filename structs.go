@@ -84,6 +84,8 @@ type TableColumnData struct {
 type EntryMap struct {
 	E		*ui.Entry
 	Edit		bool
+	Last		string	// the last value
+	Normalize	func (string) string // function to 'normalize' the data
 
 	Account		*pb.Account
 	VM		*pb.Event_VM

@@ -3,6 +3,7 @@ package gui
 import "log"
 import "time"
 import "fmt"
+import "regexp"
 // import "os"
 
 import "github.com/andlabs/ui"
@@ -285,11 +286,45 @@ func makeEntryVbox(hbox *ui.Box, a string, startValue string, edit bool, action 
 	vboxN.SetPadded(true)
 	vboxN.Append(ui.NewLabel(a), false)
 
-	entryNick := defaultMakeEntry(startValue, edit, action)
+	e := defaultMakeEntry(startValue, edit, action)
 
-	vboxN.Append(entryNick, false)
+	vboxN.Append(e.E, false)
 	hbox.Append(vboxN, false)
 	// End 'Nickname' vertical box
+}
+
+/*
+// string handling examples that might be helpful for normalizeInt()
+isAlpha := regexp.MustCompile(`^[A-Za-z]+$`).MatchString
+
+for _, username := range []string{"userone", "user2", "user-three"} {
+    if !isAlpha(username) {
+        fmt.Printf("%q is not valid\n", username)
+    }
+}
+
+const alpha = "abcdefghijklmnopqrstuvwxyz"
+
+func alphaOnly(s string) bool {
+   for _, char := range s {
+      if !strings.Contains(alpha, strings.ToLower(string(char))) {
+         return false
+      }
+   }
+   return true
+}
+*/
+
+func normalizeInt(s string) string {
+	// reg, err := regexp.Compile("[^a-zA-Z0-9]+")
+	reg, err := regexp.Compile("[^0-9]+")
+	if err != nil {
+		log.Println("normalizeInt() regexp.Compile() ERROR =", err)
+		return s
+	}
+	clean := reg.ReplaceAllString(s, "")
+	log.Println("normalizeInt() s =", clean)
+	return clean
 }
 
 func defaultEntryChange(e *ui.Entry) {
@@ -298,14 +333,22 @@ func defaultEntryChange(e *ui.Entry) {
 			log.Println("\tdefaultEntryChange() Data.AllEntries =", key, foo)
 		}
 		if Data.AllEntries[key].E == e {
-			log.Println("defaultEntryChange() FOUND", "action =", Data.AllEntries[key].Action, "e.Text() =", e.Text())
+			log.Println("defaultEntryChange() FOUND", 
+				"action =", Data.AllEntries[key].Action,
+				"Last =", Data.AllEntries[key].Last,
+				"e.Text() =", e.Text())
+			Data.AllEntries[key].Last = e.Text()
+			if Data.AllEntries[key].Normalize != nil {
+				fixed := Data.AllEntries[key].Normalize(e.Text())
+				e.SetText(fixed)
+			}
 			return
 		}
 	}
 	log.Println("defaultEntryChange() ERROR. MISSING ENTRY MAP. e.Text() =", e.Text())
 }
 
-func defaultMakeEntry(startValue string, edit bool, action string) *ui.Entry {
+func defaultMakeEntry(startValue string, edit bool, action string) *EntryMap {
 	e := ui.NewEntry()
 	e.SetText(startValue)
 	if (edit == false) {
@@ -318,22 +361,27 @@ func defaultMakeEntry(startValue string, edit bool, action string) *ui.Entry {
 	newEntryMap.E      = e
 	newEntryMap.Edit   = edit
 	newEntryMap.Action = action
+	if (action == "Memory") {
+		newEntryMap.Normalize = normalizeInt
+	}
 	Data.AllEntries = append(Data.AllEntries, newEntryMap)
 
-	return e
+	return &newEntryMap
 }
 
-func makeEntryHbox(hbox *ui.Box, a string, startValue string, edit bool, action string) {
+func makeEntryHbox(hbox *ui.Box, a string, startValue string, edit bool, action string) *EntryMap {
 	// Start 'Nickname' vertical box
 	hboxN := ui.NewHorizontalBox()
 	hboxN.SetPadded(true)
 	hboxN.Append(ui.NewLabel(a), false)
 
-	entryNick := defaultMakeEntry(startValue, edit, action)
-	hboxN.Append(entryNick, false)
+	e := defaultMakeEntry(startValue, edit, action)
+	hboxN.Append(e.E, false)
 
 	hbox.Append(hboxN, false)
 	// End 'Nickname' vertical box
+
+	return e
 }
 
 func AddBoxToTab(name string, tab *ui.Tab, box *ui.Box) {
@@ -378,8 +426,6 @@ func CreateVmBox(tab *ui.Tab, vm *pb.Event_VM) {
 	hboxButtons.Append(CreateButton(nil, vm, "Done",      "DONE",     nil), false)
 
 	AddBoxToTab(Data.CurrentVM.Name, tab, vbox)
-//	tab.Append(Data.CurrentVM.Name, vbox)
-//	tab.SetMargined(0, true)
 }
 
 func createAddVmBox(tab *ui.Tab, name string, b *ButtonMap) {
@@ -387,12 +433,16 @@ func createAddVmBox(tab *ui.Tab, name string, b *ButtonMap) {
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
 
-	hboxAccount := ui.NewHorizontalBox()
-	hboxAccount.SetPadded(true)
-	vbox.Append(hboxAccount, false)
+	hbox := ui.NewHorizontalBox()
+	hbox.SetPadded(true)
+	vbox.Append(hbox, false)
 
 	// Add hostname entry box
-	makeEntryHbox(hboxAccount, "hostname:",	"", true, "Hostname")
+	hostname := makeEntryHbox(vbox, "Hostname:", "testhost", true, "Hostname")
+	memory   := makeEntryHbox(vbox, "Memory:",   "512", true, "Memory")
+	disk     := makeEntryHbox(vbox, "Disk:",     "20", true, "Disk")
+
+	log.Println("createAddVmBox() hostname, memory, disk =", hostname, memory, disk)
 
 	vbox.Append(ui.NewHorizontalSeparator(), false)
 
@@ -400,11 +450,15 @@ func createAddVmBox(tab *ui.Tab, name string, b *ButtonMap) {
 	hboxButtons.SetPadded(true)
 	vbox.Append(hboxButtons, false)
 
-	hboxButtons.Append(CreateButton(nil, nil, "Add Virtual Machine","CREATE",nil), false)
+	var newb ButtonMap
+	newb.Action   = "CREATE"
+	newb.VM       = b.VM
+	newb.T        = tab
+	hboxButtons.Append(AddButton(&newb, "Add Virtual Machine"), false)
+
+	// hboxButtons.Append(CreateButton(nil, nil, "Add Virtual Machine","CREATE",nil), false)
 	hboxButtons.Append(CreateButton(nil, nil, "Cancel",		"CLOSE", nil), false)
 
 	name += " (" + b.Account.Nick + ")"
 	AddBoxToTab(name, tab, vbox)
-//	tab.Append(name, vbox)
-//	tab.SetMargined(0, true)
 }

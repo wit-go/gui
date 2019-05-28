@@ -199,6 +199,15 @@ func defaultButtonClick(button *ui.Button) {
 	mouseClick(nil)
 }
 
+func AddButton(b *ButtonMap, name string) *ui.Button {
+	newB := ui.NewButton(name)
+	newB.OnClicked(defaultButtonClick)
+
+	b.B	= newB
+	Data.AllButtons	= append(Data.AllButtons, *b)
+	return newB
+}
+
 func CreateButton(a *pb.Account, vm *pb.Event_VM,
 		name string, action string, custom func(*ButtonMap)) *ui.Button {
 	newB := ui.NewButton(name)
