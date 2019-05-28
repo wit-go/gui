@@ -59,8 +59,8 @@ func makeCloudInfoBox() *ui.Box {
 
 	row := 1
 
-	for key, foo := range Data.Config.Accounts {
-		log.Println("account =          ", key, foo)
+	for key, a := range Data.Config.Accounts {
+		log.Println("account =          ", key, a)
 		log.Println("Accounts[key] =    ", Data.Config.Accounts[key])
 		log.Println("account.Nick =     ", Data.Config.Accounts[key].Nick)
 		log.Println("account.Username = ", Data.Config.Accounts[key].Username)
@@ -280,7 +280,7 @@ func AddVmConfigureTab(name string, pbVM *pb.Event_VM) {
 }
 
 // makeEntryBox(box, "hostname:", "blah.foo.org") {
-func makeEntryVbox(hbox *ui.Box, a string, startValue string, edit bool, action string) {
+func makeEntryVbox(hbox *ui.Box, a string, startValue string, edit bool, action string) *EntryMap {
 	// Start 'Nickname' vertical box
 	vboxN := ui.NewVerticalBox()
 	vboxN.SetPadded(true)
@@ -291,6 +291,8 @@ func makeEntryVbox(hbox *ui.Box, a string, startValue string, edit bool, action 
 	vboxN.Append(e.E, false)
 	hbox.Append(vboxN, false)
 	// End 'Nickname' vertical box
+
+	return e
 }
 
 /*
@@ -328,9 +330,9 @@ func normalizeInt(s string) string {
 }
 
 func defaultEntryChange(e *ui.Entry) {
-	for key, foo := range Data.AllEntries {
+	for key, em := range Data.AllEntries {
 		if (Data.Debug) {
-			log.Println("\tdefaultEntryChange() Data.AllEntries =", key, foo)
+			log.Println("\tdefaultEntryChange() Data.AllEntries =", key, em)
 		}
 		if Data.AllEntries[key].E == e {
 			log.Println("defaultEntryChange() FOUND", 
@@ -451,9 +453,13 @@ func createAddVmBox(tab *ui.Tab, name string, b *ButtonMap) {
 	vbox.Append(hboxButtons, false)
 
 	var newb ButtonMap
-	newb.Action   = "CREATE"
-	newb.VM       = b.VM
-	newb.T        = tab
+	newb.Action	= "CREATE"
+	newb.VM		= b.VM
+	newb.Account	= b.Account
+	newb.T		= tab
+	hostname.B	= &newb
+	memory.B	= &newb
+	disk.B		= &newb
 	hboxButtons.Append(AddButton(&newb, "Add Virtual Machine"), false)
 
 	// hboxButtons.Append(CreateButton(nil, nil, "Add Virtual Machine","CREATE",nil), false)

@@ -90,7 +90,7 @@ type EntryMap struct {
 	Account		*pb.Account
 	VM		*pb.Event_VM
 
-	B		*ui.Button
+	B		*ButtonMap
 	FB		*ui.FontButton
 	A		*ui.Area
 	W		*ui.Window
