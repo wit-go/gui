@@ -57,9 +57,16 @@ func (mh *TableData) CellValue(m *ui.TableModel, row, column int) ui.TableValue 
 		if (column == 0) {
 			// ignore BG color on windows for now
 			if (runtime.GOOS == "windows") {
-				log.Println("CellValue() WINDOWS is BG COLOR row, column =", row, column)
+				// TODO: fix colors on windows
+				// log.Println("CellValue() WINDOWS is BG COLOR row, column =", row, column)
 				// return nil
 			}
+
+			if (mh.Rows[row].HumanData[humanID].Color == color.RGBA{255, 255, 255, 255}) {
+				log.Println("CellValue() color.RGBA{255, 255, 255, 255} so return nil. row, column =", row, column)
+				return nil
+			}
+
 			bgcolor := libuiColorToGOlangColor(mh.Rows[row].HumanData[humanID].Color)
 			if (Data.Debug) {
 				log.Println("CellValue() BGCOLOR =", bgcolor)
