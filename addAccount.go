@@ -9,12 +9,12 @@ func AddAccountQuestionBox() *ui.Box {
 	newbox := ui.NewVerticalBox()
 	newbox.SetPadded(true)
 
-	newButton := CreateButton(nil, nil, "Create New Account", "DONE", nil)
+	newButton := CreateButton(nil, nil, "Create New Account", "AREA", nil)
 	newbox.Append(newButton, false)
 
 	newbox.Append(ui.NewHorizontalSeparator(), false)
 
-	okButton := CreateButton(nil, nil, "I Have an Account", "DONE", nil)
+	okButton := CreateButton(nil, nil, "I Have an Account", "AREA", nil)
 	newbox.Append(okButton, false)
 
 	return newbox
