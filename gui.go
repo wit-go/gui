@@ -41,7 +41,7 @@ func InitColumns(mh *TableData, parts []TableColumnData) {
 	}
 }
 
-func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts []TableColumnData, account *pb.Account) *TableData {
+func AddTableTab(mytab *ui.Tab, junk int, name string, rowcount int, parts []TableColumnData, account *pb.Account) *TableData {
 	mh := new(TableData)
 
 	mh.RowCount    = rowcount
@@ -83,7 +83,7 @@ func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts
 
 	vbox.Append(table, true)
 	mytab.Append(name, vbox)
-	mytab.SetMargined(mytabcount, true)
+	// mytab.SetMargined(mytabcount, true)
 
 	vbox.Append(ui.NewVerticalSeparator(), false)
 

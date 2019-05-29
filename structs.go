@@ -58,12 +58,6 @@ type GuiDataStructure struct {
 	EntryNick	*ui.Entry
 	EntryUser	*ui.Entry
 	EntryPass	*ui.Entry
-
-	// stuff for the splash screen / setup tabs
-//	cloudBox	*ui.Box
-	smallBox	*ui.Box
-
-	tabcount	int
 }
 
 type TableColumnData struct {
@@ -89,16 +83,13 @@ type EntryMap struct {
 	T		*ui.Tab
 
 	Action		string	// what type of button
-
-	// custom callback function to your main application
-//	custom		func (*EntryMap)
 }
 
 type WindowMap struct {
 	W		*ui.Window
-	B1		*ui.Box
 	T		*ui.Tab
-	A		*ui.Area
+	Box1		*ui.Box
+	Box2		*ui.Box
 
 	AH		*AreaHandler
 }

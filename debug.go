@@ -30,9 +30,9 @@ func setupCloudUI() {
 	Data.Window1.W.SetChild(Data.Window1.T)
 	Data.Window1.W.SetMargined(true)
 
-	Data.tabcount = 0
+	// Data.tabcount = 0
 	Data.Window1.T.Append("Cloud Info", makeCloudInfoBox())
-	Data.Window1.T.SetMargined(Data.tabcount, true)
+	// Data.Window1.T.SetMargined(Data.tabcount, true)
 
 	Data.Window1.W.Show()
 }
@@ -70,10 +70,21 @@ func addDebuggingButtons(vbox *ui.Box) {
 	vbox.Append(add2button, false)
 	// ATTEMPT TO ADD THE TABLE HERE END
 
+	vbox.Append(CreateButton(nil, nil, "Hide & Show Box1&2", "HIDE", runTestHide), false)
+
 	vbox.Append(CreateButton(nil, nil, "Close GUI", "QUIT", nil), false)
 	vbox.Append(CreateButton(nil, nil, "DEBUG goroutines", "DEBUG", nil), false)
 	vbox.Append(CreateButton(nil, nil, "xterm", "XTERM", runTestExecClick), false)
 	vbox.Append(CreateButton(nil, nil, "Load test.json config file", "CONFIG", nil), false)
+}
+
+func runTestHide(b *ButtonMap) {
+	log.Println("runTestHide START")
+	Data.Window1.Box1.Hide()
+	Data.Window1.Box2.Hide()
+	time.Sleep(2000 * time.Millisecond)
+	Data.State = "HIDE"
+	log.Println("runTestHide END")
 }
 
 func runPingClick(b *ButtonMap) {

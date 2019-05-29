@@ -16,6 +16,7 @@ func makeCloudInfoBox() *ui.Box {
 	hbox.SetPadded(true)
 
 	if (Data.Debug) {
+		log.Println("makeCloudInfoBox() add debugging buttons")
 		vbox := ui.NewVerticalBox()
 		vbox.SetPadded(true)
 		hbox.Append(vbox, false)
@@ -164,8 +165,8 @@ func ShowAccountQuestionTab() {
 	log.Println("Sleep(200)")
 	time.Sleep(200 * time.Millisecond)
 
-	Data.smallBox = AddAccountQuestionBox()
-	Data.Window1.T.InsertAt("New Account?", 0, Data.smallBox)
+	Data.Window1.Box2 = AddAccountQuestionBox()
+	Data.Window1.T.InsertAt("New Account?", 0, Data.Window1.Box2)
 	Data.Window1.T.SetMargined(0, true)
 }
 
@@ -201,8 +202,8 @@ func ShowMainTab() {
 	log.Println("Sleep(200)")
 	time.Sleep(200 * time.Millisecond)
 
-	Data.smallBox = makeCloudInfoBox()
-	Data.Window1.T.InsertAt("Main", 0, Data.smallBox)
+	Data.Window1.Box2 = makeCloudInfoBox()
+	Data.Window1.T.InsertAt("Main", 0, Data.Window1.Box2)
 	Data.Window1.T.SetMargined(0, true)
 }
 
@@ -235,9 +236,9 @@ func makeCloudWindow() {
 	Data.Window1.W.SetMargined(true)
 
 	text := makeAttributedString()
-	Data.Window1.B1 = ShowSplashBox(text)
+	Data.Window1.Box1 = ShowSplashBox(text)
 
-	Data.Window1.T.Append("WIT Splash", Data.Window1.B1)
+	Data.Window1.T.Append("WIT Splash", Data.Window1.Box1)
 	Data.Window1.T.SetMargined(0, true)
 
 	Data.Window1.W.Show()
