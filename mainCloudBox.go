@@ -154,19 +154,19 @@ func AddVmsTab(name string, count int, a *pb.Account) *TableData {
 	parts = append(parts, tmp)
 	human += 1
 
-	mh := AddTableTab(Data.cloudTab, 1, name, count, parts, a)
+	mh := AddTableTab(window1.T, 1, name, count, parts, a)
 	return mh
 }
 
 func ShowAccountQuestionTab() {
-	Data.cloudTab.Delete(0)
+	window1.T.Delete(0)
 
 	log.Println("Sleep(200)")
 	time.Sleep(200 * time.Millisecond)
 
 	Data.smallBox = AddAccountQuestionBox()
-	Data.cloudTab.InsertAt("New Account?", 0, Data.smallBox)
-	Data.cloudTab.SetMargined(0, true)
+	window1.T.InsertAt("New Account?", 0, Data.smallBox)
+	window1.T.SetMargined(0, true)
 }
 
 func ShowAccountTab(i int) {
@@ -179,34 +179,35 @@ func ShowAccountTab(i int) {
 	abox := AddAccountBox()
 
 	// Set the parents and data structure links
-	// aTab.me = Data.cloudTab
+	// aTab.me = window1.T
 	// aTab.parentWindow = Data.cloudWindow
 	// aTab.tabOffset = 0
 
 	if (i >= 0) {
 		log.Println("ShowAccountTab() InsertAt i=", i)
-		Data.cloudTab.Delete(0)
-		Data.cloudTab.InsertAt("Add Account", i, abox)
-		Data.cloudTab.SetMargined(0, true)
+		window1.T.Delete(0)
+		window1.T.InsertAt("Add Account", i, abox)
+		window1.T.SetMargined(0, true)
 	} else {
 		// TODO: After append try to discover the tab index #
 		log.Println("ShowAccountTab() Append")
-		AddBoxToTab("Create New Account", Data.cloudTab, abox)
+		AddBoxToTab("Create New Account", window1.T, abox)
 	}
 }
 
 func ShowMainTab() {
-	Data.cloudTab.Delete(0)
+	window1.T.Delete(0)
 
 	log.Println("Sleep(200)")
 	time.Sleep(200 * time.Millisecond)
 
 	Data.smallBox = makeCloudInfoBox()
-	Data.cloudTab.InsertAt("Main", 0, Data.smallBox)
-	Data.cloudTab.SetMargined(0, true)
+	window1.T.InsertAt("Main", 0, Data.smallBox)
+	window1.T.SetMargined(0, true)
 }
 
 func GoMainWindow() {
+	window1 = new(WindowMap)
 	ui.Main(makeCloudWindow)
 }
 
@@ -229,15 +230,15 @@ func makeCloudWindow() {
 		return true
 	})
 
-	Data.cloudTab = ui.NewTab()
-	Data.cloudWindow.SetChild(Data.cloudTab)
+	window1.T = ui.NewTab()
+	Data.cloudWindow.SetChild(window1.T)
 	Data.cloudWindow.SetMargined(true)
 
 	text := makeAttributedString()
 	Data.cloudBox = ShowSplashBox(text)
 
-	Data.cloudTab.Append("WIT Splash", Data.cloudBox)
-	Data.cloudTab.SetMargined(0, true)
+	window1.T.Append("WIT Splash", Data.cloudBox)
+	window1.T.SetMargined(0, true)
 
 	Data.cloudWindow.Show()
 	Data.State = "splash"
@@ -245,7 +246,7 @@ func makeCloudWindow() {
 
 /*
 func AddVmConfigureTab(name string, pbVM *pb.Event_VM) {
-	CreateVmBox(Data.cloudTab, Data.CurrentVM)
+	CreateVmBox(window1.T, Data.CurrentVM)
 }
 */
 

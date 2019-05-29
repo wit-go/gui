@@ -1,7 +1,7 @@
 package gui
 
 import "log"
-import "time"
+// import "time"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
@@ -11,9 +11,9 @@ import "github.com/davecgh/go-spew/spew"
 func findFB(button *ButtonMap) *ButtonMap {
 	var a *ButtonMap
 	for key, foo := range Data.AllButtons {
-		log.Println("defaultButtonClick() Data.AllButtons =", key, foo)
-		// if Data.AllButtons[key] == *button {
+		log.Println("findFB() Data.AllButtons key, foo=", key, foo)
 		if &foo == button {
+			log.Println("findFB() FOUND BUTTON key, foo=", key, foo)
 			a = &foo
 		}
 	}
@@ -24,35 +24,11 @@ func makeSplashArea(ah *AreaHandler) {
 	// make this button just to get the default font (but don't display the button)
 	// There should be another way to do this (?)
 	newB		:= CreateFontButton("AREA")
-	// ah.FontButton = newB.FB
-
-	time.Sleep(200 * time.Millisecond)
-	tmp := findFB(newB)
-	log.Println("makeSplashArea() newB =", newB)
-	log.Println("makeSplashArea() newB.AH =", newB.AH)
-	log.Println("makeSplashArea() newB =",	newB)
-	// log.Println("makeSplashArea() newB.AH =", newB.AH)
-	log.Println("makeSplashArea() newB =", newB)
-
-	time.Sleep(200 * time.Millisecond)
-	tmp = findFB(newB)
-	log.Println("makeSplashArea() tmp =", tmp, "newB", newB)
-
-	Data.AllButtons[1].AH = ah
-
-	time.Sleep(200 * time.Millisecond)
-	tmp = findFB(newB)
-	log.Println("makeSplashArea() tmp =", tmp, "newB", newB)
-
-	// log.Println("makeSplashArea() ah =", ah)
-	// log.Println("makeSplashArea() ah.FontButton =", ah.FontButton)
-	//	DefaultFont:	ah.FontButton.Font(),
 
 	ah.Attrstr	= makeAttributedString()
 	ah.Area	= ui.NewArea(ah)
 	newB.A		= ah.Area
 	Data.AllButtons[1].A = ah.Area
-	// ah.FontButton = Data.AllButtons[1].FB
 	ah.Button	= &Data.AllButtons[1]
 
 	if (Data.Debug) {
@@ -104,8 +80,6 @@ func (ah AreaHandler) MouseEvent(a *ui.Area, me *ui.AreaMouseEvent) {
 	}
 	if (me.Up == 1) {
 		log.Println("GOT MOUSE UP")
-		// log.Println("GOT MOUSE UP ah", ah)
-		// log.Println("GOT MOUSE UP ah.FontButton =", ah.FontButton)
 		log.Println("GOT MOUSE UP ah.Button =", ah.Button)
 		log.Println("GOT MOUSE UP ah.Button.FB =", ah.Button.FB)
 		mouseClick(ah.Button)

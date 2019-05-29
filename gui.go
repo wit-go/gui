@@ -131,7 +131,7 @@ func mouseClick(b *ButtonMap) {
 		log.Println("\tgui.mouseClick() START b.Action =", b.Action)
 		if (b.Action == "createAddVmBox") {
 			log.Println("\tgui.mouseClick() createAddVmBox for b =", b)
-			createAddVmBox(Data.cloudTab, "Create New Virtual Machine", b)
+			createAddVmBox(window1.T, "Create New Virtual Machine", b)
 			return
 		}
 		/*
@@ -140,7 +140,7 @@ func mouseClick(b *ButtonMap) {
 			if (Data.Debug) {
 				go ui.Main(ShowVM)
 			} else {
-				CreateVmBox(Data.cloudTab, b.VM)
+				CreateVmBox(window1.T, b.VM)
 			}
 		}
 		*/
@@ -215,7 +215,7 @@ func CreateButton(a *pb.Account, vm *pb.Event_VM,
 
 	var newmap ButtonMap
 	newmap.B	= newB
-	newmap.T	= Data.cloudTab
+	newmap.T	= window1.T
 	newmap.Account	= a
 	newmap.VM	= vm
 	newmap.Action	= action
@@ -237,7 +237,7 @@ func CreateFontButton(action string) *ButtonMap {
 
 	newB.OnChanged(func (*ui.FontButton) {
 		log.Println("FontButton.OnChanged() START mouseClick(&newBM)", &newBM)
-		// mouseClick(&newBM)
+		mouseClick(&newBM)
 	})
 	return &newBM
 }

@@ -26,13 +26,13 @@ func setupCloudUI() {
 		return true
 	})
 
-	Data.cloudTab = ui.NewTab()
-	Data.cloudWindow.SetChild(Data.cloudTab)
+	window1.T = ui.NewTab()
+	Data.cloudWindow.SetChild(window1.T)
 	Data.cloudWindow.SetMargined(true)
 
 	Data.tabcount = 0
-	Data.cloudTab.Append("Cloud Info", makeCloudInfoBox())
-	Data.cloudTab.SetMargined(Data.tabcount, true)
+	window1.T.Append("Cloud Info", makeCloudInfoBox())
+	window1.T.SetMargined(Data.tabcount, true)
 
 	Data.cloudWindow.Show()
 }
@@ -51,7 +51,7 @@ func addTableTab() {
 
 	log.Println("Sleep for 2 seconds, then try to add new tabs")
 	time.Sleep(1 * 1000 * 1000 * 1000)
-	AddTableTab(Data.cloudTab, 1, "test seven", 7, parts, nil)
+	AddTableTab(window1.T, 1, "test seven", 7, parts, nil)
 }
 
 func addDebuggingButtons(vbox *ui.Box) {

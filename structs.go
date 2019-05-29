@@ -13,7 +13,7 @@ import pb "git.wit.com/wit/witProtobuf"
 // be the safe way to interact with the GUI
 //
 var Data	GuiDataStructure
-// var myAH	*AreaHandler
+var window1	*WindowMap
 
 type GuiDataStructure struct {
 	State		string
@@ -59,15 +59,11 @@ type GuiDataStructure struct {
 
 	// stuff for the splash screen / setup tabs
 	cloudWindow	*ui.Window
-	cloudTab	*ui.Tab
 	cloudBox	*ui.Box
 	smallBox	*ui.Box
 	myAH		*AreaHandler
 
 	tabcount	int
-
-	// stuff for the 'area'
-//	fontButton	*ui.FontButton
 }
 
 type TableColumnData struct {
@@ -98,6 +94,14 @@ type EntryMap struct {
 //	custom		func (*EntryMap)
 }
 
+type WindowMap struct {
+	W		*ui.Window
+	T		*ui.Tab
+	A		*ui.Area
+
+	AH		*AreaHandler
+}
+
 type ButtonMap struct {
 	B		*ui.Button
 	FB		*ui.FontButton
@@ -119,8 +123,6 @@ type AreaHandler struct{
 	Button		*ButtonMap
 	Attrstr		*ui.AttributedString
 	Area		*ui.Area
-//	FontButton	*ui.FontButton
-//	FB		func () *ButtonMap
 }
 // AREA STRUCTURES END
 
