@@ -63,15 +63,10 @@ type GuiDataStructure struct {
 	cloudBox	*ui.Box
 	smallBox	*ui.Box
 
-//	mainwin		*ui.Window
-//	maintab		*ui.Tab
 	tabcount	int
 
 	// stuff for the 'area'
-	MyArea		*ui.Area
-	fontButton	*ui.FontButton
-	attrstr		*ui.AttributedString
-	splashArea	*ui.Area
+//	fontButton	*ui.FontButton
 }
 
 type TableColumnData struct {
@@ -123,6 +118,8 @@ type AreaHandler struct{
 	Button		*ButtonMap
 	Attrstr		*ui.AttributedString
 	Area		*ui.Area
+	FontButton	*ui.FontButton
+	FB		func () *ButtonMap
 }
 // AREA STRUCTURES END
 

@@ -225,17 +225,17 @@ func CreateButton(a *pb.Account, vm *pb.Event_VM,
 	return newB
 }
 
-func CreateFontButton(action string, note string) *ui.FontButton {
+func CreateFontButton(action string) *ButtonMap {
 	newB := ui.NewFontButton()
 
         // create a 'fake' button entry for the mouse clicks
-	var newButtonMap ButtonMap
-	newButtonMap.Action	= action
-	newButtonMap.FB		= newB
-	Data.AllButtons		= append(Data.AllButtons, newButtonMap)
+	var newBM	ButtonMap
+	newBM.Action	= action
+	newBM.FB	= newB
+	Data.AllButtons	= append(Data.AllButtons, newBM)
 
 	newB.OnChanged(func (*ui.FontButton) {
-		mouseClick(&newButtonMap)
+		mouseClick(&newBM)
 	})
-	return newB
+	return &newBM
 }

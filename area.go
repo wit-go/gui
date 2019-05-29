@@ -1,32 +1,51 @@
 package gui
 
 import "log"
+import "time"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
 import "github.com/davecgh/go-spew/spew"
 
+func findFB(button *ButtonMap) *ButtonMap {
+	var a *ButtonMap
+	for key, foo := range Data.AllButtons {
+		log.Println("defaultButtonClick() Data.AllButtons =", key, foo)
+		// if Data.AllButtons[key] == *button {
+		if &foo == button {
+			a = &foo
+		}
+	}
+	return a
+}
+
 func makeSplashArea() *AreaHandler {
 	// make this button just to get the default font (but don't display the button)
 	// There should be another way to do this (?)
-	Data.fontButton = CreateFontButton("SplashFont", "DONE")
+	newB		:= CreateFontButton("AREA")
+
+	time.Sleep(200 * time.Millisecond)
+	tmp := findFB(newB)
+	log.Println("makeSplashArea() newB =", newB)
+	log.Println("makeSplashArea() newB.AH =", newB.AH)
+	log.Println("makeSplashArea() newB =",	newB)
+	newB.AH		= &myAH
+	// log.Println("makeSplashArea() newB.AH =", newB.AH)
+	log.Println("makeSplashArea() newB =", newB)
+
+	time.Sleep(200 * time.Millisecond)
+	tmp = findFB(newB)
+	log.Println("makeSplashArea() tmp =", tmp, "newB", newB)
 
 	myAH.Attrstr	= makeAttributedString()
-	Data.splashArea = ui.NewArea(myAH)
-	Data.MyArea     = Data.splashArea
-	myAH.Area	= Data.splashArea
-
-	// create a 'fake' button entry for the mouse clicks
-	var newmap ButtonMap
-	newmap.Action	= "AREA"
-	newmap.AH	= &myAH
-	newmap.A	= Data.splashArea
-	myAH.Button	= &newmap
-	Data.AllButtons = append(Data.AllButtons, newmap)
+	myAH.Area	= ui.NewArea(myAH)
+	newB.A		= myAH.Area
+	myAH.FontButton = newB.FB
+	myAH.Button	= newB
 
 	if (Data.Debug) {
-		spew.Dump(Data.splashArea)
+		spew.Dump(myAH.Area)
 		log.Println("DEBUGGING", Data.Debug)
 	} else {
 		log.Println("NOT DEBUGGING AREA mhAH.Button =", myAH.Button)
@@ -45,8 +64,8 @@ func appendWithAttributes(newText *ui.AttributedString, what string, attrs ...ui
 
 func (ah AreaHandler) Draw(a *ui.Area, p *ui.AreaDrawParams) {
 	tl := ui.DrawNewTextLayout(&ui.DrawTextLayoutParams{
-		String:		myAH.Attrstr,
-		DefaultFont:	Data.fontButton.Font(),
+		String:		ah.Attrstr,
+		DefaultFont:	ah.FontButton.Font(),
 		Width:		p.AreaWidth,
 		Align:		ui.DrawTextAlign(1),
 	})
@@ -66,7 +85,7 @@ func (ah AreaHandler) MouseEvent(a *ui.Area, me *ui.AreaMouseEvent) {
 		log.Println("GOT MOUSE UP")
 		log.Println("GOT MOUSE UP")
 		log.Println("GOT MOUSE UP")
-		mouseClick(myAH.Button)
+		mouseClick(ah.Button)
 	}
 }
 
