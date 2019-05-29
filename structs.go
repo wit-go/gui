@@ -13,7 +13,7 @@ import pb "git.wit.com/wit/witProtobuf"
 // be the safe way to interact with the GUI
 //
 var Data	GuiDataStructure
-var myAH	AreaHandler
+var myAH	*AreaHandler
 
 type GuiDataStructure struct {
 	State		string
@@ -119,7 +119,7 @@ type AreaHandler struct{
 	Attrstr		*ui.AttributedString
 	Area		*ui.Area
 	FontButton	*ui.FontButton
-	FB		func () *ButtonMap
+//	FB		func () *ButtonMap
 }
 // AREA STRUCTURES END
 

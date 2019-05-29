@@ -232,11 +232,12 @@ func CreateFontButton(action string) *ButtonMap {
 	var newBM	ButtonMap
 	newBM.Action	= action
 	newBM.FB	= newB
-	newBM.AH	= &myAH
+	newBM.AH	= myAH
 	Data.AllButtons	= append(Data.AllButtons, newBM)
 
 	newB.OnChanged(func (*ui.FontButton) {
-		mouseClick(&newBM)
+		log.Println("FontButton.OnChanged() START mouseClick(&newBM)", &newBM)
+		// mouseClick(&newBM)
 	})
 	return &newBM
 }

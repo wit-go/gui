@@ -14,6 +14,7 @@ func ShowSplashBox() *ui.Box {
 	newbox := ui.NewVerticalBox()
 	newbox.SetPadded(true)
 
+	myAH    = new(AreaHandler)
 	newText := makeAttributedString()
 	myAH.Attrstr = newText
 	newAH	:= makeSplashArea()

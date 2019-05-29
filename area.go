@@ -23,6 +23,7 @@ func findFB(button *ButtonMap) *ButtonMap {
 func makeSplashArea() *AreaHandler {
 	// make this button just to get the default font (but don't display the button)
 	// There should be another way to do this (?)
+	myAH	= new(AreaHandler)
 	newB		:= CreateFontButton("AREA")
 	myAH.FontButton = newB.FB
 
@@ -38,7 +39,7 @@ func makeSplashArea() *AreaHandler {
 	tmp = findFB(newB)
 	log.Println("makeSplashArea() tmp =", tmp, "newB", newB)
 
-	Data.AllButtons[1].AH = &myAH
+	Data.AllButtons[1].AH = myAH
 
 	time.Sleep(200 * time.Millisecond)
 	tmp = findFB(newB)
@@ -61,7 +62,7 @@ func makeSplashArea() *AreaHandler {
 	} else {
 		log.Println("NOT DEBUGGING AREA mhAH.Button =", myAH.Button)
 	}
-	return &myAH
+	return myAH
 }
 
 func appendWithAttributes(newText *ui.AttributedString, what string, attrs ...ui.Attribute) {
@@ -94,8 +95,9 @@ func (ah AreaHandler) MouseEvent(a *ui.Area, me *ui.AreaMouseEvent) {
 	}
 	if (me.Up == 1) {
 		log.Println("GOT MOUSE UP")
-		log.Println("GOT MOUSE UP")
-		log.Println("GOT MOUSE UP")
+		// log.Println("GOT MOUSE UP ah", ah)
+		log.Println("GOT MOUSE UP ah.FontButton =", ah.FontButton)
+		log.Println("GOT MOUSE UP ah.Button =", ah.Button)
 		mouseClick(ah.Button)
 	}
 }
