@@ -13,7 +13,7 @@ import pb "git.wit.com/wit/witProtobuf"
 // be the safe way to interact with the GUI
 //
 var Data	GuiDataStructure
-var myAH	areaHandler
+var myAH	AreaHandler
 
 type GuiDataStructure struct {
 	State		string
@@ -111,6 +111,7 @@ type ButtonMap struct {
 
 	Account		*pb.Account
 	VM		*pb.Event_VM
+	AH		*AreaHandler
 	Action		string	// what type of button
 
 	custom		func (*ButtonMap)
@@ -118,10 +119,10 @@ type ButtonMap struct {
 
 
 // AREA STRUCTURES START
-type areaHandler struct{
-	//	buttonFunc func(int, int)
-	//	closeFunc  func(int)
-	button	*ButtonMap
+type AreaHandler struct{
+	Button		*ButtonMap
+	Attrstr		*ui.AttributedString
+	Area		*ui.Area
 }
 // AREA STRUCTURES END
 

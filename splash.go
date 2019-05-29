@@ -14,10 +14,11 @@ func ShowSplashBox() *ui.Box {
 	newbox := ui.NewVerticalBox()
 	newbox.SetPadded(true)
 
-	makeAttributedString()
-	Data.MyArea = makeSplashArea()
+	newText := makeAttributedString()
+	myAH.Attrstr = newText
+	newAH	:= makeSplashArea()
 
-	newbox.Append(Data.MyArea, true)
+	newbox.Append(newAH.Area, true)
 
 	if runtime.GOOS == "linux" {
 		newbox.Append(ui.NewLabel("OS: Linux"), false)
@@ -49,4 +50,27 @@ func ShowSplashBox() *ui.Box {
 	newbox.Append(okButton, false)
 
 	return newbox
+}
+
+func makeAttributedString() *ui.AttributedString {
+	newText := ui.NewAttributedString("")
+
+	appendWithAttributes(newText, "Welcome to the Cloud Control Panel\n", ui.TextSize(16), ui.TextColor{0.0, 0.0, 0.8, .8}) // "RGBT"
+
+	appendWithAttributes(newText, "(alpha)\n\n", ui.TextSize(10))
+
+	appendWithAttributes(newText, "This control panel was designed to be an interface to your 'private' cloud. ", ui.TextWeightBold)
+	appendWithAttributes(newText, "The concept of a private cloud means that you can use a providers system, or, seemlessly, use your own hardware in your own datacenter. ", ui.TextWeightBold)
+
+	newText.AppendUnattributed("\n")
+	newText.AppendUnattributed("\n")
+	appendWithAttributes(newText, "This control panel requires:\n")
+	newText.AppendUnattributed("\n")
+	appendWithAttributes(newText, "IPv6\n")
+	appendWithAttributes(newText, "newText, Your hostname in DNS\n")
+	newText.AppendUnattributed("\n\n\n\n\n")
+
+	appendWithAttributes(newText, "<click or press any key>\n", ui.TextSize(10))
+
+	return newText
 }
