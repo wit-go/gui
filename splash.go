@@ -45,7 +45,7 @@ func ShowSplashBox() *ui.Box {
 		}
 	}
 
-	okButton := CreateButton(nil, nil, "OK", "DONE", nil)
+	okButton := CreateButton(nil, nil, "OK", "AREA", nil)
 	newbox.Append(okButton, false)
 
 	return newbox

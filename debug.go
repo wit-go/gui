@@ -72,7 +72,6 @@ func addDebuggingButtons(vbox *ui.Box) {
 
 	vbox.Append(CreateButton(nil, nil, "Close GUI", "QUIT", nil), false)
 	vbox.Append(CreateButton(nil, nil, "DEBUG goroutines", "DEBUG", nil), false)
-	// vbox.Append(CreateButton("ping", "PING", runPingClick), false)
 	vbox.Append(CreateButton(nil, nil, "xterm", "XTERM", runTestExecClick), false)
 	vbox.Append(CreateButton(nil, nil, "Load test.json config file", "CONFIG", nil), false)
 }
@@ -86,11 +85,12 @@ func runPingClick(b *ButtonMap) {
 	}
 	spew.Dump(b)
 	var tmp []string
-	tmp = append(tmp, "xterm", "-e", "ping " + hostname + ";bash")
-	runCommand(tmp)
+	tmp = append(tmp, "xterm", "-geometry", "120x30", "-e", "ping " + hostname + ";sleep 3")
+	go runCommand(tmp)
 	log.Println("runPingClick END")
 }
 
+/*
 func runAddVmClick(b *ButtonMap) {
 	log.Println("runPingClick START")
 	log.Println("runTestExecClick b.VM", b.VM)
@@ -104,6 +104,7 @@ func runAddVmClick(b *ButtonMap) {
 	runCommand(tmp)
 	log.Println("runPingClick END")
 }
+*/
 
 func runTestExecClick(b *ButtonMap) {
 	log.Println("runTestExecClick START")
@@ -124,19 +125,14 @@ func runSimpleCommand(s string) {
 }
 
 func runCommand(cmdArgs []string) {
-	log.Println("runXterm START")
-	log.Println("runXterm START")
-	log.Println("runXterm START")
-	log.Println("runXterm START", cmdArgs)
+	log.Println("runCommand() START", cmdArgs)
 	process := exec.Command(cmdArgs[0], cmdArgs[1:len(cmdArgs)]...)
 	// process := exec.Command("xterm", "-e", "ping localhost")
-	log.Println("runXterm process.Start()")
+	log.Println("runCommand() process.Start()")
 	process.Start()
-	log.Println("runXterm process.Wait()")
+	log.Println("runCommand() process.Wait()")
 	process.Wait()
-	log.Println("runXterm NEED TO CHECK THE TIME HERE TO SEE IF THIS WORKED")
-	log.Println("runXterm OTHERWISE INFORM THE USER")
-	log.Println("runXterm END")
-	log.Println("runXterm END")
-	log.Println("runXterm END")
+	log.Println("runCommand() NEED TO CHECK THE TIME HERE TO SEE IF THIS WORKED")
+	log.Println("runCommand() OTHERWISE INFORM THE USER")
+	log.Println("runCommand() END")
 }
