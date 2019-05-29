@@ -235,9 +235,9 @@ func makeCloudWindow() {
 	Data.Window1.W.SetMargined(true)
 
 	text := makeAttributedString()
-	Data.cloudBox = ShowSplashBox(text)
+	Data.Window1.B1 = ShowSplashBox(text)
 
-	Data.Window1.T.Append("WIT Splash", Data.cloudBox)
+	Data.Window1.T.Append("WIT Splash", Data.Window1.B1)
 	Data.Window1.T.SetMargined(0, true)
 
 	Data.Window1.W.Show()

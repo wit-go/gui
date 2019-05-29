@@ -60,9 +60,8 @@ type GuiDataStructure struct {
 	EntryPass	*ui.Entry
 
 	// stuff for the splash screen / setup tabs
-	cloudBox	*ui.Box
+//	cloudBox	*ui.Box
 	smallBox	*ui.Box
-//	myAH		*AreaHandler
 
 	tabcount	int
 }
@@ -97,6 +96,7 @@ type EntryMap struct {
 
 type WindowMap struct {
 	W		*ui.Window
+	B1		*ui.Box
 	T		*ui.Tab
 	A		*ui.Area
 
