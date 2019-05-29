@@ -208,7 +208,7 @@ func ShowMainTab() {
 }
 
 func GoMainWindow() {
-	Data.Window1 = new(WindowMap)
+	// Data.Window1 = new(WindowMap)
 	ui.Main(makeCloudWindow)
 }
 
@@ -235,8 +235,8 @@ func makeCloudWindow() {
 	Data.Window1.W.SetChild(Data.Window1.T)
 	Data.Window1.W.SetMargined(true)
 
-	text := makeAttributedString()
-	Data.Window1.Box1 = ShowSplashBox(text)
+	// text := makeAttributedString()
+	Data.Window1.Box1 = ShowSplashBox(Data.Window1.AreaText)
 
 	Data.Window1.T.Append("WIT Splash", Data.Window1.Box1)
 	Data.Window1.T.SetMargined(0, true)

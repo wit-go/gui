@@ -1,6 +1,7 @@
 package gui
 
 import "image/color"
+import "golang.org/x/image/font"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
@@ -92,6 +93,14 @@ type WindowMap struct {
 	Box2		*ui.Box
 
 	AH		*AreaHandler
+	AreaText	*ui.AttributedString
+}
+
+type FontString struct {
+	S		string
+	Size		int
+	F		font.Face
+	W		font.Weight
 }
 
 type ButtonMap struct {

@@ -82,7 +82,7 @@ func runTestHide(b *ButtonMap) {
 	log.Println("runTestHide START")
 	Data.Window1.Box1.Hide()
 	Data.Window1.Box2.Hide()
-	time.Sleep(2000 * time.Millisecond)
+	// time.Sleep(2000 * time.Millisecond)
 	Data.State = "HIDE"
 	log.Println("runTestHide END")
 }

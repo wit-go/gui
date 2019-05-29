@@ -25,7 +25,7 @@ func makeSplashArea(ah *AreaHandler) {
 	// There should be another way to do this (?)
 	newB		:= CreateFontButton("AREA")
 
-	ah.Attrstr	= makeAttributedString()
+	// ah.Attrstr	= makeAttributedString()
 	ah.Area	= ui.NewArea(ah)
 	newB.A		= ah.Area
 	Data.AllButtons[1].A = ah.Area
