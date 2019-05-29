@@ -95,7 +95,7 @@ type EntryMap struct {
 	Action		string	// what type of button
 
 	// custom callback function to your main application
-	custom		func (*EntryMap)
+//	custom		func (*EntryMap)
 }
 
 type ButtonMap struct {
@@ -119,7 +119,7 @@ type AreaHandler struct{
 	Button		*ButtonMap
 	Attrstr		*ui.AttributedString
 	Area		*ui.Area
-	FontButton	*ui.FontButton
+//	FontButton	*ui.FontButton
 //	FB		func () *ButtonMap
 }
 // AREA STRUCTURES END
