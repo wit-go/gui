@@ -20,12 +20,11 @@ func findFB(button *ButtonMap) *ButtonMap {
 	return a
 }
 
-func makeSplashArea() *AreaHandler {
+func makeSplashArea(ah *AreaHandler) {
 	// make this button just to get the default font (but don't display the button)
 	// There should be another way to do this (?)
-	myAH	= new(AreaHandler)
 	newB		:= CreateFontButton("AREA")
-	myAH.FontButton = newB.FB
+	ah.FontButton = newB.FB
 
 	time.Sleep(200 * time.Millisecond)
 	tmp := findFB(newB)
@@ -39,30 +38,29 @@ func makeSplashArea() *AreaHandler {
 	tmp = findFB(newB)
 	log.Println("makeSplashArea() tmp =", tmp, "newB", newB)
 
-	Data.AllButtons[1].AH = myAH
+	Data.AllButtons[1].AH = ah
 
 	time.Sleep(200 * time.Millisecond)
 	tmp = findFB(newB)
 	log.Println("makeSplashArea() tmp =", tmp, "newB", newB)
 
-	// log.Println("makeSplashArea() ah =", myAH)
-	log.Println("makeSplashArea() ah.FontButton =", myAH.FontButton)
+	// log.Println("makeSplashArea() ah =", ah)
+	log.Println("makeSplashArea() ah.FontButton =", ah.FontButton)
 	//	DefaultFont:	ah.FontButton.Font(),
 
-	myAH.Attrstr	= makeAttributedString()
-	myAH.Area	= ui.NewArea(myAH)
-	newB.A		= myAH.Area
-	Data.AllButtons[1].A = myAH.Area
-	myAH.FontButton = Data.AllButtons[1].FB
-	myAH.Button	= &Data.AllButtons[1]
+	ah.Attrstr	= makeAttributedString()
+	ah.Area	= ui.NewArea(ah)
+	newB.A		= ah.Area
+	Data.AllButtons[1].A = ah.Area
+	ah.FontButton = Data.AllButtons[1].FB
+	ah.Button	= &Data.AllButtons[1]
 
 	if (Data.Debug) {
-		spew.Dump(myAH.Area)
+		spew.Dump(ah.Area)
 		log.Println("DEBUGGING", Data.Debug)
 	} else {
-		log.Println("NOT DEBUGGING AREA mhAH.Button =", myAH.Button)
+		log.Println("NOT DEBUGGING AREA mhAH.Button =", ah.Button)
 	}
-	return myAH
 }
 
 func appendWithAttributes(newText *ui.AttributedString, what string, attrs ...ui.Attribute) {

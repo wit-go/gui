@@ -14,12 +14,13 @@ func ShowSplashBox() *ui.Box {
 	newbox := ui.NewVerticalBox()
 	newbox.SetPadded(true)
 
+	// initialize the AreaHandler{}
 	myAH    = new(AreaHandler)
 	newText := makeAttributedString()
 	myAH.Attrstr = newText
-	newAH	:= makeSplashArea()
+	makeSplashArea(myAH)
 
-	newbox.Append(newAH.Area, true)
+	newbox.Append(myAH.Area, true)
 
 	if runtime.GOOS == "linux" {
 		newbox.Append(ui.NewLabel("OS: Linux"), false)
