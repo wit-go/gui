@@ -232,6 +232,7 @@ func CreateFontButton(action string) *ButtonMap {
 	var newBM	ButtonMap
 	newBM.Action	= action
 	newBM.FB	= newB
+	newBM.AH	= &myAH
 	Data.AllButtons	= append(Data.AllButtons, newBM)
 
 	newB.OnChanged(func (*ui.FontButton) {

@@ -24,13 +24,13 @@ func makeSplashArea() *AreaHandler {
 	// make this button just to get the default font (but don't display the button)
 	// There should be another way to do this (?)
 	newB		:= CreateFontButton("AREA")
+	myAH.FontButton = newB.FB
 
 	time.Sleep(200 * time.Millisecond)
 	tmp := findFB(newB)
 	log.Println("makeSplashArea() newB =", newB)
 	log.Println("makeSplashArea() newB.AH =", newB.AH)
 	log.Println("makeSplashArea() newB =",	newB)
-	newB.AH		= &myAH
 	// log.Println("makeSplashArea() newB.AH =", newB.AH)
 	log.Println("makeSplashArea() newB =", newB)
 
@@ -38,11 +38,22 @@ func makeSplashArea() *AreaHandler {
 	tmp = findFB(newB)
 	log.Println("makeSplashArea() tmp =", tmp, "newB", newB)
 
+	Data.AllButtons[1].AH = &myAH
+
+	time.Sleep(200 * time.Millisecond)
+	tmp = findFB(newB)
+	log.Println("makeSplashArea() tmp =", tmp, "newB", newB)
+
+	// log.Println("makeSplashArea() ah =", myAH)
+	log.Println("makeSplashArea() ah.FontButton =", myAH.FontButton)
+	//	DefaultFont:	ah.FontButton.Font(),
+
 	myAH.Attrstr	= makeAttributedString()
 	myAH.Area	= ui.NewArea(myAH)
 	newB.A		= myAH.Area
-	myAH.FontButton = newB.FB
-	myAH.Button	= newB
+	Data.AllButtons[1].A = myAH.Area
+	myAH.FontButton = Data.AllButtons[1].FB
+	myAH.Button	= &Data.AllButtons[1]
 
 	if (Data.Debug) {
 		spew.Dump(myAH.Area)
