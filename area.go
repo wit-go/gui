@@ -63,6 +63,15 @@ func makeSplashArea(ah *AreaHandler) {
 	}
 }
 
+func AreaAppendText(newText *ui.AttributedString, what string, attrs ...ui.Attribute) {
+	start := len(newText.String())
+	end := start + len(what)
+	newText.AppendUnattributed(what)
+	for _, a := range attrs {
+		newText.SetAttribute(a, start, end)
+	}
+}
+
 func appendWithAttributes(newText *ui.AttributedString, what string, attrs ...ui.Attribute) {
 	start := len(newText.String())
 	end := start + len(what)

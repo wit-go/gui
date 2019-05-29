@@ -13,7 +13,7 @@ import pb "git.wit.com/wit/witProtobuf"
 // be the safe way to interact with the GUI
 //
 var Data	GuiDataStructure
-var myAH	*AreaHandler
+// var myAH	*AreaHandler
 
 type GuiDataStructure struct {
 	State		string
@@ -62,6 +62,7 @@ type GuiDataStructure struct {
 	cloudTab	*ui.Tab
 	cloudBox	*ui.Box
 	smallBox	*ui.Box
+	myAH		*AreaHandler
 
 	tabcount	int
 

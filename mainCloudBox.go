@@ -215,16 +215,17 @@ func makeCloudWindow() {
 	// cloudWindow.SetBorderless(true)
 
         // create a 'fake' button entry for the mouse clicks
-	var newButtonMap ButtonMap
-	newButtonMap.Action   = "QUIT"
-	Data.AllButtons = append(Data.AllButtons, newButtonMap)
+	var newBM ButtonMap
+	newBM.Action	= "QUIT"
+	newBM.W		= Data.cloudWindow
+	Data.AllButtons = append(Data.AllButtons, newBM)
 
 	Data.cloudWindow.OnClosing(func(*ui.Window) bool {
-		mouseClick(&newButtonMap)
+		mouseClick(&newBM)
 		return true
 	})
 	ui.OnShouldQuit(func() bool {
-		mouseClick(&newButtonMap)
+		mouseClick(&newBM)
 		return true
 	})
 
@@ -232,7 +233,8 @@ func makeCloudWindow() {
 	Data.cloudWindow.SetChild(Data.cloudTab)
 	Data.cloudWindow.SetMargined(true)
 
-	Data.cloudBox = ShowSplashBox()
+	text := makeAttributedString()
+	Data.cloudBox = ShowSplashBox(text)
 
 	Data.cloudTab.Append("WIT Splash", Data.cloudBox)
 	Data.cloudTab.SetMargined(0, true)
