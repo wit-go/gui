@@ -154,19 +154,19 @@ func AddVmsTab(name string, count int, a *pb.Account) *TableData {
 	parts = append(parts, tmp)
 	human += 1
 
-	mh := AddTableTab(window1.T, 1, name, count, parts, a)
+	mh := AddTableTab(Data.Window1.T, 1, name, count, parts, a)
 	return mh
 }
 
 func ShowAccountQuestionTab() {
-	window1.T.Delete(0)
+	Data.Window1.T.Delete(0)
 
 	log.Println("Sleep(200)")
 	time.Sleep(200 * time.Millisecond)
 
 	Data.smallBox = AddAccountQuestionBox()
-	window1.T.InsertAt("New Account?", 0, Data.smallBox)
-	window1.T.SetMargined(0, true)
+	Data.Window1.T.InsertAt("New Account?", 0, Data.smallBox)
+	Data.Window1.T.SetMargined(0, true)
 }
 
 func ShowAccountTab(i int) {
@@ -179,49 +179,49 @@ func ShowAccountTab(i int) {
 	abox := AddAccountBox()
 
 	// Set the parents and data structure links
-	// aTab.me = window1.T
-	// aTab.parentWindow = Data.cloudWindow
+	// aTab.me = Data.Window1.T
+	// aTab.parentWindow = Data.Window1.W
 	// aTab.tabOffset = 0
 
 	if (i >= 0) {
 		log.Println("ShowAccountTab() InsertAt i=", i)
-		window1.T.Delete(0)
-		window1.T.InsertAt("Add Account", i, abox)
-		window1.T.SetMargined(0, true)
+		Data.Window1.T.Delete(0)
+		Data.Window1.T.InsertAt("Add Account", i, abox)
+		Data.Window1.T.SetMargined(0, true)
 	} else {
 		// TODO: After append try to discover the tab index #
 		log.Println("ShowAccountTab() Append")
-		AddBoxToTab("Create New Account", window1.T, abox)
+		AddBoxToTab("Create New Account", Data.Window1.T, abox)
 	}
 }
 
 func ShowMainTab() {
-	window1.T.Delete(0)
+	Data.Window1.T.Delete(0)
 
 	log.Println("Sleep(200)")
 	time.Sleep(200 * time.Millisecond)
 
 	Data.smallBox = makeCloudInfoBox()
-	window1.T.InsertAt("Main", 0, Data.smallBox)
-	window1.T.SetMargined(0, true)
+	Data.Window1.T.InsertAt("Main", 0, Data.smallBox)
+	Data.Window1.T.SetMargined(0, true)
 }
 
 func GoMainWindow() {
-	window1 = new(WindowMap)
+	Data.Window1 = new(WindowMap)
 	ui.Main(makeCloudWindow)
 }
 
 func makeCloudWindow() {
-	Data.cloudWindow = ui.NewWindow("", Data.Width, Data.Height, true)
-	// cloudWindow.SetBorderless(true)
+	Data.Window1.W = ui.NewWindow("", Data.Width, Data.Height, true)
+	// Window1.W.SetBorderless(true)
 
         // create a 'fake' button entry for the mouse clicks
 	var newBM ButtonMap
 	newBM.Action	= "QUIT"
-	newBM.W		= Data.cloudWindow
+	newBM.W		= Data.Window1.W
 	Data.AllButtons = append(Data.AllButtons, newBM)
 
-	Data.cloudWindow.OnClosing(func(*ui.Window) bool {
+	Data.Window1.W.OnClosing(func(*ui.Window) bool {
 		mouseClick(&newBM)
 		return true
 	})
@@ -230,23 +230,23 @@ func makeCloudWindow() {
 		return true
 	})
 
-	window1.T = ui.NewTab()
-	Data.cloudWindow.SetChild(window1.T)
-	Data.cloudWindow.SetMargined(true)
+	Data.Window1.T = ui.NewTab()
+	Data.Window1.W.SetChild(Data.Window1.T)
+	Data.Window1.W.SetMargined(true)
 
 	text := makeAttributedString()
 	Data.cloudBox = ShowSplashBox(text)
 
-	window1.T.Append("WIT Splash", Data.cloudBox)
-	window1.T.SetMargined(0, true)
+	Data.Window1.T.Append("WIT Splash", Data.cloudBox)
+	Data.Window1.T.SetMargined(0, true)
 
-	Data.cloudWindow.Show()
+	Data.Window1.W.Show()
 	Data.State = "splash"
 }
 
 /*
 func AddVmConfigureTab(name string, pbVM *pb.Event_VM) {
-	CreateVmBox(window1.T, Data.CurrentVM)
+	CreateVmBox(Data.Window1.T, Data.CurrentVM)
 }
 */
 

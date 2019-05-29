@@ -99,17 +99,17 @@ func AddTableTab(mytab *ui.Tab, mytabcount int, name string, rowcount int, parts
 }
 
 func SocketError() {
-	ui.MsgBoxError(Data.cloudWindow,
+	ui.MsgBoxError(Data.Window1.W,
 		"There was a socket error",
 		"More detailed information can be shown here.")
 }
 
 func MessageWindow(msg1 string, msg2 string) {
-	ui.MsgBox(Data.cloudWindow, msg1, msg2)
+	ui.MsgBox(Data.Window1.W, msg1, msg2)
 }
 
 func ErrorWindow(msg1 string, msg2 string) {
-	ui.MsgBoxError(Data.cloudWindow, msg1, msg2)
+	ui.MsgBoxError(Data.Window1.W, msg1, msg2)
 }
 
 // This is the default mouse click handler
@@ -131,7 +131,7 @@ func mouseClick(b *ButtonMap) {
 		log.Println("\tgui.mouseClick() START b.Action =", b.Action)
 		if (b.Action == "createAddVmBox") {
 			log.Println("\tgui.mouseClick() createAddVmBox for b =", b)
-			createAddVmBox(window1.T, "Create New Virtual Machine", b)
+			createAddVmBox(Data.Window1.T, "Create New Virtual Machine", b)
 			return
 		}
 		/*
@@ -140,7 +140,7 @@ func mouseClick(b *ButtonMap) {
 			if (Data.Debug) {
 				go ui.Main(ShowVM)
 			} else {
-				CreateVmBox(window1.T, b.VM)
+				CreateVmBox(Data.Window1.T, b.VM)
 			}
 		}
 		*/
@@ -215,7 +215,7 @@ func CreateButton(a *pb.Account, vm *pb.Event_VM,
 
 	var newmap ButtonMap
 	newmap.B	= newB
-	newmap.T	= window1.T
+	newmap.T	= Data.Window1.T
 	newmap.Account	= a
 	newmap.VM	= vm
 	newmap.Action	= action
@@ -232,7 +232,7 @@ func CreateFontButton(action string) *ButtonMap {
 	var newBM	ButtonMap
 	newBM.Action	= action
 	newBM.FB	= newB
-	newBM.AH	= Data.myAH
+	newBM.AH	= Data.Window1.AH
 	Data.AllButtons	= append(Data.AllButtons, newBM)
 
 	newB.OnChanged(func (*ui.FontButton) {

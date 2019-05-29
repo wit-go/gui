@@ -16,25 +16,25 @@ import "github.com/davecgh/go-spew/spew"
 
 // can not pass any args to this (?)
 func setupCloudUI() {
-	Data.cloudWindow = ui.NewWindow("Cloud Control Panel", Data.Width, Data.Height, false)
-	Data.cloudWindow.OnClosing(func(*ui.Window) bool {
+	Data.Window1.W = ui.NewWindow("Cloud Control Panel", Data.Width, Data.Height, false)
+	Data.Window1.W.OnClosing(func(*ui.Window) bool {
 		ui.Quit()
 		return true
 	})
 	ui.OnShouldQuit(func() bool {
-		Data.cloudWindow.Destroy()
+		Data.Window1.W.Destroy()
 		return true
 	})
 
-	window1.T = ui.NewTab()
-	Data.cloudWindow.SetChild(window1.T)
-	Data.cloudWindow.SetMargined(true)
+	Data.Window1.T = ui.NewTab()
+	Data.Window1.W.SetChild(Data.Window1.T)
+	Data.Window1.W.SetMargined(true)
 
 	Data.tabcount = 0
-	window1.T.Append("Cloud Info", makeCloudInfoBox())
-	window1.T.SetMargined(Data.tabcount, true)
+	Data.Window1.T.Append("Cloud Info", makeCloudInfoBox())
+	Data.Window1.T.SetMargined(Data.tabcount, true)
 
-	Data.cloudWindow.Show()
+	Data.Window1.W.Show()
 }
 
 func addTableTab() {
@@ -51,7 +51,7 @@ func addTableTab() {
 
 	log.Println("Sleep for 2 seconds, then try to add new tabs")
 	time.Sleep(1 * 1000 * 1000 * 1000)
-	AddTableTab(window1.T, 1, "test seven", 7, parts, nil)
+	AddTableTab(Data.Window1.T, 1, "test seven", 7, parts, nil)
 }
 
 func addDebuggingButtons(vbox *ui.Box) {

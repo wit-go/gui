@@ -13,7 +13,6 @@ import pb "git.wit.com/wit/witProtobuf"
 // be the safe way to interact with the GUI
 //
 var Data	GuiDataStructure
-var window1	*WindowMap
 
 type GuiDataStructure struct {
 	State		string
@@ -53,15 +52,17 @@ type GuiDataStructure struct {
 	// pass it in
 	CurrentVM	*pb.Event_VM
 
+	Window1		*WindowMap
+	Window2		*WindowMap
+
 	EntryNick	*ui.Entry
 	EntryUser	*ui.Entry
 	EntryPass	*ui.Entry
 
 	// stuff for the splash screen / setup tabs
-	cloudWindow	*ui.Window
 	cloudBox	*ui.Box
 	smallBox	*ui.Box
-	myAH		*AreaHandler
+//	myAH		*AreaHandler
 
 	tabcount	int
 }

@@ -43,7 +43,7 @@ func ShowVM() {
 }
 
 func AddVmConfigureTab(name string, pbVM *pb.Event_VM) {
-	CreateVmBox(window1.T, Data.CurrentVM)
+	CreateVmBox(Data.Window1.T, Data.CurrentVM)
 }
 
 func CreateVmBox(tab *ui.Tab, vm *pb.Event_VM) {
