@@ -1,6 +1,7 @@
 package gui
 
 import "log"
+import "fmt"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
@@ -21,6 +22,7 @@ func AddEntry(box *GuiBox, name string) *GuiEntry {
 	box.UiBox.Append(ue, false)
 
 	ge.E = ue
+	box.EntryMap[name] = ge
 
 	return ge
 }
@@ -28,6 +30,9 @@ func AddEntry(box *GuiBox, name string) *GuiEntry {
 func AddAccountQuestionBox(wm *GuiWindow) *ui.Box {
 	var gb *GuiBox
 	gb = new(GuiBox)
+	gb.EntryMap = make(map[string]*GuiEntry)
+
+	gb.EntryMap["test"] = nil
 
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
@@ -45,14 +50,54 @@ func AddAccountQuestionBox(wm *GuiWindow) *ui.Box {
 	hbox.Append(button1.B, false)
 
 	AddEntry(gb, "SUBDOMAIN")
+	// AddEntry(gb, "USERNAME")
 
 	vbox.Append(ui.NewHorizontalSeparator(), false)
 
-	button2 := CreateButton(wm, nil, nil, "Create Subdomain Account", "SUBDOMAIN", addSubdomain)
+	button2 := CreateButton(wm, nil, nil, "Create Subdomain Account", "ADD", nil)
 	button2.Box = gb
 	vbox.Append(button2.B, false)
 
 	return vbox
+}
+
+func GetText(box *GuiBox, name string) string {
+	if (box == nil) {
+		log.Println("gui.GetText() ERROR box == nil")
+		return ""
+	}
+	if (box.EntryMap == nil) {
+		log.Println("gui.GetText() ERROR b.Box.EntryMap == nil")
+		return ""
+	}
+	spew.Dump(box.EntryMap)
+	if (box.EntryMap[name] == nil) {
+		log.Println("gui.GetText() ERROR box.EntryMap[", name, "] == nil ")
+		return ""
+	}
+	e := box.EntryMap[name]
+	log.Println("gui.GetText() box.EntryMap[", name, "] = ", e.E.Text())
+	log.Println("gui.GetText() END")
+	return e.E.Text()
+}
+
+func SetText(box *GuiBox, name string, value string) error {
+	if (box == nil) {
+		return fmt.Errorf("gui.SetText() ERROR box == nil")
+	}
+	if (box.EntryMap == nil) {
+		return fmt.Errorf("gui.SetText() ERROR b.Box.EntryMap == nil")
+	}
+	spew.Dump(box.EntryMap)
+	if (box.EntryMap[name] == nil) {
+		return fmt.Errorf("gui.SetText() ERROR box.EntryMap[", name, "] == nil ")
+	}
+	e := box.EntryMap[name]
+	log.Println("gui.SetText() box.EntryMap[", name, "] = ", e.E.Text())
+	e.E.SetText(value)
+	log.Println("gui.SetText() box.EntryMap[", name, "] = ", e.E.Text())
+	log.Println("gui.SetText() END")
+	return nil
 }
 
 func generateSubdomain(b *GuiButton) {
@@ -61,16 +106,10 @@ func generateSubdomain(b *GuiButton) {
 		log.Println("generateSubdomain ERROR b == nil")
 		return
 	}
-	if (b.Box == nil) {
-		log.Println("generateSubdomain ERROR b.Box == nil")
-		return
-	}
-	if (b.Box.EntryMap == nil) {
-		log.Println("generateSubdomain ERROR b.Box.EntryMap == nil")
-		return
-	}
-	spew.Dump(b.Box.EntryMap)
 	// subdomain.SetText("cust00013.wit.dev")
+
+	txt := SetText(b.Box, "SUBDOMAIN", "cust001.testing.com.customers.wpord.wit.com")
+	log.Println("generateSubdomain subdomain = ", txt)
 	log.Println("generateSubdomain END")
 }
 

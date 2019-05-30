@@ -81,7 +81,7 @@ type GuiButton struct {
 
 type GuiBox struct {
 	W		*GuiWindow
-	EntryMap	map[string][]*GuiEntry
+	EntryMap	map[string]*GuiEntry
 	A		*GuiArea
 
 	UiBox		*ui.Box
