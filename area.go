@@ -25,16 +25,16 @@ func makeSplashArea(wm *GuiWindow, ah *GuiArea) {
 	// There should be another way to do this (?)
 	newB := CreateFontButton(wm, "AREA")
 
-	// ah.Attrstr	= makeAttributedString()
-	ah.Area	= ui.NewArea(ah)
-	newB.A		= ah.Area
+	// ah.UiAttrstr	= makeAttributedString()
+	ah.UiArea	= ui.NewArea(ah)
+	newB.A		= ah.UiArea
 	newB.WM	= wm
-	// Data.AllButtons[1].A = ah.Area
+	// Data.AllButtons[1].A = ah.UiArea
 	// ah.Button	= &Data.AllButtons[1]
 	ah.Button	= newB
 
 	if (Data.Debug) {
-		spew.Dump(ah.Area)
+		spew.Dump(ah.UiArea)
 		log.Println("DEBUGGING", Data.Debug)
 	} else {
 		log.Println("NOT DEBUGGING AREA mhAH.Button =", ah.Button)
@@ -61,7 +61,7 @@ func appendWithAttributes(newText *ui.AttributedString, what string, attrs ...ui
 
 func (ah GuiArea) Draw(a *ui.Area, p *ui.AreaDrawParams) {
 	tl := ui.DrawNewTextLayout(&ui.DrawTextLayoutParams{
-		String:		ah.Attrstr,
+		String:		ah.UiAttrstr,
 		DefaultFont:	ah.Button.FB.Font(),
 		Width:		p.AreaWidth,
 		Align:		ui.DrawTextAlign(1),
