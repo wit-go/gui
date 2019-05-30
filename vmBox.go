@@ -45,7 +45,7 @@ func ShowVM() {
 */
 
 func AddVmConfigureTab(wm *WindowMap, name string, pbVM *pb.Event_VM) {
-	CreateVmBox(wm, wm.T, Data.CurrentVM)
+	CreateVmBox(wm, wm.T, pbVM)
 }
 
 func CreateVmBox(wm *WindowMap, tab *ui.Tab, vm *pb.Event_VM) {
@@ -84,7 +84,7 @@ func CreateVmBox(wm *WindowMap, tab *ui.Tab, vm *pb.Event_VM) {
 	hboxButtons.Append(CreateButton(wm, nil, vm, "Save",      "SAVE",     nil), false)
 	hboxButtons.Append(CreateButton(wm, nil, vm, "Done",      "DONE",     nil), false)
 
-	AddBoxToTab(Data.CurrentVM.Name, tab, vbox)
+	AddBoxToTab(vm.Name, tab, vbox)
 }
 
 func createAddVmBox(wm *WindowMap, tab *ui.Tab, name string, b *ButtonMap) {

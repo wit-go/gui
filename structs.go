@@ -13,9 +13,9 @@ import pb "git.wit.com/wit/witProtobuf"
 // If you need cross platform support, these might only
 // be the safe way to interact with the GUI
 //
-var Data	GuiDataStructure
+var Data	GuiData
 
-type GuiDataStructure struct {
+type GuiData struct {
 	State		string
 	Width		int
 	Height		int
@@ -48,15 +48,7 @@ type GuiDataStructure struct {
 	// A map of all the entry boxes
 	AllEntries	[]EntryMap
 
-	// a VM (maybe the one the user is playing with?)
-	// if opening a new window, this is a trick to
-	// pass it in
-	CurrentVM	*pb.Event_VM
-
 	Windows		[]*WindowMap
-	NewWindow	int
-//	Window1		*WindowMap
-	Window2		*WindowMap
 
 	EntryNick	*ui.Entry
 	EntryUser	*ui.Entry
@@ -97,7 +89,6 @@ type WindowMap struct {
 	C		*pb.Config
 
 	AH		*AreaHandler
-//	AreaText	*ui.AttributedString
 	Action		string
 }
 

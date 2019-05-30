@@ -3,6 +3,7 @@ package gui
 import "log"
 import "time"
 import "regexp"
+import "reflect"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
@@ -210,7 +211,7 @@ func ShowMainTab(wm *WindowMap) {
 	wm.T.SetMargined(0, true)
 }
 
-func StartNewWindow(c *pb.Config, action string) {
+func StartNewWindow(c *pb.Config, bg bool, action string) {
 	log.Println("InitNewWindow() Create a new window")
 	var newWindowMap WindowMap
 	newWindowMap.C = c
@@ -226,10 +227,21 @@ func StartNewWindow(c *pb.Config, action string) {
 	for i, aWM := range(Data.Windows) {
 		log.Println(aWM)
 		if (aWM.W == nil) {
-			log.Println("ShowWindow() THIS WINDOW IS NOT YET SHOWN")
+			log.Println("ShowWindow() THIS WINDOW IS NOT YET SHOWN i=", i)
+			log.Println("ShowWindow() THIS WINDOW IS NOT YET SHOWN aWM=", reflect.TypeOf(aWM))
 			// Data.NewWindow = &aWM
-			Data.NewWindow = i
-			ui.Main(InitWindow)
+			// Data.NewWindow = i
+			// ui.Main(InitWindow)
+			time.Sleep(200 * time.Millisecond)
+			if (bg) {
+				ui.Main(func() {
+					InitWindow(Data.Windows[i], i)
+				})
+			} else {
+				ui.Main(func() {
+					InitWindow(Data.Windows[i], i)
+				})
+			}
 			return
 		}
 	}
@@ -242,8 +254,10 @@ func getSplashText() *ui.AttributedString {
 }
 
 
-func InitWindow() {
-	i := Data.NewWindow
+func InitWindow(wm *WindowMap, i int) {
+	log.Println("InitWindow() THIS WINDOW IS NOT YET SHOWN")
+	// i := Data.NewWindow
+	log.Println("InitWindow() THIS WINDOW IS NOT YET SHOWN i=", i)
 
 	c := Data.Windows[i].C
 	Data.Windows[i].W = ui.NewWindow("", int(c.Width), int(c.Height), true)
@@ -257,7 +271,8 @@ func InitWindow() {
 	Data.AllButtons = append(Data.AllButtons, newBM)
 
 	Data.Windows[i].W.OnClosing(func(*ui.Window) bool {
-		mouseClick(&newBM)
+		log.Println("InitWindow() OnClosing() THIS WINDOW IS CLOSING i=", i)
+		// mouseClick(&newBM)
                 ui.Quit()
 		return true
 	})
