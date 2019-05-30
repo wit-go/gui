@@ -217,20 +217,7 @@ func GoMainWindow() {
 }
 */
 
-func ShowWindow() {
-	// Data.Window1 = new(WindowMap)
-	for i, aWM := range(Data.Windows) {
-		log.Println(aWM)
-		if (aWM.W == nil) {
-			log.Println("ShowWindow() THIS WINDOW IS NOT YET SHOWN")
-			// Data.NewWindow = &aWM
-			Data.NewWindow = i
-			ui.Main(InitWindow)
-		}
-	}
-}
-
-func InitNewWindow(c *pb.Config, action string) *WindowMap {
+func StartNewWindow(c *pb.Config, action string) {
 	log.Println("InitNewWindow() Create a new window")
 	var newWindowMap WindowMap
 	newWindowMap.C = c
@@ -250,13 +237,16 @@ func InitNewWindow(c *pb.Config, action string) *WindowMap {
 		return true
 	})
 
-	return &newWindowMap
-
-	// NEED TO INIT THIS HERE
-//	ui.OnShouldQuit(func() bool {
-//		mouseClick(&newBM)
-//		return true
-//	})
+	for i, aWM := range(Data.Windows) {
+		log.Println(aWM)
+		if (aWM.W == nil) {
+			log.Println("ShowWindow() THIS WINDOW IS NOT YET SHOWN")
+			// Data.NewWindow = &aWM
+			Data.NewWindow = i
+			ui.Main(InitWindow)
+			return
+		}
+	}
 }
 
 func getSplashText() *ui.AttributedString {
