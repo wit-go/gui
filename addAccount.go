@@ -5,26 +5,43 @@ import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
+var subdomain *ui.Entry
+
 func AddAccountQuestionBox(wm *WindowMap) *ui.Box {
-	newbox := ui.NewVerticalBox()
-	newbox.SetPadded(true)
+	vbox := ui.NewVerticalBox()
+	vbox.SetPadded(true)
 
-	newButton := CreateButton(wm, nil, nil, "Create New Account", "AREA", nil)
-	newbox.Append(newButton, false)
+	vboxN := ui.NewVerticalBox()
+	vboxN.SetPadded(true)
+	vboxN.Append(ui.NewLabel("Enter your Subdomain:"), false)
 
-	newbox.Append(ui.NewHorizontalSeparator(), false)
+	subdomain = ui.NewEntry()
+	subdomain.SetReadOnly(false)
 
-	okButton := CreateButton(wm, nil, nil, "I Have an Account", "AREA", nil)
-	newbox.Append(okButton, false)
+	vboxN.Append(subdomain, false)
 
-	return newbox
+	subdomain.OnChanged(func(*ui.Entry) {
+		log.Println("OK. subdomain =", subdomain.Text())
+	})
+	vbox.Append(vboxN, false)
+
+	vbox.Append(ui.NewHorizontalSeparator(), false)
+
+	okButton := CreateButton(wm, nil, nil, "Make me a Subdomain", "SUBDOMAIN", generateSubdomain)
+	vbox.Append(okButton, false)
+
+	return vbox
 }
 
-// func AddAccountBox(aTab *GuiTabStructure) {
+func generateSubdomain(b *ButtonMap) {
+	log.Println("generateSubdomain START")
+	subdomain.SetText("cust00013.wit.dev")
+	log.Println("generateSubdomain END")
+}
+
 func AddAccountBox(wm *WindowMap) *ui.Box {
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
-//	aTab.firstBox = vbox
 
 	hboxAccount := ui.NewHorizontalBox()
 	hboxAccount.SetPadded(true)
