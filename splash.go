@@ -22,8 +22,8 @@ func ShowSplashBox(wm *GuiWindow, newText *ui.AttributedString) *ui.Box {
 	newbox := ui.NewVerticalBox()
 	newbox.SetPadded(true)
 
-	// initialize the AreaHandler{}
-	wm.AH    = new(AreaHandler)
+	// initialize the GuiArea{}
+	wm.AH    = new(GuiArea)
 	wm.AH.WM = wm
 	wm.AH.Attrstr = newText
 	makeSplashArea(wm, wm.AH)

@@ -20,7 +20,7 @@ func findFB(button *GuiButton) *GuiButton {
 	return a
 }
 
-func makeSplashArea(wm *GuiWindow, ah *AreaHandler) {
+func makeSplashArea(wm *GuiWindow, ah *GuiArea) {
 	// make this button just to get the default font (but don't display the button)
 	// There should be another way to do this (?)
 	newB := CreateFontButton(wm, "AREA")
@@ -59,7 +59,7 @@ func appendWithAttributes(newText *ui.AttributedString, what string, attrs ...ui
 	}
 }
 
-func (ah AreaHandler) Draw(a *ui.Area, p *ui.AreaDrawParams) {
+func (ah GuiArea) Draw(a *ui.Area, p *ui.AreaDrawParams) {
 	tl := ui.DrawNewTextLayout(&ui.DrawTextLayoutParams{
 		String:		ah.Attrstr,
 		DefaultFont:	ah.Button.FB.Font(),
@@ -70,7 +70,7 @@ func (ah AreaHandler) Draw(a *ui.Area, p *ui.AreaDrawParams) {
 	defer tl.Free()
 }
 
-func (ah AreaHandler) MouseEvent(a *ui.Area, me *ui.AreaMouseEvent) {
+func (ah GuiArea) MouseEvent(a *ui.Area, me *ui.AreaMouseEvent) {
 	if (Data.Debug) {
 		log.Println("GOT MouseEvent() ah.Button =", ah.Button)
 		spew.Dump(me)
@@ -88,15 +88,15 @@ func (ah AreaHandler) MouseEvent(a *ui.Area, me *ui.AreaMouseEvent) {
 	}
 }
 
-func (ah AreaHandler) MouseCrossed(a *ui.Area, left bool) {
+func (ah GuiArea) MouseCrossed(a *ui.Area, left bool) {
 	log.Println("GOT MouseCrossed()")
 }
 
-func (ah AreaHandler) DragBroken(a *ui.Area) {
+func (ah GuiArea) DragBroken(a *ui.Area) {
 	log.Println("GOT DragBroken()")
 }
 
-func (ah AreaHandler) KeyEvent(a *ui.Area, ke *ui.AreaKeyEvent) (handled bool) {
+func (ah GuiArea) KeyEvent(a *ui.Area, ke *ui.AreaKeyEvent) (handled bool) {
 	log.Println("GOT KeyEvent()")
 	if (ke.Key == 10) {
 		log.Println("GOT ENTER")

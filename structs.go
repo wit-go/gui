@@ -44,6 +44,7 @@ type GuiData struct {
 	// windows, all tabs, across all goroutines
 	// This is "GLOBAL"
 	AllButtons	[]GuiButton
+	ButtonMap	map[*GuiButton][]func (*GuiButton)
 
 	// A map of all the entry boxes
 	AllEntries	[]*GuiEntry
@@ -80,17 +81,21 @@ type GuiEntry struct {
 	Action		string	// what type of button
 }
 
+type GuiBox struct {
+	EntryMap	map[string][]*GuiEntry
+	AH		*GuiArea
+
+}
+
 type GuiWindow struct {
 	W		*ui.Window
 	T		*ui.Tab
 	Box1		*ui.Box
 	Box2		*ui.Box
 
-	EntryMap	map[string][]*GuiEntry
-
 	C		*pb.Config
 
-	AH		*AreaHandler
+	AH		*GuiArea
 	Action		string
 }
 
@@ -109,7 +114,7 @@ type GuiButton struct {
 	W		*ui.Window
 	T		*ui.Tab
 
-	AH		*AreaHandler
+	AH		*GuiArea
 
 	// git.wit.com/wit/gui stuff
 	WM		*GuiWindow
@@ -123,7 +128,7 @@ type GuiButton struct {
 
 
 // AREA STRUCTURES START
-type AreaHandler struct{
+type GuiArea struct{
 	Button		*GuiButton
 	Attrstr		*ui.AttributedString
 	Area		*ui.Area
