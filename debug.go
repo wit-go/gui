@@ -56,7 +56,7 @@ func addTableTab() {
 	// AddTableTab(Data.Window1.T, 1, "test seven", 7, parts, nil)
 }
 
-func addDebuggingButtons(wm *WindowMap, vbox *ui.Box) {
+func addDebuggingButtons(wm *GuiWindow, vbox *ui.Box) {
 	vbox.Append(ui.NewLabel("Debugging:"), false)
 
 	vbox.Append(ui.NewColorButton(), false)

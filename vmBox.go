@@ -10,45 +10,11 @@ import pb "git.wit.com/wit/witProtobuf"
 
 import "github.com/davecgh/go-spew/spew"
 
-/*
-func GoShowVM() {
-	ui.Main(ShowVM)
-}
-
-func ShowVM() {
-	name := Data.CurrentVM.Name
-	log.Println("ShowVM() START Data.CurrentVM=", Data.CurrentVM)
-	VMwin := ui.NewWindow("VM " + name, 500, 300, false)
-
-        // create a 'fake' button entry for the mouse clicks
-	var newButtonMap ButtonMap
-	newButtonMap.Action   = "WINDOW CLOSE"
-	newButtonMap.W        = VMwin
-	Data.AllButtons = append(Data.AllButtons, newButtonMap)
-
-	VMwin.OnClosing(func(*ui.Window) bool {
-		mouseClick(&newButtonMap)
-		return true
-	})
-	ui.OnShouldQuit(func() bool {
-		mouseClick(&newButtonMap)
-		return true
-	})
-
-	VMtab := ui.NewTab()
-	VMwin.SetChild(VMtab)
-	VMwin.SetMargined(true)
-
-	CreateVmBox(VMtab, Data.CurrentVM)
-	VMwin.Show()
-}
-*/
-
-func AddVmConfigureTab(wm *WindowMap, name string, pbVM *pb.Event_VM) {
+func AddVmConfigureTab(wm *GuiWindow, name string, pbVM *pb.Event_VM) {
 	CreateVmBox(wm, wm.T, pbVM)
 }
 
-func CreateVmBox(wm *WindowMap, tab *ui.Tab, vm *pb.Event_VM) {
+func CreateVmBox(wm *GuiWindow, tab *ui.Tab, vm *pb.Event_VM) {
 	log.Println("CreateVmBox() START")
 	log.Println("CreateVmBox() vm.Name", vm.Name)
 	spew.Dump(vm)
@@ -87,7 +53,7 @@ func CreateVmBox(wm *WindowMap, tab *ui.Tab, vm *pb.Event_VM) {
 	AddBoxToTab(vm.Name, tab, vbox)
 }
 
-func createAddVmBox(wm *WindowMap, tab *ui.Tab, name string, b *ButtonMap) {
+func createAddVmBox(wm *GuiWindow, tab *ui.Tab, name string, b *ButtonMap) {
 	log.Println("createAddVmBox() START")
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)

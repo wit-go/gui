@@ -41,7 +41,7 @@ func InitColumns(mh *TableData, parts []TableColumnData) {
 	}
 }
 
-func AddTableTab(wm *WindowMap, mytab *ui.Tab, junk int, name string, rowcount int, parts []TableColumnData, account *pb.Account) *TableData {
+func AddTableTab(wm *GuiWindow, mytab *ui.Tab, junk int, name string, rowcount int, parts []TableColumnData, account *pb.Account) *TableData {
 	mh := new(TableData)
 
 	mh.RowCount    = rowcount
@@ -98,17 +98,17 @@ func AddTableTab(wm *WindowMap, mytab *ui.Tab, junk int, name string, rowcount i
 	return mh
 }
 
-func SocketError(wm *WindowMap) {
+func SocketError(wm *GuiWindow) {
 	ui.MsgBoxError(wm.W,
 		"There was a socket error",
 		"More detailed information can be shown here.")
 }
 
-func MessageWindow(wm *WindowMap, msg1 string, msg2 string) {
+func MessageWindow(wm *GuiWindow, msg1 string, msg2 string) {
 	ui.MsgBox(wm.W, msg1, msg2)
 }
 
-func ErrorWindow(wm *WindowMap, msg1 string, msg2 string) {
+func ErrorWindow(wm *GuiWindow, msg1 string, msg2 string) {
 	ui.MsgBoxError(wm.W, msg1, msg2)
 }
 
@@ -209,25 +209,25 @@ func AddButton(b *ButtonMap, name string) *ui.Button {
 	return newB
 }
 
-func CreateButton(wm *WindowMap, a *pb.Account, vm *pb.Event_VM,
+func CreateButton(wm *GuiWindow, a *pb.Account, vm *pb.Event_VM,
 		name string, action string, custom func(*ButtonMap)) *ui.Button {
-	newB := ui.NewButton(name)
-	newB.OnClicked(defaultButtonClick)
+	newUiB := ui.NewButton(name)
+	newUiB.OnClicked(defaultButtonClick)
 
-	var newmap ButtonMap
-	newmap.B	= newB
-	newmap.T	= wm.T
-	newmap.Account	= a
-	newmap.VM	= vm
-	newmap.WM	= wm
-	newmap.Action	= action
-	newmap.custom	= custom
-	Data.AllButtons	= append(Data.AllButtons, newmap)
+	var newB ButtonMap
+	newB.B	= newUiB
+	newB.T	= wm.T
+	newB.Account	= a
+	newB.VM	= vm
+	newB.WM	= wm
+	newB.Action	= action
+	newB.custom	= custom
+	Data.AllButtons	= append(Data.AllButtons, newB)
 
-	return newB
+	return newUiB
 }
 
-func CreateFontButton(wm *WindowMap, action string) *ButtonMap {
+func CreateFontButton(wm *GuiWindow, action string) *ButtonMap {
 	newB := ui.NewFontButton()
 
         // create a 'fake' button entry for the mouse clicks

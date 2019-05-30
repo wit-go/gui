@@ -20,7 +20,7 @@ func findFB(button *ButtonMap) *ButtonMap {
 	return a
 }
 
-func makeSplashArea(wm *WindowMap, ah *AreaHandler) {
+func makeSplashArea(wm *GuiWindow, ah *AreaHandler) {
 	// make this button just to get the default font (but don't display the button)
 	// There should be another way to do this (?)
 	newB := CreateFontButton(wm, "AREA")

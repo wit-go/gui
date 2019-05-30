@@ -46,9 +46,9 @@ type GuiData struct {
 	AllButtons	[]ButtonMap
 
 	// A map of all the entry boxes
-	AllEntries	[]EntryMap
+	AllEntries	[]*GuiEntry
 
-	Windows		[]*WindowMap
+	Windows		[]*GuiWindow
 
 	EntryNick	*ui.Entry
 	EntryUser	*ui.Entry
@@ -62,7 +62,7 @@ type TableColumnData struct {
 	Color		string
 }
 
-type EntryMap struct {
+type GuiEntry struct {
 	E		*ui.Entry
 	Edit		bool
 	Last		string	// the last value
@@ -80,11 +80,13 @@ type EntryMap struct {
 	Action		string	// what type of button
 }
 
-type WindowMap struct {
+type GuiWindow struct {
 	W		*ui.Window
 	T		*ui.Tab
 	Box1		*ui.Box
 	Box2		*ui.Box
+
+	EntryMap	map[string][]*GuiEntry
 
 	C		*pb.Config
 
@@ -110,7 +112,7 @@ type ButtonMap struct {
 	AH		*AreaHandler
 
 	// git.wit.com/wit/gui stuff
-	WM		*WindowMap
+	WM		*GuiWindow
 	Account		*pb.Account
 	VM		*pb.Event_VM
 	Action		string	// what type of button
@@ -125,7 +127,7 @@ type AreaHandler struct{
 	Button		*ButtonMap
 	Attrstr		*ui.AttributedString
 	Area		*ui.Area
-	WM		*WindowMap
+	WM		*GuiWindow
 }
 // AREA STRUCTURES END
 

@@ -11,7 +11,7 @@ import "runtime"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-func ShowSplashBox(wm *WindowMap, newText *ui.AttributedString) *ui.Box {
+func ShowSplashBox(wm *GuiWindow, newText *ui.AttributedString) *ui.Box {
 	log.Println("ShowSplashBox() START")
 	log.Println("ShowSplashBox() START wm =", wm)
 	if (wm == nil) {

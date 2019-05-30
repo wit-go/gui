@@ -7,7 +7,7 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 var subdomain *ui.Entry
 
-func AddAccountQuestionBox(wm *WindowMap) *ui.Box {
+func AddAccountQuestionBox(wm *GuiWindow) *ui.Box {
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
 	wm.Box1 = vbox
@@ -18,7 +18,7 @@ func AddAccountQuestionBox(wm *WindowMap) *ui.Box {
 
 	hbox.Append(ui.NewLabel("Enter your Subdomain or"), false)
 
-	generate := CreateButton(wm, nil, nil, "Make me a Subdomain", "SUBDOMAIN", generateSubdomain)
+	generate := CreateButton(wm, nil, nil, "Generate", "SUBDOMAIN", generateSubdomain)
 	hbox.Append(generate, false)
 
 	subdomain = ui.NewEntry()
@@ -49,7 +49,7 @@ func addSubdomain(b *ButtonMap) {
 	log.Println("generateSubdomain END")
 }
 
-func AddAccountBox(wm *WindowMap) *ui.Box {
+func AddAccountBox(wm *GuiWindow) *ui.Box {
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
 

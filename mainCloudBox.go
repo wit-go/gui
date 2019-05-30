@@ -13,7 +13,7 @@ import pb "git.wit.com/wit/witProtobuf"
 
 // import "github.com/davecgh/go-spew/spew"
 
-func makeCloudInfoBox(wm *WindowMap) *ui.Box {
+func makeCloudInfoBox(wm *GuiWindow) *ui.Box {
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 
@@ -103,7 +103,7 @@ func makeCloudInfoBox(wm *WindowMap) *ui.Box {
 // which could be anything since TEXTCOLOR, TEXT, BG, etc
 // fields use between 1 and 3 values internally
 //
-func AddVmsTab(wm *WindowMap, name string, count int, a *pb.Account) *TableData {
+func AddVmsTab(wm *GuiWindow, name string, count int, a *pb.Account) *TableData {
 	var parts []TableColumnData
 
 	human := 0
@@ -161,7 +161,7 @@ func AddVmsTab(wm *WindowMap, name string, count int, a *pb.Account) *TableData 
 	return mh
 }
 
-func ShowAccountQuestionTab(wm *WindowMap) {
+func ShowAccountQuestionTab(wm *GuiWindow) {
 	log.Println("ShowAccountQuestionTab() wm =", wm)
 	if (wm.T == nil) {
 		log.Println("ShowAccountQuestionTab() wm.T = nil THIS IS BAD")
@@ -177,7 +177,7 @@ func ShowAccountQuestionTab(wm *WindowMap) {
 	wm.T.SetMargined(0, true)
 }
 
-func ShowAccountTab(wm *WindowMap, i int) {
+func ShowAccountTab(wm *GuiWindow, i int) {
 	log.Println("ShowAccountTab() START")
 
 	log.Println("Sleep(200)")
@@ -203,7 +203,7 @@ func ShowAccountTab(wm *WindowMap, i int) {
 	}
 }
 
-func ShowMainTab(wm *WindowMap) {
+func ShowMainTab(wm *GuiWindow) {
 	log.Println("ShowMainTab() wm =", wm)
 	log.Println("ShowMainTab() wm.T =", wm.T)
 	log.Println("ShowMainTab() wm.T =", wm.T)
@@ -219,10 +219,10 @@ func ShowMainTab(wm *WindowMap) {
 
 func StartNewWindow(c *pb.Config, bg bool, action string) {
 	log.Println("InitNewWindow() Create a new window")
-	var newWindowMap WindowMap
-	newWindowMap.C = c
-	newWindowMap.Action = action
-	Data.Windows = append(Data.Windows, &newWindowMap)
+	var newGuiWindow GuiWindow
+	newGuiWindow.C = c
+	newGuiWindow.Action = action
+	Data.Windows = append(Data.Windows, &newGuiWindow)
 
 	ui.OnShouldQuit(func() bool {
 		// mouseClick(&newBM)
@@ -233,13 +233,13 @@ func StartNewWindow(c *pb.Config, bg bool, action string) {
 	if (bg) {
 		log.Println("ShowWindow() IN NEW GOROUTINE")
 		go ui.Main(func() {
-			InitWindow(&newWindowMap)
+			InitWindow(&newGuiWindow)
 		})
 		time.Sleep(2000 * time.Millisecond)
 	} else {
 		log.Println("ShowWindow() WAITING for ui.Main()")
 		ui.Main(func() {
-			InitWindow(&newWindowMap)
+			InitWindow(&newGuiWindow)
 		})
 	}
 }
@@ -251,7 +251,7 @@ func getSplashText(a string) *ui.AttributedString {
 }
 
 
-func InitWindow(wm *WindowMap) {
+func InitWindow(wm *GuiWindow) {
 	log.Println("InitWindow() THIS WINDOW IS NOT YET SHOWN")
 
 	c := wm.C
@@ -295,7 +295,7 @@ func InitWindow(wm *WindowMap) {
 }
 
 // makeEntryBox(box, "hostname:", "blah.foo.org") {
-func makeEntryVbox(hbox *ui.Box, a string, startValue string, edit bool, action string) *EntryMap {
+func makeEntryVbox(hbox *ui.Box, a string, startValue string, edit bool, action string) *GuiEntry {
 	// Start 'Nickname' vertical box
 	vboxN := ui.NewVerticalBox()
 	vboxN.SetPadded(true)
@@ -365,7 +365,7 @@ func defaultEntryChange(e *ui.Entry) {
 	log.Println("defaultEntryChange() ERROR. MISSING ENTRY MAP. e.Text() =", e.Text())
 }
 
-func defaultMakeEntry(startValue string, edit bool, action string) *EntryMap {
+func defaultMakeEntry(startValue string, edit bool, action string) *GuiEntry {
 	e := ui.NewEntry()
 	e.SetText(startValue)
 	if (edit == false) {
@@ -374,19 +374,19 @@ func defaultMakeEntry(startValue string, edit bool, action string) *EntryMap {
 	e.OnChanged(defaultEntryChange)
 
 	// add the entry field to the global map
-	var newEntryMap EntryMap
-	newEntryMap.E      = e
-	newEntryMap.Edit   = edit
-	newEntryMap.Action = action
+	var newEntry GuiEntry
+	newEntry.E      = e
+	newEntry.Edit   = edit
+	newEntry.Action = action
 	if (action == "Memory") {
-		newEntryMap.Normalize = normalizeInt
+		newEntry.Normalize = normalizeInt
 	}
-	Data.AllEntries = append(Data.AllEntries, newEntryMap)
+	Data.AllEntries = append(Data.AllEntries, &newEntry)
 
-	return &newEntryMap
+	return &newEntry
 }
 
-func makeEntryHbox(hbox *ui.Box, a string, startValue string, edit bool, action string) *EntryMap {
+func makeEntryHbox(hbox *ui.Box, a string, startValue string, edit bool, action string) *GuiEntry {
 	// Start 'Nickname' vertical box
 	hboxN := ui.NewHorizontalBox()
 	hboxN.SetPadded(true)
