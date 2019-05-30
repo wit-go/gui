@@ -259,7 +259,7 @@ func InitWindow(wm *GuiWindow) {
 	wm.W.SetBorderless(false)
 
         // create a 'fake' button entry for the mouse clicks
-	var newBM ButtonMap
+	var newBM GuiButton
 	newBM.Action	= "QUIT"
 	newBM.W		= wm.W
 	newBM.WM	= wm

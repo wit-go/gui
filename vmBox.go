@@ -53,7 +53,7 @@ func CreateVmBox(wm *GuiWindow, tab *ui.Tab, vm *pb.Event_VM) {
 	AddBoxToTab(vm.Name, tab, vbox)
 }
 
-func createAddVmBox(wm *GuiWindow, tab *ui.Tab, name string, b *ButtonMap) {
+func createAddVmBox(wm *GuiWindow, tab *ui.Tab, name string, b *GuiButton) {
 	log.Println("createAddVmBox() START")
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
@@ -75,7 +75,7 @@ func createAddVmBox(wm *GuiWindow, tab *ui.Tab, name string, b *ButtonMap) {
 	hboxButtons.SetPadded(true)
 	vbox.Append(hboxButtons, false)
 
-	var newb ButtonMap
+	var newb GuiButton
 	newb.Action	= "CREATE"
 	newb.VM		= b.VM
 	newb.Account	= b.Account

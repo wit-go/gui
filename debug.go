@@ -80,7 +80,7 @@ func addDebuggingButtons(wm *GuiWindow, vbox *ui.Box) {
 	vbox.Append(CreateButton(wm, nil, nil, "Load test.json config file", "CONFIG", nil), false)
 }
 
-func runTestHide(b *ButtonMap) {
+func runTestHide(b *GuiButton) {
 	/*
 	log.Println("runTestHide START")
 	Data.Window1.Box1.Hide()
@@ -91,7 +91,7 @@ func runTestHide(b *ButtonMap) {
 	*/
 }
 
-func runPingClick(b *ButtonMap) {
+func runPingClick(b *GuiButton) {
 	log.Println("runPingClick START")
 	log.Println("runTestExecClick b.VM", b.VM)
 	hostname := "localhost"
@@ -105,7 +105,7 @@ func runPingClick(b *ButtonMap) {
 	log.Println("runPingClick END")
 }
 
-func runTestExecClick(b *ButtonMap) {
+func runTestExecClick(b *GuiButton) {
 	log.Println("runTestExecClick START")
 	if runtime.GOOS == "linux" {
 		go runSimpleCommand("xterm -report-fonts")

@@ -8,8 +8,8 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 import "github.com/davecgh/go-spew/spew"
 
-func findFB(button *ButtonMap) *ButtonMap {
-	var a *ButtonMap
+func findFB(button *GuiButton) *GuiButton {
+	var a *GuiButton
 	for key, foo := range Data.AllButtons {
 		log.Println("findFB() Data.AllButtons key, foo=", key, foo)
 		if &foo == button {

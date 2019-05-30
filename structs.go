@@ -22,7 +22,7 @@ type GuiData struct {
 
 	// a fallback default function to handle mouse events 
 	// if nothing else is defined to handle them
-	MouseClick	func(*ButtonMap)
+	MouseClick	func(*GuiButton)
 
 	// account entry textboxes
 	Config		*pb.Config
@@ -43,7 +43,7 @@ type GuiData struct {
 	// A map of all buttons everywhere on all
 	// windows, all tabs, across all goroutines
 	// This is "GLOBAL"
-	AllButtons	[]ButtonMap
+	AllButtons	[]GuiButton
 
 	// A map of all the entry boxes
 	AllEntries	[]*GuiEntry
@@ -71,7 +71,7 @@ type GuiEntry struct {
 	Account		*pb.Account
 	VM		*pb.Event_VM
 
-	B		*ButtonMap
+	B		*GuiButton
 	FB		*ui.FontButton
 	A		*ui.Area
 	W		*ui.Window
@@ -101,7 +101,7 @@ type FontString struct {
 	W		font.Weight
 }
 
-type ButtonMap struct {
+type GuiButton struct {
 	// andlabs/ui stuff
 	B		*ui.Button
 	FB		*ui.FontButton
@@ -118,13 +118,13 @@ type ButtonMap struct {
 	Action		string	// what type of button
 
 	// a callback function for the main application
-	custom		func (*ButtonMap)
+	custom		func (*GuiButton)
 }
 
 
 // AREA STRUCTURES START
 type AreaHandler struct{
-	Button		*ButtonMap
+	Button		*GuiButton
 	Attrstr		*ui.AttributedString
 	Area		*ui.Area
 	WM		*GuiWindow
@@ -178,7 +178,7 @@ type HumanCellData struct {
 	Color		color.RGBA
 	ColorID		int
 	VM		*pb.Event_VM
-	Button		*ButtonMap
+	Button		*GuiButton
 }
 
 type HumanMap struct {

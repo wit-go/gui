@@ -36,13 +36,13 @@ func AddAccountQuestionBox(wm *GuiWindow) *ui.Box {
 	return vbox
 }
 
-func generateSubdomain(b *ButtonMap) {
+func generateSubdomain(b *GuiButton) {
 	log.Println("generateSubdomain START")
 	subdomain.SetText("cust00013.wit.dev")
 	log.Println("generateSubdomain END")
 }
 
-func addSubdomain(b *ButtonMap) {
+func addSubdomain(b *GuiButton) {
 	log.Println("generateSubdomain START")
 	sub := subdomain.Text()
 	log.Println("generateSubdomain subdomain =", sub)

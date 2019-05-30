@@ -123,7 +123,7 @@ func ErrorWindow(wm *GuiWindow, msg1 string, msg2 string) {
 // in the AllButtons %map
 // TODO: clean up the text above
 // TODO: remove this all together going only to main()
-func mouseClick(b *ButtonMap) {
+func mouseClick(b *GuiButton) {
 	log.Println("gui.mouseClick() START")
 	if (b == nil) {
 		log.Println("\tgui.mouseClick() START b = nil")
@@ -167,7 +167,7 @@ func mouseClick(b *ButtonMap) {
 // This routine MUST be here as this is how the andlabs/ui works
 // This is the raw routine passed to every button in andlabs libui / ui
 //
-// There is a []ButtonMap which has all the buttons. We search
+// There is a []GuiButton which has all the buttons. We search
 // for the button and then call the function below
 //
 func defaultButtonClick(button *ui.Button) {
@@ -183,7 +183,7 @@ func defaultButtonClick(button *ui.Button) {
 			log.Println("\tdefaultButtonClick() Data.AllButtons[key].Action =", Data.AllButtons[key].Action)
 			if Data.AllButtons[key].custom != nil {
 				log.Println("\tdefaultButtonClick() DOING CUSTOM FUNCTION")
-				var tmp ButtonMap
+				var tmp GuiButton
 				tmp = Data.AllButtons[key]
 				// spew.Dump(tmp)
 				Data.AllButtons[key].custom(&tmp)
@@ -200,7 +200,7 @@ func defaultButtonClick(button *ui.Button) {
 	mouseClick(nil)
 }
 
-func AddButton(b *ButtonMap, name string) *ui.Button {
+func AddButton(b *GuiButton, name string) *ui.Button {
 	newB := ui.NewButton(name)
 	newB.OnClicked(defaultButtonClick)
 
@@ -210,11 +210,11 @@ func AddButton(b *ButtonMap, name string) *ui.Button {
 }
 
 func CreateButton(wm *GuiWindow, a *pb.Account, vm *pb.Event_VM,
-		name string, action string, custom func(*ButtonMap)) *ui.Button {
+		name string, action string, custom func(*GuiButton)) *ui.Button {
 	newUiB := ui.NewButton(name)
 	newUiB.OnClicked(defaultButtonClick)
 
-	var newB ButtonMap
+	var newB GuiButton
 	newB.B	= newUiB
 	newB.T	= wm.T
 	newB.Account	= a
@@ -227,11 +227,11 @@ func CreateButton(wm *GuiWindow, a *pb.Account, vm *pb.Event_VM,
 	return newUiB
 }
 
-func CreateFontButton(wm *GuiWindow, action string) *ButtonMap {
+func CreateFontButton(wm *GuiWindow, action string) *GuiButton {
 	newB := ui.NewFontButton()
 
         // create a 'fake' button entry for the mouse clicks
-	var newBM	ButtonMap
+	var newBM	GuiButton
 	newBM.Action	= action
 	newBM.FB	= newB
 	newBM.AH	= wm.AH
