@@ -237,6 +237,19 @@ func InitNewWindow(c *pb.Config, action string) *WindowMap {
 	newWindowMap.Action = action
 	Data.Windows = append(Data.Windows, &newWindowMap)
 
+	/*
+	var newBM ButtonMap
+	newBM.Action	= "QUIT"
+	newBM.WM	= &newWindowMap
+	Data.AllButtons = append(Data.AllButtons, newBM)
+	*/
+
+	ui.OnShouldQuit(func() bool {
+		// mouseClick(&newBM)
+                ui.Quit()
+		return true
+	})
+
 	return &newWindowMap
 
 	// NEED TO INIT THIS HERE
@@ -264,6 +277,7 @@ func InitWindow() {
 	var newBM ButtonMap
 	newBM.Action	= "QUIT"
 	newBM.W		= Data.Windows[i].W
+	newBM.WM	= Data.Windows[i]
 	Data.AllButtons = append(Data.AllButtons, newBM)
 
 	Data.Windows[i].W.OnClosing(func(*ui.Window) bool {
@@ -276,6 +290,7 @@ func InitWindow() {
 	Data.Windows[i].W.SetChild(Data.Windows[i].T)
 	Data.Windows[i].W.SetMargined(true)
 
+	log.Println("InitWindow() i =", i)
 	log.Println("InitWindow() Data.Windows[i] =", Data.Windows[i])
 	log.Println("InitWindow() Data.Windows[i].Action =", Data.Windows[i].Action)
 
