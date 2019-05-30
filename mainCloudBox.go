@@ -264,7 +264,7 @@ func InitWindow(wm *GuiWindow) {
 	newBM.Action	= "QUIT"
 	newBM.W		= wm.W
 	newBM.WM	= wm
-	Data.AllButtons = append(Data.AllButtons, newBM)
+	Data.AllButtons = append(Data.AllButtons, &newBM)
 
 	wm.W.OnClosing(func(*ui.Window) bool {
 		log.Println("InitWindow() OnClosing() THIS WINDOW IS CLOSING wm=", wm)

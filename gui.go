@@ -185,13 +185,13 @@ func defaultButtonClick(button *ui.Button) {
 			log.Println("\tdefaultButtonClick() Data.AllButtons[key].Action =", Data.AllButtons[key].Action)
 			if Data.AllButtons[key].custom != nil {
 				log.Println("\tdefaultButtonClick() DOING CUSTOM FUNCTION")
-				var tmp GuiButton
+				var tmp *GuiButton
 				tmp = Data.AllButtons[key]
 				// spew.Dump(tmp)
-				Data.AllButtons[key].custom(&tmp)
+				Data.AllButtons[key].custom(tmp)
 				return
 			}
-			mouseClick(&Data.AllButtons[key])
+			mouseClick(Data.AllButtons[key])
 			return
 		}
 	}
@@ -207,7 +207,7 @@ func AddButton(b *GuiButton, name string) *ui.Button {
 	newB.OnClicked(defaultButtonClick)
 
 	b.B	= newB
-	Data.AllButtons	= append(Data.AllButtons, *b)
+	Data.AllButtons	= append(Data.AllButtons, b)
 	return newB
 }
 
@@ -225,7 +225,7 @@ func CreateButton(wm *GuiWindow, a *pb.Account, vm *pb.Event_VM,
 	newB.WM	= wm
 	newB.Action	= action
 	newB.custom	= custom
-	Data.AllButtons	= append(Data.AllButtons, *newB)
+	Data.AllButtons	= append(Data.AllButtons, newB)
 
 	return newB
 }
@@ -238,10 +238,10 @@ func CreateFontButton(wm *GuiWindow, action string) *GuiButton {
 	newBM.Action	= action
 	newBM.FB	= newB
 	newBM.AH	= wm.AH
-	Data.AllButtons	= append(Data.AllButtons, newBM)
+	Data.AllButtons	= append(Data.AllButtons, &newBM)
 
 	newB.OnChanged(func (*ui.FontButton) {
-		log.Println("FontButton.OnChanged() START mouseClick(&newBM)", &newBM)
+		log.Println("FontButton.OnChanged() START mouseClick(&newBM)", newBM)
 		mouseClick(&newBM)
 	})
 	return &newBM

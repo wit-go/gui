@@ -40,15 +40,17 @@ func AddAccountQuestionBox(wm *GuiWindow) *ui.Box {
 
 	hbox.Append(ui.NewLabel("Enter your Subdomain or"), false)
 
-	generate := CreateButton(wm, nil, nil, "Generate", "SUBDOMAIN", generateSubdomain)
-	hbox.Append(generate.B, false)
+	button1 := CreateButton(wm, nil, nil, "Generate", "SUBDOMAIN", generateSubdomain)
+	button1.Box = gb
+	hbox.Append(button1.B, false)
 
 	AddEntry(gb, "SUBDOMAIN")
 
 	vbox.Append(ui.NewHorizontalSeparator(), false)
 
-	okButton := CreateButton(wm, nil, nil, "Create Subdomain Account", "SUBDOMAIN", addSubdomain)
-	vbox.Append(okButton.B, false)
+	button2 := CreateButton(wm, nil, nil, "Create Subdomain Account", "SUBDOMAIN", addSubdomain)
+	button2.Box = gb
+	vbox.Append(button2.B, false)
 
 	return vbox
 }
@@ -73,10 +75,10 @@ func generateSubdomain(b *GuiButton) {
 }
 
 func addSubdomain(b *GuiButton) {
-	log.Println("generateSubdomain START")
+	log.Println("addSubdomain START")
 	// sub := subdomain.Text()
 	// log.Println("generateSubdomain subdomain =", sub)
-	log.Println("generateSubdomain END")
+	log.Println("addSubdomain END")
 }
 
 func AddAccountBox(wm *GuiWindow) *ui.Box {

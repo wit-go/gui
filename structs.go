@@ -41,7 +41,7 @@ type GuiData struct {
 	// A map of all buttons everywhere on all
 	// windows, all tabs, across all goroutines
 	// This is "GLOBAL"
-	AllButtons	[]GuiButton
+	AllButtons	[]*GuiButton
 	ButtonMap	map[*GuiButton][]func (*GuiButton)
 
 	// A map of all the entry boxes

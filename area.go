@@ -12,9 +12,9 @@ func findFB(button *GuiButton) *GuiButton {
 	var a *GuiButton
 	for key, foo := range Data.AllButtons {
 		log.Println("findFB() Data.AllButtons key, foo=", key, foo)
-		if &foo == button {
+		if foo == button {
 			log.Println("findFB() FOUND BUTTON key, foo=", key, foo)
-			a = &foo
+			a = foo
 		}
 	}
 	return a
