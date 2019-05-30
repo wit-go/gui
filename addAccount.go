@@ -10,24 +10,27 @@ var subdomain *ui.Entry
 func AddAccountQuestionBox(wm *WindowMap) *ui.Box {
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
+	wm.Box1 = vbox
 
-	vboxN := ui.NewVerticalBox()
-	vboxN.SetPadded(true)
-	vboxN.Append(ui.NewLabel("Enter your Subdomain:"), false)
+	hbox := ui.NewHorizontalBox()
+	hbox.SetPadded(true)
+	vbox.Append(hbox, false)
+
+	hbox.Append(ui.NewLabel("Enter your Subdomain or"), false)
+
+	generate := CreateButton(wm, nil, nil, "Make me a Subdomain", "SUBDOMAIN", generateSubdomain)
+	hbox.Append(generate, false)
 
 	subdomain = ui.NewEntry()
 	subdomain.SetReadOnly(false)
-
-	vboxN.Append(subdomain, false)
-
 	subdomain.OnChanged(func(*ui.Entry) {
 		log.Println("OK. subdomain =", subdomain.Text())
 	})
-	vbox.Append(vboxN, false)
+	vbox.Append(subdomain, false)
 
 	vbox.Append(ui.NewHorizontalSeparator(), false)
 
-	okButton := CreateButton(wm, nil, nil, "Make me a Subdomain", "SUBDOMAIN", generateSubdomain)
+	okButton := CreateButton(wm, nil, nil, "Create Subdomain Account", "SUBDOMAIN", addSubdomain)
 	vbox.Append(okButton, false)
 
 	return vbox
@@ -36,6 +39,13 @@ func AddAccountQuestionBox(wm *WindowMap) *ui.Box {
 func generateSubdomain(b *ButtonMap) {
 	log.Println("generateSubdomain START")
 	subdomain.SetText("cust00013.wit.dev")
+	log.Println("generateSubdomain END")
+}
+
+func addSubdomain(b *ButtonMap) {
+	log.Println("generateSubdomain START")
+	sub := subdomain.Text()
+	log.Println("generateSubdomain subdomain =", sub)
 	log.Println("generateSubdomain END")
 }
 

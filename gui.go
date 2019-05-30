@@ -175,6 +175,7 @@ func defaultButtonClick(button *ui.Button) {
 	for key, foo := range Data.AllButtons {
 		if (Data.Debug) {
 			log.Println("defaultButtonClick() Data.AllButtons =", key, foo)
+			spew.Dump(foo)
 		}
 		if Data.AllButtons[key].B == button {
 			log.Println("\tdefaultButtonClick() BUTTON MATCHED")
@@ -184,7 +185,7 @@ func defaultButtonClick(button *ui.Button) {
 				log.Println("\tdefaultButtonClick() DOING CUSTOM FUNCTION")
 				var tmp ButtonMap
 				tmp = Data.AllButtons[key]
-				spew.Dump(tmp)
+				// spew.Dump(tmp)
 				Data.AllButtons[key].custom(&tmp)
 				return
 			}

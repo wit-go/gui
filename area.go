@@ -28,6 +28,7 @@ func makeSplashArea(wm *WindowMap, ah *AreaHandler) {
 	// ah.Attrstr	= makeAttributedString()
 	ah.Area	= ui.NewArea(ah)
 	newB.A		= ah.Area
+	newB.WM	= wm
 	// Data.AllButtons[1].A = ah.Area
 	// ah.Button	= &Data.AllButtons[1]
 	ah.Button	= newB

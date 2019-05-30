@@ -3,6 +3,7 @@ package gui
 import "log"
 import "time"
 import "regexp"
+import "os"
 // import "reflect"
 
 import "github.com/andlabs/ui"
@@ -161,6 +162,11 @@ func AddVmsTab(wm *WindowMap, name string, count int, a *pb.Account) *TableData 
 }
 
 func ShowAccountQuestionTab(wm *WindowMap) {
+	log.Println("ShowAccountQuestionTab() wm =", wm)
+	if (wm.T == nil) {
+		log.Println("ShowAccountQuestionTab() wm.T = nil THIS IS BAD")
+		os.Exit(-1)
+	}
 	wm.T.Delete(0)
 
 	log.Println("Sleep(200)")
