@@ -210,26 +210,12 @@ func ShowMainTab(wm *WindowMap) {
 	wm.T.SetMargined(0, true)
 }
 
-/*
-func GoMainWindow() {
-	// Data.Window1 = new(WindowMap)
-	ui.Main(makeCloudWindow)
-}
-*/
-
 func StartNewWindow(c *pb.Config, action string) {
 	log.Println("InitNewWindow() Create a new window")
 	var newWindowMap WindowMap
 	newWindowMap.C = c
 	newWindowMap.Action = action
 	Data.Windows = append(Data.Windows, &newWindowMap)
-
-	/*
-	var newBM ButtonMap
-	newBM.Action	= "QUIT"
-	newBM.WM	= &newWindowMap
-	Data.AllButtons = append(Data.AllButtons, newBM)
-	*/
 
 	ui.OnShouldQuit(func() bool {
 		// mouseClick(&newBM)
@@ -297,47 +283,6 @@ func InitWindow() {
 	Data.Windows[i].W.Show()
 	Data.State = "splash"
 }
-
-/*
-func makeCloudWindow() {
-	Data.Window1.W = ui.NewWindow("", Data.Width, Data.Height, true)
-	// Window1.W.SetBorderless(true)
-
-        // create a 'fake' button entry for the mouse clicks
-	var newBM ButtonMap
-	newBM.Action	= "QUIT"
-	newBM.W		= Data.Window1.W
-	Data.AllButtons = append(Data.AllButtons, newBM)
-
-	Data.Window1.W.OnClosing(func(*ui.Window) bool {
-		mouseClick(&newBM)
-		return true
-	})
-	ui.OnShouldQuit(func() bool {
-		mouseClick(&newBM)
-		return true
-	})
-
-	Data.Window1.T = ui.NewTab()
-	Data.Window1.W.SetChild(Data.Window1.T)
-	Data.Window1.W.SetMargined(true)
-
-	// text := makeAttributedString()
-	// Data.Window1.Box1 = ShowSplashBox(Data.Window1.AreaText)
-
-	Data.Window1.T.Append("WIT Splash", Data.Window1.Box1)
-	Data.Window1.T.SetMargined(0, true)
-
-	Data.Window1.W.Show()
-	Data.State = "splash"
-}
-*/
-
-/*
-func AddVmConfigureTab(name string, pbVM *pb.Event_VM) {
-	CreateVmBox(Data.Window1.T, Data.CurrentVM)
-}
-*/
 
 // makeEntryBox(box, "hostname:", "blah.foo.org") {
 func makeEntryVbox(hbox *ui.Box, a string, startValue string, edit bool, action string) *EntryMap {
