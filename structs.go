@@ -17,8 +17,8 @@ var Data	GuiData
 
 type GuiData struct {
 	State		string
-	Width		int
-	Height		int
+	// Width		int
+	// Height		int
 
 	// a fallback default function to handle mouse events 
 	// if nothing else is defined to handle them

@@ -3,7 +3,7 @@ package gui
 import "log"
 import "time"
 import "regexp"
-import "reflect"
+// import "reflect"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
@@ -224,79 +224,68 @@ func StartNewWindow(c *pb.Config, bg bool, action string) {
 		return true
 	})
 
-	for i, aWM := range(Data.Windows) {
-		log.Println(aWM)
-		if (aWM.W == nil) {
-			log.Println("ShowWindow() THIS WINDOW IS NOT YET SHOWN i=", i)
-			log.Println("ShowWindow() THIS WINDOW IS NOT YET SHOWN aWM=", reflect.TypeOf(aWM))
-			// Data.NewWindow = &aWM
-			// Data.NewWindow = i
-			// ui.Main(InitWindow)
-			time.Sleep(200 * time.Millisecond)
-			if (bg) {
-				ui.Main(func() {
-					InitWindow(Data.Windows[i], i)
-				})
-			} else {
-				ui.Main(func() {
-					InitWindow(Data.Windows[i], i)
-				})
-			}
-			return
-		}
+	if (bg) {
+		log.Println("ShowWindow() IN NEW GOROUTINE")
+		go ui.Main(func() {
+			InitWindow(&newWindowMap)
+		})
+		time.Sleep(2000 * time.Millisecond)
+	} else {
+		log.Println("ShowWindow() WAITING for ui.Main()")
+		ui.Main(func() {
+			InitWindow(&newWindowMap)
+		})
 	}
 }
 
-func getSplashText() *ui.AttributedString {
+func getSplashText(a string) *ui.AttributedString {
 	var aText  *ui.AttributedString
-	aText = ui.NewAttributedString("Click to continue")
+	aText = ui.NewAttributedString(a)
 	return aText
 }
 
 
-func InitWindow(wm *WindowMap, i int) {
+func InitWindow(wm *WindowMap) {
 	log.Println("InitWindow() THIS WINDOW IS NOT YET SHOWN")
-	// i := Data.NewWindow
-	log.Println("InitWindow() THIS WINDOW IS NOT YET SHOWN i=", i)
 
-	c := Data.Windows[i].C
-	Data.Windows[i].W = ui.NewWindow("", int(c.Width), int(c.Height), true)
-	Data.Windows[i].W.SetBorderless(false)
+	c := wm.C
+	wm.W = ui.NewWindow("", int(c.Width), int(c.Height), true)
+	wm.W.SetBorderless(false)
 
         // create a 'fake' button entry for the mouse clicks
 	var newBM ButtonMap
 	newBM.Action	= "QUIT"
-	newBM.W		= Data.Windows[i].W
-	newBM.WM	= Data.Windows[i]
+	newBM.W		= wm.W
+	newBM.WM	= wm
 	Data.AllButtons = append(Data.AllButtons, newBM)
 
-	Data.Windows[i].W.OnClosing(func(*ui.Window) bool {
-		log.Println("InitWindow() OnClosing() THIS WINDOW IS CLOSING i=", i)
+	wm.W.OnClosing(func(*ui.Window) bool {
+		log.Println("InitWindow() OnClosing() THIS WINDOW IS CLOSING wm=", wm)
 		// mouseClick(&newBM)
                 ui.Quit()
 		return true
 	})
 
-	Data.Windows[i].T = ui.NewTab()
-	Data.Windows[i].W.SetChild(Data.Windows[i].T)
-	Data.Windows[i].W.SetMargined(true)
+	wm.T = ui.NewTab()
+	wm.W.SetChild(wm.T)
+	wm.W.SetMargined(true)
 
-	log.Println("InitWindow() i =", i)
-	log.Println("InitWindow() Data.Windows[i] =", Data.Windows[i])
-	log.Println("InitWindow() Data.Windows[i].Action =", Data.Windows[i].Action)
+	log.Println("InitWindow() wm =", wm)
+	log.Println("InitWindow() wm.Action =", wm.Action)
 
-	if (Data.Windows[i].Action == "SPLASH") {
+	if (wm.Action == "SPLASH") {
 		log.Println("InitWindow() TRYING SPLASH")
-		tmp := getSplashText()
+		damnit := "click" + string(c.Hostname)
+		tmp := getSplashText(damnit)
 		log.Println("InitWindow() TRYING SPLASH tmp =", tmp)
-		Data.Windows[i].Box1 = ShowSplashBox(Data.Windows[i], i, tmp)
+		wm.Box1 = ShowSplashBox(wm, tmp)
 
-		Data.Windows[i].T.Append("WIT Splash", Data.Windows[i].Box1)
-		Data.Windows[i].T.SetMargined(0, true)
+		wm.T.Append("WIT Splash", wm.Box1)
+		wm.T.SetMargined(0, true)
 	}
 
-	Data.Windows[i].W.Show()
 	Data.State = "splash"
+	wm.W.Show()
 }
 
 // makeEntryBox(box, "hostname:", "blah.foo.org") {

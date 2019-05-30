@@ -11,7 +11,7 @@ import "runtime"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-func ShowSplashBox(wm *WindowMap, i int, newText *ui.AttributedString) *ui.Box {
+func ShowSplashBox(wm *WindowMap, newText *ui.AttributedString) *ui.Box {
 	log.Println("ShowSplashBox() START")
 	log.Println("ShowSplashBox() START wm =", wm)
 	if (wm == nil) {
@@ -23,12 +23,12 @@ func ShowSplashBox(wm *WindowMap, i int, newText *ui.AttributedString) *ui.Box {
 	newbox.SetPadded(true)
 
 	// initialize the AreaHandler{}
-	Data.Windows[i].AH    = new(AreaHandler)
-	Data.Windows[i].AH.WM = wm
-	Data.Windows[i].AH.Attrstr = newText
-	makeSplashArea(Data.Windows[i].AH)
+	wm.AH    = new(AreaHandler)
+	wm.AH.WM = wm
+	wm.AH.Attrstr = newText
+	makeSplashArea(wm, wm.AH)
 
-	newbox.Append(Data.Windows[i].AH.Area, true)
+	newbox.Append(wm.AH.Area, true)
 
 	if runtime.GOOS == "linux" {
 		newbox.Append(ui.NewLabel("OS: Linux"), false)
