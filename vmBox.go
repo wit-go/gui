@@ -42,13 +42,20 @@ func CreateVmBox(wm *GuiWindow, tab *ui.Tab, vm *pb.Event_VM) {
 	hboxButtons.SetPadded(true)
 	vbox.Append(hboxButtons, false)
 
-	hboxButtons.Append(CreateButton(wm, nil, vm, "Power On",  "POWERON",  nil), false)
-	hboxButtons.Append(CreateButton(wm, nil, vm, "Power Off", "POWEROFF", nil), false)
-	hboxButtons.Append(CreateButton(wm, nil, vm, "Destroy",   "DESTROY",  nil), false)
-	hboxButtons.Append(CreateButton(wm, nil, vm, "ping",      "PING",     runPingClick), false)
-	hboxButtons.Append(CreateButton(wm, nil, vm, "Console",   "XTERM",    runTestExecClick), false)
-	hboxButtons.Append(CreateButton(wm, nil, vm, "Save",      "SAVE",     nil), false)
-	hboxButtons.Append(CreateButton(wm, nil, vm, "Done",      "DONE",     nil), false)
+	a := CreateButton(wm, nil, vm, "Power On",  "POWERON",  nil)
+	hboxButtons.Append(a.B, false)
+	a = CreateButton(wm, nil, vm, "Power Off", "POWEROFF", nil)
+	hboxButtons.Append(a.B, false)
+	a = CreateButton(wm, nil, vm, "Destroy",   "DESTROY",  nil)
+	hboxButtons.Append(a.B, false)
+	a = CreateButton(wm, nil, vm, "ping",      "PING",     runPingClick)
+	hboxButtons.Append(a.B, false)
+	a = CreateButton(wm, nil, vm, "Console",   "XTERM",    runTestExecClick)
+	hboxButtons.Append(a.B, false)
+	a = CreateButton(wm, nil, vm, "Save",      "SAVE",     nil)
+	hboxButtons.Append(a.B, false)
+	a = CreateButton(wm, nil, vm, "Done",      "DONE",     nil)
+	hboxButtons.Append(a.B, false)
 
 	AddBoxToTab(vm.Name, tab, vbox)
 }
@@ -86,7 +93,8 @@ func createAddVmBox(wm *GuiWindow, tab *ui.Tab, name string, b *GuiButton) {
 	hboxButtons.Append(AddButton(&newb, "Add Virtual Machine"), false)
 
 	// hboxButtons.Append(CreateButton(nil, nil, "Add Virtual Machine","CREATE",nil), false)
-	hboxButtons.Append(CreateButton(wm, nil, nil, "Cancel",		"CLOSE", nil), false)
+	a := CreateButton(wm, nil, nil, "Cancel",		"CLOSE", nil)
+	hboxButtons.Append(a.B, false)
 
 	name += " (" + b.Account.Nick + ")"
 	AddBoxToTab(name, tab, vbox)

@@ -57,9 +57,12 @@ func ShowSplashBox(wm *GuiWindow, newText *ui.AttributedString) *ui.Box {
 	}
 
 	log.Println("ShowSplashBox() START wm =", wm)
+
 	okButton := CreateButton(wm, nil, nil, "OK", "AREA", nil)
-	newbox.Append(okButton, false)
-	newbox.Append(CreateButton(wm, nil, nil, "NEWTEXT", "NEWTEXT", nil), false)
+	newbox.Append(okButton.B, false)
+
+	okButton = CreateButton(wm, nil, nil, "NEWTEXT", "NEWTEXT", nil)
+	newbox.Append(okButton.B, false)
 
 	// os.Exit(0)
 	return newbox

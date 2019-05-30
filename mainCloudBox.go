@@ -46,7 +46,8 @@ func makeCloudInfoBox(wm *GuiWindow) *ui.Box {
 	hostnameEntry.SetText(tmp)
 	hostnameEntry.SetReadOnly(true)
 
-	hostnamebox.Append(CreateButton(wm, nil, nil, "Edit", "EDIT", nil), false)
+	anew := CreateButton(wm, nil, nil, "Edit", "EDIT", nil)
+	hostnamebox.Append(anew.B, false)
 
 	vbox.Append(ui.NewHorizontalSeparator(), false)
 
@@ -73,11 +74,11 @@ func makeCloudInfoBox(wm *GuiWindow) *ui.Box {
 
 		name := "Login " + Data.Config.Accounts[key].Nick
 		l := CreateButton(wm, Data.Config.Accounts[key], nil, name, "LOGIN", nil)
-		agrid.Append(l, 4, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+		agrid.Append(l.B, 4, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 		name  = "Show " + Data.Config.Accounts[key].Nick
 		b := CreateButton(wm, Data.Config.Accounts[key], nil, name, "SHOW", nil)
-		agrid.Append(b, 5, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+		agrid.Append(b.B, 5, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 		row += 1
 	}
@@ -86,9 +87,9 @@ func makeCloudInfoBox(wm *GuiWindow) *ui.Box {
 	agrid.Append(ui.NewLabel(""),    1, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 	row += 1
 	a := CreateButton(wm, nil, nil, "Add Account", "ADD TAB", nil)
-	agrid.Append(a, 4, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+	agrid.Append(a.B, 4, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 	q := CreateButton(wm, nil, nil, "Quit", "QUIT", nil)
-	agrid.Append(q, 5, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+	agrid.Append(q.B, 5, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 	vbox.Append(agrid, false)
 	return hbox

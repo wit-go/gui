@@ -90,8 +90,10 @@ func AddTableTab(wm *GuiWindow, mytab *ui.Tab, junk int, name string, rowcount i
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 
-	hbox.Append(CreateButton(wm, account, nil, "Add Virtual Machine", "createAddVmBox", nil), false)
-	hbox.Append(CreateButton(wm, account, nil, "Close", "CLOSE", nil), false)
+	a := CreateButton(wm, account, nil, "Add Virtual Machine", "createAddVmBox", nil)
+	hbox.Append(a.B, false)
+	b := CreateButton(wm, account, nil, "Add Virtual Machine", "createAddVmBox", nil)
+	hbox.Append(b.B, false)
 
 	vbox.Append(hbox, false)
 
@@ -210,11 +212,12 @@ func AddButton(b *GuiButton, name string) *ui.Button {
 }
 
 func CreateButton(wm *GuiWindow, a *pb.Account, vm *pb.Event_VM,
-		name string, action string, custom func(*GuiButton)) *ui.Button {
+		name string, action string, custom func(*GuiButton)) *GuiButton {
 	newUiB := ui.NewButton(name)
 	newUiB.OnClicked(defaultButtonClick)
 
-	var newB GuiButton
+	var newB *GuiButton
+	newB = new(GuiButton)
 	newB.B	= newUiB
 	newB.T	= wm.T
 	newB.Account	= a
@@ -222,9 +225,9 @@ func CreateButton(wm *GuiWindow, a *pb.Account, vm *pb.Event_VM,
 	newB.WM	= wm
 	newB.Action	= action
 	newB.custom	= custom
-	Data.AllButtons	= append(Data.AllButtons, newB)
+	Data.AllButtons	= append(Data.AllButtons, *newB)
 
-	return newUiB
+	return newB
 }
 
 func CreateFontButton(wm *GuiWindow, action string) *GuiButton {
