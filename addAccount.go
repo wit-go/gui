@@ -5,12 +5,34 @@ import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-var subdomain *ui.Entry
+import "github.com/davecgh/go-spew/spew"
+
+// var subdomain *ui.Entry
+
+func AddEntry(box *GuiBox, name string) *GuiEntry {
+	var ge *GuiEntry
+	ge = new(GuiEntry)
+
+	ue := ui.NewEntry()
+	ue.SetReadOnly(false)
+	ue.OnChanged(func(*ui.Entry) {
+		log.Println("gui.AddEntry() OK. ue.Text() =", ue.Text())
+	})
+	box.UiBox.Append(ue, false)
+
+	ge.E = ue
+
+	return ge
+}
 
 func AddAccountQuestionBox(wm *GuiWindow) *ui.Box {
+	var gb *GuiBox
+	gb = new(GuiBox)
+
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
 	wm.Box1 = vbox
+	gb.UiBox = vbox
 
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
@@ -21,12 +43,7 @@ func AddAccountQuestionBox(wm *GuiWindow) *ui.Box {
 	generate := CreateButton(wm, nil, nil, "Generate", "SUBDOMAIN", generateSubdomain)
 	hbox.Append(generate, false)
 
-	subdomain = ui.NewEntry()
-	subdomain.SetReadOnly(false)
-	subdomain.OnChanged(func(*ui.Entry) {
-		log.Println("OK. subdomain =", subdomain.Text())
-	})
-	vbox.Append(subdomain, false)
+	AddEntry(gb, "SUBDOMAIN")
 
 	vbox.Append(ui.NewHorizontalSeparator(), false)
 
@@ -38,14 +55,27 @@ func AddAccountQuestionBox(wm *GuiWindow) *ui.Box {
 
 func generateSubdomain(b *GuiButton) {
 	log.Println("generateSubdomain START")
-	subdomain.SetText("cust00013.wit.dev")
+	if (b == nil) {
+		log.Println("generateSubdomain ERROR b == nil")
+		return
+	}
+	if (b.Box == nil) {
+		log.Println("generateSubdomain ERROR b.Box == nil")
+		return
+	}
+	if (b.Box.EntryMap == nil) {
+		log.Println("generateSubdomain ERROR b.Box.EntryMap == nil")
+		return
+	}
+	spew.Dump(b.Box.EntryMap)
+	// subdomain.SetText("cust00013.wit.dev")
 	log.Println("generateSubdomain END")
 }
 
 func addSubdomain(b *GuiButton) {
 	log.Println("generateSubdomain START")
-	sub := subdomain.Text()
-	log.Println("generateSubdomain subdomain =", sub)
+	// sub := subdomain.Text()
+	// log.Println("generateSubdomain subdomain =", sub)
 	log.Println("generateSubdomain END")
 }
 

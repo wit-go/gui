@@ -66,6 +66,7 @@ type GuiButton struct {
 	W		*ui.Window
 	T		*ui.Tab
 
+	Box		*GuiBox
 	AH		*GuiArea
 
 	// git.wit.com/wit/gui stuff
@@ -76,6 +77,14 @@ type GuiButton struct {
 
 	// a callback function for the main application
 	custom		func (*GuiButton)
+}
+
+type GuiBox struct {
+	W		*GuiWindow
+	EntryMap	map[string][]*GuiEntry
+	A		*GuiArea
+
+	UiBox		*ui.Box
 }
 
 type GuiEntry struct {
@@ -94,12 +103,6 @@ type GuiEntry struct {
 	T		*ui.Tab
 
 	Action		string	// what type of button
-}
-
-type GuiBox struct {
-	W		*GuiWindow
-	EntryMap	map[string][]*GuiEntry
-	A		*GuiArea
 }
 
 type GuiWindow struct {
