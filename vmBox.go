@@ -10,6 +10,7 @@ import pb "git.wit.com/wit/witProtobuf"
 
 import "github.com/davecgh/go-spew/spew"
 
+/*
 func GoShowVM() {
 	ui.Main(ShowVM)
 }
@@ -41,12 +42,13 @@ func ShowVM() {
 	CreateVmBox(VMtab, Data.CurrentVM)
 	VMwin.Show()
 }
+*/
 
-func AddVmConfigureTab(name string, pbVM *pb.Event_VM) {
-	CreateVmBox(Data.Window1.T, Data.CurrentVM)
+func AddVmConfigureTab(wm *WindowMap, name string, pbVM *pb.Event_VM) {
+	CreateVmBox(wm, wm.T, Data.CurrentVM)
 }
 
-func CreateVmBox(tab *ui.Tab, vm *pb.Event_VM) {
+func CreateVmBox(wm *WindowMap, tab *ui.Tab, vm *pb.Event_VM) {
 	log.Println("CreateVmBox() START")
 	log.Println("CreateVmBox() vm.Name", vm.Name)
 	spew.Dump(vm)
@@ -74,18 +76,18 @@ func CreateVmBox(tab *ui.Tab, vm *pb.Event_VM) {
 	hboxButtons.SetPadded(true)
 	vbox.Append(hboxButtons, false)
 
-	hboxButtons.Append(CreateButton(nil, vm, "Power On",  "POWERON",  nil), false)
-	hboxButtons.Append(CreateButton(nil, vm, "Power Off", "POWEROFF", nil), false)
-	hboxButtons.Append(CreateButton(nil, vm, "Destroy",   "DESTROY",  nil), false)
-	hboxButtons.Append(CreateButton(nil, vm, "ping",      "PING",     runPingClick), false)
-	hboxButtons.Append(CreateButton(nil, vm, "Console",   "XTERM",    runTestExecClick), false)
-	hboxButtons.Append(CreateButton(nil, vm, "Save",      "SAVE",     nil), false)
-	hboxButtons.Append(CreateButton(nil, vm, "Done",      "DONE",     nil), false)
+	hboxButtons.Append(CreateButton(wm, nil, vm, "Power On",  "POWERON",  nil), false)
+	hboxButtons.Append(CreateButton(wm, nil, vm, "Power Off", "POWEROFF", nil), false)
+	hboxButtons.Append(CreateButton(wm, nil, vm, "Destroy",   "DESTROY",  nil), false)
+	hboxButtons.Append(CreateButton(wm, nil, vm, "ping",      "PING",     runPingClick), false)
+	hboxButtons.Append(CreateButton(wm, nil, vm, "Console",   "XTERM",    runTestExecClick), false)
+	hboxButtons.Append(CreateButton(wm, nil, vm, "Save",      "SAVE",     nil), false)
+	hboxButtons.Append(CreateButton(wm, nil, vm, "Done",      "DONE",     nil), false)
 
 	AddBoxToTab(Data.CurrentVM.Name, tab, vbox)
 }
 
-func createAddVmBox(tab *ui.Tab, name string, b *ButtonMap) {
+func createAddVmBox(wm *WindowMap, tab *ui.Tab, name string, b *ButtonMap) {
 	log.Println("createAddVmBox() START")
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
@@ -118,7 +120,7 @@ func createAddVmBox(tab *ui.Tab, name string, b *ButtonMap) {
 	hboxButtons.Append(AddButton(&newb, "Add Virtual Machine"), false)
 
 	// hboxButtons.Append(CreateButton(nil, nil, "Add Virtual Machine","CREATE",nil), false)
-	hboxButtons.Append(CreateButton(nil, nil, "Cancel",		"CLOSE", nil), false)
+	hboxButtons.Append(CreateButton(wm, nil, nil, "Cancel",		"CLOSE", nil), false)
 
 	name += " (" + b.Account.Nick + ")"
 	AddBoxToTab(name, tab, vbox)

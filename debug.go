@@ -15,6 +15,7 @@ import "github.com/davecgh/go-spew/spew"
 // import pb "git.wit.com/wit/witProtobuf"
 
 // can not pass any args to this (?)
+/*
 func setupCloudUI() {
 	Data.Window1.W = ui.NewWindow("Cloud Control Panel", Data.Width, Data.Height, false)
 	Data.Window1.W.OnClosing(func(*ui.Window) bool {
@@ -36,6 +37,7 @@ func setupCloudUI() {
 
 	Data.Window1.W.Show()
 }
+*/
 
 func addTableTab() {
 	var parts []TableColumnData
@@ -51,15 +53,15 @@ func addTableTab() {
 
 	log.Println("Sleep for 2 seconds, then try to add new tabs")
 	time.Sleep(1 * 1000 * 1000 * 1000)
-	AddTableTab(Data.Window1.T, 1, "test seven", 7, parts, nil)
+	// AddTableTab(Data.Window1.T, 1, "test seven", 7, parts, nil)
 }
 
-func addDebuggingButtons(vbox *ui.Box) {
+func addDebuggingButtons(wm *WindowMap, vbox *ui.Box) {
 	vbox.Append(ui.NewLabel("Debugging:"), false)
 
 	vbox.Append(ui.NewColorButton(), false)
-	vbox.Append(CreateButton(nil, nil, "Add Account", "ADD", nil), false)
-	vbox.Append(CreateButton(nil, nil, "Quit", "QUIT", nil), false)
+	vbox.Append(CreateButton(wm, nil, nil, "Add Account", "ADD", nil), false)
+	vbox.Append(CreateButton(wm, nil, nil, "Quit", "QUIT", nil), false)
 
 	// ATTEMPT TO ADD THE TABLE HERE
 	add2button := ui.NewButton("Add a Test Table")
@@ -70,21 +72,23 @@ func addDebuggingButtons(vbox *ui.Box) {
 	vbox.Append(add2button, false)
 	// ATTEMPT TO ADD THE TABLE HERE END
 
-	vbox.Append(CreateButton(nil, nil, "Hide & Show Box1&2", "HIDE", runTestHide), false)
+	vbox.Append(CreateButton(wm, nil, nil, "Hide & Show Box1&2", "HIDE", runTestHide), false)
 
-	vbox.Append(CreateButton(nil, nil, "Close GUI", "QUIT", nil), false)
-	vbox.Append(CreateButton(nil, nil, "DEBUG goroutines", "DEBUG", nil), false)
-	vbox.Append(CreateButton(nil, nil, "xterm", "XTERM", runTestExecClick), false)
-	vbox.Append(CreateButton(nil, nil, "Load test.json config file", "CONFIG", nil), false)
+	vbox.Append(CreateButton(wm, nil, nil, "Close GUI", "QUIT", nil), false)
+	vbox.Append(CreateButton(wm, nil, nil, "DEBUG goroutines", "DEBUG", nil), false)
+	vbox.Append(CreateButton(wm, nil, nil, "xterm", "XTERM", runTestExecClick), false)
+	vbox.Append(CreateButton(wm, nil, nil, "Load test.json config file", "CONFIG", nil), false)
 }
 
 func runTestHide(b *ButtonMap) {
+	/*
 	log.Println("runTestHide START")
 	Data.Window1.Box1.Hide()
 	Data.Window1.Box2.Hide()
 	// time.Sleep(2000 * time.Millisecond)
 	Data.State = "HIDE"
 	log.Println("runTestHide END")
+	*/
 }
 
 func runPingClick(b *ButtonMap) {

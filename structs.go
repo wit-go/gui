@@ -53,7 +53,9 @@ type GuiDataStructure struct {
 	// pass it in
 	CurrentVM	*pb.Event_VM
 
-	Window1		*WindowMap
+	Windows		[]*WindowMap
+	NewWindow	int
+//	Window1		*WindowMap
 	Window2		*WindowMap
 
 	EntryNick	*ui.Entry
@@ -92,8 +94,11 @@ type WindowMap struct {
 	Box1		*ui.Box
 	Box2		*ui.Box
 
+	C		*pb.Config
+
 	AH		*AreaHandler
-	AreaText	*ui.AttributedString
+//	AreaText	*ui.AttributedString
+	Action		string
 }
 
 type FontString struct {
@@ -104,17 +109,22 @@ type FontString struct {
 }
 
 type ButtonMap struct {
+	// andlabs/ui stuff
 	B		*ui.Button
 	FB		*ui.FontButton
 	A		*ui.Area
 	W		*ui.Window
 	T		*ui.Tab
 
+	AH		*AreaHandler
+
+	// git.wit.com/wit/gui stuff
+	WM		*WindowMap
 	Account		*pb.Account
 	VM		*pb.Event_VM
-	AH		*AreaHandler
 	Action		string	// what type of button
 
+	// a callback function for the main application
 	custom		func (*ButtonMap)
 }
 
@@ -124,6 +134,7 @@ type AreaHandler struct{
 	Button		*ButtonMap
 	Attrstr		*ui.AttributedString
 	Area		*ui.Area
+	WM		*WindowMap
 }
 // AREA STRUCTURES END
 

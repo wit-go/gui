@@ -41,7 +41,7 @@ func InitColumns(mh *TableData, parts []TableColumnData) {
 	}
 }
 
-func AddTableTab(mytab *ui.Tab, junk int, name string, rowcount int, parts []TableColumnData, account *pb.Account) *TableData {
+func AddTableTab(wm *WindowMap, mytab *ui.Tab, junk int, name string, rowcount int, parts []TableColumnData, account *pb.Account) *TableData {
 	mh := new(TableData)
 
 	mh.RowCount    = rowcount
@@ -90,26 +90,26 @@ func AddTableTab(mytab *ui.Tab, junk int, name string, rowcount int, parts []Tab
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 
-	hbox.Append(CreateButton(account, nil, "Add Virtual Machine", "createAddVmBox", nil), false)
-	hbox.Append(CreateButton(account, nil, "Close", "CLOSE", nil), false)
+	hbox.Append(CreateButton(wm, account, nil, "Add Virtual Machine", "createAddVmBox", nil), false)
+	hbox.Append(CreateButton(wm, account, nil, "Close", "CLOSE", nil), false)
 
 	vbox.Append(hbox, false)
 
 	return mh
 }
 
-func SocketError() {
-	ui.MsgBoxError(Data.Window1.W,
+func SocketError(wm *WindowMap) {
+	ui.MsgBoxError(wm.W,
 		"There was a socket error",
 		"More detailed information can be shown here.")
 }
 
-func MessageWindow(msg1 string, msg2 string) {
-	ui.MsgBox(Data.Window1.W, msg1, msg2)
+func MessageWindow(wm *WindowMap, msg1 string, msg2 string) {
+	ui.MsgBox(wm.W, msg1, msg2)
 }
 
-func ErrorWindow(msg1 string, msg2 string) {
-	ui.MsgBoxError(Data.Window1.W, msg1, msg2)
+func ErrorWindow(wm *WindowMap, msg1 string, msg2 string) {
+	ui.MsgBoxError(wm.W, msg1, msg2)
 }
 
 // This is the default mouse click handler
@@ -131,7 +131,7 @@ func mouseClick(b *ButtonMap) {
 		log.Println("\tgui.mouseClick() START b.Action =", b.Action)
 		if (b.Action == "createAddVmBox") {
 			log.Println("\tgui.mouseClick() createAddVmBox for b =", b)
-			createAddVmBox(Data.Window1.T, "Create New Virtual Machine", b)
+			createAddVmBox(b.WM, b.T, "Create New Virtual Machine", b)
 			return
 		}
 		/*
@@ -208,16 +208,17 @@ func AddButton(b *ButtonMap, name string) *ui.Button {
 	return newB
 }
 
-func CreateButton(a *pb.Account, vm *pb.Event_VM,
+func CreateButton(wm *WindowMap, a *pb.Account, vm *pb.Event_VM,
 		name string, action string, custom func(*ButtonMap)) *ui.Button {
 	newB := ui.NewButton(name)
 	newB.OnClicked(defaultButtonClick)
 
 	var newmap ButtonMap
 	newmap.B	= newB
-	newmap.T	= Data.Window1.T
+	newmap.T	= wm.T
 	newmap.Account	= a
 	newmap.VM	= vm
+	newmap.WM	= wm
 	newmap.Action	= action
 	newmap.custom	= custom
 	Data.AllButtons	= append(Data.AllButtons, newmap)
@@ -225,14 +226,14 @@ func CreateButton(a *pb.Account, vm *pb.Event_VM,
 	return newB
 }
 
-func CreateFontButton(action string) *ButtonMap {
+func CreateFontButton(wm *WindowMap, action string) *ButtonMap {
 	newB := ui.NewFontButton()
 
         // create a 'fake' button entry for the mouse clicks
 	var newBM	ButtonMap
 	newBM.Action	= action
 	newBM.FB	= newB
-	newBM.AH	= Data.Window1.AH
+	newBM.AH	= wm.AH
 	Data.AllButtons	= append(Data.AllButtons, newBM)
 
 	newB.OnChanged(func (*ui.FontButton) {

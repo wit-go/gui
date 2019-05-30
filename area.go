@@ -23,7 +23,8 @@ func findFB(button *ButtonMap) *ButtonMap {
 func makeSplashArea(ah *AreaHandler) {
 	// make this button just to get the default font (but don't display the button)
 	// There should be another way to do this (?)
-	newB		:= CreateFontButton("AREA")
+	wm := ah.WM
+	newB		:= CreateFontButton(wm, "AREA")
 
 	// ah.Attrstr	= makeAttributedString()
 	ah.Area	= ui.NewArea(ah)

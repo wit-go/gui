@@ -5,23 +5,23 @@ import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-func AddAccountQuestionBox() *ui.Box {
+func AddAccountQuestionBox(wm *WindowMap) *ui.Box {
 	newbox := ui.NewVerticalBox()
 	newbox.SetPadded(true)
 
-	newButton := CreateButton(nil, nil, "Create New Account", "AREA", nil)
+	newButton := CreateButton(wm, nil, nil, "Create New Account", "AREA", nil)
 	newbox.Append(newButton, false)
 
 	newbox.Append(ui.NewHorizontalSeparator(), false)
 
-	okButton := CreateButton(nil, nil, "I Have an Account", "AREA", nil)
+	okButton := CreateButton(wm, nil, nil, "I Have an Account", "AREA", nil)
 	newbox.Append(okButton, false)
 
 	return newbox
 }
 
 // func AddAccountBox(aTab *GuiTabStructure) {
-func AddAccountBox() *ui.Box {
+func AddAccountBox(wm *WindowMap) *ui.Box {
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
 //	aTab.firstBox = vbox
@@ -121,10 +121,10 @@ func AddAccountBox() *ui.Box {
 	hboxButtons.SetPadded(true)
 	vbox.Append(hboxButtons, false)
 
-	okButton := CreateButton(nil, nil, "Add Account", "ADD", nil)
+	okButton := CreateButton(wm, nil, nil, "Add Account", "ADD", nil)
 	hboxButtons.Append(okButton, false)
 
-	backButton := CreateButton(nil, nil, "Back", "BACK", nil)
+	backButton := CreateButton(wm, nil, nil, "Back", "BACK", nil)
 	hboxButtons.Append(backButton, false)
 
 	return vbox
