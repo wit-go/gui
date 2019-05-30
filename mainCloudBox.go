@@ -55,9 +55,8 @@ func makeCloudInfoBox(wm *GuiWindow) *ui.Box {
 	agrid.SetPadded(true)
 
 	agrid.Append(ui.NewLabel("Accounts:"),   0, 0, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
-	agrid.Append(ui.NewLabel("Nickname"),    1, 0, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
-	agrid.Append(ui.NewLabel("Username"),    2, 0, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
-	agrid.Append(ui.NewLabel("Domain Name"), 3, 0, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+	agrid.Append(ui.NewLabel("Domain Name"), 1, 0, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+	agrid.Append(ui.NewLabel("Email"),       2, 0, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 	row := 1
 
@@ -68,17 +67,16 @@ func makeCloudInfoBox(wm *GuiWindow) *ui.Box {
 		log.Println("account.Username = ", Data.Config.Accounts[key].Username)
 		log.Println("account.Token =    ", Data.Config.Accounts[key].Token)
 
-		agrid.Append(ui.NewLabel(Data.Config.Accounts[key].Nick),	1, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
-		agrid.Append(ui.NewLabel(Data.Config.Accounts[key].Username),	2, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
-		agrid.Append(ui.NewLabel(Data.Config.Accounts[key].Domain),	3, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+		agrid.Append(ui.NewLabel(Data.Config.Accounts[key].Domain),	1, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+		agrid.Append(ui.NewLabel(Data.Config.Accounts[key].Email),	2, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 		name := "Login " + Data.Config.Accounts[key].Nick
 		l := CreateButton(wm, Data.Config.Accounts[key], nil, name, "LOGIN", nil)
-		agrid.Append(l.B, 4, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+		agrid.Append(l.B, 3, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 		name  = "Show " + Data.Config.Accounts[key].Nick
 		b := CreateButton(wm, Data.Config.Accounts[key], nil, name, "SHOW", nil)
-		agrid.Append(b.B, 5, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
+		agrid.Append(b.B, 4, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 		row += 1
 	}
