@@ -11,7 +11,7 @@ import pb "git.wit.com/wit/witProtobuf"
 import "github.com/davecgh/go-spew/spew"
 
 func AddVmConfigureTab(wm *GuiWindow, name string, pbVM *pb.Event_VM) {
-	CreateVmBox(wm, wm.T, pbVM)
+	CreateVmBox(wm, wm.UiTab, pbVM)
 }
 
 func CreateVmBox(wm *GuiWindow, tab *ui.Tab, vm *pb.Event_VM) {

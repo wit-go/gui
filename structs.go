@@ -76,10 +76,10 @@ type GuiWindow struct {
 	C		*pb.Config
 
 	W		*ui.Window
-	T		*ui.Tab		// if this != nil, the window is 'tabbed'
+	UiTab		*ui.Tab		// if this != nil, the window is 'tabbed'
 	BoxMap		map[string]*GuiBox
-	Box1		*ui.Box
-	Box2		*ui.Box
+//	Box1		*ui.Box
+//	Box2		*ui.Box
 }
 
 

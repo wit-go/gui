@@ -35,7 +35,7 @@ func AddAccountQuestionBox(gw *GuiWindow) *GuiBox {
 
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
-	gw.Box1 = vbox
+	// gw.Box1 = vbox
 	gb.UiBox = vbox
 
 	hbox := ui.NewHorizontalBox()
@@ -91,7 +91,7 @@ func AddAccountBox(gw *GuiWindow) *GuiBox {
 
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
-	gw.Box1 = vbox
+	// gw.Box1 = vbox
 	gb.UiBox = vbox
 
 	hboxAccount := ui.NewHorizontalBox()

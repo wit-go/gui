@@ -218,12 +218,12 @@ func CreateButton(gw *GuiWindow, a *pb.Account, vm *pb.Event_VM,
 	newUiB.OnClicked(defaultButtonClick)
 
 	var newB *GuiButton
-	newB = new(GuiButton)
-	newB.B	= newUiB
-	newB.T	= gw.T
+	newB		= new(GuiButton)
+	newB.B		= newUiB
+	newB.T		= gw.UiTab
 	newB.Account	= a
-	newB.VM	= vm
-	newB.WM	= gw
+	newB.VM		= vm
+	newB.WM		= gw
 	newB.Action	= action
 	newB.custom	= custom
 	Data.AllButtons	= append(Data.AllButtons, newB)

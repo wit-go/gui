@@ -13,9 +13,17 @@ import pb "git.wit.com/wit/witProtobuf"
 
 // import "github.com/davecgh/go-spew/spew"
 
-func makeCloudInfoBox(gw *GuiWindow) *ui.Box {
+func makeCloudInfoBox(gw *GuiWindow) *GuiBox {
+	var gb *GuiBox
+	gb = new(GuiBox)
+
+	gb.EntryMap = make(map[string]*GuiEntry)
+	gb.EntryMap["test"] = nil
+
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
+	// gw.Box1 = hbox
+	gb.UiBox = hbox
 
 	if (Data.Debug) {
 		log.Println("makeCloudInfoBox() add debugging buttons")
@@ -90,7 +98,7 @@ func makeCloudInfoBox(gw *GuiWindow) *ui.Box {
 	agrid.Append(q.B, 5, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 	vbox.Append(agrid, false)
-	return hbox
+	return gb
 }
 
 //
@@ -156,26 +164,26 @@ func AddVmsTab(gw *GuiWindow, name string, count int, a *pb.Account) *TableData 
 	parts = append(parts, tmp)
 	human += 1
 
-	mh := AddTableTab(gw, gw.T, 1, name, count, parts, a)
+	mh := AddTableTab(gw, gw.UiTab, 1, name, count, parts, a)
 	return mh
 }
 
 func ShowAccountQuestionTab(gw *GuiWindow) {
 	log.Println("ShowAccountQuestionTab() gw =", gw)
-	if (gw.T == nil) {
-		log.Println("ShowAccountQuestionTab() gw.T = nil THIS IS BAD")
+	if (gw.UiTab == nil) {
+		log.Println("ShowAccountQuestionTab() gw.UiTab = nil THIS IS BAD")
 		os.Exit(-1)
 	}
-	gw.T.Delete(0)
+	gw.UiTab.Delete(0)
 
 	log.Println("Sleep(200)")
 	time.Sleep(200 * time.Millisecond)
 
 	abox := AddAccountQuestionBox(gw)
-	gw.BoxMap["MAIN"] = abox
+	gw.BoxMap["Box2"] = abox
 	// gw.Box2 = AddAccountQuestionBox(gw)
-	gw.T.InsertAt("New Account?", 0, abox.UiBox)
-	gw.T.SetMargined(0, true)
+	gw.UiTab.InsertAt("New Account?", 0, abox.UiBox)
+	gw.UiTab.SetMargined(0, true)
 }
 
 func ShowAccountTab(gw *GuiWindow, i int) {
@@ -188,33 +196,34 @@ func ShowAccountTab(gw *GuiWindow, i int) {
 	abox := AddAccountBox(gw)
 
 	// Set the parents and data structure links
-	// aTab.me = gw.T
+	// aTab.me = gw.UiTab
 	// aTab.parentWindow = Data.Window1.W
 	// aTab.tabOffset = 0
 
 	if (i >= 0) {
 		log.Println("ShowAccountTab() InsertAt i=", i)
-		gw.T.Delete(0)
-		gw.T.InsertAt("Add Account", i, abox.UiBox)
-		gw.T.SetMargined(0, true)
+		gw.UiTab.Delete(0)
+		gw.UiTab.InsertAt("Add Account", i, abox.UiBox)
+		gw.UiTab.SetMargined(0, true)
 	} else {
 		// TODO: After append try to discover the tab index #
 		log.Println("ShowAccountTab() Append")
-		AddBoxToTab("Create New Account", gw.T, abox.UiBox)
+		AddBoxToTab("Create New Account", gw.UiTab, abox.UiBox)
 	}
 }
 
 func ShowMainTab(gw *GuiWindow) {
 	log.Println("ShowMainTab() gw =", gw)
-	log.Println("ShowMainTab() gw.T =", gw.T)
-	gw.T.Delete(0)
+	log.Println("ShowMainTab() gw.UiTab =", gw.UiTab)
+	gw.UiTab.Delete(0)
 
 	log.Println("Sleep(200)")
 	time.Sleep(200 * time.Millisecond)
 
-	gw.Box2 = makeCloudInfoBox(gw)
-	gw.T.InsertAt("Main", 0, gw.Box2)
-	gw.T.SetMargined(0, true)
+	abox := makeCloudInfoBox(gw)
+	gw.BoxMap["Box3"] = abox
+	gw.UiTab.InsertAt("Main", 0, abox.UiBox)
+	gw.UiTab.SetMargined(0, true)
 }
 
 func GuiInit() {
@@ -277,8 +286,8 @@ func InitWindow(gw *GuiWindow) {
 		return true
 	})
 
-	gw.T = ui.NewTab()
-	gw.W.SetChild(gw.T)
+	gw.UiTab = ui.NewTab()
+	gw.W.SetChild(gw.UiTab)
 	gw.W.SetMargined(true)
 
 	log.Println("InitWindow() gw =", gw)
@@ -289,10 +298,10 @@ func InitWindow(gw *GuiWindow) {
 		damnit := "click" + string(c.Hostname)
 		tmp := getSplashText(damnit)
 		log.Println("InitWindow() TRYING SPLASH tmp =", tmp)
-		gw.Box1 = ShowSplashBox(gw, tmp)
+		abox := ShowSplashBox(gw, tmp)
 
-		gw.T.Append("WIT Splash", gw.Box1)
-		gw.T.SetMargined(0, true)
+		gw.UiTab.Append("WIT Splash", abox.UiBox)
+		gw.UiTab.SetMargined(0, true)
 	}
 
 	Data.State = "splash"

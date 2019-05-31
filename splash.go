@@ -11,7 +11,7 @@ import "runtime"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-func ShowSplashBox(wm *GuiWindow, newText *ui.AttributedString) *ui.Box {
+func ShowSplashBox(wm *GuiWindow, newText *ui.AttributedString) *GuiBox {
 	log.Println("ShowSplashBox() START")
 	log.Println("ShowSplashBox() START wm =", wm)
 	if (wm == nil) {
@@ -19,14 +19,23 @@ func ShowSplashBox(wm *GuiWindow, newText *ui.AttributedString) *ui.Box {
 		os.Exit(0)
 		return nil
 	}
+	var gb *GuiBox
+	gb = new(GuiBox)
+
+	gb.EntryMap = make(map[string]*GuiEntry)
+	gb.EntryMap["test"] = nil
+
 	newbox := ui.NewVerticalBox()
 	newbox.SetPadded(true)
+	// gw.Box1 = hbox
+	gb.UiBox = newbox
 
 	// initialize the GuiArea{}
 	wm.Area		= new(GuiArea)
 	wm.Area.Window	= wm
 	wm.Area.UiAttrstr = newText
 	makeSplashArea(wm, wm.Area)
+	gb.Area		= wm.Area
 
 	newbox.Append(wm.Area.UiArea, true)
 
@@ -65,5 +74,5 @@ func ShowSplashBox(wm *GuiWindow, newText *ui.AttributedString) *ui.Box {
 	newbox.Append(okButton.B, false)
 
 	// os.Exit(0)
-	return newbox
+	return gb
 }
