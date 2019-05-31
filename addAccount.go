@@ -1,13 +1,12 @@
 package gui
 
 import "log"
-import "fmt"
+// import "fmt"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-import "github.com/davecgh/go-spew/spew"
-
+// import "github.com/davecgh/go-spew/spew"
 // var subdomain *ui.Entry
 
 func AddEntry(box *GuiBox, name string) *GuiEntry {
@@ -27,16 +26,16 @@ func AddEntry(box *GuiBox, name string) *GuiEntry {
 	return ge
 }
 
-func AddAccountQuestionBox(wm *GuiWindow) *ui.Box {
+func AddAccountQuestionBox(gw *GuiWindow) *GuiBox {
 	var gb *GuiBox
 	gb = new(GuiBox)
-	gb.EntryMap = make(map[string]*GuiEntry)
 
+	gb.EntryMap = make(map[string]*GuiEntry)
 	gb.EntryMap["test"] = nil
 
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
-	wm.Box1 = vbox
+	gw.Box1 = vbox
 	gb.UiBox = vbox
 
 	hbox := ui.NewHorizontalBox()
@@ -45,7 +44,7 @@ func AddAccountQuestionBox(wm *GuiWindow) *ui.Box {
 
 	hbox.Append(ui.NewLabel("Enter your Subdomain or"), false)
 
-	button1 := CreateButton(wm, nil, nil, "Generate", "SUBDOMAIN", generateSubdomain)
+	button1 := CreateButton(gw, nil, nil, "Generate", "SUBDOMAIN", generateSubdomain)
 	button1.Box = gb
 	hbox.Append(button1.B, false)
 
@@ -54,50 +53,11 @@ func AddAccountQuestionBox(wm *GuiWindow) *ui.Box {
 
 	vbox.Append(ui.NewHorizontalSeparator(), false)
 
-	button2 := CreateButton(wm, nil, nil, "Create Subdomain Account", "ADD", nil)
+	button2 := CreateButton(gw, nil, nil, "Create Subdomain Account", "ADD", nil)
 	button2.Box = gb
 	vbox.Append(button2.B, false)
 
-	return vbox
-}
-
-func GetText(box *GuiBox, name string) string {
-	if (box == nil) {
-		log.Println("gui.GetText() ERROR box == nil")
-		return ""
-	}
-	if (box.EntryMap == nil) {
-		log.Println("gui.GetText() ERROR b.Box.EntryMap == nil")
-		return ""
-	}
-	spew.Dump(box.EntryMap)
-	if (box.EntryMap[name] == nil) {
-		log.Println("gui.GetText() ERROR box.EntryMap[", name, "] == nil ")
-		return ""
-	}
-	e := box.EntryMap[name]
-	log.Println("gui.GetText() box.EntryMap[", name, "] = ", e.E.Text())
-	log.Println("gui.GetText() END")
-	return e.E.Text()
-}
-
-func SetText(box *GuiBox, name string, value string) error {
-	if (box == nil) {
-		return fmt.Errorf("gui.SetText() ERROR box == nil")
-	}
-	if (box.EntryMap == nil) {
-		return fmt.Errorf("gui.SetText() ERROR b.Box.EntryMap == nil")
-	}
-	spew.Dump(box.EntryMap)
-	if (box.EntryMap[name] == nil) {
-		return fmt.Errorf("gui.SetText() ERROR box.EntryMap[", name, "] == nil ")
-	}
-	e := box.EntryMap[name]
-	log.Println("gui.SetText() box.EntryMap[", name, "] = ", e.E.Text())
-	e.E.SetText(value)
-	log.Println("gui.SetText() box.EntryMap[", name, "] = ", e.E.Text())
-	log.Println("gui.SetText() END")
-	return nil
+	return gb
 }
 
 func generateSubdomain(b *GuiButton) {
@@ -113,16 +73,26 @@ func generateSubdomain(b *GuiButton) {
 	log.Println("generateSubdomain END")
 }
 
+/*
 func addSubdomain(b *GuiButton) {
 	log.Println("addSubdomain START")
 	// sub := subdomain.Text()
 	// log.Println("generateSubdomain subdomain =", sub)
 	log.Println("addSubdomain END")
 }
+*/
 
-func AddAccountBox(wm *GuiWindow) *ui.Box {
+func AddAccountBox(gw *GuiWindow) *GuiBox {
+	var gb *GuiBox
+	gb = new(GuiBox)
+
+	gb.EntryMap = make(map[string]*GuiEntry)
+	gb.EntryMap["test"] = nil
+
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
+	gw.Box1 = vbox
+	gb.UiBox = vbox
 
 	hboxAccount := ui.NewHorizontalBox()
 	hboxAccount.SetPadded(true)
@@ -219,11 +189,11 @@ func AddAccountBox(wm *GuiWindow) *ui.Box {
 	hboxButtons.SetPadded(true)
 	vbox.Append(hboxButtons, false)
 
-	okButton := CreateButton(wm, nil, nil, "Add Account", "ADD", nil)
+	okButton := CreateButton(gw, nil, nil, "Add Account", "ADD", nil)
 	hboxButtons.Append(okButton.B, false)
 
-	backButton := CreateButton(wm, nil, nil, "Back", "BACK", nil)
+	backButton := CreateButton(gw, nil, nil, "Back", "BACK", nil)
 	hboxButtons.Append(backButton.B, false)
 
-	return vbox
+	return gb
 }

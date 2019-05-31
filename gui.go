@@ -1,6 +1,7 @@
 package gui
 
 import "log"
+import "fmt"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
@@ -41,7 +42,7 @@ func InitColumns(mh *TableData, parts []TableColumnData) {
 	}
 }
 
-func AddTableTab(wm *GuiWindow, mytab *ui.Tab, junk int, name string, rowcount int, parts []TableColumnData, account *pb.Account) *TableData {
+func AddTableTab(gw *GuiWindow, mytab *ui.Tab, junk int, name string, rowcount int, parts []TableColumnData, account *pb.Account) *TableData {
 	mh := new(TableData)
 
 	mh.RowCount    = rowcount
@@ -90,9 +91,9 @@ func AddTableTab(wm *GuiWindow, mytab *ui.Tab, junk int, name string, rowcount i
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 
-	a := CreateButton(wm, account, nil, "Add Virtual Machine", "createAddVmBox", nil)
+	a := CreateButton(gw, account, nil, "Add Virtual Machine", "createAddVmBox", nil)
 	hbox.Append(a.B, false)
-	b := CreateButton(wm, account, nil, "Add Virtual Machine", "createAddVmBox", nil)
+	b := CreateButton(gw, account, nil, "Add Virtual Machine", "createAddVmBox", nil)
 	hbox.Append(b.B, false)
 
 	vbox.Append(hbox, false)
@@ -100,18 +101,18 @@ func AddTableTab(wm *GuiWindow, mytab *ui.Tab, junk int, name string, rowcount i
 	return mh
 }
 
-func SocketError(wm *GuiWindow) {
-	ui.MsgBoxError(wm.W,
+func SocketError(gw *GuiWindow) {
+	ui.MsgBoxError(gw.W,
 		"There was a socket error",
 		"More detailed information can be shown here.")
 }
 
-func MessageWindow(wm *GuiWindow, msg1 string, msg2 string) {
-	ui.MsgBox(wm.W, msg1, msg2)
+func MessageWindow(gw *GuiWindow, msg1 string, msg2 string) {
+	ui.MsgBox(gw.W, msg1, msg2)
 }
 
-func ErrorWindow(wm *GuiWindow, msg1 string, msg2 string) {
-	ui.MsgBoxError(wm.W, msg1, msg2)
+func ErrorWindow(gw *GuiWindow, msg1 string, msg2 string) {
+	ui.MsgBoxError(gw.W, msg1, msg2)
 }
 
 // This is the default mouse click handler
@@ -211,7 +212,7 @@ func AddButton(b *GuiButton, name string) *ui.Button {
 	return newB
 }
 
-func CreateButton(wm *GuiWindow, a *pb.Account, vm *pb.Event_VM,
+func CreateButton(gw *GuiWindow, a *pb.Account, vm *pb.Event_VM,
 		name string, action string, custom func(*GuiButton)) *GuiButton {
 	newUiB := ui.NewButton(name)
 	newUiB.OnClicked(defaultButtonClick)
@@ -219,10 +220,10 @@ func CreateButton(wm *GuiWindow, a *pb.Account, vm *pb.Event_VM,
 	var newB *GuiButton
 	newB = new(GuiButton)
 	newB.B	= newUiB
-	newB.T	= wm.T
+	newB.T	= gw.T
 	newB.Account	= a
 	newB.VM	= vm
-	newB.WM	= wm
+	newB.WM	= gw
 	newB.Action	= action
 	newB.custom	= custom
 	Data.AllButtons	= append(Data.AllButtons, newB)
@@ -230,14 +231,14 @@ func CreateButton(wm *GuiWindow, a *pb.Account, vm *pb.Event_VM,
 	return newB
 }
 
-func CreateFontButton(wm *GuiWindow, action string) *GuiButton {
+func CreateFontButton(gw *GuiWindow, action string) *GuiButton {
 	newB := ui.NewFontButton()
 
         // create a 'fake' button entry for the mouse clicks
 	var newBM	GuiButton
 	newBM.Action	= action
 	newBM.FB	= newB
-	newBM.Area	= wm.Area
+	newBM.Area	= gw.Area
 	Data.AllButtons	= append(Data.AllButtons, &newBM)
 
 	newB.OnChanged(func (*ui.FontButton) {
@@ -245,4 +246,43 @@ func CreateFontButton(wm *GuiWindow, action string) *GuiButton {
 		mouseClick(&newBM)
 	})
 	return &newBM
+}
+
+func GetText(box *GuiBox, name string) string {
+	if (box == nil) {
+		log.Println("gui.GetText() ERROR box == nil")
+		return ""
+	}
+	if (box.EntryMap == nil) {
+		log.Println("gui.GetText() ERROR b.Box.EntryMap == nil")
+		return ""
+	}
+	spew.Dump(box.EntryMap)
+	if (box.EntryMap[name] == nil) {
+		log.Println("gui.GetText() ERROR box.EntryMap[", name, "] == nil ")
+		return ""
+	}
+	e := box.EntryMap[name]
+	log.Println("gui.GetText() box.EntryMap[", name, "] = ", e.E.Text())
+	log.Println("gui.GetText() END")
+	return e.E.Text()
+}
+
+func SetText(box *GuiBox, name string, value string) error {
+	if (box == nil) {
+		return fmt.Errorf("gui.SetText() ERROR box == nil")
+	}
+	if (box.EntryMap == nil) {
+		return fmt.Errorf("gui.SetText() ERROR b.Box.EntryMap == nil")
+	}
+	spew.Dump(box.EntryMap)
+	if (box.EntryMap[name] == nil) {
+		return fmt.Errorf("gui.SetText() ERROR box.EntryMap[", name, "] == nil ")
+	}
+	e := box.EntryMap[name]
+	log.Println("gui.SetText() box.EntryMap[", name, "] = ", e.E.Text())
+	e.E.SetText(value)
+	log.Println("gui.SetText() box.EntryMap[", name, "] = ", e.E.Text())
+	log.Println("gui.SetText() END")
+	return nil
 }

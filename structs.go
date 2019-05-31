@@ -55,6 +55,34 @@ type GuiData struct {
 	EntryPass	*ui.Entry
 }
 
+// stores information on 'the' window
+
+// More than one Window is not supported in a cross platform
+// sense & may never be. On Windows and MacOS, you have to have
+// 'tabs'. Even under Linux, more than one Window is currently
+// unstable
+//
+// This code will keep track of if the windows is 'tabbed' or
+// not. You can draw one thing in the window, then destroy
+// that, then redraw the window with something else
+//
+// This struct keeps track of what is in the window so you
+// can destroy and replace it with something else
+//
+type GuiWindow struct {
+	Action		string
+	Area		*GuiArea	// should be moved to GuiBox
+
+	C		*pb.Config
+
+	W		*ui.Window
+	T		*ui.Tab		// if this != nil, the window is 'tabbed'
+	BoxMap		map[string]*GuiBox
+	Box1		*ui.Box
+	Box2		*ui.Box
+}
+
+
 // Note: every mouse click is handled
 // as a 'Button' regardless of where
 // the user clicks it. You could probably
@@ -101,18 +129,6 @@ type GuiEntry struct {
 	W		*ui.Window  // should be moved to *GuiWindow or GuiBox
 	T		*ui.Tab     // should be moved to *GuiWindow or GuiBox
 
-}
-
-type GuiWindow struct {
-	Action		string
-	Area		*GuiArea    // should be moved to GuiBox
-
-	C		*pb.Config
-
-	W		*ui.Window
-	T		*ui.Tab
-	Box1		*ui.Box
-	Box2		*ui.Box
 }
 
 //

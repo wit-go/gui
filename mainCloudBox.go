@@ -171,8 +171,10 @@ func ShowAccountQuestionTab(gw *GuiWindow) {
 	log.Println("Sleep(200)")
 	time.Sleep(200 * time.Millisecond)
 
-	gw.Box2 = AddAccountQuestionBox(gw)
-	gw.T.InsertAt("New Account?", 0, gw.Box2)
+	abox := AddAccountQuestionBox(gw)
+	gw.BoxMap["MAIN"] = abox
+	// gw.Box2 = AddAccountQuestionBox(gw)
+	gw.T.InsertAt("New Account?", 0, abox.UiBox)
 	gw.T.SetMargined(0, true)
 }
 
@@ -193,12 +195,12 @@ func ShowAccountTab(gw *GuiWindow, i int) {
 	if (i >= 0) {
 		log.Println("ShowAccountTab() InsertAt i=", i)
 		gw.T.Delete(0)
-		gw.T.InsertAt("Add Account", i, abox)
+		gw.T.InsertAt("Add Account", i, abox.UiBox)
 		gw.T.SetMargined(0, true)
 	} else {
 		// TODO: After append try to discover the tab index #
 		log.Println("ShowAccountTab() Append")
-		AddBoxToTab("Create New Account", gw.T, abox)
+		AddBoxToTab("Create New Account", gw.T, abox.UiBox)
 	}
 }
 
@@ -229,6 +231,9 @@ func StartNewWindow(c *pb.Config, bg bool, action string) {
 	newGuiWindow.C = c
 	newGuiWindow.Action = action
 	Data.Windows = append(Data.Windows, &newGuiWindow)
+
+	// make(newGuiWindow.BoxMap)
+	newGuiWindow.BoxMap = make(map[string]*GuiBox)
 
 	if (bg) {
 		log.Println("ShowWindow() IN NEW GOROUTINE")
