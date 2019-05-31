@@ -22,10 +22,11 @@ type GuiData struct {
 	// if nothing else is defined to handle them
 	MouseClick	func(*GuiButton)
 
-	// account entry textboxes
+	// passes in all the User accounts from the cloud-control-panel config file
 	Config		*pb.Config
 
 	// general information on the App
+	// move all this to Config (?)
 	Version		string
 	GitCommit	string
 	GoVersion	string
@@ -35,19 +36,19 @@ type GuiData struct {
 	DebugTable	bool
 
 	// official hostname and IPv6 address for this box
+	// also move all this to Config (?)
 	Hostname	string
 	IPv6		string
+
+	// A map of all the entry boxes
+	AllEntries	[]*GuiEntry
+	Windows		[]*GuiWindow
 
 	// A map of all buttons everywhere on all
 	// windows, all tabs, across all goroutines
 	// This is "GLOBAL"
 	AllButtons	[]*GuiButton
 	ButtonMap	map[*GuiButton][]func (*GuiButton)
-
-	// A map of all the entry boxes
-	AllEntries	[]*GuiEntry
-
-	Windows		[]*GuiWindow
 
 	EntryNick	*ui.Entry
 	EntryUser	*ui.Entry
@@ -59,62 +60,59 @@ type GuiData struct {
 // the user clicks it. You could probably
 // call this 'GuiMouseClick'
 type GuiButton struct {
-	// andlabs/ui stuff
-	B		*ui.Button
-	FB		*ui.FontButton
-	A		*ui.Area
-	W		*ui.Window
-	T		*ui.Tab
+	Action		string		// what type of button
+	Box		*GuiBox		// what box the button click was in
+	Area		*GuiArea	// indicates the button click was in an Area
+	WM		*GuiWindow	// what window the button click was in (redundant?)
 
-	Box		*GuiBox
-	AH		*GuiArea
-
-	// git.wit.com/wit/gui stuff
-	WM		*GuiWindow
-	Account		*pb.Account
-	VM		*pb.Event_VM
-	Action		string	// what type of button
+	Account		*pb.Account	// associated with what account?
+	VM		*pb.Event_VM	// associated with which VM?
 
 	// a callback function for the main application
 	custom		func (*GuiButton)
+
+	// andlabs/ui abstraction mapping
+	B		*ui.Button
+	FB		*ui.FontButton
+	A		*ui.Area	// should be deprecated
+	W		*ui.Window	// should be deprecated
+	T		*ui.Tab		// should be deprecated
 }
 
 type GuiBox struct {
 	W		*GuiWindow
 	EntryMap	map[string]*GuiEntry
-	A		*GuiArea
+	Area		*GuiArea
 
 	UiBox		*ui.Box
 }
 
 type GuiEntry struct {
-	E		*ui.Entry
+	Action		string	// what type of button
 	Edit		bool
 	Last		string	// the last value
 	Normalize	func (string) string // function to 'normalize' the data
 
+	B		*GuiButton
 	Account		*pb.Account
 	VM		*pb.Event_VM
 
-	B		*GuiButton
-	FB		*ui.FontButton
-	A		*ui.Area
-	W		*ui.Window
-	T		*ui.Tab
+	E		*ui.Entry
+	W		*ui.Window  // should be moved to *GuiWindow or GuiBox
+	T		*ui.Tab     // should be moved to *GuiWindow or GuiBox
 
-	Action		string	// what type of button
 }
 
 type GuiWindow struct {
+	Action		string
+	Area		*GuiArea    // should be moved to GuiBox
+
+	C		*pb.Config
+
 	W		*ui.Window
 	T		*ui.Tab
 	Box1		*ui.Box
 	Box2		*ui.Box
-
-	C		*pb.Config
-
-	AH		*GuiArea
-	Action		string
 }
 
 //
@@ -123,8 +121,8 @@ type GuiWindow struct {
 // AREA STRUCTURES START
 //
 type GuiArea struct{
-	WM		*GuiWindow
-	Button		*GuiButton
+	Window		*GuiWindow // what window this area is in (should be GuiBox?)
+	Button		*GuiButton // what button handles mouse events
 
 	UiAttrstr	*ui.AttributedString
 	UiArea		*ui.Area
@@ -165,7 +163,7 @@ type TableData struct {
 
 	lastRow			int
 	lastColumn		int
-	parentTab		*ui.Tab
+//	parentTab		*ui.Tab
 }
 
 //

@@ -23,12 +23,12 @@ func ShowSplashBox(wm *GuiWindow, newText *ui.AttributedString) *ui.Box {
 	newbox.SetPadded(true)
 
 	// initialize the GuiArea{}
-	wm.AH    = new(GuiArea)
-	wm.AH.WM = wm
-	wm.AH.UiAttrstr = newText
-	makeSplashArea(wm, wm.AH)
+	wm.Area		= new(GuiArea)
+	wm.Area.Window	= wm
+	wm.Area.UiAttrstr = newText
+	makeSplashArea(wm, wm.Area)
 
-	newbox.Append(wm.AH.UiArea, true)
+	newbox.Append(wm.Area.UiArea, true)
 
 	if runtime.GOOS == "linux" {
 		newbox.Append(ui.NewLabel("OS: Linux"), false)

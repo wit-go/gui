@@ -13,7 +13,7 @@ import pb "git.wit.com/wit/witProtobuf"
 
 // import "github.com/davecgh/go-spew/spew"
 
-func makeCloudInfoBox(wm *GuiWindow) *ui.Box {
+func makeCloudInfoBox(gw *GuiWindow) *ui.Box {
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 
@@ -23,7 +23,7 @@ func makeCloudInfoBox(wm *GuiWindow) *ui.Box {
 		vbox.SetPadded(true)
 		hbox.Append(vbox, false)
 
-		addDebuggingButtons(wm, vbox)
+		addDebuggingButtons(gw, vbox)
 
 		hbox.Append(ui.NewVerticalSeparator(), false)
 	}
@@ -46,7 +46,7 @@ func makeCloudInfoBox(wm *GuiWindow) *ui.Box {
 	hostnameEntry.SetText(tmp)
 	hostnameEntry.SetReadOnly(true)
 
-	anew := CreateButton(wm, nil, nil, "Edit", "EDIT", nil)
+	anew := CreateButton(gw, nil, nil, "Edit", "EDIT", nil)
 	hostnamebox.Append(anew.B, false)
 
 	vbox.Append(ui.NewHorizontalSeparator(), false)
@@ -71,11 +71,11 @@ func makeCloudInfoBox(wm *GuiWindow) *ui.Box {
 		agrid.Append(ui.NewLabel(Data.Config.Accounts[key].Email),	2, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 		name := "Login " + Data.Config.Accounts[key].Nick
-		l := CreateButton(wm, Data.Config.Accounts[key], nil, name, "LOGIN", nil)
+		l := CreateButton(gw, Data.Config.Accounts[key], nil, name, "LOGIN", nil)
 		agrid.Append(l.B, 3, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 		name  = "Show " + Data.Config.Accounts[key].Nick
-		b := CreateButton(wm, Data.Config.Accounts[key], nil, name, "SHOW", nil)
+		b := CreateButton(gw, Data.Config.Accounts[key], nil, name, "SHOW", nil)
 		agrid.Append(b.B, 4, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 		row += 1
@@ -84,9 +84,9 @@ func makeCloudInfoBox(wm *GuiWindow) *ui.Box {
 	row += 1
 	agrid.Append(ui.NewLabel(""),    1, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 	row += 1
-	a := CreateButton(wm, nil, nil, "Add Account", "ADD TAB", nil)
+	a := CreateButton(gw, nil, nil, "Add Account", "ADD TAB", nil)
 	agrid.Append(a.B, 4, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
-	q := CreateButton(wm, nil, nil, "Quit", "QUIT", nil)
+	q := CreateButton(gw, nil, nil, "Quit", "QUIT", nil)
 	agrid.Append(q.B, 5, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 	vbox.Append(agrid, false)
@@ -102,7 +102,7 @@ func makeCloudInfoBox(wm *GuiWindow) *ui.Box {
 // which could be anything since TEXTCOLOR, TEXT, BG, etc
 // fields use between 1 and 3 values internally
 //
-func AddVmsTab(wm *GuiWindow, name string, count int, a *pb.Account) *TableData {
+func AddVmsTab(gw *GuiWindow, name string, count int, a *pb.Account) *TableData {
 	var parts []TableColumnData
 
 	human := 0
@@ -156,64 +156,71 @@ func AddVmsTab(wm *GuiWindow, name string, count int, a *pb.Account) *TableData 
 	parts = append(parts, tmp)
 	human += 1
 
-	mh := AddTableTab(wm, wm.T, 1, name, count, parts, a)
+	mh := AddTableTab(gw, gw.T, 1, name, count, parts, a)
 	return mh
 }
 
-func ShowAccountQuestionTab(wm *GuiWindow) {
-	log.Println("ShowAccountQuestionTab() wm =", wm)
-	if (wm.T == nil) {
-		log.Println("ShowAccountQuestionTab() wm.T = nil THIS IS BAD")
+func ShowAccountQuestionTab(gw *GuiWindow) {
+	log.Println("ShowAccountQuestionTab() gw =", gw)
+	if (gw.T == nil) {
+		log.Println("ShowAccountQuestionTab() gw.T = nil THIS IS BAD")
 		os.Exit(-1)
 	}
-	wm.T.Delete(0)
+	gw.T.Delete(0)
 
 	log.Println("Sleep(200)")
 	time.Sleep(200 * time.Millisecond)
 
-	wm.Box2 = AddAccountQuestionBox(wm)
-	wm.T.InsertAt("New Account?", 0, wm.Box2)
-	wm.T.SetMargined(0, true)
+	gw.Box2 = AddAccountQuestionBox(gw)
+	gw.T.InsertAt("New Account?", 0, gw.Box2)
+	gw.T.SetMargined(0, true)
 }
 
-func ShowAccountTab(wm *GuiWindow, i int) {
+func ShowAccountTab(gw *GuiWindow, i int) {
 	log.Println("ShowAccountTab() START")
 
 	log.Println("Sleep(200)")
 	time.Sleep(200 * time.Millisecond)
 
 	// Create the things for the Account Tab
-	abox := AddAccountBox(wm)
+	abox := AddAccountBox(gw)
 
 	// Set the parents and data structure links
-	// aTab.me = wm.T
+	// aTab.me = gw.T
 	// aTab.parentWindow = Data.Window1.W
 	// aTab.tabOffset = 0
 
 	if (i >= 0) {
 		log.Println("ShowAccountTab() InsertAt i=", i)
-		wm.T.Delete(0)
-		wm.T.InsertAt("Add Account", i, abox)
-		wm.T.SetMargined(0, true)
+		gw.T.Delete(0)
+		gw.T.InsertAt("Add Account", i, abox)
+		gw.T.SetMargined(0, true)
 	} else {
 		// TODO: After append try to discover the tab index #
 		log.Println("ShowAccountTab() Append")
-		AddBoxToTab("Create New Account", wm.T, abox)
+		AddBoxToTab("Create New Account", gw.T, abox)
 	}
 }
 
-func ShowMainTab(wm *GuiWindow) {
-	log.Println("ShowMainTab() wm =", wm)
-	log.Println("ShowMainTab() wm.T =", wm.T)
-	log.Println("ShowMainTab() wm.T =", wm.T)
-	wm.T.Delete(0)
+func ShowMainTab(gw *GuiWindow) {
+	log.Println("ShowMainTab() gw =", gw)
+	log.Println("ShowMainTab() gw.T =", gw.T)
+	gw.T.Delete(0)
 
 	log.Println("Sleep(200)")
 	time.Sleep(200 * time.Millisecond)
 
-	wm.Box2 = makeCloudInfoBox(wm)
-	wm.T.InsertAt("Main", 0, wm.Box2)
-	wm.T.SetMargined(0, true)
+	gw.Box2 = makeCloudInfoBox(gw)
+	gw.T.InsertAt("Main", 0, gw.Box2)
+	gw.T.SetMargined(0, true)
+}
+
+func GuiInit() {
+	ui.OnShouldQuit(func() bool {
+		// mouseClick(&newBM)
+                ui.Quit()
+		return true
+	})
 }
 
 func StartNewWindow(c *pb.Config, bg bool, action string) {
@@ -222,12 +229,6 @@ func StartNewWindow(c *pb.Config, bg bool, action string) {
 	newGuiWindow.C = c
 	newGuiWindow.Action = action
 	Data.Windows = append(Data.Windows, &newGuiWindow)
-
-	ui.OnShouldQuit(func() bool {
-		// mouseClick(&newBM)
-                ui.Quit()
-		return true
-	})
 
 	if (bg) {
 		log.Println("ShowWindow() IN NEW GOROUTINE")
@@ -250,47 +251,47 @@ func getSplashText(a string) *ui.AttributedString {
 }
 
 
-func InitWindow(wm *GuiWindow) {
+func InitWindow(gw *GuiWindow) {
 	log.Println("InitWindow() THIS WINDOW IS NOT YET SHOWN")
 
-	c := wm.C
-	wm.W = ui.NewWindow("", int(c.Width), int(c.Height), true)
-	wm.W.SetBorderless(false)
+	c := gw.C
+	gw.W = ui.NewWindow("", int(c.Width), int(c.Height), true)
+	gw.W.SetBorderless(false)
 
         // create a 'fake' button entry for the mouse clicks
 	var newBM GuiButton
 	newBM.Action	= "QUIT"
-	newBM.W		= wm.W
-	newBM.WM	= wm
+	newBM.W		= gw.W
+	newBM.WM	= gw
 	Data.AllButtons = append(Data.AllButtons, &newBM)
 
-	wm.W.OnClosing(func(*ui.Window) bool {
-		log.Println("InitWindow() OnClosing() THIS WINDOW IS CLOSING wm=", wm)
+	gw.W.OnClosing(func(*ui.Window) bool {
+		log.Println("InitWindow() OnClosing() THIS WINDOW IS CLOSING gw=", gw)
 		// mouseClick(&newBM)
                 ui.Quit()
 		return true
 	})
 
-	wm.T = ui.NewTab()
-	wm.W.SetChild(wm.T)
-	wm.W.SetMargined(true)
+	gw.T = ui.NewTab()
+	gw.W.SetChild(gw.T)
+	gw.W.SetMargined(true)
 
-	log.Println("InitWindow() wm =", wm)
-	log.Println("InitWindow() wm.Action =", wm.Action)
+	log.Println("InitWindow() gw =", gw)
+	log.Println("InitWindow() gw.Action =", gw.Action)
 
-	if (wm.Action == "SPLASH") {
+	if (gw.Action == "SPLASH") {
 		log.Println("InitWindow() TRYING SPLASH")
 		damnit := "click" + string(c.Hostname)
 		tmp := getSplashText(damnit)
 		log.Println("InitWindow() TRYING SPLASH tmp =", tmp)
-		wm.Box1 = ShowSplashBox(wm, tmp)
+		gw.Box1 = ShowSplashBox(gw, tmp)
 
-		wm.T.Append("WIT Splash", wm.Box1)
-		wm.T.SetMargined(0, true)
+		gw.T.Append("WIT Splash", gw.Box1)
+		gw.T.SetMargined(0, true)
 	}
 
 	Data.State = "splash"
-	wm.W.Show()
+	gw.W.Show()
 }
 
 // makeEntryBox(box, "hostname:", "blah.foo.org") {
