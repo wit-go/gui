@@ -40,16 +40,17 @@ func AddMainTab(gw *GuiWindow) *GuiBox {
 	log.Println("ShowMainTab() gw =", gw)
 	log.Println("ShowMainTab() gw.UiTab =", gw.UiTab)
 
-	newWindow := new(GuiWindow)
-	newWindow.UiWindow = gw.UiWindow
-	Data.Windows = append(Data.Windows, newWindow)
+	window := InitGuiWindow(Data.Config, "MAIN", nil, gw.UiWindow, gw.UiTab)
+//	newWindow := new(GuiWindow)
+//	newWindow.UiWindow = gw.UiWindow
+//	Data.Windows = append(Data.Windows, newWindow)
 
 	var box *GuiBox
 	box = new(GuiBox)
-	box.Window = gw
+	box.Window = window
 
-	box.EntryMap = make(map[string]*GuiEntry)
-	box.EntryMap["test"] = nil
+//	box.EntryMap = make(map[string]*GuiEntry)
+//	box.EntryMap["test"] = nil
 
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
@@ -75,28 +76,49 @@ func ShowMainTabShowBox(gw *GuiWindow, box *GuiBox) {
 	gw.UiTab.SetMargined(0, true)
 }
 
-func StartNewWindow(c *pb.Config, bg bool, action string, maketab func(*GuiWindow) *GuiBox) {
-	log.Println("InitNewWindow() Create a new window")
+func InitGuiWindow(c *pb.Config, action string, maketab func(*GuiWindow) *GuiBox, uiW *ui.Window, uiT *ui.Tab) *GuiWindow {
+	log.Println("InitGuiWindow() START")
 	var newGuiWindow GuiWindow
-	newGuiWindow.Width   = int(c.Width)
-	newGuiWindow.Height  = int(c.Height)
-	newGuiWindow.Action  = action
-	newGuiWindow.MakeWindow = maketab
-	newGuiWindow.BoxMap = make(map[string]*GuiBox)
+	newGuiWindow.Width	= int(c.Width)
+	newGuiWindow.Height	= int(c.Height)
+	newGuiWindow.Action	= action
+	newGuiWindow.MakeWindow	= maketab
+	newGuiWindow.UiWindow	= uiW
+	newGuiWindow.UiTab	= uiT
+	newGuiWindow.BoxMap	= make(map[string]*GuiBox)
+	newGuiWindow.EntryMap	= make(map[string]*GuiEntry)
+	newGuiWindow.EntryMap["test"] = nil
 	Data.Windows = append(Data.Windows, &newGuiWindow)
 
-	// make(newGuiWindow.BoxMap)
+	log.Println("InitGuiWindow() END *GuiWindow =", &newGuiWindow)
+	return &newGuiWindow
+}
+
+
+func StartNewWindow(c *pb.Config, bg bool, action string, maketab func(*GuiWindow) *GuiBox) {
+	log.Println("InitNewWindow() Create a new window")
+	window := InitGuiWindow(c, action, maketab, nil, nil)
+	/*
+	newGuiWindow.Width	= int(c.Width)
+	newGuiWindow.Height	= int(c.Height)
+	newGuiWindow.Action	= action
+	newGuiWindow.MakeWindow	= maketab
+	newGuiWindow.BoxMap	= make(map[string]*GuiBox)
+	newGuiWindow.EntryMap	= make(map[string]*GuiEntry)
+	newGuiWindow.EntryMap["test"] = nil
+	Data.Windows = append(Data.Windows, &newGuiWindow)
+	*/
 
 	if (bg) {
 		log.Println("ShowWindow() IN NEW GOROUTINE")
 		go ui.Main(func() {
-			InitTabWindow(&newGuiWindow)
+			InitTabWindow(window)
 		})
 		time.Sleep(2000 * time.Millisecond)
 	} else {
 		log.Println("ShowWindow() WAITING for ui.Main()")
 		ui.Main(func() {
-			InitTabWindow(&newGuiWindow)
+			InitTabWindow(window)
 		})
 	}
 }

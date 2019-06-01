@@ -119,9 +119,11 @@ type GuiButton struct {
 	FB		*ui.FontButton
 }
 
+// GuiBox is any type of ui.Hbox or ui.Vbox
+// There can be lots of these for each GuiWindow
 type GuiBox struct {
 	Window		*GuiWindow
-	EntryMap	map[string]*GuiEntry
+//	EntryMap	map[string]*GuiEntry
 
 	// andlabs/ui abstraction mapping
 	UiBox		*ui.Box

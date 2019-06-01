@@ -119,8 +119,8 @@ func ShowTextBox(gw *GuiWindow, newText *ui.AttributedString) *GuiBox {
 	var gb *GuiBox
 	gb = new(GuiBox)
 
-	gb.EntryMap = make(map[string]*GuiEntry)
-	gb.EntryMap["test"] = nil
+//	gw.EntryMap = make(map[string]*GuiEntry)
+//	gw.EntryMap["test"] = nil
 
 	newbox := ui.NewVerticalBox()
 	newbox.SetPadded(true)
