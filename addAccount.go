@@ -75,14 +75,6 @@ func generateSubdomain(b *GuiButton) {
 }
 
 /*
-func addSubdomain(b *GuiButton) {
-	log.Println("addSubdomain START")
-	// sub := subdomain.Text()
-	// log.Println("generateSubdomain subdomain =", sub)
-	log.Println("addSubdomain END")
-}
-*/
-
 func AddAccountBox(gw *GuiWindow) *GuiBox {
 	var gb *GuiBox
 	gb = new(GuiBox)
@@ -198,3 +190,4 @@ func AddAccountBox(gw *GuiWindow) *GuiBox {
 
 	return gb
 }
+*/

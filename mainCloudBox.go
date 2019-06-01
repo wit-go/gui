@@ -122,6 +122,7 @@ func ShowAccountQuestionTab(gw *GuiWindow) {
 	gw.UiTab.SetMargined(0, true)
 }
 
+/*
 func ShowAccountTab(gw *GuiWindow, i int) {
 	log.Println("ShowAccountTab() START")
 
@@ -147,6 +148,7 @@ func ShowAccountTab(gw *GuiWindow, i int) {
 		AddBoxToTab("Create New Account", gw.UiTab, abox.UiBox)
 	}
 }
+*/
 
 func ShowMainTab(gw *GuiWindow) {
 	log.Println("ShowMainTab() gw =", gw)
