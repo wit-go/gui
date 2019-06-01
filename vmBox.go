@@ -10,21 +10,28 @@ import pb "git.wit.com/wit/witProtobuf"
 
 import "github.com/davecgh/go-spew/spew"
 
+/*
 func AddVmConfigureTab(wm *GuiWindow, name string, pbVM *pb.Event_VM) {
-	CreateVmBox(wm, wm.UiTab, pbVM)
+	CreateVmBox(wm, pbVM)
 }
+*/
 
-func CreateVmBox(gw *GuiWindow, junk *ui.Tab, vm *pb.Event_VM) {
+func CreateVmBox(gw *GuiWindow, vm *pb.Event_VM) {
 	log.Println("CreateVmBox() START")
-	log.Println("CreateVmBox() vm.Name", vm.Name)
+	log.Println("CreateVmBox() vm.Name =", vm.Name)
+	log.Println("CreateVmBox() gw =", gw)
 
 	var gb *GuiBox
 	gb = new(GuiBox)
 
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
+	log.Println("CreateVmBox() vbox =", vbox)
+	log.Println("CreateVmBox() gb.UiBox =", gb.UiBox)
 	gb.UiBox = vbox
+	log.Println("CreateVmBox() gb.W =", gb.W)
 	gb.W = gw
+	log.Println("CreateVmBox() gw.BoxMap =", gw.BoxMap)
 	gw.BoxMap[vm.Name] = gb
 
 //	gw.UiTab.Append(vm.Name, vbox)
@@ -72,8 +79,9 @@ func CreateVmBox(gw *GuiWindow, junk *ui.Tab, vm *pb.Event_VM) {
 	AddBoxToTab(vm.Name, gw.UiTab, vbox)
 }
 
-func createAddVmBox(gw *GuiWindow, junk *ui.Tab, name string, b *GuiButton) {
+func createAddVmBox(gw *GuiWindow, b *GuiButton) {
 	log.Println("createAddVmBox() START")
+	name := "(" + b.Account.Nick + ")"
 
 	var gb *GuiBox
 	gb = new(GuiBox)
@@ -82,11 +90,7 @@ func createAddVmBox(gw *GuiWindow, junk *ui.Tab, name string, b *GuiButton) {
 	vbox.SetPadded(true)
 	gb.UiBox = vbox
 	gb.W = gw
-	gw.BoxMap[name] = gb
-
-//	gw.UiTab.Append(vm.Name, vbox)
-
-
+	gw.BoxMap["ADD VM" + name] = gb
 
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
@@ -115,10 +119,8 @@ func createAddVmBox(gw *GuiWindow, junk *ui.Tab, name string, b *GuiButton) {
 	disk.B		= &newb
 	hboxButtons.Append(AddButton(&newb, "Add Virtual Machine"), false)
 
-	// hboxButtons.Append(CreateButton(nil, nil, "Add Virtual Machine","CREATE",nil), false)
 	a := CreateButton(gb, nil, nil, "Cancel",		"CLOSE", nil)
 	hboxButtons.Append(a.B, false)
 
-	name += " (" + b.Account.Nick + ")"
 	AddBoxToTab(name, gw.UiTab, vbox)
 }

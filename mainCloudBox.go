@@ -167,7 +167,8 @@ func AddVmsTab(gw *GuiWindow, name string, count int, a *pb.Account) *TableData 
 	parts = append(parts, tmp)
 	human += 1
 
-	mh := AddTableTab(gw, 1, name, count, parts, a)
+	mh := AddTableTab(gw, name, count, parts, a)
+//	mh := 
 	return mh
 }
 

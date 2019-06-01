@@ -42,7 +42,7 @@ func InitColumns(mh *TableData, parts []TableColumnData) {
 	}
 }
 
-func AddTableTab(gw *GuiWindow, junk int, name string, rowcount int, parts []TableColumnData, account *pb.Account) *TableData {
+func AddTableTab(gw *GuiWindow, name string, rowcount int, parts []TableColumnData, account *pb.Account) *TableData {
 	mh := new(TableData)
 
 	mh.RowCount    = rowcount
@@ -90,6 +90,7 @@ func AddTableTab(gw *GuiWindow, junk int, name string, rowcount int, parts []Tab
 	gb.UiBox = vbox
 	gb.W = gw
 	gw.BoxMap[name] = gb
+	mh.Box = gb
 
 	vbox.Append(table, true)
 	gw.UiTab.Append(name, vbox)
@@ -141,19 +142,9 @@ func mouseClick(b *GuiButton) {
 		log.Println("\tgui.mouseClick() START b.Action =", b.Action)
 		if (b.Action == "createAddVmBox") {
 			log.Println("\tgui.mouseClick() createAddVmBox for b =", b)
-			createAddVmBox(b.GW, b.T, "Create New Virtual Machine", b)
+			createAddVmBox(b.GW, b)
 			return
 		}
-		/*
-		if (b.Action == "SHOW VM") {
-			Data.CurrentVM = b.VM
-			if (Data.Debug) {
-				go ui.Main(ShowVM)
-			} else {
-				CreateVmBox(Data.Window1.T, b.VM)
-			}
-		}
-		*/
 		if (b.Action == "WINDOW CLOSE") {
 			b.W.Hide()
 			// TODO: fix this (seems to crash? maybe because we are in the button here?)

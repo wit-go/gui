@@ -174,6 +174,7 @@ type TableData struct {
 	Human			[20]HumanMap
 
 	Account			*pb.Account	// what account this table is for
+	Box			*GuiBox
 
 	lastRow			int
 	lastColumn		int
