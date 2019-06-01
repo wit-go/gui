@@ -346,3 +346,32 @@ func CreateGenericBox(gw *GuiWindow, b *GuiButton, name string) *GuiBox{
 
 	return box
 }
+
+func CreateBox(gw *GuiWindow, name string) *GuiBox {
+	log.Println("CreateVmBox() START")
+	log.Println("CreateVmBox() vm.Name =", name)
+	log.Println("CreateVmBox() gw =", gw)
+
+	var box *GuiBox
+	box = new(GuiBox)
+
+	vbox := ui.NewVerticalBox()
+	vbox.SetPadded(true)
+	log.Println("CreateVmBox() vbox =", vbox)
+	log.Println("CreateVmBox() box.UiBox =", box.UiBox)
+	box.UiBox = vbox
+	log.Println("CreateVmBox() box.W =", box.W)
+	box.W = gw
+	log.Println("CreateVmBox() gw.BoxMap =", gw.BoxMap)
+	gw.BoxMap[name] = box
+
+	hboxAccount := ui.NewHorizontalBox()
+	hboxAccount.SetPadded(true)
+	vbox.Append(hboxAccount, false)
+
+	box.UiBox = hboxAccount
+
+	AddBoxToTab(name, gw.UiTab, vbox)
+
+	return box
+}
