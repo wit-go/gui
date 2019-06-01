@@ -37,6 +37,7 @@ func AddAccountQuestionBox(gw *GuiWindow) *GuiBox {
 	vbox.SetPadded(true)
 	// gw.Box1 = vbox
 	gb.UiBox = vbox
+	gb.W = gw
 
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
@@ -44,7 +45,7 @@ func AddAccountQuestionBox(gw *GuiWindow) *GuiBox {
 
 	hbox.Append(ui.NewLabel("Enter your Subdomain or"), false)
 
-	button1 := CreateButton(gw, nil, nil, "Generate", "SUBDOMAIN", generateSubdomain)
+	button1 := CreateButton(gb, nil, nil, "Generate", "SUBDOMAIN", generateSubdomain)
 	button1.Box = gb
 	hbox.Append(button1.B, false)
 
@@ -53,7 +54,7 @@ func AddAccountQuestionBox(gw *GuiWindow) *GuiBox {
 
 	vbox.Append(ui.NewHorizontalSeparator(), false)
 
-	button2 := CreateButton(gw, nil, nil, "Create Subdomain Account", "ADD", nil)
+	button2 := CreateButton(gb, nil, nil, "Create Subdomain Account", "ADD", nil)
 	button2.Box = gb
 	vbox.Append(button2.B, false)
 
@@ -189,10 +190,10 @@ func AddAccountBox(gw *GuiWindow) *GuiBox {
 	hboxButtons.SetPadded(true)
 	vbox.Append(hboxButtons, false)
 
-	okButton := CreateButton(gw, nil, nil, "Add Account", "ADD", nil)
+	okButton := CreateButton(gb, nil, nil, "Add Account", "ADD", nil)
 	hboxButtons.Append(okButton.B, false)
 
-	backButton := CreateButton(gw, nil, nil, "Back", "BACK", nil)
+	backButton := CreateButton(gb, nil, nil, "Back", "BACK", nil)
 	hboxButtons.Append(backButton.B, false)
 
 	return gb

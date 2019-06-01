@@ -56,13 +56,17 @@ func addTableTab() {
 	// AddTableTab(Data.Window1.T, 1, "test seven", 7, parts, nil)
 }
 
-func addDebuggingButtons(wm *GuiWindow, vbox *ui.Box) {
+func addDebuggingButtons(box *GuiBox) {
+	vbox := ui.NewVerticalBox()
+	vbox.SetPadded(true)
+	box.UiBox.Append(vbox, false)
+
 	vbox.Append(ui.NewLabel("Debugging:"), false)
 
 	vbox.Append(ui.NewColorButton(), false)
-	a := CreateButton(wm, nil, nil, "Add Account", "ADD", nil)
+	a := CreateButton(box, nil, nil, "Add Account", "ADD", nil)
 	vbox.Append(a.B, false)
-	a = CreateButton(wm, nil, nil, "Quit", "QUIT", nil)
+	a = CreateButton(box, nil, nil, "Quit", "QUIT", nil)
 	vbox.Append(a.B, false)
 
 	// ATTEMPT TO ADD THE TABLE HERE
@@ -74,16 +78,16 @@ func addDebuggingButtons(wm *GuiWindow, vbox *ui.Box) {
 	vbox.Append(add2button, false)
 	// ATTEMPT TO ADD THE TABLE HERE END
 
-	a = CreateButton(wm, nil, nil, "Hide & Show Box1&2", "HIDE", runTestHide)
+	a = CreateButton(box, nil, nil, "Hide & Show Box1&2", "HIDE", runTestHide)
 	vbox.Append(a.B, false)
 
-	a = CreateButton(wm, nil, nil, "Close GUI", "QUIT", nil)
+	a = CreateButton(box, nil, nil, "Close GUI", "QUIT", nil)
 	vbox.Append(a.B, false)
-	a = CreateButton(wm, nil, nil, "DEBUG goroutines", "DEBUG", nil)
+	a = CreateButton(box, nil, nil, "DEBUG goroutines", "DEBUG", nil)
 	vbox.Append(a.B, false)
-	a = CreateButton(wm, nil, nil, "xterm", "XTERM", runTestExecClick)
+	a = CreateButton(box, nil, nil, "xterm", "XTERM", runTestExecClick)
 	vbox.Append(a.B, false)
-	a = CreateButton(wm, nil, nil, "Load test.json config file", "CONFIG", nil)
+	a = CreateButton(box, nil, nil, "Load test.json config file", "CONFIG", nil)
 	vbox.Append(a.B, false)
 }
 

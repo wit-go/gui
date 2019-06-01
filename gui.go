@@ -42,7 +42,7 @@ func InitColumns(mh *TableData, parts []TableColumnData) {
 	}
 }
 
-func AddTableTab(gw *GuiWindow, mytab *ui.Tab, junk int, name string, rowcount int, parts []TableColumnData, account *pb.Account) *TableData {
+func AddTableTab(gw *GuiWindow, junk int, name string, rowcount int, parts []TableColumnData, account *pb.Account) *TableData {
 	mh := new(TableData)
 
 	mh.RowCount    = rowcount
@@ -79,11 +79,20 @@ func AddTableTab(gw *GuiWindow, mytab *ui.Tab, junk int, name string, rowcount i
 		}
 	}
 
+	var gb *GuiBox
+	gb = new(GuiBox)
+
+	gb.EntryMap = make(map[string]*GuiEntry)
+	gb.EntryMap["test"] = nil
+
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
+	gb.UiBox = vbox
+	gb.W = gw
+	gw.BoxMap[name] = gb
 
 	vbox.Append(table, true)
-	mytab.Append(name, vbox)
+	gw.UiTab.Append(name, vbox)
 	// mytab.SetMargined(mytabcount, true)
 
 	vbox.Append(ui.NewVerticalSeparator(), false)
@@ -91,10 +100,8 @@ func AddTableTab(gw *GuiWindow, mytab *ui.Tab, junk int, name string, rowcount i
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 
-	a := CreateButton(gw, account, nil, "Add Virtual Machine", "createAddVmBox", nil)
+	a := CreateButton(gb, account, nil, "Add Virtual Machine", "createAddVmBox", nil)
 	hbox.Append(a.B, false)
-	b := CreateButton(gw, account, nil, "Add Virtual Machine", "createAddVmBox", nil)
-	hbox.Append(b.B, false)
 
 	vbox.Append(hbox, false)
 
@@ -102,17 +109,17 @@ func AddTableTab(gw *GuiWindow, mytab *ui.Tab, junk int, name string, rowcount i
 }
 
 func SocketError(gw *GuiWindow) {
-	ui.MsgBoxError(gw.W,
+	ui.MsgBoxError(gw.UiWindow,
 		"There was a socket error",
 		"More detailed information can be shown here.")
 }
 
 func MessageWindow(gw *GuiWindow, msg1 string, msg2 string) {
-	ui.MsgBox(gw.W, msg1, msg2)
+	ui.MsgBox(gw.UiWindow, msg1, msg2)
 }
 
 func ErrorWindow(gw *GuiWindow, msg1 string, msg2 string) {
-	ui.MsgBoxError(gw.W, msg1, msg2)
+	ui.MsgBoxError(gw.UiWindow, msg1, msg2)
 }
 
 // This is the default mouse click handler
@@ -134,7 +141,7 @@ func mouseClick(b *GuiButton) {
 		log.Println("\tgui.mouseClick() START b.Action =", b.Action)
 		if (b.Action == "createAddVmBox") {
 			log.Println("\tgui.mouseClick() createAddVmBox for b =", b)
-			createAddVmBox(b.WM, b.T, "Create New Virtual Machine", b)
+			createAddVmBox(b.GW, b.T, "Create New Virtual Machine", b)
 			return
 		}
 		/*
@@ -212,7 +219,7 @@ func AddButton(b *GuiButton, name string) *ui.Button {
 	return newB
 }
 
-func CreateButton(gw *GuiWindow, a *pb.Account, vm *pb.Event_VM,
+func CreateButton(box *GuiBox, a *pb.Account, vm *pb.Event_VM,
 		name string, action string, custom func(*GuiButton)) *GuiButton {
 	newUiB := ui.NewButton(name)
 	newUiB.OnClicked(defaultButtonClick)
@@ -220,10 +227,15 @@ func CreateButton(gw *GuiWindow, a *pb.Account, vm *pb.Event_VM,
 	var newB *GuiButton
 	newB		= new(GuiButton)
 	newB.B		= newUiB
-	newB.T		= gw.UiTab
+	if (box.W == nil) {
+		log.Println("CreateButton() box.W == nil")
+		panic("crap")
+	}
+	newB.GW		= box.W
+	newB.T		= box.W.UiTab
 	newB.Account	= a
 	newB.VM		= vm
-	newB.WM		= gw
+	newB.Box	= box
 	newB.Action	= action
 	newB.custom	= custom
 	Data.AllButtons	= append(Data.AllButtons, newB)
@@ -231,21 +243,21 @@ func CreateButton(gw *GuiWindow, a *pb.Account, vm *pb.Event_VM,
 	return newB
 }
 
-func CreateFontButton(gw *GuiWindow, action string) *GuiButton {
-	newB := ui.NewFontButton()
+func CreateFontButton(box *GuiBox, action string) *GuiButton {
 
         // create a 'fake' button entry for the mouse clicks
-	var newBM	GuiButton
-	newBM.Action	= action
-	newBM.FB	= newB
-	newBM.Area	= gw.Area
-	Data.AllButtons	= append(Data.AllButtons, &newBM)
+	var newGB	GuiButton
+	newGB.Action	= action
+	newGB.FB	= ui.NewFontButton()
+	newGB.Box	= box
+	newGB.Area	= box.Area
+	Data.AllButtons	= append(Data.AllButtons, &newGB)
 
-	newB.OnChanged(func (*ui.FontButton) {
-		log.Println("FontButton.OnChanged() START mouseClick(&newBM)", newBM)
-		mouseClick(&newBM)
+	newGB.FB.OnChanged(func (*ui.FontButton) {
+		log.Println("FontButton.OnChanged() START mouseClick(&newBM)", newGB)
+		mouseClick(&newGB)
 	})
-	return &newBM
+	return &newGB
 }
 
 func GetText(box *GuiBox, name string) string {

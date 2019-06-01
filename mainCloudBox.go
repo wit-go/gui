@@ -16,6 +16,7 @@ import pb "git.wit.com/wit/witProtobuf"
 func makeCloudInfoBox(gw *GuiWindow) *GuiBox {
 	var gb *GuiBox
 	gb = new(GuiBox)
+	gb.W = gw
 
 	gb.EntryMap = make(map[string]*GuiEntry)
 	gb.EntryMap["test"] = nil
@@ -27,11 +28,13 @@ func makeCloudInfoBox(gw *GuiWindow) *GuiBox {
 
 	if (Data.Debug) {
 		log.Println("makeCloudInfoBox() add debugging buttons")
+		/*
 		vbox := ui.NewVerticalBox()
 		vbox.SetPadded(true)
 		hbox.Append(vbox, false)
+		*/
 
-		addDebuggingButtons(gw, vbox)
+		addDebuggingButtons(gb)
 
 		hbox.Append(ui.NewVerticalSeparator(), false)
 	}
@@ -54,7 +57,7 @@ func makeCloudInfoBox(gw *GuiWindow) *GuiBox {
 	hostnameEntry.SetText(tmp)
 	hostnameEntry.SetReadOnly(true)
 
-	anew := CreateButton(gw, nil, nil, "Edit", "EDIT", nil)
+	anew := CreateButton(gb, nil, nil, "Edit", "EDIT", nil)
 	hostnamebox.Append(anew.B, false)
 
 	vbox.Append(ui.NewHorizontalSeparator(), false)
@@ -79,11 +82,11 @@ func makeCloudInfoBox(gw *GuiWindow) *GuiBox {
 		agrid.Append(ui.NewLabel(Data.Config.Accounts[key].Email),	2, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 		name := "Login " + Data.Config.Accounts[key].Nick
-		l := CreateButton(gw, Data.Config.Accounts[key], nil, name, "LOGIN", nil)
+		l := CreateButton(gb, Data.Config.Accounts[key], nil, name, "LOGIN", nil)
 		agrid.Append(l.B, 3, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 		name  = "Show " + Data.Config.Accounts[key].Nick
-		b := CreateButton(gw, Data.Config.Accounts[key], nil, name, "SHOW", nil)
+		b := CreateButton(gb, Data.Config.Accounts[key], nil, name, "SHOW", nil)
 		agrid.Append(b.B, 4, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 		row += 1
@@ -92,9 +95,9 @@ func makeCloudInfoBox(gw *GuiWindow) *GuiBox {
 	row += 1
 	agrid.Append(ui.NewLabel(""),    1, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 	row += 1
-	a := CreateButton(gw, nil, nil, "Add Account", "ADD TAB", nil)
+	a := CreateButton(gb, nil, nil, "Add Account", "ADD TAB", nil)
 	agrid.Append(a.B, 4, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
-	q := CreateButton(gw, nil, nil, "Quit", "QUIT", nil)
+	q := CreateButton(gb, nil, nil, "Quit", "QUIT", nil)
 	agrid.Append(q.B, 5, row, 1, 1, true, ui.AlignFill, false, ui.AlignFill)
 
 	vbox.Append(agrid, false)
@@ -164,7 +167,7 @@ func AddVmsTab(gw *GuiWindow, name string, count int, a *pb.Account) *TableData 
 	parts = append(parts, tmp)
 	human += 1
 
-	mh := AddTableTab(gw, gw.UiTab, 1, name, count, parts, a)
+	mh := AddTableTab(gw, 1, name, count, parts, a)
 	return mh
 }
 
@@ -237,7 +240,8 @@ func GuiInit() {
 func StartNewWindow(c *pb.Config, bg bool, action string) {
 	log.Println("InitNewWindow() Create a new window")
 	var newGuiWindow GuiWindow
-	newGuiWindow.C = c
+	newGuiWindow.Width  = int(c.Width)
+	newGuiWindow.Height = int(c.Height)
 	newGuiWindow.Action = action
 	Data.Windows = append(Data.Windows, &newGuiWindow)
 
@@ -264,22 +268,20 @@ func getSplashText(a string) *ui.AttributedString {
 	return aText
 }
 
-
 func InitWindow(gw *GuiWindow) {
 	log.Println("InitWindow() THIS WINDOW IS NOT YET SHOWN")
 
-	c := gw.C
-	gw.W = ui.NewWindow("", int(c.Width), int(c.Height), true)
-	gw.W.SetBorderless(false)
+	gw.UiWindow = ui.NewWindow("", int(gw.Width), int(gw.Height), true)
+	gw.UiWindow.SetBorderless(false)
 
         // create a 'fake' button entry for the mouse clicks
 	var newBM GuiButton
 	newBM.Action	= "QUIT"
-	newBM.W		= gw.W
-	newBM.WM	= gw
+	newBM.W		= gw.UiWindow
+	newBM.GW	= gw
 	Data.AllButtons = append(Data.AllButtons, &newBM)
 
-	gw.W.OnClosing(func(*ui.Window) bool {
+	gw.UiWindow.OnClosing(func(*ui.Window) bool {
 		log.Println("InitWindow() OnClosing() THIS WINDOW IS CLOSING gw=", gw)
 		// mouseClick(&newBM)
                 ui.Quit()
@@ -287,15 +289,15 @@ func InitWindow(gw *GuiWindow) {
 	})
 
 	gw.UiTab = ui.NewTab()
-	gw.W.SetChild(gw.UiTab)
-	gw.W.SetMargined(true)
+	gw.UiWindow.SetChild(gw.UiTab)
+	gw.UiWindow.SetMargined(true)
 
 	log.Println("InitWindow() gw =", gw)
 	log.Println("InitWindow() gw.Action =", gw.Action)
 
 	if (gw.Action == "SPLASH") {
 		log.Println("InitWindow() TRYING SPLASH")
-		damnit := "click" + string(c.Hostname)
+		damnit := "click" + string(Data.Config.Hostname)
 		tmp := getSplashText(damnit)
 		log.Println("InitWindow() TRYING SPLASH tmp =", tmp)
 		abox := ShowSplashBox(gw, tmp)
@@ -305,7 +307,7 @@ func InitWindow(gw *GuiWindow) {
 	}
 
 	Data.State = "splash"
-	gw.W.Show()
+	gw.UiWindow.Show()
 }
 
 // makeEntryBox(box, "hostname:", "blah.foo.org") {

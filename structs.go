@@ -71,15 +71,13 @@ type GuiData struct {
 //
 type GuiWindow struct {
 	Action		string
-	Area		*GuiArea	// should be moved to GuiBox
-
-	C		*pb.Config
-
-	W		*ui.Window
-	UiTab		*ui.Tab		// if this != nil, the window is 'tabbed'
+//	Area		*GuiArea	// should be moved to GuiBox
 	BoxMap		map[string]*GuiBox
-//	Box1		*ui.Box
-//	Box2		*ui.Box
+	Width		int
+	Height		int
+
+	UiWindow	*ui.Window
+	UiTab		*ui.Tab		// if this != nil, the window is 'tabbed'
 }
 
 
@@ -91,7 +89,7 @@ type GuiButton struct {
 	Action		string		// what type of button
 	Box		*GuiBox		// what box the button click was in
 	Area		*GuiArea	// indicates the button click was in an Area
-	WM		*GuiWindow	// what window the button click was in (redundant?)
+	GW		*GuiWindow	// what window the button click was in (redundant?)
 
 	Account		*pb.Account	// associated with what account?
 	VM		*pb.Event_VM	// associated with which VM?

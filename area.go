@@ -20,24 +20,31 @@ func findFB(button *GuiButton) *GuiButton {
 	return a
 }
 
-func makeSplashArea(wm *GuiWindow, ah *GuiArea) {
+func makeSplashArea(gb *GuiBox, newText *ui.AttributedString) {
 	// make this button just to get the default font (but don't display the button)
 	// There should be another way to do this (?)
-	newB := CreateFontButton(wm, "AREA")
+	var newB *GuiButton
+	newB = CreateFontButton(gb, "AREA")
+
+	// initialize the GuiArea{}
+        gb.Area			= new(GuiArea)
+        gb.Area.Window		= gb.W
+        gb.Area.UiAttrstr	= newText
 
 	// ah.UiAttrstr	= makeAttributedString()
-	ah.UiArea	= ui.NewArea(ah)
-	newB.A		= ah.UiArea
-	newB.WM	= wm
+	gb.Area.UiArea	= ui.NewArea(gb.Area)
+	newB.A		= gb.Area.UiArea
+	newB.GW		= gb.W
+	newB.Box	= gb
 	// Data.AllButtons[1].A = ah.UiArea
 	// ah.Button	= &Data.AllButtons[1]
-	ah.Button	= newB
+	gb.Area.Button	= newB
 
 	if (Data.Debug) {
-		spew.Dump(ah.UiArea)
+		spew.Dump(gb.Area.UiArea)
 		log.Println("DEBUGGING", Data.Debug)
 	} else {
-		log.Println("NOT DEBUGGING AREA mhAH.Button =", ah.Button)
+		log.Println("NOT DEBUGGING AREA mhAH.Button =", gb.Area.Button)
 	}
 }
 

@@ -11,10 +11,10 @@ import "runtime"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-func ShowSplashBox(wm *GuiWindow, newText *ui.AttributedString) *GuiBox {
+func ShowSplashBox(gw *GuiWindow, newText *ui.AttributedString) *GuiBox {
 	log.Println("ShowSplashBox() START")
-	log.Println("ShowSplashBox() START wm =", wm)
-	if (wm == nil) {
+	log.Println("ShowSplashBox() START gw =", gw)
+	if (gw == nil) {
 		log.Println("ShowSplashBox() WE ARE FUCKED BECAUSE WE DON'T KNOW WHAT WINDOW TO DO THIS IN")
 		os.Exit(0)
 		return nil
@@ -29,15 +29,19 @@ func ShowSplashBox(wm *GuiWindow, newText *ui.AttributedString) *GuiBox {
 	newbox.SetPadded(true)
 	// gw.Box1 = hbox
 	gb.UiBox = newbox
+	gb.W = gw
+	gw.BoxMap["Splash"] = gb
 
+	/*
 	// initialize the GuiArea{}
-	wm.Area		= new(GuiArea)
-	wm.Area.Window	= wm
-	wm.Area.UiAttrstr = newText
-	makeSplashArea(wm, wm.Area)
-	gb.Area		= wm.Area
+	gb.Area		= new(GuiArea)
+	gb.Area.Window	= gw
+	gb.Area.UiAttrstr = newText
+	*/
 
-	newbox.Append(wm.Area.UiArea, true)
+	makeSplashArea(gb, newText)
+
+	newbox.Append(gb.Area.UiArea, true)
 
 	if runtime.GOOS == "linux" {
 		newbox.Append(ui.NewLabel("OS: Linux"), false)
@@ -65,12 +69,12 @@ func ShowSplashBox(wm *GuiWindow, newText *ui.AttributedString) *GuiBox {
 		}
 	}
 
-	log.Println("ShowSplashBox() START wm =", wm)
+	log.Println("ShowSplashBox() START gb =", gb)
 
-	okButton := CreateButton(wm, nil, nil, "OK", "AREA", nil)
+	okButton := CreateButton(gb, nil, nil, "OK", "AREA", nil)
 	newbox.Append(okButton.B, false)
 
-	okButton = CreateButton(wm, nil, nil, "NEWTEXT", "NEWTEXT", nil)
+	okButton = CreateButton(gb, nil, nil, "NEWTEXT", "NEWTEXT", nil)
 	newbox.Append(okButton.B, false)
 
 	// os.Exit(0)

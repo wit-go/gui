@@ -14,15 +14,27 @@ func AddVmConfigureTab(wm *GuiWindow, name string, pbVM *pb.Event_VM) {
 	CreateVmBox(wm, wm.UiTab, pbVM)
 }
 
-func CreateVmBox(wm *GuiWindow, tab *ui.Tab, vm *pb.Event_VM) {
+func CreateVmBox(gw *GuiWindow, junk *ui.Tab, vm *pb.Event_VM) {
 	log.Println("CreateVmBox() START")
 	log.Println("CreateVmBox() vm.Name", vm.Name)
+
+	var gb *GuiBox
+	gb = new(GuiBox)
+
+	vbox := ui.NewVerticalBox()
+	vbox.SetPadded(true)
+	gb.UiBox = vbox
+	gb.W = gw
+	gw.BoxMap[vm.Name] = gb
+
+//	gw.UiTab.Append(vm.Name, vbox)
+
+
+
 	spew.Dump(vm)
 	if (Data.Debug) {
 		spew.Dump(vm)
 	}
-	vbox := ui.NewVerticalBox()
-	vbox.SetPadded(true)
 
 	hboxAccount := ui.NewHorizontalBox()
 	hboxAccount.SetPadded(true)
@@ -42,28 +54,39 @@ func CreateVmBox(wm *GuiWindow, tab *ui.Tab, vm *pb.Event_VM) {
 	hboxButtons.SetPadded(true)
 	vbox.Append(hboxButtons, false)
 
-	a := CreateButton(wm, nil, vm, "Power On",  "POWERON",  nil)
+	a := CreateButton(gb, nil, vm, "Power On",  "POWERON",  nil)
 	hboxButtons.Append(a.B, false)
-	a = CreateButton(wm, nil, vm, "Power Off", "POWEROFF", nil)
+	a = CreateButton(gb, nil, vm, "Power Off", "POWEROFF", nil)
 	hboxButtons.Append(a.B, false)
-	a = CreateButton(wm, nil, vm, "Destroy",   "DESTROY",  nil)
+	a = CreateButton(gb, nil, vm, "Destroy",   "DESTROY",  nil)
 	hboxButtons.Append(a.B, false)
-	a = CreateButton(wm, nil, vm, "ping",      "PING",     runPingClick)
+	a = CreateButton(gb, nil, vm, "ping",      "PING",     runPingClick)
 	hboxButtons.Append(a.B, false)
-	a = CreateButton(wm, nil, vm, "Console",   "XTERM",    runTestExecClick)
+	a = CreateButton(gb, nil, vm, "Console",   "XTERM",    runTestExecClick)
 	hboxButtons.Append(a.B, false)
-	a = CreateButton(wm, nil, vm, "Save",      "SAVE",     nil)
+	a = CreateButton(gb, nil, vm, "Save",      "SAVE",     nil)
 	hboxButtons.Append(a.B, false)
-	a = CreateButton(wm, nil, vm, "Done",      "DONE",     nil)
+	a = CreateButton(gb, nil, vm, "Done",      "DONE",     nil)
 	hboxButtons.Append(a.B, false)
 
-	AddBoxToTab(vm.Name, tab, vbox)
+	AddBoxToTab(vm.Name, gw.UiTab, vbox)
 }
 
-func createAddVmBox(wm *GuiWindow, tab *ui.Tab, name string, b *GuiButton) {
+func createAddVmBox(gw *GuiWindow, junk *ui.Tab, name string, b *GuiButton) {
 	log.Println("createAddVmBox() START")
+
+	var gb *GuiBox
+	gb = new(GuiBox)
+
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
+	gb.UiBox = vbox
+	gb.W = gw
+	gw.BoxMap[name] = gb
+
+//	gw.UiTab.Append(vm.Name, vbox)
+
+
 
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
@@ -86,16 +109,16 @@ func createAddVmBox(wm *GuiWindow, tab *ui.Tab, name string, b *GuiButton) {
 	newb.Action	= "CREATE"
 	newb.VM		= b.VM
 	newb.Account	= b.Account
-	newb.T		= tab
+	newb.T		= gw.UiTab
 	hostname.B	= &newb
 	memory.B	= &newb
 	disk.B		= &newb
 	hboxButtons.Append(AddButton(&newb, "Add Virtual Machine"), false)
 
 	// hboxButtons.Append(CreateButton(nil, nil, "Add Virtual Machine","CREATE",nil), false)
-	a := CreateButton(wm, nil, nil, "Cancel",		"CLOSE", nil)
+	a := CreateButton(gb, nil, nil, "Cancel",		"CLOSE", nil)
 	hboxButtons.Append(a.B, false)
 
 	name += " (" + b.Account.Nick + ")"
-	AddBoxToTab(name, tab, vbox)
+	AddBoxToTab(name, gw.UiTab, vbox)
 }
