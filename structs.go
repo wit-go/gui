@@ -49,24 +49,30 @@ type GuiData struct {
 	// A map of all buttons everywhere on all
 	// windows, all tabs, across all goroutines
 	// This is "GLOBAL"
+	//
+	// This has to work this way because of how
+	// andlabs/ui & andlabs/libui work
 	AllButtons	[]*GuiButton
-	ButtonMap	map[*GuiButton][]func (*GuiButton)
 
 	EntryNick	*ui.Entry
 	EntryUser	*ui.Entry
 	EntryPass	*ui.Entry
 }
 
-// stores information on 'the' window
-
+//
+// stores information on the 'window'
+//
+// This merges the concept of andlabs/ui *Window and *Tab
+//
 // More than one Window is not supported in a cross platform
 // sense & may never be. On Windows and MacOS, you have to have
 // 'tabs'. Even under Linux, more than one Window is currently
 // unstable
 //
-// This code will keep track of if the windows is 'tabbed' or
-// not. You can draw one thing in the window, then destroy
-// that, then redraw the window with something else
+// This code will make a 'GuiWindow' regardless of if it is
+// a stand alone window (which is more or less working on Linux)
+// or a 'tab' inside a window (which is all that works on MacOS
+// and MSWindows.
 //
 // This struct keeps track of what is in the window so you
 // can destroy and replace it with something else
@@ -85,7 +91,6 @@ type GuiWindow struct {
 	BoxMap		map[string]*GuiBox
 	EntryMap	map[string]*GuiEntry
 	Area		*GuiArea
-	ButtonMap	map[*GuiButton][]func (*GuiButton)
 
 	// andlabs/ui abstraction mapping
 	UiWindow	*ui.Window
@@ -115,7 +120,7 @@ type GuiButton struct {
 }
 
 type GuiBox struct {
-	W		*GuiWindow
+	Window		*GuiWindow
 	EntryMap	map[string]*GuiEntry
 	Area		*GuiArea
 

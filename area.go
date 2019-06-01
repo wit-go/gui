@@ -15,7 +15,7 @@ func makeSplashArea(gb *GuiBox, newText *ui.AttributedString) {
 	var newB *GuiButton
 	newB		= CreateFontButton(gb, "AREA")
 	newB.Box	= gb
-	newB.GW		= gb.W
+	newB.GW		= gb.Window
 
 	// initialize the GuiArea{}
 	gb.Area			= new(GuiArea)
@@ -124,7 +124,7 @@ func ShowTextBox(gw *GuiWindow, newText *ui.AttributedString) *GuiBox {
 	newbox := ui.NewVerticalBox()
 	newbox.SetPadded(true)
 	gb.UiBox = newbox
-	gb.W = gw
+	gb.Window = gw
 	gw.BoxMap["Splash"] = gb
 
 	makeSplashArea(gb, newText)

@@ -90,7 +90,7 @@ func AddTableTab(gw *GuiWindow, name string, rowcount int, parts []TableColumnDa
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
 	gb.UiBox = vbox
-	gb.W = gw
+	gb.Window = gw
 	gw.BoxMap[name] = gb
 	mh.Box = gb
 
@@ -176,18 +176,17 @@ func CreateButton(box *GuiBox, a *pb.Account, vm *pb.Event_VM, name string, acti
 	var newB *GuiButton
 	newB		= new(GuiButton)
 	newB.B		= newUiB
-	if (box.W == nil) {
-		log.Println("CreateButton() box.W == nil")
+	if (box.Window == nil) {
+		log.Println("CreateButton() box.Window == nil")
 		panic("crap")
 	}
-	newB.GW		= box.W
+	newB.GW		= box.Window
 	newB.Account	= a
 	newB.VM		= vm
 	newB.Box	= box
 	newB.Action	= action
 	newB.custom	= custom
 	Data.AllButtons	= append(Data.AllButtons, newB)
-
 	return newB
 }
 
@@ -303,7 +302,7 @@ func AddEntry(box *GuiBox, name string) *GuiEntry {
 
 func HardHorizontalBreak(box *GuiBox) {
 	log.Println("HardHorizontalBreak START")
-	gw := box.W
+	gw := box.Window
 	mainbox := gw.mainbox
 
 	tmp := ui.NewHorizontalSeparator()
@@ -318,7 +317,7 @@ func HardHorizontalBreak(box *GuiBox) {
 
 func HardVerticalBreak(box *GuiBox) {
 	log.Println("HardVerticalBreak START")
-	gw := box.W
+	gw := box.Window
 	mainbox := gw.mainbox
 
 	tmp := ui.NewVerticalSeparator()
@@ -352,7 +351,7 @@ func AddGenericBox(gw *GuiWindow) *GuiBox {
 	vbox.SetPadded(true)
 	// gw.Box1 = vbox
 	gb.UiBox = vbox
-	gb.W = gw
+	gb.Window = gw
 
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
@@ -370,7 +369,7 @@ func CreateGenericBox(gw *GuiWindow, b *GuiButton, name string) *GuiBox{
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
 	box.UiBox = vbox
-	box.W = gw
+	box.Window = gw
 	gw.BoxMap["ADD VM" + name] = box
 
 	hbox := ui.NewHorizontalBox()
@@ -395,8 +394,8 @@ func CreateBox(gw *GuiWindow, name string) *GuiBox {
 	log.Println("CreateVmBox() vbox =", vbox)
 	log.Println("CreateVmBox() box.UiBox =", box.UiBox)
 	box.UiBox = vbox
-	log.Println("CreateVmBox() box.W =", box.W)
-	box.W = gw
+	log.Println("CreateVmBox() box.Window =", box.Window)
+	box.Window = gw
 	log.Println("CreateVmBox() gw.BoxMap =", gw.BoxMap)
 	gw.BoxMap[name] = box
 

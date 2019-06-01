@@ -42,7 +42,7 @@ func ShowMainTab(gw *GuiWindow) *GuiBox {
 
 	var box *GuiBox
 	box = new(GuiBox)
-	box.W = gw
+	box.Window = gw
 
 	box.EntryMap = make(map[string]*GuiEntry)
 	box.EntryMap["test"] = nil
@@ -78,10 +78,10 @@ func StartNewWindow(c *pb.Config, bg bool, action string, maketab func(*GuiWindo
 	newGuiWindow.Height  = int(c.Height)
 	newGuiWindow.Action  = action
 	newGuiWindow.MakeWindow = maketab
+	newGuiWindow.BoxMap = make(map[string]*GuiBox)
 	Data.Windows = append(Data.Windows, &newGuiWindow)
 
 	// make(newGuiWindow.BoxMap)
-	newGuiWindow.BoxMap = make(map[string]*GuiBox)
 
 	if (bg) {
 		log.Println("ShowWindow() IN NEW GOROUTINE")
