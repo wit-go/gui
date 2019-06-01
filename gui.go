@@ -109,12 +109,6 @@ func AddTableTab(gw *GuiWindow, name string, rowcount int, parts []TableColumnDa
 	return mh
 }
 
-func SocketError(gw *GuiWindow) {
-	ui.MsgBoxError(gw.UiWindow,
-		"There was a socket error",
-		"More detailed information can be shown here.")
-}
-
 func MessageWindow(gw *GuiWindow, msg1 string, msg2 string) {
 	ui.MsgBox(gw.UiWindow, msg1, msg2)
 }
