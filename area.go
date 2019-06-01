@@ -1,44 +1,28 @@
 package gui
 
 import "log"
-// import "time"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
 import "github.com/davecgh/go-spew/spew"
 
-func findFB(button *GuiButton) *GuiButton {
-	var a *GuiButton
-	for key, foo := range Data.AllButtons {
-		log.Println("findFB() Data.AllButtons key, foo=", key, foo)
-		if foo == button {
-			log.Println("findFB() FOUND BUTTON key, foo=", key, foo)
-			a = foo
-		}
-	}
-	return a
-}
+// THIS IS CLEAN
 
 func makeSplashArea(gb *GuiBox, newText *ui.AttributedString) {
 	// make this button just to get the default font (but don't display the button)
 	// There should be another way to do this (?)
 	var newB *GuiButton
-	newB = CreateFontButton(gb, "AREA")
+	newB		= CreateFontButton(gb, "AREA")
+	newB.Box	= gb
+	newB.GW		= gb.W
 
 	// initialize the GuiArea{}
-        gb.Area			= new(GuiArea)
-        gb.Area.Window		= gb.W
-        gb.Area.UiAttrstr	= newText
-
-	// ah.UiAttrstr	= makeAttributedString()
-	gb.Area.UiArea	= ui.NewArea(gb.Area)
-	newB.A		= gb.Area.UiArea
-	newB.GW		= gb.W
-	newB.Box	= gb
-	// Data.AllButtons[1].A = ah.UiArea
-	// ah.Button	= &Data.AllButtons[1]
-	gb.Area.Button	= newB
+	gb.Area			= new(GuiArea)
+	gb.Area.Button		= newB
+	gb.Area.Box		= gb
+	gb.Area.UiAttrstr	= newText
+	gb.Area.UiArea		= ui.NewArea(gb.Area)
 
 	if (Data.Debug) {
 		spew.Dump(gb.Area.UiArea)
@@ -103,6 +87,7 @@ func (ah GuiArea) DragBroken(a *ui.Area) {
 	log.Println("GOT DragBroken()")
 }
 
+// TODO: fix KeyEvents
 func (ah GuiArea) KeyEvent(a *ui.Area, ke *ui.AreaKeyEvent) (handled bool) {
 	log.Println("GOT KeyEvent()")
 	if (ke.Key == 10) {

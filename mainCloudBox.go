@@ -170,12 +170,13 @@ func GuiInit() {
 	})
 }
 
-func StartNewWindow(c *pb.Config, bg bool, action string) {
+func StartNewWindow(c *pb.Config, bg bool, action string, text func() *ui.AttributedString) {
 	log.Println("InitNewWindow() Create a new window")
 	var newGuiWindow GuiWindow
-	newGuiWindow.Width  = int(c.Width)
-	newGuiWindow.Height = int(c.Height)
-	newGuiWindow.Action = action
+	newGuiWindow.Width   = int(c.Width)
+	newGuiWindow.Height  = int(c.Height)
+	newGuiWindow.Action  = action
+	newGuiWindow.GetText = text
 	Data.Windows = append(Data.Windows, &newGuiWindow)
 
 	// make(newGuiWindow.BoxMap)
@@ -210,7 +211,7 @@ func InitWindow(gw *GuiWindow) {
         // create a 'fake' button entry for the mouse clicks
 	var newBM GuiButton
 	newBM.Action	= "QUIT"
-	newBM.W		= gw.UiWindow
+//	newBM.W		= gw.UiWindow
 	newBM.GW	= gw
 	Data.AllButtons = append(Data.AllButtons, &newBM)
 
@@ -231,7 +232,12 @@ func InitWindow(gw *GuiWindow) {
 	if (gw.Action == "SPLASH") {
 		log.Println("InitWindow() TRYING SPLASH")
 		damnit := "click" + string(Data.Config.Hostname)
-		tmp := getSplashText(damnit)
+		var tmp *ui.AttributedString
+		if (gw.GetText == nil) {
+			tmp = getSplashText(damnit)
+		} else {
+			tmp = gw.GetText()
+		}
 		log.Println("InitWindow() TRYING SPLASH tmp =", tmp)
 		abox := ShowSplashBox(gw, tmp)
 
@@ -252,7 +258,7 @@ func makeEntryVbox(hbox *ui.Box, a string, startValue string, edit bool, action 
 
 	e := defaultMakeEntry(startValue, edit, action)
 
-	vboxN.Append(e.E, false)
+	vboxN.Append(e.UiEntry, false)
 	hbox.Append(vboxN, false)
 	// End 'Nickname' vertical box
 
@@ -298,7 +304,7 @@ func defaultEntryChange(e *ui.Entry) {
 		if (Data.Debug) {
 			log.Println("\tdefaultEntryChange() Data.AllEntries =", key, em)
 		}
-		if Data.AllEntries[key].E == e {
+		if Data.AllEntries[key].UiEntry == e {
 			log.Println("defaultEntryChange() FOUND", 
 				"action =", Data.AllEntries[key].Action,
 				"Last =", Data.AllEntries[key].Last,
@@ -324,9 +330,9 @@ func defaultMakeEntry(startValue string, edit bool, action string) *GuiEntry {
 
 	// add the entry field to the global map
 	var newEntry GuiEntry
-	newEntry.E      = e
-	newEntry.Edit   = edit
-	newEntry.Action = action
+	newEntry.UiEntry  = e
+	newEntry.Edit     = edit
+	newEntry.Action   = action
 	if (action == "Memory") {
 		newEntry.Normalize = normalizeInt
 	}
@@ -342,7 +348,7 @@ func makeEntryHbox(hbox *ui.Box, a string, startValue string, edit bool, action 
 	hboxN.Append(ui.NewLabel(a), false)
 
 	e := defaultMakeEntry(startValue, edit, action)
-	hboxN.Append(e.E, false)
+	hboxN.Append(e.UiEntry, false)
 
 	hbox.Append(hboxN, false)
 	// End 'Nickname' vertical box

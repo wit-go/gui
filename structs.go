@@ -71,13 +71,14 @@ type GuiData struct {
 //
 type GuiWindow struct {
 	Action		string
-//	Area		*GuiArea	// should be moved to GuiBox
 	BoxMap		map[string]*GuiBox
 	Width		int
 	Height		int
 
+	// andlabs/ui abstraction mapping
 	UiWindow	*ui.Window
 	UiTab		*ui.Tab		// if this != nil, the window is 'tabbed'
+	GetText		func() *ui.AttributedString
 }
 
 
@@ -100,9 +101,6 @@ type GuiButton struct {
 	// andlabs/ui abstraction mapping
 	B		*ui.Button
 	FB		*ui.FontButton
-	A		*ui.Area	// should be deprecated
-	W		*ui.Window	// should be deprecated
-	T		*ui.Tab		// should be deprecated
 }
 
 type GuiBox struct {
@@ -110,6 +108,7 @@ type GuiBox struct {
 	EntryMap	map[string]*GuiEntry
 	Area		*GuiArea
 
+	// andlabs/ui abstraction mapping
 	UiBox		*ui.Box
 }
 
@@ -120,13 +119,12 @@ type GuiEntry struct {
 	Normalize	func (string) string // function to 'normalize' the data
 
 	B		*GuiButton
+	Box		*GuiBox
 	Account		*pb.Account
 	VM		*pb.Event_VM
 
-	E		*ui.Entry
-	W		*ui.Window  // should be moved to *GuiWindow or GuiBox
-	T		*ui.Tab     // should be moved to *GuiWindow or GuiBox
-
+	// andlabs/ui abstraction mapping
+	UiEntry		*ui.Entry
 }
 
 //
@@ -135,8 +133,8 @@ type GuiEntry struct {
 // AREA STRUCTURES START
 //
 type GuiArea struct{
-	Window		*GuiWindow // what window this area is in (should be GuiBox?)
 	Button		*GuiButton // what button handles mouse events
+	Box		*GuiBox
 
 	UiAttrstr	*ui.AttributedString
 	UiArea		*ui.Area
@@ -178,7 +176,6 @@ type TableData struct {
 
 	lastRow			int
 	lastColumn		int
-//	parentTab		*ui.Tab
 }
 
 //
@@ -231,6 +228,7 @@ type RowData struct {
 	Status		string			// status of the row?
 /*
 	// TODO: These may or may not be implementable
+	// depending on if it's possible to detect the bgcolor or what row is selected
 	click		func()			// what function to call if the user clicks on it
 	doubleclick	func()			// what function to call if the user double clicks on it
 */

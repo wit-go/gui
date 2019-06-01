@@ -20,7 +20,7 @@ func AddEntry(box *GuiBox, name string) *GuiEntry {
 	})
 	box.UiBox.Append(ue, false)
 
-	ge.E = ue
+	ge.UiEntry = ue
 	box.EntryMap[name] = ge
 
 	return ge
@@ -69,7 +69,7 @@ func generateSubdomain(b *GuiButton) {
 	}
 	// subdomain.SetText("cust00013.wit.dev")
 
-	txt := SetText(b.Box, "SUBDOMAIN", "cust001.testing.com.customers.wpord.wit.com")
+	txt := SetText(b.Box, "SUBDOMAIN", "cust001.testing.com.customers.wprod.wit.com")
 	log.Println("generateSubdomain subdomain = ", txt)
 	log.Println("generateSubdomain END")
 }

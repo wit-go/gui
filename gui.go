@@ -145,6 +145,7 @@ func mouseClick(b *GuiButton) {
 			createAddVmBox(b.GW, b)
 			return
 		}
+		/*
 		if (b.Action == "WINDOW CLOSE") {
 			b.W.Hide()
 			// TODO: fix this (seems to crash? maybe because we are in the button here?)
@@ -154,10 +155,12 @@ func mouseClick(b *GuiButton) {
 		if (b.Action == "ADD") {
 			log.Println("\tgui.mouseClick() SHOULD ADD VM HERE?")
 		}
+		*/
 	}
 
 	if (Data.MouseClick == nil) {
 		log.Println("\tgui.mouseClick() Data.MouseClick() IS nil. NOT DOING ANYTHING")
+		log.Println("\tgui.mouseClick() Your application did not set a MouseClick() callback function")
 	} else {
 		log.Println("\tgui.mouseClick() Data.MouseClick() START")
 		Data.MouseClick(b)
@@ -210,8 +213,7 @@ func AddButton(b *GuiButton, name string) *ui.Button {
 	return newB
 }
 
-func CreateButton(box *GuiBox, a *pb.Account, vm *pb.Event_VM,
-		name string, action string, custom func(*GuiButton)) *GuiButton {
+func CreateButton(box *GuiBox, a *pb.Account, vm *pb.Event_VM, name string, action string, custom func(*GuiButton)) *GuiButton {
 	newUiB := ui.NewButton(name)
 	newUiB.OnClicked(defaultButtonClick)
 
@@ -223,7 +225,6 @@ func CreateButton(box *GuiBox, a *pb.Account, vm *pb.Event_VM,
 		panic("crap")
 	}
 	newB.GW		= box.W
-	newB.T		= box.W.UiTab
 	newB.Account	= a
 	newB.VM		= vm
 	newB.Box	= box
@@ -266,9 +267,9 @@ func GetText(box *GuiBox, name string) string {
 		return ""
 	}
 	e := box.EntryMap[name]
-	log.Println("gui.GetText() box.EntryMap[", name, "] = ", e.E.Text())
+	log.Println("gui.GetText() box.EntryMap[", name, "] = ", e.UiEntry.Text())
 	log.Println("gui.GetText() END")
-	return e.E.Text()
+	return e.UiEntry.Text()
 }
 
 func SetText(box *GuiBox, name string, value string) error {
@@ -283,9 +284,9 @@ func SetText(box *GuiBox, name string, value string) error {
 		return fmt.Errorf("gui.SetText() ERROR box.EntryMap[", name, "] == nil ")
 	}
 	e := box.EntryMap[name]
-	log.Println("gui.SetText() box.EntryMap[", name, "] = ", e.E.Text())
-	e.E.SetText(value)
-	log.Println("gui.SetText() box.EntryMap[", name, "] = ", e.E.Text())
+	log.Println("gui.SetText() box.EntryMap[", name, "] = ", e.UiEntry.Text())
+	e.UiEntry.SetText(value)
+	log.Println("gui.SetText() box.EntryMap[", name, "] = ", e.UiEntry.Text())
 	log.Println("gui.SetText() END")
 	return nil
 }
