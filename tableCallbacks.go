@@ -110,7 +110,9 @@ func defaultSetCellValue(mh *TableData, row int, column int) {
 
 		button := mh.Rows[row].HumanData[humanID].Button
 		if (button != nil) {
-			mouseClick(button)
+			if (Data.MouseClick != nil) {
+				Data.MouseClick(button)
+			}
 			return
 		}
 		if (Data.Debug) {

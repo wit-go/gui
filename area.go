@@ -75,7 +75,9 @@ func (ah GuiArea) MouseEvent(a *ui.Area, me *ui.AreaMouseEvent) {
 		log.Println("GOT MOUSE UP")
 		log.Println("GOT MOUSE UP ah.Button =", ah.Button)
 		log.Println("GOT MOUSE UP ah.Button.FB =", ah.Button.FB)
-		mouseClick(ah.Button)
+		if (Data.MouseClick != nil) {
+			Data.MouseClick(ah.Button)
+		}
 	}
 }
 

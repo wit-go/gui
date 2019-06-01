@@ -10,7 +10,7 @@ import pb "git.wit.com/wit/witProtobuf"
 
 import "github.com/davecgh/go-spew/spew"
 
-// THIS IS CLEAN (all that is left is the 'createAddVmBox')
+// THIS IS CLEAN (all that is left is the 'ADD VM')
 
 func InitColumns(mh *TableData, parts []TableColumnData) {
 	tmpBTindex := 0
@@ -96,15 +96,11 @@ func AddTableTab(gw *GuiWindow, name string, rowcount int, parts []TableColumnDa
 
 	vbox.Append(table, true)
 	gw.UiTab.Append(name, vbox)
-	// mytab.SetMargined(mytabcount, true)
 
 	vbox.Append(ui.NewVerticalSeparator(), false)
 
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
-
-//	a := CreateButton(gb, account, nil, "Add Virtual Machine", "createAddVmBox", nil)
-//	hbox.Append(a.B, false)
 
 	vbox.Append(hbox, false)
 
@@ -124,47 +120,6 @@ func ErrorWindow(gw *GuiWindow, msg1 string, msg2 string) {
 // something specific will fall into this routine
 // By default, all it runs is the call back to
 // the main program that is using this library
-
-// This is one of the routines that is called from the
-// defaultButtonClick() below when the button is found
-// in the AllButtons %map
-// TODO: clean up the text above
-// TODO: remove this all together going only to main()
-func mouseClick(b *GuiButton) {
-	log.Println("gui.mouseClick() START")
-	if (b == nil) {
-		log.Println("\tgui.mouseClick() START b = nil")
-	} else {
-		log.Println("\tgui.mouseClick() START b.Action =", b.Action)
-		/*
-		if (b.Action == "CreateAddVmBox") {
-			log.Println("\tgui.mouseClick() CreateAddVmBox for b =", b)
-			CreateAddVmBox(b.GW, b)
-			return
-		}
-		*/
-		/*
-		if (b.Action == "WINDOW CLOSE") {
-			b.W.Hide()
-			// TODO: fix this (seems to crash? maybe because we are in the button here?)
-			// b.W.Destroy()
-			return
-		}
-		if (b.Action == "ADD") {
-			log.Println("\tgui.mouseClick() SHOULD ADD VM HERE?")
-		}
-		*/
-	}
-
-	if (Data.MouseClick == nil) {
-		log.Println("\tgui.mouseClick() Data.MouseClick() IS nil. NOT DOING ANYTHING")
-		log.Println("\tgui.mouseClick() Your application did not set a MouseClick() callback function")
-	} else {
-		log.Println("\tgui.mouseClick() Data.MouseClick() START")
-		Data.MouseClick(b)
-	}
-}
-
 //
 // This routine MUST be here as this is how the andlabs/ui works
 // This is the raw routine passed to every button in andlabs libui / ui
@@ -177,21 +132,21 @@ func defaultButtonClick(button *ui.Button) {
 	for key, foo := range Data.AllButtons {
 		if (Data.Debug) {
 			log.Println("defaultButtonClick() Data.AllButtons =", key, foo)
-			spew.Dump(foo)
+			// spew.Dump(foo)
 		}
 		if Data.AllButtons[key].B == button {
 			log.Println("\tdefaultButtonClick() BUTTON MATCHED")
-			// log.Println("\tData.AllButtons[key].Name =", Data.AllButtons[key].Name)
 			log.Println("\tdefaultButtonClick() Data.AllButtons[key].Action =", Data.AllButtons[key].Action)
 			if Data.AllButtons[key].custom != nil {
 				log.Println("\tdefaultButtonClick() DOING CUSTOM FUNCTION")
-				var tmp *GuiButton
-				tmp = Data.AllButtons[key]
-				// spew.Dump(tmp)
-				Data.AllButtons[key].custom(tmp)
+				Data.AllButtons[key].custom(Data.AllButtons[key])
 				return
 			}
-			mouseClick(Data.AllButtons[key])
+			if (Data.MouseClick != nil) {
+				Data.MouseClick(Data.AllButtons[key])
+			} else {
+				log.Println("\tdefaultButtonClick() IGNORING BUTTON. MouseClick() is nil")
+			}
 			return
 		}
 	}
@@ -199,7 +154,6 @@ func defaultButtonClick(button *ui.Button) {
 	if (Data.Debug) {
 		panic("defaultButtonClick() SHOULD NOT HAVE UNMAPPED BUTTONS")
 	}
-	mouseClick(nil)
 }
 
 func AddButton(b *GuiButton, name string) *ui.Button {
@@ -249,7 +203,9 @@ func CreateFontButton(box *GuiBox, action string) *GuiButton {
 
 	newGB.FB.OnChanged(func (*ui.FontButton) {
 		log.Println("FontButton.OnChanged() START mouseClick(&newBM)", newGB)
-		mouseClick(&newGB)
+		if (Data.MouseClick != nil) {
+			Data.MouseClick(&newGB)
+		}
 	})
 	return &newGB
 }
@@ -345,6 +301,11 @@ func AddEntry(box *GuiBox, name string) *GuiEntry {
 	return ge
 }
 
+func HorizontalBreak(box *GuiBox) {
+	tmp := ui.NewHorizontalSeparator()
+	box.UiBox.Append(tmp, false)
+}
+
 func AddGenericBox(gw *GuiWindow) *GuiBox {
 	var gb *GuiBox
 	gb = new(GuiBox)
@@ -365,7 +326,23 @@ func AddGenericBox(gw *GuiWindow) *GuiBox {
 	return gb
 }
 
-func HorizontalBreak(box *GuiBox) {
-	tmp := ui.NewHorizontalSeparator()
-	box.UiBox.Append(tmp, false)
+func CreateGenericBox(gw *GuiWindow, b *GuiButton, name string) *GuiBox{
+	log.Println("CreateAddVmBox() START name =", name)
+
+	var box *GuiBox
+	box = new(GuiBox)
+
+	vbox := ui.NewVerticalBox()
+	vbox.SetPadded(true)
+	box.UiBox = vbox
+	box.W = gw
+	gw.BoxMap["ADD VM" + name] = box
+
+	hbox := ui.NewHorizontalBox()
+	hbox.SetPadded(true)
+	vbox.Append(hbox, false)
+
+	AddBoxToTab(name, gw.UiTab, vbox)
+
+	return box
 }
