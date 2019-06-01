@@ -14,18 +14,20 @@ import pb "git.wit.com/wit/witProtobuf"
 
 // THIS IS NOT CLEAN (almost?)
 
-func ShowTab(gw *GuiWindow, tabname string, title string) {
+func ShowTab(gw *GuiWindow, tabname string, title string) *GuiWindow {
 	log.Println("ShowTab() gw =", gw)
 	if (gw.UiTab == nil) {
 		log.Println("ShowTab() gw.UiTab = nil THIS IS BAD")
 		os.Exit(-1)
 	}
-	gw.UiTab.Delete(0)
+	window := InitGuiWindow(Data.Config, tabname, gw.MakeWindow, gw.UiWindow, gw.UiTab)
+	window.UiTab.Delete(0)
 
-	abox := gw.MakeWindow(gw)
-	gw.BoxMap[tabname] = abox
-	gw.UiTab.InsertAt(title, 0, abox.UiBox)
-	gw.UiTab.SetMargined(0, true)
+	abox := window.MakeWindow(window)
+	window.BoxMap[tabname] = abox
+	window.UiTab.InsertAt(title, 0, abox.UiBox)
+	window.UiTab.SetMargined(0, true)
+	return window
 }
 
 func GuiInit() {
