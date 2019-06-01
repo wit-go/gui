@@ -73,14 +73,23 @@ type GuiData struct {
 //
 type GuiWindow struct {
 	Action		string
-	BoxMap		map[string]*GuiBox
 	Width		int
 	Height		int
+
+	mainbox		*ui.Box
+
+	// the callback function to make the window contents
+	MakeWindow	func(*GuiWindow) *GuiBox
+
+	// the components of the window
+	BoxMap		map[string]*GuiBox
+	EntryMap	map[string]*GuiEntry
+	Area		*GuiArea
+	ButtonMap	map[*GuiButton][]func (*GuiButton)
 
 	// andlabs/ui abstraction mapping
 	UiWindow	*ui.Window
 	UiTab		*ui.Tab		// if this != nil, the window is 'tabbed'
-	MakeTab		func(*GuiWindow) *GuiBox
 }
 
 
@@ -122,6 +131,7 @@ type GuiEntry struct {
 
 	B		*GuiButton
 	Box		*GuiBox
+
 	Account		*pb.Account
 	VM		*pb.Event_VM
 

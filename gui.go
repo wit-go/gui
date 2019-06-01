@@ -301,8 +301,43 @@ func AddEntry(box *GuiBox, name string) *GuiEntry {
 	return ge
 }
 
+func HardHorizontalBreak(box *GuiBox) {
+	log.Println("HardHorizontalBreak START")
+	gw := box.W
+	mainbox := gw.mainbox
+
+	tmp := ui.NewHorizontalSeparator()
+	mainbox.Append(tmp, false)
+
+	hbox := ui.NewVerticalBox()
+	hbox.SetPadded(true)
+	box.UiBox = hbox
+	mainbox.Append(hbox, true)
+	log.Println("HardHorizontalBreak END")
+}
+
+func HardVerticalBreak(box *GuiBox) {
+	log.Println("HardVerticalBreak START")
+	gw := box.W
+	mainbox := gw.mainbox
+
+	tmp := ui.NewVerticalSeparator()
+	mainbox.Append(tmp, false)
+
+	hbox := ui.NewVerticalBox()
+	hbox.SetPadded(true)
+	box.UiBox = hbox
+	mainbox.Append(hbox, false)
+	log.Println("HardVerticalBreak END")
+}
+
 func HorizontalBreak(box *GuiBox) {
 	tmp := ui.NewHorizontalSeparator()
+	box.UiBox.Append(tmp, false)
+}
+
+func VerticalBreak(box *GuiBox) {
+	tmp := ui.NewVerticalSeparator()
 	box.UiBox.Append(tmp, false)
 }
 

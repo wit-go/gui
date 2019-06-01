@@ -22,7 +22,7 @@ func ShowTab(gw *GuiWindow, tabname string, title string) {
 	}
 	gw.UiTab.Delete(0)
 
-	abox := gw.MakeTab(gw)
+	abox := gw.MakeWindow(gw)
 	gw.BoxMap[tabname] = abox
 	gw.UiTab.InsertAt(title, 0, abox.UiBox)
 	gw.UiTab.SetMargined(0, true)
@@ -36,17 +36,38 @@ func GuiInit() {
 	})
 }
 
-func ShowMainTab(gw *GuiWindow) {
+func ShowMainTab(gw *GuiWindow) *GuiBox {
 	log.Println("ShowMainTab() gw =", gw)
 	log.Println("ShowMainTab() gw.UiTab =", gw.UiTab)
-	gw.UiTab.Delete(0)
 
-	log.Println("Sleep(200)")
-	time.Sleep(200 * time.Millisecond)
+	var box *GuiBox
+	box = new(GuiBox)
+	box.W = gw
 
-	abox := makeCloudInfoBox(gw)
-	gw.BoxMap["Box3"] = abox
-	gw.UiTab.InsertAt("Main", 0, abox.UiBox)
+	box.EntryMap = make(map[string]*GuiEntry)
+	box.EntryMap["test"] = nil
+
+	hbox := ui.NewHorizontalBox()
+	hbox.SetPadded(true)
+	box.UiBox = hbox
+	gw.mainbox = hbox
+
+	if (Data.Debug) {
+		log.Println("makeCloudInfoBox() add debugging buttons")
+		addDebuggingButtons(box)
+		hbox.Append(ui.NewVerticalSeparator(), false)
+	}
+
+	// box := gw.MakeWindow(gw)
+	// abox := makeCloudInfoBox(gw, box)
+	return box
+}
+
+func ShowMainTabShowBox(gw *GuiWindow, box *GuiBox) {
+	log.Println("gui.ShowMainTabShowBox() box =", box)
+	// gw.UiTab.Delete(0)
+	gw.BoxMap["Box3"] = box
+	gw.UiTab.InsertAt("Main", 0, gw.mainbox)
 	gw.UiTab.SetMargined(0, true)
 }
 
@@ -56,7 +77,7 @@ func StartNewWindow(c *pb.Config, bg bool, action string, maketab func(*GuiWindo
 	newGuiWindow.Width   = int(c.Width)
 	newGuiWindow.Height  = int(c.Height)
 	newGuiWindow.Action  = action
-	newGuiWindow.MakeTab = maketab
+	newGuiWindow.MakeWindow = maketab
 	Data.Windows = append(Data.Windows, &newGuiWindow)
 
 	// make(newGuiWindow.BoxMap)
@@ -108,7 +129,7 @@ func InitTabWindow(gw *GuiWindow) {
 
 	log.Println("InitTabWindow() gw =", gw)
 
-	abox := gw.MakeTab(gw)
+	abox := gw.MakeWindow(gw)
 
 	gw.UiTab.Append("WIT Splash", abox.UiBox)
 	gw.UiTab.SetMargined(0, true)
