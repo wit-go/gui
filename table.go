@@ -9,6 +9,8 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 // import "github.com/davecgh/go-spew/spew"
 
+// THIS IS CLEAN
+
 func initRowBTcolor(mh *TableData, intBG int, cell TableColumnData) {
 	humanInt := cell.Index
 

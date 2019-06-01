@@ -8,6 +8,8 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 import pb "git.wit.com/wit/witProtobuf"
 
+// THIS IS CLEAN
+
 //
 // All GUI Data Structures and functions that are external
 // If you need cross platform support, these might only
@@ -78,7 +80,7 @@ type GuiWindow struct {
 	// andlabs/ui abstraction mapping
 	UiWindow	*ui.Window
 	UiTab		*ui.Tab		// if this != nil, the window is 'tabbed'
-	GetText		func() *ui.AttributedString
+	MakeTab		func(*GuiWindow) *GuiBox
 }
 
 

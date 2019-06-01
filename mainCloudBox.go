@@ -170,13 +170,13 @@ func GuiInit() {
 	})
 }
 
-func StartNewWindow(c *pb.Config, bg bool, action string, text func() *ui.AttributedString) {
+func StartNewWindow(c *pb.Config, bg bool, action string, maketab func(*GuiWindow) *GuiBox) {
 	log.Println("InitNewWindow() Create a new window")
 	var newGuiWindow GuiWindow
 	newGuiWindow.Width   = int(c.Width)
 	newGuiWindow.Height  = int(c.Height)
 	newGuiWindow.Action  = action
-	newGuiWindow.GetText = text
+	newGuiWindow.MakeTab = maketab
 	Data.Windows = append(Data.Windows, &newGuiWindow)
 
 	// make(newGuiWindow.BoxMap)
@@ -185,13 +185,13 @@ func StartNewWindow(c *pb.Config, bg bool, action string, text func() *ui.Attrib
 	if (bg) {
 		log.Println("ShowWindow() IN NEW GOROUTINE")
 		go ui.Main(func() {
-			InitWindow(&newGuiWindow)
+			InitTabWindow(&newGuiWindow)
 		})
 		time.Sleep(2000 * time.Millisecond)
 	} else {
 		log.Println("ShowWindow() WAITING for ui.Main()")
 		ui.Main(func() {
-			InitWindow(&newGuiWindow)
+			InitTabWindow(&newGuiWindow)
 		})
 	}
 }
@@ -202,8 +202,8 @@ func getSplashText(a string) *ui.AttributedString {
 	return aText
 }
 
-func InitWindow(gw *GuiWindow) {
-	log.Println("InitWindow() THIS WINDOW IS NOT YET SHOWN")
+func InitTabWindow(gw *GuiWindow) {
+	log.Println("InitTabWindow() THIS WINDOW IS NOT YET SHOWN")
 
 	gw.UiWindow = ui.NewWindow("", int(gw.Width), int(gw.Height), true)
 	gw.UiWindow.SetBorderless(false)
@@ -216,7 +216,7 @@ func InitWindow(gw *GuiWindow) {
 	Data.AllButtons = append(Data.AllButtons, &newBM)
 
 	gw.UiWindow.OnClosing(func(*ui.Window) bool {
-		log.Println("InitWindow() OnClosing() THIS WINDOW IS CLOSING gw=", gw)
+		log.Println("InitTabWindow() OnClosing() THIS WINDOW IS CLOSING gw=", gw)
 		// mouseClick(&newBM)
                 ui.Quit()
 		return true
@@ -226,24 +226,12 @@ func InitWindow(gw *GuiWindow) {
 	gw.UiWindow.SetChild(gw.UiTab)
 	gw.UiWindow.SetMargined(true)
 
-	log.Println("InitWindow() gw =", gw)
-	log.Println("InitWindow() gw.Action =", gw.Action)
+	log.Println("InitTabWindow() gw =", gw)
 
-	if (gw.Action == "SPLASH") {
-		log.Println("InitWindow() TRYING SPLASH")
-		damnit := "click" + string(Data.Config.Hostname)
-		var tmp *ui.AttributedString
-		if (gw.GetText == nil) {
-			tmp = getSplashText(damnit)
-		} else {
-			tmp = gw.GetText()
-		}
-		log.Println("InitWindow() TRYING SPLASH tmp =", tmp)
-		abox := ShowSplashBox(gw, tmp)
+	abox := gw.MakeTab(gw)
 
-		gw.UiTab.Append("WIT Splash", abox.UiBox)
-		gw.UiTab.SetMargined(0, true)
-	}
+	gw.UiTab.Append("WIT Splash", abox.UiBox)
+	gw.UiTab.SetMargined(0, true)
 
 	Data.State = "splash"
 	gw.UiWindow.Show()
@@ -329,36 +317,3 @@ func defaultMakeEntry(startValue string, edit bool, action string) *GuiEntry {
 
 	return &newEntry
 }
-
-/*
-// makeEntryBox(box, "hostname:", "blah.foo.org") {
-func makeEntryVbox(box *GuiBox, a string, startValue string, edit bool, action string) *GuiEntry {
-	// Start 'Nickname' vertical box
-	vboxN := ui.NewVerticalBox()
-	vboxN.SetPadded(true)
-	vboxN.Append(ui.NewLabel(a), false)
-
-	e := defaultMakeEntry(startValue, edit, action)
-
-	vboxN.Append(e.UiEntry, false)
-	box.UiBox.Append(vboxN, false)
-	// End 'Nickname' vertical box
-
-	return e
-}
-
-func makeEntryHbox(box *GuiBox, a string, startValue string, edit bool, action string) *GuiEntry {
-	// Start 'Nickname' vertical box
-	hboxN := ui.NewHorizontalBox()
-	hboxN.SetPadded(true)
-	hboxN.Append(ui.NewLabel(a), false)
-
-	e := defaultMakeEntry(startValue, edit, action)
-	hboxN.Append(e.UiEntry, false)
-
-	box.UiBox.Append(hboxN, false)
-	// End 'Nickname' vertical box
-
-	return e
-}
-*/

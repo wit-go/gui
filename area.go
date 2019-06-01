@@ -101,7 +101,32 @@ func (ah GuiArea) KeyEvent(a *ui.Area, ke *ui.AreaKeyEvent) (handled bool) {
 		log.Println("GOT ENTER")
 	}
 	spew.Dump(ke)
-	// splashWin.Destroy()
-	// ui.Quit()
 	return false
+}
+
+func ShowTextBox(gw *GuiWindow, newText *ui.AttributedString) *GuiBox {
+	log.Println("ShowTextBox() START")
+	if (gw == nil) {
+		log.Println("ShowTextBox() ERROR gw = nil")
+		return nil
+	}
+	log.Println("ShowTextBox() START gw =", gw)
+
+	// create and setup a new GuiBox
+	var gb *GuiBox
+	gb = new(GuiBox)
+
+	gb.EntryMap = make(map[string]*GuiEntry)
+	gb.EntryMap["test"] = nil
+
+	newbox := ui.NewVerticalBox()
+	newbox.SetPadded(true)
+	gb.UiBox = newbox
+	gb.W = gw
+	gw.BoxMap["Splash"] = gb
+
+	makeSplashArea(gb, newText)
+	newbox.Append(gb.Area.UiArea, true)
+
+	return gb
 }

@@ -209,6 +209,10 @@ func AddButton(b *GuiButton, name string) *ui.Button {
 	return newB
 }
 
+func AddButtonToBox(box *GuiBox, button *GuiButton) {
+	box.UiBox.Append(button.B, false)
+}
+
 func CreateButton(box *GuiBox, a *pb.Account, vm *pb.Event_VM, name string, action string, custom func(*GuiButton)) *GuiButton {
 	newUiB := ui.NewButton(name)
 	newUiB.OnClicked(defaultButtonClick)
@@ -316,4 +320,8 @@ func MakeEntryHbox(box *GuiBox, a string, startValue string, edit bool, action s
 	// End 'Nickname' vertical box
 
 	return e
+}
+
+func NewLabel(box *GuiBox, text string) {
+	box.UiBox.Append(ui.NewLabel(text), false)
 }

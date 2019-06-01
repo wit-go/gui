@@ -14,6 +14,8 @@ import "runtime"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
+// THIS IS CLEAN
+
 func (mh *TableData) NumRows(m *ui.TableModel) int {
 	if (Data.Debug) {
 		log.Println("NumRows = mh.RowCount = ", mh.RowCount, "(last Row & Column =", mh.lastRow, mh.lastColumn, ")")
