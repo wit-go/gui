@@ -325,3 +325,45 @@ func MakeEntryHbox(box *GuiBox, a string, startValue string, edit bool, action s
 func NewLabel(box *GuiBox, text string) {
 	box.UiBox.Append(ui.NewLabel(text), false)
 }
+
+func AddEntry(box *GuiBox, name string) *GuiEntry {
+	var ge *GuiEntry
+	ge = new(GuiEntry)
+
+	ue := ui.NewEntry()
+	ue.SetReadOnly(false)
+	ue.OnChanged(func(*ui.Entry) {
+		log.Println("gui.AddEntry() OK. ue.Text() =", ue.Text())
+	})
+	box.UiBox.Append(ue, false)
+
+	ge.UiEntry = ue
+	box.EntryMap[name] = ge
+
+	return ge
+}
+
+func AddGenericBox(gw *GuiWindow) *GuiBox {
+	var gb *GuiBox
+	gb = new(GuiBox)
+
+	gb.EntryMap = make(map[string]*GuiEntry)
+	gb.EntryMap["test"] = nil
+
+	vbox := ui.NewVerticalBox()
+	vbox.SetPadded(true)
+	// gw.Box1 = vbox
+	gb.UiBox = vbox
+	gb.W = gw
+
+	hbox := ui.NewHorizontalBox()
+	hbox.SetPadded(true)
+	vbox.Append(hbox, false)
+
+	return gb
+}
+
+func HorizontalBreak(box *GuiBox) {
+	tmp := ui.NewHorizontalSeparator()
+	box.UiBox.Append(tmp, false)
+}

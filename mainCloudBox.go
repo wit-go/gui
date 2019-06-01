@@ -115,40 +115,12 @@ func ShowAccountQuestionTab(gw *GuiWindow) {
 	log.Println("Sleep(200)")
 	time.Sleep(200 * time.Millisecond)
 
-	abox := AddAccountQuestionBox(gw)
+	// abox := AddAccountQuestionBox(gw)
+	abox := gw.MakeTab(gw)
 	gw.BoxMap["Box2"] = abox
-	// gw.Box2 = AddAccountQuestionBox(gw)
 	gw.UiTab.InsertAt("New Account?", 0, abox.UiBox)
 	gw.UiTab.SetMargined(0, true)
 }
-
-/*
-func ShowAccountTab(gw *GuiWindow, i int) {
-	log.Println("ShowAccountTab() START")
-
-	log.Println("Sleep(200)")
-	time.Sleep(200 * time.Millisecond)
-
-	// Create the things for the Account Tab
-	abox := AddAccountBox(gw)
-
-	// Set the parents and data structure links
-	// aTab.me = gw.UiTab
-	// aTab.parentWindow = Data.Window1.W
-	// aTab.tabOffset = 0
-
-	if (i >= 0) {
-		log.Println("ShowAccountTab() InsertAt i=", i)
-		gw.UiTab.Delete(0)
-		gw.UiTab.InsertAt("Add Account", i, abox.UiBox)
-		gw.UiTab.SetMargined(0, true)
-	} else {
-		// TODO: After append try to discover the tab index #
-		log.Println("ShowAccountTab() Append")
-		AddBoxToTab("Create New Account", gw.UiTab, abox.UiBox)
-	}
-}
-*/
 
 func ShowMainTab(gw *GuiWindow) {
 	log.Println("ShowMainTab() gw =", gw)
