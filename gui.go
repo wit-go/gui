@@ -10,6 +10,8 @@ import pb "git.wit.com/wit/witProtobuf"
 
 import "github.com/davecgh/go-spew/spew"
 
+// THIS IS CLEAN (all that is left is the 'ADD VM')
+
 func InitColumns(mh *TableData, parts []TableColumnData) {
 	tmpBTindex := 0
 	humanID := 0
@@ -82,37 +84,27 @@ func AddTableTab(gw *GuiWindow, name string, rowcount int, parts []TableColumnDa
 	var gb *GuiBox
 	gb = new(GuiBox)
 
-	gb.EntryMap = make(map[string]*GuiEntry)
-	gb.EntryMap["test"] = nil
+//	gb.EntryMap = make(map[string]*GuiEntry)
+//	gb.EntryMap["test"] = nil
 
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
 	gb.UiBox = vbox
-	gb.W = gw
+	gb.Window = gw
 	gw.BoxMap[name] = gb
 	mh.Box = gb
 
 	vbox.Append(table, true)
 	gw.UiTab.Append(name, vbox)
-	// mytab.SetMargined(mytabcount, true)
 
 	vbox.Append(ui.NewVerticalSeparator(), false)
 
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 
-	a := CreateButton(gb, account, nil, "Add Virtual Machine", "createAddVmBox", nil)
-	hbox.Append(a.B, false)
-
 	vbox.Append(hbox, false)
 
 	return mh
-}
-
-func SocketError(gw *GuiWindow) {
-	ui.MsgBoxError(gw.UiWindow,
-		"There was a socket error",
-		"More detailed information can be shown here.")
 }
 
 func MessageWindow(gw *GuiWindow, msg1 string, msg2 string) {
@@ -128,45 +120,6 @@ func ErrorWindow(gw *GuiWindow, msg1 string, msg2 string) {
 // something specific will fall into this routine
 // By default, all it runs is the call back to
 // the main program that is using this library
-
-// This is one of the routines that is called from the
-// defaultButtonClick() below when the button is found
-// in the AllButtons %map
-// TODO: clean up the text above
-// TODO: remove this all together going only to main()
-func mouseClick(b *GuiButton) {
-	log.Println("gui.mouseClick() START")
-	if (b == nil) {
-		log.Println("\tgui.mouseClick() START b = nil")
-	} else {
-		log.Println("\tgui.mouseClick() START b.Action =", b.Action)
-		if (b.Action == "createAddVmBox") {
-			log.Println("\tgui.mouseClick() createAddVmBox for b =", b)
-			createAddVmBox(b.GW, b)
-			return
-		}
-		/*
-		if (b.Action == "WINDOW CLOSE") {
-			b.W.Hide()
-			// TODO: fix this (seems to crash? maybe because we are in the button here?)
-			// b.W.Destroy()
-			return
-		}
-		if (b.Action == "ADD") {
-			log.Println("\tgui.mouseClick() SHOULD ADD VM HERE?")
-		}
-		*/
-	}
-
-	if (Data.MouseClick == nil) {
-		log.Println("\tgui.mouseClick() Data.MouseClick() IS nil. NOT DOING ANYTHING")
-		log.Println("\tgui.mouseClick() Your application did not set a MouseClick() callback function")
-	} else {
-		log.Println("\tgui.mouseClick() Data.MouseClick() START")
-		Data.MouseClick(b)
-	}
-}
-
 //
 // This routine MUST be here as this is how the andlabs/ui works
 // This is the raw routine passed to every button in andlabs libui / ui
@@ -179,21 +132,21 @@ func defaultButtonClick(button *ui.Button) {
 	for key, foo := range Data.AllButtons {
 		if (Data.Debug) {
 			log.Println("defaultButtonClick() Data.AllButtons =", key, foo)
-			spew.Dump(foo)
+			// spew.Dump(foo)
 		}
 		if Data.AllButtons[key].B == button {
 			log.Println("\tdefaultButtonClick() BUTTON MATCHED")
-			// log.Println("\tData.AllButtons[key].Name =", Data.AllButtons[key].Name)
 			log.Println("\tdefaultButtonClick() Data.AllButtons[key].Action =", Data.AllButtons[key].Action)
 			if Data.AllButtons[key].custom != nil {
 				log.Println("\tdefaultButtonClick() DOING CUSTOM FUNCTION")
-				var tmp *GuiButton
-				tmp = Data.AllButtons[key]
-				// spew.Dump(tmp)
-				Data.AllButtons[key].custom(tmp)
+				Data.AllButtons[key].custom(Data.AllButtons[key])
 				return
 			}
-			mouseClick(Data.AllButtons[key])
+			if (Data.MouseClick != nil) {
+				Data.MouseClick(Data.AllButtons[key])
+			} else {
+				log.Println("\tdefaultButtonClick() IGNORING BUTTON. MouseClick() is nil")
+			}
 			return
 		}
 	}
@@ -201,7 +154,6 @@ func defaultButtonClick(button *ui.Button) {
 	if (Data.Debug) {
 		panic("defaultButtonClick() SHOULD NOT HAVE UNMAPPED BUTTONS")
 	}
-	mouseClick(nil)
 }
 
 func AddButton(b *GuiButton, name string) *ui.Button {
@@ -213,6 +165,10 @@ func AddButton(b *GuiButton, name string) *ui.Button {
 	return newB
 }
 
+func AddButtonToBox(box *GuiBox, button *GuiButton) {
+	box.UiBox.Append(button.B, false)
+}
+
 func CreateButton(box *GuiBox, a *pb.Account, vm *pb.Event_VM, name string, action string, custom func(*GuiButton)) *GuiButton {
 	newUiB := ui.NewButton(name)
 	newUiB.OnClicked(defaultButtonClick)
@@ -220,18 +176,17 @@ func CreateButton(box *GuiBox, a *pb.Account, vm *pb.Event_VM, name string, acti
 	var newB *GuiButton
 	newB		= new(GuiButton)
 	newB.B		= newUiB
-	if (box.W == nil) {
-		log.Println("CreateButton() box.W == nil")
+	if (box.Window == nil) {
+		log.Println("CreateButton() box.Window == nil")
 		panic("crap")
 	}
-	newB.GW		= box.W
+	newB.GW		= box.Window
 	newB.Account	= a
 	newB.VM		= vm
 	newB.Box	= box
 	newB.Action	= action
 	newB.custom	= custom
 	Data.AllButtons	= append(Data.AllButtons, newB)
-
 	return newB
 }
 
@@ -242,12 +197,14 @@ func CreateFontButton(box *GuiBox, action string) *GuiButton {
 	newGB.Action	= action
 	newGB.FB	= ui.NewFontButton()
 	newGB.Box	= box
-	newGB.Area	= box.Area
+	newGB.Area	= box.Window.Area
 	Data.AllButtons	= append(Data.AllButtons, &newGB)
 
 	newGB.FB.OnChanged(func (*ui.FontButton) {
 		log.Println("FontButton.OnChanged() START mouseClick(&newBM)", newGB)
-		mouseClick(&newGB)
+		if (Data.MouseClick != nil) {
+			Data.MouseClick(&newGB)
+		}
 	})
 	return &newGB
 }
@@ -257,17 +214,17 @@ func GetText(box *GuiBox, name string) string {
 		log.Println("gui.GetText() ERROR box == nil")
 		return ""
 	}
-	if (box.EntryMap == nil) {
-		log.Println("gui.GetText() ERROR b.Box.EntryMap == nil")
+	if (box.Window.EntryMap == nil) {
+		log.Println("gui.GetText() ERROR b.Box.Window.EntryMap == nil")
 		return ""
 	}
-	spew.Dump(box.EntryMap)
-	if (box.EntryMap[name] == nil) {
-		log.Println("gui.GetText() ERROR box.EntryMap[", name, "] == nil ")
+	spew.Dump(box.Window.EntryMap)
+	if (box.Window.EntryMap[name] == nil) {
+		log.Println("gui.GetText() ERROR box.Window.EntryMap[", name, "] == nil ")
 		return ""
 	}
-	e := box.EntryMap[name]
-	log.Println("gui.GetText() box.EntryMap[", name, "] = ", e.UiEntry.Text())
+	e := box.Window.EntryMap[name]
+	log.Println("gui.GetText() box.Window.EntryMap[", name, "] = ", e.UiEntry.Text())
 	log.Println("gui.GetText() END")
 	return e.UiEntry.Text()
 }
@@ -276,17 +233,188 @@ func SetText(box *GuiBox, name string, value string) error {
 	if (box == nil) {
 		return fmt.Errorf("gui.SetText() ERROR box == nil")
 	}
-	if (box.EntryMap == nil) {
-		return fmt.Errorf("gui.SetText() ERROR b.Box.EntryMap == nil")
+	if (box.Window.EntryMap == nil) {
+		return fmt.Errorf("gui.SetText() ERROR b.Box.Window.EntryMap == nil")
 	}
-	spew.Dump(box.EntryMap)
-	if (box.EntryMap[name] == nil) {
-		return fmt.Errorf("gui.SetText() ERROR box.EntryMap[", name, "] == nil ")
+	spew.Dump(box.Window.EntryMap)
+	if (box.Window.EntryMap[name] == nil) {
+		return fmt.Errorf("gui.SetText() ERROR box.Window.EntryMap[", name, "] == nil ")
 	}
-	e := box.EntryMap[name]
-	log.Println("gui.SetText() box.EntryMap[", name, "] = ", e.UiEntry.Text())
+	e := box.Window.EntryMap[name]
+	log.Println("gui.SetText() box.Window.EntryMap[", name, "] = ", e.UiEntry.Text())
 	e.UiEntry.SetText(value)
-	log.Println("gui.SetText() box.EntryMap[", name, "] = ", e.UiEntry.Text())
+	log.Println("gui.SetText() box.Window.EntryMap[", name, "] = ", e.UiEntry.Text())
 	log.Println("gui.SetText() END")
 	return nil
+}
+
+// makeEntryBox(box, "hostname:", "blah.foo.org") {
+func MakeEntryVbox(box *GuiBox, a string, startValue string, edit bool, action string) *GuiEntry {
+	// Start 'Nickname' vertical box
+	vboxN := ui.NewVerticalBox()
+	vboxN.SetPadded(true)
+	vboxN.Append(ui.NewLabel(a), false)
+
+	e := defaultMakeEntry(startValue, edit, action)
+
+	vboxN.Append(e.UiEntry, false)
+	box.UiBox.Append(vboxN, false)
+	// End 'Nickname' vertical box
+
+	return e
+}
+
+func MakeEntryHbox(box *GuiBox, a string, startValue string, edit bool, action string) *GuiEntry {
+	// Start 'Nickname' vertical box
+	hboxN := ui.NewHorizontalBox()
+	hboxN.SetPadded(true)
+	hboxN.Append(ui.NewLabel(a), false)
+
+	e := defaultMakeEntry(startValue, edit, action)
+	hboxN.Append(e.UiEntry, false)
+
+	box.UiBox.Append(hboxN, false)
+	// End 'Nickname' vertical box
+
+	return e
+}
+
+func NewLabel(box *GuiBox, text string) {
+	box.UiBox.Append(ui.NewLabel(text), false)
+}
+
+func AddEntry(box *GuiBox, name string) *GuiEntry {
+	var ge *GuiEntry
+	ge = new(GuiEntry)
+
+	ue := ui.NewEntry()
+	ue.SetReadOnly(false)
+	ue.OnChanged(func(*ui.Entry) {
+		log.Println("gui.AddEntry() OK. ue.Text() =", ue.Text())
+	})
+	box.UiBox.Append(ue, false)
+
+	ge.UiEntry = ue
+	box.Window.EntryMap[name] = ge
+
+	return ge
+}
+
+func HardHorizontalBreak(box *GuiBox) {
+	log.Println("HardHorizontalBreak START")
+	gw := box.Window
+	mainbox := gw.BoxMap["MAIN"]
+	if (mainbox == nil) {
+		log.Println("HardHorizontalBreak ERROR MAIN box == nil")
+		return
+	}
+	uibox := mainbox.UiBox
+
+	tmp := ui.NewHorizontalSeparator()
+	uibox.Append(tmp, false)
+
+	hbox := ui.NewVerticalBox()
+	hbox.SetPadded(true)
+	box.UiBox = hbox
+	uibox.Append(hbox, true)
+	log.Println("HardHorizontalBreak END")
+}
+
+func HardVerticalBreak(box *GuiBox) {
+	log.Println("HardVerticalBreak START")
+	gw := box.Window
+	mainbox := gw.BoxMap["MAIN"]
+	if (mainbox == nil) {
+		log.Println("HardHorizontalBreak ERROR MAIN box == nil")
+		return
+	}
+
+	tmp := ui.NewVerticalSeparator()
+	mainbox.UiBox.Append(tmp, false)
+
+	hbox := ui.NewVerticalBox()
+	hbox.SetPadded(true)
+	box.UiBox = hbox
+	mainbox.UiBox.Append(hbox, false)
+	log.Println("HardVerticalBreak END")
+}
+
+func HorizontalBreak(box *GuiBox) {
+	tmp := ui.NewHorizontalSeparator()
+	box.UiBox.Append(tmp, false)
+}
+
+func VerticalBreak(box *GuiBox) {
+	tmp := ui.NewVerticalSeparator()
+	box.UiBox.Append(tmp, false)
+}
+
+func AddGenericBox(gw *GuiWindow) *GuiBox {
+	var gb *GuiBox
+	gb = new(GuiBox)
+
+//	gb.EntryMap = make(map[string]*GuiEntry)
+//	gb.EntryMap["test"] = nil
+
+	vbox := ui.NewVerticalBox()
+	vbox.SetPadded(true)
+	// gw.Box1 = vbox
+	gb.UiBox = vbox
+	gb.Window = gw
+
+	hbox := ui.NewHorizontalBox()
+	hbox.SetPadded(true)
+	vbox.Append(hbox, false)
+
+	return gb
+}
+
+func CreateGenericBox(gw *GuiWindow, b *GuiButton, name string) *GuiBox{
+	log.Println("CreateAddVmBox() START name =", name)
+
+	var box *GuiBox
+	box = new(GuiBox)
+
+	vbox := ui.NewVerticalBox()
+	vbox.SetPadded(true)
+	box.UiBox = vbox
+	box.Window = gw
+	gw.BoxMap["ADD VM" + name] = box
+
+	hbox := ui.NewHorizontalBox()
+	hbox.SetPadded(true)
+	vbox.Append(hbox, false)
+
+	AddBoxToTab(name, gw.UiTab, vbox)
+
+	return box
+}
+
+func CreateBox(gw *GuiWindow, name string) *GuiBox {
+	log.Println("CreateVmBox() START")
+	log.Println("CreateVmBox() vm.Name =", name)
+	log.Println("CreateVmBox() gw =", gw)
+
+	var box *GuiBox
+	box = new(GuiBox)
+
+	vbox := ui.NewVerticalBox()
+	vbox.SetPadded(true)
+	log.Println("CreateVmBox() vbox =", vbox)
+	log.Println("CreateVmBox() box.UiBox =", box.UiBox)
+	box.UiBox = vbox
+	log.Println("CreateVmBox() box.Window =", box.Window)
+	box.Window = gw
+	log.Println("CreateVmBox() gw.BoxMap =", gw.BoxMap)
+	gw.BoxMap[name] = box
+
+	hboxAccount := ui.NewHorizontalBox()
+	hboxAccount.SetPadded(true)
+	vbox.Append(hboxAccount, false)
+
+	box.UiBox = hboxAccount
+
+	AddBoxToTab(name, gw.UiTab, vbox)
+
+	return box
 }

@@ -15,20 +15,21 @@ func makeSplashArea(gb *GuiBox, newText *ui.AttributedString) {
 	var newB *GuiButton
 	newB		= CreateFontButton(gb, "AREA")
 	newB.Box	= gb
-	newB.GW		= gb.W
+	newB.GW		= gb.Window
 
+	gw := gb.Window
 	// initialize the GuiArea{}
-	gb.Area			= new(GuiArea)
-	gb.Area.Button		= newB
-	gb.Area.Box		= gb
-	gb.Area.UiAttrstr	= newText
-	gb.Area.UiArea		= ui.NewArea(gb.Area)
+	gw.Area			= new(GuiArea)
+	gw.Area.Button		= newB
+	gw.Area.Box		= gb
+	gw.Area.UiAttrstr	= newText
+	gw.Area.UiArea		= ui.NewArea(gw.Area)
 
 	if (Data.Debug) {
-		spew.Dump(gb.Area.UiArea)
+		spew.Dump(gw.Area.UiArea)
 		log.Println("DEBUGGING", Data.Debug)
 	} else {
-		log.Println("NOT DEBUGGING AREA mhAH.Button =", gb.Area.Button)
+		log.Println("NOT DEBUGGING AREA mhAH.Button =", gw.Area.Button)
 	}
 }
 
@@ -75,7 +76,9 @@ func (ah GuiArea) MouseEvent(a *ui.Area, me *ui.AreaMouseEvent) {
 		log.Println("GOT MOUSE UP")
 		log.Println("GOT MOUSE UP ah.Button =", ah.Button)
 		log.Println("GOT MOUSE UP ah.Button.FB =", ah.Button.FB)
-		mouseClick(ah.Button)
+		if (Data.MouseClick != nil) {
+			Data.MouseClick(ah.Button)
+		}
 	}
 }
 
@@ -101,7 +104,32 @@ func (ah GuiArea) KeyEvent(a *ui.Area, ke *ui.AreaKeyEvent) (handled bool) {
 		log.Println("GOT ENTER")
 	}
 	spew.Dump(ke)
-	// splashWin.Destroy()
-	// ui.Quit()
 	return false
+}
+
+func ShowTextBox(gw *GuiWindow, newText *ui.AttributedString) *GuiBox {
+	log.Println("ShowTextBox() START")
+	if (gw == nil) {
+		log.Println("ShowTextBox() ERROR gw = nil")
+		return nil
+	}
+	log.Println("ShowTextBox() START gw =", gw)
+
+	// create and setup a new GuiBox
+	var gb *GuiBox
+	gb = new(GuiBox)
+
+//	gw.EntryMap = make(map[string]*GuiEntry)
+//	gw.EntryMap["test"] = nil
+
+	newbox := ui.NewVerticalBox()
+	newbox.SetPadded(true)
+	gb.UiBox = newbox
+	gb.Window = gw
+	gw.BoxMap["Splash"] = gb
+
+	makeSplashArea(gb, newText)
+	newbox.Append(gw.Area.UiArea, true)
+
+	return gb
 }

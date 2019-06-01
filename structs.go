@@ -8,6 +8,8 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 import pb "git.wit.com/wit/witProtobuf"
 
+// THIS IS CLEAN
+
 //
 // All GUI Data Structures and functions that are external
 // If you need cross platform support, these might only
@@ -47,38 +49,52 @@ type GuiData struct {
 	// A map of all buttons everywhere on all
 	// windows, all tabs, across all goroutines
 	// This is "GLOBAL"
+	//
+	// This has to work this way because of how
+	// andlabs/ui & andlabs/libui work
 	AllButtons	[]*GuiButton
-	ButtonMap	map[*GuiButton][]func (*GuiButton)
 
 	EntryNick	*ui.Entry
 	EntryUser	*ui.Entry
 	EntryPass	*ui.Entry
 }
 
-// stores information on 'the' window
-
+//
+// stores information on the 'window'
+//
+// This merges the concept of andlabs/ui *Window and *Tab
+//
 // More than one Window is not supported in a cross platform
 // sense & may never be. On Windows and MacOS, you have to have
 // 'tabs'. Even under Linux, more than one Window is currently
 // unstable
 //
-// This code will keep track of if the windows is 'tabbed' or
-// not. You can draw one thing in the window, then destroy
-// that, then redraw the window with something else
+// This code will make a 'GuiWindow' regardless of if it is
+// a stand alone window (which is more or less working on Linux)
+// or a 'tab' inside a window (which is all that works on MacOS
+// and MSWindows.
 //
 // This struct keeps track of what is in the window so you
 // can destroy and replace it with something else
 //
 type GuiWindow struct {
 	Action		string
-	BoxMap		map[string]*GuiBox
 	Width		int
 	Height		int
+
+//	mainbox		*ui.Box
+
+	// the callback function to make the window contents
+	MakeWindow	func(*GuiWindow) *GuiBox
+
+	// the components of the window
+	BoxMap		map[string]*GuiBox
+	EntryMap	map[string]*GuiEntry
+	Area		*GuiArea
 
 	// andlabs/ui abstraction mapping
 	UiWindow	*ui.Window
 	UiTab		*ui.Tab		// if this != nil, the window is 'tabbed'
-	GetText		func() *ui.AttributedString
 }
 
 
@@ -103,10 +119,11 @@ type GuiButton struct {
 	FB		*ui.FontButton
 }
 
+// GuiBox is any type of ui.Hbox or ui.Vbox
+// There can be lots of these for each GuiWindow
 type GuiBox struct {
-	W		*GuiWindow
-	EntryMap	map[string]*GuiEntry
-	Area		*GuiArea
+	Window		*GuiWindow
+//	EntryMap	map[string]*GuiEntry
 
 	// andlabs/ui abstraction mapping
 	UiBox		*ui.Box
@@ -120,6 +137,7 @@ type GuiEntry struct {
 
 	B		*GuiButton
 	Box		*GuiBox
+
 	Account		*pb.Account
 	VM		*pb.Event_VM
 

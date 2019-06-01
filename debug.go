@@ -14,6 +14,8 @@ import "github.com/davecgh/go-spew/spew"
 
 // import pb "git.wit.com/wit/witProtobuf"
 
+// THIS IS NOT CLEAN (but probably doesn't need to be. it's debugging)
+
 // can not pass any args to this (?)
 /*
 func setupCloudUI() {

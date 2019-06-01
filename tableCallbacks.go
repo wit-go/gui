@@ -14,6 +14,8 @@ import "runtime"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
+// THIS IS CLEAN
+
 func (mh *TableData) NumRows(m *ui.TableModel) int {
 	if (Data.Debug) {
 		log.Println("NumRows = mh.RowCount = ", mh.RowCount, "(last Row & Column =", mh.lastRow, mh.lastColumn, ")")
@@ -108,7 +110,9 @@ func defaultSetCellValue(mh *TableData, row int, column int) {
 
 		button := mh.Rows[row].HumanData[humanID].Button
 		if (button != nil) {
-			mouseClick(button)
+			if (Data.MouseClick != nil) {
+				Data.MouseClick(button)
+			}
 			return
 		}
 		if (Data.Debug) {
