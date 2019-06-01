@@ -13,6 +13,8 @@ import pb "git.wit.com/wit/witProtobuf"
 
 // import "github.com/davecgh/go-spew/spew"
 
+// THIS IS NOT CLEAN
+
 func makeCloudInfoBox(gw *GuiWindow) *GuiBox {
 	var gb *GuiBox
 	gb = new(GuiBox)

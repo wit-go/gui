@@ -10,6 +10,8 @@ import pb "git.wit.com/wit/witProtobuf"
 
 import "github.com/davecgh/go-spew/spew"
 
+// THIS IS NOT CLEAN
+
 func CreateVmBox(gw *GuiWindow, vm *pb.Event_VM) {
 	log.Println("CreateVmBox() START")
 	log.Println("CreateVmBox() vm.Name =", vm.Name)
@@ -70,9 +72,8 @@ func CreateVmBox(gw *GuiWindow, vm *pb.Event_VM) {
 	AddBoxToTab(vm.Name, gw.UiTab, vbox)
 }
 
-func createAddVmBox(gw *GuiWindow, b *GuiButton) {
-	log.Println("createAddVmBox() START")
-	name := "(" + b.Account.Nick + ")"
+func CreateAddVmBox(gw *GuiWindow, b *GuiButton, name string) *GuiBox{
+	log.Println("CreateAddVmBox() START name =", name)
 
 	var box *GuiBox
 	box = new(GuiBox)
@@ -87,12 +88,19 @@ func createAddVmBox(gw *GuiWindow, b *GuiButton) {
 	hbox.SetPadded(true)
 	vbox.Append(hbox, false)
 
+	// abox := gw.MakeTab(gw)
+
+	AddBoxToTab(name, gw.UiTab, vbox)
+
+	return box
+
+	/*
 	// Add hostname entry box
 	hostname := MakeEntryHbox(box, "Hostname:", "testhost", true, "Hostname")
 	memory   := MakeEntryHbox(box, "Memory:",   "512", true, "Memory")
 	disk     := MakeEntryHbox(box, "Disk:",     "20", true, "Disk")
 
-	log.Println("createAddVmBox() hostname, memory, disk =", hostname, memory, disk)
+	log.Println("CreateAddVmBox() hostname, memory, disk =", hostname, memory, disk)
 
 	vbox.Append(ui.NewHorizontalSeparator(), false)
 
@@ -111,6 +119,5 @@ func createAddVmBox(gw *GuiWindow, b *GuiButton) {
 
 	a := CreateButton(box, nil, nil, "Cancel",		"CLOSE", nil)
 	hboxButtons.Append(a.B, false)
-
-	AddBoxToTab(name, gw.UiTab, vbox)
+	*/
 }

@@ -103,8 +103,8 @@ func AddTableTab(gw *GuiWindow, name string, rowcount int, parts []TableColumnDa
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 
-	a := CreateButton(gb, account, nil, "Add Virtual Machine", "createAddVmBox", nil)
-	hbox.Append(a.B, false)
+//	a := CreateButton(gb, account, nil, "Add Virtual Machine", "createAddVmBox", nil)
+//	hbox.Append(a.B, false)
 
 	vbox.Append(hbox, false)
 
@@ -136,11 +136,13 @@ func mouseClick(b *GuiButton) {
 		log.Println("\tgui.mouseClick() START b = nil")
 	} else {
 		log.Println("\tgui.mouseClick() START b.Action =", b.Action)
-		if (b.Action == "createAddVmBox") {
-			log.Println("\tgui.mouseClick() createAddVmBox for b =", b)
-			createAddVmBox(b.GW, b)
+		/*
+		if (b.Action == "CreateAddVmBox") {
+			log.Println("\tgui.mouseClick() CreateAddVmBox for b =", b)
+			CreateAddVmBox(b.GW, b)
 			return
 		}
+		*/
 		/*
 		if (b.Action == "WINDOW CLOSE") {
 			b.W.Hide()
