@@ -249,20 +249,9 @@ func InitWindow(gw *GuiWindow) {
 	gw.UiWindow.Show()
 }
 
-// makeEntryBox(box, "hostname:", "blah.foo.org") {
-func makeEntryVbox(hbox *ui.Box, a string, startValue string, edit bool, action string) *GuiEntry {
-	// Start 'Nickname' vertical box
-	vboxN := ui.NewVerticalBox()
-	vboxN.SetPadded(true)
-	vboxN.Append(ui.NewLabel(a), false)
-
-	e := defaultMakeEntry(startValue, edit, action)
-
-	vboxN.Append(e.UiEntry, false)
-	hbox.Append(vboxN, false)
-	// End 'Nickname' vertical box
-
-	return e
+func AddBoxToTab(name string, tab *ui.Tab, box *ui.Box) {
+	tab.Append(name, box)
+	tab.SetMargined(0, true)
 }
 
 /*
@@ -341,7 +330,24 @@ func defaultMakeEntry(startValue string, edit bool, action string) *GuiEntry {
 	return &newEntry
 }
 
-func makeEntryHbox(hbox *ui.Box, a string, startValue string, edit bool, action string) *GuiEntry {
+/*
+// makeEntryBox(box, "hostname:", "blah.foo.org") {
+func makeEntryVbox(box *GuiBox, a string, startValue string, edit bool, action string) *GuiEntry {
+	// Start 'Nickname' vertical box
+	vboxN := ui.NewVerticalBox()
+	vboxN.SetPadded(true)
+	vboxN.Append(ui.NewLabel(a), false)
+
+	e := defaultMakeEntry(startValue, edit, action)
+
+	vboxN.Append(e.UiEntry, false)
+	box.UiBox.Append(vboxN, false)
+	// End 'Nickname' vertical box
+
+	return e
+}
+
+func makeEntryHbox(box *GuiBox, a string, startValue string, edit bool, action string) *GuiEntry {
 	// Start 'Nickname' vertical box
 	hboxN := ui.NewHorizontalBox()
 	hboxN.SetPadded(true)
@@ -350,13 +356,9 @@ func makeEntryHbox(hbox *ui.Box, a string, startValue string, edit bool, action 
 	e := defaultMakeEntry(startValue, edit, action)
 	hboxN.Append(e.UiEntry, false)
 
-	hbox.Append(hboxN, false)
+	box.UiBox.Append(hboxN, false)
 	// End 'Nickname' vertical box
 
 	return e
 }
-
-func AddBoxToTab(name string, tab *ui.Tab, box *ui.Box) {
-	tab.Append(name, box)
-	tab.SetMargined(0, true)
-}
+*/

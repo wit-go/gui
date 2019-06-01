@@ -10,6 +10,8 @@ import pb "git.wit.com/wit/witProtobuf"
 
 import "github.com/davecgh/go-spew/spew"
 
+// THIS IS CLEAN (all that is left is the 'createAddVmBox')
+
 func InitColumns(mh *TableData, parts []TableColumnData) {
 	tmpBTindex := 0
 	humanID := 0
@@ -283,4 +285,35 @@ func SetText(box *GuiBox, name string, value string) error {
 	log.Println("gui.SetText() box.EntryMap[", name, "] = ", e.UiEntry.Text())
 	log.Println("gui.SetText() END")
 	return nil
+}
+
+// makeEntryBox(box, "hostname:", "blah.foo.org") {
+func MakeEntryVbox(box *GuiBox, a string, startValue string, edit bool, action string) *GuiEntry {
+	// Start 'Nickname' vertical box
+	vboxN := ui.NewVerticalBox()
+	vboxN.SetPadded(true)
+	vboxN.Append(ui.NewLabel(a), false)
+
+	e := defaultMakeEntry(startValue, edit, action)
+
+	vboxN.Append(e.UiEntry, false)
+	box.UiBox.Append(vboxN, false)
+	// End 'Nickname' vertical box
+
+	return e
+}
+
+func MakeEntryHbox(box *GuiBox, a string, startValue string, edit bool, action string) *GuiEntry {
+	// Start 'Nickname' vertical box
+	hboxN := ui.NewHorizontalBox()
+	hboxN.SetPadded(true)
+	hboxN.Append(ui.NewLabel(a), false)
+
+	e := defaultMakeEntry(startValue, edit, action)
+	hboxN.Append(e.UiEntry, false)
+
+	box.UiBox.Append(hboxN, false)
+	// End 'Nickname' vertical box
+
+	return e
 }

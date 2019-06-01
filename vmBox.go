@@ -36,13 +36,15 @@ func CreateVmBox(gw *GuiWindow, vm *pb.Event_VM) {
 	hboxAccount.SetPadded(true)
 	vbox.Append(hboxAccount, false)
 
+	box.UiBox = hboxAccount
+
 	// Add hostname entry box
-	makeEntryVbox(hboxAccount, "hostname:",	vm.Hostname,			true, "Hostname")
-	makeEntryVbox(hboxAccount, "IPv6:",	vm.IPv6,			true, "IPv6")
-	makeEntryVbox(hboxAccount, "RAM:",	fmt.Sprintf("%d",vm.Memory),	true, "Memory")
-	makeEntryVbox(hboxAccount, "CPU:",	fmt.Sprintf("%d",vm.Cpus),	true, "Cpus")
-	makeEntryVbox(hboxAccount, "Disk (GB):",fmt.Sprintf("%d",vm.Disk),	true, "Disk")
-	makeEntryVbox(hboxAccount, "OS Image:",	vm.BaseImage,			true, "BaseImage")
+	MakeEntryVbox(box, "hostname:",	vm.Hostname,			true, "Hostname")
+	MakeEntryVbox(box, "IPv6:",	vm.IPv6,			true, "IPv6")
+	MakeEntryVbox(box, "RAM:",	fmt.Sprintf("%d",vm.Memory),	true, "Memory")
+	MakeEntryVbox(box, "CPU:",	fmt.Sprintf("%d",vm.Cpus),	true, "Cpus")
+	MakeEntryVbox(box, "Disk (GB):",fmt.Sprintf("%d",vm.Disk),	true, "Disk")
+	MakeEntryVbox(box, "OS Image:",	vm.BaseImage,			true, "BaseImage")
 
 	vbox.Append(ui.NewHorizontalSeparator(), false)
 
@@ -86,9 +88,9 @@ func createAddVmBox(gw *GuiWindow, b *GuiButton) {
 	vbox.Append(hbox, false)
 
 	// Add hostname entry box
-	hostname := makeEntryHbox(vbox, "Hostname:", "testhost", true, "Hostname")
-	memory   := makeEntryHbox(vbox, "Memory:",   "512", true, "Memory")
-	disk     := makeEntryHbox(vbox, "Disk:",     "20", true, "Disk")
+	hostname := MakeEntryHbox(box, "Hostname:", "testhost", true, "Hostname")
+	memory   := MakeEntryHbox(box, "Memory:",   "512", true, "Memory")
+	disk     := MakeEntryHbox(box, "Disk:",     "20", true, "Disk")
 
 	log.Println("createAddVmBox() hostname, memory, disk =", hostname, memory, disk)
 
