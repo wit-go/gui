@@ -122,7 +122,6 @@ type GuiButton struct {
 type GuiBox struct {
 	Window		*GuiWindow
 	EntryMap	map[string]*GuiEntry
-	Area		*GuiArea
 
 	// andlabs/ui abstraction mapping
 	UiBox		*ui.Box

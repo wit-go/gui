@@ -36,9 +36,13 @@ func GuiInit() {
 	})
 }
 
-func ShowMainTab(gw *GuiWindow) *GuiBox {
+func AddMainTab(gw *GuiWindow) *GuiBox {
 	log.Println("ShowMainTab() gw =", gw)
 	log.Println("ShowMainTab() gw.UiTab =", gw.UiTab)
+
+	newWindow := new(GuiWindow)
+	newWindow.UiWindow = gw.UiWindow
+	Data.Windows = append(Data.Windows, newWindow)
 
 	var box *GuiBox
 	box = new(GuiBox)

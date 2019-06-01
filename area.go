@@ -17,18 +17,19 @@ func makeSplashArea(gb *GuiBox, newText *ui.AttributedString) {
 	newB.Box	= gb
 	newB.GW		= gb.Window
 
+	gw := gb.Window
 	// initialize the GuiArea{}
-	gb.Area			= new(GuiArea)
-	gb.Area.Button		= newB
-	gb.Area.Box		= gb
-	gb.Area.UiAttrstr	= newText
-	gb.Area.UiArea		= ui.NewArea(gb.Area)
+	gw.Area			= new(GuiArea)
+	gw.Area.Button		= newB
+	gw.Area.Box		= gb
+	gw.Area.UiAttrstr	= newText
+	gw.Area.UiArea		= ui.NewArea(gw.Area)
 
 	if (Data.Debug) {
-		spew.Dump(gb.Area.UiArea)
+		spew.Dump(gw.Area.UiArea)
 		log.Println("DEBUGGING", Data.Debug)
 	} else {
-		log.Println("NOT DEBUGGING AREA mhAH.Button =", gb.Area.Button)
+		log.Println("NOT DEBUGGING AREA mhAH.Button =", gw.Area.Button)
 	}
 }
 
@@ -128,7 +129,7 @@ func ShowTextBox(gw *GuiWindow, newText *ui.AttributedString) *GuiBox {
 	gw.BoxMap["Splash"] = gb
 
 	makeSplashArea(gb, newText)
-	newbox.Append(gb.Area.UiArea, true)
+	newbox.Append(gw.Area.UiArea, true)
 
 	return gb
 }
