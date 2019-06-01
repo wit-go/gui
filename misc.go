@@ -43,26 +43,13 @@ func AddMainTab(gw *GuiWindow) *GuiBox {
 	log.Println("ShowMainTab() gw.UiTab =", gw.UiTab)
 
 	window := InitGuiWindow(Data.Config, "MAIN", nil, gw.UiWindow, gw.UiTab)
-//	newWindow := new(GuiWindow)
-//	newWindow.UiWindow = gw.UiWindow
-//	Data.Windows = append(Data.Windows, newWindow)
 
-	var box *GuiBox
-	box = new(GuiBox)
-	box.Window = window
-
-//	box.EntryMap = make(map[string]*GuiEntry)
-//	box.EntryMap["test"] = nil
-
-	hbox := ui.NewHorizontalBox()
-	hbox.SetPadded(true)
-	box.UiBox = hbox
-	gw.mainbox = hbox
+	box := InitGuiBox(window, nil, ui.NewHorizontalBox(), "MAIN")
 
 	if (Data.Debug) {
 		log.Println("makeCloudInfoBox() add debugging buttons")
 		addDebuggingButtons(box)
-		hbox.Append(ui.NewVerticalSeparator(), false)
+		box.UiBox.Append(ui.NewVerticalSeparator(), false)
 	}
 
 	// box := gw.MakeWindow(gw)
@@ -73,9 +60,28 @@ func AddMainTab(gw *GuiWindow) *GuiBox {
 func ShowMainTabShowBox(gw *GuiWindow, box *GuiBox) {
 	log.Println("gui.ShowMainTabShowBox() box =", box)
 	// gw.UiTab.Delete(0)
-	gw.BoxMap["Box3"] = box
-	gw.UiTab.InsertAt("Main", 0, gw.mainbox)
+	gw.BoxMap["MAIN3"] = box
+	// gw.UiTab.InsertAt("Main", 0, box.UiBox)
 	gw.UiTab.SetMargined(0, true)
+}
+
+func InitGuiBox(gw *GuiWindow, box *GuiBox, uiBox *ui.Box, name string) *GuiBox {
+	log.Println("InitGuiBox() START")
+	var newGuiBox GuiBox
+	newGuiBox.UiBox = uiBox
+	newGuiBox.Window = gw
+	uiBox.SetPadded(true)
+
+	if (box != nil) {
+		log.Println("InitGuiBox() APPEND NEW BOX TO OLD BOX")
+		box.UiBox.Append(uiBox, false)
+	} else {
+		log.Println("InitGuiBox() APPEND NEW BOX TO TAB")
+		gw.UiTab.Append(name, uiBox)
+	}
+	gw.BoxMap[name] = &newGuiBox
+	log.Println("InitGuiBox() END")
+	return &newGuiBox
 }
 
 func InitGuiWindow(c *pb.Config, action string, maketab func(*GuiWindow) *GuiBox, uiW *ui.Window, uiT *ui.Tab) *GuiWindow {

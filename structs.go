@@ -82,7 +82,7 @@ type GuiWindow struct {
 	Width		int
 	Height		int
 
-	mainbox		*ui.Box
+//	mainbox		*ui.Box
 
 	// the callback function to make the window contents
 	MakeWindow	func(*GuiWindow) *GuiBox
