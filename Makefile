@@ -15,4 +15,4 @@ merge-devel:
 	git pull origin master
 	git merge devel
 	git push origin master
-	git check devel
+	git checkout devel
