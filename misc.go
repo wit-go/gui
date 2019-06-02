@@ -3,7 +3,7 @@ package gui
 import "log"
 import "time"
 import "regexp"
-import "os"
+// import "os"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
@@ -14,26 +14,28 @@ import pb "git.wit.com/wit/witProtobuf"
 
 // THIS IS NOT CLEAN (almost?)
 
-func ShowTab(gw *GuiWindow, tabname string, title string) *GuiWindow {
-	log.Println("ShowTab() gw =", gw)
+const Xaxis = 0
+const Yaxis = 1
+
+/*
+func ReplaceTab(gw *GuiWindow, tabname string, title string) {
+	log.Println("ReplaceTab() gw =", gw)
 	if (gw.UiTab == nil) {
-		log.Println("ShowTab() gw.UiTab = nil THIS IS BAD")
+		log.Println("\tShowTab() gw.UiTab = nil THIS IS BAD")
 		os.Exit(-1)
 	}
 	window := InitGuiWindow(Data.Config, tabname, gw.MakeWindow, gw.UiWindow, gw.UiTab)
 	window.UiTab.Delete(0)
-
-	abox := window.MakeWindow(window)
+	window.MakeWindow(window)
 	// add(nil, abox)
-	log.Println("ShowTab() NOT INSERTING TAB abox =", abox)
-	log.Println("ShowTab() NOT INSERTING TAB")
-	log.Println("ShowTab() NOT INSERTING TAB")
-	log.Println("ShowTab() NOT INSERTING TAB")
+	log.Println("\tShowTab() NOT INSERTING TAB")
+	log.Println("\tShowTab() NOT INSERTING TAB")
+	log.Println("\tShowTab() NOT INSERTING TAB")
 //	window.BoxMap[tabname] = abox
 //	window.UiTab.InsertAt(title, 0, abox.UiBox)
 //	window.UiTab.SetMargined(0, true)
-	return window
 }
+*/
 
 func GuiInit() {
 	ui.OnShouldQuit(func() bool {
@@ -113,17 +115,6 @@ func InitGuiWindow(c *pb.Config, action string, maketab func(*GuiWindow) *GuiBox
 func StartNewWindow(c *pb.Config, bg bool, action string, maketab func(*GuiWindow) *GuiBox) {
 	log.Println("InitNewWindow() Create a new window")
 	window := InitGuiWindow(c, action, maketab, nil, nil)
-	/*
-	newGuiWindow.Width	= int(c.Width)
-	newGuiWindow.Height	= int(c.Height)
-	newGuiWindow.Action	= action
-	newGuiWindow.MakeWindow	= maketab
-	newGuiWindow.BoxMap	= make(map[string]*GuiBox)
-	newGuiWindow.EntryMap	= make(map[string]*GuiEntry)
-	newGuiWindow.EntryMap["test"] = nil
-	Data.Windows = append(Data.Windows, &newGuiWindow)
-	*/
-
 	if (bg) {
 		log.Println("ShowWindow() IN NEW GOROUTINE")
 		go ui.Main(func() {

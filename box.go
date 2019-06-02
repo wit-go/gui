@@ -19,18 +19,27 @@ func add(box *GuiBox, newbox *GuiBox) {
 	log.Println("gui.add() START newbox =", newbox)
 	if (box == nil) {
 		log.Println("\tgui.add() add to Window as MAINBOX")
-		newbox.Window.BoxMap["MAINBOX"] = newbox
 		if (newbox.Window.UiTab != nil) {
+			// create a new tab here
+			// add the box to it as MAINBOX
 			log.Println("\tgui.add() add to Window as a UiTab")
 			newbox.Window.UiTab.InsertAt(newbox.Name, 0, newbox.UiBox)
 			newbox.Window.UiTab.SetMargined(0, true)
-			// create a new tab here
-			// add the box to it as MAINBOX
+
+			// TODO: figure out how to make a new Tab/Window/Box here
+			// window := InitGuiWindow(Data.Config, newbox.Name, gw.MakeWindow, gw.UiWindow, gw.UiTab)
+			// window.UiTab.Delete(0)
+			// window.MakeWindow(window)
+			// newbox.Window = window
+
+			newbox.Window.BoxMap["MAINBOX"] = newbox
+			log.Println("gui.add() END")
+			return
 		} else {
-			log.Println("\tgui.add() DONT KNOW HOW TO ADD TO A RAW WINDOW YET")
+			log.Println("\tgui.add() ERROR DONT KNOW HOW TO ADD TO A RAW WINDOW YET")
 			// add this to the window
 		}
-		log.Println("\tgui.add() add to Window as MAINBOX DONE")
+		log.Println("\tgui.add() ERROR DON'T KNOW HOW TO add to Window as MAINBOX DONE")
 		log.Println("gui.add() END")
 		return
 	}
