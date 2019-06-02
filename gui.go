@@ -12,8 +12,6 @@ import pb "git.wit.com/wit/witProtobuf"
 
 // import "github.com/davecgh/go-spew/spew"
 
-// THIS IS NOT CLEAN (except the Memory normalization example)
-
 const Xaxis = 0
 const Yaxis = 1
 
@@ -73,10 +71,12 @@ func InitTabWindow(gw *GuiWindow) {
 	gw.UiWindow.SetBorderless(false)
 
         // create a 'fake' button entry for the mouse clicks
+	/*
 	var newBM GuiButton
 	newBM.Action	= "QUIT"
 	newBM.GW	= gw
 	Data.AllButtons = append(Data.AllButtons, &newBM)
+	*/
 
 	gw.UiWindow.OnClosing(func(*ui.Window) bool {
 		log.Println("InitTabWindow() OnClosing() THIS WINDOW IS CLOSING gw=", gw)
@@ -127,50 +127,6 @@ func normalizeInt(s string) string {
 	log.Println("normalizeInt() s =", clean)
 	return clean
 }
-
-/*
-func defaultEntryChange(e *ui.Entry) {
-	for key, em := range Data.AllEntries {
-		if (Data.Debug) {
-			log.Println("\tdefaultEntryChange() Data.AllEntries =", key, em)
-		}
-		if Data.AllEntries[key].UiEntry == e {
-			log.Println("defaultEntryChange() FOUND", 
-				"action =", Data.AllEntries[key].Action,
-				"Last =", Data.AllEntries[key].Last,
-				"e.Text() =", e.Text())
-			Data.AllEntries[key].Last = e.Text()
-			if Data.AllEntries[key].Normalize != nil {
-				fixed := Data.AllEntries[key].Normalize(e.Text())
-				e.SetText(fixed)
-			}
-			return
-		}
-	}
-	log.Println("defaultEntryChange() ERROR. MISSING ENTRY MAP. e.Text() =", e.Text())
-}
-
-func defaultMakeEntry(startValue string, edit bool, action string) *GuiEntry {
-	e := ui.NewEntry()
-	e.SetText(startValue)
-	if (edit == false) {
-		e.SetReadOnly(true)
-	}
-	e.OnChanged(defaultEntryChange)
-
-	// add the entry field to the global map
-	var newEntry GuiEntry
-	newEntry.UiEntry  = e
-	newEntry.Edit     = edit
-	newEntry.Action   = action
-	if (action == "Memory") {
-		newEntry.Normalize = normalizeInt
-	}
-	Data.AllEntries = append(Data.AllEntries, &newEntry)
-
-	return &newEntry
-}
-*/
 
 func MessageWindow(gw *GuiWindow, msg1 string, msg2 string) {
 	ui.MsgBox(gw.UiWindow, msg1, msg2)

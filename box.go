@@ -8,8 +8,6 @@ import _ "github.com/andlabs/ui/winmanifest"
 // import pb "git.wit.com/wit/witProtobuf"
 // import "github.com/davecgh/go-spew/spew"
 
-// THIS IS CLEAN
-
 // add(nil, newbox, "")				// use this when the Window is created. Always called 'MAINBOX'
 // add(gw.BoxMap["MAINBOX"], newbox, name)	// use this to add a box off the main box
 // add(gw.BoxMap["BUTTONBOX"], newbox, name)	// use this to add something to the box called 'BUTTONBOX'
@@ -150,26 +148,3 @@ func AddGenericBox(gw *GuiWindow, name string) *GuiBox {
 
 	return newbox
 }
-
-/*
-func CreateGenericBox(gw *GuiWindow, name string) *GuiBox {
-	log.Println("CreateAddVmBox() START name =", name)
-
-	var box *GuiBox
-	box = new(GuiBox)
-
-	vbox := ui.NewVerticalBox()
-	vbox.SetPadded(true)
-	box.UiBox = vbox
-	box.Window = gw
-	gw.BoxMap["ADD VM" + name] = box
-
-	hbox := ui.NewHorizontalBox()
-	hbox.SetPadded(true)
-	vbox.Append(hbox, false)
-
-	gw.UiTab.Append(name, vbox)
-	gw.UiTab.SetMargined(0, true)
-	return box
-}
-*/

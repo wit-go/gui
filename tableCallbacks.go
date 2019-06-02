@@ -14,8 +14,6 @@ import "runtime"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-// THIS IS CLEAN
-
 func (mh *TableData) NumRows(m *ui.TableModel) int {
 	if (Data.Debug) {
 		log.Println("NumRows = mh.RowCount = ", mh.RowCount, "(last Row & Column =", mh.lastRow, mh.lastColumn, ")")
@@ -110,11 +108,10 @@ func defaultSetCellValue(mh *TableData, row int, column int) {
 
 		button := mh.Rows[row].HumanData[humanID].Button
 		if (button != nil) {
-			if (Data.MouseClick != nil) {
-				Data.MouseClick(button)
-			}
+			guiButtonClick(button)
 			return
 		}
+		log.Println("defaultSetCellValue() ERROR: UNKNOWN BUTTON IN TABLE")
 		if (Data.Debug) {
 			panic("defaultSetCellValue() GOT AN UNKNOWN BUTTON CLICK IN TABLE")
 		}

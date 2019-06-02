@@ -1,15 +1,10 @@
 package gui
 
 import "log"
-
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
-
 import pb "git.wit.com/wit/witProtobuf"
-
 // import "github.com/davecgh/go-spew/spew"
-
-// THIS IS CLEAN
 
 // This is the default mouse click handler
 // Every mouse click that hasn't been assigned to
@@ -32,23 +27,27 @@ func defaultButtonClick(button *ui.Button) {
 		}
 		if Data.AllButtons[key].B == button {
 			log.Println("\tgui.defaultButtonClick() BUTTON MATCHED")
-			log.Println("\tgui.defaultButtonClick() Data.AllButtons[key].Action =", Data.AllButtons[key].Action)
-			if Data.AllButtons[key].custom != nil {
-				log.Println("\tgui.defaultButtonClick() DOING CUSTOM FUNCTION")
-				Data.AllButtons[key].custom(Data.AllButtons[key])
-				return
-			}
-			if (Data.MouseClick != nil) {
-				Data.MouseClick(Data.AllButtons[key])
-			} else {
-				log.Println("\tgui.defaultButtonClick() IGNORING BUTTON. MouseClick() is nil")
-			}
+			guiButtonClick(Data.AllButtons[key])
 			return
 		}
 	}
-	log.Println("\tgui.defaultButtonClick() BUTTON NOT FOUND")
+	log.Println("\tgui.defaultButtonClick() ERROR: BUTTON NOT FOUND")
 	if (Data.Debug) {
-		panic("gui.defaultButtonClick() SHOULD NOT HAVE UNMAPPED BUTTONS")
+		panic("gui.defaultButtonClick() ERROR: UNMAPPED ui.Button")
+	}
+}
+
+func guiButtonClick(button *GuiButton) {
+	log.Println("\tgui.guiButtonClick() button.Action =", button.Action)
+	if button.Custom != nil {
+		log.Println("\tgui.guiButtonClick() DOING CUSTOM FUNCTION")
+		button.Custom(button)
+		return
+	}
+	if (Data.MouseClick != nil) {
+		Data.MouseClick(button)
+	} else {
+		log.Println("\tgui.guiButtonClick() IGNORING BUTTON. MouseClick() is nil")
 	}
 }
 
@@ -63,12 +62,12 @@ func CreateButton(box *GuiBox, a *pb.Account, vm *pb.Event_VM, name string, acti
 		log.Println("CreateButton() box.Window == nil")
 		panic("crap")
 	}
-	newB.GW		= box.Window
 	newB.Account	= a
 	newB.VM		= vm
 	newB.Box	= box
+//	newB.GW		= box.Window
 	newB.Action	= action
-	newB.custom	= custom
+	newB.Custom	= custom
 	Data.AllButtons	= append(Data.AllButtons, newB)
 
 	box.UiBox.Append(newB.B, false)
@@ -76,9 +75,9 @@ func CreateButton(box *GuiBox, a *pb.Account, vm *pb.Event_VM, name string, acti
 }
 
 func CreateFontButton(box *GuiBox, action string) *GuiButton {
-
         // create a 'fake' button entry for the mouse clicks
 	var newGB	GuiButton
+	newGB.Name	= "FONT"
 	newGB.Action	= action
 	newGB.FB	= ui.NewFontButton()
 	newGB.Box	= box

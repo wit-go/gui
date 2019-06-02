@@ -8,8 +8,6 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 import pb "git.wit.com/wit/witProtobuf"
 
-// THIS IS CLEAN
-
 //
 // All GUI Data Structures and functions that are external
 // If you need cross platform support, these might only
@@ -110,15 +108,16 @@ type GuiBox struct {
 // the user clicks it. You could probably
 // call this 'GuiMouseClick'
 type GuiButton struct {
+	Name		string		// field for human readable name
 	Action		string		// what type of button
 	Box		*GuiBox		// what box the button click was in
-	GW		*GuiWindow	// what window the button click was in (redundant?)
+//	GW		*GuiWindow	// what window the button click was in (redundant?)
 
 	Account		*pb.Account	// associated with what account?
 	VM		*pb.Event_VM	// associated with which VM?
 
 	// a callback function for the main application
-	custom		func (*GuiButton)
+	Custom		func (*GuiButton)
 
 	// andlabs/ui abstraction mapping
 	B		*ui.Button

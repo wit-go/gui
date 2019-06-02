@@ -8,8 +8,9 @@ import _ "github.com/andlabs/ui/winmanifest"
 import "github.com/davecgh/go-spew/spew"
 // import pb "git.wit.com/wit/witProtobuf"
 
+// THIS IS CLEAN (except the 'Memory' normalization example)
 
-// THIS IS CLEAN
+// functions for handling text entry boxes
 
 func NewLabel(box *GuiBox, text string) {
 	box.UiBox.Append(ui.NewLabel(text), false)

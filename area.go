@@ -7,16 +7,14 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 import "github.com/davecgh/go-spew/spew"
 
-// THIS IS CLEAN
-
 func makeGenericArea(gb *GuiBox, newText *ui.AttributedString, custom func(*GuiButton)) {
 	// make this button just to get the default font (but don't display the button)
 	// There should be another way to do this (?)
 	var newB *GuiButton
 	newB		= CreateFontButton(gb, "AREA")
 	newB.Box	= gb
-	newB.custom	= custom
-	newB.GW		= gb.Window
+	newB.Custom	= custom
+//	newB.GW		= gb.Window
 
 	gw := gb.Window
 	// initialize the GuiArea{}
@@ -77,8 +75,8 @@ func (ah GuiArea) MouseEvent(a *ui.Area, me *ui.AreaMouseEvent) {
 		log.Println("GOT MOUSE UP")
 		log.Println("GOT MOUSE UP ah.Button =", ah.Button)
 		log.Println("GOT MOUSE UP ah.Button.FB =", ah.Button.FB)
-		if (ah.Button.custom != nil) {
-			ah.Button.custom(ah.Button)
+		if (ah.Button.Custom != nil) {
+			ah.Button.Custom(ah.Button)
 		} else if (Data.MouseClick != nil) {
 			Data.MouseClick(ah.Button)
 		}
