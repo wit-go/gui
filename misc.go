@@ -12,7 +12,7 @@ import pb "git.wit.com/wit/witProtobuf"
 
 // import "github.com/davecgh/go-spew/spew"
 
-// THIS IS NOT CLEAN (almost?)
+// THIS IS NOT CLEAN (except the Memory normalization example)
 
 const Xaxis = 0
 const Yaxis = 1
@@ -23,14 +23,6 @@ func GuiInit() {
                 ui.Quit()
 		return true
 	})
-}
-
-func ShowMainTabShowBox(gw *GuiWindow, box *GuiBox) {
-	log.Println("gui.ShowMainTabShowBox() box =", box)
-	// gw.UiTab.Delete(0)
-	gw.BoxMap["MAIN3"] = box
-	// gw.UiTab.InsertAt("Main", 0, box.UiBox)
-	gw.UiTab.SetMargined(0, true)
 }
 
 // func InitGuiWindow(c *pb.Config, action string, maketab func(*GuiWindow) *GuiBox, uiW *ui.Window, uiT *ui.Tab) *GuiWindow {
@@ -176,4 +168,12 @@ func defaultMakeEntry(startValue string, edit bool, action string) *GuiEntry {
 	Data.AllEntries = append(Data.AllEntries, &newEntry)
 
 	return &newEntry
+}
+
+func MessageWindow(gw *GuiWindow, msg1 string, msg2 string) {
+	ui.MsgBox(gw.UiWindow, msg1, msg2)
+}
+
+func ErrorWindow(gw *GuiWindow, msg1 string, msg2 string) {
+	ui.MsgBoxError(gw.UiWindow, msg1, msg2)
 }

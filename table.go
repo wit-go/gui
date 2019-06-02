@@ -66,3 +66,96 @@ func initRowTextColumn(mh *TableData, stringID int, junk string, cell TableColum
 	mh.Cells[stringID].Name    = "EDIT"
 	mh.Cells[stringID].HumanID = humanInt
 }
+
+func InitColumns(mh *TableData, parts []TableColumnData) {
+	tmpBTindex := 0
+	humanID := 0
+	for key, foo := range parts {
+		log.Println("key, foo =", key, foo)
+
+		parts[key].Index = humanID
+		humanID += 1
+
+		if (foo.CellType == "BG") {
+			mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableColor{})
+			initRowBTcolor        (mh, tmpBTindex, parts[key])
+			tmpBTindex += 1
+		} else if (foo.CellType == "BUTTON") {
+			mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableString(""))
+			initRowButtonColumn   (mh, tmpBTindex,    parts[key].Heading, parts[key])
+			tmpBTindex += 1
+		} else if (foo.CellType == "TEXTCOLOR") {
+			mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableString(""))
+			mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableColor{})
+			initRowTextColorColumn(mh, tmpBTindex, tmpBTindex + 1, parts[key].Heading, ui.TableColor{0.0, 0, 0.9, 1}, parts[key])
+			tmpBTindex += 2
+		} else if (foo.CellType == "TEXT") {
+			mh.generatedColumnTypes = append(mh.generatedColumnTypes, ui.TableString(""))
+			initRowTextColumn     (mh, tmpBTindex,    parts[key].Heading, parts[key])
+			tmpBTindex += 1
+		} else {
+			panic("I don't know what this is in initColumnNames")
+		}
+	}
+}
+
+// func AddTableTab(gw *GuiWindow, name string, rowcount int, parts []TableColumnData, account *pb.Account) *TableData {
+func AddTableTab(gw *GuiWindow, name string, rowcount int, parts []TableColumnData) *TableData {
+	mh := new(TableData)
+
+	mh.RowCount    = rowcount
+	mh.Rows        = make([]RowData, mh.RowCount)
+
+	InitColumns(mh, parts)
+
+	model := ui.NewTableModel(mh)
+	table := ui.NewTable(
+		&ui.TableParams{
+			Model:	model,
+			RowBackgroundColorModelColumn:	0,	// Row Background color is always index zero
+	})
+
+	tmpBTindex := 0
+	for key, foo := range parts {
+		log.Println(key, foo)
+		if (foo.CellType == "BG") {
+		} else if (foo.CellType == "BUTTON") {
+			tmpBTindex += 1
+			table.AppendButtonColumn(foo.Heading, tmpBTindex, ui.TableModelColumnAlwaysEditable)
+		} else if (foo.CellType == "TEXTCOLOR") {
+			tmpBTindex += 1
+			table.AppendTextColumn(foo.Heading, tmpBTindex, ui.TableModelColumnAlwaysEditable,
+					&ui.TableTextColumnOptionalParams{
+						ColorModelColumn:   tmpBTindex + 1,
+			});
+			tmpBTindex += 1
+		} else if (foo.CellType == "TEXT") {
+			tmpBTindex += 1
+			table.AppendTextColumn(foo.Heading, tmpBTindex, ui.TableModelColumnAlwaysEditable, nil)
+		} else {
+			panic("I don't know what this is in initColumnNames")
+		}
+	}
+
+	var gb *GuiBox
+	gb = new(GuiBox)
+
+	vbox := ui.NewVerticalBox()
+	vbox.SetPadded(true)
+	gb.UiBox = vbox
+	gb.Window = gw
+	gw.BoxMap[name] = gb
+	mh.Box = gb
+
+	vbox.Append(table, true)
+	gw.UiTab.Append(name, vbox)
+
+	vbox.Append(ui.NewVerticalSeparator(), false)
+
+	hbox := ui.NewHorizontalBox()
+	hbox.SetPadded(true)
+
+	vbox.Append(hbox, false)
+
+	return mh
+}

@@ -3,7 +3,7 @@ package gui
 import "log"
 import "time"
 import "fmt"
-import "reflect"
+// import "reflect"
 
 // import "github.com/andlabs/ui"
 // import _ "github.com/andlabs/ui/winmanifest"
@@ -24,7 +24,8 @@ func WatchGUI() {
 			for i, window := range Data.Windows {
 				log.Println("watchGUI() Data.Windows", i, "Action =", window.Action)
 				for name, abox := range window.BoxMap {
-					log.Println("\twatchGUI() BOX name =", name)
+					log.Printf("\twatchGUI() BOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
+					/*
 					if (name == "SplashArea3") {
 						log.Println("\t\twatchGUI() BOX abox =", reflect.TypeOf(abox))
 						win := abox.Window
@@ -36,6 +37,7 @@ func WatchGUI() {
 						// time.Sleep(2000 * time.Millisecond)
 						// os.Exit(0)
 					}
+					*/
 				}
 			}
 			count = 0
