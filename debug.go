@@ -137,7 +137,7 @@ func WatchGUI() {
 		if (count > 20) {
 			log.Println("Sleep() in watchGUI() Data.State =", Data.State)
 			for i, window := range Data.Windows {
-				log.Println("watchGUI() Data.Windows i =", i, "Action =", window.Action)
+				log.Println("watchGUI() Data.Windows", i, "Action =", window.Action)
 				for name, abox := range window.BoxMap {
 					log.Println("\twatchGUI() BOX name =", name)
 					if (name == "SplashArea3") {

@@ -95,6 +95,15 @@ type GuiWindow struct {
 	UiTab		*ui.Tab		// if this != nil, the window is 'tabbed'
 }
 
+// GuiBox is any type of ui.Hbox or ui.Vbox
+// There can be lots of these for each GuiWindow
+type GuiBox struct {
+	Window		*GuiWindow
+	Name		string
+
+	// andlabs/ui abstraction mapping
+	UiBox		*ui.Box
+}
 
 // Note: every mouse click is handled
 // as a 'Button' regardless of where
@@ -103,7 +112,6 @@ type GuiWindow struct {
 type GuiButton struct {
 	Action		string		// what type of button
 	Box		*GuiBox		// what box the button click was in
-//	Area		*GuiArea	// indicates the button click was in an Area
 	GW		*GuiWindow	// what window the button click was in (redundant?)
 
 	Account		*pb.Account	// associated with what account?
@@ -117,16 +125,7 @@ type GuiButton struct {
 	FB		*ui.FontButton
 }
 
-// GuiBox is any type of ui.Hbox or ui.Vbox
-// There can be lots of these for each GuiWindow
-type GuiBox struct {
-	Window		*GuiWindow
-//	EntryMap	map[string]*GuiEntry
-
-	// andlabs/ui abstraction mapping
-	UiBox		*ui.Box
-}
-
+// text entry fields
 type GuiEntry struct {
 	Action		string	// what type of button
 	Edit		bool

@@ -208,6 +208,10 @@ func CreateFontButton(box *GuiBox, action string) *GuiButton {
 	return &newGB
 }
 
+func NewLabel(box *GuiBox, text string) {
+	box.UiBox.Append(ui.NewLabel(text), false)
+}
+
 func GetText(box *GuiBox, name string) string {
 	if (box == nil) {
 		log.Println("gui.GetText() ERROR box == nil")
@@ -278,10 +282,6 @@ func MakeEntryHbox(box *GuiBox, a string, startValue string, edit bool, action s
 	return e
 }
 
-func NewLabel(box *GuiBox, text string) {
-	box.UiBox.Append(ui.NewLabel(text), false)
-}
-
 func AddEntry(box *GuiBox, name string) *GuiEntry {
 	var ge *GuiEntry
 	ge = new(GuiEntry)
@@ -297,123 +297,4 @@ func AddEntry(box *GuiBox, name string) *GuiEntry {
 	box.Window.EntryMap[name] = ge
 
 	return ge
-}
-
-func HardHorizontalBreak(box *GuiBox) {
-	log.Println("HardHorizontalBreak START")
-	gw := box.Window
-	mainbox := gw.BoxMap["MAIN"]
-	if (mainbox == nil) {
-		log.Println("HardHorizontalBreak ERROR MAIN box == nil")
-		return
-	}
-	uibox := mainbox.UiBox
-
-	tmp := ui.NewHorizontalSeparator()
-	uibox.Append(tmp, false)
-
-	hbox := ui.NewVerticalBox()
-	hbox.SetPadded(true)
-	box.UiBox = hbox
-	uibox.Append(hbox, true)
-	log.Println("HardHorizontalBreak END")
-}
-
-func HardVerticalBreak(box *GuiBox) {
-	log.Println("HardVerticalBreak START")
-	gw := box.Window
-	mainbox := gw.BoxMap["MAIN"]
-	if (mainbox == nil) {
-		log.Println("HardHorizontalBreak ERROR MAIN box == nil")
-		return
-	}
-
-	tmp := ui.NewVerticalSeparator()
-	mainbox.UiBox.Append(tmp, false)
-
-	hbox := ui.NewVerticalBox()
-	hbox.SetPadded(true)
-	box.UiBox = hbox
-	mainbox.UiBox.Append(hbox, false)
-	log.Println("HardVerticalBreak END")
-}
-
-func HorizontalBreak(box *GuiBox) {
-	tmp := ui.NewHorizontalSeparator()
-	box.UiBox.Append(tmp, false)
-}
-
-func VerticalBreak(box *GuiBox) {
-	tmp := ui.NewVerticalSeparator()
-	box.UiBox.Append(tmp, false)
-}
-
-func AddGenericBox(gw *GuiWindow) *GuiBox {
-	var gb *GuiBox
-	gb = new(GuiBox)
-
-//	gb.EntryMap = make(map[string]*GuiEntry)
-//	gb.EntryMap["test"] = nil
-
-	vbox := ui.NewVerticalBox()
-	vbox.SetPadded(true)
-	// gw.Box1 = vbox
-	gb.UiBox = vbox
-	gb.Window = gw
-
-	hbox := ui.NewHorizontalBox()
-	hbox.SetPadded(true)
-	vbox.Append(hbox, false)
-
-	return gb
-}
-
-func CreateGenericBox(gw *GuiWindow, b *GuiButton, name string) *GuiBox{
-	log.Println("CreateAddVmBox() START name =", name)
-
-	var box *GuiBox
-	box = new(GuiBox)
-
-	vbox := ui.NewVerticalBox()
-	vbox.SetPadded(true)
-	box.UiBox = vbox
-	box.Window = gw
-	gw.BoxMap["ADD VM" + name] = box
-
-	hbox := ui.NewHorizontalBox()
-	hbox.SetPadded(true)
-	vbox.Append(hbox, false)
-
-	AddBoxToTab(name, gw.UiTab, vbox)
-
-	return box
-}
-
-func CreateBox(gw *GuiWindow, name string) *GuiBox {
-	log.Println("CreateVmBox() START")
-	log.Println("CreateVmBox() vm.Name =", name)
-	log.Println("CreateVmBox() gw =", gw)
-
-	var box *GuiBox
-	box = new(GuiBox)
-
-	vbox := ui.NewVerticalBox()
-	vbox.SetPadded(true)
-	log.Println("CreateVmBox() vbox =", vbox)
-	log.Println("CreateVmBox() box.UiBox =", box.UiBox)
-	box.UiBox = vbox
-	log.Println("CreateVmBox() box.Window =", box.Window)
-	box.Window = gw
-	log.Println("CreateVmBox() gw.BoxMap =", gw.BoxMap)
-	gw.BoxMap[name] = box
-
-	hboxAccount := ui.NewHorizontalBox()
-	hboxAccount.SetPadded(true)
-	vbox.Append(hboxAccount, false)
-
-	box.UiBox = hboxAccount
-
-	AddBoxToTab(name, gw.UiTab, vbox)
-
-	return box
 }

@@ -24,9 +24,14 @@ func ShowTab(gw *GuiWindow, tabname string, title string) *GuiWindow {
 	window.UiTab.Delete(0)
 
 	abox := window.MakeWindow(window)
-	window.BoxMap[tabname] = abox
-	window.UiTab.InsertAt(title, 0, abox.UiBox)
-	window.UiTab.SetMargined(0, true)
+	// add(nil, abox)
+	log.Println("ShowTab() NOT INSERTING TAB abox =", abox)
+	log.Println("ShowTab() NOT INSERTING TAB")
+	log.Println("ShowTab() NOT INSERTING TAB")
+	log.Println("ShowTab() NOT INSERTING TAB")
+//	window.BoxMap[tabname] = abox
+//	window.UiTab.InsertAt(title, 0, abox.UiBox)
+//	window.UiTab.SetMargined(0, true)
 	return window
 }
 
