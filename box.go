@@ -167,8 +167,8 @@ func CreateGenericBox(gw *GuiWindow, b *GuiButton, name string) *GuiBox{
 	hbox.SetPadded(true)
 	vbox.Append(hbox, false)
 
-	AddBoxToTab(name, gw.UiTab, vbox)
-
+	gw.UiTab.Append(name, vbox)
+	gw.UiTab.SetMargined(0, true)
 	return box
 }
 
@@ -196,7 +196,7 @@ func CreateBox(gw *GuiWindow, name string) *GuiBox {
 
 	box.UiBox = hboxAccount
 
-	AddBoxToTab(name, gw.UiTab, vbox)
-
+	gw.UiTab.Append(name, vbox)
+	gw.UiTab.SetMargined(0, true)
 	return box
 }

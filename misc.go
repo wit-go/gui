@@ -69,12 +69,6 @@ func StartNewWindow(c *pb.Config, bg bool, action string, maketab func(*GuiWindo
 	}
 }
 
-func getSplashText(a string) *ui.AttributedString {
-	var aText  *ui.AttributedString
-	aText = ui.NewAttributedString(a)
-	return aText
-}
-
 func InitTabWindow(gw *GuiWindow) {
 	log.Println("InitTabWindow() THIS WINDOW IS NOT YET SHOWN")
 
@@ -100,17 +94,7 @@ func InitTabWindow(gw *GuiWindow) {
 	log.Println("InitTabWindow() gw =", gw)
 
 	gw.MakeWindow(gw)
-
-//	abox := gw.MakeWindow(gw)
-//	gw.UiTab.Append("WIT Splash", abox.UiBox)
-//	gw.UiTab.SetMargined(0, true)
-
 	gw.UiWindow.Show()
-}
-
-func AddBoxToTab(name string, tab *ui.Tab, box *ui.Box) {
-	tab.Append(name, box)
-	tab.SetMargined(0, true)
 }
 
 /*
