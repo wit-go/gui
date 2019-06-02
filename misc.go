@@ -146,13 +146,11 @@ func InitTabWindow(gw *GuiWindow) {
         // create a 'fake' button entry for the mouse clicks
 	var newBM GuiButton
 	newBM.Action	= "QUIT"
-//	newBM.W		= gw.UiWindow
 	newBM.GW	= gw
 	Data.AllButtons = append(Data.AllButtons, &newBM)
 
 	gw.UiWindow.OnClosing(func(*ui.Window) bool {
 		log.Println("InitTabWindow() OnClosing() THIS WINDOW IS CLOSING gw=", gw)
-		// mouseClick(&newBM)
                 ui.Quit()
 		return true
 	})
@@ -163,12 +161,12 @@ func InitTabWindow(gw *GuiWindow) {
 
 	log.Println("InitTabWindow() gw =", gw)
 
-	abox := gw.MakeWindow(gw)
+	gw.MakeWindow(gw)
 
-	gw.UiTab.Append("WIT Splash", abox.UiBox)
-	gw.UiTab.SetMargined(0, true)
+//	abox := gw.MakeWindow(gw)
+//	gw.UiTab.Append("WIT Splash", abox.UiBox)
+//	gw.UiTab.SetMargined(0, true)
 
-	Data.State = "splash"
 	gw.UiWindow.Show()
 }
 

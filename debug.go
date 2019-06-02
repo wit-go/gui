@@ -6,6 +6,7 @@ import "fmt"
 import "strings"
 import "os/exec"
 import "runtime"
+import "reflect"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
@@ -147,4 +148,38 @@ func runCommand(cmdArgs []string) {
 	log.Println("runCommand() NEED TO CHECK THE TIME HERE TO SEE IF THIS WORKED")
 	log.Println("runCommand() OTHERWISE INFORM THE USER")
 	log.Println("runCommand() END")
+}
+
+//
+// this watches the GUI primarily to process protobuf's
+// this is pointless or wrong but I use it for debugging
+//
+func WatchGUI() {
+	count := 0
+
+	for {
+		if (count > 20) {
+			log.Println("Sleep() in watchGUI() Data.State =", Data.State)
+			for i, window := range Data.Windows {
+				log.Println("watchGUI() Data.Windows i =", i, "Action =", window.Action)
+				for name, abox := range window.BoxMap {
+					log.Println("\twatchGUI() BOX name =", name)
+					if (name == "SplashArea3") {
+						log.Println("\t\twatchGUI() BOX abox =", reflect.TypeOf(abox))
+						win := abox.Window
+						log.Println("\t\twatchGUI() BOX win =", reflect.TypeOf(win))
+						area := win.Area
+						log.Println("\t\twatchGUI() BOX area =", reflect.TypeOf(area), area.UiArea)
+						// spew.Dump(area.UiArea)
+						// area.UiArea.Show()
+						// time.Sleep(2000 * time.Millisecond)
+						// os.Exit(0)
+					}
+				}
+			}
+			count = 0
+		}
+		count += 1
+		time.Sleep(200 * time.Millisecond)
+	}
 }

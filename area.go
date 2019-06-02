@@ -9,7 +9,7 @@ import "github.com/davecgh/go-spew/spew"
 
 // THIS IS CLEAN
 
-func makeSplashArea(gb *GuiBox, newText *ui.AttributedString) {
+func makeGenericArea(gb *GuiBox, newText *ui.AttributedString) {
 	// make this button just to get the default font (but don't display the button)
 	// There should be another way to do this (?)
 	var newB *GuiButton
@@ -115,21 +115,10 @@ func ShowTextBox(gw *GuiWindow, newText *ui.AttributedString) *GuiBox {
 	}
 	log.Println("ShowTextBox() START gw =", gw)
 
-	// create and setup a new GuiBox
-	var gb *GuiBox
-	gb = new(GuiBox)
+	box := InitGuiBox(gw, nil, ui.NewVerticalBox(), "SplashArea3")
 
-//	gw.EntryMap = make(map[string]*GuiEntry)
-//	gw.EntryMap["test"] = nil
+	makeGenericArea(box, newText)
+	box.UiBox.Append(box.Window.Area.UiArea, true)
 
-	newbox := ui.NewVerticalBox()
-	newbox.SetPadded(true)
-	gb.UiBox = newbox
-	gb.Window = gw
-	gw.BoxMap["Splash"] = gb
-
-	makeSplashArea(gb, newText)
-	newbox.Append(gw.Area.UiArea, true)
-
-	return gb
+	return box
 }

@@ -82,8 +82,6 @@ type GuiWindow struct {
 	Width		int
 	Height		int
 
-//	mainbox		*ui.Box
-
 	// the callback function to make the window contents
 	MakeWindow	func(*GuiWindow) *GuiBox
 
@@ -105,7 +103,7 @@ type GuiWindow struct {
 type GuiButton struct {
 	Action		string		// what type of button
 	Box		*GuiBox		// what box the button click was in
-	Area		*GuiArea	// indicates the button click was in an Area
+//	Area		*GuiArea	// indicates the button click was in an Area
 	GW		*GuiWindow	// what window the button click was in (redundant?)
 
 	Account		*pb.Account	// associated with what account?

@@ -128,31 +128,31 @@ func ErrorWindow(gw *GuiWindow, msg1 string, msg2 string) {
 // for the button and then call the function below
 //
 func defaultButtonClick(button *ui.Button) {
-	log.Println("defaultButtonClick() LOOK FOR BUTTON button =", button)
+	log.Println("gui.defaultButtonClick() LOOK FOR BUTTON button =", button)
 	for key, foo := range Data.AllButtons {
 		if (Data.Debug) {
-			log.Println("defaultButtonClick() Data.AllButtons =", key, foo)
+			log.Println("gui.defaultButtonClick() Data.AllButtons =", key, foo)
 			// spew.Dump(foo)
 		}
 		if Data.AllButtons[key].B == button {
-			log.Println("\tdefaultButtonClick() BUTTON MATCHED")
-			log.Println("\tdefaultButtonClick() Data.AllButtons[key].Action =", Data.AllButtons[key].Action)
+			log.Println("\tgui.defaultButtonClick() BUTTON MATCHED")
+			log.Println("\tgui.defaultButtonClick() Data.AllButtons[key].Action =", Data.AllButtons[key].Action)
 			if Data.AllButtons[key].custom != nil {
-				log.Println("\tdefaultButtonClick() DOING CUSTOM FUNCTION")
+				log.Println("\tgui.defaultButtonClick() DOING CUSTOM FUNCTION")
 				Data.AllButtons[key].custom(Data.AllButtons[key])
 				return
 			}
 			if (Data.MouseClick != nil) {
 				Data.MouseClick(Data.AllButtons[key])
 			} else {
-				log.Println("\tdefaultButtonClick() IGNORING BUTTON. MouseClick() is nil")
+				log.Println("\tgui.defaultButtonClick() IGNORING BUTTON. MouseClick() is nil")
 			}
 			return
 		}
 	}
-	log.Println("\tdefaultButtonClick() BUTTON NOT FOUND")
+	log.Println("\tgui.defaultButtonClick() BUTTON NOT FOUND")
 	if (Data.Debug) {
-		panic("defaultButtonClick() SHOULD NOT HAVE UNMAPPED BUTTONS")
+		panic("gui.defaultButtonClick() SHOULD NOT HAVE UNMAPPED BUTTONS")
 	}
 }
 
@@ -197,7 +197,7 @@ func CreateFontButton(box *GuiBox, action string) *GuiButton {
 	newGB.Action	= action
 	newGB.FB	= ui.NewFontButton()
 	newGB.Box	= box
-	newGB.Area	= box.Window.Area
+//	newGB.Area	= box.Window.Area
 	Data.AllButtons	= append(Data.AllButtons, &newGB)
 
 	newGB.FB.OnChanged(func (*ui.FontButton) {
