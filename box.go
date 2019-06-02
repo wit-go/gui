@@ -43,7 +43,7 @@ func add(box *GuiBox, newbox *GuiBox) {
 		log.Println("gui.add() END")
 		return
 	}
-	log.Println("gui.add() adding", newbox.Name, "to", box.Name)
+	log.Println("\tgui.add() adding", newbox.Name, "to", box.Name)
 	// copy the box settings over
 	newbox.Window = box.Window
 	box.UiBox.Append(newbox.UiBox, false)
@@ -151,7 +151,8 @@ func AddGenericBox(gw *GuiWindow, name string) *GuiBox {
 	return newbox
 }
 
-func CreateGenericBox(gw *GuiWindow, b *GuiButton, name string) *GuiBox{
+/*
+func CreateGenericBox(gw *GuiWindow, name string) *GuiBox {
 	log.Println("CreateAddVmBox() START name =", name)
 
 	var box *GuiBox
@@ -171,32 +172,4 @@ func CreateGenericBox(gw *GuiWindow, b *GuiButton, name string) *GuiBox{
 	gw.UiTab.SetMargined(0, true)
 	return box
 }
-
-func CreateBox(gw *GuiWindow, name string) *GuiBox {
-	log.Println("CreateVmBox() START")
-	log.Println("CreateVmBox() vm.Name =", name)
-	log.Println("CreateVmBox() gw =", gw)
-
-	var box *GuiBox
-	box = new(GuiBox)
-
-	vbox := ui.NewVerticalBox()
-	vbox.SetPadded(true)
-	log.Println("CreateVmBox() vbox =", vbox)
-	log.Println("CreateVmBox() box.UiBox =", box.UiBox)
-	box.UiBox = vbox
-	log.Println("CreateVmBox() box.Window =", box.Window)
-	box.Window = gw
-	log.Println("CreateVmBox() gw.BoxMap =", gw.BoxMap)
-	gw.BoxMap[name] = box
-
-	hboxAccount := ui.NewHorizontalBox()
-	hboxAccount.SetPadded(true)
-	vbox.Append(hboxAccount, false)
-
-	box.UiBox = hboxAccount
-
-	gw.UiTab.Append(name, vbox)
-	gw.UiTab.SetMargined(0, true)
-	return box
-}
+*/

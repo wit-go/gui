@@ -33,15 +33,16 @@ func ShowMainTabShowBox(gw *GuiWindow, box *GuiBox) {
 	gw.UiTab.SetMargined(0, true)
 }
 
-func InitGuiWindow(c *pb.Config, action string, maketab func(*GuiWindow) *GuiBox, uiW *ui.Window, uiT *ui.Tab) *GuiWindow {
+// func InitGuiWindow(c *pb.Config, action string, maketab func(*GuiWindow) *GuiBox, uiW *ui.Window, uiT *ui.Tab) *GuiWindow {
+func InitGuiWindow(c *pb.Config, action string, gw *GuiWindow) *GuiWindow {
 	log.Println("InitGuiWindow() START")
 	var newGuiWindow GuiWindow
 	newGuiWindow.Width	= int(c.Width)
 	newGuiWindow.Height	= int(c.Height)
 	newGuiWindow.Action	= action
-	newGuiWindow.MakeWindow	= maketab
-	newGuiWindow.UiWindow	= uiW
-	newGuiWindow.UiTab	= uiT
+	newGuiWindow.MakeWindow	= gw.MakeWindow
+	newGuiWindow.UiWindow	= gw.UiWindow
+	newGuiWindow.UiTab	= gw.UiTab
 	newGuiWindow.BoxMap	= make(map[string]*GuiBox)
 	newGuiWindow.EntryMap	= make(map[string]*GuiEntry)
 	newGuiWindow.EntryMap["test"] = nil
@@ -52,18 +53,22 @@ func InitGuiWindow(c *pb.Config, action string, maketab func(*GuiWindow) *GuiBox
 }
 
 
-func StartNewWindow(c *pb.Config, bg bool, action string, maketab func(*GuiWindow) *GuiBox) {
-	log.Println("InitNewWindow() Create a new window")
-	window := InitGuiWindow(c, action, maketab, nil, nil)
+func StartNewWindow(c *pb.Config, bg bool, action string, callback func(*GuiWindow) *GuiBox) {
+	log.Println("StartNewWindow() Create a new window")
+	var junk GuiWindow
+	junk.MakeWindow = callback
+	window := InitGuiWindow(c, action, &junk)
 	if (bg) {
-		log.Println("ShowWindow() IN NEW GOROUTINE")
+		log.Println("StartNewWindow() START NEW GOROUTINE for ui.Main()")
 		go ui.Main(func() {
+			log.Println("gui.StartNewWindow() inside ui.Main()")
 			InitTabWindow(window)
 		})
-		time.Sleep(2000 * time.Millisecond)
+		time.Sleep(2000 * time.Millisecond) // this might make it more stable on windows?
 	} else {
-		log.Println("ShowWindow() WAITING for ui.Main()")
+		log.Println("StartNewWindow() WAITING for ui.Main()")
 		ui.Main(func() {
+			log.Println("gui.StartNewWindow() inside ui.Main()")
 			InitTabWindow(window)
 		})
 	}
