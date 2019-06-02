@@ -101,3 +101,45 @@ func AddEntry(box *GuiBox, name string) *GuiEntry {
 
 	return ge
 }
+
+func defaultEntryChange(e *ui.Entry) {
+	for key, em := range Data.AllEntries {
+		if (Data.Debug) {
+			log.Println("\tdefaultEntryChange() Data.AllEntries =", key, em)
+		}
+		if Data.AllEntries[key].UiEntry == e {
+			log.Println("defaultEntryChange() FOUND", 
+				"action =", Data.AllEntries[key].Action,
+				"Last =", Data.AllEntries[key].Last,
+				"e.Text() =", e.Text())
+			Data.AllEntries[key].Last = e.Text()
+			if Data.AllEntries[key].Normalize != nil {
+				fixed := Data.AllEntries[key].Normalize(e.Text())
+				e.SetText(fixed)
+			}
+			return
+		}
+	}
+	log.Println("defaultEntryChange() ERROR. MISSING ENTRY MAP. e.Text() =", e.Text())
+}
+
+func defaultMakeEntry(startValue string, edit bool, action string) *GuiEntry {
+	e := ui.NewEntry()
+	e.SetText(startValue)
+	if (edit == false) {
+		e.SetReadOnly(true)
+	}
+	e.OnChanged(defaultEntryChange)
+
+	// add the entry field to the global map
+	var newEntry GuiEntry
+	newEntry.UiEntry  = e
+	newEntry.Edit     = edit
+	newEntry.Action   = action
+	if (action == "Memory") {
+		newEntry.Normalize = normalizeInt
+	}
+	Data.AllEntries = append(Data.AllEntries, &newEntry)
+
+	return &newEntry
+}

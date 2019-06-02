@@ -128,6 +128,7 @@ func normalizeInt(s string) string {
 	return clean
 }
 
+/*
 func defaultEntryChange(e *ui.Entry) {
 	for key, em := range Data.AllEntries {
 		if (Data.Debug) {
@@ -169,6 +170,7 @@ func defaultMakeEntry(startValue string, edit bool, action string) *GuiEntry {
 
 	return &newEntry
 }
+*/
 
 func MessageWindow(gw *GuiWindow, msg1 string, msg2 string) {
 	ui.MsgBox(gw.UiWindow, msg1, msg2)
