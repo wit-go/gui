@@ -53,6 +53,25 @@ func add(box *GuiBox, newbox *GuiBox) {
 	log.Println("gui.add() END")
 }
 
+func InitGuiBox(gw *GuiWindow, box *GuiBox, uiBox *ui.Box, name string) *GuiBox {
+	log.Println("InitGuiBox() START")
+	var newGuiBox GuiBox
+	newGuiBox.UiBox = uiBox
+	newGuiBox.Window = gw
+	uiBox.SetPadded(true)
+
+	if (box != nil) {
+		log.Println("InitGuiBox() APPEND NEW BOX TO OLD BOX")
+		box.UiBox.Append(uiBox, false)
+	} else {
+		log.Println("InitGuiBox() APPEND NEW BOX TO TAB")
+		gw.UiTab.Append(name, uiBox)
+	}
+	gw.BoxMap[name] = &newGuiBox
+	log.Println("InitGuiBox() END")
+	return &newGuiBox
+}
+
 func HardHorizontalBox(gw *GuiWindow) *GuiBox {
 	log.Println("HardHorizontalBreak START")
 	var newbox *GuiBox
