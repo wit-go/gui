@@ -17,26 +17,6 @@ import pb "git.wit.com/wit/witProtobuf"
 const Xaxis = 0
 const Yaxis = 1
 
-/*
-func ReplaceTab(gw *GuiWindow, tabname string, title string) {
-	log.Println("ReplaceTab() gw =", gw)
-	if (gw.UiTab == nil) {
-		log.Println("\tShowTab() gw.UiTab = nil THIS IS BAD")
-		os.Exit(-1)
-	}
-	window := InitGuiWindow(Data.Config, tabname, gw.MakeWindow, gw.UiWindow, gw.UiTab)
-	window.UiTab.Delete(0)
-	window.MakeWindow(window)
-	// add(nil, abox)
-	log.Println("\tShowTab() NOT INSERTING TAB")
-	log.Println("\tShowTab() NOT INSERTING TAB")
-	log.Println("\tShowTab() NOT INSERTING TAB")
-//	window.BoxMap[tabname] = abox
-//	window.UiTab.InsertAt(title, 0, abox.UiBox)
-//	window.UiTab.SetMargined(0, true)
-}
-*/
-
 func GuiInit() {
 	ui.OnShouldQuit(func() bool {
 		// mouseClick(&newBM)
@@ -45,26 +25,16 @@ func GuiInit() {
 	})
 }
 
+/*
 func AddMainTab(gw *GuiWindow) *GuiBox {
 	log.Println("ShowMainTab() gw =", gw)
 	log.Println("ShowMainTab() gw.UiTab =", gw.UiTab)
 
 	window := InitGuiWindow(Data.Config, "MAIN", nil, gw.UiWindow, gw.UiTab)
-
 	box := InitGuiBox(window, nil, ui.NewHorizontalBox(), "MAIN")
-
-	/*
-	if (Data.Debug) {
-		log.Println("makeCloudInfoBox() add debugging buttons")
-		addDebuggingButtons(box)
-		box.UiBox.Append(ui.NewVerticalSeparator(), false)
-	}
-	*/
-
-	// box := gw.MakeWindow(gw)
-	// abox := makeCloudInfoBox(gw, box)
 	return box
 }
+*/
 
 func ShowMainTabShowBox(gw *GuiWindow, box *GuiBox) {
 	log.Println("gui.ShowMainTabShowBox() box =", box)
