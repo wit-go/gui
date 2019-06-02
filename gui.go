@@ -197,7 +197,6 @@ func CreateFontButton(box *GuiBox, action string) *GuiButton {
 	newGB.Action	= action
 	newGB.FB	= ui.NewFontButton()
 	newGB.Box	= box
-//	newGB.Area	= box.Window.Area
 	Data.AllButtons	= append(Data.AllButtons, &newGB)
 
 	newGB.FB.OnChanged(func (*ui.FontButton) {

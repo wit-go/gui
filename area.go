@@ -9,12 +9,13 @@ import "github.com/davecgh/go-spew/spew"
 
 // THIS IS CLEAN
 
-func makeGenericArea(gb *GuiBox, newText *ui.AttributedString) {
+func makeGenericArea(gb *GuiBox, newText *ui.AttributedString, custom func(*GuiButton)) {
 	// make this button just to get the default font (but don't display the button)
 	// There should be another way to do this (?)
 	var newB *GuiButton
 	newB		= CreateFontButton(gb, "AREA")
 	newB.Box	= gb
+	newB.custom	= custom
 	newB.GW		= gb.Window
 
 	gw := gb.Window
@@ -76,7 +77,9 @@ func (ah GuiArea) MouseEvent(a *ui.Area, me *ui.AreaMouseEvent) {
 		log.Println("GOT MOUSE UP")
 		log.Println("GOT MOUSE UP ah.Button =", ah.Button)
 		log.Println("GOT MOUSE UP ah.Button.FB =", ah.Button.FB)
-		if (Data.MouseClick != nil) {
+		if (ah.Button.custom != nil) {
+			ah.Button.custom(ah.Button)
+		} else if (Data.MouseClick != nil) {
 			Data.MouseClick(ah.Button)
 		}
 	}
@@ -107,7 +110,7 @@ func (ah GuiArea) KeyEvent(a *ui.Area, ke *ui.AreaKeyEvent) (handled bool) {
 	return false
 }
 
-func ShowTextBox(gw *GuiWindow, newText *ui.AttributedString) *GuiBox {
+func ShowTextBox(gw *GuiWindow, newText *ui.AttributedString, custom func(*GuiButton)) *GuiBox {
 	log.Println("ShowTextBox() START")
 	if (gw == nil) {
 		log.Println("ShowTextBox() ERROR gw = nil")
@@ -117,7 +120,7 @@ func ShowTextBox(gw *GuiWindow, newText *ui.AttributedString) *GuiBox {
 
 	box := InitGuiBox(gw, nil, ui.NewVerticalBox(), "SplashArea3")
 
-	makeGenericArea(box, newText)
+	makeGenericArea(box, newText, custom)
 	box.UiBox.Append(box.Window.Area.UiArea, true)
 
 	return box
