@@ -46,11 +46,13 @@ func AddMainTab(gw *GuiWindow) *GuiBox {
 
 	box := InitGuiBox(window, nil, ui.NewHorizontalBox(), "MAIN")
 
+	/*
 	if (Data.Debug) {
 		log.Println("makeCloudInfoBox() add debugging buttons")
 		addDebuggingButtons(box)
 		box.UiBox.Append(ui.NewVerticalSeparator(), false)
 	}
+	*/
 
 	// box := gw.MakeWindow(gw)
 	// abox := makeCloudInfoBox(gw, box)

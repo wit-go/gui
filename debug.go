@@ -3,44 +3,16 @@ package gui
 import "log"
 import "time"
 import "fmt"
-import "strings"
-import "os/exec"
-import "runtime"
 import "reflect"
 
-import "github.com/andlabs/ui"
-import _ "github.com/andlabs/ui/winmanifest"
+// import "github.com/andlabs/ui"
+// import _ "github.com/andlabs/ui/winmanifest"
 
-import "github.com/davecgh/go-spew/spew"
+// import "github.com/davecgh/go-spew/spew"
 
 // import pb "git.wit.com/wit/witProtobuf"
 
 // THIS IS NOT CLEAN (but probably doesn't need to be. it's debugging)
-
-// can not pass any args to this (?)
-/*
-func setupCloudUI() {
-	Data.Window1.W = ui.NewWindow("Cloud Control Panel", Data.Width, Data.Height, false)
-	Data.Window1.W.OnClosing(func(*ui.Window) bool {
-		ui.Quit()
-		return true
-	})
-	ui.OnShouldQuit(func() bool {
-		Data.Window1.W.Destroy()
-		return true
-	})
-
-	Data.Window1.T = ui.NewTab()
-	Data.Window1.W.SetChild(Data.Window1.T)
-	Data.Window1.W.SetMargined(true)
-
-	// Data.tabcount = 0
-	Data.Window1.T.Append("Cloud Info", makeCloudInfoBox())
-	// Data.Window1.T.SetMargined(Data.tabcount, true)
-
-	Data.Window1.W.Show()
-}
-*/
 
 func addTableTab() {
 	var parts []TableColumnData
@@ -59,6 +31,7 @@ func addTableTab() {
 	// AddTableTab(Data.Window1.T, 1, "test seven", 7, parts, nil)
 }
 
+/*
 func addDebuggingButtons(box *GuiBox) {
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
@@ -93,6 +66,7 @@ func addDebuggingButtons(box *GuiBox) {
 	a = CreateButton(box, nil, nil, "Load test.json config file", "CONFIG", nil)
 	vbox.Append(a.B, false)
 }
+*/
 
 func runTestHide(b *GuiButton) {
 	/*
@@ -105,6 +79,7 @@ func runTestHide(b *GuiButton) {
 	*/
 }
 
+/*
 func runPingClick(b *GuiButton) {
 	log.Println("runPingClick START")
 	log.Println("runTestExecClick b.VM", b.VM)
@@ -149,6 +124,7 @@ func runCommand(cmdArgs []string) {
 	log.Println("runCommand() OTHERWISE INFORM THE USER")
 	log.Println("runCommand() END")
 }
+*/
 
 //
 // this watches the GUI primarily to process protobuf's
