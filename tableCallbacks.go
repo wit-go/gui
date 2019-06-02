@@ -15,7 +15,7 @@ import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
 func (mh *TableData) NumRows(m *ui.TableModel) int {
-	if (Data.Debug) {
+	if (Config.Debug) {
 		log.Println("NumRows = mh.RowCount = ", mh.RowCount, "(last Row & Column =", mh.lastRow, mh.lastColumn, ")")
 	}
 	return mh.RowCount
@@ -23,7 +23,7 @@ func (mh *TableData) NumRows(m *ui.TableModel) int {
 
 // FYI: this routine seems to be called around 10 to 100 times a second for each table
 func (mh *TableData) ColumnTypes(m *ui.TableModel) []ui.TableValue {
-	if (Data.DebugTable) {
+	if (Config.DebugTable) {
 		log.Println("ColumnTypes = ", mh.generatedColumnTypes)
 	}
 	return mh.generatedColumnTypes
@@ -44,7 +44,7 @@ func libuiColorToGOlangColor(rgba color.RGBA) ui.TableColor {
 // TODO: Figure out why this is being called 1000 times a second (10 times for each row & column)
 // Nevermind this TODO. Who gives a shit. This is a really smart way to treat the OS toolkits
 func (mh *TableData) CellValue(m *ui.TableModel, row, column int) ui.TableValue {
-	if (Data.DebugTable) {
+	if (Config.DebugTable) {
 		log.Println("CellValue() row, column =", row, column)
 	}
 	mh.lastRow = row
@@ -68,7 +68,7 @@ func (mh *TableData) CellValue(m *ui.TableModel, row, column int) ui.TableValue 
 			}
 
 			bgcolor := libuiColorToGOlangColor(mh.Rows[row].HumanData[humanID].Color)
-			if (Data.Debug) {
+			if (Config.Debug) {
 				log.Println("CellValue() BGCOLOR =", bgcolor)
 			}
 			return bgcolor
@@ -112,7 +112,7 @@ func defaultSetCellValue(mh *TableData, row int, column int) {
 			return
 		}
 		log.Println("defaultSetCellValue() ERROR: UNKNOWN BUTTON IN TABLE")
-		if (Data.Debug) {
+		if (Config.Debug) {
 			panic("defaultSetCellValue() GOT AN UNKNOWN BUTTON CLICK IN TABLE")
 		}
 	}

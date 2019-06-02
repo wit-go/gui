@@ -8,8 +8,6 @@ import "regexp"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-import pb "git.wit.com/wit/witProtobuf"
-
 // import "github.com/davecgh/go-spew/spew"
 
 const Xaxis = 0
@@ -24,11 +22,11 @@ func GuiInit() {
 }
 
 // func InitGuiWindow(c *pb.Config, action string, maketab func(*GuiWindow) *GuiBox, uiW *ui.Window, uiT *ui.Tab) *GuiWindow {
-func InitGuiWindow(c *pb.Config, action string, gw *GuiWindow) *GuiWindow {
+func InitGuiWindow(action string, gw *GuiWindow) *GuiWindow {
 	log.Println("InitGuiWindow() START")
 	var newGuiWindow GuiWindow
-	newGuiWindow.Width	= int(c.Width)
-	newGuiWindow.Height	= int(c.Height)
+	newGuiWindow.Width	= Config.Width
+	newGuiWindow.Height	= Config.Height
 	newGuiWindow.Action	= action
 	newGuiWindow.MakeWindow	= gw.MakeWindow
 	newGuiWindow.UiWindow	= gw.UiWindow
@@ -43,11 +41,11 @@ func InitGuiWindow(c *pb.Config, action string, gw *GuiWindow) *GuiWindow {
 }
 
 
-func StartNewWindow(c *pb.Config, bg bool, action string, callback func(*GuiWindow) *GuiBox) {
+func StartNewWindow(bg bool, action string, callback func(*GuiWindow) *GuiBox) {
 	log.Println("StartNewWindow() Create a new window")
 	var junk GuiWindow
 	junk.MakeWindow = callback
-	window := InitGuiWindow(c, action, &junk)
+	window := InitGuiWindow(action, &junk)
 	if (bg) {
 		log.Println("StartNewWindow() START NEW GOROUTINE for ui.Main()")
 		go ui.Main(func() {

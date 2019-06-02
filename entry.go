@@ -105,7 +105,7 @@ func AddEntry(box *GuiBox, name string) *GuiEntry {
 
 func defaultEntryChange(e *ui.Entry) {
 	for key, em := range Data.AllEntries {
-		if (Data.Debug) {
+		if (Config.Debug) {
 			log.Println("\tdefaultEntryChange() Data.AllEntries =", key, em)
 		}
 		if Data.AllEntries[key].UiEntry == e {

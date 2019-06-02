@@ -24,9 +24,9 @@ func makeGenericArea(gb *GuiBox, newText *ui.AttributedString, custom func(*GuiB
 	gw.Area.UiAttrstr	= newText
 	gw.Area.UiArea		= ui.NewArea(gw.Area)
 
-	if (Data.Debug) {
+	if (Config.Debug) {
 		spew.Dump(gw.Area.UiArea)
-		log.Println("DEBUGGING", Data.Debug)
+		log.Println("DEBUGGING", Config.Debug)
 	} else {
 		log.Println("NOT DEBUGGING AREA mhAH.Button =", gw.Area.Button)
 	}
@@ -62,7 +62,7 @@ func (ah GuiArea) Draw(a *ui.Area, p *ui.AreaDrawParams) {
 }
 
 func (ah GuiArea) MouseEvent(a *ui.Area, me *ui.AreaMouseEvent) {
-	if (Data.Debug) {
+	if (Config.Debug) {
 		log.Println("GOT MouseEvent() ah.Button =", ah.Button)
 		spew.Dump(me)
 	}

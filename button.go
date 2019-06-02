@@ -21,7 +21,7 @@ import pb "git.wit.com/wit/witProtobuf"
 func defaultButtonClick(button *ui.Button) {
 	log.Println("gui.defaultButtonClick() LOOK FOR BUTTON button =", button)
 	for key, foo := range Data.AllButtons {
-		if (Data.Debug) {
+		if (Config.Debug) {
 			log.Println("gui.defaultButtonClick() Data.AllButtons =", key, foo)
 			// spew.Dump(foo)
 		}
@@ -32,7 +32,7 @@ func defaultButtonClick(button *ui.Button) {
 		}
 	}
 	log.Println("\tgui.defaultButtonClick() ERROR: BUTTON NOT FOUND")
-	if (Data.Debug) {
+	if (Config.Debug) {
 		panic("gui.defaultButtonClick() ERROR: UNMAPPED ui.Button")
 	}
 }
@@ -65,7 +65,6 @@ func CreateButton(box *GuiBox, a *pb.Account, vm *pb.Event_VM, name string, acti
 	newB.Account	= a
 	newB.VM		= vm
 	newB.Box	= box
-//	newB.GW		= box.Window
 	newB.Action	= action
 	newB.Custom	= custom
 	Data.AllButtons	= append(Data.AllButtons, newB)

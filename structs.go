@@ -14,6 +14,14 @@ import pb "git.wit.com/wit/witProtobuf"
 // be the safe way to interact with the GUI
 //
 var Data	GuiData
+var Config	GuiConfig
+
+type GuiConfig struct {
+	Width		int
+	Height		int
+	Debug		bool
+	DebugTable	bool
+}
 
 type GuiData struct {
 	State		string  // used like a state machine
@@ -21,24 +29,6 @@ type GuiData struct {
 	// a fallback default function to handle mouse events 
 	// if nothing else is defined to handle them
 	MouseClick	func(*GuiButton)
-
-	// passes in all the User accounts from the cloud-control-panel config file
-	Config		*pb.Config
-
-	// general information on the App
-	// move all this to Config (?)
-	Version		string
-	GitCommit	string
-	GoVersion	string
-	Buildtime	string
-	HomeDir		string
-	Debug		bool
-	DebugTable	bool
-
-	// official hostname and IPv6 address for this box
-	// also move all this to Config (?)
-	Hostname	string
-	IPv6		string
 
 	// A map of all the entry boxes
 	AllEntries	[]*GuiEntry
@@ -51,10 +41,6 @@ type GuiData struct {
 	// This has to work this way because of how
 	// andlabs/ui & andlabs/libui work
 	AllButtons	[]*GuiButton
-
-	EntryNick	*ui.Entry
-	EntryUser	*ui.Entry
-	EntryPass	*ui.Entry
 }
 
 //
@@ -111,7 +97,6 @@ type GuiButton struct {
 	Name		string		// field for human readable name
 	Action		string		// what type of button
 	Box		*GuiBox		// what box the button click was in
-//	GW		*GuiWindow	// what window the button click was in (redundant?)
 
 	Account		*pb.Account	// associated with what account?
 	VM		*pb.Event_VM	// associated with which VM?
