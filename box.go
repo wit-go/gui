@@ -18,7 +18,9 @@ func add(box *GuiBox, newbox *GuiBox) {
 			// create a new tab here
 			// add the box to it as MAINBOX
 			log.Println("\tgui.add() add to Window as a UiTab")
-			newbox.Window.UiTab.InsertAt(newbox.Name, 0, newbox.UiBox)
+			// TODO: allow passing where to append
+			// newbox.Window.UiTab.InsertAt(newbox.Name, 0, newbox.UiBox)
+			newbox.Window.UiTab.Append(newbox.Name, newbox.UiBox)
 			newbox.Window.UiTab.SetMargined(0, true)
 
 			// TODO: figure out how to make a new Tab/Window/Box here
@@ -46,25 +48,6 @@ func add(box *GuiBox, newbox *GuiBox) {
 	// add the newbox to the Window.BoxMap[]
 	box.Window.BoxMap[newbox.Name] = newbox
 	log.Println("gui.add() END")
-}
-
-func InitGuiBox(gw *GuiWindow, box *GuiBox, uiBox *ui.Box, name string) *GuiBox {
-	log.Println("InitGuiBox() START")
-	var newGuiBox GuiBox
-	newGuiBox.UiBox = uiBox
-	newGuiBox.Window = gw
-	uiBox.SetPadded(true)
-
-	if (box != nil) {
-		log.Println("InitGuiBox() APPEND NEW BOX TO OLD BOX")
-		box.UiBox.Append(uiBox, false)
-	} else {
-		log.Println("InitGuiBox() APPEND NEW BOX TO TAB")
-		gw.UiTab.Append(name, uiBox)
-	}
-	gw.BoxMap[name] = &newGuiBox
-	log.Println("InitGuiBox() END")
-	return &newGuiBox
 }
 
 func HardHorizontalBox(gw *GuiWindow) *GuiBox {

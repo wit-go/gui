@@ -126,7 +126,6 @@ func ShowTextBox(gw *GuiWindow, newText *ui.AttributedString, custom func(*GuiBu
 	hbox.SetPadded(true)
 
 	add(gw.BoxMap["MAINBOX"], newbox)
-	// box := InitGuiBox(gw, nil, ui.NewVerticalBox(), "SplashArea3")
 
 	makeGenericArea(newbox, newText, custom)
 	newbox.UiBox.Append(newbox.Window.Area.UiArea, true)
