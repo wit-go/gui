@@ -22,7 +22,7 @@ func InitGuiWindow(action string, gw *GuiWindow) *GuiWindow {
 	var newGuiWindow GuiWindow
 	newGuiWindow.Width	= Config.Width
 	newGuiWindow.Height	= Config.Height
-	newGuiWindow.Action	= action
+//	newGuiWindow.Action	= action
 	newGuiWindow.MakeWindow	= gw.MakeWindow
 	newGuiWindow.UiWindow	= gw.UiWindow
 	newGuiWindow.UiTab	= gw.UiTab
@@ -40,13 +40,13 @@ func StartNewWindow(bg bool, action string, callback func(*GuiWindow) *GuiBox) {
 	log.Println("StartNewWindow() Create a new window")
 	var junk GuiWindow
 	junk.MakeWindow = callback
-	junk.Action = action
+//	junk.Action = action
 	window := InitGuiWindow(action, &junk)
 	if (bg) {
 		log.Println("StartNewWindow() START NEW GOROUTINE for ui.Main()")
 		go ui.Main(func() {
 			log.Println("gui.StartNewWindow() inside ui.Main()")
-			InitTabWindow(window)
+			go InitTabWindow(window)
 		})
 		time.Sleep(2000 * time.Millisecond) // this might make it more stable on windows?
 	} else {

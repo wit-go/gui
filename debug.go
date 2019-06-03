@@ -21,7 +21,7 @@ func WatchGUI() {
 		if (count > 20) {
 			log.Println("Sleep() in watchGUI() Data.State =", Data.State)
 			for i, window := range Data.Windows {
-				log.Println("watchGUI() Data.Windows", i, "Action =", window.Action)
+				log.Println("watchGUI() Data.Windows", i, "Name =", window.Name)
 				for name, abox := range window.BoxMap {
 					log.Printf("\twatchGUI() BOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
 					/*

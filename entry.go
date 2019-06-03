@@ -107,7 +107,7 @@ func defaultEntryChange(e *ui.Entry) {
 		}
 		if Data.AllEntries[key].UiEntry == e {
 			log.Println("defaultEntryChange() FOUND", 
-				"action =", Data.AllEntries[key].Action,
+				"Name =", Data.AllEntries[key].Name,
 				"Last =", Data.AllEntries[key].Last,
 				"e.Text() =", e.Text())
 			Data.AllEntries[key].Last = e.Text()
@@ -133,7 +133,7 @@ func defaultMakeEntry(startValue string, edit bool, action string) *GuiEntry {
 	var newEntry GuiEntry
 	newEntry.UiEntry  = e
 	newEntry.Edit     = edit
-	newEntry.Action   = action
+	newEntry.Name     = action
 	if (action == "INT") {
 		newEntry.Normalize = normalizeInt
 	}

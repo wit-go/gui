@@ -60,7 +60,8 @@ type GuiData struct {
 // can destroy and replace it with something else
 //
 type GuiWindow struct {
-	Action		string
+	Name		string		// field for human readable name
+//	Action		string
 	Width		int
 	Height		int
 
@@ -80,8 +81,8 @@ type GuiWindow struct {
 // GuiBox is any type of ui.Hbox or ui.Vbox
 // There can be lots of these for each GuiWindow
 type GuiBox struct {
+	Name		string		// field for human readable name
 	Window		*GuiWindow
-	Name		string
 
 	// andlabs/ui abstraction mapping
 	UiBox		*ui.Box
@@ -99,8 +100,6 @@ type GuiButton struct {
 	Custom		func (*GuiButton)
 	Values		interface {}
 
-//	Action		string		// what type of button
-
 	// andlabs/ui abstraction mapping
 	B		*ui.Button
 	FB		*ui.FontButton
@@ -108,9 +107,10 @@ type GuiButton struct {
 
 // text entry fields
 type GuiEntry struct {
-	Action		string	// what type of button
+	Name		string		// field for human readable name
+//	Action		string	// what type of button
 	Edit		bool
-	Last		string	// the last value
+	Last		string		// the last value
 	Normalize	func (string) string // function to 'normalize' the data
 
 	B		*GuiButton
