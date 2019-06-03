@@ -20,29 +20,35 @@ func WatchGUI() {
 	for {
 		if (count > 20) {
 			log.Println("Sleep() in watchGUI()")
-			for i, window := range Data.Windows {
-				log.Println("watchGUI() Data.Windows", i, "Name =", window.Name)
-				for name, abox := range window.BoxMap {
-					log.Printf("\twatchGUI() BOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
-					/*
-					if (name == "DEBUG") {
-						log.Println("\t\twatchGUI() BOX abox =", reflect.TypeOf(abox))
-						win := abox.Window
-						log.Println("\t\twatchGUI() BOX win =", reflect.TypeOf(win))
-						area := win.Area
-						log.Println("\t\twatchGUI() BOX area =", reflect.TypeOf(area), area.UiArea)
-						// spew.Dump(area.UiArea)
-						// area.UiArea.Show()
-						// time.Sleep(2000 * time.Millisecond)
-						// os.Exit(0)
-					}
-					*/
-				}
+			if (Config.Debug) {
+				DumpBoxes()
 			}
 			count = 0
 		}
 		count += 1
 		time.Sleep(200 * time.Millisecond)
+	}
+}
+
+func DumpBoxes() {
+	for i, window := range Data.Windows {
+		log.Println("watchGUI() Data.Windows", i, "Name =", window.Name)
+		for name, abox := range window.BoxMap {
+			log.Printf("\twatchGUI() BOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
+			/*
+			if (name == "DEBUG") {
+				log.Println("\t\twatchGUI() BOX abox =", reflect.TypeOf(abox))
+				win := abox.Window
+				log.Println("\t\twatchGUI() BOX win =", reflect.TypeOf(win))
+				area := win.Area
+				log.Println("\t\twatchGUI() BOX area =", reflect.TypeOf(area), area.UiArea)
+				// spew.Dump(area.UiArea)
+				// area.UiArea.Show()
+				// time.Sleep(2000 * time.Millisecond)
+				// os.Exit(0)
+			}
+			*/
+		}
 	}
 }
 
