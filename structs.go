@@ -6,8 +6,6 @@ import "golang.org/x/image/font"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-import pb "git.wit.com/wit/witProtobuf"
-
 //
 // All GUI Data Structures and functions that are external
 // If you need cross platform support, these might only
@@ -101,9 +99,7 @@ type GuiButton struct {
 	Custom		func (*GuiButton)
 	Values		interface {}
 
-	Action		string		// what type of button
-	Account		*pb.Account	// associated with what account?
-	VM		*pb.Event_VM	// associated with which VM?
+//	Action		string		// what type of button
 
 	// andlabs/ui abstraction mapping
 	B		*ui.Button

@@ -3,7 +3,6 @@ package gui
 import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
-import pb "git.wit.com/wit/witProtobuf"
 // import "github.com/davecgh/go-spew/spew"
 
 // This is the default mouse click handler
@@ -38,7 +37,7 @@ func defaultButtonClick(button *ui.Button) {
 }
 
 func guiButtonClick(button *GuiButton) {
-	log.Println("\tgui.guiButtonClick() button.Action =", button.Action)
+	log.Println("\tgui.guiButtonClick() button.Name =", button.Name)
 	if button.Custom != nil {
 		log.Println("\tgui.guiButtonClick() DOING CUSTOM FUNCTION")
 		button.Custom(button)
@@ -51,28 +50,6 @@ func guiButtonClick(button *GuiButton) {
 	}
 }
 
-func CreateButton(box *GuiBox, a *pb.Account, vm *pb.Event_VM, name string, action string, custom func(*GuiButton)) *GuiButton {
-	newUiB := ui.NewButton(name)
-	newUiB.OnClicked(defaultButtonClick)
-
-	var newB *GuiButton
-	newB		= new(GuiButton)
-	newB.B		= newUiB
-	if (box.Window == nil) {
-		log.Println("CreateButton() box.Window == nil")
-		panic("crap")
-	}
-	newB.Account	= a
-	newB.VM		= vm
-	newB.Box	= box
-	newB.Action	= action
-	newB.Custom	= custom
-	Data.AllButtons	= append(Data.AllButtons, newB)
-
-	box.UiBox.Append(newB.B, false)
-	return newB
-}
-
 func NewCreateButton(box *GuiBox, custom func(*GuiButton), name string, values interface {}) *GuiButton {
 	newUiB := ui.NewButton(name)
 	newUiB.OnClicked(defaultButtonClick)
@@ -82,7 +59,8 @@ func NewCreateButton(box *GuiBox, custom func(*GuiButton), name string, values i
 	newB.B		= newUiB
 	if (box.Window == nil) {
 		log.Println("CreateButton() box.Window == nil")
-		panic("crap")
+		// ErrorWindow(box.Window, "Login Failed", msg) // can't even do this
+		panic("maybe print an error and return nil? or make a fake button?")
 	}
 	newB.Box	= box
 	newB.Custom	= custom
@@ -98,7 +76,6 @@ func CreateFontButton(box *GuiBox, action string) *GuiButton {
         // create a 'fake' button entry for the mouse clicks
 	var newGB	GuiButton
 	newGB.Name	= "FONT"
-	newGB.Action	= action
 	newGB.FB	= ui.NewFontButton()
 	newGB.Box	= box
 	Data.AllButtons	= append(Data.AllButtons, &newGB)
