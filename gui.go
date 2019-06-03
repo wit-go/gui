@@ -18,12 +18,12 @@ func GuiInit() {
 	})
 }
 
-func InitGuiWindow(action string, gw *GuiWindow) *GuiWindow {
+func InitGuiWindow(name string, gw *GuiWindow) *GuiWindow {
 	log.Println("InitGuiWindow() START")
 	var newGuiWindow GuiWindow
 	newGuiWindow.Width	= Config.Width
 	newGuiWindow.Height	= Config.Height
-//	newGuiWindow.Action	= action
+	newGuiWindow.Name	= name
 	newGuiWindow.MakeWindow	= gw.MakeWindow
 	newGuiWindow.UiWindow	= gw.UiWindow
 	newGuiWindow.UiTab	= gw.UiTab
@@ -40,12 +40,11 @@ func InitGuiWindow(action string, gw *GuiWindow) *GuiWindow {
 }
 
 
-func StartNewWindow(bg bool, action string, callback func(*GuiWindow) *GuiBox) {
+func StartNewWindow(bg bool, name string, callback func(*GuiWindow) *GuiBox) {
 	log.Println("StartNewWindow() Create a new window")
 	var junk GuiWindow
 	junk.MakeWindow = callback
-//	junk.Action = action
-	window := InitGuiWindow(action, &junk)
+	window := InitGuiWindow(name, &junk)
 	if (bg) {
 		log.Println("StartNewWindow() START NEW GOROUTINE for ui.Main()")
 		go ui.Main(func() {
@@ -65,7 +64,7 @@ func StartNewWindow(bg bool, action string, callback func(*GuiWindow) *GuiBox) {
 func InitTabWindow(gw *GuiWindow) {
 	log.Println("InitTabWindow() START. THIS WINDOW IS NOT YET SHOWN")
 
-	gw.UiWindow = ui.NewWindow("InitTabWindow()", int(gw.Width), int(gw.Height), true)
+	gw.UiWindow = ui.NewWindow(gw.Name, int(gw.Width), int(gw.Height), true)
 	gw.UiWindow.SetBorderless(false)
 
 	gw.UiWindow.OnClosing(func(*ui.Window) bool {
