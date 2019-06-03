@@ -128,32 +128,3 @@ func VerticalBreak(box *GuiBox) {
 	tmp := ui.NewVerticalSeparator()
 	box.UiBox.Append(tmp, false)
 }
-
-/*
-func AddGenericBox(gw *GuiWindow, name string) *GuiBox {
-	log.Println("AddGenericBox() START name =", name)
-	// create a new vertical box off of the mainbox
-	vbox := ui.NewVerticalBox()
-	vbox.SetPadded(true)
-
-	var newbox *GuiBox
-	newbox = new(GuiBox)
-	newbox.UiBox = vbox
-	newbox.Window = gw
-	newbox.Name = name
-	add(gw.BoxMap["MAINBOX"], newbox)
-
-	// create a new horizonal box off of the vertical box
-	hbox := ui.NewHorizontalBox()
-	hbox.SetPadded(true)
-
-	var newhbox *GuiBox
-	newhbox = new(GuiBox)
-	newhbox.UiBox = hbox
-	newhbox.Window = gw
-	newhbox.Name = "Hbox1"
-	add(newbox, newhbox)
-
-	return newbox
-}
-*/
