@@ -22,8 +22,6 @@ type GuiConfig struct {
 }
 
 type GuiData struct {
-	State		string  // used like a state machine
-
 	// a fallback default function to handle mouse events 
 	// if nothing else is defined to handle them
 	MouseClick	func(*GuiButton)
@@ -39,6 +37,7 @@ type GuiData struct {
 	// This has to work this way because of how
 	// andlabs/ui & andlabs/libui work
 	AllButtons	[]*GuiButton
+	buttonMap	map[*ui.Button]*GuiButton
 }
 
 //
@@ -61,7 +60,6 @@ type GuiData struct {
 //
 type GuiWindow struct {
 	Name		string		// field for human readable name
-//	Action		string
 	Width		int
 	Height		int
 
@@ -108,7 +106,6 @@ type GuiButton struct {
 // text entry fields
 type GuiEntry struct {
 	Name		string		// field for human readable name
-//	Action		string	// what type of button
 	Edit		bool
 	Last		string		// the last value
 	Normalize	func (string) string // function to 'normalize' the data

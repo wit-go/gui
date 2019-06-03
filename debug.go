@@ -19,7 +19,7 @@ func WatchGUI() {
 
 	for {
 		if (count > 20) {
-			log.Println("Sleep() in watchGUI() Data.State =", Data.State)
+			log.Println("Sleep() in watchGUI()")
 			for i, window := range Data.Windows {
 				log.Println("watchGUI() Data.Windows", i, "Name =", window.Name)
 				for name, abox := range window.BoxMap {

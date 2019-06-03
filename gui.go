@@ -11,6 +11,7 @@ const Xaxis = 0
 const Yaxis = 1
 
 func GuiInit() {
+	Data.buttonMap	= make(map[*ui.Button]*GuiButton)
 	ui.OnShouldQuit(func() bool {
                 ui.Quit()
 		return true
@@ -31,6 +32,9 @@ func InitGuiWindow(action string, gw *GuiWindow) *GuiWindow {
 	newGuiWindow.EntryMap["test"] = nil
 	Data.Windows = append(Data.Windows, &newGuiWindow)
 
+	if (Data.buttonMap == nil) {
+		GuiInit()
+	}
 	log.Println("InitGuiWindow() END *GuiWindow =", &newGuiWindow)
 	return &newGuiWindow
 }

@@ -50,7 +50,7 @@ func guiButtonClick(button *GuiButton) {
 	}
 }
 
-func NewCreateButton(box *GuiBox, custom func(*GuiButton), name string, values interface {}) *GuiButton {
+func CreateButton(box *GuiBox, custom func(*GuiButton), name string, values interface {}) *GuiButton {
 	newUiB := ui.NewButton(name)
 	newUiB.OnClicked(defaultButtonClick)
 
