@@ -7,8 +7,8 @@ import "regexp"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-const Xaxis = 0
-const Yaxis = 1
+const Xaxis = 0 // box that is horizontal
+const Yaxis = 1 // box that is vertical
 
 func GuiInit() {
 	Data.buttonMap	= make(map[*ui.Button]*GuiButton)

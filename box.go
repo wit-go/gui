@@ -1,9 +1,12 @@
 package gui
 
 import "log"
+// import "reflect"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
+
+// import "github.com/davecgh/go-spew/spew"
 
 // add(nil, newbox, "")				// use this when the Window is created. Always called 'MAINBOX'
 // add(gw.BoxMap["MAINBOX"], newbox, name)	// use this to add a box off the main box
@@ -43,6 +46,16 @@ func add(box *GuiBox, newbox *GuiBox) {
 	log.Println("\tgui.add() adding", newbox.Name, "to", box.Name)
 	// copy the box settings over
 	newbox.Window = box.Window
+	if (box.UiBox == nil) {
+		log.Println("\tgui.add() ERROR box.UiBox == nil")
+		panic("crap")
+	}
+	if (newbox.UiBox == nil) {
+		log.Println("\tgui.add() ERROR newbox.UiBox == nil")
+		panic("crap")
+	}
+	// log.Println("\tgui.add() newbox.UiBox == ", newbox.UiBox.GetParent())
+	// spew.Dump(newbox.UiBox)
 	box.UiBox.Append(newbox.UiBox, false)
 
 	// add the newbox to the Window.BoxMap[]
@@ -50,54 +63,83 @@ func add(box *GuiBox, newbox *GuiBox) {
 	log.Println("gui.add() END")
 }
 
+/*
 func HardHorizontalBox(gw *GuiWindow) *GuiBox {
 	log.Println("HardHorizontalBreak START")
+
+	box := gw.BoxMap["MAINBOX"]
+	if (box != nil) { HorizontalBreak(box) }
+
 	var newbox *GuiBox
 	newbox = new(GuiBox)
 	newbox.Window = gw
-
-	box := gw.BoxMap["MAINBOX"]
-	if (box != nil) {
-		// There is already a box. Add a Seperator
-		tmp := ui.NewHorizontalSeparator()
-		box.UiBox.Append(tmp, true)
-		add(gw.BoxMap["MAINBOX"], newbox)
-	}
-
 	hbox := ui.NewVerticalBox()
 	hbox.SetPadded(true)
 	newbox.UiBox = hbox
-	newbox.Name = "Hbox1"
+	newbox.Name = "Hbox1 HARD"
 	add(gw.BoxMap["MAINBOX"], newbox)
 	log.Println("HardHorizontalBreak END")
 	return newbox
 }
+*/
 
-func HardVerticalBreak(box *GuiBox) {
-	log.Println("HardVerticalBreak START")
-	gw := box.Window
-	mainbox := gw.BoxMap["MAIN"]
-	if (mainbox == nil) {
-		log.Println("HardHorizontalBreak ERROR MAIN box == nil")
-		return
+func VerticalBox(box *GuiBox, name string) *GuiBox {
+	log.Println("VerticalBox START")
+	var newbox *GuiBox
+	newbox		= new(GuiBox)
+	newbox.Window	= box.Window
+	newbox.Name	= name
+
+	vbox := ui.NewVerticalBox()
+	vbox.SetPadded(true)
+	newbox.UiBox = vbox
+	add(box, newbox)
+	return newbox
+}
+
+func HardBox(gw *GuiWindow, axis int) *GuiBox {
+	log.Println("HardBox() START axis =", axis)
+
+	// add a Vertical Seperator if there is already a box
+	// Is this right?
+	box := gw.BoxMap["MAINBOX"]
+	if (box != nil) {
+		if (axis == Xaxis) {
+			VerticalBreak(box)
+		} else {
+			HorizontalBreak(box)
+		}
 	}
 
-	tmp := ui.NewVerticalSeparator()
-	mainbox.UiBox.Append(tmp, false)
+	// make the new vbox
+	var uiBox *ui.Box
+	if (axis == Xaxis) {
+		uiBox = ui.NewHorizontalBox()
+	} else {
+		uiBox = ui.NewVerticalBox()
+	}
+	uiBox.SetPadded(true)
 
-	hbox := ui.NewVerticalBox()
-	hbox.SetPadded(true)
-	box.UiBox = hbox
-	mainbox.UiBox.Append(hbox, false)
-	log.Println("HardVerticalBreak END")
+	// Init a new GuiBox
+	newbox		:= new(GuiBox)
+	newbox.Window	= gw
+	newbox.UiBox	= uiBox
+	newbox.Name	= "Vbox1 HARD"
+
+	add(gw.BoxMap["MAINBOX"], newbox)
+
+	log.Println("HardBoxk END")
+	return newbox
 }
 
 func HorizontalBreak(box *GuiBox) {
+	log.Println("VerticalSeparator added to box =", box.Name)
 	tmp := ui.NewHorizontalSeparator()
 	box.UiBox.Append(tmp, false)
 }
 
 func VerticalBreak(box *GuiBox) {
+	log.Println("VerticalSeparator  added to box =", box.Name)
 	tmp := ui.NewVerticalSeparator()
 	box.UiBox.Append(tmp, false)
 }
