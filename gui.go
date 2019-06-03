@@ -12,6 +12,8 @@ const Yaxis = 1 // box that is vertical
 
 func GuiInit() {
 	Data.buttonMap	= make(map[*ui.Button]*GuiButton)
+	Data.WindowMap	= make(map[string]*GuiWindow)
+
 	ui.OnShouldQuit(func() bool {
                 ui.Quit()
 		return true
@@ -29,8 +31,16 @@ func InitGuiWindow(name string, gw *GuiWindow) *GuiWindow {
 	newGuiWindow.UiTab	= gw.UiTab
 	newGuiWindow.BoxMap	= make(map[string]*GuiBox)
 	newGuiWindow.EntryMap	= make(map[string]*GuiEntry)
-	newGuiWindow.EntryMap["test"] = nil
-	Data.Windows = append(Data.Windows, &newGuiWindow)
+	Data.Windows		= append(Data.Windows, &newGuiWindow)
+
+	if (Data.WindowMap == nil) {
+		log.Println("gui.InitGuiWindow() making the Data.WindowMap here")
+		Data.WindowMap  = make(map[string]*GuiWindow)
+	}
+	Data.WindowMap[name]	= &newGuiWindow
+
+	// make a blank entry for testing
+	// newGuiWindow.EntryMap["test"] = nil
 
 	if (Data.buttonMap == nil) {
 		GuiInit()

@@ -31,10 +31,13 @@ func WatchGUI() {
 }
 
 func DumpBoxes() {
+	for name, window := range Data.WindowMap {
+		log.Println("gui.DumpBoxes() Data.WindowMap name =", name, "Window.Name =", window.Name)
+	}
 	for i, window := range Data.Windows {
-		log.Println("watchGUI() Data.Windows", i, "Name =", window.Name)
+		log.Println("gui.DumpBoxes() Data.Windows", i, "Name =", window.Name)
 		for name, abox := range window.BoxMap {
-			log.Printf("\twatchGUI() BOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
+			log.Printf("gui.DumpBoxes() \tBOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
 			/*
 			if (name == "DEBUG") {
 				log.Println("\t\twatchGUI() BOX abox =", reflect.TypeOf(abox))
