@@ -97,7 +97,6 @@ func InitColumns(mh *TableData, parts []TableColumnData) {
 	}
 }
 
-// func AddTableTab(gw *GuiWindow, name string, rowcount int, parts []TableColumnData, account *pb.Account) *TableData {
 func AddTableTab(gw *GuiWindow, name string, rowcount int, parts []TableColumnData) *TableData {
 	mh := new(TableData)
 

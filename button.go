@@ -73,6 +73,27 @@ func CreateButton(box *GuiBox, a *pb.Account, vm *pb.Event_VM, name string, acti
 	return newB
 }
 
+func NewCreateButton(box *GuiBox, custom func(*GuiButton), name string, values interface {}) *GuiButton {
+	newUiB := ui.NewButton(name)
+	newUiB.OnClicked(defaultButtonClick)
+
+	var newB *GuiButton
+	newB		= new(GuiButton)
+	newB.B		= newUiB
+	if (box.Window == nil) {
+		log.Println("CreateButton() box.Window == nil")
+		panic("crap")
+	}
+	newB.Box	= box
+	newB.Custom	= custom
+	newB.Values	= values
+
+	Data.AllButtons	= append(Data.AllButtons, newB)
+
+	box.UiBox.Append(newB.B, false)
+	return newB
+}
+
 func CreateFontButton(box *GuiBox, action string) *GuiButton {
         // create a 'fake' button entry for the mouse clicks
 	var newGB	GuiButton

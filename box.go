@@ -5,9 +5,6 @@ import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-// import pb "git.wit.com/wit/witProtobuf"
-// import "github.com/davecgh/go-spew/spew"
-
 // add(nil, newbox, "")				// use this when the Window is created. Always called 'MAINBOX'
 // add(gw.BoxMap["MAINBOX"], newbox, name)	// use this to add a box off the main box
 // add(gw.BoxMap["BUTTONBOX"], newbox, name)	// use this to add something to the box called 'BUTTONBOX'

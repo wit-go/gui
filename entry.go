@@ -6,7 +6,6 @@ import "fmt"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 import "github.com/davecgh/go-spew/spew"
-// import pb "git.wit.com/wit/witProtobuf"
 
 // THIS IS CLEAN (except the 'Memory' normalization example)
 

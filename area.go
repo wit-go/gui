@@ -14,7 +14,6 @@ func makeGenericArea(gb *GuiBox, newText *ui.AttributedString, custom func(*GuiB
 	newB		= CreateFontButton(gb, "AREA")
 	newB.Box	= gb
 	newB.Custom	= custom
-//	newB.GW		= gb.Window
 
 	gw := gb.Window
 	// initialize the GuiArea{}
@@ -116,10 +115,21 @@ func ShowTextBox(gw *GuiWindow, newText *ui.AttributedString, custom func(*GuiBu
 	}
 	log.Println("ShowTextBox() START gw =", gw)
 
-	box := InitGuiBox(gw, nil, ui.NewVerticalBox(), "SplashArea3")
+	var newbox *GuiBox
+	newbox		= new(GuiBox)
+	newbox.Window	= gw
+	newbox.Name	= "Hbox1"
+	hbox		:= ui.NewVerticalBox()
+	newbox.UiBox	= hbox
 
-	makeGenericArea(box, newText, custom)
-	box.UiBox.Append(box.Window.Area.UiArea, true)
+	// TODO: allow padded & axis here
+	hbox.SetPadded(true)
 
-	return box
+	add(gw.BoxMap["MAINBOX"], newbox)
+	// box := InitGuiBox(gw, nil, ui.NewVerticalBox(), "SplashArea3")
+
+	makeGenericArea(newbox, newText, custom)
+	newbox.UiBox.Append(newbox.Window.Area.UiArea, true)
+
+	return newbox
 }

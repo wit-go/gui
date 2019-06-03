@@ -95,14 +95,15 @@ type GuiBox struct {
 // call this 'GuiMouseClick'
 type GuiButton struct {
 	Name		string		// field for human readable name
-	Action		string		// what type of button
 	Box		*GuiBox		// what box the button click was in
-
-	Account		*pb.Account	// associated with what account?
-	VM		*pb.Event_VM	// associated with which VM?
 
 	// a callback function for the main application
 	Custom		func (*GuiButton)
+	Values		interface {}
+
+	Action		string		// what type of button
+	Account		*pb.Account	// associated with what account?
+	VM		*pb.Event_VM	// associated with which VM?
 
 	// andlabs/ui abstraction mapping
 	B		*ui.Button
@@ -118,9 +119,6 @@ type GuiEntry struct {
 
 	B		*GuiButton
 	Box		*GuiBox
-
-	Account		*pb.Account
-	VM		*pb.Event_VM
 
 	// andlabs/ui abstraction mapping
 	UiEntry		*ui.Entry
@@ -170,7 +168,6 @@ type TableData struct {
 	Cells			[20]CellData
 	Human			[20]HumanMap
 
-	Account			*pb.Account	// what account this table is for
 	Box			*GuiBox
 
 	lastRow			int
@@ -198,7 +195,6 @@ type HumanCellData struct {
 	TextID		int
 	Color		color.RGBA
 	ColorID		int
-	VM		*pb.Event_VM
 	Button		*GuiButton
 }
 
@@ -232,9 +228,6 @@ type RowData struct {
 	doubleclick	func()			// what function to call if the user double clicks on it
 */
 	HumanData	[20]HumanCellData
-
-	// The VM from the protobuf
-	VM		*pb.Event_VM
 }
 
 //

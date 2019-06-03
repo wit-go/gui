@@ -3,25 +3,20 @@ package gui
 import "log"
 import "time"
 import "regexp"
-// import "os"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
-
-// import "github.com/davecgh/go-spew/spew"
 
 const Xaxis = 0
 const Yaxis = 1
 
 func GuiInit() {
 	ui.OnShouldQuit(func() bool {
-		// mouseClick(&newBM)
                 ui.Quit()
 		return true
 	})
 }
 
-// func InitGuiWindow(c *pb.Config, action string, maketab func(*GuiWindow) *GuiBox, uiW *ui.Window, uiT *ui.Tab) *GuiWindow {
 func InitGuiWindow(action string, gw *GuiWindow) *GuiWindow {
 	log.Println("InitGuiWindow() START")
 	var newGuiWindow GuiWindow
@@ -45,6 +40,7 @@ func StartNewWindow(bg bool, action string, callback func(*GuiWindow) *GuiBox) {
 	log.Println("StartNewWindow() Create a new window")
 	var junk GuiWindow
 	junk.MakeWindow = callback
+	junk.Action = action
 	window := InitGuiWindow(action, &junk)
 	if (bg) {
 		log.Println("StartNewWindow() START NEW GOROUTINE for ui.Main()")
@@ -63,18 +59,10 @@ func StartNewWindow(bg bool, action string, callback func(*GuiWindow) *GuiBox) {
 }
 
 func InitTabWindow(gw *GuiWindow) {
-	log.Println("InitTabWindow() THIS WINDOW IS NOT YET SHOWN")
+	log.Println("InitTabWindow() START. THIS WINDOW IS NOT YET SHOWN")
 
-	gw.UiWindow = ui.NewWindow("", int(gw.Width), int(gw.Height), true)
+	gw.UiWindow = ui.NewWindow("InitTabWindow()", int(gw.Width), int(gw.Height), true)
 	gw.UiWindow.SetBorderless(false)
-
-        // create a 'fake' button entry for the mouse clicks
-	/*
-	var newBM GuiButton
-	newBM.Action	= "QUIT"
-	newBM.GW	= gw
-	Data.AllButtons = append(Data.AllButtons, &newBM)
-	*/
 
 	gw.UiWindow.OnClosing(func(*ui.Window) bool {
 		log.Println("InitTabWindow() OnClosing() THIS WINDOW IS CLOSING gw=", gw)
@@ -86,9 +74,10 @@ func InitTabWindow(gw *GuiWindow) {
 	gw.UiWindow.SetChild(gw.UiTab)
 	gw.UiWindow.SetMargined(true)
 
-	log.Println("InitTabWindow() gw =", gw)
 
-	gw.MakeWindow(gw)
+	box := gw.MakeWindow(gw)
+	log.Println("InitTabWindow() END box =", box)
+	log.Println("InitTabWindow() END gw =", gw)
 	gw.UiWindow.Show()
 }
 
