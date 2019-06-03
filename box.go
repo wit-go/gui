@@ -63,41 +63,26 @@ func add(box *GuiBox, newbox *GuiBox) {
 	log.Println("gui.add() END")
 }
 
-/*
-func HardHorizontalBox(gw *GuiWindow) *GuiBox {
-	log.Println("HardHorizontalBreak START")
-
-	box := gw.BoxMap["MAINBOX"]
-	if (box != nil) { HorizontalBreak(box) }
-
-	var newbox *GuiBox
-	newbox = new(GuiBox)
-	newbox.Window = gw
-	hbox := ui.NewVerticalBox()
-	hbox.SetPadded(true)
-	newbox.UiBox = hbox
-	newbox.Name = "Hbox1 HARD"
-	add(gw.BoxMap["MAINBOX"], newbox)
-	log.Println("HardHorizontalBreak END")
-	return newbox
-}
-*/
-
-func VerticalBox(box *GuiBox, name string) *GuiBox {
+func NewBox(box *GuiBox, axis int, name string) *GuiBox {
 	log.Println("VerticalBox START")
 	var newbox *GuiBox
 	newbox		= new(GuiBox)
 	newbox.Window	= box.Window
 	newbox.Name	= name
 
-	vbox := ui.NewVerticalBox()
-	vbox.SetPadded(true)
-	newbox.UiBox = vbox
+	var uiBox *ui.Box
+	if (axis == Xaxis) {
+		uiBox = ui.NewHorizontalBox()
+	} else {
+		uiBox = ui.NewVerticalBox()
+	}
+	uiBox.SetPadded(true)
+	newbox.UiBox = uiBox
 	add(box, newbox)
 	return newbox
 }
 
-func HardBox(gw *GuiWindow, axis int) *GuiBox {
+func HardBox(gw *GuiWindow, axis int, name string) *GuiBox {
 	log.Println("HardBox() START axis =", axis)
 
 	// add a Vertical Seperator if there is already a box
@@ -124,7 +109,7 @@ func HardBox(gw *GuiWindow, axis int) *GuiBox {
 	newbox		:= new(GuiBox)
 	newbox.Window	= gw
 	newbox.UiBox	= uiBox
-	newbox.Name	= "Vbox1 HARD"
+	newbox.Name	= name
 
 	add(gw.BoxMap["MAINBOX"], newbox)
 
@@ -144,6 +129,7 @@ func VerticalBreak(box *GuiBox) {
 	box.UiBox.Append(tmp, false)
 }
 
+/*
 func AddGenericBox(gw *GuiWindow, name string) *GuiBox {
 	log.Println("AddGenericBox() START name =", name)
 	// create a new vertical box off of the mainbox
@@ -170,3 +156,4 @@ func AddGenericBox(gw *GuiWindow, name string) *GuiBox {
 
 	return newbox
 }
+*/

@@ -80,7 +80,8 @@ type GuiWindow struct {
 // There can be lots of these for each GuiWindow
 type GuiBox struct {
 	Name		string		// field for human readable name
-	Window		*GuiWindow
+	Axis		int		// does it add items to the X or Y axis 
+	Window		*GuiWindow	// the parent Window
 
 	// andlabs/ui abstraction mapping
 	UiBox		*ui.Box
