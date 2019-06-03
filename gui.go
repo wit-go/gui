@@ -120,9 +120,13 @@ func normalizeInt(s string) string {
 }
 
 func MessageWindow(gw *GuiWindow, msg1 string, msg2 string) {
+	log.Println("gui.MessageWindow() msg1 =", msg1)
+	log.Println("gui.MessageWindow() msg2 =", msg2)
 	ui.MsgBox(gw.UiWindow, msg1, msg2)
 }
 
 func ErrorWindow(gw *GuiWindow, msg1 string, msg2 string) {
+	log.Println("gui.ErrorWindow() msg1 =", msg1)
+	log.Println("gui.ErrorWindow() msg2 =", msg2)
 	ui.MsgBoxError(gw.UiWindow, msg1, msg2)
 }
