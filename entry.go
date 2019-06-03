@@ -7,8 +7,6 @@ import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 import "github.com/davecgh/go-spew/spew"
 
-// THIS IS CLEAN (except the 'Memory' normalization example)
-
 // functions for handling text entry boxes
 
 func NewLabel(box *GuiBox, text string) {
@@ -136,7 +134,7 @@ func defaultMakeEntry(startValue string, edit bool, action string) *GuiEntry {
 	newEntry.UiEntry  = e
 	newEntry.Edit     = edit
 	newEntry.Action   = action
-	if (action == "Memory") {
+	if (action == "INT") {
 		newEntry.Normalize = normalizeInt
 	}
 	Data.AllEntries = append(Data.AllEntries, &newEntry)

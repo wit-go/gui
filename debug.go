@@ -25,7 +25,7 @@ func WatchGUI() {
 				for name, abox := range window.BoxMap {
 					log.Printf("\twatchGUI() BOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
 					/*
-					if (name == "SplashArea3") {
+					if (name == "DEBUG") {
 						log.Println("\t\twatchGUI() BOX abox =", reflect.TypeOf(abox))
 						win := abox.Window
 						log.Println("\t\twatchGUI() BOX win =", reflect.TypeOf(win))
