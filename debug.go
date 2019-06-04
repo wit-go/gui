@@ -3,11 +3,11 @@ package gui
 import "log"
 import "time"
 import "fmt"
-// import "reflect"
+import "reflect"
 
 // import "github.com/andlabs/ui"
 // import _ "github.com/andlabs/ui/winmanifest"
-// import "github.com/davecgh/go-spew/spew"
+import "github.com/davecgh/go-spew/spew"
 // import pb "git.wit.com/wit/witProtobuf"
 
 //
@@ -32,7 +32,16 @@ func WatchGUI() {
 
 func DumpBoxes() {
 	for name, window := range Data.WindowMap {
-		log.Println("gui.DumpBoxes() Data.WindowMap name =", name, "Window.Name =", window.Name)
+		log.Println("gui.DumpBoxes()", name)
+		log.Println("gui.DumpBoxes()\tWindow.name =", window.Name)
+		log.Println("gui.DumpBoxes()\tWindow.UiWindow type =", reflect.TypeOf(window.UiWindow))
+		log.Println("gui.DumpBoxes()\tWindow.UiWindow =", window.UiWindow)
+		if (window.UiTab != nil) {
+			log.Println("gui.DumpBoxes()\tWindow.UiTab type =", reflect.TypeOf(window.UiTab))
+			log.Println("gui.DumpBoxes()\tWindow.UiTab =", window.UiTab)
+			log.Println("gui.DumpBoxes()\tWindow.UiTab.NumPages() =", window.UiTab.NumPages())
+			spew.Dump(window.UiTab)
+		}
 	}
 	for i, window := range Data.Windows {
 		log.Println("gui.DumpBoxes() Data.Windows", i, "Name =", window.Name)
