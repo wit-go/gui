@@ -7,11 +7,12 @@ import "time"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-func InitGuiWindow(action string, gw *GuiWindow) *GuiWindow {
+func InitGuiWindow(name string, gw *GuiWindow) *GuiWindow {
 	log.Println("InitGuiWindow() START")
 	var newGuiWindow GuiWindow
 	newGuiWindow.Width	= Config.Width
 	newGuiWindow.Height	= Config.Height
+	newGuiWindow.Name       = name
 	newGuiWindow.MakeWindow	= gw.MakeWindow
 	newGuiWindow.UiWindow	= gw.UiWindow
 	newGuiWindow.UiTab	= gw.UiTab
@@ -19,6 +20,12 @@ func InitGuiWindow(action string, gw *GuiWindow) *GuiWindow {
 	newGuiWindow.EntryMap	= make(map[string]*GuiEntry)
 	newGuiWindow.EntryMap["test"] = nil
 	Data.Windows = append(Data.Windows, &newGuiWindow)
+
+	if (Data.WindowMap == nil) {
+		log.Println("gui.InitGuiWindow() making the Data.WindowMap here")
+		Data.WindowMap  = make(map[string]*GuiWindow)
+	}
+	Data.WindowMap[name]    = &newGuiWindow
 
 	if (Data.buttonMap == nil) {
 		GuiInit()
@@ -28,12 +35,11 @@ func InitGuiWindow(action string, gw *GuiWindow) *GuiWindow {
 }
 
 
-func StartNewWindow(bg bool, action string, callback func(*GuiWindow) *GuiBox) {
+func StartNewWindow(bg bool, name string, callback func(*GuiWindow) *GuiBox) {
 	log.Println("StartNewWindow() Create a new window")
 	var junk GuiWindow
 	junk.MakeWindow = callback
-//	junk.Action = action
-	window := InitGuiWindow(action, &junk)
+	window := InitGuiWindow(name, &junk)
 	if (bg) {
 		log.Println("StartNewWindow() START NEW GOROUTINE for ui.Main()")
 		go ui.Main(func() {
