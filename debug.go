@@ -39,7 +39,17 @@ func DumpBoxes() {
 		if (window.UiTab != nil) {
 			log.Println("gui.DumpBoxes()\tWindow.UiTab type =", reflect.TypeOf(window.UiTab))
 			log.Println("gui.DumpBoxes()\tWindow.UiTab =", window.UiTab)
-			log.Println("gui.DumpBoxes()\tWindow.UiTab.NumPages() =", window.UiTab.NumPages())
+			pages := window.UiTab.NumPages()
+			log.Println("gui.DumpBoxes()\tWindow.UiTab.NumPages() =", pages)
+			for i := 1; i <= pages; i++ {
+				log.Println("gui.DumpBoxes()\t\tWindow.UiTab.Margined(", i, ") =")
+				log.Println(window.UiTab.Margined(i))
+				/*
+				if (window.UiTab.Margined(i)) {
+					window.UiTab.SetMargined(i, false)
+				}
+				*/
+			}
 			// tmp := spew.NewDefaultConfig()
 			// tmp.MaxDepth = 2
 			// tmp.Dump(window.UiTab)
@@ -53,6 +63,13 @@ func DumpBoxes() {
 		log.Println("gui.DumpBoxes() Data.Windows", i, "Name =", window.Name)
 		for name, abox := range window.BoxMap {
 			log.Printf("gui.DumpBoxes() \tBOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
+			if (name == "MAINBOX") {
+				if (Config.Debug) {
+					scs := spew.ConfigState{MaxDepth: 1}
+					scs.Dump(abox.UiBox)
+				}
+			}
+
 			/*
 			if (name == "DEBUG") {
 				log.Println("\t\twatchGUI() BOX abox =", reflect.TypeOf(abox))
