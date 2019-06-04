@@ -24,7 +24,7 @@ func add(box *GuiBox, newbox *GuiBox) {
 			// TODO: allow passing where to append
 			// newbox.Window.UiTab.InsertAt(newbox.Name, 0, newbox.UiBox)
 			newbox.Window.UiTab.Append(newbox.Name, newbox.UiBox)
-			newbox.Window.UiTab.SetMargined(0, true)
+			// newbox.Window.UiTab.SetMargined(0, true)
 
 			// TODO: figure out how to make a new Tab/Window/Box here
 			// window := InitGuiWindow(Data.Config, newbox.Name, gw.MakeWindow, gw.UiWindow, gw.UiTab)
