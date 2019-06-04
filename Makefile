@@ -1,5 +1,6 @@
 # simple sortcut to push all git changes
 push:
+	git checkout devel
 	git pull
 	git add --all
 	-git commit -a -s
