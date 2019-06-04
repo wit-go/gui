@@ -12,25 +12,35 @@ const Yaxis = 1 // box that is vertical
 
 func GuiInit() {
 	Data.buttonMap	= make(map[*ui.Button]*GuiButton)
+	Data.WindowMap	= make(map[string]*GuiWindow)
+
 	ui.OnShouldQuit(func() bool {
                 ui.Quit()
 		return true
 	})
 }
 
-func InitGuiWindow(action string, gw *GuiWindow) *GuiWindow {
+func InitGuiWindow(name string, gw *GuiWindow) *GuiWindow {
 	log.Println("InitGuiWindow() START")
 	var newGuiWindow GuiWindow
 	newGuiWindow.Width	= Config.Width
 	newGuiWindow.Height	= Config.Height
-//	newGuiWindow.Action	= action
+	newGuiWindow.Name	= name
 	newGuiWindow.MakeWindow	= gw.MakeWindow
 	newGuiWindow.UiWindow	= gw.UiWindow
 	newGuiWindow.UiTab	= gw.UiTab
 	newGuiWindow.BoxMap	= make(map[string]*GuiBox)
 	newGuiWindow.EntryMap	= make(map[string]*GuiEntry)
-	newGuiWindow.EntryMap["test"] = nil
-	Data.Windows = append(Data.Windows, &newGuiWindow)
+	Data.Windows		= append(Data.Windows, &newGuiWindow)
+
+	if (Data.WindowMap == nil) {
+		log.Println("gui.InitGuiWindow() making the Data.WindowMap here")
+		Data.WindowMap  = make(map[string]*GuiWindow)
+	}
+	Data.WindowMap[name]	= &newGuiWindow
+
+	// make a blank entry for testing
+	// newGuiWindow.EntryMap["test"] = nil
 
 	if (Data.buttonMap == nil) {
 		GuiInit()
@@ -40,12 +50,11 @@ func InitGuiWindow(action string, gw *GuiWindow) *GuiWindow {
 }
 
 
-func StartNewWindow(bg bool, action string, callback func(*GuiWindow) *GuiBox) {
+func StartNewWindow(bg bool, name string, callback func(*GuiWindow) *GuiBox) {
 	log.Println("StartNewWindow() Create a new window")
 	var junk GuiWindow
 	junk.MakeWindow = callback
-//	junk.Action = action
-	window := InitGuiWindow(action, &junk)
+	window := InitGuiWindow(name, &junk)
 	if (bg) {
 		log.Println("StartNewWindow() START NEW GOROUTINE for ui.Main()")
 		go ui.Main(func() {
@@ -65,7 +74,7 @@ func StartNewWindow(bg bool, action string, callback func(*GuiWindow) *GuiBox) {
 func InitTabWindow(gw *GuiWindow) {
 	log.Println("InitTabWindow() START. THIS WINDOW IS NOT YET SHOWN")
 
-	gw.UiWindow = ui.NewWindow("InitTabWindow()", int(gw.Width), int(gw.Height), true)
+	gw.UiWindow = ui.NewWindow(gw.Name, int(gw.Width), int(gw.Height), true)
 	gw.UiWindow.SetBorderless(false)
 
 	gw.UiWindow.OnClosing(func(*ui.Window) bool {
@@ -120,9 +129,13 @@ func normalizeInt(s string) string {
 }
 
 func MessageWindow(gw *GuiWindow, msg1 string, msg2 string) {
+	log.Println("gui.MessageWindow() msg1 =", msg1)
+	log.Println("gui.MessageWindow() msg2 =", msg2)
 	ui.MsgBox(gw.UiWindow, msg1, msg2)
 }
 
 func ErrorWindow(gw *GuiWindow, msg1 string, msg2 string) {
+	log.Println("gui.ErrorWindow() msg1 =", msg1)
+	log.Println("gui.ErrorWindow() msg2 =", msg2)
 	ui.MsgBoxError(gw.UiWindow, msg1, msg2)
 }

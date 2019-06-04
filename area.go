@@ -107,7 +107,7 @@ func (ah GuiArea) KeyEvent(a *ui.Area, ke *ui.AreaKeyEvent) (handled bool) {
 	return false
 }
 
-func ShowTextBox(gw *GuiWindow, newText *ui.AttributedString, custom func(*GuiButton)) *GuiBox {
+func ShowTextBox(gw *GuiWindow, newText *ui.AttributedString, custom func(*GuiButton), name string) *GuiBox {
 	log.Println("ShowTextBox() START")
 	if (gw == nil) {
 		log.Println("ShowTextBox() ERROR gw = nil")
@@ -118,7 +118,7 @@ func ShowTextBox(gw *GuiWindow, newText *ui.AttributedString, custom func(*GuiBu
 	var newbox *GuiBox
 	newbox		= new(GuiBox)
 	newbox.Window	= gw
-	newbox.Name	= "Hbox1"
+	newbox.Name	= name
 	hbox		:= ui.NewVerticalBox()
 	newbox.UiBox	= hbox
 
