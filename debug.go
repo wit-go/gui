@@ -40,7 +40,13 @@ func DumpBoxes() {
 			log.Println("gui.DumpBoxes()\tWindow.UiTab type =", reflect.TypeOf(window.UiTab))
 			log.Println("gui.DumpBoxes()\tWindow.UiTab =", window.UiTab)
 			log.Println("gui.DumpBoxes()\tWindow.UiTab.NumPages() =", window.UiTab.NumPages())
-			spew.Dump(window.UiTab)
+			// tmp := spew.NewDefaultConfig()
+			// tmp.MaxDepth = 2
+			// tmp.Dump(window.UiTab)
+			if (Config.Debug) {
+				scs := spew.ConfigState{MaxDepth: 2}
+				scs.Dump(window.UiTab)
+			}
 		}
 	}
 	for i, window := range Data.Windows {
