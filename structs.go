@@ -63,6 +63,7 @@ type GuiWindow struct {
 	Name		string		// field for human readable name
 	Width		int
 	Height		int
+	Axis		int		// does it add items to the X or Y axis
 
 	// the callback function to make the window contents
 	MakeWindow	func(*GuiWindow) *GuiBox
