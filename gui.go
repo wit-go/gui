@@ -20,6 +20,7 @@ func GuiInit() {
 	})
 }
 
+<<<<<<< Updated upstream
 func InitGuiWindow(name string, gw *GuiWindow) *GuiWindow {
 	log.Println("InitGuiWindow() START")
 	var newGuiWindow GuiWindow
@@ -94,6 +95,8 @@ func InitTabWindow(gw *GuiWindow) {
 	gw.UiWindow.Show()
 }
 
+=======
+>>>>>>> Stashed changes
 /*
 // string handling examples that might be helpful for normalizeInt()
 isAlpha := regexp.MustCompile(`^[A-Za-z]+$`).MatchString
@@ -127,6 +130,7 @@ func normalizeInt(s string) string {
 	log.Println("normalizeInt() s =", clean)
 	return clean
 }
+<<<<<<< Updated upstream
 
 func MessageWindow(gw *GuiWindow, msg1 string, msg2 string) {
 	log.Println("gui.MessageWindow() msg1 =", msg1)
@@ -139,3 +143,5 @@ func ErrorWindow(gw *GuiWindow, msg1 string, msg2 string) {
 	log.Println("gui.ErrorWindow() msg2 =", msg2)
 	ui.MsgBoxError(gw.UiWindow, msg1, msg2)
 }
+=======
+>>>>>>> Stashed changes
