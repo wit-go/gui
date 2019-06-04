@@ -2,7 +2,7 @@ package gui
 
 import "log"
 import "time"
-import "regexp"
+// import "regexp"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
@@ -12,7 +12,6 @@ func InitGuiWindow(action string, gw *GuiWindow) *GuiWindow {
 	var newGuiWindow GuiWindow
 	newGuiWindow.Width	= Config.Width
 	newGuiWindow.Height	= Config.Height
-//	newGuiWindow.Action	= action
 	newGuiWindow.MakeWindow	= gw.MakeWindow
 	newGuiWindow.UiWindow	= gw.UiWindow
 	newGuiWindow.UiTab	= gw.UiTab

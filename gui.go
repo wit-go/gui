@@ -1,7 +1,7 @@
 package gui
 
 import "log"
-import "time"
+// import "time"
 import "regexp"
 
 import "github.com/andlabs/ui"
