@@ -64,6 +64,7 @@ type GuiWindow struct {
 	Width		int
 	Height		int
 	Axis		int		// does it add items to the X or Y axis
+	TabNumber	int		// the andlabs/ui tab index
 
 	// the callback function to make the window contents
 	MakeWindow	func(*GuiWindow) *GuiBox
@@ -100,10 +101,12 @@ type GuiButton struct {
 	// a callback function for the main application
 	Custom		func (*GuiButton)
 	Values		interface {}
+	Color		color.RGBA
 
 	// andlabs/ui abstraction mapping
 	B		*ui.Button
 	FB		*ui.FontButton
+	CB		*ui.ColorButton
 }
 
 // text entry fields

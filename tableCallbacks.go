@@ -29,18 +29,6 @@ func (mh *TableData) ColumnTypes(m *ui.TableModel) []ui.TableValue {
 	return mh.generatedColumnTypes
 }
 
-func libuiColorToGOlangColor(rgba color.RGBA) ui.TableColor {
-	/* a hack to see if colors work differently on macos or windows 
-	if (rgba.R == 72) {
-		log.Println("SETTING COLOR TO NIL")
-		log.Println("SETTING COLOR TO NIL")
-		log.Println("SETTING COLOR TO NIL")
-		return ui.TableColor{}
-	}
-	*/
-	return ui.TableColor{float64(rgba.R) / 256, float64(rgba.G) / 256, float64(rgba.B) / 256, float64(rgba.A) / 256}
-}
-
 // TODO: Figure out why this is being called 1000 times a second (10 times for each row & column)
 // Nevermind this TODO. Who gives a shit. This is a really smart way to treat the OS toolkits
 func (mh *TableData) CellValue(m *ui.TableModel, row, column int) ui.TableValue {

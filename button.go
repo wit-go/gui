@@ -88,3 +88,28 @@ func CreateFontButton(box *GuiBox, action string) *GuiButton {
 	})
 	return &newGB
 }
+
+func CreateColorButton(box *GuiBox, custom func(*GuiButton), name string, values interface {}) *GuiButton {
+        // create a 'fake' button entry for the mouse clicks
+	var newCB	GuiButton
+	newCB.Name	= name
+	newCB.CB	= ui.NewColorButton()
+	newCB.Box	= box
+	newCB.Custom	= custom
+	newCB.Values	= values
+
+	Data.AllButtons	= append(Data.AllButtons, &newCB)
+
+	newCB.CB.OnChanged(func (*ui.ColorButton) {
+		log.Println("ColorButton.OnChanged() START Color Button Click")
+		r, g, b, a := newCB.CB.Color()
+		log.Println("ColorButton.OnChanged() Color() =", r, g, b, a)
+		if (newCB.Custom != nil) {
+			newCB.Custom(&newCB)
+		} else if (Data.MouseClick != nil) {
+			Data.MouseClick(&newCB)
+		}
+	})
+	box.UiBox.Append(newCB.CB, false)
+	return &newCB
+}
