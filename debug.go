@@ -41,7 +41,7 @@ func DumpBoxes() {
 			log.Println("gui.DumpBoxes()\tWindow.UiTab =", window.UiTab)
 			pages := window.UiTab.NumPages()
 			log.Println("gui.DumpBoxes()\tWindow.UiTab.NumPages() =", pages)
-			for i := 1; i <= pages; i++ {
+			for i := 0; i < pages; i++ {
 				log.Println("gui.DumpBoxes()\t\tWindow.UiTab.Margined(", i, ") =")
 				log.Println(window.UiTab.Margined(i))
 				/*
