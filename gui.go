@@ -10,6 +10,10 @@ import _ "github.com/andlabs/ui/winmanifest"
 const Xaxis = 0 // box that is horizontal
 const Yaxis = 1 // box that is vertical
 
+func init() {
+	log.Println("gui.init() has been run")
+}
+
 func GuiInit() {
 	Data.buttonMap	= make(map[*ui.Button]*GuiButton)
 	Data.WindowMap	= make(map[string]*GuiWindow)
