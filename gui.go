@@ -5,7 +5,7 @@ import "log"
 import "regexp"
 
 import "github.com/andlabs/ui"
-import _ "github.com/andlabs/ui/winmanifest"
+import _ "github.com/andlabs/ui/winmanifest" // the _ means we only need this for the init()
 
 const Xaxis = 0 // box that is horizontal
 const Yaxis = 1 // box that is vertical
