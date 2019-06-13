@@ -113,7 +113,7 @@ func HardBox(gw *GuiWindow, axis int, name string) *GuiBox {
 
 	add(gw.BoxMap["MAINBOX"], newbox)
 
-	log.Println("HardBoxk END")
+	log.Println("HardBox END")
 	return newbox
 }
 

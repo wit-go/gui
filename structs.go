@@ -67,7 +67,7 @@ type GuiWindow struct {
 	TabNumber	*int		// the andlabs/ui tab index
 
 	// the callback function to make the window contents
-	MakeWindow	func(*GuiBox) *GuiBox
+	// MakeWindow	func(*GuiBox) *GuiBox
 
 	// the components of the window
 	BoxMap		map[string]*GuiBox

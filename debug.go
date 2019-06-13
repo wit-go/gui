@@ -33,14 +33,14 @@ func WatchGUI() {
 func DumpBoxes() {
 	for name, window := range Data.WindowMap {
 		log.Println("gui.DumpBoxes() MAP: ", name)
-		log.Println("gui.DumpBoxes()\tWindow.name =", window.Name)
-		// log.Println("gui.DumpBoxes()\tWindow.UiWindow type =", reflect.TypeOf(window.UiWindow))
-		// log.Println("gui.DumpBoxes()\tWindow.UiWindow =", window.UiWindow)
 		if (window.TabNumber == nil) {
 			log.Println("gui.DumpBoxes() \tWindows.TabNumber = nil")
 		} else {
 			log.Println("gui.DumpBoxes() \tWindows.TabNumber =", *window.TabNumber)
 		}
+		log.Println("gui.DumpBoxes()\tWindow.name =", window.Name)
+		// log.Println("gui.DumpBoxes()\tWindow.UiWindow type =", reflect.TypeOf(window.UiWindow))
+		log.Println("gui.DumpBoxes()\tWindow.UiWindow =", window.UiWindow)
 		for name, abox := range window.BoxMap {
 			log.Printf("gui.DumpBoxes() \tBOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
 			if (name == "MAINBOX") {
