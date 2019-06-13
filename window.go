@@ -7,7 +7,7 @@ import "time"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-func StartNewWindow(bg bool, name string, axis int, callback func(*GuiWindow) *GuiBox) {
+func StartNewWindow(bg bool, name string, axis int, callback func(*GuiBox) *GuiBox) {
 	log.Println("StartNewWindow() Create a new window")
 	var tmp GuiWindow
 	tmp.MakeWindow = callback
@@ -52,9 +52,8 @@ func initTabWindow(gw *GuiWindow) {
 	DumpBoxes()
 	// for {}
 	box := InitWindow(gw, gw.Name, gw.Axis)
+	box = gw.MakeWindow(box)
 	gw = box.Window
-
-	box = gw.MakeWindow(gw)
 	log.Println("initTabWindow() END box =", box)
 	log.Println("initTabWindow() END gw =", gw)
 	gw.UiWindow.Show()
@@ -84,8 +83,10 @@ func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
 
 	log.Println("InitGuiWindow() START")
 	var newGuiWindow GuiWindow
-	newGuiWindow.Width	= Config.Width
 	newGuiWindow.Height	= Config.Height
+	newGuiWindow.Width	= Config.Width
+	newGuiWindow.Height	= 600
+	newGuiWindow.Width	= 800
 
 	newGuiWindow.Axis	= axis
 	newGuiWindow.MakeWindow	= gw.MakeWindow
