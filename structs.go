@@ -64,7 +64,7 @@ type GuiWindow struct {
 	Width		int
 	Height		int
 	Axis		int		// does it add items to the X or Y axis
-	TabNumber	int		// the andlabs/ui tab index
+	TabNumber	*int		// the andlabs/ui tab index
 
 	// the callback function to make the window contents
 	MakeWindow	func(*GuiWindow) *GuiBox

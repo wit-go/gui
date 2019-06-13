@@ -98,6 +98,10 @@ func InitColumns(mh *TableData, parts []TableColumnData) {
 }
 
 func AddTableTab(gw *GuiWindow, name string, rowcount int, parts []TableColumnData) *TableData {
+	// gw.Name = name
+	// gw = InitGuiWindow(gw)
+	box := InitWindow(gw, name, Yaxis)
+
 	mh := new(TableData)
 
 	mh.RowCount    = rowcount
@@ -134,25 +138,25 @@ func AddTableTab(gw *GuiWindow, name string, rowcount int, parts []TableColumnDa
 		}
 	}
 
-	var gb *GuiBox
-	gb = new(GuiBox)
+//	var gb *GuiBox
+//	gb = new(GuiBox)
 
-	vbox := ui.NewVerticalBox()
-	vbox.SetPadded(true)
-	gb.UiBox = vbox
-	gb.Window = gw
-	gw.BoxMap[name] = gb
-	mh.Box = gb
+//	vbox := ui.NewVerticalBox()
+//	vbox.SetPadded(true)
+//	gb.UiBox = vbox
+//	gb.Window = gw
+	gw.BoxMap[name] = box
+	mh.Box = box
 
-	vbox.Append(table, true)
-	gw.UiTab.Append(name, vbox)
+	box.UiBox.Append(table, true)
+	// gw.UiTab.Append(name, vbox)
 
-	vbox.Append(ui.NewVerticalSeparator(), false)
+//	vbox.Append(ui.NewVerticalSeparator(), false)
 
-	hbox := ui.NewHorizontalBox()
-	hbox.SetPadded(true)
+//	hbox := ui.NewHorizontalBox()
+//	hbox.SetPadded(true)
 
-	vbox.Append(hbox, false)
+//	vbox.Append(hbox, false)
 
 	return mh
 }

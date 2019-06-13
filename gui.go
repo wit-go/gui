@@ -12,12 +12,12 @@ const Yaxis = 1 // box that is vertical
 
 func init() {
 	log.Println("gui.init() has been run")
+
+	Data.buttonMap	= make(map[*ui.Button]*GuiButton)
+	Data.WindowMap	= make(map[string]*GuiWindow)
 }
 
 func GuiInit() {
-	Data.buttonMap	= make(map[*ui.Button]*GuiButton)
-	Data.WindowMap	= make(map[string]*GuiWindow)
-
 	ui.OnShouldQuit(func() bool {
                 ui.Quit()
 		return true
