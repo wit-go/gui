@@ -10,15 +10,17 @@ import _ "github.com/andlabs/ui/winmanifest"
 func StartNewWindow(bg bool, name string, axis int, callback func(*GuiBox) *GuiBox) {
 	log.Println("StartNewWindow() Create a new window")
 
-	box := InitWindow(nil, name, axis)
-	box = callback(box)
-	window := box.Window
-	log.Println("StartNewWindow() box =", box)
-
 	if (bg) {
 		log.Println("StartNewWindow() START NEW GOROUTINE for ui.Main()")
 		go ui.Main(func() {
 			log.Println("gui.StartNewWindow() inside ui.Main()")
+
+			// InitWindow must be called from within ui.Main()
+			box := InitWindow(nil, name, axis)
+			box = callback(box)
+			window := box.Window
+			log.Println("StartNewWindow() box =", box)
+
 			go runWindow(window.UiWindow)
 		})
 		time.Sleep(2000 * time.Millisecond) // this might make it more stable on windows?
@@ -26,6 +28,13 @@ func StartNewWindow(bg bool, name string, axis int, callback func(*GuiBox) *GuiB
 		log.Println("StartNewWindow() WAITING for ui.Main()")
 		ui.Main(func() {
 			log.Println("gui.StartNewWindow() inside ui.Main()")
+
+			// InitWindow must be called from within ui.Main()
+			box := InitWindow(nil, name, axis)
+			box = callback(box)
+			window := box.Window
+			log.Println("StartNewWindow() box =", box)
+
 			runWindow(window.UiWindow)
 		})
 	}
@@ -125,7 +134,25 @@ func DeleteWindow(name string) {
 	log.Println("gui.DumpBoxes()\tWindow.name =", window.Name)
 	if (window.TabNumber == nil) {
 		log.Println("gui.DumpBoxes() \tWindows.TabNumber = nil")
-	} else {
-		log.Println("gui.DumpBoxes() \tWindows.TabNumber =", *window.TabNumber)
+	}
+	tab := *window.TabNumber
+	log.Println("gui.DumpBoxes() \tWindows.TabNumber =", tab)
+	log.Println("gui.DumpBoxes() \tSHOULD DELETE TAB", tab, "HERE")
+	window.UiTab.Delete(tab)
+	delete(Data.WindowMap, name)
+
+	// renumber tabs here
+	for name, window := range Data.WindowMap {
+		log.Println("gui.DumpBoxes() MAP: ", name)
+		if (window.TabNumber == nil) {
+			log.Println("gui.DumpBoxes() \tWindows.TabNumber = nil")
+		} else {
+			log.Println("gui.DumpBoxes() \tWindows.TabNumber =", *window.TabNumber)
+			if (tab < *window.TabNumber) {
+				log.Println("gui.DumpBoxes() \tSubtracting 1 from TabNumber")
+				*window.TabNumber -= 1
+				log.Println("gui.DumpBoxes() \tWindows.TabNumber is now =", *window.TabNumber)
+			}
+		}
 	}
 }
