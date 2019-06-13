@@ -7,60 +7,24 @@ import "time"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-func InitGuiWindow(gw *GuiWindow) *GuiWindow {
-	log.Println("InitGuiWindow() START")
-	var newGuiWindow GuiWindow
-	newGuiWindow.Width	= Config.Width
-	newGuiWindow.Height	= Config.Height
-
-	newGuiWindow.Axis	= gw.Axis
-	newGuiWindow.MakeWindow	= gw.MakeWindow
-	newGuiWindow.UiWindow	= gw.UiWindow
-	newGuiWindow.UiTab	= gw.UiTab
-	newGuiWindow.Name       = gw.Name
-
-	newGuiWindow.BoxMap	= make(map[string]*GuiBox)
-	newGuiWindow.EntryMap	= make(map[string]*GuiEntry)
-	newGuiWindow.EntryMap["test"] = nil
-	Data.Windows = append(Data.Windows, &newGuiWindow)
-
-	if (gw.UiTab == nil) {
-		tabnum			:= 0
-		newGuiWindow.TabNumber	= &tabnum
-	} else {
-		tabnum			:= gw.UiTab.NumPages()
-		newGuiWindow.TabNumber	= &tabnum
-	}
-
-	Data.WindowMap[newGuiWindow.Name]    = &newGuiWindow
-
-	if (Data.buttonMap == nil) {
-		GuiInit()
-	}
-	log.Println("InitGuiWindow() END *GuiWindow =", &newGuiWindow)
-	return &newGuiWindow
-}
-
-
 func StartNewWindow(bg bool, name string, axis int, callback func(*GuiWindow) *GuiBox) {
 	log.Println("StartNewWindow() Create a new window")
-	var junk GuiWindow
-	junk.MakeWindow = callback
-	junk.Name = name
-	junk.Axis = axis
-	window := InitGuiWindow(&junk)
+	var tmp GuiWindow
+	tmp.MakeWindow = callback
+	tmp.Name = name
+	tmp.Axis = axis
 	if (bg) {
 		log.Println("StartNewWindow() START NEW GOROUTINE for ui.Main()")
 		go ui.Main(func() {
 			log.Println("gui.StartNewWindow() inside ui.Main()")
-			go initTabWindow(window)
+			go initTabWindow(&tmp)
 		})
 		time.Sleep(2000 * time.Millisecond) // this might make it more stable on windows?
 	} else {
 		log.Println("StartNewWindow() WAITING for ui.Main()")
 		ui.Main(func() {
 			log.Println("gui.StartNewWindow() inside ui.Main()")
-			initTabWindow(window)
+			initTabWindow(&tmp)
 		})
 	}
 }
@@ -87,8 +51,10 @@ func initTabWindow(gw *GuiWindow) {
 
 	DumpBoxes()
 	// for {}
+	box := InitWindow(gw, gw.Name, gw.Axis)
+	gw = box.Window
 
-	box := gw.MakeWindow(gw)
+	box = gw.MakeWindow(gw)
 	log.Println("initTabWindow() END box =", box)
 	log.Println("initTabWindow() END gw =", gw)
 	gw.UiWindow.Show()
@@ -116,21 +82,42 @@ func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
 		return nil
 	}
 
-	// if there is not an account, then go to 'make account'
-	gw.Name = name
-	var junk GuiWindow
-	// junk.MakeWindow	= callback
-	junk.Name	= name
-	junk.Axis	= axis
-	junk.UiWindow	= gw.UiWindow
-	junk.UiTab	= gw.UiTab
-	newWindow	:= InitGuiWindow(gw)
+	log.Println("InitGuiWindow() START")
+	var newGuiWindow GuiWindow
+	newGuiWindow.Width	= Config.Width
+	newGuiWindow.Height	= Config.Height
+
+	newGuiWindow.Axis	= axis
+	newGuiWindow.MakeWindow	= gw.MakeWindow
+	newGuiWindow.UiWindow	= gw.UiWindow
+	newGuiWindow.UiTab	= gw.UiTab
+	newGuiWindow.Name       = name
+
+	newGuiWindow.BoxMap	= make(map[string]*GuiBox)
+	newGuiWindow.EntryMap	= make(map[string]*GuiEntry)
+	// newGuiWindow.EntryMap["test"] = nil
+	Data.Windows = append(Data.Windows, &newGuiWindow)
+
+	if (newGuiWindow.UiTab == nil) {
+		tabnum			:= 0
+		newGuiWindow.TabNumber	= &tabnum
+	} else {
+		tabnum			:= gw.UiTab.NumPages()
+		newGuiWindow.TabNumber	= &tabnum
+	}
+
+	Data.WindowMap[newGuiWindow.Name]    = &newGuiWindow
+
+//	if (Data.buttonMap == nil) {
+//		GuiInit()
+//	}
+	log.Println("InitGuiWindow() END *GuiWindow =", &newGuiWindow)
 
 	var box *GuiBox
 	if (axis == Xaxis) {
-		box = HardBox(newWindow, Xaxis, name)
+		box = HardBox(&newGuiWindow, Xaxis, name)
 	} else {
-		box = HardBox(newWindow, Yaxis, name)
+		box = HardBox(&newGuiWindow, Yaxis, name)
 	}
 	return box
 }
@@ -141,5 +128,13 @@ func DeleteWindow(name string) {
 	if (window == nil) {
 		log.Println("gui.DeleteWindow() NO WINDOW WITH name =", name)
 		return
+	}
+
+	log.Println("gui.DumpBoxes() MAP: ", name)
+	log.Println("gui.DumpBoxes()\tWindow.name =", window.Name)
+	if (window.TabNumber == nil) {
+		log.Println("gui.DumpBoxes() \tWindows.TabNumber = nil")
+	} else {
+		log.Println("gui.DumpBoxes() \tWindows.TabNumber =", *window.TabNumber)
 	}
 }
