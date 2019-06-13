@@ -9,33 +9,32 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 func StartNewWindow(bg bool, name string, axis int, callback func(*GuiBox) *GuiBox) {
 	log.Println("StartNewWindow() Create a new window")
+
+	box := InitWindow(nil, name, axis)
+	box = callback(box)
+	window := box.Window
+	log.Println("StartNewWindow() box =", box)
+
 	if (bg) {
 		log.Println("StartNewWindow() START NEW GOROUTINE for ui.Main()")
 		go ui.Main(func() {
 			log.Println("gui.StartNewWindow() inside ui.Main()")
-			go runWindow(name, axis, callback)
+			go runWindow(window.UiWindow)
 		})
 		time.Sleep(2000 * time.Millisecond) // this might make it more stable on windows?
 	} else {
 		log.Println("StartNewWindow() WAITING for ui.Main()")
 		ui.Main(func() {
 			log.Println("gui.StartNewWindow() inside ui.Main()")
-			runWindow(name, axis, callback)
+			runWindow(window.UiWindow)
 		})
 	}
 }
 
 // This creates the raw andlabs/ui Window
-func runWindow(name string, axis int, callback func(*GuiBox) *GuiBox) {
-	log.Println("initTabWindow() START. THIS WINDOW IS NOT YET SHOWN")
-	log.Println("initTabWindow() START. name =", name)
-
-	box := InitWindow(nil, name, axis)
-	box = callback(box)
-	window := box.Window
-	log.Println("initTabWindow() END box =", box)
-	log.Println("initTabWindow() END gw =", window)
-	window.UiWindow.Show()
+func runWindow(uiWindow *ui.Window) {
+	log.Println("runWindow() START ui.Window.Show()")
+	uiWindow.Show()
 }
 
 func MessageWindow(gw *GuiWindow, msg1 string, msg2 string) {
@@ -64,13 +63,13 @@ func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
 	var newGuiWindow GuiWindow
 	newGuiWindow.Height	= Config.Height
 	newGuiWindow.Width	= Config.Width
-	newGuiWindow.Height	= 600
-	newGuiWindow.Width	= 800
+	newGuiWindow.Axis	= axis
+	newGuiWindow.Name       = name
 
 	// This is the first window. One must create it here
 	if (gw == nil) {
 		log.Println("initWindow() ADDING ui.NewWindow()")
-		newGuiWindow.UiWindow = ui.NewWindow(newGuiWindow.Name, int(newGuiWindow.Width), int(newGuiWindow.Height), true)
+		newGuiWindow.UiWindow = ui.NewWindow(name, int(newGuiWindow.Width), int(newGuiWindow.Height), true)
 		newGuiWindow.UiWindow.SetBorderless(false)
 
 		newGuiWindow.UiWindow.OnClosing(func(*ui.Window) bool {
@@ -89,12 +88,9 @@ func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
 		newGuiWindow.UiTab	= gw.UiTab
 	}
 
-	newGuiWindow.Axis	= axis
-	newGuiWindow.Name       = name
 
 	newGuiWindow.BoxMap	= make(map[string]*GuiBox)
 	newGuiWindow.EntryMap	= make(map[string]*GuiEntry)
-	// newGuiWindow.EntryMap["test"] = nil
 	Data.Windows = append(Data.Windows, &newGuiWindow)
 
 	if (newGuiWindow.UiTab == nil) {
@@ -107,17 +103,13 @@ func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
 
 	Data.WindowMap[newGuiWindow.Name]    = &newGuiWindow
 
-//	if (Data.buttonMap == nil) {
-//		GuiInit()
-//	}
-	log.Println("InitGuiWindow() END *GuiWindow =", &newGuiWindow)
-
 	var box *GuiBox
 	if (axis == Xaxis) {
 		box = HardBox(&newGuiWindow, Xaxis, name)
 	} else {
 		box = HardBox(&newGuiWindow, Yaxis, name)
 	}
+	log.Println("InitGuiWindow() END *GuiWindow =", &newGuiWindow)
 	return box
 }
 
