@@ -67,6 +67,7 @@ func DumpBoxes() {
 			}
 		}
 	}
+	/*
 	for i, window := range Data.Windows {
 		if (window.TabNumber == nil) {
 			log.Println("gui.DumpBoxes() Data.Windows", i, "Name =", window.Name, "TabNumber = nil")
@@ -74,6 +75,7 @@ func DumpBoxes() {
 			log.Println("gui.DumpBoxes() Data.Windows", i, "Name =", window.Name, "TabNumber =", *window.TabNumber)
 		}
 	}
+	*/
 }
 
 func addTableTab() {

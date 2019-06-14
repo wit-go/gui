@@ -100,7 +100,7 @@ func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
 
 	newGuiWindow.BoxMap	= make(map[string]*GuiBox)
 	newGuiWindow.EntryMap	= make(map[string]*GuiEntry)
-	Data.Windows = append(Data.Windows, &newGuiWindow)
+	// Data.Windows = append(Data.Windows, &newGuiWindow)
 
 	if (newGuiWindow.UiTab == nil) {
 		tabnum			:= 0
