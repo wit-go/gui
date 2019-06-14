@@ -69,16 +69,14 @@ func MakeEntryVbox(box *GuiBox, a string, startValue string, edit bool, action s
 }
 
 func MakeEntryHbox(box *GuiBox, a string, startValue string, edit bool, action string) *GuiEntry {
-	// Start 'Nickname' vertical box
 	hboxN := ui.NewHorizontalBox()
 	hboxN.SetPadded(true)
 	hboxN.Append(ui.NewLabel(a), false)
 
 	e := defaultMakeEntry(startValue, edit, action)
-	hboxN.Append(e.UiEntry, false)
+	hboxN.Append(e.UiEntry, true)
 
-	box.UiBox.Append(hboxN, false)
-	// End 'Nickname' vertical box
+	box.UiBox.Append(hboxN, true)
 
 	return e
 }
