@@ -13,7 +13,7 @@ func StartNewWindow(bg bool, name string, axis int, callback func(*GuiBox) *GuiB
 	if (bg) {
 		log.Println("StartNewWindow() START NEW GOROUTINE for ui.Main()")
 		go ui.Main(func() {
-			log.Println("gui.StartNewWindow() inside ui.Main()")
+			log.Println("gui.StartNewWindow() inside ui.Main() in NEW goroutine")
 
 			// InitWindow must be called from within ui.Main()
 			box := InitWindow(nil, name, axis)
@@ -21,7 +21,7 @@ func StartNewWindow(bg bool, name string, axis int, callback func(*GuiBox) *GuiB
 			window := box.Window
 			log.Println("StartNewWindow() box =", box)
 
-			go runWindow(window.UiWindow)
+			runWindow(window.UiWindow)
 		})
 		time.Sleep(2000 * time.Millisecond) // this might make it more stable on windows?
 	} else {
