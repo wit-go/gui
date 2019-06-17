@@ -83,7 +83,13 @@ func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
 
 		newGuiWindow.UiWindow.OnClosing(func(*ui.Window) bool {
 			log.Println("initTabWindow() OnClosing() THIS WINDOW IS CLOSING newGuiWindow=", newGuiWindow)
-			ui.Quit()
+			// newGuiWindow.UiWindow.Destroy()
+			if (Config.Exit == nil) {
+				ui.Quit()
+			} else {
+				// allow a custom exit function
+				Config.Exit(&newGuiWindow)
+			}
 			return true
 		})
 

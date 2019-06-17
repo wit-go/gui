@@ -19,6 +19,7 @@ type GuiConfig struct {
 	Height		int
 	Debug		bool
 	DebugTable	bool
+	Exit		func(*GuiWindow)
 }
 
 type GuiData struct {
