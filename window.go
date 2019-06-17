@@ -23,7 +23,7 @@ func StartNewWindow(bg bool, name string, axis int, callback func(*GuiBox) *GuiB
 
 			runWindow(window.UiWindow)
 		})
-		time.Sleep(2000 * time.Millisecond) // this might make it more stable on windows?
+		time.Sleep(500 * time.Millisecond) // this might make it more stable on windows?
 	} else {
 		log.Println("StartNewWindow() WAITING for ui.Main()")
 		ui.Main(func() {

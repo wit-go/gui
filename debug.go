@@ -90,6 +90,6 @@ func addTableTab() {
 		parts = append(parts, b)
 	}
 
-	log.Println("Sleep for 2 seconds, then try to add new tabs")
-	time.Sleep(1 * 1000 * 1000 * 1000)
+	log.Println("Sleep for 1 second, then try to add new tabs")
+	time.Sleep(1 * time.Second)
 }
