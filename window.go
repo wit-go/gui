@@ -144,7 +144,13 @@ func DeleteWindow(name string) {
 	tab := *window.TabNumber
 	log.Println("gui.DumpBoxes() \tWindows.TabNumber =", tab)
 	log.Println("gui.DumpBoxes() \tSHOULD DELETE TAB", tab, "HERE")
-	window.UiTab.Delete(tab)
+	log.Println("gui.DeleteWindow() \tSHOULD DELETE TAB", tab, "HERE")
+	log.Println("gui.DumpBoxes() \tUiTab =", window.UiTab)
+	tabnum			:= window.UiTab.NumPages()
+	log.Println("gui.DumpBoxes() \tUiTab.NumPages() =", tabnum)
+	if (tabnum > 0) {
+		window.UiTab.Delete(tab)
+	}
 	delete(Data.WindowMap, name)
 
 	// renumber tabs here
