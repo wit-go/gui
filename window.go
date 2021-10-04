@@ -162,3 +162,28 @@ func DeleteWindow(name string) {
 		}
 	}
 }
+
+// CreateWindow("my title", "my tabname", 300, 200, makeNumbersPagewin2)
+func CreateWindow(title string, tabname string, x int, y int, custom func() ui.Control) *ui.Window {
+	window := ui.NewWindow(title, x, y, false)
+	window.OnClosing(func(*ui.Window) bool {
+		log.Println("createWindow().OnClosing()", title)
+		return true
+	})
+	ui.OnShouldQuit(func() bool {
+		log.Println("createWindow().Destroy()", title)
+		window.Destroy()
+		return true
+	})
+
+	tab := ui.NewTab()
+	window.SetChild(tab)
+	window.SetMargined(true)
+
+	tab.Append(tabname, custom())
+	tab.SetMargined(0, true)
+
+	window.Show()
+
+	return window
+}
