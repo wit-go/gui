@@ -105,12 +105,12 @@ func (s GuiBox) SetTitle(title string) {
 	return
 }
 
-func (s GuiBox) InitTab(title string) {
+func (s GuiBox) InitTab(title string) *ui.Tab {
 	if (s.Window == nil) {
-		return
+		return nil
 	}
 	if (s.Window.UiWindow == nil) {
-		return
+		return nil
 	}
 
 	window := s.Window.UiWindow
@@ -123,19 +123,21 @@ func (s GuiBox) InitTab(title string) {
 	// tab.SetMargined(1, true)
 
 	s.Window.UiTab = tab
+	return tab
 }
 
-func (s GuiBox) AddTab(title string, custom ui.Control) {
+func (s GuiBox) AddTab(title string, custom ui.Control) *ui.Tab {
 	if (s.Window == nil) {
-		return
+		return nil
 	}
 	if (s.Window.UiTab == nil) {
-		return
+		return nil
 	}
 
 	tab := s.Window.UiTab
 
 	tab.Append(title, custom)
+	return tab
 }
 
 func (s GuiBox) AddTab2(title string, custom ui.Control) *ui.Tab {
@@ -153,8 +155,8 @@ func (s GuiBox) AddTab2(title string, custom ui.Control) *ui.Tab {
 
 func (s GuiBox) AddBoxTab(title string) *GuiBox {
 	uiTab := s.AddTab2(title, InitBlankWindow())
-
 	tabSetMargined(uiTab)
+
 	var box *GuiBox
 	box = HardBox(s.Window, Xaxis, "jcarrAddBoxTab")
 	box.Window.UiTab = uiTab
@@ -162,7 +164,13 @@ func (s GuiBox) AddBoxTab(title string) *GuiBox {
 }
 
 func (s GuiBox) AddDemoTab(title string) {
-	s.AddTab(title, makeWindowTemplate())
+	uiTab := s.AddTab(title, makeWindowTemplate())
+	tabSetMargined(uiTab)
+}
+
+func (s GuiBox) AddDebugTab(title string) {
+	uiTab := s.AddTab(title, makeWindowDebug())
+	tabSetMargined(uiTab)
 }
 
 func tabSetMargined(tab *ui.Tab) {
