@@ -124,7 +124,7 @@ func (s GuiBox) InitTab(title string) {
 	s.Window.UiTab = tab
 }
 
-func (s GuiBox) AddTab(title string) {
+func (s GuiBox) AddTab(title string, custom ui.Control) {
 	if (s.Window == nil) {
 		return
 	}
@@ -134,7 +134,20 @@ func (s GuiBox) AddTab(title string) {
 
 	tab := s.Window.UiTab
 
-	tab.Append(title, InitBlankWindow())
+	tab.Append(title, custom)
+}
+
+func (s GuiBox) AddDemoTab(title string) {
+	if (s.Window == nil) {
+		return
+	}
+	if (s.Window.UiTab == nil) {
+		return
+	}
+
+	tab := s.Window.UiTab
+
+	tab.Append(title, makeWindowTemplate())
 }
 
 // Note: every mouse click is handled
