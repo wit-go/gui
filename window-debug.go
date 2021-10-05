@@ -69,6 +69,57 @@ func makeWindowDebug() ui.Control {
 		gw.UiTab.SetMargined(*gw.TabNumber, true)
 	})
 
+	b3 := addButton(vbox, "Hide()")
+	b3.OnClicked(func(*ui.Button) {
+		x := cbox.Selected()
+		log.Println("x =", x)
+		log.Println("findBox; names[x] =", names[x])
+		findBox(names[x])
+		gw := findBox(names[x])
+		if (gw == nil) {
+			return
+		}
+		if (gw.UiTab == nil) {
+			return
+		}
+		gw.UiTab.Hide()
+	})
+
+	b4 := addButton(vbox, "Show()")
+	b4.OnClicked(func(*ui.Button) {
+		x := cbox.Selected()
+		log.Println("x =", x)
+		log.Println("findBox; names[x] =", names[x])
+		findBox(names[x])
+		gw := findBox(names[x])
+		if (gw == nil) {
+			return
+		}
+		if (gw.UiTab == nil) {
+			return
+		}
+		gw.UiTab.Show()
+	})
+
+	b5 := addButton(vbox, "Delete()")
+	b5.OnClicked(func(*ui.Button) {
+		x := cbox.Selected()
+		log.Println("x =", x)
+		log.Println("findBox; names[x] =", names[x])
+		findBox(names[x])
+		gw := findBox(names[x])
+		if (gw == nil) {
+			return
+		}
+		if (gw.UiTab == nil) {
+			return
+		}
+		if (gw.TabNumber == nil) {
+			return
+		}
+		gw.UiTab.Delete(*gw.TabNumber)
+	})
+
 	return hbox
 }
 
