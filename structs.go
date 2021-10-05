@@ -137,17 +137,31 @@ func (s GuiBox) AddTab(title string, custom ui.Control) {
 	tab.Append(title, custom)
 }
 
-func (s GuiBox) AddDemoTab(title string) {
+func (s GuiBox) AddTab2(title string, custom ui.Control) *ui.Tab {
 	if (s.Window == nil) {
-		return
+		return nil
 	}
 	if (s.Window.UiTab == nil) {
-		return
+		return nil
 	}
 
 	tab := s.Window.UiTab
+	tab.Append(title, custom)
+	return tab
+}
 
-	tab.Append(title, makeWindowTemplate())
+func (s GuiBox) AddBoxTab(title string) *GuiBox {
+	uiTab := s.AddTab2(title, InitBlankWindow())
+
+	var box *GuiBox
+	box = HardBox(s.Window, Xaxis, "jcarrAddBoxTab")
+	box.Window.UiTab = uiTab
+        return box
+
+}
+
+func (s GuiBox) AddDemoTab(title string) {
+	s.AddTab(title, makeWindowTemplate())
 }
 
 // Note: every mouse click is handled

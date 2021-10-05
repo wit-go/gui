@@ -204,6 +204,11 @@ func CreateBlankWindow(title string, x int, y int) *GuiBox {
 	newGuiWindow.Name       = title
 	newGuiWindow.UiWindow   = window
 
+	newGuiWindow.BoxMap     = make(map[string]*GuiBox)
+        newGuiWindow.EntryMap   = make(map[string]*GuiEntry)
+
+	Data.WindowMap[newGuiWindow.Name]    = &newGuiWindow
+
 	var box GuiBox
 	box.Window = &newGuiWindow
 
