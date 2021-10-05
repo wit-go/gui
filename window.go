@@ -182,3 +182,30 @@ func CreateWindow(title string, tabname string, x int, y int, custom func() ui.C
 
 	return window
 }
+
+func CreateBlankWindow(title string, x int, y int) *GuiBox {
+	window := ui.NewWindow(title, x, y, false)
+	window.OnClosing(func(*ui.Window) bool {
+		log.Println("createWindow().OnClosing()", title)
+		return true
+	})
+	ui.OnShouldQuit(func() bool {
+		log.Println("createWindow().Destroy()", title)
+		window.Destroy()
+		return true
+	})
+
+	window.SetMargined(true)
+	window.Show()
+
+	var newGuiWindow GuiWindow
+	newGuiWindow.Width	= x
+	newGuiWindow.Height	= y
+	newGuiWindow.Name       = title
+	newGuiWindow.UiWindow   = window
+
+	var box GuiBox
+	box.Window = &newGuiWindow
+
+	return &box
+}
