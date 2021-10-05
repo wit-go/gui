@@ -18,11 +18,6 @@ func makeWindowDebug() ui.Control {
 	vbox.Append(pbar, false)
 
 /////////////////////////////////////////////////////
-	vbox = addGroup(hbox, "Buttons")
-	pbar = ui.NewProgressBar()
-	vbox.Append(pbar, false)
-
-/////////////////////////////////////////////////////
 	vbox = addGroup(hbox, "WindowMap")
 	cbox := ui.NewCombobox()
 
@@ -40,6 +35,20 @@ func makeWindowDebug() ui.Control {
 		dumpBox(names[x])
 	})
 
+/////////////////////////////////////////////////////
+	vbox = addGroup(hbox, "Buttons")
+	b1 := addButton(vbox, "dumpBox(name)")
+	b1.OnClicked(func(*ui.Button) {
+		x := cbox.Selected()
+		log.Println("x =", x)
+		log.Println("names[x] =", names[x])
+		dumpBox(names[x])
+	})
+	b2 := addButton(vbox, "something 2")
+	b2.OnClicked(func(*ui.Button) {
+		log.Println("Should do something here b2")
+	})
+
 	return hbox
 }
 
@@ -51,10 +60,10 @@ func addName(c *ui.Combobox, s string) {
 	x = x + 1
 }
 
-func addGroup(hb *ui.Box, name string) *ui.Box{
+func addGroup(b *ui.Box, name string) *ui.Box {
 	group := ui.NewGroup(name)
 	group.SetMargined(true)
-	hb.Append(group, true)
+	b.Append(group, true)
 
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
@@ -96,4 +105,15 @@ func dumpBox(s string) {
 			}
 		}
 	}
+}
+
+func addButton(box *ui.Box, name string) *ui.Button {
+	button := ui.NewButton(name)
+
+	button.OnClicked(func(*ui.Button) {
+		log.Println("Should do something here")
+	})
+
+	box.Append(button, false)
+	return button
 }
