@@ -37,6 +37,7 @@ func makeWindowDebug() ui.Control {
 
 /////////////////////////////////////////////////////
 	vbox = addGroup(hbox, "Buttons")
+
 	b1 := addButton(vbox, "dumpBox(name)")
 	b1.OnClicked(func(*ui.Button) {
 		x := cbox.Selected()
@@ -44,9 +45,28 @@ func makeWindowDebug() ui.Control {
 		log.Println("names[x] =", names[x])
 		dumpBox(names[x])
 	})
-	b2 := addButton(vbox, "something 2")
+
+	b2 := addButton(vbox, "SetMargined()")
 	b2.OnClicked(func(*ui.Button) {
-		log.Println("Should do something here b2")
+		x := cbox.Selected()
+		log.Println("x =", x)
+		log.Println("findBox; names[x] =", names[x])
+		findBox(names[x])
+		gw := findBox(names[x])
+		if (gw == nil) {
+			return
+		}
+		if (gw.UiTab == nil) {
+			return
+		}
+		if (gw.TabNumber == nil) {
+			return
+		}
+		scs := spew.ConfigState{MaxDepth: 1}
+		scs.Dump(gw)
+		log.Println("gui.DumpBoxes()\tWindow.UiTab     =", gw.UiTab)
+		log.Println("gui.DumpBoxes()\tWindow.TabNumber =", *gw.TabNumber)
+		gw.UiTab.SetMargined(*gw.TabNumber, true)
 	})
 
 	return hbox
@@ -72,6 +92,15 @@ func addGroup(b *ui.Box, name string) *ui.Box {
 	return vbox
 }
 
+func findBox(s string) *GuiWindow {
+	for name, window := range Data.WindowMap {
+		if (name == s) {
+			return window
+		}
+	}
+	return nil
+}
+
 func dumpBox(s string) {
 	for name, window := range Data.WindowMap {
 		if (name != s) {
@@ -86,6 +115,7 @@ func dumpBox(s string) {
 		log.Println("gui.DumpBoxes()\tWindow.name =", window.Name)
 		// log.Println("gui.DumpBoxes()\tWindow.UiWindow type =", reflect.TypeOf(window.UiWindow))
 		log.Println("gui.DumpBoxes()\tWindow.UiWindow =", window.UiWindow)
+		log.Println("gui.DumpBoxes()\tWindow.UiTab    =", window.UiTab)
 		for name, abox := range window.BoxMap {
 			log.Printf("gui.DumpBoxes() \tBOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
 			if (name == "MAINBOX") {

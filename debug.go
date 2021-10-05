@@ -41,6 +41,7 @@ func DumpBoxes() {
 		log.Println("gui.DumpBoxes()\tWindow.name =", window.Name)
 		// log.Println("gui.DumpBoxes()\tWindow.UiWindow type =", reflect.TypeOf(window.UiWindow))
 		log.Println("gui.DumpBoxes()\tWindow.UiWindow =", window.UiWindow)
+		log.Println("gui.DumpBoxes()\tWindow.UiTab =", window.UiTab)
 		for name, abox := range window.BoxMap {
 			log.Printf("gui.DumpBoxes() \tBOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
 			if (name == "MAINBOX") {

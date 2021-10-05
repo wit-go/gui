@@ -177,7 +177,7 @@ func tabSetMargined(tab *ui.Tab) {
 	c := tab.NumPages()
 	for i := 0; i < c; i++ {
 		log.Println("tabSetMargined() i =", i)
-		tab.SetMargined(i, true)
+		// tab.SetMargined(i, true)
 	}
 }
 
