@@ -4,72 +4,41 @@ import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
+import "github.com/davecgh/go-spew/spew"
+
 var names = make([]string, 100)
 
 func makeWindowDebug() ui.Control {
-
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 
-	group := ui.NewGroup("Numbers")
-	group.SetMargined(true)
-	hbox.Append(group, true)
-
-	vbox := ui.NewVerticalBox()
-	vbox.SetPadded(true)
-	group.SetChild(vbox)
-
-	spinbox := ui.NewSpinbox(22, 44)
-	slider  := ui.NewSlider(22, 44)
-	pbar    := ui.NewProgressBar()
-
-	spinbox.OnChanged(func(*ui.Spinbox) {
-		slider.SetValue(spinbox.Value())
-		pbar.SetValue(spinbox.Value())
-	})
-	slider.OnChanged(func(*ui.Slider) {
-		spinbox.SetValue(slider.Value())
-		pbar.SetValue(slider.Value())
-	})
-	vbox.Append(spinbox, false)
-	vbox.Append(slider, false)
+/////////////////////////////////////////////////////
+	vbox := addGroup(hbox, "Numbers")
+	pbar := ui.NewProgressBar()
 	vbox.Append(pbar, false)
 
-	ip := ui.NewProgressBar()
-	ip.SetValue(-1)
-	vbox.Append(ip, false)
+/////////////////////////////////////////////////////
+	vbox = addGroup(hbox, "Buttons")
+	pbar = ui.NewProgressBar()
+	vbox.Append(pbar, false)
 
-	group = ui.NewGroup("WindowMap")
-	group.SetMargined(true)
-	hbox.Append(group, true)
-
-	vbox = ui.NewVerticalBox()
-	vbox.SetPadded(true)
-	group.SetChild(vbox)
-
+/////////////////////////////////////////////////////
+	vbox = addGroup(hbox, "WindowMap")
 	cbox := ui.NewCombobox()
-	addName(cbox, "Window 1")
-	addName(cbox, "Window 2")
-	addName(cbox, "Combobox Item 3")
+
+	for name, _ := range Data.WindowMap {
+		log.Println("range Data.WindowMap() name =", name)
+		addName(cbox, name)
+	}
+
 	vbox.Append(cbox, false)
 
 	cbox.OnSelected(func(*ui.Combobox) {
-		log.Println("test")
-		test := cbox.Selected()
-		log.Println("test=", test)
-		log.Println("names[test] =", names[test])
-
-//		for name := range names {
-//			log.Println("gui.DumpBoxes() name: ", name)
-//		}
-//		if (names[test] != nil) {
-//		}
+		x := cbox.Selected()
+		log.Println("x =", x)
+		log.Println("names[x] =", names[x])
+		dumpBox(names[x])
 	})
-
-	for name, _ := range Data.WindowMap {
-		log.Println("gui.DumpBoxes() name: ", name)
-		addName(cbox, name)
-	}
 
 	return hbox
 }
@@ -80,4 +49,51 @@ func addName(c *ui.Combobox, s string) {
 	c.Append(s)
 	names[x] = s
 	x = x + 1
+}
+
+func addGroup(hb *ui.Box, name string) *ui.Box{
+	group := ui.NewGroup(name)
+	group.SetMargined(true)
+	hb.Append(group, true)
+
+	vbox := ui.NewVerticalBox()
+	vbox.SetPadded(true)
+	group.SetChild(vbox)
+
+	return vbox
+}
+
+func dumpBox(s string) {
+	for name, window := range Data.WindowMap {
+		if (name != s) {
+			continue
+		}
+		log.Println("gui.DumpBoxes() MAP: ", name)
+		if (window.TabNumber == nil) {
+			log.Println("gui.DumpBoxes() \tWindows.TabNumber = nil")
+		} else {
+			log.Println("gui.DumpBoxes() \tWindows.TabNumber =", *window.TabNumber)
+		}
+		log.Println("gui.DumpBoxes()\tWindow.name =", window.Name)
+		// log.Println("gui.DumpBoxes()\tWindow.UiWindow type =", reflect.TypeOf(window.UiWindow))
+		log.Println("gui.DumpBoxes()\tWindow.UiWindow =", window.UiWindow)
+		for name, abox := range window.BoxMap {
+			log.Printf("gui.DumpBoxes() \tBOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
+			if (name == "MAINBOX") {
+				if (Config.Debug) {
+					scs := spew.ConfigState{MaxDepth: 1}
+					scs.Dump(abox.UiBox)
+				}
+			}
+		}
+		if (window.UiTab != nil) {
+			pages := window.UiTab.NumPages()
+			log.Println("gui.DumpBoxes()\tWindow.UiTab.NumPages() =", pages)
+			tabSetMargined(window.UiTab)
+			if (Config.Debug) {
+				scs := spew.ConfigState{MaxDepth: 2}
+				scs.Dump(window.UiTab)
+			}
+		}
+	}
 }
