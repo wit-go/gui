@@ -21,7 +21,7 @@ func StartNewWindow(bg bool, name string, axis int, callback func(*GuiBox) *GuiB
 			window := box.Window
 			log.Println("StartNewWindow() box =", box)
 
-			runWindow(window.UiWindow)
+			window.UiWindow.Show()
 		})
 		time.Sleep(500 * time.Millisecond) // this might make it more stable on windows?
 	} else {
@@ -35,15 +35,9 @@ func StartNewWindow(bg bool, name string, axis int, callback func(*GuiBox) *GuiB
 			window := box.Window
 			log.Println("StartNewWindow() box =", box)
 
-			runWindow(window.UiWindow)
+			window.UiWindow.Show()
 		})
 	}
-}
-
-// This creates the raw andlabs/ui Window
-func runWindow(uiWindow *ui.Window) {
-	log.Println("runWindow() START ui.Window.Show()")
-	uiWindow.Show()
 }
 
 func MessageWindow(gw *GuiWindow, msg1 string, msg2 string) {
@@ -81,6 +75,7 @@ func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
 		newGuiWindow.UiWindow = ui.NewWindow(name, int(newGuiWindow.Width), int(newGuiWindow.Height), true)
 		newGuiWindow.UiWindow.SetBorderless(false)
 
+		// newGuiWindow.UiWindow.SetTitle("test")
 		newGuiWindow.UiWindow.OnClosing(func(*ui.Window) bool {
 			log.Println("initTabWindow() OnClosing() THIS WINDOW IS CLOSING newGuiWindow=", newGuiWindow)
 			// newGuiWindow.UiWindow.Destroy()
