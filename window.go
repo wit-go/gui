@@ -7,36 +7,27 @@ import "time"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
+func initUI(name string, callback func(*GuiBox) *GuiBox) {
+	ui.Main(func() {
+		log.Println("gui.initUI() inside ui.Main()")
+
+		box := InitWindow(nil, "StartNewWindow" + name, 0)
+		box = callback(box)
+		window := box.Window
+		log.Println("StartNewWindow() box =", box)
+
+		window.UiWindow.Show()
+	})
+}
+
 func StartNewWindow(bg bool, name string, axis int, callback func(*GuiBox) *GuiBox) {
-	log.Println("StartNewWindow() Create a new window")
+	log.Println("StartNewWindow() ui.Main() Create a new window")
 
 	if (bg) {
-		log.Println("StartNewWindow() START NEW GOROUTINE for ui.Main()")
-		go ui.Main(func() {
-			log.Println("gui.StartNewWindow() inside ui.Main() in NEW goroutine")
-
-			// InitWindow must be called from within ui.Main()
-			box := InitWindow(nil, name, axis)
-			box = callback(box)
-			window := box.Window
-			log.Println("StartNewWindow() box =", box)
-
-			window.UiWindow.Show()
-		})
+		go initUI(name, callback)
 		time.Sleep(500 * time.Millisecond) // this might make it more stable on windows?
 	} else {
-		log.Println("StartNewWindow() WAITING for ui.Main()")
-		ui.Main(func() {
-			log.Println("gui.StartNewWindow() inside ui.Main()")
-
-			// InitWindow must be called from within ui.Main()
-			box := InitWindow(nil, name, axis)
-			box = callback(box)
-			window := box.Window
-			log.Println("StartNewWindow() box =", box)
-
-			window.UiWindow.Show()
-		})
+		initUI(name, callback)
 	}
 }
 
@@ -62,6 +53,7 @@ func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
 		return nil
 	}
 
+	// return mapWindow(window, name, Config.Height, Config.Width)
 	log.Println("InitGuiWindow() START")
 	var newGuiWindow GuiWindow
 	newGuiWindow.Height	= Config.Height
@@ -97,7 +89,6 @@ func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
 		newGuiWindow.UiWindow	= gw.UiWindow
 		newGuiWindow.UiTab	= gw.UiTab
 	}
-
 
 	newGuiWindow.BoxMap	= make(map[string]*GuiBox)
 	newGuiWindow.EntryMap	= make(map[string]*GuiEntry)
@@ -158,30 +149,10 @@ func DeleteWindow(name string) {
 	}
 }
 
-// CreateWindow("my title", "my tabname", 300, 200, makeNumbersPagewin2)
-func CreateWindow(title string, tabname string, x int, y int, custom func() ui.Control) *ui.Window {
-	window := ui.NewWindow(title, x, y, false)
-	window.SetBorderless(false)
-	window.OnClosing(func(*ui.Window) bool {
-		log.Println("createWindow().OnClosing()", title)
-		return true
-	})
-	ui.OnShouldQuit(func() bool {
-		log.Println("createWindow().Destroy()", title)
-		window.Destroy()
-		return true
-	})
-
-	tab := ui.NewTab()
-	window.SetChild(tab)
-	window.SetMargined(true)
-
-	tab.Append(tabname, custom())
-	tab.SetMargined(0, true)
-
-	window.Show()
-
-	return window
+func CreateWindow(title string, tabname string, x int, y int, custom func() ui.Control) *GuiBox {
+	box := CreateBlankWindow(title, x, y)
+	box.InitTab(title)
+	return box
 }
 
 func CreateBlankWindow(title string, x int, y int) *GuiBox {
@@ -200,6 +171,17 @@ func CreateBlankWindow(title string, x int, y int) *GuiBox {
 	window.SetMargined(true)
 	window.Show()
 
+	return mapWindow(window, title, x, y)
+}
+
+func initBlankWindow() ui.Control {
+        hbox := ui.NewHorizontalBox()
+        hbox.SetPadded(true)
+
+	return hbox
+}
+
+func mapWindow(window *ui.Window, title string, x int, y int) *GuiBox {
 	var newGuiWindow GuiWindow
 	newGuiWindow.Width	= x
 	newGuiWindow.Height	= y
@@ -209,17 +191,15 @@ func CreateBlankWindow(title string, x int, y int) *GuiBox {
 	newGuiWindow.BoxMap     = make(map[string]*GuiBox)
         newGuiWindow.EntryMap   = make(map[string]*GuiEntry)
 
+	if (Data.WindowMap[newGuiWindow.Name] != nil) {
+		log.Println("Data.WindowMap[newGuiWindow.Name] already exists\n")
+		panic("Data.WindowMap[newGuiWindow.Name] already exists")
+		return nil
+	}
 	Data.WindowMap[newGuiWindow.Name]    = &newGuiWindow
 
 	var box GuiBox
 	box.Window = &newGuiWindow
 
 	return &box
-}
-
-func InitBlankWindow() ui.Control {
-        hbox := ui.NewHorizontalBox()
-        hbox.SetPadded(true)
-
-	return hbox
 }

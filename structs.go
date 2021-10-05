@@ -118,7 +118,7 @@ func (s GuiBox) InitTab(title string) *ui.Tab {
 	window.SetChild(tab)
 	window.SetMargined(true)
 
-	tab.Append(title, InitBlankWindow())
+	tab.Append(title, initBlankWindow())
 	tab.SetMargined(0, true)
 	// tab.SetMargined(1, true)
 
@@ -154,7 +154,7 @@ func (s GuiBox) AddTab2(title string, custom ui.Control) *ui.Tab {
 }
 
 func (s GuiBox) AddBoxTab(title string) *GuiBox {
-	uiTab := s.AddTab2(title, InitBlankWindow())
+	uiTab := s.AddTab2(title, initBlankWindow())
 	tabSetMargined(uiTab)
 
 	var box *GuiBox
