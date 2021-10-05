@@ -120,6 +120,12 @@ func HardBox(gw *GuiWindow, axis int, name string) *GuiBox {
 func HorizontalBreak(box *GuiBox) {
 	log.Println("VerticalSeparator added to box =", box.Name)
 	tmp := ui.NewHorizontalSeparator()
+	if (box == nil) {
+		return
+	}
+	if (box.UiBox == nil) {
+		return
+	}
 	box.UiBox.Append(tmp, false)
 }
 

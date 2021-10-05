@@ -105,6 +105,13 @@ func (s GuiBox) SetTitle(title string) {
 	return
 }
 
+func (s GuiBox) Append(child ui.Control, x bool) {
+	if (s.UiBox == nil) {
+		return
+	}
+	s.UiBox.Append(child, x)
+}
+
 func (s GuiBox) InitTab(title string) *ui.Tab {
 	if (s.Window == nil) {
 		return nil

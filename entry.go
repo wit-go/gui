@@ -10,7 +10,7 @@ import "github.com/davecgh/go-spew/spew"
 // functions for handling text entry boxes
 
 func NewLabel(box *GuiBox, text string) {
-	box.UiBox.Append(ui.NewLabel(text), false)
+	box.Append(ui.NewLabel(text), false)
 }
 
 func GetText(box *GuiBox, name string) string {

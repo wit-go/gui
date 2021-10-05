@@ -45,21 +45,17 @@ func ErrorWindow(gw *GuiWindow, msg1 string, msg2 string) {
 // actual window but that does not appear to work on the MacOS or Windows
 //
 func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
-	window := Data.WindowMap[name]
-	if (window != nil) {
-		box := window.BoxMap["MAINBOX"]
-		log.Println("gui.InitWindow() tab already exists name =", name)
-		ErrorWindow(box.Window, "Create Window Error", "Window " + name + " already exists")
-		return nil
+	log.Println("InitGuiWindow() START")
+
+	var box *GuiBox
+	if (gw == nil) {
+		box = mapWindow(nil, name, Config.Height, Config.Width)
+	} else {
+		box = mapWindow(gw.UiWindow, name, Config.Height, Config.Width)
 	}
 
-	// return mapWindow(window, name, Config.Height, Config.Width)
-	log.Println("InitGuiWindow() START")
-	var newGuiWindow GuiWindow
-	newGuiWindow.Height	= Config.Height
-	newGuiWindow.Width	= Config.Width
-	newGuiWindow.Axis	= axis
-	newGuiWindow.Name       = name
+	// box.Window = &newGuiWindow
+	newGuiWindow := box.Window
 
 	// This is the first window. One must create it here
 	if (gw == nil) {
@@ -75,7 +71,7 @@ func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
 				ui.Quit()
 			} else {
 				// allow a custom exit function
-				Config.Exit(&newGuiWindow)
+				Config.Exit(newGuiWindow)
 			}
 			return true
 		})
@@ -102,15 +98,9 @@ func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
 		newGuiWindow.TabNumber	= &tabnum
 	}
 
-	Data.WindowMap[newGuiWindow.Name]    = &newGuiWindow
+	Data.WindowMap[newGuiWindow.Name]    = newGuiWindow
 
-	var box *GuiBox
-	if (axis == Xaxis) {
-		box = HardBox(&newGuiWindow, Xaxis, name)
-	} else {
-		box = HardBox(&newGuiWindow, Yaxis, name)
-	}
-	log.Println("InitGuiWindow() END *GuiWindow =", &newGuiWindow)
+	log.Println("InitGuiWindow() END *GuiWindow =", newGuiWindow)
 	return box
 }
 
@@ -181,7 +171,18 @@ func initBlankWindow() ui.Control {
 	return hbox
 }
 
+var master = 0
+
 func mapWindow(window *ui.Window, title string, x int, y int) *GuiBox {
+	if (Data.WindowMap[title] != nil) {
+		log.Println("Data.WindowMap[title] already exists title =", title)
+		title = title + string(master)
+	}
+	if (Data.WindowMap[title] != nil) {
+		log.Println("Data.WindowMap[title] already exists title =", title)
+		panic("Data.WindowMap[newGuiWindow.Name] already exists")
+		return nil
+	}
 	var newGuiWindow GuiWindow
 	newGuiWindow.Width	= x
 	newGuiWindow.Height	= y
@@ -191,11 +192,6 @@ func mapWindow(window *ui.Window, title string, x int, y int) *GuiBox {
 	newGuiWindow.BoxMap     = make(map[string]*GuiBox)
         newGuiWindow.EntryMap   = make(map[string]*GuiEntry)
 
-	if (Data.WindowMap[newGuiWindow.Name] != nil) {
-		log.Println("Data.WindowMap[newGuiWindow.Name] already exists\n")
-		panic("Data.WindowMap[newGuiWindow.Name] already exists")
-		return nil
-	}
 	Data.WindowMap[newGuiWindow.Name]    = &newGuiWindow
 
 	var box GuiBox
