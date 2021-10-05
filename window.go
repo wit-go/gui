@@ -161,6 +161,7 @@ func DeleteWindow(name string) {
 // CreateWindow("my title", "my tabname", 300, 200, makeNumbersPagewin2)
 func CreateWindow(title string, tabname string, x int, y int, custom func() ui.Control) *ui.Window {
 	window := ui.NewWindow(title, x, y, false)
+	window.SetBorderless(false)
 	window.OnClosing(func(*ui.Window) bool {
 		log.Println("createWindow().OnClosing()", title)
 		return true
@@ -185,6 +186,7 @@ func CreateWindow(title string, tabname string, x int, y int, custom func() ui.C
 
 func CreateBlankWindow(title string, x int, y int) *GuiBox {
 	window := ui.NewWindow(title, x, y, false)
+	window.SetBorderless(false)
 	window.OnClosing(func(*ui.Window) bool {
 		log.Println("createWindow().OnClosing()", title)
 		return true

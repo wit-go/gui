@@ -120,6 +120,7 @@ func (s GuiBox) InitTab(title string) {
 
 	tab.Append(title, InitBlankWindow())
 	tab.SetMargined(0, true)
+	// tab.SetMargined(1, true)
 
 	s.Window.UiTab = tab
 }
@@ -153,15 +154,23 @@ func (s GuiBox) AddTab2(title string, custom ui.Control) *ui.Tab {
 func (s GuiBox) AddBoxTab(title string) *GuiBox {
 	uiTab := s.AddTab2(title, InitBlankWindow())
 
+	tabSetMargined(uiTab)
 	var box *GuiBox
 	box = HardBox(s.Window, Xaxis, "jcarrAddBoxTab")
 	box.Window.UiTab = uiTab
-        return box
-
+	return box
 }
 
 func (s GuiBox) AddDemoTab(title string) {
 	s.AddTab(title, makeWindowTemplate())
+}
+
+func tabSetMargined(tab *ui.Tab) {
+	c := tab.NumPages()
+	for i := 0; i < c; i++ {
+		log.Println("tabSetMargined() i =", i)
+		tab.SetMargined(i, true)
+	}
 }
 
 // Note: every mouse click is handled
