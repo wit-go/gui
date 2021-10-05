@@ -68,7 +68,7 @@ func CreateButton(box *GuiBox, custom func(*GuiButton), name string, values inte
 
 	Data.AllButtons	= append(Data.AllButtons, newB)
 
-	box.UiBox.Append(newB.B, false)
+	box.Append(newB.B, false)
 	return newB
 }
 
@@ -110,6 +110,6 @@ func CreateColorButton(box *GuiBox, custom func(*GuiButton), name string, values
 			Data.MouseClick(&newCB)
 		}
 	})
-	box.UiBox.Append(newCB.CB, false)
+	box.Append(newCB.CB, false)
 	return &newCB
 }

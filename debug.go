@@ -30,6 +30,12 @@ func WatchGUI() {
 	}
 }
 
+func DumpMap() {
+	for name, _ := range Data.WindowMap {
+		log.Println("gui.DumpBoxes() MAP: ", name)
+	}
+}
+
 func DumpBoxes() {
 	for name, window := range Data.WindowMap {
 		log.Println("gui.DumpBoxes() MAP: ", name)
