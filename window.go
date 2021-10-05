@@ -209,3 +209,10 @@ func CreateBlankWindow(title string, x int, y int) *GuiBox {
 
 	return &box
 }
+
+func InitBlankWindow() ui.Control {
+        hbox := ui.NewHorizontalBox()
+        hbox.SetPadded(true)
+
+	return hbox
+}

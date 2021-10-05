@@ -1,5 +1,6 @@
 package gui
 
+import "log"
 import "image/color"
 import "golang.org/x/image/font"
 
@@ -90,6 +91,50 @@ type GuiBox struct {
 
 	// andlabs/ui abstraction mapping
 	UiBox		*ui.Box
+}
+
+func (s GuiBox) SetTitle(title string) {
+	log.Println("DID IT!", title)
+	if (s.Window == nil) {
+		return
+	}
+	if (s.Window.UiWindow == nil) {
+		return
+	}
+	s.Window.UiWindow.SetTitle(title)
+	return
+}
+
+func (s GuiBox) InitTab(title string) {
+	if (s.Window == nil) {
+		return
+	}
+	if (s.Window.UiWindow == nil) {
+		return
+	}
+
+	window := s.Window.UiWindow
+	tab := ui.NewTab()
+	window.SetChild(tab)
+	window.SetMargined(true)
+
+	tab.Append(title, InitBlankWindow())
+	tab.SetMargined(0, true)
+
+	s.Window.UiTab = tab
+}
+
+func (s GuiBox) AddTab(title string) {
+	if (s.Window == nil) {
+		return
+	}
+	if (s.Window.UiTab == nil) {
+		return
+	}
+
+	tab := s.Window.UiTab
+
+	tab.Append(title, InitBlankWindow())
 }
 
 // Note: every mouse click is handled
