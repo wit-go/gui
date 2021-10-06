@@ -1,5 +1,5 @@
 run: build
-	~/go/bin/gui-example
+	./gui-example
 
 build:
-	GO111MODULE="off" go install
+	GO111MODULE="off" go build

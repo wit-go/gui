@@ -1,10 +1,12 @@
 package gui
 
-import "log"
-import "github.com/andlabs/ui"
-import _ "github.com/andlabs/ui/winmanifest"
+import (
+	"log"
 
-import "github.com/davecgh/go-spew/spew"
+	"github.com/andlabs/ui"
+	_ "github.com/andlabs/ui/winmanifest"
+	"github.com/davecgh/go-spew/spew"
+)
 
 var names = make([]string, 100)
 
@@ -12,12 +14,12 @@ func makeWindowDebug() ui.Control {
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 
-/////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////
 	vbox := addGroup(hbox, "Numbers")
 	pbar := ui.NewProgressBar()
 	vbox.Append(pbar, false)
 
-/////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////
 	vbox = addGroup(hbox, "WindowMap 2")
 	cbox := ui.NewCombobox()
 
@@ -35,7 +37,7 @@ func makeWindowDebug() ui.Control {
 		dumpBox(names[x])
 	})
 
-/////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////
 	vbox = addGroup(hbox, "Buttons")
 
 	b1 := addButton(vbox, "dumpBox(name)")
@@ -46,6 +48,16 @@ func makeWindowDebug() ui.Control {
 		dumpBox(names[x])
 	})
 
+	dump2 := addButton(vbox, "Dump Boxes")
+	dump2.OnClicked(func(*ui.Button) {
+		DumpBoxes()
+	})
+
+	dump1 := addButton(vbox, "Dump MAP")
+	dump1.OnClicked(func(*ui.Button) {
+		DumpMap()
+	})
+
 	b2 := addButton(vbox, "SetMargined()")
 	b2.OnClicked(func(*ui.Button) {
 		x := cbox.Selected()
@@ -53,13 +65,13 @@ func makeWindowDebug() ui.Control {
 		log.Println("findBox; names[x] =", names[x])
 		findBox(names[x])
 		gw := findBox(names[x])
-		if (gw == nil) {
+		if gw == nil {
 			return
 		}
-		if (gw.UiTab == nil) {
+		if gw.UiTab == nil {
 			return
 		}
-		if (gw.TabNumber == nil) {
+		if gw.TabNumber == nil {
 			return
 		}
 		scs := spew.ConfigState{MaxDepth: 1}
@@ -76,10 +88,10 @@ func makeWindowDebug() ui.Control {
 		log.Println("findBox; names[x] =", names[x])
 		findBox(names[x])
 		gw := findBox(names[x])
-		if (gw == nil) {
+		if gw == nil {
 			return
 		}
-		if (gw.UiTab == nil) {
+		if gw.UiTab == nil {
 			return
 		}
 		gw.UiTab.Hide()
@@ -92,10 +104,10 @@ func makeWindowDebug() ui.Control {
 		log.Println("findBox; names[x] =", names[x])
 		findBox(names[x])
 		gw := findBox(names[x])
-		if (gw == nil) {
+		if gw == nil {
 			return
 		}
-		if (gw.UiTab == nil) {
+		if gw.UiTab == nil {
 			return
 		}
 		gw.UiTab.Show()
@@ -108,13 +120,13 @@ func makeWindowDebug() ui.Control {
 		log.Println("findBox; names[x] =", names[x])
 		findBox(names[x])
 		gw := findBox(names[x])
-		if (gw == nil) {
+		if gw == nil {
 			return
 		}
-		if (gw.UiTab == nil) {
+		if gw.UiTab == nil {
 			return
 		}
-		if (gw.TabNumber == nil) {
+		if gw.TabNumber == nil {
 			return
 		}
 		gw.UiTab.Delete(*gw.TabNumber)
@@ -145,7 +157,7 @@ func addGroup(b *ui.Box, name string) *ui.Box {
 
 func findBox(s string) *GuiWindow {
 	for name, window := range Data.WindowMap {
-		if (name == s) {
+		if name == s {
 			return window
 		}
 	}
@@ -154,11 +166,11 @@ func findBox(s string) *GuiWindow {
 
 func dumpBox(s string) {
 	for name, window := range Data.WindowMap {
-		if (name != s) {
+		if name != s {
 			continue
 		}
 		log.Println("gui.DumpBoxes() MAP: ", name)
-		if (window.TabNumber == nil) {
+		if window.TabNumber == nil {
 			log.Println("gui.DumpBoxes() \tWindows.TabNumber = nil")
 		} else {
 			log.Println("gui.DumpBoxes() \tWindows.TabNumber =", *window.TabNumber)
@@ -169,18 +181,18 @@ func dumpBox(s string) {
 		log.Println("gui.DumpBoxes()\tWindow.UiTab    =", window.UiTab)
 		for name, abox := range window.BoxMap {
 			log.Printf("gui.DumpBoxes() \tBOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
-			if (name == "MAINBOX") {
-				if (Config.Debug) {
+			if name == "MAINBOX" {
+				if Config.Debug {
 					scs := spew.ConfigState{MaxDepth: 1}
 					scs.Dump(abox.UiBox)
 				}
 			}
 		}
-		if (window.UiTab != nil) {
+		if window.UiTab != nil {
 			pages := window.UiTab.NumPages()
 			log.Println("gui.DumpBoxes()\tWindow.UiTab.NumPages() =", pages)
 			tabSetMargined(window.UiTab)
-			if (Config.Debug) {
+			if Config.Debug {
 				scs := spew.ConfigState{MaxDepth: 2}
 				scs.Dump(window.UiTab)
 			}

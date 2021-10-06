@@ -23,7 +23,6 @@ func Queue(f func()) {
 	ui.QueueMain(f)
 }
 
-// gui.Main(gui.MainExample())
 func ExampleWindow() {
 	log.Println("START gui.ExampleWindow()")
 
@@ -37,12 +36,15 @@ func ExampleWindow() {
 	window.UiWindow.Show()
 }
 
-func TestExample() {
-	log.Println("gui.initUI() inside ui.Main()")
+func DebugWindow() {
+	log.Println("START gui.ExampleWindow()")
 
-	box := InitWindow(nil, "test", 0)
+	title := "Debug Window"
+	box := InitWindow(nil, title, 0)
 	window := box.Window
-	log.Println("StartNewWindow() box =", box)
+	log.Println("box =", box)
+	log.Println("window =", window)
+	box.AddDebugTab("jcarr Debug")
 
 	window.UiWindow.Show()
 }

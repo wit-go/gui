@@ -1,5 +1,13 @@
+all:
+	@echo
+	@echo "make examples     # will run all the examples"
+	@echo "make update       # full git update"
+	@echo
+
 # should update every go dependancy (?)
 update:
-	# git pull
-	wit go update
-	# go get -v -t -u ./...
+	git pull
+	go get -v -t -u ./...
+
+examples:
+	make -C gui-example

@@ -16,8 +16,8 @@ func customExit(gw *gui.GuiWindow) {
 func main() {
 	log.Println("starting my Control Panel")
 
-	gui.Config.Width = 1000
-	gui.Config.Height = 400
+	gui.Config.Width = 800
+	gui.Config.Height = 300
 	gui.Config.Exit = customExit
 
 	go gui.Main(initGUI)
@@ -37,7 +37,7 @@ func watchGUI() {
 		time.Sleep(time.Second)
 		if i == 3 {
 			log.Println("Sending ExampleWindow to gui.Queue()")
-			gui.Queue(gui.ExampleWindow)
+			gui.Queue(gui.DebugWindow)
 		}
 	}
 }
