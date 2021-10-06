@@ -1,9 +1,11 @@
 package gui
 
-import "log"
+import (
+	"log"
 
-import "github.com/andlabs/ui"
-import _ "github.com/andlabs/ui/winmanifest"
+	"github.com/andlabs/ui"
+	_ "github.com/andlabs/ui/winmanifest"
+)
 
 func Main(f func()) {
 	log.Println("Starting gui.Main() (using gtk via andlabs/ui)")
@@ -13,7 +15,7 @@ func Main(f func()) {
 // Other goroutines must use this
 //
 // You can not acess / process the GUI thread directly from
-// other goroutines. This is due to the nature of how 
+// other goroutines. This is due to the nature of how
 // Linux, MacOS and Windows work (they all work differently. suprise. surprise.)
 // For example: gui.Queue(addNewTabForColorSelection())
 func Queue(f func()) {
@@ -21,16 +23,15 @@ func Queue(f func()) {
 	ui.QueueMain(f)
 }
 
-// gui.Main(
-// 	gui.MainExample()
-// )
-func MainExample() {
-	name := "jcarr"
-	log.Println("gui.initUI() inside ui.Main()")
+// gui.Main(gui.MainExample())
+func ExampleWindow() {
+	log.Println("START gui.ExampleWindow()")
 
-	box := InitWindow(nil, "StartNewWindow" + name, 0)
+	title := "Test Window"
+	box := InitWindow(nil, title, 0)
 	window := box.Window
-	log.Println("StartNewWindow() box =", box)
+	log.Println("box =", box)
+	log.Println("window =", window)
 
 	window.UiWindow.Show()
 }
