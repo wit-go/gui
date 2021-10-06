@@ -18,7 +18,7 @@ func makeWindowDebug() ui.Control {
 	vbox.Append(pbar, false)
 
 /////////////////////////////////////////////////////
-	vbox = addGroup(hbox, "WindowMap")
+	vbox = addGroup(hbox, "WindowMap 2")
 	cbox := ui.NewCombobox()
 
 	for name, _ := range Data.WindowMap {

@@ -42,6 +42,7 @@ type GuiData struct {
 	// andlabs/ui & andlabs/libui work
 	AllButtons	[]*GuiButton
 	buttonMap	map[*ui.Button]*GuiButton
+	Nodes		*Node
 }
 
 type GuiTab struct {
