@@ -27,6 +27,7 @@ func makeWindowDebug() ui.Control {
 		log.Println("range Data.WindowMap() name =", name)
 		addName(cbox, name)
 	}
+	cbox.SetSelected(0)
 
 	vbox.Append(cbox, false)
 

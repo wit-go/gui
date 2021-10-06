@@ -1,26 +1,28 @@
 package gui
 
-import "log"
-import "time"
-import "fmt"
+import (
+	"fmt"
+	"log"
+	"time"
+
+	"github.com/davecgh/go-spew/spew"
+)
+
 // import "reflect"
 
 // import "github.com/andlabs/ui"
 // import _ "github.com/andlabs/ui/winmanifest"
-import "github.com/davecgh/go-spew/spew"
-// import pb "git.wit.com/wit/witProtobuf"
 
 //
-// this watches the GUI primarily to process protobuf's
-// this is pointless or wrong but I use it for debugging
+// Dump out debugging information every 4 seconds
 //
 func WatchGUI() {
 	count := 0
 
 	for {
-		if (count > 20) {
+		if count > 20 {
 			log.Println("Sleep() in watchGUI()")
-			if (Config.Debug) {
+			if Config.Debug {
 				DumpBoxes()
 			}
 			count = 0
@@ -39,7 +41,7 @@ func DumpMap() {
 func DumpBoxes() {
 	for name, window := range Data.WindowMap {
 		log.Println("gui.DumpBoxes() MAP: ", name)
-		if (window.TabNumber == nil) {
+		if window.TabNumber == nil {
 			log.Println("gui.DumpBoxes() \tWindows.TabNumber = nil")
 		} else {
 			log.Println("gui.DumpBoxes() \tWindows.TabNumber =", *window.TabNumber)
@@ -50,14 +52,14 @@ func DumpBoxes() {
 		log.Println("gui.DumpBoxes()\tWindow.UiTab =", window.UiTab)
 		for name, abox := range window.BoxMap {
 			log.Printf("gui.DumpBoxes() \tBOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
-			if (name == "MAINBOX") {
-				if (Config.Debug) {
+			if name == "MAINBOX" {
+				if Config.Debug {
 					scs := spew.ConfigState{MaxDepth: 1}
 					scs.Dump(abox.UiBox)
 				}
 			}
 		}
-		if (window.UiTab != nil) {
+		if window.UiTab != nil {
 			// log.Println("gui.DumpBoxes()\tWindow.UiTab type =", reflect.TypeOf(window.UiTab))
 			// log.Println("gui.DumpBoxes()\tWindow.UiTab =", window.UiTab)
 			pages := window.UiTab.NumPages()
@@ -68,20 +70,20 @@ func DumpBoxes() {
 			// tmp := spew.NewDefaultConfig()
 			// tmp.MaxDepth = 2
 			// tmp.Dump(window.UiTab)
-			if (Config.Debug) {
+			if Config.Debug {
 				scs := spew.ConfigState{MaxDepth: 2}
 				scs.Dump(window.UiTab)
 			}
 		}
 	}
 	/*
-	for i, window := range Data.Windows {
-		if (window.TabNumber == nil) {
-			log.Println("gui.DumpBoxes() Data.Windows", i, "Name =", window.Name, "TabNumber = nil")
-		} else {
-			log.Println("gui.DumpBoxes() Data.Windows", i, "Name =", window.Name, "TabNumber =", *window.TabNumber)
+		for i, window := range Data.Windows {
+			if (window.TabNumber == nil) {
+				log.Println("gui.DumpBoxes() Data.Windows", i, "Name =", window.Name, "TabNumber = nil")
+			} else {
+				log.Println("gui.DumpBoxes() Data.Windows", i, "Name =", window.Name, "TabNumber =", *window.TabNumber)
+			}
 		}
-	}
 	*/
 }
 
@@ -93,7 +95,7 @@ func addTableTab() {
 
 		var b TableColumnData
 		b.CellType = foo
-		b.Heading  = fmt.Sprintf("heading%d", key)
+		b.Heading = fmt.Sprintf("heading%d", key)
 		parts = append(parts, b)
 	}
 

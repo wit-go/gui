@@ -1,11 +1,14 @@
 package gui
 
-import "log"
-// import "time"
-import "regexp"
+import (
+	"github.com/andlabs/ui" // import "time"
+	"log"
+	"regexp"
 
-import "github.com/andlabs/ui"
-import _ "github.com/andlabs/ui/winmanifest" // the _ means we only need this for the init()
+	_ "github.com/andlabs/ui/winmanifest"
+)
+
+// the _ means we only need this for the init()
 
 const Xaxis = 0 // box that is horizontal
 const Yaxis = 1 // box that is vertical
@@ -13,13 +16,13 @@ const Yaxis = 1 // box that is vertical
 func init() {
 	log.Println("gui.init() has been run")
 
-	Data.buttonMap	= make(map[*ui.Button]*GuiButton)
-	Data.WindowMap	= make(map[string]*GuiWindow)
+	Data.buttonMap = make(map[*ui.Button]*GuiButton)
+	Data.WindowMap = make(map[string]*GuiWindow)
 }
 
 func GuiInit() {
 	ui.OnShouldQuit(func() bool {
-                ui.Quit()
+		ui.Quit()
 		return true
 	})
 }
