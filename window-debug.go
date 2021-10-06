@@ -20,7 +20,7 @@ func makeWindowDebug() ui.Control {
 	vbox.Append(pbar, false)
 
 	/////////////////////////////////////////////////////
-	vbox = addGroup(hbox, "WindowMap 2")
+	vbox = addGroup(hbox, "Window")
 	cbox := ui.NewCombobox()
 
 	for name, _ := range Data.WindowMap {
@@ -39,9 +39,9 @@ func makeWindowDebug() ui.Control {
 	})
 
 	/////////////////////////////////////////////////////
-	vbox = addGroup(hbox, "Buttons")
+	vbox = addGroup(hbox, "Debug Window")
 
-	b1 := addButton(vbox, "dumpBox(name)")
+	b1 := addButton(vbox, "dumpBox(window)")
 	b1.OnClicked(func(*ui.Button) {
 		x := cbox.Selected()
 		log.Println("x =", x)
@@ -49,23 +49,12 @@ func makeWindowDebug() ui.Control {
 		dumpBox(names[x])
 	})
 
-	dump2 := addButton(vbox, "Dump Boxes")
-	dump2.OnClicked(func(*ui.Button) {
-		DumpBoxes()
-	})
-
-	dump1 := addButton(vbox, "Dump MAP")
-	dump1.OnClicked(func(*ui.Button) {
-		DumpMap()
-	})
-
-	b2 := addButton(vbox, "SetMargined()")
+	b2 := addButton(vbox, "SetMargined(tab)")
 	b2.OnClicked(func(*ui.Button) {
 		x := cbox.Selected()
 		log.Println("x =", x)
-		log.Println("findBox; names[x] =", names[x])
-		findBox(names[x])
-		gw := findBox(names[x])
+		log.Println("FindWindow; names[x] =", names[x])
+		gw := FindWindow(names[x])
 		if gw == nil {
 			return
 		}
@@ -82,13 +71,12 @@ func makeWindowDebug() ui.Control {
 		gw.UiTab.SetMargined(*gw.TabNumber, true)
 	})
 
-	b3 := addButton(vbox, "Hide()")
+	b3 := addButton(vbox, "Hide(tab)")
 	b3.OnClicked(func(*ui.Button) {
 		x := cbox.Selected()
 		log.Println("x =", x)
-		log.Println("findBox; names[x] =", names[x])
-		findBox(names[x])
-		gw := findBox(names[x])
+		log.Println("FindWindow; names[x] =", names[x])
+		gw := FindWindow(names[x])
 		if gw == nil {
 			return
 		}
@@ -98,13 +86,12 @@ func makeWindowDebug() ui.Control {
 		gw.UiTab.Hide()
 	})
 
-	b4 := addButton(vbox, "Show()")
+	b4 := addButton(vbox, "Show(tab)")
 	b4.OnClicked(func(*ui.Button) {
 		x := cbox.Selected()
 		log.Println("x =", x)
-		log.Println("findBox; names[x] =", names[x])
-		findBox(names[x])
-		gw := findBox(names[x])
+		log.Println("FindWindow; names[x] =", names[x])
+		gw := FindWindow(names[x])
 		if gw == nil {
 			return
 		}
@@ -114,13 +101,12 @@ func makeWindowDebug() ui.Control {
 		gw.UiTab.Show()
 	})
 
-	b5 := addButton(vbox, "Delete()")
+	b5 := addButton(vbox, "Delete(tab)")
 	b5.OnClicked(func(*ui.Button) {
 		x := cbox.Selected()
 		log.Println("x =", x)
-		log.Println("findBox; names[x] =", names[x])
-		findBox(names[x])
-		gw := findBox(names[x])
+		log.Println("FindWindow; names[x] =", names[x])
+		gw := FindWindow(names[x])
 		if gw == nil {
 			return
 		}
@@ -131,6 +117,19 @@ func makeWindowDebug() ui.Control {
 			return
 		}
 		gw.UiTab.Delete(*gw.TabNumber)
+	})
+
+	/////////////////////////////////////////////////////
+	vbox = addGroup(hbox, "Global Debug")
+
+	dump2 := addButton(vbox, "Dump Boxes")
+	dump2.OnClicked(func(*ui.Button) {
+		DumpBoxes()
+	})
+
+	dump1 := addButton(vbox, "Dump MAP")
+	dump1.OnClicked(func(*ui.Button) {
+		DumpMap()
 	})
 
 	return hbox
@@ -156,12 +155,28 @@ func addGroup(b *ui.Box, name string) *ui.Box {
 	return vbox
 }
 
-func findBox(s string) *GuiWindow {
+func FindWindow(s string) *GuiWindow {
 	for name, window := range Data.WindowMap {
 		if name == s {
 			return window
 		}
 	}
+	log.Printf("COULD NOT FIND WINDOW", s)
+	return nil
+}
+
+func FindBox(s string) *GuiBox {
+	for name, window := range Data.WindowMap {
+		if name != s {
+			continue
+		}
+		for name, abox := range window.BoxMap {
+			log.Printf("gui.DumpBoxes() \tBOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
+			return abox
+		}
+		log.Println("gui.FindBox() NEED TO INIT WINDOW name =", name)
+	}
+	log.Println("gui.FindBox() COULD NOT FIND BOX", s)
 	return nil
 }
 
@@ -180,6 +195,7 @@ func dumpBox(s string) {
 		// log.Println("gui.DumpBoxes()\tWindow.UiWindow type =", reflect.TypeOf(window.UiWindow))
 		log.Println("gui.DumpBoxes()\tWindow.UiWindow =", window.UiWindow)
 		log.Println("gui.DumpBoxes()\tWindow.UiTab    =", window.UiTab)
+		log.Println("gui.dumpBox() BoxMap START")
 		for name, abox := range window.BoxMap {
 			log.Printf("gui.DumpBoxes() \tBOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
 			if name == "MAINBOX" {
@@ -189,6 +205,7 @@ func dumpBox(s string) {
 				}
 			}
 		}
+		log.Println("gui.dumpBox() BoxMap END")
 		if window.UiTab != nil {
 			pages := window.UiTab.NumPages()
 			log.Println("gui.DumpBoxes()\tWindow.UiTab.NumPages() =", pages)

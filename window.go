@@ -210,6 +210,8 @@ func mapWindow(window *ui.Window, title string, x int, y int) *GuiBox {
 	box.Window = &newGuiWindow
 	box.Name = title
 
+	newGuiWindow.BoxMap["jcarrInitTest"] = &box
+
 	return &box
 }
 

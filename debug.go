@@ -33,8 +33,12 @@ func WatchGUI() {
 }
 
 func DumpMap() {
-	for name, _ := range Data.WindowMap {
+	for name, window := range Data.WindowMap {
 		log.Println("gui.DumpBoxes() MAP: ", name)
+		log.Println("gui.DumpBoxes()     BOXES:", name)
+		for name, abox := range window.BoxMap {
+			log.Printf("gui.DumpBoxes() \tBOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
+		}
 	}
 }
 
