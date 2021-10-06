@@ -146,7 +146,7 @@ func DeleteWindow(name string) {
 
 func CreateWindow(title string, tabname string, x int, y int, custom func() ui.Control) *GuiBox {
 	box := CreateBlankWindow(title, x, y)
-	box.InitTab(title)
+	box.InitTab(title, custom)
 	return box
 }
 
@@ -173,7 +173,7 @@ func CreateBlankWindow(title string, x int, y int) *GuiBox {
 	return box
 }
 
-func initBlankWindow() ui.Control {
+func InitBlankWindow() ui.Control {
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 
@@ -215,7 +215,7 @@ func mapWindow(window *ui.Window, title string, x int, y int) *GuiBox {
 	return &box
 }
 
-func NewWindow(title string, x int, y int) {
+func NewWindow(title string, x int, y int) *GuiBox {
 	box := mapWindow(nil, title, x, y)
 	log.Println("gui.NewWindow() title = box.Name =", box.Name)
 
@@ -235,4 +235,5 @@ func NewWindow(title string, x int, y int) {
 	window.Show()
 
 	box.Window.UiWindow = window
+	return box
 }

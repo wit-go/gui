@@ -122,7 +122,8 @@ func (s GuiBox) Append(child ui.Control, x bool) {
 	s.UiBox.Append(child, x)
 }
 
-func (w GuiWindow) InitBox(title string) *GuiBox {
+/*
+func (w GuiWindow) InitWindow(title string) *GuiBox {
 	if w.UiWindow == nil {
 		log.Println("gui.InitBox() THIS SHOULD NEVER HAPPEN. Window doesn't exist", w)
 		return nil
@@ -131,14 +132,15 @@ func (w GuiWindow) InitBox(title string) *GuiBox {
 	w.UiWindow.SetChild(tab)
 	w.UiWindow.SetMargined(true)
 
-	tab.Append(title, initBlankWindow())
+	tab.Append(title, InitBlankWindow())
 	tab.SetMargined(0, true)
 
 	w.UiTab = tab
 	return nil
 }
+*/
 
-func (s GuiBox) InitTab(title string) *ui.Tab {
+func (s GuiBox) InitTab(title string, custom func() ui.Control) *ui.Tab {
 	if s.Window == nil {
 		return nil
 	}
@@ -151,7 +153,7 @@ func (s GuiBox) InitTab(title string) *ui.Tab {
 	window.SetChild(tab)
 	window.SetMargined(true)
 
-	tab.Append(title, initBlankWindow())
+	tab.Append(title, custom())
 	tab.SetMargined(0, true)
 	// tab.SetMargined(1, true)
 
@@ -187,7 +189,7 @@ func (s GuiBox) AddTab2(title string, custom ui.Control) *ui.Tab {
 }
 
 func (s GuiBox) AddBoxTab(title string) *GuiBox {
-	uiTab := s.AddTab2(title, initBlankWindow())
+	uiTab := s.AddTab2(title, InitBlankWindow())
 	tabSetMargined(uiTab)
 
 	var box *GuiBox
