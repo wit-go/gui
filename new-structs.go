@@ -1,18 +1,23 @@
 package gui
 
-import "log"
+import (
+	"log"
 
-import "github.com/andlabs/ui"
-import _ "github.com/andlabs/ui/winmanifest"
+	"github.com/andlabs/ui"
+	_ "github.com/andlabs/ui/winmanifest"
+)
+
+// https://ieftimov.com/post/golang-datastructures-trees/
 
 type Node struct {
-	Name		string
-	tag		string
-	Width		int
-	Height		int
+	id     int
+	Name   string
+	tag    string
+	Width  int
+	Height int
 
-	uiType		*ui.Control
-	Children	[]*Node
+	uiType   *ui.Control
+	Children []*Node
 }
 
 func (n Node) SetName(name string) {
@@ -22,8 +27,21 @@ func (n Node) SetName(name string) {
 }
 
 func (n Node) Append(child Node) {
-//	if (n.UiBox == nil) {
-//		return
-//	}
+	//	if (n.UiBox == nil) {
+	//		return
+	//	}
 	// n.uiType.Append(child, x)
+}
+
+func findByIdDFS(node *Node, id string) *Node {
+	if node.id == id {
+		return node
+	}
+
+	if len(node.children) > 0 {
+		for _, child := range node.children {
+			findByIdDFS(child, id)
+		}
+	}
+	return nil
 }
