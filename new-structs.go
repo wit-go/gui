@@ -10,14 +10,13 @@ import (
 // https://ieftimov.com/post/golang-datastructures-trees/
 
 type Node struct {
-	id     int
+	id     string
 	Name   string
-	tag    string
 	Width  int
 	Height int
 
 	uiType   *ui.Control
-	Children []*Node
+	children []*Node
 }
 
 func (n Node) SetName(name string) {
