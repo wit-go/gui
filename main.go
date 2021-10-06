@@ -32,6 +32,7 @@ func ExampleWindow() {
 	window := box.Window
 	log.Println("box =", box)
 	log.Println("window =", window)
+	box.AddDebugTab("jcarr Debug")
 
 	window.UiWindow.Show()
 }
