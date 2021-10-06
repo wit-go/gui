@@ -44,6 +44,12 @@ type GuiData struct {
 	buttonMap	map[*ui.Button]*GuiButton
 }
 
+type GuiTab struct {
+	Name		string		// field for human readable name
+	Number		int		// the andlabs/ui tab index
+	Window		*GuiWindow	// the parent Window
+}
+
 //
 // stores information on the 'window'
 //

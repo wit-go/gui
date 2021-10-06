@@ -148,6 +148,7 @@ func CreateWindow(title string, tabname string, x int, y int, custom func() ui.C
 
 func CreateBlankWindow(title string, x int, y int) *GuiBox {
 	box := mapWindow(nil, title, x, y)
+	log.Println("gui.CreateBlankWindow() title = box.Name =", box.Name)
 
 	window := ui.NewWindow(box.Name, x, y, false)
 	window.SetBorderless(false)
@@ -178,6 +179,7 @@ func initBlankWindow() ui.Control {
 var master = 0
 
 func mapWindow(window *ui.Window, title string, x int, y int) *GuiBox {
+	log.Println("gui.WindowMap START title =", title)
 	if (Data.WindowMap[title] != nil) {
 		log.Println("Data.WindowMap[title] already exists title =", title)
 		master = master + 1
@@ -188,6 +190,7 @@ func mapWindow(window *ui.Window, title string, x int, y int) *GuiBox {
 		panic("Data.WindowMap[newGuiWindow.Name] already exists")
 		return nil
 	}
+	log.Println("gui.WindowMap START title =", title)
 	var newGuiWindow GuiWindow
 	newGuiWindow.Width	= x
 	newGuiWindow.Height	= y
@@ -201,6 +204,7 @@ func mapWindow(window *ui.Window, title string, x int, y int) *GuiBox {
 
 	var box GuiBox
 	box.Window = &newGuiWindow
+	box.Name = title
 
 	return &box
 }
