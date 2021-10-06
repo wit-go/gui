@@ -2,6 +2,7 @@ package gui
 
 import "log"
 import "time"
+import "strconv"
 // import "regexp"
 
 import "github.com/andlabs/ui"
@@ -60,7 +61,7 @@ func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
 	// This is the first window. One must create it here
 	if (gw == nil) {
 		log.Println("initWindow() ADDING ui.NewWindow()")
-		newGuiWindow.UiWindow = ui.NewWindow(name, int(newGuiWindow.Width), int(newGuiWindow.Height), true)
+		newGuiWindow.UiWindow = ui.NewWindow(name, int(newGuiWindow.Height), int(newGuiWindow.Width), true)
 		newGuiWindow.UiWindow.SetBorderless(false)
 
 		// newGuiWindow.UiWindow.SetTitle("test")
@@ -146,14 +147,16 @@ func CreateWindow(title string, tabname string, x int, y int, custom func() ui.C
 }
 
 func CreateBlankWindow(title string, x int, y int) *GuiBox {
-	window := ui.NewWindow(title, x, y, false)
+	box := mapWindow(nil, title, x, y)
+
+	window := ui.NewWindow(box.Name, x, y, false)
 	window.SetBorderless(false)
 	window.OnClosing(func(*ui.Window) bool {
-		log.Println("createWindow().OnClosing()", title)
+		log.Println("createWindow().OnClosing()", box.Name)
 		return true
 	})
 	ui.OnShouldQuit(func() bool {
-		log.Println("createWindow().Destroy()", title)
+		log.Println("createWindow().Destroy()", box.Name)
 		window.Destroy()
 		return true
 	})
@@ -161,7 +164,8 @@ func CreateBlankWindow(title string, x int, y int) *GuiBox {
 	window.SetMargined(true)
 	window.Show()
 
-	return mapWindow(window, title, x, y)
+	box.Window.UiWindow = window
+	return box
 }
 
 func initBlankWindow() ui.Control {
@@ -176,7 +180,8 @@ var master = 0
 func mapWindow(window *ui.Window, title string, x int, y int) *GuiBox {
 	if (Data.WindowMap[title] != nil) {
 		log.Println("Data.WindowMap[title] already exists title =", title)
-		title = title + string(master)
+		master = master + 1
+		title = title + " jcarr " + strconv.Itoa(master)
 	}
 	if (Data.WindowMap[title] != nil) {
 		log.Println("Data.WindowMap[title] already exists title =", title)
