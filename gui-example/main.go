@@ -34,8 +34,8 @@ func watchGUI() {
 	for {
 		log.Println("Waiting for customExit()", i)
 		i += 1
-		time.Sleep(time.Second)
-		if i == 3 {
+		time.Sleep(3 * time.Second)
+		if i == 2 {
 			log.Println("Sending ExampleWindow to gui.Queue()")
 			gui.Queue(gui.DebugWindow)
 		}

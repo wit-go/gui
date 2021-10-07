@@ -15,12 +15,7 @@ func makeWindowDebug() ui.Control {
 	hbox.SetPadded(true)
 
 	/////////////////////////////////////////////////////
-	vbox := addGroup(hbox, "Numbers")
-	pbar := ui.NewProgressBar()
-	vbox.Append(pbar, false)
-
-	/////////////////////////////////////////////////////
-	vbox = addGroup(hbox, "Window")
+	vbox := addGroup(hbox, "Window")
 	cbox := ui.NewCombobox()
 
 	for name, _ := range Data.WindowMap {
@@ -122,6 +117,11 @@ func makeWindowDebug() ui.Control {
 	/////////////////////////////////////////////////////
 	vbox = addGroup(hbox, "Global Debug")
 
+	dump3 := addButton(vbox, "Dump Windows")
+	dump3.OnClicked(func(*ui.Button) {
+		DumpWindows()
+	})
+
 	dump2 := addButton(vbox, "Dump Boxes")
 	dump2.OnClicked(func(*ui.Button) {
 		DumpBoxes()
@@ -131,6 +131,12 @@ func makeWindowDebug() ui.Control {
 	dump1.OnClicked(func(*ui.Button) {
 		DumpMap()
 	})
+
+	/////////////////////////////////////////////////////
+	vbox = addGroup(hbox, "Numbers")
+	pbar := ui.NewProgressBar()
+	vbox.Append(pbar, false)
+
 
 	return hbox
 }
