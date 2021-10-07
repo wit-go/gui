@@ -3,7 +3,6 @@ package gui
 import (
 	"image/color"
 	"log"
-	"os"
 
 	"github.com/andlabs/ui"
 	"golang.org/x/image/font"
@@ -135,23 +134,6 @@ func (s GuiBox) Append(child ui.Control, x bool) {
 }
 
 /*
-func (w GuiWindow) InitWindow(title string) *GuiBox {
-	if w.UiWindow == nil {
-		log.Println("gui.InitBox() THIS SHOULD NEVER HAPPEN. Window doesn't exist", w)
-		return nil
-	}
-	tab := ui.NewTab()
-	w.UiWindow.SetChild(tab)
-	w.UiWindow.SetMargined(true)
-
-	tab.Append(title, InitBlankWindow())
-	tab.SetMargined(0, true)
-
-	w.UiTab = tab
-	return nil
-}
-*/
-
 func (s GuiBox) InitTab(title string, custom func() ui.Control) *Node {
 	if s.Window == nil {
 		return nil
@@ -176,6 +158,7 @@ func (s GuiBox) InitTab(title string, custom func() ui.Control) *Node {
 	}
 	return s.node
 }
+*/
 
 func (s *GuiBox) AddTab(title string, custom ui.Control) *ui.Tab {
 	if s.Window == nil {

@@ -154,7 +154,7 @@ func CreateWindow(title string, tabname string, x int, y int, custom func() ui.C
 		log.Println("SERIOUS ERROR n.box == nil in CreateWindow()")
 		log.Println("SERIOUS ERROR n.box == nil in CreateWindow()")
 	}
-	n.box.InitTab(title, custom)
+	n.InitTab(title, custom)
 	return n
 }
 
