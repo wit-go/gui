@@ -18,6 +18,7 @@ func init() {
 
 	Data.buttonMap = make(map[*ui.Button]*GuiButton)
 	Data.WindowMap = make(map[string]*GuiWindow)
+	Data.NodeMap = make(map[string]*Node)
 }
 
 func GuiInit() {

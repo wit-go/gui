@@ -65,11 +65,11 @@ func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
 	// This is the first window. One must create it here
 	if gw == nil {
 		log.Println("initWindow() ADDING ui.NewWindow()")
-		newGuiWindow.UiWindow = ui.NewWindow(name, int(newGuiWindow.Height), int(newGuiWindow.Width), true)
-		newGuiWindow.UiWindow.SetBorderless(false)
+		w := uiNewWindow(name, Config.Height, Config.Width)
+		newGuiWindow.UiWindow = w
 
 		// newGuiWindow.UiWindow.SetTitle("test")
-		newGuiWindow.UiWindow.OnClosing(func(*ui.Window) bool {
+		w.OnClosing(func(*ui.Window) bool {
 			log.Println("initTabWindow() OnClosing() THIS WINDOW IS CLOSING newGuiWindow=", newGuiWindow)
 			// newGuiWindow.UiWindow.Destroy()
 			if Config.Exit == nil {
@@ -150,24 +150,37 @@ func CreateWindow(title string, tabname string, x int, y int, custom func() ui.C
 	return box
 }
 
+func uiNewWindow(title string, x int, y int) *ui.Window {
+	var node Node
+	node.Name = title
+	node.Width = x
+	node.Height = y
+	Data.NodeMap[title] = &node
+
+	w := ui.NewWindow(title, x, y, false)
+	w.SetBorderless(false)
+	w.OnClosing(func(*ui.Window) bool {
+		log.Println("ui.Window().OnClosing() IS EMPTY FOR window name =", title)
+		return true
+	})
+
+	w.SetMargined(true)
+	w.Show()
+
+	return w
+}
+
 func CreateBlankWindow(title string, x int, y int) *GuiBox {
 	box := mapWindow(nil, title, x, y)
 	log.Println("gui.CreateBlankWindow() title = box.Name =", box.Name)
 
-	window := ui.NewWindow(box.Name, x, y, false)
-	window.SetBorderless(false)
-	window.OnClosing(func(*ui.Window) bool {
-		log.Println("createWindow().OnClosing()", box.Name)
-		return true
-	})
+	window := uiNewWindow(box.Name, x, y)
+
 	ui.OnShouldQuit(func() bool {
 		log.Println("createWindow().Destroy()", box.Name)
 		window.Destroy()
 		return true
 	})
-
-	window.SetMargined(true)
-	window.Show()
 
 	box.Window.UiWindow = window
 	return box
@@ -194,6 +207,7 @@ func mapWindow(window *ui.Window, title string, x int, y int) *GuiBox {
 		panic("Data.WindowMap[newGuiWindow.Name] already exists")
 		return nil
 	}
+
 	log.Println("gui.WindowMap START title =", title)
 	var newGuiWindow GuiWindow
 	newGuiWindow.Width = x
@@ -219,20 +233,13 @@ func NewWindow(title string, x int, y int) *GuiBox {
 	box := mapWindow(nil, title, x, y)
 	log.Println("gui.NewWindow() title = box.Name =", box.Name)
 
-	window := ui.NewWindow(box.Name, x, y, false)
-	window.SetBorderless(false)
-	window.OnClosing(func(*ui.Window) bool {
-		log.Println("createWindow().OnClosing()", box.Name)
-		return true
-	})
+	window := uiNewWindow(box.Name, x, y)
+
 	ui.OnShouldQuit(func() bool {
 		log.Println("createWindow().Destroy()", box.Name)
 		window.Destroy()
 		return true
 	})
-
-	window.SetMargined(true)
-	window.Show()
 
 	box.Window.UiWindow = window
 	return box

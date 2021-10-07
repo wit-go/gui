@@ -35,7 +35,8 @@ type GuiData struct {
 	AllEntries []*GuiEntry
 	WindowMap  map[string]*GuiWindow
 
-	// Windows		[]*GuiWindow
+	// Store access to everything via binary tree's
+	NodeMap    map[string]*Node
 
 	// A map of all buttons everywhere on all
 	// windows, all tabs, across all goroutines
@@ -45,7 +46,6 @@ type GuiData struct {
 	// andlabs/ui & andlabs/libui work
 	AllButtons []*GuiButton
 	buttonMap  map[*ui.Button]*GuiButton
-	Nodes      *Node
 }
 
 type GuiTab struct {
