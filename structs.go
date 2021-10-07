@@ -177,7 +177,7 @@ func (s GuiBox) InitTab(title string, custom func() ui.Control) *Node {
 	return s.node
 }
 
-func (s GuiBox) AddTab(title string, custom ui.Control) *ui.Tab {
+func (s *GuiBox) AddTab(title string, custom ui.Control) *ui.Tab {
 	if s.Window == nil {
 		return nil
 	}

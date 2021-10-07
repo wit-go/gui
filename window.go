@@ -146,10 +146,16 @@ func DeleteWindow(name string) {
 	}
 }
 
-func CreateWindow(title string, tabname string, x int, y int, custom func() ui.Control) *GuiBox {
-	box := CreateBlankWindow(title, x, y)
-	box.InitTab(title, custom)
-	return box
+func CreateWindow(title string, tabname string, x int, y int, custom func() ui.Control) *Node {
+	n := CreateBlankWindow(title, x, y)
+	if (n.box == nil) {
+		log.Println("SERIOUS ERROR n.box == nil in CreateWindow()")
+		log.Println("SERIOUS ERROR n.box == nil in CreateWindow()")
+		log.Println("SERIOUS ERROR n.box == nil in CreateWindow()")
+		log.Println("SERIOUS ERROR n.box == nil in CreateWindow()")
+	}
+	n.box.InitTab(title, custom)
+	return n
 }
 
 func uiNewWindow(title string, x int, y int) *Node {
@@ -177,12 +183,13 @@ func uiNewWindow(title string, x int, y int) *Node {
 	return &node
 }
 
-func CreateBlankWindow(title string, x int, y int) *GuiBox {
+func CreateBlankWindow(title string, x int, y int) *Node {
 	box := mapWindow(nil, title, x, y)
 	log.Println("gui.CreateBlankWindow() title = box.Name =", box.Name)
 
 	n := uiNewWindow(box.Name, x, y)
 	box.node = n
+	n.box = box
 	window := n.window
 
 	ui.OnShouldQuit(func() bool {
@@ -192,7 +199,7 @@ func CreateBlankWindow(title string, x int, y int) *GuiBox {
 	})
 
 	box.Window.UiWindow = window
-	return box
+	return n
 }
 
 func InitBlankWindow() ui.Control {

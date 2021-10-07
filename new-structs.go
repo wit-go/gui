@@ -16,12 +16,13 @@ type Node struct {
 	Height int
 
 	children []*Node
+	box	*GuiBox
 
 	control  *ui.Control
 	window  *ui.Window
 }
 
-func (n Node) SetName(name string) {
+func (n *Node) SetName(name string) {
 	// n.uiType.SetName(name)
 	if (n.window != nil) {
 		log.Println("node is a window. setting title =", name)
@@ -32,15 +33,30 @@ func (n Node) SetName(name string) {
 	return
 }
 
-func (n Node) Append(child Node) {
+func (n *Node) FindWindowBox() *GuiBox {
+	if (n.box == nil) {
+		log.Println("SERIOUS ERROR n.box == nil in FindWindowBox()")
+		log.Println("SERIOUS ERROR n.box == nil in FindWindowBox()")
+		log.Println("SERIOUS ERROR n.box == nil in FindWindowBox()")
+		log.Println("SERIOUS ERROR n.box == nil in FindWindowBox()")
+	}
+	return n.box
+}
+
+func (n *Node) Append(child Node) {
 	//	if (n.UiBox == nil) {
 	//		return
 	//	}
 	// n.uiType.Append(child, x)
 }
+func (n *Node) List() {
+	findByIdDFS(n, "test")
+}
 
 func findByIdDFS(node *Node, id string) *Node {
+	log.Println("findByIdDFS()", id, node)
 	if node.id == id {
+		log.Println("Found node id =", id, node)
 		return node
 	}
 
