@@ -1,6 +1,7 @@
 package gui
 
 import "log"
+import "os"
 // import "reflect"
 
 import "github.com/andlabs/ui"
@@ -64,7 +65,14 @@ func add(box *GuiBox, newbox *GuiBox) {
 }
 
 func NewBox(box *GuiBox, axis int, name string) *GuiBox {
-	log.Println("VerticalBox START")
+	log.Println("gui.NewBox() START")
+	n := box.FindNode()
+	if (n == nil) {
+		log.Println("gui.NewBox() SERIOUS ERROR. CAN NOT FIND NODE")
+	} else {
+		log.Println("gui.NewBox() node =", n.Name)
+		os.Exit(0)
+	}
 	var newbox *GuiBox
 	newbox		= new(GuiBox)
 	newbox.Window	= box.Window

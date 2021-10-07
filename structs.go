@@ -3,6 +3,7 @@ package gui
 import (
 	"image/color"
 	"log"
+	"os"
 
 	"github.com/andlabs/ui"
 	"golang.org/x/image/font"
@@ -87,6 +88,8 @@ type GuiWindow struct {
 	EntryMap map[string]*GuiEntry
 	Area     *GuiArea
 
+	node	*Node
+
 	// andlabs/ui abstraction mapping
 	UiWindow *ui.Window
 	UiTab    *ui.Tab // if this != nil, the window is 'tabbed'
@@ -98,6 +101,8 @@ type GuiBox struct {
 	Name   string     // field for human readable name
 	Axis   int        // does it add items to the X or Y axis
 	Window *GuiWindow // the parent Window
+
+	node	*Node
 
 	// andlabs/ui abstraction mapping
 	UiBox *ui.Box
@@ -113,6 +118,13 @@ func (s GuiBox) SetTitle(title string) {
 	}
 	s.Window.UiWindow.SetTitle(title)
 	return
+}
+
+func (s GuiBox) FindNode() *Node {
+	if s.node != nil {
+		return s.node
+	}
+	return nil
 }
 
 func (s GuiBox) Append(child ui.Control, x bool) {
@@ -140,7 +152,7 @@ func (w GuiWindow) InitWindow(title string) *GuiBox {
 }
 */
 
-func (s GuiBox) InitTab(title string, custom func() ui.Control) *ui.Tab {
+func (s GuiBox) InitTab(title string, custom func() ui.Control) *Node {
 	if s.Window == nil {
 		return nil
 	}
@@ -158,24 +170,14 @@ func (s GuiBox) InitTab(title string, custom func() ui.Control) *ui.Tab {
 	// tab.SetMargined(1, true)
 
 	s.Window.UiTab = tab
-	return tab
+	if s.node == nil {
+		log.Println("Fuck node = ", s.node)
+		os.Exit(-1)
+	}
+	return s.node
 }
 
 func (s GuiBox) AddTab(title string, custom ui.Control) *ui.Tab {
-	if s.Window == nil {
-		return nil
-	}
-	if s.Window.UiTab == nil {
-		return nil
-	}
-
-	tab := s.Window.UiTab
-
-	tab.Append(title, custom)
-	return tab
-}
-
-func (s GuiBox) AddTab2(title string, custom ui.Control) *ui.Tab {
 	if s.Window == nil {
 		return nil
 	}
@@ -189,7 +191,7 @@ func (s GuiBox) AddTab2(title string, custom ui.Control) *ui.Tab {
 }
 
 func (s GuiBox) AddBoxTab(title string) *GuiBox {
-	uiTab := s.AddTab2(title, InitBlankWindow())
+	uiTab := s.AddTab(title, InitBlankWindow())
 	tabSetMargined(uiTab)
 
 	var box *GuiBox

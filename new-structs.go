@@ -15,13 +15,20 @@ type Node struct {
 	Width  int
 	Height int
 
-	uiType   *ui.Control
 	children []*Node
+
+	control  *ui.Control
+	window  *ui.Window
 }
 
 func (n Node) SetName(name string) {
 	// n.uiType.SetName(name)
-	log.Println("n.uiType =", n.uiType)
+	if (n.window != nil) {
+		log.Println("node is a window. setting title =", name)
+		n.window.SetTitle(name)
+		return
+	}
+	log.Println("*ui.Control =", n.control)
 	return
 }
 

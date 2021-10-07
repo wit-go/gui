@@ -65,7 +65,9 @@ func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
 	// This is the first window. One must create it here
 	if gw == nil {
 		log.Println("initWindow() ADDING ui.NewWindow()")
-		w := uiNewWindow(name, Config.Height, Config.Width)
+		n := uiNewWindow(name, Config.Height, Config.Width)
+		box.node = n
+		w := n.window
 		newGuiWindow.UiWindow = w
 
 		// newGuiWindow.UiWindow.SetTitle("test")
@@ -150,11 +152,16 @@ func CreateWindow(title string, tabname string, x int, y int, custom func() ui.C
 	return box
 }
 
-func uiNewWindow(title string, x int, y int) *ui.Window {
+func uiNewWindow(title string, x int, y int) *Node {
 	var node Node
 	node.Name = title
 	node.Width = x
 	node.Height = y
+	if (Data.NodeMap[title] != nil) {
+		log.Println("Duplicate uiNewWindow() name =", title)
+		// TODO: just change the 'title' to something unique
+		return nil
+	}
 	Data.NodeMap[title] = &node
 
 	w := ui.NewWindow(title, x, y, false)
@@ -163,18 +170,20 @@ func uiNewWindow(title string, x int, y int) *ui.Window {
 		log.Println("ui.Window().OnClosing() IS EMPTY FOR window name =", title)
 		return true
 	})
-
 	w.SetMargined(true)
 	w.Show()
-
-	return w
+	node.window = w
+	// w.node = &node
+	return &node
 }
 
 func CreateBlankWindow(title string, x int, y int) *GuiBox {
 	box := mapWindow(nil, title, x, y)
 	log.Println("gui.CreateBlankWindow() title = box.Name =", box.Name)
 
-	window := uiNewWindow(box.Name, x, y)
+	n := uiNewWindow(box.Name, x, y)
+	box.node = n
+	window := n.window
 
 	ui.OnShouldQuit(func() bool {
 		log.Println("createWindow().Destroy()", box.Name)
@@ -233,7 +242,9 @@ func NewWindow(title string, x int, y int) *GuiBox {
 	box := mapWindow(nil, title, x, y)
 	log.Println("gui.NewWindow() title = box.Name =", box.Name)
 
-	window := uiNewWindow(box.Name, x, y)
+	n := uiNewWindow(box.Name, x, y)
+	box.node = n
+	window := n.window
 
 	ui.OnShouldQuit(func() bool {
 		log.Println("createWindow().Destroy()", box.Name)
