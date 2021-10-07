@@ -69,9 +69,9 @@ func NewBox(box *GuiBox, axis int, name string) *GuiBox {
 	n := box.FindNode()
 	if (n == nil) {
 		log.Println("gui.NewBox() SERIOUS ERROR. CAN NOT FIND NODE")
+		os.Exit(0)
 	} else {
 		log.Println("gui.NewBox() node =", n.Name)
-		os.Exit(0)
 	}
 	var newbox *GuiBox
 	newbox		= new(GuiBox)

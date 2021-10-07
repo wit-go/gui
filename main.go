@@ -9,6 +9,10 @@ import (
 
 func Main(f func()) {
 	log.Println("Starting gui.Main() (using gtk via andlabs/ui)")
+	log.Println("Starting gui.Main() (using gtk via andlabs/ui)")
+	log.Println("Starting gui.Main() (using gtk via andlabs/ui)")
+	log.Println("Starting gui.Main() (using gtk via andlabs/ui)")
+	log.Println("Starting gui.Main() (using gtk via andlabs/ui)")
 	ui.Main(f)
 }
 

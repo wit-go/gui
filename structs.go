@@ -3,6 +3,7 @@ package gui
 import (
 	"image/color"
 	"log"
+	"os"
 
 	"github.com/andlabs/ui"
 	"golang.org/x/image/font"
@@ -24,6 +25,8 @@ type GuiConfig struct {
 	Debug      bool
 	DebugTable bool
 	Exit       func(*GuiWindow)
+
+	depth      int
 }
 
 type GuiData struct {
@@ -107,6 +110,14 @@ type GuiBox struct {
 	UiBox *ui.Box
 }
 
+func (gb *GuiBox) Dump() {
+	log.Println("gui.GuiBox.Dump() Name       = ", gb.Name)
+	log.Println("gui.GuiBox.Dump() Axis       = ", gb.Axis)
+	log.Println("gui.GuiBox.Dump() GuiWindow  = ", gb.Window)
+	log.Println("gui.GuiBox.Dump() node       = ", gb.node)
+	log.Println("gui.GuiBox.Dump() UiBox      = ", gb.UiBox)
+}
+
 func (s GuiBox) SetTitle(title string) {
 	log.Println("DID IT!", title)
 	if s.Window == nil {
@@ -119,10 +130,30 @@ func (s GuiBox) SetTitle(title string) {
 	return
 }
 
-func (s GuiBox) FindNode() *Node {
-	if s.node != nil {
-		return s.node
+func (b *GuiBox) SetNode(n *Node) {
+	if (b.node != nil) {
+		b.Dump()
+		log.Println("gui.SetNode() Error not nil")
+		os.Exit(-1)
 	}
+	b.node = n
+	if (b.node == nil) {
+		b.Dump()
+		log.Println("gui.SetNode() node == nil")
+		os.Exit(-1)
+	}
+	b.Dump()
+}
+
+func (b *GuiBox) FindNode() *Node {
+	log.Println("gui.FindNode() on GuiBox")
+	if b.node != nil {
+		return b.node
+	}
+	DebugNodeChildren()
+	b.Dump()
+	log.Println("gui.FindNode() on GuiBox is nil")
+	os.Exit(-1)
 	return nil
 }
 
@@ -194,6 +225,8 @@ func (s GuiBox) AddDebugTab(title string) {
 }
 
 func tabSetMargined(tab *ui.Tab) {
+	log.Println("tabSetMargined() IGNORE THIS")
+	return
 	c := tab.NumPages()
 	for i := 0; i < c; i++ {
 		log.Println("tabSetMargined() i =", i)
