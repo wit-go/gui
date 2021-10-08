@@ -51,7 +51,7 @@ func ErrorWindow(gw *GuiWindow, msg1 string, msg2 string) {
 // actual window but that does not appear to work on the MacOS or Windows
 //
 func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
-	log.Println("InitWindow() START")
+	log.Println("gui.InitWindow() START")
 
 	var box *GuiBox
 	if gw == nil {
@@ -65,7 +65,7 @@ func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
 
 	// This is the first window. One must create it here
 	if gw == nil {
-		log.Println("initWindow() ADDING ui.NewWindow()")
+		log.Println("gui.initWindow() ADDING ui.NewWindow()")
 		n := uiNewWindow(name, Config.Height, Config.Width)
 		box.node = n
 		if (n.box == nil) {
@@ -73,11 +73,10 @@ func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
 		}
 		w := n.uiWindow
 		newGuiWindow.UiWindow = w
-		os.Exit(-1)
 
 		// newGuiWindow.UiWindow.SetTitle("test")
 		w.OnClosing(func(*ui.Window) bool {
-			log.Println("initTabWindow() OnClosing() THIS WINDOW IS CLOSING newGuiWindow=", newGuiWindow)
+			log.Println("gui.InitWindow() OnClosing() THIS WINDOW IS CLOSING newGuiWindow=", newGuiWindow)
 			// newGuiWindow.UiWindow.Destroy()
 			if Config.Exit == nil {
 				ui.Quit()
