@@ -133,9 +133,24 @@ func makeWindowDebug() ui.Control {
 	})
 
 	/////////////////////////////////////////////////////
+	vbox = addGroup(hbox, "Node Debug")
+
+	n1 := addButton(vbox, "DebugDataNodeMap()")
+	n1.OnClicked(func(*ui.Button) {
+		DebugDataNodeMap()
+	})
+
+	n2 := addButton(vbox, "DebugNodeChildren()")
+	n2.OnClicked(func(*ui.Button) {
+		DebugNodeChildren()
+	})
+
+/*
+	/////////////////////////////////////////////////////
 	vbox = addGroup(hbox, "Numbers")
 	pbar := ui.NewProgressBar()
 	vbox.Append(pbar, false)
+*/
 
 
 	return hbox

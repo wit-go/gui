@@ -55,9 +55,9 @@ func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
 
 	var box *GuiBox
 	if gw == nil {
-		box = mapWindow(nil, name, Config.Height, Config.Width)
+		box = mapWindow(nil, name, Config.Width, Config.Height)
 	} else {
-		box = mapWindow(gw.UiWindow, name, Config.Height, Config.Width)
+		box = mapWindow(gw.UiWindow, name, Config.Width, Config.Height)
 	}
 
 	// box.Window = &newGuiWindow
@@ -66,7 +66,7 @@ func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
 	// This is the first window. One must create it here
 	if gw == nil {
 		log.Println("gui.initWindow() ADDING ui.NewWindow()")
-		n := uiNewWindow(name, Config.Height, Config.Width)
+		n := uiNewWindow(name, Config.Width, Config.Height)
 		box.node = n
 		if (n.box == nil) {
 			n.box = box

@@ -122,6 +122,11 @@ func DebugDataNodeMap() {
 	log.Println("Dumping Data.NodeMap:")
 	for name, node := range Data.NodeMap {
 		log.Println("\tData.NodeMap name =", node.Width, node.Height, name)
+		if (node.children == nil) {
+			log.Println("\t\tNo children")
+		} else {
+			log.Println("\t\tHas children:", node.children)
+		}
 		// node.SetName("yahoo")
 		// log.Println("\tData.NodeMap node =", node)
 	}

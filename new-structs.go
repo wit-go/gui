@@ -129,9 +129,9 @@ func (n *Node) InitTab(title string, custom func() ui.Control) *Node {
 		os.Exit(-1)
 	}
 	if n.box != nil {
-		log.Println("gui.InitTab() ERROR box already exists")
+		log.Println("gui.InitTab() ERROR box already exists title =", title)
 		n.Dump()
-		os.Exit(-1)
+		// os.Exit(-1)
 	}
 
 	tab := ui.NewTab()
