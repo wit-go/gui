@@ -2,7 +2,7 @@ package gui
 
 import (
 	"log"
-	"time"
+	// "time"
 
 	// "github.com/davecgh/go-spew/spew"
 
@@ -88,7 +88,7 @@ func (n *Node) Append(child *Node) {
 	child.Dump()
 	log.Println("parent node:")
 	n.Dump()
-	time.Sleep(3 * time.Second)
+	// time.Sleep(3 * time.Second)
 }
 
 func (n *Node) List() {

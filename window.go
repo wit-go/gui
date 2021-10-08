@@ -96,9 +96,11 @@ func InitWindow(parent *Node, gw *GuiWindow, name string, axis int) *Node {
 		newGuiWindow.UiWindow.SetMargined(true)
 		tmp := 0
 		newGuiWindow.TabNumber = &tmp
+		node.uiTab = newGuiWindow.UiTab
 	} else {
 		newGuiWindow.UiWindow = gw.UiWindow
 		newGuiWindow.UiTab = gw.UiTab
+		node.uiTab = newGuiWindow.UiTab
 	}
 
 	newGuiWindow.BoxMap = make(map[string]*GuiBox)
@@ -111,6 +113,9 @@ func InitWindow(parent *Node, gw *GuiWindow, name string, axis int) *Node {
 	} else {
 		tabnum := newGuiWindow.UiTab.NumPages()
 		newGuiWindow.TabNumber = &tabnum
+		if (node.uiTab == nil) {
+			node.uiTab = newGuiWindow.UiTab
+		}
 	}
 
 	Data.WindowMap[newGuiWindow.Name] = newGuiWindow
@@ -158,7 +163,10 @@ func InitWindow(parent *Node, gw *GuiWindow, name string, axis int) *Node {
 		log.Println("InitWindow() node.box != box. Hmmm....")
 		panic(-1)
 	}
-	// panic("InitWindow")
+	if (node.uiTab == nil) {
+		// DebugNodeChildren()
+		// panic("node.uiTab = nil")
+	}
 	return node
 }
 
@@ -316,6 +324,7 @@ func mapWindow(parent *Node, window *ui.Window, title string, x int, y int) *Nod
 	// func makeNode(parent *Node, title string, x int, y int) *Node {
 	node := makeNode(parent, title, x, y)
 	node.box = &box
+	node.uiWindow = window
 	box.node = node
 
 	newGuiWindow.BoxMap["jcarrInitTest"] = &box
