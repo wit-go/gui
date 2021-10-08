@@ -27,6 +27,7 @@ type GuiConfig struct {
 	Exit       func(*GuiWindow)
 
 	depth      int
+	counter    int  // used to make unique ID's
 }
 
 type GuiData struct {
@@ -97,6 +98,13 @@ type GuiWindow struct {
 	UiTab    *ui.Tab // if this != nil, the window is 'tabbed'
 }
 
+func (gw *GuiWindow) Dump() {
+	log.Println("gui.GuiWindow.Dump() Name       = ", gw.Name)
+	log.Println("gui.GuiWindow.Dump() node       = ", gw.node)
+	log.Println("gui.GuiWindow.Dump() Width      = ", gw.Width)
+	log.Println("gui.GuiWindow.Dump() Height     = ", gw.Height)
+}
+
 // GuiBox is any type of ui.Hbox or ui.Vbox
 // There can be lots of these for each GuiWindow
 type GuiBox struct {
@@ -130,19 +138,32 @@ func (s GuiBox) SetTitle(title string) {
 	return
 }
 
+func (w *GuiWindow) SetNode(n *Node) {
+	if (w.node != nil) {
+		w.Dump()
+		panic("gui.SetNode() Error not nil")
+	}
+	w.node = n
+	if (w.node == nil) {
+		w.Dump()
+		panic("gui.SetNode() node == nil")
+	}
+}
+
 func (b *GuiBox) SetNode(n *Node) {
 	if (b.node != nil) {
 		b.Dump()
-		log.Println("gui.SetNode() Error not nil")
-		os.Exit(-1)
+		panic("gui.SetNode() Error not nil")
 	}
 	b.node = n
 	if (b.node == nil) {
 		b.Dump()
-		log.Println("gui.SetNode() node == nil")
-		os.Exit(-1)
+		panic("gui.SetNode() node == nil")
 	}
-	b.Dump()
+}
+
+func (w *GuiWindow) FindNode() *Node {
+	return w.node
 }
 
 func (b *GuiBox) FindNode() *Node {

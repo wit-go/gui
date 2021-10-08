@@ -2,7 +2,6 @@ package gui
 
 import (
 	"log"
-	"os"
 	"strconv"
 	"time"
 
@@ -17,7 +16,8 @@ func initUI(name string, callback func(*GuiBox) *GuiBox) {
 	ui.Main(func() {
 		log.Println("gui.initUI() inside ui.Main()")
 
-		box := InitWindow(nil, "StartNewWindow"+name, 0)
+		node := InitWindow(nil, nil, "StartNewWindow"+name, 0)
+		box := node.box
 		box = callback(box)
 		window := box.Window
 		log.Println("StartNewWindow() box =", box)
@@ -50,14 +50,18 @@ func ErrorWindow(gw *GuiWindow, msg1 string, msg2 string) {
 // This is this way because on Linux you can have more than one
 // actual window but that does not appear to work on the MacOS or Windows
 //
-func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
+func InitWindow(parent *Node, gw *GuiWindow, name string, axis int) *Node {
 	log.Println("gui.InitWindow() START")
 
 	var box *GuiBox
+	var node *Node
+
 	if gw == nil {
-		box = mapWindow(nil, name, Config.Width, Config.Height)
+		node = mapWindow(parent, nil, name, Config.Width, Config.Height)
+		box = node.box
 	} else {
-		box = mapWindow(gw.UiWindow, name, Config.Width, Config.Height)
+		node = mapWindow(parent, gw.UiWindow, name, Config.Width, Config.Height)
+		box = node.box
 	}
 
 	// box.Window = &newGuiWindow
@@ -66,12 +70,12 @@ func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
 	// This is the first window. One must create it here
 	if gw == nil {
 		log.Println("gui.initWindow() ADDING ui.NewWindow()")
-		n := uiNewWindow(name, Config.Width, Config.Height)
-		box.node = n
-		if (n.box == nil) {
-			n.box = box
+		node = uiNewWindow(node, name, Config.Width, Config.Height)
+		box.node = node
+		if (node.box == nil) {
+			node.box = box
 		}
-		w := n.uiWindow
+		w := node.uiWindow
 		newGuiWindow.UiWindow = w
 
 		// newGuiWindow.UiWindow.SetTitle("test")
@@ -126,17 +130,36 @@ func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
 		log.Println("InitWindow() box has a FUCKING nil node")
 		fn := FindNode("full initTab")
 		log.Println("InitWindow() fn =", fn)
-		os.Exit(-1)
+		panic(-1)
 	}
 
 	if (newGuiWindow.node == nil) {
 		DebugNodeChildren()
 		log.Println("InitWindow() newGuiWindow has a FUCKING nil node")
-		// os.Exit(-1)
+		// panic(-1)
 	}
 
 	log.Println("InitWindow() END *GuiWindow =", newGuiWindow)
-	return box
+	if (box.node == nil) {
+		box.Dump()
+		panic(-1)
+	}
+	box.Dump()
+	box.node.Dump()
+	if (box.node != node) {
+		log.Println("InitWindow() box.node != node. Hmmm....")
+		log.Println("InitWindow() box.node != node. Hmmm....")
+		log.Println("InitWindow() box.node != node. Hmmm....")
+		panic(-1)
+	}
+	if (node.box != box) {
+		log.Println("InitWindow() node.box != box. Hmmm....")
+		log.Println("InitWindow() node.box != box. Hmmm....")
+		log.Println("InitWindow() node.box != box. Hmmm....")
+		panic(-1)
+	}
+	// panic("InitWindow")
+	return node
 }
 
 func DeleteWindow(name string) {
@@ -186,17 +209,40 @@ func CreateWindow(title string, tabname string, x int, y int, custom func() ui.C
 	return n
 }
 
-func uiNewWindow(title string, x int, y int) *Node {
+//
+// Create a new node
+// if parent == nil, that means it is a new window and needs to be put
+// in the window map (aka Data.NodeMap)
+//
+func makeNode(parent *Node, title string, x int, y int) *Node {
 	var node Node
 	node.Name = title
 	node.Width = x
 	node.Height = y
-	if (Data.NodeMap[title] != nil) {
-		log.Println("Duplicate uiNewWindow() name =", title)
-		// TODO: just change the 'title' to something unique
-		return nil
+
+	id := "jwc" + strconv.Itoa(Config.counter)
+	Config.counter += 1
+	node.id = id
+
+	if (parent == nil) {
+		if (Data.NodeMap[title] != nil) {
+			log.Println("Duplicate uiNewWindow() name =", title)
+			// TODO: just change the 'title' to something unique
+			return nil
+		}
+		Data.NodeMap[title] = &node
+		return &node
+	} else {
+		parent.Append(&node)
 	}
-	Data.NodeMap[title] = &node
+	node.parent = parent
+	return &node
+}
+
+func uiNewWindow(node *Node, title string, x int, y int) *Node {
+	if (node == nil) {
+		node = makeNode(nil, title, x, y)
+	}
 
 	w := ui.NewWindow(title, x, y, false)
 	w.SetBorderless(false)
@@ -208,16 +254,15 @@ func uiNewWindow(title string, x int, y int) *Node {
 	w.Show()
 	node.uiWindow = w
 	// w.node = &node
-	return &node
+	return node
 }
 
 func CreateBlankWindow(title string, x int, y int) *Node {
-	box := mapWindow(nil, title, x, y)
+	n := mapWindow(nil, nil, title, x, y)
+	box := n.box
 	log.Println("gui.CreateBlankWindow() title = box.Name =", box.Name)
 
-	n := uiNewWindow(box.Name, x, y)
-	box.node = n
-	n.box = box
+	n = uiNewWindow(n, box.Name, x, y)
 	window := n.uiWindow
 
 	ui.OnShouldQuit(func() bool {
@@ -239,7 +284,7 @@ func InitBlankWindow() ui.Control {
 
 var master = 0
 
-func mapWindow(window *ui.Window, title string, x int, y int) *GuiBox {
+func mapWindow(parent *Node, window *ui.Window, title string, x int, y int) *Node {
 	log.Println("gui.WindowMap START title =", title)
 	if Data.WindowMap[title] != nil {
 		log.Println("Data.WindowMap[title] already exists title =", title)
@@ -268,17 +313,22 @@ func mapWindow(window *ui.Window, title string, x int, y int) *GuiBox {
 	box.Window = &newGuiWindow
 	box.Name = title
 
+	// func makeNode(parent *Node, title string, x int, y int) *Node {
+	node := makeNode(parent, title, x, y)
+	node.box = &box
+	box.node = node
+
 	newGuiWindow.BoxMap["jcarrInitTest"] = &box
 
-	return &box
+	return node
 }
 
 func NewWindow(title string, x int, y int) *GuiBox {
-	box := mapWindow(nil, title, x, y)
+	n := mapWindow(nil, nil, title, x, y)
+	box := n.box
 	log.Println("gui.NewWindow() title = box.Name =", box.Name)
 
-	n := uiNewWindow(box.Name, x, y)
-	box.node = n
+	n = uiNewWindow(n, box.Name, x, y)
 	window := n.uiWindow
 
 	ui.OnShouldQuit(func() bool {

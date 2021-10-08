@@ -93,6 +93,10 @@ func NewBox(box *GuiBox, axis int, name string) *GuiBox {
 func HardBox(gw *GuiWindow, axis int, name string) *GuiBox {
 	log.Println("HardBox() START axis =", axis)
 
+	if (gw.node == nil) {
+		gw.Dump()
+		panic("gui.HardBox() gw.node == nil")
+	}
 	// add a Vertical Seperator if there is already a box
 	// Is this right?
 	box := gw.BoxMap["MAINBOX"]

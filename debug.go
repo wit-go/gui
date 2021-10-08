@@ -178,7 +178,7 @@ func DebugNodeChildren() {
 	}
 	log.Println("Dumping Data.NodeMap:")
 	for name, node := range Data.NodeMap {
-		log.Println("\tData.NodeMap name =", node.Width, node.Height, name)
+		log.Println("\tData.NodeMap name =", node.id, node.Width, node.Height, name)
 		// node.Dump()
 		node.ListChildren()
 		// node.SetName("yahoo")

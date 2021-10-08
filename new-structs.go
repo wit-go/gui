@@ -2,7 +2,9 @@ package gui
 
 import (
 	"log"
-	"os"
+	"time"
+
+	// "github.com/davecgh/go-spew/spew"
 
 	"github.com/andlabs/ui"
 	_ "github.com/andlabs/ui/winmanifest"
@@ -45,6 +47,9 @@ func (n *Node) Dump() {
 	log.Println("gui.Node.Dump() uiControl  = ", n.uiControl)
 	log.Println("gui.Node.Dump() uiWindow   = ", n.uiWindow)
 	log.Println("gui.Node.Dump() uiTab      = ", n.uiTab)
+	if (n.id == "") {
+		panic("gui.Node.Dump() id == nil")
+	}
 }
 
 
@@ -63,13 +68,13 @@ func (n *Node) FindTab() *ui.Tab {
 	return n.uiTab
 }
 
+func (n *Node) FindBox() *GuiBox {
+	return n.box
+}
+
 func (n *Node) FindWindowBox() *GuiBox {
 	if (n.box == nil) {
-		log.Println("SERIOUS ERROR n.box == nil in FindWindowBox()")
-		log.Println("SERIOUS ERROR n.box == nil in FindWindowBox()")
-		log.Println("SERIOUS ERROR n.box == nil in FindWindowBox()")
-		log.Println("SERIOUS ERROR n.box == nil in FindWindowBox()")
-		os.Exit(-1)
+		panic("SERIOUS ERROR n.box == nil in FindWindowBox()")
 	}
 	return n.box
 }
@@ -79,6 +84,11 @@ func (n *Node) Append(child *Node) {
 	//		return
 	//	}
 	n.children = append(n.children, child)
+	log.Println("child node:")
+	child.Dump()
+	log.Println("parent node:")
+	n.Dump()
+	time.Sleep(3 * time.Second)
 }
 
 func (n *Node) List() {
@@ -86,20 +96,28 @@ func (n *Node) List() {
 }
 
 func (n *Node) ListChildren() {
-	log.Println("gui.Node.ListChildren() node =", n.Name, n)
+	log.Println("\tListChildren() node =", n.id, n.Name, n.Width, n.Height)
 
 	if len(n.children) == 0 {
+		log.Println("\t\t\tparent =",n.parent.id)
 		log.Println("\t\tNo children START")
 		return
 	}
-//	if len(n.children) > 0 {
+	// spew.Dump(n)
 	for _, child := range n.children {
-		log.Println("gui.Node.ListChildren() child =", child.Name, child)
-		if (child.children == nil) {
-			log.Println("\t\tNo children END")
-			break
+		log.Println("\t\tListChildren() child =",child.id,  child.Name, child.Width, child.Height)
+		if (child.parent != nil) {
+			log.Println("\t\t\tparent =",child.parent.id)
+		} else {
+			log.Println("\t\t\tno parent")
+			panic("no parent")
 		}
-		log.Println("\t\tHas children:", child.children)
+		// child.Dump()
+		if (child.children == nil) {
+			log.Println("\t\t\tNo children END")
+			// break
+		}
+		log.Println("\t\t\tHas children:", child.children)
 		child.ListChildren()
 	}
 	return
@@ -145,14 +163,12 @@ func findByName(node *Node, name string) *Node {
 
 func (n *Node) InitTab(title string, custom func() ui.Control) *Node {
 	if n.uiWindow == nil {
-		log.Println("gui.InitTab() ERROR ui.Window == nil")
 		n.Dump()
-		os.Exit(-1)
+		panic("gui.InitTab() ERROR ui.Window == nil")
 	}
-	if n.box != nil {
-		log.Println("gui.InitTab() ERROR box already exists title =", title)
+	if n.box == nil {
 		n.Dump()
-		// os.Exit(-1)
+		panic("gui.InitTab() ERROR box == nil")
 	}
 
 	tab := ui.NewTab()
@@ -162,17 +178,7 @@ func (n *Node) InitTab(title string, custom func() ui.Control) *Node {
 	tab.Append(title, custom())
 	tab.SetMargined(0, true)
 
-	var newNode Node
-	newNode.Name = title
-	newNode.parent = n
-	n.Append(&newNode)
+	newNode := makeNode(n, title, 555, 666)
 	newNode.uiTab = tab
-	/*
-	if boxs.node == nil {
-		log.Println("gui.InitTab() 4 Fuck node = ", n)
-		n.Dump()
-		os.Exit(-1)
-	}
-	*/
-	return &newNode
+	return newNode
 }

@@ -31,7 +31,8 @@ func ExampleWindow() {
 	log.Println("START gui.ExampleWindow()")
 
 	title := "Test Window"
-	box := InitWindow(nil, title, 0)
+	node := InitWindow(nil, nil, title, 0)
+	box := node.box
 	window := box.Window
 	log.Println("box =", box)
 	log.Println("window =", window)
@@ -44,7 +45,8 @@ func DebugWindow() {
 	log.Println("START gui.ExampleWindow()")
 
 	title := "Debug Window"
-	box := InitWindow(nil, title, 0)
+	node := InitWindow(nil, nil, title, 0)
+	box := node.box
 	window := box.Window
 	log.Println("box =", box)
 	log.Println("window =", window)

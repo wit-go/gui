@@ -98,9 +98,9 @@ func InitColumns(mh *TableData, parts []TableColumnData) {
 }
 
 func AddTableTab(gw *GuiWindow, name string, rowcount int, parts []TableColumnData) *TableData {
-	box := InitWindow(gw, name, Yaxis)
+	node := InitWindow(nil, gw, name, Yaxis)
 
-	return AddTableBox(box, name, rowcount, parts)
+	return AddTableBox(node.box, name, rowcount, parts)
 }
 
 func AddTableBox(box *GuiBox, name string, rowcount int, parts []TableColumnData) *TableData {
