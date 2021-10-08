@@ -80,8 +80,29 @@ func (n *Node) Append(child *Node) {
 	//	}
 	n.children = append(n.children, child)
 }
+
 func (n *Node) List() {
 	findByIdDFS(n, "test")
+}
+
+func (n *Node) ListChildren() {
+	log.Println("gui.Node.ListChildren() node =", n.Name, n)
+
+	if len(n.children) == 0 {
+		log.Println("\t\tNo children START")
+		return
+	}
+//	if len(n.children) > 0 {
+	for _, child := range n.children {
+		log.Println("gui.Node.ListChildren() child =", child.Name, child)
+		if (child.children == nil) {
+			log.Println("\t\tNo children END")
+			break
+		}
+		log.Println("\t\tHas children:", child.children)
+		child.ListChildren()
+	}
+	return
 }
 
 func findByIdDFS(node *Node, id string) *Node {

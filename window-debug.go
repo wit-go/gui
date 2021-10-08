@@ -140,8 +140,13 @@ func makeWindowDebug() ui.Control {
 		DebugDataNodeMap()
 	})
 
-	n2 := addButton(vbox, "DebugNodeChildren()")
+	n2 := addButton(vbox, "DebugDataNodeChildren()")
 	n2.OnClicked(func(*ui.Button) {
+		DebugDataNodeChildren()
+	})
+
+	n3 := addButton(vbox, "DebugNodeChildren()")
+	n3.OnClicked(func(*ui.Button) {
 		DebugNodeChildren()
 	})
 

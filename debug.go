@@ -116,12 +116,12 @@ func addTableTab() {
 
 func DebugDataNodeMap() {
 	if Data.NodeMap == nil {
-		log.Println("Data.NodeMap == nil")
+		log.Println("DebugDataNodeMap() NodeMap == nil")
 		return
 	}
-	log.Println("Dumping Data.NodeMap:")
+	log.Println("DebugDataNodeMap():")
 	for name, node := range Data.NodeMap {
-		log.Println("\tData.NodeMap name =", node.Width, node.Height, name)
+		log.Println("\tNode name =", node.Width, node.Height, name)
 		if (node.children == nil) {
 			log.Println("\t\tNo children")
 		} else {
@@ -129,6 +129,22 @@ func DebugDataNodeMap() {
 		}
 		// node.SetName("yahoo")
 		// log.Println("\tData.NodeMap node =", node)
+	}
+}
+
+func DebugDataNodeChildren() {
+	if Data.NodeMap == nil {
+		log.Println("DebugDataNodeChildren() NodeMap == nil")
+		return
+	}
+	log.Println("DebugDataNodeChildren():")
+	for name, node := range Data.NodeMap {
+		log.Println("\tNode name =", node.Width, node.Height, name)
+		if (node.children == nil) {
+			log.Println("\t\tNo children")
+			break
+		}
+		log.Println("\t\tHas children:", node.children)
 	}
 }
 
@@ -163,8 +179,8 @@ func DebugNodeChildren() {
 	log.Println("Dumping Data.NodeMap:")
 	for name, node := range Data.NodeMap {
 		log.Println("\tData.NodeMap name =", node.Width, node.Height, name)
-		node.Dump()
-		node.List()
+		// node.Dump()
+		node.ListChildren()
 		// node.SetName("yahoo")
 		// log.Println("\tData.NodeMap node =", node)
 	}
