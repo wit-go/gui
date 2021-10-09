@@ -171,6 +171,39 @@ func FindNode(name string) *Node {
 	return nil
 }
 
+func (dn *GuiData) ListChildren(dump bool) {
+	if Data.NodeMap == nil {
+		log.Println("Data.NodeMap == nil")
+		return
+	}
+	log.Println("Dumping Data.NodeMap:")
+	for name, node := range Data.NodeMap {
+		log.Println("\tData.NodeMap name =", node.id, node.Width, node.Height, name)
+		if (dump == true) {
+			node.Dump()
+		}
+		node.ListChildren(dump)
+	}
+}
+
+func (dn *GuiData) findId(id string) *Node {
+	if Data.NodeMap == nil {
+		log.Println("Data.NodeMap == nil")
+		return nil
+	}
+	log.Println("Dumping Data.NodeMap:")
+	for name, node := range Data.NodeMap {
+		log.Println("\tData.NodeMap name =", node.id, node.Width, node.Height, name)
+		if (id == node.id) {
+			return node
+		}
+		// TODO: fix // Oct 9
+		// node.findId(id)
+	}
+	return nil
+}
+
+/*
 func DebugNodeChildren() {
 	if Data.NodeMap == nil {
 		log.Println("Data.NodeMap == nil")
@@ -185,3 +218,4 @@ func DebugNodeChildren() {
 		// log.Println("\tData.NodeMap node =", node)
 	}
 }
+*/

@@ -131,7 +131,7 @@ func InitWindow(parent *Node, gw *GuiWindow, name string, axis int) *Node {
 		}
 	}
 	if (box.node == nil) {
-		DebugNodeChildren()
+		Data.ListChildren(true)
 		log.Println("InitWindow() box has a FUCKING nil node")
 		fn := FindNode("full initTab")
 		log.Println("InitWindow() fn =", fn)
@@ -139,7 +139,7 @@ func InitWindow(parent *Node, gw *GuiWindow, name string, axis int) *Node {
 	}
 
 	if (newGuiWindow.node == nil) {
-		DebugNodeChildren()
+		Data.ListChildren(true)
 		log.Println("InitWindow() newGuiWindow has a FUCKING nil node")
 		// panic(-1)
 	}

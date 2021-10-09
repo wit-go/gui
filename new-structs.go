@@ -99,7 +99,7 @@ func (n *Node) List() {
 	findByIdDFS(n, "test")
 }
 
-func (n *Node) ListChildren() {
+func (n *Node) ListChildren(dump bool) {
 	log.Println("\tListChildren() node =", n.id, n.Name, n.Width, n.Height)
 
 	if len(n.children) == 0 {
@@ -118,13 +118,15 @@ func (n *Node) ListChildren() {
 			log.Println("\t\t\tno parent")
 			panic("no parent")
 		}
-		// child.Dump()
+		if (dump == true) {
+			child.Dump()
+		}
 		if (child.children == nil) {
 			log.Println("\t\t\tNo children END")
 			// break
 		}
 		log.Println("\t\t\tHas children:", child.children)
-		child.ListChildren()
+		child.ListChildren(dump)
 	}
 	return
 }

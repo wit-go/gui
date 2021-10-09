@@ -171,7 +171,7 @@ func (b *GuiBox) FindNode() *Node {
 	if b.node != nil {
 		return b.node
 	}
-	DebugNodeChildren()
+	Data.ListChildren(true)
 	b.Dump()
 	log.Println("gui.FindNode() on GuiBox is nil")
 	os.Exit(-1)

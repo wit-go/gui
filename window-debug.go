@@ -9,13 +9,21 @@ import (
 )
 
 var names = make([]string, 100)
+var nodeNames = make([]string, 100)
+
+// TODO: remove this crap
+func addNodeName(c *ui.Combobox, s string) {
+	c.Append(s)
+	nodeNames[y] = s
+	y = y + 1
+}
 
 func makeWindowDebug() ui.Control {
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 
 	/////////////////////////////////////////////////////
-	vbox := addGroup(hbox, "Window")
+	vbox := addGroup(hbox, "range Data.WindowMap")
 	cbox := ui.NewCombobox()
 
 	for name, _ := range Data.WindowMap {
@@ -133,6 +141,28 @@ func makeWindowDebug() ui.Control {
 	})
 
 	/////////////////////////////////////////////////////
+	nodeBox := addGroup(hbox, "range Data.NodeMap")
+	nodeCombo := ui.NewCombobox()
+
+	for name, node := range Data.NodeMap {
+		log.Println("range Data.NodeMap() name =", name)
+		addNodeName(nodeCombo, node.id)
+	}
+	nodeCombo.SetSelected(0)
+
+	nodeBox.Append(nodeCombo, false)
+
+	nodeCombo.OnSelected(func(*ui.Combobox) {
+		y := nodeCombo.Selected()
+		log.Println("y =", y)
+		log.Println("nodeNames[y] =", nodeNames[y])
+		node := Data.findId(nodeNames[y])
+		if (node != nil) {
+			node.Dump()
+		}
+	})
+
+	/////////////////////////////////////////////////////
 	vbox = addGroup(hbox, "Node Debug")
 
 	n1 := addButton(vbox, "DebugDataNodeMap()")
@@ -145,9 +175,14 @@ func makeWindowDebug() ui.Control {
 		DebugDataNodeChildren()
 	})
 
-	n3 := addButton(vbox, "Node.ListChildren()")
+	n3 := addButton(vbox, "Node.ListChildren(false)")
 	n3.OnClicked(func(*ui.Button) {
-		DebugNodeChildren()
+		Data.ListChildren(false)
+	})
+
+	n4 := addButton(vbox, "Node.ListChildren(true)")
+	n4.OnClicked(func(*ui.Button) {
+		Data.ListChildren(true)
 	})
 
 /*
@@ -161,8 +196,11 @@ func makeWindowDebug() ui.Control {
 	return hbox
 }
 
+// TODO: remove this crap
 var x int = 0
+var y int = 0
 
+// TODO: remove this crap
 func addName(c *ui.Combobox, s string) {
 	c.Append(s)
 	names[x] = s
