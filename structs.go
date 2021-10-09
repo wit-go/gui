@@ -186,7 +186,7 @@ func (s GuiBox) Append(child ui.Control, x bool) {
 	s.UiBox.Append(child, x)
 }
 
-
+/*
 func (s *GuiBox) AddTab(title string, custom ui.Control) *ui.Tab {
 	if s.Window == nil {
 		return nil
@@ -199,6 +199,7 @@ func (s *GuiBox) AddTab(title string, custom ui.Control) *ui.Tab {
 	tab.Append(title, custom)
 	return tab
 }
+*/
 
 /*
 func (s GuiBox) AddBoxTab(title string) *GuiBox {
@@ -218,9 +219,10 @@ func (n *Node) AddDemoTab(title string) {
 	tabSetMargined(newNode.uiTab)
 }
 
-func (s GuiBox) AddDebugTab(title string) {
-	uiTab := s.AddTab(title, makeWindowDebug())
-	tabSetMargined(uiTab)
+func (n *Node) AddDebugTab(title string) {
+	newNode := n.AddTab(title, makeWindowDebug())
+	newNode.Dump()
+	tabSetMargined(newNode.uiTab)
 }
 
 func tabSetMargined(tab *ui.Tab) {

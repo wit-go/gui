@@ -90,6 +90,10 @@ func (n *Node) Dump() {
 }
 
 
+func (n *Node) SetBox(box *GuiBox) {
+	n.box = box
+}
+
 func (n *Node) SetName(name string) {
 	// n.uiType.SetName(name)
 	if (n.uiWindow != nil) {
@@ -206,6 +210,19 @@ func findByName(node *Node, name string) *Node {
 		}
 	}
 	return nil
+}
+
+func (parent *Node) AddTabNode(title string, n *Node) *Node {
+	// Ybox := gui.NewBox(box, gui.Yaxis, "Working Stuff")
+	// var baseControl ui.Control
+	// baseControl = Ybox.UiBox
+	// return baseControl
+
+	parent.Dump()
+
+	newNode := parent.makeNode(title, 444, 400 + Config.counter)
+	newNode.uiTab = parent.uiTab
+	return newNode
 }
 
 func (parent *Node) AddTab(title string, uiC ui.Control) *Node {
