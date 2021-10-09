@@ -47,16 +47,24 @@ func add(box *GuiBox, newbox *GuiBox) {
 	log.Println("\tgui.add() adding", newbox.Name, "to", box.Name)
 	// copy the box settings over
 	newbox.Window = box.Window
-	if (box.UiBox == nil) {
-		log.Println("\tgui.add() ERROR box.UiBox == nil")
-		panic("crap")
+	if (box.node == nil) {
+		box.Dump()
+		panic("gui.add() ERROR box.node == nil")
 	}
+
 	if (newbox.UiBox == nil) {
-		log.Println("\tgui.add() ERROR newbox.UiBox == nil")
-		panic("crap")
+		panic("gui.add() ERROR newbox.UiBox == nil")
 	}
-	// log.Println("\tgui.add() newbox.UiBox == ", newbox.UiBox.GetParent())
-	// spew.Dump(newbox.UiBox)
+
+	if (box.UiBox == nil) {
+	}
+
+	if (box.UiBox == nil) {
+		DebugDataNodeChildren()
+		box.Dump()
+		return
+		panic("gui.add() ERROR box.UiBox == nil")
+	}
 	box.UiBox.Append(newbox.UiBox, false)
 
 	// add the newbox to the Window.BoxMap[]

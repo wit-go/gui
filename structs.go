@@ -226,7 +226,7 @@ func (s *GuiBox) AddTab(title string, custom ui.Control) *ui.Tab {
 }
 
 func (s GuiBox) AddBoxTab(title string) *GuiBox {
-	uiTab := s.AddTab(title, InitBlankWindow())
+	uiTab := s.AddTab(title, initBlankWindow())
 	tabSetMargined(uiTab)
 
 	var box *GuiBox

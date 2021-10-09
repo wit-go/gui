@@ -13,6 +13,17 @@ func NewLabel(box *GuiBox, text string) {
 	box.Append(ui.NewLabel(text), false)
 }
 
+func (n *Node) NewLabel(text string) *Node {
+	// make new node here
+	// n.Append(ui.NewLabel(text), false)
+	newNode := makeNode(n, text, 333, 334)
+	newNode.Dump()
+	// panic("node.NewLabel()")
+
+	n.Append(newNode)
+	return newNode
+}
+
 func GetText(box *GuiBox, name string) string {
 	if (box == nil) {
 		log.Println("gui.GetText() ERROR box == nil")

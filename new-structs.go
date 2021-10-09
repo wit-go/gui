@@ -68,6 +68,10 @@ func (n *Node) FindTab() *ui.Tab {
 	return n.uiTab
 }
 
+func (n *Node) FindControl() *ui.Control {
+	return n.uiControl
+}
+
 func (n *Node) FindBox() *GuiBox {
 	return n.box
 }
@@ -99,7 +103,9 @@ func (n *Node) ListChildren() {
 	log.Println("\tListChildren() node =", n.id, n.Name, n.Width, n.Height)
 
 	if len(n.children) == 0 {
-		log.Println("\t\t\tparent =",n.parent.id)
+		if (n.parent != nil) {
+			log.Println("\t\t\tparent =",n.parent.id)
+		}
 		log.Println("\t\tNo children START")
 		return
 	}
@@ -161,7 +167,7 @@ func findByName(node *Node, name string) *Node {
 	return nil
 }
 
-func (n *Node) InitTab(title string, custom func() ui.Control) *Node {
+func (n *Node) InitTab(title string) *Node {
 	if n.uiWindow == nil {
 		n.Dump()
 		panic("gui.InitTab() ERROR ui.Window == nil")
@@ -175,10 +181,31 @@ func (n *Node) InitTab(title string, custom func() ui.Control) *Node {
 	n.uiWindow.SetChild(tab)
 	n.uiWindow.SetMargined(true)
 
+	tab.Append(title, initBlankWindow())
+	tab.SetMargined(0, true)
+
+	newNode := makeNode(n, title, 555, 600 + Config.counter)
+	newNode.uiTab = tab
+	return newNode
+}
+
+func (n *Node) AddTab(title string, custom func() ui.Control) *Node {
+	if n.uiWindow == nil {
+		n.Dump()
+		panic("gui.AddTab() ERROR ui.Window == nil")
+	}
+	if n.box == nil {
+		n.Dump()
+		panic("gui.AddTab() ERROR box == nil")
+	}
+
+	tab := ui.NewTab()
+	n.uiWindow.SetMargined(true)
+
 	tab.Append(title, custom())
 	tab.SetMargined(0, true)
 
-	newNode := makeNode(n, title, 555, 666)
+	newNode := makeNode(n, title, 555, 600 + Config.counter)
 	newNode.uiTab = tab
 	return newNode
 }

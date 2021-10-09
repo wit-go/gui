@@ -213,7 +213,8 @@ func CreateWindow(title string, tabname string, x int, y int, custom func() ui.C
 		log.Println("SERIOUS ERROR n.box == nil in CreateWindow()")
 		log.Println("SERIOUS ERROR n.box == nil in CreateWindow()")
 	}
-	n.InitTab(title, custom)
+	n.InitTab(title)
+	// TODO: run custom() here // Oct 9
 	return n
 }
 
@@ -283,7 +284,7 @@ func CreateBlankWindow(title string, x int, y int) *Node {
 	return n
 }
 
-func InitBlankWindow() ui.Control {
+func initBlankWindow() ui.Control {
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 
