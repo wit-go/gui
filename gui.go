@@ -21,6 +21,7 @@ func init() {
 	Data.NodeMap = make(map[string]*Node)
 
 	Config.counter = 0
+	Config.prefix = "jwc"
 }
 
 func GuiInit() {

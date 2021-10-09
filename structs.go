@@ -28,6 +28,7 @@ type GuiConfig struct {
 
 	depth      int
 	counter    int  // used to make unique ID's
+	prefix     string
 }
 
 type GuiData struct {

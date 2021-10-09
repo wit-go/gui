@@ -213,9 +213,17 @@ func CreateWindow(title string, tabname string, x int, y int, custom func() ui.C
 		log.Println("SERIOUS ERROR n.box == nil in CreateWindow()")
 		log.Println("SERIOUS ERROR n.box == nil in CreateWindow()")
 	}
-	n.InitTab(title)
+	n.AddTab(title)
 	// TODO: run custom() here // Oct 9
 	return n
+}
+
+func (n *Node) Add(e Element) *Node {
+	newNode := n.addNode("testingAdd")
+	if(e == Tab) {
+		log.Println("gui.Add() SHOULD ADD element =", e.String())
+	}
+	return newNode
 }
 
 //
@@ -223,13 +231,28 @@ func CreateWindow(title string, tabname string, x int, y int, custom func() ui.C
 // if parent == nil, that means it is a new window and needs to be put
 // in the window map (aka Data.NodeMap)
 //
+func (parent *Node) addNode(title string) *Node {
+	var node Node
+	node.Name = title
+	node.Width = parent.Width
+	node.Height = parent.Height
+	node.parent = parent
+
+	id := Config.prefix + strconv.Itoa(Config.counter)
+	Config.counter += 1
+	node.id = id
+
+	parent.Append(&node)
+	return &node
+}
+
 func makeNode(parent *Node, title string, x int, y int) *Node {
 	var node Node
 	node.Name = title
 	node.Width = x
 	node.Height = y
 
-	id := "jwc" + strconv.Itoa(Config.counter)
+	id := Config.prefix + strconv.Itoa(Config.counter)
 	Config.counter += 1
 	node.id = id
 

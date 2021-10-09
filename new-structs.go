@@ -10,7 +10,33 @@ import (
 	_ "github.com/andlabs/ui/winmanifest"
 )
 
+type Element int
+
 // https://ieftimov.com/post/golang-datastructures-trees/
+const (
+	Unknown Element = iota
+	Window
+	Tab
+	Box
+	Label
+	Combo
+)
+
+func (s Element) String() string {
+	switch s {
+	case Window:
+		return "window"
+	case Tab:
+		return "tab"
+	case Box:
+		return "box"
+	case Label:
+		return "label"
+	case Combo:
+		return "combo"
+	}
+	return "unknown"
+}
 
 type Node struct {
 	id     string
@@ -120,16 +146,14 @@ func (n *Node) ListChildren(dump bool) {
 			log.Println("\t\t\tno parent")
 			panic("no parent")
 		}
-		/*
 		if (dump == true) {
 			child.Dump()
 		}
-		*/
 		if (child.children == nil) {
 			log.Println("\t\t", child.id, "has no children")
-			break
+		} else {
+			log.Println("\t\t\tHas children:", child.children)
 		}
-		log.Println("\t\t\tHas children:", child.children)
 		child.ListChildren(dump)
 	}
 	return
@@ -173,45 +197,56 @@ func findByName(node *Node, name string) *Node {
 	return nil
 }
 
-func (n *Node) InitTab(title string) *Node {
-	if n.uiWindow == nil {
-		n.Dump()
+/*
+func (parent *Node) InitTab(title string) *Node {
+	if parent.uiWindow == nil {
+		parent.Dump()
 		panic("gui.InitTab() ERROR ui.Window == nil")
 	}
-	if n.box == nil {
-		n.Dump()
+	if parent.box == nil {
+		parent.Dump()
 		panic("gui.InitTab() ERROR box == nil")
 	}
 
 	tab := ui.NewTab()
-	n.uiWindow.SetChild(tab)
-	n.uiWindow.SetMargined(true)
+	parent.uiWindow.SetChild(tab)
+	parent.uiWindow.SetMargined(true)
+	parent.uiTab = tab
 
 	tab.Append(title, initBlankWindow())
 	tab.SetMargined(0, true)
 
-	newNode := makeNode(n, title, 555, 600 + Config.counter)
-	newNode.uiTab = tab
+	newNode := makeNode(parent, title, 555, 600 + Config.counter)
 	return newNode
 }
+*/
 
-func (n *Node) AddTab(title string, custom func() ui.Control) *Node {
-	if n.uiWindow == nil {
-		n.Dump()
+func (parent *Node) AddTab(title string) *Node {
+	if parent.uiWindow == nil {
+		parent.Dump()
 		panic("gui.AddTab() ERROR ui.Window == nil")
 	}
-	if n.box == nil {
-		n.Dump()
+	if parent.box == nil {
+		parent.Dump()
 		panic("gui.AddTab() ERROR box == nil")
 	}
+	if parent.uiTab == nil {
+		inittab := ui.NewTab() // no, not that 'inittab'
+		parent.uiWindow.SetChild(inittab)
+		parent.uiWindow.SetMargined(true)
+		parent.uiTab = inittab
 
-	tab := ui.NewTab()
-	n.uiWindow.SetMargined(true)
+		parent.Dump()
+		// panic("gui.AddTab() ERROR uiTab == nil")
+	}
 
-	tab.Append(title, custom())
+	tab := parent.uiTab
+	parent.uiWindow.SetMargined(true)
+
+	tab.Append(title, initBlankWindow())
 	tab.SetMargined(0, true)
 
-	newNode := makeNode(n, title, 555, 600 + Config.counter)
+	newNode := makeNode(parent, title, 555, 600 + Config.counter)
 	newNode.uiTab = tab
 	return newNode
 }
