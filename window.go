@@ -20,6 +20,7 @@ func initUI(name string, callback func(*GuiBox) *GuiBox) {
 		box := node.box
 		box = callback(box)
 		window := box.Window
+		node.window = window
 		log.Println("StartNewWindow() box =", box)
 
 		window.UiWindow.Show()
@@ -267,6 +268,21 @@ func makeNode(parent *Node, title string, x int, y int) *Node {
 	} else {
 		parent.Append(&node)
 	}
+	node.parent = parent
+	return &node
+}
+
+func (parent *Node) makeNode(title string, x int, y int) *Node {
+	var node Node
+	node.Name = title
+	node.Width = x
+	node.Height = y
+
+	id := Config.prefix + strconv.Itoa(Config.counter)
+	Config.counter += 1
+	node.id = id
+
+	parent.Append(&node)
 	node.parent = parent
 	return &node
 }

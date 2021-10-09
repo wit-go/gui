@@ -47,11 +47,13 @@ type Node struct {
 	parent	*Node
 	children []*Node
 
+	window	*GuiWindow
 	box	*GuiBox
 
 	uiControl  *ui.Control
 	uiWindow  *ui.Window
 	uiTab  *ui.Tab
+	uiBox  *ui.Box
 }
 
 func (n *Node) Parent() *Node {
@@ -67,12 +69,17 @@ func (n *Node) Dump() {
 	log.Println("gui.Node.Dump() Name       = ", n.Name)
 	log.Println("gui.Node.Dump() Width      = ", n.Width)
 	log.Println("gui.Node.Dump() Height     = ", n.Height)
+
 	log.Println("gui.Node.Dump() parent     = ", n.parent)
 	log.Println("gui.Node.Dump() children   = ", n.children)
+
+	log.Println("gui.Node.Dump() window     = ", n.window)
 	log.Println("gui.Node.Dump() box        = ", n.box)
-	log.Println("gui.Node.Dump() uiControl  = ", n.uiControl)
+
 	log.Println("gui.Node.Dump() uiWindow   = ", n.uiWindow)
 	log.Println("gui.Node.Dump() uiTab      = ", n.uiTab)
+	log.Println("gui.Node.Dump() uiBox      = ", n.uiBox)
+	log.Println("gui.Node.Dump() uiControl  = ", n.uiControl)
 	if (n.id == "") {
 		panic("gui.Node.Dump() id == nil")
 	}
@@ -197,30 +204,6 @@ func findByName(node *Node, name string) *Node {
 	return nil
 }
 
-/*
-func (parent *Node) InitTab(title string) *Node {
-	if parent.uiWindow == nil {
-		parent.Dump()
-		panic("gui.InitTab() ERROR ui.Window == nil")
-	}
-	if parent.box == nil {
-		parent.Dump()
-		panic("gui.InitTab() ERROR box == nil")
-	}
-
-	tab := ui.NewTab()
-	parent.uiWindow.SetChild(tab)
-	parent.uiWindow.SetMargined(true)
-	parent.uiTab = tab
-
-	tab.Append(title, initBlankWindow())
-	tab.SetMargined(0, true)
-
-	newNode := makeNode(parent, title, 555, 600 + Config.counter)
-	return newNode
-}
-*/
-
 func (parent *Node) AddTab(title string) *Node {
 	if parent.uiWindow == nil {
 		parent.Dump()
@@ -246,7 +229,7 @@ func (parent *Node) AddTab(title string) *Node {
 	tab.Append(title, initBlankWindow())
 	tab.SetMargined(0, true)
 
-	newNode := makeNode(parent, title, 555, 600 + Config.counter)
+	newNode := parent.makeNode(title, 555, 600 + Config.counter)
 	newNode.uiTab = tab
 	return newNode
 }

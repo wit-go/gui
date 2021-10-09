@@ -186,32 +186,6 @@ func (s GuiBox) Append(child ui.Control, x bool) {
 	s.UiBox.Append(child, x)
 }
 
-/*
-func (s GuiBox) InitTab(title string, custom func() ui.Control) *Node {
-	if s.Window == nil {
-		return nil
-	}
-	if s.Window.UiWindow == nil {
-		return nil
-	}
-
-	window := s.Window.UiWindow
-	tab := ui.NewTab()
-	window.SetChild(tab)
-	window.SetMargined(true)
-
-	tab.Append(title, custom())
-	tab.SetMargined(0, true)
-	// tab.SetMargined(1, true)
-
-	s.Window.UiTab = tab
-	if s.node == nil {
-		log.Println("Fuck node = ", s.node)
-		os.Exit(-1)
-	}
-	return s.node
-}
-*/
 
 func (s *GuiBox) AddTab(title string, custom ui.Control) *ui.Tab {
 	if s.Window == nil {

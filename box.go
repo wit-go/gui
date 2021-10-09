@@ -72,25 +72,18 @@ func add(box *GuiBox, newbox *GuiBox) {
 	log.Println("gui.add() END")
 }
 
-func (n *Node) NewBox(axis int, name string) *Node {
-	var newBox *GuiBox
-	var newNode *Node = n
+func (parent *Node) NewBox(axis int, name string) *Node {
+	if (parent.box == nil) {
+		panic("gui.Node.NewBox() parent.box == nil")
+	}
 
-	newBox		= new(GuiBox)
-	// newBox.Window	= newNode.uiWindow
+	newBox		:= new(GuiBox)
+	newBox.Window	= parent.window
 	newBox.Name	= name
 
-	if (n.box == nil) {
-		panic("node.newBox() box == nil")
-	}
-	if (n.box == nil) {
-		// add a box here
-		newBox.node = n
-		n.box = newBox
-	} else {
-		// make a new box & a new node
-		newNode = makeNode(n, name, 111, 112)
-	}
+	// make a new box & a new node
+	newNode := parent.makeNode(name, 111, 100 + Config.counter)
+	Config.counter += 1
 
 	var uiBox *ui.Box
 	if (axis == Xaxis) {
@@ -100,7 +93,10 @@ func (n *Node) NewBox(axis int, name string) *Node {
 	}
 	uiBox.SetPadded(true)
 	newBox.UiBox = uiBox
-	add(n.box, newBox)
+	newNode.uiBox = uiBox
+
+	parent.Append(newNode)
+	// add(n.box, newBox)
 	return newNode
 }
 
