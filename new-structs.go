@@ -70,7 +70,11 @@ func (n *Node) Dump() {
 	log.Println("gui.Node.Dump() Width      = ", n.Width)
 	log.Println("gui.Node.Dump() Height     = ", n.Height)
 
-	log.Println("gui.Node.Dump() parent     = ", n.parent)
+	if (n.parent == nil) {
+		log.Println("gui.Node.Dump() parent     = nil")
+	} else {
+		log.Println("gui.Node.Dump() parent     = ", n.parent.id)
+	}
 	log.Println("gui.Node.Dump() children   = ", n.children)
 
 	log.Println("gui.Node.Dump() window     = ", n.window)
@@ -204,7 +208,7 @@ func findByName(node *Node, name string) *Node {
 	return nil
 }
 
-func (parent *Node) AddTab(title string) *Node {
+func (parent *Node) AddTab(title string, uiC ui.Control) *Node {
 	if parent.uiWindow == nil {
 		parent.Dump()
 		panic("gui.AddTab() ERROR ui.Window == nil")
@@ -226,7 +230,10 @@ func (parent *Node) AddTab(title string) *Node {
 	tab := parent.uiTab
 	parent.uiWindow.SetMargined(true)
 
-	tab.Append(title, initBlankWindow())
+	if (uiC == nil) {
+		uiC = parent.initBlankWindow()
+	}
+	tab.Append(title, uiC)
 	tab.SetMargined(0, true)
 
 	newNode := parent.makeNode(title, 555, 600 + Config.counter)

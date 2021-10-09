@@ -187,6 +187,17 @@ func makeWindowDebug() ui.Control {
 		Data.ListChildren(true)
 	})
 
+	n1 = addButton(vbox, "Node.Dump()")
+	n1.OnClicked(func(*ui.Button) {
+		y := nodeCombo.Selected()
+		log.Println("y =", y)
+		log.Println("nodeNames[y] =", nodeNames[y])
+		node := Data.findId(nodeNames[y])
+		if (node != nil) {
+			node.Dump()
+		}
+	})
+
 	n1 = addButton(vbox, "Node.ListChildren(false)")
 	n1.OnClicked(func(*ui.Button) {
 		y := nodeCombo.Selected()
@@ -269,7 +280,10 @@ func FindBox(s string) *GuiBox {
 }
 
 func dumpBox(s string) {
-	for name, window := range Data.WindowMap {
+	var name string
+	var window *GuiWindow
+
+	for name, window = range Data.WindowMap {
 		if name != s {
 			continue
 		}
@@ -286,6 +300,7 @@ func dumpBox(s string) {
 		log.Println("gui.dumpBox() BoxMap START")
 		for name, abox := range window.BoxMap {
 			log.Printf("gui.DumpBoxes() \tBOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
+			abox.Dump()
 			if name == "MAINBOX" {
 				if Config.Debug {
 					scs := spew.ConfigState{MaxDepth: 1}

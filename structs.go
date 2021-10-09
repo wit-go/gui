@@ -200,6 +200,7 @@ func (s *GuiBox) AddTab(title string, custom ui.Control) *ui.Tab {
 	return tab
 }
 
+/*
 func (s GuiBox) AddBoxTab(title string) *GuiBox {
 	uiTab := s.AddTab(title, initBlankWindow())
 	tabSetMargined(uiTab)
@@ -209,10 +210,12 @@ func (s GuiBox) AddBoxTab(title string) *GuiBox {
 	box.Window.UiTab = uiTab
 	return box
 }
+*/
 
-func (s GuiBox) AddDemoTab(title string) {
-	uiTab := s.AddTab(title, makeWindowTemplate())
-	tabSetMargined(uiTab)
+func (n *Node) AddDemoTab(title string) {
+	newNode := n.AddTab(title, makeWindowTemplate())
+	newNode.Dump()
+	tabSetMargined(newNode.uiTab)
 }
 
 func (s GuiBox) AddDebugTab(title string) {
