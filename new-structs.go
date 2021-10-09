@@ -102,14 +102,16 @@ func (n *Node) List() {
 func (n *Node) ListChildren(dump bool) {
 	log.Println("\tListChildren() node =", n.id, n.Name, n.Width, n.Height)
 
+	if (dump == true) {
+		n.Dump()
+	}
 	if len(n.children) == 0 {
 		if (n.parent != nil) {
 			log.Println("\t\t\tparent =",n.parent.id)
 		}
-		log.Println("\t\tNo children START")
+		log.Println("\t\t", n.id, "has no children")
 		return
 	}
-	// spew.Dump(n)
 	for _, child := range n.children {
 		log.Println("\t\tListChildren() child =",child.id,  child.Name, child.Width, child.Height)
 		if (child.parent != nil) {
@@ -118,12 +120,14 @@ func (n *Node) ListChildren(dump bool) {
 			log.Println("\t\t\tno parent")
 			panic("no parent")
 		}
+		/*
 		if (dump == true) {
 			child.Dump()
 		}
+		*/
 		if (child.children == nil) {
-			log.Println("\t\t\tNo children END")
-			// break
+			log.Println("\t\t", child.id, "has no children")
+			break
 		}
 		log.Println("\t\t\tHas children:", child.children)
 		child.ListChildren(dump)

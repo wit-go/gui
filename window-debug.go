@@ -165,24 +165,46 @@ func makeWindowDebug() ui.Control {
 	/////////////////////////////////////////////////////
 	vbox = addGroup(hbox, "Node Debug")
 
-	n1 := addButton(vbox, "DebugDataNodeMap()")
+	n1 := addButton(vbox, "Data.DumpNodeMap()")
 	n1.OnClicked(func(*ui.Button) {
-		DebugDataNodeMap()
+		Data.DumpNodeMap()
 	})
 
-	n2 := addButton(vbox, "DebugDataNodeChildren()")
-	n2.OnClicked(func(*ui.Button) {
+	n1 = addButton(vbox, "DebugDataNodeChildren()")
+	n1.OnClicked(func(*ui.Button) {
 		DebugDataNodeChildren()
 	})
 
-	n3 := addButton(vbox, "Node.ListChildren(false)")
-	n3.OnClicked(func(*ui.Button) {
+	n1 = addButton(vbox, "Data.ListChildren(false)")
+	n1.OnClicked(func(*ui.Button) {
 		Data.ListChildren(false)
 	})
 
-	n4 := addButton(vbox, "Node.ListChildren(true)")
-	n4.OnClicked(func(*ui.Button) {
+	n1 = addButton(vbox, "Data.ListChildren(true)")
+	n1.OnClicked(func(*ui.Button) {
 		Data.ListChildren(true)
+	})
+
+	n1 = addButton(vbox, "Node.ListChildren(false)")
+	n1.OnClicked(func(*ui.Button) {
+		y := nodeCombo.Selected()
+		log.Println("y =", y)
+		log.Println("nodeNames[y] =", nodeNames[y])
+		node := Data.findId(nodeNames[y])
+		if (node != nil) {
+			node.ListChildren(false)
+		}
+	})
+
+	n1 = addButton(vbox, "Node.ListChildren(true)")
+	n1.OnClicked(func(*ui.Button) {
+		y := nodeCombo.Selected()
+		log.Println("y =", y)
+		log.Println("nodeNames[y] =", nodeNames[y])
+		node := Data.findId(nodeNames[y])
+		if (node != nil) {
+			node.ListChildren(true)
+		}
 	})
 
 /*

@@ -114,14 +114,10 @@ func addTableTab() {
 	time.Sleep(1 * time.Second)
 }
 
-func DebugDataNodeMap() {
-	if Data.NodeMap == nil {
-		log.Println("DebugDataNodeMap() NodeMap == nil")
-		return
-	}
+func (dn *GuiData) DumpNodeMap() {
 	log.Println("DebugDataNodeMap():")
-	for name, node := range Data.NodeMap {
-		log.Println("\tNode name =", node.Width, node.Height, name)
+	for name, node := range dn.NodeMap {
+		log.Println("\tNode =", node.id, node.Width, node.Height, name)
 		if (node.children == nil) {
 			log.Println("\t\tNo children")
 		} else {
@@ -173,12 +169,12 @@ func FindNode(name string) *Node {
 
 func (dn *GuiData) ListChildren(dump bool) {
 	if Data.NodeMap == nil {
-		log.Println("Data.NodeMap == nil")
+		log.Println("gui.Data.ListChildren() Data.NodeMap == nil")
 		return
 	}
-	log.Println("Dumping Data.NodeMap:")
+	log.Println("gui.Data.ListChildren() Data.NodeMap:")
 	for name, node := range Data.NodeMap {
-		log.Println("\tData.NodeMap name =", node.id, node.Width, node.Height, name)
+		log.Println("\tgui.Data.ListChildren() node =", node.id, node.Width, node.Height, name)
 		if (dump == true) {
 			node.Dump()
 		}
@@ -188,13 +184,14 @@ func (dn *GuiData) ListChildren(dump bool) {
 
 func (dn *GuiData) findId(id string) *Node {
 	if Data.NodeMap == nil {
-		log.Println("Data.NodeMap == nil")
+		log.Println("gui.Data.findId() map == nil")
 		return nil
 	}
-	log.Println("Dumping Data.NodeMap:")
+	// log.Println("Dumping Data.NodeMap:")
 	for name, node := range Data.NodeMap {
-		log.Println("\tData.NodeMap name =", node.id, node.Width, node.Height, name)
+		// log.Println("\tData.NodeMap name =", node.id, node.Width, node.Height, name)
 		if (id == node.id) {
+			log.Println("\tgui.Data.findId() found node =", node.id, node.Width, node.Height, name)
 			return node
 		}
 		// TODO: fix // Oct 9
