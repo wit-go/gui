@@ -170,10 +170,12 @@ func makeWindowDebug() ui.Control {
 		Data.DumpNodeMap()
 	})
 
+/*
 	n1 = addButton(vbox, "DebugDataNodeChildren()")
 	n1.OnClicked(func(*ui.Button) {
 		DebugDataNodeChildren()
 	})
+*/
 
 	n1 = addButton(vbox, "Data.ListChildren(false)")
 	n1.OnClicked(func(*ui.Button) {

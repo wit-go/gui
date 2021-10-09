@@ -60,9 +60,9 @@ func add(box *GuiBox, newbox *GuiBox) {
 	}
 
 	if (box.UiBox == nil) {
-		DebugDataNodeChildren()
 		box.Dump()
 		return
+		// TODO: fix this whole add() function // Oct 9
 		panic("gui.add() ERROR box.UiBox == nil")
 	}
 	box.UiBox.Append(newbox.UiBox, false)

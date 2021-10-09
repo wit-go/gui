@@ -128,6 +128,7 @@ func (dn *GuiData) DumpNodeMap() {
 	}
 }
 
+/*
 func DebugDataNodeChildren() {
 	if Data.NodeMap == nil {
 		log.Println("DebugDataNodeChildren() NodeMap == nil")
@@ -143,6 +144,7 @@ func DebugDataNodeChildren() {
 		log.Println("\t\tHas children:", node.children)
 	}
 }
+*/
 
 func FindNode(name string) *Node {
 	if Data.NodeMap == nil {

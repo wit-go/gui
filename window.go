@@ -70,7 +70,7 @@ func InitWindow(parent *Node, gw *GuiWindow, name string, axis int) *Node {
 	// This is the first window. One must create it here
 	if gw == nil {
 		log.Println("gui.initWindow() ADDING ui.NewWindow()")
-		node = uiNewWindow(node, name, Config.Width, Config.Height)
+		node.uiNewWindow(name, Config.Width, Config.Height)
 		box.node = node
 		if (node.box == nil) {
 			node.box = box
@@ -248,11 +248,7 @@ func makeNode(parent *Node, title string, x int, y int) *Node {
 	return &node
 }
 
-func uiNewWindow(node *Node, title string, x int, y int) *Node {
-	if (node == nil) {
-		node = makeNode(nil, title, x, y)
-	}
-
+func (n *Node) uiNewWindow(title string, x int, y int) {
 	w := ui.NewWindow(title, x, y, false)
 	w.SetBorderless(false)
 	w.OnClosing(func(*ui.Window) bool {
@@ -261,18 +257,18 @@ func uiNewWindow(node *Node, title string, x int, y int) *Node {
 	})
 	w.SetMargined(true)
 	w.Show()
-	node.uiWindow = w
+	n.uiWindow = w
 	// w.node = &node
-	return node
+	return
 }
 
 func CreateBlankWindow(title string, x int, y int) *Node {
-	n := mapWindow(nil, nil, title, x, y)
-	box := n.box
+	node := mapWindow(nil, nil, title, x, y)
+	box := node.box
 	log.Println("gui.CreateBlankWindow() title = box.Name =", box.Name)
 
-	n = uiNewWindow(n, box.Name, x, y)
-	window := n.uiWindow
+	node.uiNewWindow(box.Name, x, y)
+	window := node.uiWindow
 
 	ui.OnShouldQuit(func() bool {
 		log.Println("createWindow().Destroy()", box.Name)
@@ -281,7 +277,7 @@ func CreateBlankWindow(title string, x int, y int) *Node {
 	})
 
 	box.Window.UiWindow = window
-	return n
+	return node
 }
 
 func initBlankWindow() ui.Control {
@@ -333,13 +329,14 @@ func mapWindow(parent *Node, window *ui.Window, title string, x int, y int) *Nod
 	return node
 }
 
-func NewWindow(title string, x int, y int) *GuiBox {
-	n := mapWindow(nil, nil, title, x, y)
-	box := n.box
+func NewWindow(title string, x int, y int) *Node {
+	var node *Node
+	node = mapWindow(nil, nil, title, x, y)
+	box := node.box
 	log.Println("gui.NewWindow() title = box.Name =", box.Name)
 
-	n = uiNewWindow(n, box.Name, x, y)
-	window := n.uiWindow
+	node.uiNewWindow(box.Name, x, y)
+	window := node.uiWindow
 
 	ui.OnShouldQuit(func() bool {
 		log.Println("createWindow().Destroy()", box.Name)
@@ -348,5 +345,5 @@ func NewWindow(title string, x int, y int) *GuiBox {
 	})
 
 	box.Window.UiWindow = window
-	return box
+	return node
 }
