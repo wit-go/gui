@@ -36,7 +36,7 @@ func ExampleWindow() {
 	window := box.Window
 	log.Println("box =", box)
 	log.Println("window =", window)
-	// box.AddDebugTab("jcarr Debug")
+	node.AddDebugTab("jcarr Debug")
 
 	window.UiWindow.Show()
 }
@@ -50,7 +50,7 @@ func DebugWindow() {
 	window := box.Window
 	log.Println("box =", box)
 	log.Println("window =", window)
-	// box.AddDebugTab("jcarr Debug")
+	node.AddDebugTab("jcarr Debug")
 
 	window.UiWindow.Show()
 }
