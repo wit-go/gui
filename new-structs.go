@@ -2,6 +2,7 @@ package gui
 
 import (
 	"log"
+	"fmt"
 	// "time"
 
 	// "github.com/davecgh/go-spew/spew"
@@ -212,16 +213,50 @@ func findByName(node *Node, name string) *Node {
 	return nil
 }
 
-func (parent *Node) AddTabNode(title string, n *Node) *Node {
+// The parent Node needs to be the raw Window
+// The 'stuff' Node needs to be the contents of the tab
+//
+// This function should make a new node with the parent and
+// the 'stuff' Node as a child
+func (parent *Node) AddTabNode(title string, b *GuiBox) *Node {
 	// Ybox := gui.NewBox(box, gui.Yaxis, "Working Stuff")
 	// var baseControl ui.Control
 	// baseControl = Ybox.UiBox
 	// return baseControl
 
+	var newNode *Node
+	// var newControl ui.Control
+
+	if (parent.box == nil) {
+		// TODO: fix this to use a blank box
+		uiC := parent.initBlankWindow()
+		newNode.uiControl = &uiC
+		panic("node.AddTabNode() can not add a tab if the box == nil")
+	}
+	if (parent.uiTab == nil) {
+		panic("node.AddTabNode() can not add a tab if parent.uiTab == nil")
+	}
+
+	newNode = parent.makeNode(title, 444, 400 + Config.counter)
+	newNode.uiTab = parent.uiTab
+	newNode.box = b
+
+	/*
+	newControl = b.UiBox
+	newNode.uiTab.Append(title, newControl)
+	*/
+	newNode.uiTab.Append(title, b.UiBox)
+
+	fmt.Println("")
+	log.Println("parent:")
 	parent.Dump()
 
-	newNode := parent.makeNode(title, 444, 400 + Config.counter)
-	newNode.uiTab = parent.uiTab
+	fmt.Println("")
+	log.Println("newNode:")
+	newNode.Dump()
+
+	// panic("node.AddTabNode()")
+
 	return newNode
 }
 
