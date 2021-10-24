@@ -20,6 +20,8 @@ func init() {
 	Data.WindowMap = make(map[string]*GuiWindow)
 	Data.NodeMap = make(map[string]*Node)
 
+	Data.NodeSlice = make([]*Node, 0)
+
 	Config.counter = 0
 	Config.prefix = "jwc"
 }

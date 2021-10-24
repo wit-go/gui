@@ -2,6 +2,7 @@ package gui
 
 import (
 	"log"
+	"fmt"
 	"strconv"
 	"time"
 
@@ -257,16 +258,24 @@ func makeNode(parent *Node, title string, x int, y int) *Node {
 	Config.counter += 1
 	node.id = id
 
+	// panic("gui.makeNode() START")
 	if (parent == nil) {
 		if (Data.NodeMap[title] != nil) {
 			log.Println("Duplicate uiNewWindow() name =", title)
 			// TODO: just change the 'title' to something unique
+			panic(fmt.Sprintf("Duplicate uiNewWindow() name = %s\n", title))
 			return nil
 		}
+		// panic("gui.makeNode() before NodeMap()")
 		Data.NodeMap[title] = &node
+		Data.NodeArray = append(Data.NodeArray, &node)
+		Data.NodeSlice = append(Data.NodeSlice, &node)
+		// panic("gui.makeNode() after NodeMap()")
 		return &node
 	} else {
+		panic("gui.makeNode() before Append()")
 		parent.Append(&node)
+		panic("gui.makeNode() after Append()")
 	}
 	node.parent = parent
 	return &node
@@ -326,14 +335,28 @@ func (n *Node) initBlankWindow() ui.Control {
 	return hbox
 }
 
-var master = 0
+func makeBlankNode(title string) *Node {
+	log.Println("gui.makeBlankNode() title =", title)
+	if Data.NodeMap[title] != nil {
+		log.Println("gui.makeBlankNode() already exists title =", title)
+		title = title + Config.prefix + strconv.Itoa(Config.counter)
+		Config.counter += 1
+	}
+	if Data.NodeMap[title] != nil {
+		panic("gui.makeBlankNode() already exists")
+		return nil
+	}
+
+	node := makeNode(nil, title, x, y)
+	return node
+}
 
 func mapWindow(parent *Node, window *ui.Window, title string, x int, y int) *Node {
 	log.Println("gui.WindowMap START title =", title)
 	if Data.WindowMap[title] != nil {
 		log.Println("Data.WindowMap[title] already exists title =", title)
-		master = master + 1
-		title = title + " jcarr " + strconv.Itoa(master)
+		title = title + Config.prefix + strconv.Itoa(Config.counter)
+		Config.counter += 1
 	}
 	if Data.WindowMap[title] != nil {
 		log.Println("Data.WindowMap[title] already exists title =", title)
@@ -357,7 +380,6 @@ func mapWindow(parent *Node, window *ui.Window, title string, x int, y int) *Nod
 	box.Window = &newGuiWindow
 	box.Name = title
 
-	// func makeNode(parent *Node, title string, x int, y int) *Node {
 	node := makeNode(parent, title, x, y)
 	node.box = &box
 	node.uiWindow = window

@@ -9,14 +9,13 @@ import (
 	"github.com/davecgh/go-spew/spew"
 )
 
-// import "reflect"
-
-// import "github.com/andlabs/ui"
-// import _ "github.com/andlabs/ui/winmanifest"
-
+// WatchGUI() opens a goroutine
 //
-// Dump out debugging information every 4 seconds
-//
+// From that goroutine, it dumps out debugging information every 4 seconds
+/*
+	TODO: add configuration triggers on what to dump out
+	TODO: allow this to be sent to /var/log, syslogd, systemd's journalctl, etc
+*/
 func WatchGUI() {
 	count := 0
 

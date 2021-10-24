@@ -35,6 +35,7 @@ func add(box *GuiBox, newbox *GuiBox) {
 
 			newbox.Window.BoxMap["MAINBOX"] = newbox
 			log.Println("gui.add() END")
+			panic("gui.add() MAINBOX gui.add() END")
 			return
 		} else {
 			log.Println("\tgui.add() ERROR DONT KNOW HOW TO ADD TO A RAW WINDOW YET")
@@ -42,6 +43,7 @@ func add(box *GuiBox, newbox *GuiBox) {
 		}
 		log.Println("\tgui.add() ERROR DON'T KNOW HOW TO add to Window as MAINBOX DONE")
 		log.Println("gui.add() END")
+		panic("gui.add() gui.add() END")
 		return
 	}
 	log.Println("\tgui.add() adding", newbox.Name, "to", box.Name)
@@ -57,15 +59,14 @@ func add(box *GuiBox, newbox *GuiBox) {
 	}
 
 	if (box.UiBox == nil) {
-	}
-
-	if (box.UiBox == nil) {
 		box.Dump()
+		// panic("gui.add() ERROR box.UiBox == nil")
 		return
 		// TODO: fix this whole add() function // Oct 9
-		panic("gui.add() ERROR box.UiBox == nil")
 	}
 	box.UiBox.Append(newbox.UiBox, false)
+	box.Dump()
+	panic("gui.add()")
 
 	// add the newbox to the Window.BoxMap[]
 	box.Window.BoxMap[newbox.Name] = newbox
@@ -123,6 +124,7 @@ func NewBox(box *GuiBox, axis int, name string) *GuiBox {
 	uiBox.SetPadded(true)
 	newbox.UiBox = uiBox
 	add(box, newbox)
+	// panic("gui.NewBox")
 	return newbox
 }
 

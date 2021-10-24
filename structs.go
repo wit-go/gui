@@ -42,6 +42,8 @@ type GuiData struct {
 
 	// Store access to everything via binary tree's
 	NodeMap    map[string]*Node
+	NodeArray  []*Node
+	NodeSlice  []*Node
 
 	// A map of all buttons everywhere on all
 	// windows, all tabs, across all goroutines

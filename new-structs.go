@@ -130,10 +130,12 @@ func (n *Node) Append(child *Node) {
 	//		return
 	//	}
 	n.children = append(n.children, child)
-	log.Println("child node:")
-	child.Dump()
-	log.Println("parent node:")
-	n.Dump()
+	if (Config.Debug) {
+		log.Println("child node:")
+		child.Dump()
+		log.Println("parent node:")
+		n.Dump()
+	}
 	// time.Sleep(3 * time.Second)
 }
 
@@ -275,7 +277,7 @@ func (parent *Node) AddTab(title string, uiC ui.Control) *Node {
 		parent.uiWindow.SetMargined(true)
 		parent.uiTab = inittab
 
-		parent.Dump()
+		// parent.Dump()
 		// panic("gui.AddTab() ERROR uiTab == nil")
 	}
 
@@ -288,7 +290,9 @@ func (parent *Node) AddTab(title string, uiC ui.Control) *Node {
 	tab.Append(title, uiC)
 	tab.SetMargined(0, true)
 
+	// panic("gui.AddTab() before makeNode()")
 	newNode := parent.makeNode(title, 555, 600 + Config.counter)
 	newNode.uiTab = tab
+	// panic("gui.AddTab() after makeNode()")
 	return newNode
 }
