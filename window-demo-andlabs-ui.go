@@ -4,15 +4,19 @@ import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-func (n *Node) AddDemoTab(title string) {
-	newNode := n.AddTab(title, makeDemoTab())
+// This will create a tab in a window using direct
+// calls to andlabs/ui. This can be used to bypass
+// the obvuscation added in this package if it is desired
+// or needed.
+func (n *Node) AddAndlabsUiDemoTab(title string) {
+	newNode := n.AddTab(title, makeAndlabsUiTab())
 	if (Config.DebugNode) {
 		newNode.Dump()
 	}
 	tabSetMargined(newNode.uiTab)
 }
 
-func makeDemoTab() ui.Control {
+func makeAndlabsUiTab() ui.Control {
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 
