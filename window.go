@@ -135,7 +135,9 @@ func InitWindow(parent *Node, gw *GuiWindow, name string, axis int) *Node {
 		}
 	}
 	if (box.node == nil) {
-		Data.ListChildren(true)
+		if (Config.Debug) {
+			Data.ListChildren(true)
+		}
 		log.Println("InitWindow() box has a FUCKING nil node")
 		fn := FindNode("full initTab")
 		log.Println("InitWindow() fn =", fn)
@@ -143,7 +145,9 @@ func InitWindow(parent *Node, gw *GuiWindow, name string, axis int) *Node {
 	}
 
 	if (newGuiWindow.node == nil) {
-		Data.ListChildren(true)
+		if (Config.Debug) {
+			Data.ListChildren(true)
+		}
 		log.Println("InitWindow() newGuiWindow has a FUCKING nil node")
 		// panic(-1)
 	}
@@ -153,8 +157,10 @@ func InitWindow(parent *Node, gw *GuiWindow, name string, axis int) *Node {
 		box.Dump()
 		panic(-1)
 	}
-	box.Dump()
-	box.node.Dump()
+	if (Config.DebugWindow) {
+		box.Dump()
+		box.node.Dump()
+	}
 	if (box.node != node) {
 		log.Println("InitWindow() box.node != node. Hmmm....")
 		log.Println("InitWindow() box.node != node. Hmmm....")
@@ -168,8 +174,7 @@ func InitWindow(parent *Node, gw *GuiWindow, name string, axis int) *Node {
 		panic(-1)
 	}
 	if (node.uiTab == nil) {
-		// DebugNodeChildren()
-		// panic("node.uiTab = nil")
+		panic("node.uiTab = nil")
 	}
 	return node
 }
@@ -372,7 +377,6 @@ func mapWindow(parent *Node, window *ui.Window, title string, x int, y int) *Nod
 		return nil
 	}
 
-	log.Println("gui.WindowMap START title =", title)
 	var newGuiWindow GuiWindow
 	newGuiWindow.Width = x
 	newGuiWindow.Height = y

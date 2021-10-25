@@ -24,10 +24,11 @@ type GuiConfig struct {
 	Height     int
 	Exit       func(*Node)
 
-	Debug      bool
-	DebugNode  bool
-	DebugTabs  bool
-	DebugTable bool
+	Debug       bool
+	DebugNode   bool
+	DebugTabs   bool
+	DebugTable  bool
+	DebugWindow bool
 
 	depth      int
 	counter    int  // used to make unique ID's
