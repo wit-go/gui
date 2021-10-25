@@ -341,12 +341,14 @@ func CreateBlankWindow(title string, x int, y int) *Node {
 	return node
 }
 
+/*
 func (n *Node) initBlankWindow() ui.Control {
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 
 	return hbox
 }
+*/
 
 func makeBlankNode(title string) *Node {
 	log.Println("gui.makeBlankNode() title =", title)

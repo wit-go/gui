@@ -172,15 +172,19 @@ func (parent *Node) AddTabNode(title string, b *GuiBox) *Node {
 	var newNode *Node
 	// var newControl ui.Control
 
+	/*
 	if (parent.box == nil) {
 		// TODO: fix this to use a blank box
-		uiC := parent.initBlankWindow()
-		newNode.uiControl = &uiC
+		// uiC := parent.initBlankWindow()
+		hbox := ui.NewHorizontalBox()
+		hbox.SetPadded(true)
+		newNode.uiBox = hbox
 		panic("node.AddTabNode() can not add a tab if the box == nil")
 	}
 	if (parent.uiTab == nil) {
 		panic("node.AddTabNode() can not add a tab if parent.uiTab == nil")
 	}
+	*/
 
 	newNode = parent.makeNode(title, 444, 400 + Config.counter)
 	newNode.uiTab = parent.uiTab
@@ -206,6 +210,7 @@ func (parent *Node) AddTabNode(title string, b *GuiBox) *Node {
 }
 
 func (parent *Node) AddTab(title string, uiC ui.Control) *Node {
+	log.Println("gui.Node.AddTab() START name =", title)
 	if parent.uiWindow == nil {
 		parent.Dump()
 		panic("gui.AddTab() ERROR ui.Window == nil")
@@ -228,7 +233,9 @@ func (parent *Node) AddTab(title string, uiC ui.Control) *Node {
 	parent.uiWindow.SetMargined(true)
 
 	if (uiC == nil) {
-		uiC = parent.initBlankWindow()
+		hbox := ui.NewHorizontalBox()
+		hbox.SetPadded(true)
+		uiC = hbox
 	}
 	tab.Append(title, uiC)
 	tab.SetMargined(0, true)
