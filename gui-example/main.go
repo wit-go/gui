@@ -8,17 +8,19 @@ import (
 	"git.wit.org/wit/gui"
 )
 
+// This initializes the first window
+//
+// Then starts a goroutine to demonstrate how to
+// inject things into the GUI
 func main() {
 	log.Println("Starting my Control Panel")
 
-	// This initializes the first window
 	go gui.Main(initGUI)
 
-	// This starts a goroutine to demonstrate how to
-	// inject things into the GUI
 	watchGUI()
 }
 
+// This initializes the first window
 func initGUI() {
 	gui.Config.Title = "WIT GUI Window Demo"
 	gui.Config.Width = 640
@@ -31,7 +33,6 @@ func initGUI() {
 
 // This demonstrates how to properly interact with the GUI
 // You can not involke the GUI from external goroutines in most cases.
-
 func watchGUI() {
 	var i = 1
 	for {
