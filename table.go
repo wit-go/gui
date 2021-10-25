@@ -98,10 +98,7 @@ func InitColumns(mh *TableData, parts []TableColumnData) {
 }
 
 func AddTableTab(gw *GuiWindow, name string, rowcount int, parts []TableColumnData) *TableData {
-	// node := InitWindow(nil, gw, name, Yaxis)
 	node := NewWindow()
-	// node.AddDebugTab("jcarr Debug")
-
 	return AddTableBox(node.box, name, rowcount, parts)
 }
 

@@ -12,22 +12,9 @@ var names = make([]string, 100)
 var nodeNames = make([]string, 100)
 
 func DebugWindow() {
-	log.Println("START gui.DebugWindow()")
-
-	/*
-	title := "WIT GUI Debug Window"
-	node := InitWindow(nil, nil, title, 0)
-	box := node.box
-	window := box.Window
-	log.Println("box =", box)
-	log.Println("window =", window)
-	*/
-
 	Config.Title = "replace InitWindow()"
 	node := NewWindow()
 	node.AddDebugTab("WIT GUI Debug Tab")
-
-	// window.UiWindow.Show()
 }
 
 // TODO: remove this crap
@@ -190,13 +177,6 @@ func makeWindowDebug() ui.Control {
 	n1.OnClicked(func(*ui.Button) {
 		Data.DumpNodeMap()
 	})
-
-/*
-	n1 = addButton(vbox, "DebugDataNodeChildren()")
-	n1.OnClicked(func(*ui.Button) {
-		DebugDataNodeChildren()
-	})
-*/
 
 	n1 = addButton(vbox, "Data.ListChildren(false)")
 	n1.OnClicked(func(*ui.Button) {
