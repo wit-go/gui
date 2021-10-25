@@ -188,55 +188,6 @@ func (s GuiBox) Append(child ui.Control, x bool) {
 	s.UiBox.Append(child, x)
 }
 
-/*
-func (s *GuiBox) AddTab(title string, custom ui.Control) *ui.Tab {
-	if s.Window == nil {
-		return nil
-	}
-	if s.Window.UiTab == nil {
-		return nil
-	}
-
-	tab := s.Window.UiTab
-	tab.Append(title, custom)
-	return tab
-}
-*/
-
-/*
-func (s GuiBox) AddBoxTab(title string) *GuiBox {
-	uiTab := s.AddTab(title, initBlankWindow())
-	tabSetMargined(uiTab)
-
-	var box *GuiBox
-	box = HardBox(s.Window, Xaxis, "jcarrAddBoxTab")
-	box.Window.UiTab = uiTab
-	return box
-}
-*/
-
-func (n *Node) AddDemoTab(title string) {
-	newNode := n.AddTab(title, makeWindowTemplate())
-	newNode.Dump()
-	tabSetMargined(newNode.uiTab)
-}
-
-func (n *Node) AddDebugTab(title string) {
-	newNode := n.AddTab(title, makeWindowDebug())
-	newNode.Dump()
-	tabSetMargined(newNode.uiTab)
-}
-
-func tabSetMargined(tab *ui.Tab) {
-	log.Println("tabSetMargined() IGNORE THIS")
-	return
-	c := tab.NumPages()
-	for i := 0; i < c; i++ {
-		log.Println("tabSetMargined() i =", i)
-		// tab.SetMargined(i, true)
-	}
-}
-
 // Note: every mouse click is handled
 // as a 'Button' regardless of where
 // the user clicks it. You could probably

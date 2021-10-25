@@ -12,6 +12,8 @@ var names = make([]string, 100)
 var nodeNames = make([]string, 100)
 
 // TODO: remove this crap
+// What does this actually do?
+// It populates the nodeNames in a map. No, not a map, an array. What is the difference again?
 func addNodeName(c *ui.Combobox, s string) {
 	c.Append(s)
 	nodeNames[y] = s
@@ -220,6 +222,28 @@ func makeWindowDebug() ui.Control {
 		}
 	})
 
+	n1 = addButton(vbox, "Node.AddDebugTab")
+	n1.OnClicked(func(*ui.Button) {
+		y := nodeCombo.Selected()
+		log.Println("y =", y)
+		log.Println("nodeNames[y] =", nodeNames[y])
+		node := Data.findId(nodeNames[y])
+		if (node != nil) {
+			node.AddDebugTab("added this DebugTab")
+		}
+	})
+
+	n1 = addButton(vbox, "Node.DemoTab")
+	n1.OnClicked(func(*ui.Button) {
+		y := nodeCombo.Selected()
+		log.Println("y =", y)
+		log.Println("nodeNames[y] =", nodeNames[y])
+		node := Data.findId(nodeNames[y])
+		if (node != nil) {
+			node.AddDemoTab("added this DemoTab")
+		}
+	})
+
 /*
 	/////////////////////////////////////////////////////
 	vbox = addGroup(hbox, "Numbers")
@@ -330,4 +354,28 @@ func addButton(box *ui.Box, name string) *ui.Button {
 
 	box.Append(button, false)
 	return button
+}
+
+func (n *Node) AddDemoTab(title string) {
+	newNode := n.AddTab(title, makeWindowTemplate())
+	newNode.Dump()
+	tabSetMargined(newNode.uiTab)
+}
+
+func (n *Node) AddDebugTab(title string) {
+	newNode := n.AddTab(title, makeWindowDebug())
+	newNode.Dump()
+	tabSetMargined(newNode.uiTab)
+}
+
+// This sets _all_ the tabs to Margin = true
+//
+// TODO: do proper tab tracking (will be complicated). low priority
+func tabSetMargined(tab *ui.Tab) {
+	log.Println("tabSetMargined() IGNORE THIS")
+	c := tab.NumPages()
+	for i := 0; i < c; i++ {
+		log.Println("tabSetMargined() i =", i)
+		tab.SetMargined(i, true)
+	}
 }
