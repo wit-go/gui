@@ -35,7 +35,9 @@ func makeWindowDebug() ui.Control {
 	cbox := ui.NewCombobox()
 
 	for name, _ := range Data.WindowMap {
-		log.Println("range Data.WindowMap() name =", name)
+		if (Config.Debug) {
+			log.Println("range Data.WindowMap() name =", name)
+		}
 		addName(cbox, name)
 	}
 	cbox.SetSelected(0)
@@ -153,7 +155,9 @@ func makeWindowDebug() ui.Control {
 	nodeCombo := ui.NewCombobox()
 
 	for name, node := range Data.NodeMap {
-		log.Println("range Data.NodeMap() name =", name)
+		if (Config.Debug) {
+			log.Println("range Data.NodeMap() name =", name)
+		}
 		addNodeName(nodeCombo, node.id)
 	}
 	nodeCombo.SetSelected(0)

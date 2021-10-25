@@ -52,6 +52,7 @@ func DeleteWindow(name string) {
 	}
 }
 
+/*
 func CreateWindow(title string, tabname string, x int, y int, custom func() ui.Control) *Node {
 	n := CreateBlankWindow(title, x, y)
 	if (n.box == nil) {
@@ -64,7 +65,9 @@ func CreateWindow(title string, tabname string, x int, y int, custom func() ui.C
 	// TODO: run custom() here // Oct 9
 	return n
 }
+*/
 
+/*
 func (n *Node) Add(e Element) *Node {
 	newNode := n.addNode("testingAdd")
 	if(e == Tab) {
@@ -72,12 +75,14 @@ func (n *Node) Add(e Element) *Node {
 	}
 	return newNode
 }
+*/
 
 //
 // Create a new node
 // if parent == nil, that means it is a new window and needs to be put
 // in the window map (aka Data.NodeMap)
 //
+/*
 func (parent *Node) addNode(title string) *Node {
 	var node Node
 	node.Name = title
@@ -92,6 +97,7 @@ func (parent *Node) addNode(title string) *Node {
 	parent.Append(&node)
 	return &node
 }
+*/
 
 func makeNode(parent *Node, title string, x int, y int) *Node {
 	var node Node
@@ -106,9 +112,9 @@ func makeNode(parent *Node, title string, x int, y int) *Node {
 	// panic("gui.makeNode() START")
 	if (parent == nil) {
 		if (Data.NodeMap[title] != nil) {
-			log.Println("Duplicate uiNewWindow() name =", title)
+			log.Println("Duplicate window name =", title)
 			// TODO: just change the 'title' to something unique
-			panic(fmt.Sprintf("Duplicate uiNewWindow() name = %s\n", title))
+			panic(fmt.Sprintf("Duplicate window name = %s\n", title))
 			return nil
 		}
 		// panic("gui.makeNode() before NodeMap()")
@@ -161,6 +167,7 @@ func (n *Node) uiNewWindow(title string, x int, y int) {
 	return
 }
 
+/*
 func CreateBlankWindow(title string, x int, y int) *Node {
 	node := mapWindow(nil, nil, title, x, y)
 	box := node.box
@@ -178,6 +185,7 @@ func CreateBlankWindow(title string, x int, y int) *Node {
 	box.Window.UiWindow = window
 	return node
 }
+*/
 
 /*
 func (n *Node) initBlankWindow() ui.Control {
