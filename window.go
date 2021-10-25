@@ -80,15 +80,17 @@ func InitWindow(parent *Node, gw *GuiWindow, name string, axis int) *Node {
 		w := node.uiWindow
 		newGuiWindow.UiWindow = w
 
-		// newGuiWindow.UiWindow.SetTitle("test")
+		f := Config.Exit
 		w.OnClosing(func(*ui.Window) bool {
-			log.Println("gui.InitWindow() OnClosing() THIS WINDOW IS CLOSING newGuiWindow=", newGuiWindow)
+			if (Config.Debug) {
+				log.Println("gui.InitWindow() OnClosing()")
+			}
 			// newGuiWindow.UiWindow.Destroy()
-			if Config.Exit == nil {
+			if f == nil {
 				ui.Quit()
 			} else {
-				// allow a custom exit function
-				Config.Exit(newGuiWindow)
+				// use a custom exit function
+				f(node)
 			}
 			return true
 		})
@@ -299,8 +301,14 @@ func (parent *Node) makeNode(title string, x int, y int) *Node {
 func (n *Node) uiNewWindow(title string, x int, y int) {
 	w := ui.NewWindow(title, x, y, false)
 	w.SetBorderless(false)
+	f := Config.Exit
 	w.OnClosing(func(*ui.Window) bool {
-		log.Println("ui.Window().OnClosing() IS EMPTY FOR window name =", title)
+		if (Config.Debug) {
+			log.Println("ui.Window().OnClosing()")
+		}
+		if (f != nil) {
+			f(n)
+		}
 		return true
 	})
 	w.SetMargined(true)
@@ -390,18 +398,31 @@ func mapWindow(parent *Node, window *ui.Window, title string, x int, y int) *Nod
 	return node
 }
 
-func NewWindow(title string, x int, y int) *Node {
+// This routine creates a blank window with a Title and size (W x H)
+//
+// This routine can not have any arguements due to the nature of how
+// it can be passed via the 'andlabs/ui' queue which, because it is
+// cross platform, must pass UI changes into the OS threads (that is
+// my guess).
+func NewWindow() *Node {
+	title := Config.Title
+	w     := Config.Width
+	h     := Config.Height
+
 	var node *Node
-	node = mapWindow(nil, nil, title, x, y)
+	node = mapWindow(nil, nil, title, w, h)
 	box := node.box
 	log.Println("gui.NewWindow() title = box.Name =", box.Name)
 
-	node.uiNewWindow(box.Name, x, y)
+	node.uiNewWindow(box.Name, w, h)
 	window := node.uiWindow
 
+	f := Config.Exit
 	ui.OnShouldQuit(func() bool {
-		log.Println("createWindow().Destroy()", box.Name)
-		window.Destroy()
+		log.Println("createWindow().Destroy() on node.Name =", node.Name)
+		if (f != nil) {
+			f(node)
+		}
 		return true
 	})
 

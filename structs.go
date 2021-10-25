@@ -20,13 +20,15 @@ var Data GuiData
 var Config GuiConfig
 
 type GuiConfig struct {
+	Title      string
 	Width      int
 	Height     int
+	Exit       func(*Node)
+
 	Debug      bool
 	DebugNode  bool
 	DebugTabs  bool
 	DebugTable bool
-	Exit       func(*GuiWindow)
 
 	depth      int
 	counter    int  // used to make unique ID's
