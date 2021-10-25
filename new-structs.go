@@ -209,7 +209,8 @@ func (parent *Node) AddTabNode(title string, b *GuiBox) *Node {
 	return newNode
 }
 
-func (parent *Node) AddTab(title string, uiC ui.Control) *Node {
+// func (parent *Node) AddTab(title string, uiC ui.Control) *Node {
+func (parent *Node) AddTab(title string, uiC *ui.Box) *Node {
 	log.Println("gui.Node.AddTab() START name =", title)
 	if parent.uiWindow == nil {
 		parent.Dump()
@@ -243,6 +244,7 @@ func (parent *Node) AddTab(title string, uiC ui.Control) *Node {
 	// panic("gui.AddTab() before makeNode()")
 	newNode := parent.makeNode(title, 555, 600 + Config.counter)
 	newNode.uiTab = tab
+	newNode.uiBox = uiC
 	// panic("gui.AddTab() after makeNode()")
 	return newNode
 }

@@ -4,19 +4,24 @@ import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
+var mybox *ui.Box
+
 func (n *Node) AddDemoTab(title string) {
 	newNode := n.AddTab(title, makeDemoTab())
 	if (Config.DebugNode) {
 		newNode.Dump()
 	}
 	tabSetMargined(newNode.uiTab)
+	newNode.Dump()
+	newNode.ListChildren(false)
+	addDemoGroup(newNode.uiBox)
 }
 
-func makeDemoTab() ui.Control {
+func makeDemoTab() *ui.Box {
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 
-	group := ui.NewGroup("Numbers")
+	group := ui.NewGroup("DemoEditBox")
 	group.SetMargined(true)
 	hbox.Append(group, true)
 
@@ -24,45 +29,10 @@ func makeDemoTab() ui.Control {
 	vbox.SetPadded(true)
 	group.SetChild(vbox)
 
-	spinbox := ui.NewSpinbox(47, 100)
-	slider  := ui.NewSlider(21, 100)
-	pbar    := ui.NewProgressBar()
-
-	spinbox.OnChanged(func(*ui.Spinbox) {
-		slider.SetValue(spinbox.Value())
-		pbar.SetValue(spinbox.Value())
-	})
-	slider.OnChanged(func(*ui.Slider) {
-		spinbox.SetValue(slider.Value())
-		pbar.SetValue(slider.Value())
-	})
-	vbox.Append(spinbox, false)
-	vbox.Append(slider, false)
-	vbox.Append(pbar, false)
-
-	ip := ui.NewProgressBar()
-	ip.SetValue(-1)
-	vbox.Append(ip, false)
-
-	group = ui.NewGroup("Lists")
-	group.SetMargined(true)
-	hbox.Append(group, true)
-
-	vbox = ui.NewVerticalBox()
-	vbox.SetPadded(true)
-	group.SetChild(vbox)
-
-	cbox := ui.NewCombobox()
-	cbox.Append("Combobox Item 1")
-	cbox.Append("Combobox Item 2")
-	cbox.Append("Combobox Item 3")
-	vbox.Append(cbox, false)
-
 	ecbox := ui.NewEditableCombobox()
-	ecbox.Append("Editable Item 1")
-	ecbox.Append("Editable Item 2")
-	ecbox.Append("Editable Item 3")
-	vbox.Append(ecbox, false)
+	ecbox.Append("foo 1")
+	ecbox.Append("man 2")
+	ecbox.Append("bar 3")
 
 	ecbox.OnChanged(func(*ui.EditableCombobox) {
 		log.Println("test")
@@ -70,11 +40,33 @@ func makeDemoTab() ui.Control {
 		log.Println("test=", test)
 	})
 
-	rb := ui.NewRadioButtons()
-	rb.Append("Radio Button 1")
-	rb.Append("Radio Button 2")
-	rb.Append("Radio Button 3")
-	vbox.Append(rb, false)
+	vbox.Append(ecbox, false)
 
 	return hbox
+}
+
+func addDemoGroup(hbox *ui.Box) {
+	if (hbox == nil) {
+		return
+	}
+	group := ui.NewGroup("DemoEditBox 2")
+	group.SetMargined(true)
+	hbox.Append(group, true)
+
+	vbox := ui.NewVerticalBox()
+	vbox.SetPadded(true)
+	group.SetChild(vbox)
+
+	ecbox := ui.NewEditableCombobox()
+	ecbox.Append("foo 1")
+	ecbox.Append("man 2")
+	ecbox.Append("bar 3")
+
+	ecbox.OnChanged(func(*ui.EditableCombobox) {
+		log.Println("test")
+		test := ecbox.Text()
+		log.Println("test=", test)
+	})
+
+	vbox.Append(ecbox, false)
 }

@@ -26,7 +26,7 @@ func addNodeName(c *ui.Combobox, s string) {
 	y = y + 1
 }
 
-func makeWindowDebug() ui.Control {
+func makeWindowDebug() *ui.Box {
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 

@@ -16,7 +16,7 @@ func (n *Node) AddAndlabsUiDemoTab(title string) {
 	tabSetMargined(newNode.uiTab)
 }
 
-func makeAndlabsUiTab() ui.Control {
+func makeAndlabsUiTab() *ui.Box {
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 
