@@ -177,44 +177,6 @@ func (n *Node) ListChildren(dump bool) {
 	return
 }
 
-func findByIdDFS(node *Node, id string) *Node {
-	log.Println("findByIdDFS()", id, node)
-	node.Dump()
-	if node.id == id {
-		log.Println("Found node id =", id, node)
-		return node
-	}
-
-	if len(node.children) > 0 {
-		for _, child := range node.children {
-			newNode := findByIdDFS(child, id)
-			if (newNode != nil) {
-				return newNode
-			}
-		}
-	}
-	return nil
-}
-
-func findByName(node *Node, name string) *Node {
-	log.Println("findByName()", name, node)
-	node.Dump()
-	if node.Name == name {
-		log.Println("findByName() Found node name =", name, node)
-		return node
-	}
-
-	if len(node.children) > 0 {
-		for _, child := range node.children {
-			newNode := findByName(child, name)
-			if (newNode != nil) {
-				return newNode
-			}
-		}
-	}
-	return nil
-}
-
 // The parent Node needs to be the raw Window
 // The 'stuff' Node needs to be the contents of the tab
 //

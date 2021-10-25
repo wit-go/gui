@@ -2,7 +2,6 @@ package gui
 
 import (
 	"fmt"
-	"os"
 	"log"
 	"time"
 
@@ -145,29 +144,6 @@ func DebugDataNodeChildren() {
 }
 */
 
-func FindNode(name string) *Node {
-	if Data.NodeMap == nil {
-		log.Println("gui.FindNode() gui.Data.NodeMap == nil")
-		return nil
-	}
-	log.Println("gui.FindNode() searching Data.NodeMap:")
-	for id, node := range Data.NodeMap {
-		log.Println("\tData.NodeMap name =", node.Width, node.Height, id)
-		node.Dump()
-		if (name == node.Name) {
-			return node
-		}
-		newNode := findByName(node, name)
-		if (newNode != nil) {
-			return newNode
-		}
-		log.Println("gui.FindNode() could not find node name =", name)
-		os.Exit(-1)
-	}
-	log.Println("gui.FindNode() could not find node name =", name)
-	return nil
-}
-
 func (dn *GuiData) ListChildren(dump bool) {
 	if Data.NodeMap == nil {
 		log.Println("gui.Data.ListChildren() Data.NodeMap == nil")
@@ -182,38 +158,3 @@ func (dn *GuiData) ListChildren(dump bool) {
 		node.ListChildren(dump)
 	}
 }
-
-func (dn *GuiData) findId(id string) *Node {
-	if Data.NodeMap == nil {
-		log.Println("gui.Data.findId() map == nil")
-		return nil
-	}
-	// log.Println("Dumping Data.NodeMap:")
-	for name, node := range Data.NodeMap {
-		// log.Println("\tData.NodeMap name =", node.id, node.Width, node.Height, name)
-		if (id == node.id) {
-			log.Println("\tgui.Data.findId() found node =", node.id, node.Width, node.Height, name)
-			return node
-		}
-		// TODO: fix // Oct 9
-		// node.findId(id)
-	}
-	return nil
-}
-
-/*
-func DebugNodeChildren() {
-	if Data.NodeMap == nil {
-		log.Println("Data.NodeMap == nil")
-		return
-	}
-	log.Println("Dumping Data.NodeMap:")
-	for name, node := range Data.NodeMap {
-		log.Println("\tData.NodeMap name =", node.id, node.Width, node.Height, name)
-		// node.Dump()
-		node.ListChildren()
-		// node.SetName("yahoo")
-		// log.Println("\tData.NodeMap node =", node)
-	}
-}
-*/
