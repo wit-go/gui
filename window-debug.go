@@ -2,6 +2,8 @@ package gui
 
 import (
 	"log"
+	// "fmt"
+	"strconv"
 
 	"github.com/andlabs/ui"
 	_ "github.com/andlabs/ui/winmanifest"
@@ -243,7 +245,7 @@ func makeWindowDebug() *ui.Box {
 		log.Println("nodeNames[y] =", nodeNames[y])
 		node := Data.findId(nodeNames[y])
 		if (node != nil) {
-			node.AddDemoTab("added this DemoTab")
+			node.AddDemoTab("ran gui.AddDemoTab() " + strconv.Itoa(Config.counter))
 		}
 	})
 

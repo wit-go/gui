@@ -14,7 +14,9 @@ func (n *Node) AddDemoTab(title string) {
 	tabSetMargined(newNode.uiTab)
 	newNode.Dump()
 	newNode.ListChildren(false)
-	addDemoGroup(newNode.uiBox)
+	addDemoGroup(newNode, "new group 1")
+	addDemoGroup(newNode, "new group 2")
+	addDemoGroup(newNode, "new group 3")
 }
 
 func makeDemoTab() *ui.Box {
@@ -45,11 +47,12 @@ func makeDemoTab() *ui.Box {
 	return hbox
 }
 
-func addDemoGroup(hbox *ui.Box) {
+func addDemoGroup(n *Node, title string) {
+	hbox := n.uiBox
 	if (hbox == nil) {
 		return
 	}
-	group := ui.NewGroup("DemoEditBox 2")
+	group := ui.NewGroup(title)
 	group.SetMargined(true)
 	hbox.Append(group, true)
 
