@@ -26,9 +26,12 @@ func main() {
 }
 
 func initGUI() {
-	n := gui.NewWindow("jcarr start", 640, 480)
-	n.AddDemoTab("up the rabbit hole")
+	n := gui.NewWindow("WIT GUI Example Window", 640, 480)
+	n.AddDemoTab("A Simple Tab Demo")
 }
+
+// This demonstrates how to properly interact with the GUI
+// You can not involke the GUI from external goroutines in most cases.
 
 func watchGUI() {
 	var i = 1
@@ -37,7 +40,7 @@ func watchGUI() {
 		i += 1
 		time.Sleep(1 * time.Second)
 		if i == 4 {
-			log.Println("Sending ExampleWindow to gui.Queue()")
+			log.Println("Opening a Debug Window via the gui.Queue()")
 			gui.Queue(gui.DebugWindow)
 		}
 	}

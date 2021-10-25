@@ -23,7 +23,7 @@ func init() {
 	Data.NodeSlice = make([]*Node, 0)
 
 	Config.counter = 0
-	Config.prefix = "jwc"
+	Config.prefix = "wit"
 	Config.DebugNode = false
 	Config.DebugTabs = false
 }

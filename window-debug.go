@@ -11,6 +11,20 @@ import (
 var names = make([]string, 100)
 var nodeNames = make([]string, 100)
 
+func DebugWindow() {
+	log.Println("START gui.DebugWindow()")
+
+	title := "WIT GUI Debug Window"
+	node := InitWindow(nil, nil, title, 0)
+	box := node.box
+	window := box.Window
+	log.Println("box =", box)
+	log.Println("window =", window)
+	node.AddDebugTab("WIT GUI Debug Tab")
+
+	window.UiWindow.Show()
+}
+
 // TODO: remove this crap
 // What does this actually do?
 // It populates the nodeNames in a map. No, not a map, an array. What is the difference again?
@@ -276,31 +290,6 @@ func addGroup(b *ui.Box, name string) *ui.Box {
 	group.SetChild(vbox)
 
 	return vbox
-}
-
-func FindWindow(s string) *GuiWindow {
-	for name, window := range Data.WindowMap {
-		if name == s {
-			return window
-		}
-	}
-	log.Printf("COULD NOT FIND WINDOW", s)
-	return nil
-}
-
-func FindBox(s string) *GuiBox {
-	for name, window := range Data.WindowMap {
-		if name != s {
-			continue
-		}
-		for name, abox := range window.BoxMap {
-			log.Printf("gui.DumpBoxes() \tBOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
-			return abox
-		}
-		log.Println("gui.FindBox() NEED TO INIT WINDOW name =", name)
-	}
-	log.Println("gui.FindBox() COULD NOT FIND BOX", s)
-	return nil
 }
 
 func dumpBox(s string) {
