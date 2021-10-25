@@ -106,25 +106,6 @@ func (n *Node) SetName(name string) {
 	return
 }
 
-func (n *Node) FindTab() *ui.Tab {
-	return n.uiTab
-}
-
-func (n *Node) FindControl() *ui.Control {
-	return n.uiControl
-}
-
-func (n *Node) FindBox() *GuiBox {
-	return n.box
-}
-
-func (n *Node) FindWindowBox() *GuiBox {
-	if (n.box == nil) {
-		panic("SERIOUS ERROR n.box == nil in FindWindowBox()")
-	}
-	return n.box
-}
-
 func (n *Node) Append(child *Node) {
 	//	if (n.UiBox == nil) {
 	//		return

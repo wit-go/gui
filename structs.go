@@ -3,7 +3,6 @@ package gui
 import (
 	"image/color"
 	"log"
-	"os"
 
 	"github.com/andlabs/ui"
 	"golang.org/x/image/font"
@@ -167,22 +166,6 @@ func (b *GuiBox) SetNode(n *Node) {
 		b.Dump()
 		panic("gui.SetNode() node == nil")
 	}
-}
-
-func (w *GuiWindow) FindNode() *Node {
-	return w.node
-}
-
-func (b *GuiBox) FindNode() *Node {
-	log.Println("gui.FindNode() on GuiBox")
-	if b.node != nil {
-		return b.node
-	}
-	Data.ListChildren(true)
-	b.Dump()
-	log.Println("gui.FindNode() on GuiBox is nil")
-	os.Exit(-1)
-	return nil
 }
 
 func (s GuiBox) Append(child ui.Control, x bool) {

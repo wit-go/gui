@@ -4,11 +4,45 @@ import (
 	"log"
 	"os"
 
-//	"github.com/andlabs/ui"
-//	_ "github.com/andlabs/ui/winmanifest"
+	"github.com/andlabs/ui"
+	_ "github.com/andlabs/ui/winmanifest"
 //	"github.com/davecgh/go-spew/spew"
 )
 
+func (n *Node) FindTab() *ui.Tab {
+	return n.uiTab
+}
+
+func (n *Node) FindControl() *ui.Control {
+	return n.uiControl
+}
+
+func (n *Node) FindBox() *GuiBox {
+	return n.box
+}
+
+func (n *Node) FindWindowBox() *GuiBox {
+	if (n.box == nil) {
+		panic("SERIOUS ERROR n.box == nil in FindWindowBox()")
+	}
+	return n.box
+}
+
+func (w *GuiWindow) FindNode() *Node {
+	return w.node
+}
+
+func (b *GuiBox) FindNode() *Node {
+	log.Println("gui.FindNode() on GuiBox")
+	if b.node != nil {
+		return b.node
+	}
+	Data.ListChildren(true)
+	b.Dump()
+	log.Println("gui.FindNode() on GuiBox is nil")
+	os.Exit(-1)
+	return nil
+}
 
 func FindWindow(s string) *GuiWindow {
 	for name, window := range Data.WindowMap {
