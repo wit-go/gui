@@ -4,6 +4,14 @@ import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
+func (n *Node) AddDemoTab(title string) {
+	newNode := n.AddTab(title, makeWindowTemplate())
+	if (Config.DebugNode) {
+		newNode.Dump()
+	}
+	tabSetMargined(newNode.uiTab)
+}
+
 func makeWindowTemplate() ui.Control {
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)

@@ -356,15 +356,11 @@ func addButton(box *ui.Box, name string) *ui.Button {
 	return button
 }
 
-func (n *Node) AddDemoTab(title string) {
-	newNode := n.AddTab(title, makeWindowTemplate())
-	newNode.Dump()
-	tabSetMargined(newNode.uiTab)
-}
-
 func (n *Node) AddDebugTab(title string) {
 	newNode := n.AddTab(title, makeWindowDebug())
-	newNode.Dump()
+	if (Config.DebugNode) {
+		newNode.Dump()
+	}
 	tabSetMargined(newNode.uiTab)
 }
 
@@ -372,10 +368,14 @@ func (n *Node) AddDebugTab(title string) {
 //
 // TODO: do proper tab tracking (will be complicated). low priority
 func tabSetMargined(tab *ui.Tab) {
-	log.Println("tabSetMargined() IGNORE THIS")
+	if (Config.DebugTabs) {
+		log.Println("tabSetMargined() IGNORE THIS")
+	}
 	c := tab.NumPages()
 	for i := 0; i < c; i++ {
-		log.Println("tabSetMargined() i =", i)
+		if (Config.DebugTabs) {
+			log.Println("tabSetMargined() i =", i)
+		}
 		tab.SetMargined(i, true)
 	}
 }

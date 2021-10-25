@@ -23,6 +23,8 @@ type GuiConfig struct {
 	Width      int
 	Height     int
 	Debug      bool
+	DebugNode  bool
+	DebugTabs  bool
 	DebugTable bool
 	Exit       func(*GuiWindow)
 

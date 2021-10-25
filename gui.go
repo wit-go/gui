@@ -24,6 +24,8 @@ func init() {
 
 	Config.counter = 0
 	Config.prefix = "jwc"
+	Config.DebugNode = false
+	Config.DebugTabs = false
 }
 
 func GuiInit() {

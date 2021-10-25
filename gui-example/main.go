@@ -26,7 +26,8 @@ func main() {
 }
 
 func initGUI() {
-	gui.NewWindow("jcarr start", 640, 480)
+	n := gui.NewWindow("jcarr start", 640, 480)
+	n.AddDemoTab("up the rabbit hole")
 }
 
 func watchGUI() {
@@ -35,7 +36,7 @@ func watchGUI() {
 		log.Println("Waiting for customExit()", i)
 		i += 1
 		time.Sleep(1 * time.Second)
-		if i == 2 {
+		if i == 4 {
 			log.Println("Sending ExampleWindow to gui.Queue()")
 			gui.Queue(gui.DebugWindow)
 		}
