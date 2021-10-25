@@ -26,13 +26,16 @@ func Queue(f func()) {
 func ExampleWindow() {
 	log.Println("START gui.ExampleWindow()")
 
-	title := "Test Window"
+	Config.Title = "ExampleWindow"
+	/*
 	node := InitWindow(nil, nil, title, 0)
 	box := node.box
 	window := box.Window
 	log.Println("box =", box)
 	log.Println("window =", window)
+	*/
+	node := NewWindow()
 	node.AddDebugTab("jcarr Debug")
 
-	window.UiWindow.Show()
+	// window.UiWindow.Show()
 }

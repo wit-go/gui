@@ -4,7 +4,7 @@ import (
 	"log"
 	"fmt"
 	"strconv"
-	"time"
+//	"time"
 
 	"github.com/andlabs/ui"
 
@@ -13,21 +13,25 @@ import (
 	_ "github.com/andlabs/ui/winmanifest"
 )
 
+/*
 func initUI(name string, callback func(*GuiBox) *GuiBox) {
 	ui.Main(func() {
 		log.Println("gui.initUI() inside ui.Main()")
 
-		node := InitWindow(nil, nil, "StartNewWindow"+name, 0)
+		node := NewWindow()
+
+		// node := InitWindow(nil, nil, "StartNewWindow"+name, 0)
 		box := node.box
 		box = callback(box)
 		window := box.Window
-		node.window = window
 		log.Println("StartNewWindow() box =", box)
 
 		window.UiWindow.Show()
 	})
 }
+*/
 
+/*
 func StartNewWindow(bg bool, name string, axis int, callback func(*GuiBox) *GuiBox) {
 	log.Println("StartNewWindow() ui.Main() Create a new window")
 
@@ -38,6 +42,7 @@ func StartNewWindow(bg bool, name string, axis int, callback func(*GuiBox) *GuiB
 		initUI(name, callback)
 	}
 }
+*/
 
 func MessageWindow(gw *GuiWindow, msg1 string, msg2 string) {
 	ui.MsgBox(gw.UiWindow, msg1, msg2)
@@ -52,6 +57,7 @@ func ErrorWindow(gw *GuiWindow, msg1 string, msg2 string) {
 // This is this way because on Linux you can have more than one
 // actual window but that does not appear to work on the MacOS or Windows
 //
+/*
 func InitWindow(parent *Node, gw *GuiWindow, name string, axis int) *Node {
 	log.Println("gui.InitWindow() START")
 
@@ -178,6 +184,7 @@ func InitWindow(parent *Node, gw *GuiWindow, name string, axis int) *Node {
 	}
 	return node
 }
+*/
 
 func DeleteWindow(name string) {
 	log.Println("gui.DeleteWindow() START name =", name)
