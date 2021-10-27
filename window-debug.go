@@ -249,6 +249,17 @@ func makeWindowDebug() *ui.Box {
 		}
 	})
 
+	n1 = addButton(vbox, "Node.DemoAndlabsUiTab")
+	n1.OnClicked(func(*ui.Button) {
+		y := nodeCombo.Selected()
+		log.Println("y =", y)
+		log.Println("nodeNames[y] =", nodeNames[y])
+		node := Data.findId(nodeNames[y])
+		if (node != nil) {
+			node.AddDemoAndlabsUiTab("ran gui.AddDemoAndlabsUiTab() " + strconv.Itoa(Config.counter))
+		}
+	})
+
 /*
 	/////////////////////////////////////////////////////
 	vbox = addGroup(hbox, "Numbers")

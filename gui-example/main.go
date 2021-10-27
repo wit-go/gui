@@ -29,7 +29,7 @@ func initGUI() {
 
 	node := gui.NewWindow()
 	node.AddDemoTab("A Simple Tab Demo")
-	node.AddAndlabsUiDemoTab("A Simple andlabs/ui Tab Demo")
+	node.AddDemoAndlabsUiTab("A Simple andlabs/ui Tab Demo")
 }
 
 // This demonstrates how to properly interact with the GUI
