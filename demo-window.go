@@ -16,7 +16,9 @@ func (n *Node) AddDemoTab(title string) {
 	newNode.ListChildren(false)
 	addDemoGroup(newNode, "new group 1")
 	addDemoGroup(newNode, "new group 2")
-	addDemoGroup(newNode, "new group 3")
+	
+	groupNode := newNode.AddGroup("new group 3")
+	groupNode.AddComboBox("testing", "foo", "man", "blah")
 }
 
 func makeDemoTab() *ui.Box {
@@ -72,4 +74,54 @@ func addDemoGroup(n *Node, title string) {
 	})
 
 	vbox.Append(ecbox, false)
+}
+
+func (n *Node) AddGroup(title string) *Node {
+	hbox := n.uiBox
+	if (hbox == nil) {
+		return n
+	}
+	group := ui.NewGroup(title)
+	group.SetMargined(true)
+	hbox.Append(group, true)
+
+	vbox := ui.NewVerticalBox()
+	vbox.SetPadded(true)
+	group.SetChild(vbox)
+
+	newNode := n.AddNode(title)
+	newNode.uiBox = vbox
+	return newNode
+}
+
+func (n *Node) GetText(title string) string {
+	if (n.uiText != nil) {
+		return n.uiText.Text()
+	}
+	return n.Name
+}
+
+func (n *Node) AddComboBox(title string, s ...string) *Node {
+	box := n.uiBox
+	if (box == nil) {
+		return n
+	}
+
+	ecbox := ui.NewEditableCombobox()
+
+	for id, name := range s {
+		log.Println("Adding Combobox Entry:", id, name)
+		ecbox.Append(name)
+	}
+
+	ecbox.OnChanged(func(*ui.EditableCombobox) {
+		test := ecbox.Text()
+		log.Println("text is now:", test)
+	})
+
+	box.Append(ecbox, false)
+
+	newNode := n.AddNode(title)
+	newNode.uiText = ecbox
+	return newNode
 }

@@ -77,12 +77,12 @@ func (n *Node) Add(e Element) *Node {
 }
 */
 
+/*
 //
 // Create a new node
 // if parent == nil, that means it is a new window and needs to be put
 // in the window map (aka Data.NodeMap)
 //
-/*
 func (parent *Node) addNode(title string) *Node {
 	var node Node
 	node.Name = title
@@ -137,6 +137,21 @@ func (parent *Node) makeNode(title string, x int, y int) *Node {
 	node.Name = title
 	node.Width = x
 	node.Height = y
+
+	id := Config.prefix + strconv.Itoa(Config.counter)
+	Config.counter += 1
+	node.id = id
+
+	parent.Append(&node)
+	node.parent = parent
+	return &node
+}
+
+func (parent *Node) AddNode(title string) *Node {
+	var node Node
+	node.Name = title
+	node.Width = parent.Width
+	node.Height = parent.Height
 
 	id := Config.prefix + strconv.Itoa(Config.counter)
 	Config.counter += 1

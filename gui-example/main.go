@@ -22,14 +22,19 @@ func main() {
 
 // This initializes the first window
 func initGUI() {
-	gui.Config.Title = "WIT GUI Window Demo"
+	gui.Config.Title = "WIT GUI Window Demo 1"
 	gui.Config.Width = 640
 	gui.Config.Height = 480
 	gui.Config.Exit = myExit
+	node1 := gui.NewWindow()
+	node1.AddDemoTab("A Simple Tab Demo")
 
-	node := gui.NewWindow()
-	node.AddDemoTab("A Simple Tab Demo")
-	node.AddDemoAndlabsUiTab("A Simple andlabs/ui Tab Demo")
+	gui.Config.Title = "WIT GUI Window Demo 2"
+	gui.Config.Width = 640
+	gui.Config.Height = 240
+	gui.Config.Exit = myExit
+	node2 := gui.NewWindow()
+	node2.AddDemoAndlabsUiTab("A Simple andlabs/ui Tab Demo")
 }
 
 // This demonstrates how to properly interact with the GUI

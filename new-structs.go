@@ -55,6 +55,7 @@ type Node struct {
 	uiWindow  *ui.Window
 	uiTab  *ui.Tab
 	uiBox  *ui.Box
+	uiText *ui.EditableCombobox
 }
 
 func (n *Node) Parent() *Node {
