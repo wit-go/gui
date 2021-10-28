@@ -198,54 +198,37 @@ func (n *Node) ListChildren(dump bool) {
 //
 // This function should make a new node with the parent and
 // the 'stuff' Node as a child
-func (parent *Node) AddTabNode(title string, b *GuiBox) *Node {
-	// Ybox := gui.NewBox(box, gui.Yaxis, "Working Stuff")
-	// var baseControl ui.Control
-	// baseControl = Ybox.UiBox
-	// return baseControl
-
+func (n *Node) AddTabNode(title string, b *GuiBox) *Node {
 	var newNode *Node
-	// var newControl ui.Control
-
-	/*
-	if (parent.box == nil) {
-		// TODO: fix this to use a blank box
-		// uiC := parent.initBlankWindow()
-		hbox := ui.NewHorizontalBox()
-		hbox.SetPadded(true)
-		newNode.uiBox = hbox
-		panic("node.AddTabNode() can not add a tab if the box == nil")
-	}
-	if (parent.uiTab == nil) {
-		panic("node.AddTabNode() can not add a tab if parent.uiTab == nil")
-	}
-	*/
+	parent := n
 
 	newNode = parent.makeNode(title, 444, 400 + Config.counter)
 	newNode.uiTab = parent.uiTab
 	newNode.box = b
 
-	/*
-	newControl = b.UiBox
-	newNode.uiTab.Append(title, newControl)
-	*/
+	if (Config.DebugNode) {
+		fmt.Println("")
+		log.Println("parent:")
+		parent.Dump()
+
+		fmt.Println("")
+		log.Println("newNode:")
+		newNode.Dump()
+	}
+
+	if (newNode.uiTab == nil) {
+		log.Println("wit/gui/ AddTabNode() Something went wrong tab == nil")
+		// TODO: try to find the tab or window and make them if need be
+		return newNode
+	}
 	newNode.uiTab.Append(title, b.UiBox)
-
-	fmt.Println("")
-	log.Println("parent:")
-	parent.Dump()
-
-	fmt.Println("")
-	log.Println("newNode:")
-	newNode.Dump()
-
-	// panic("node.AddTabNode()")
 
 	return newNode
 }
 
 // func (parent *Node) AddTab(title string, uiC ui.Control) *Node {
-func (parent *Node) AddTab(title string, uiC *ui.Box) *Node {
+func (n *Node) AddTab(title string, uiC *ui.Box) *Node {
+	parent := n
 	log.Println("gui.Node.AddTab() START name =", title)
 	if parent.uiWindow == nil {
 		parent.Dump()
@@ -275,7 +258,6 @@ func (parent *Node) AddTab(title string, uiC *ui.Box) *Node {
 	}
 	tab.Append(title, uiC)
 
-	// panic("gui.AddTab() before makeNode()")
 	newNode := parent.makeNode(title, 555, 600 + Config.counter)
 	newNode.uiTab = tab
 	newNode.uiBox = uiC

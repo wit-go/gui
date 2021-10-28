@@ -73,17 +73,18 @@ func add(box *GuiBox, newbox *GuiBox) {
 	log.Println("gui.add() END")
 }
 
-func (parent *Node) NewBox(axis int, name string) *Node {
-	if (parent.box == nil) {
-		panic("gui.Node.NewBox() parent.box == nil")
+func (n *Node) NewBox(axis int, name string) *Node {
+	if (n.box == nil) {
+		log.Println("box == nil. I can't add a box!")
+		panic("gui.Node.NewBox() node.box == nil")
 	}
 
 	newBox		:= new(GuiBox)
-	newBox.Window	= parent.window
+	newBox.Window	= n.window
 	newBox.Name	= name
 
 	// make a new box & a new node
-	newNode := parent.makeNode(name, 111, 100 + Config.counter)
+	newNode := n.makeNode(name, 111, 100 + Config.counter)
 	Config.counter += 1
 
 	var uiBox *ui.Box
@@ -96,7 +97,7 @@ func (parent *Node) NewBox(axis int, name string) *Node {
 	newBox.UiBox = uiBox
 	newNode.uiBox = uiBox
 
-	parent.Append(newNode)
+	n.Append(newNode)
 	// add(n.box, newBox)
 	return newNode
 }
