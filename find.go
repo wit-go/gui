@@ -50,7 +50,7 @@ func FindWindow(s string) *GuiWindow {
 			return window
 		}
 	}
-	log.Printf("COULD NOT FIND WINDOW", s)
+	log.Printf("COULD NOT FIND WINDOW " + s)
 	return nil
 }
 

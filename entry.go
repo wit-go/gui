@@ -53,7 +53,7 @@ func SetText(box *GuiBox, name string, value string) error {
 	}
 	spew.Dump(box.Window.EntryMap)
 	if (box.Window.EntryMap[name] == nil) {
-		return fmt.Errorf("gui.SetText() ERROR box.Window.EntryMap[", name, "] == nil ")
+		return fmt.Errorf("gui.SetText() ERROR box.Window.EntryMap[" + name + "] == nil ")
 	}
 	e := box.Window.EntryMap[name]
 	log.Println("gui.SetText() box.Window.EntryMap[", name, "] = ", e.UiEntry.Text())
