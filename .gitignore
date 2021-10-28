@@ -1,2 +1,3 @@
 *.swp
-gui-example/gui-example
+cmds/gui-example/gui-example
+cmds/gui-demo/gui-demo

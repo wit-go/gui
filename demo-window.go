@@ -6,6 +6,7 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 var mybox *ui.Box
 
+/*
 func (n *Node) AddDemoTab(title string) {
 	newNode := n.AddTab(title, makeDemoTab())
 	if (Config.DebugNode) {
@@ -16,7 +17,7 @@ func (n *Node) AddDemoTab(title string) {
 	newNode.ListChildren(false)
 	addDemoGroup(newNode, "new group 1")
 	addDemoGroup(newNode, "new group 2")
-	
+
 	groupNode := newNode.AddGroup("new group 3")
 	groupNode.AddComboBox("testing", "foo", "man", "blah")
 }
@@ -75,6 +76,7 @@ func addDemoGroup(n *Node, title string) {
 
 	vbox.Append(ecbox, false)
 }
+*/
 
 func (n *Node) AddGroup(title string) *Node {
 	hbox := n.uiBox
@@ -94,7 +96,7 @@ func (n *Node) AddGroup(title string) *Node {
 	return newNode
 }
 
-func (n *Node) GetText(title string) string {
+func (n *Node) GetText(name string) string {
 	if (n.uiText != nil) {
 		return n.uiText.Text()
 	}

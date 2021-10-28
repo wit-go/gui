@@ -240,12 +240,12 @@ func (parent *Node) AddTab(title string, uiC *ui.Box) *Node {
 		uiC = hbox
 	}
 	tab.Append(title, uiC)
-	tab.SetMargined(0, true)
 
 	// panic("gui.AddTab() before makeNode()")
 	newNode := parent.makeNode(title, 555, 600 + Config.counter)
 	newNode.uiTab = tab
 	newNode.uiBox = uiC
 	// panic("gui.AddTab() after makeNode()")
+	tabSetMargined(newNode.uiTab)
 	return newNode
 }

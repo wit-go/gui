@@ -238,6 +238,7 @@ func makeWindowDebug() *ui.Box {
 		}
 	})
 
+	/*
 	n1 = addButton(vbox, "Node.DemoTab")
 	n1.OnClicked(func(*ui.Button) {
 		y := nodeCombo.Selected()
@@ -248,6 +249,7 @@ func makeWindowDebug() *ui.Box {
 			node.AddDemoTab("ran gui.AddDemoTab() " + strconv.Itoa(Config.counter))
 		}
 	})
+	*/
 
 	n1 = addButton(vbox, "Node.DemoAndlabsUiTab")
 	n1.OnClicked(func(*ui.Button) {
