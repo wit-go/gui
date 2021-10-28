@@ -14,17 +14,18 @@ var names = make([]string, 100)
 var nodeNames = make([]string, 100)
 
 func DebugWindow() {
-	Config.Title = "replace InitWindow()"
+	Config.Title = "DebugWindow()"
 	node := NewWindow()
 	node.AddDebugTab("WIT GUI Debug Tab")
 }
 
 // TODO: remove this crap
 // What does this actually do?
-// It populates the nodeNames in a map. No, not a map, an array. What is the difference again?
-func addNodeName(c *ui.Combobox, s string) {
+// It populates the nodeNames in a map. No, not a map, an array.
+// What is the difference again? (other than one being in order and a predefined length)
+func addNodeName(c *ui.Combobox, s string, id string) {
 	c.Append(s)
-	nodeNames[y] = s
+	nodeNames[y] = id
 	y = y + 1
 }
 
@@ -153,14 +154,15 @@ func makeWindowDebug() *ui.Box {
 	})
 
 	/////////////////////////////////////////////////////
-	nodeBox := addGroup(hbox, "range Data.NodeMap")
+	nodeBox := addGroup(hbox, "Windows:")
 	nodeCombo := ui.NewCombobox()
 
 	for name, node := range Data.NodeMap {
 		if (Config.Debug) {
 			log.Println("range Data.NodeMap() name =", name)
 		}
-		addNodeName(nodeCombo, node.id)
+		tmp := node.id + " (" + name + ")"
+		addNodeName(nodeCombo, tmp, node.id)
 	}
 	nodeCombo.SetSelected(0)
 

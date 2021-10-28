@@ -3,7 +3,6 @@ package gui
 import (
 	"log"
 	"fmt"
-	// "time"
 
 	// "github.com/davecgh/go-spew/spew"
 
@@ -125,23 +124,53 @@ func (n *Node) List() {
 	findByIdDFS(n, "test")
 }
 
+var listChildrenParent *Node
+var listChildrenDepth int = 0
+
+func indentPrintln(depth int, format string, a ...interface{}) {
+	var tabs string
+	for i := 0; i < depth; i++ {
+		tabs = tabs + "\t"
+	}
+
+	// newFormat := tabs + strconv.Itoa(depth) + " " + format
+	newFormat := tabs + format
+	log.Println(newFormat, a)
+}
+
 func (n *Node) ListChildren(dump bool) {
-	log.Println("\tListChildren() node =", n.id, n.Name, n.Width, n.Height)
+	indentPrintln(listChildrenDepth, "\t", n.id, n.Width, n.Height, n.Name)
 
 	if (dump == true) {
 		n.Dump()
 	}
 	if len(n.children) == 0 {
-		if (n.parent != nil) {
-			log.Println("\t\t\tparent =",n.parent.id)
+		if (n.parent == nil) {
+		} else {
+			if (Config.DebugNode) {
+				log.Println("\t\t\tparent =",n.parent.id)
+			}
+			if (listChildrenParent != nil) {
+				if (Config.DebugNode) {
+					log.Println("\t\t\tlistChildrenParent =",listChildrenParent.id)
+				}
+				if (listChildrenParent.id != n.parent.id) {
+					log.Println("parent.child does not match child.parent")
+					panic("parent.child does not match child.parent")
+				}
+			}
 		}
-		log.Println("\t\t", n.id, "has no children")
+		if (Config.DebugNode) {
+			log.Println("\t\t", n.id, "has no children")
+		}
 		return
 	}
 	for _, child := range n.children {
-		log.Println("\t\tListChildren() child =",child.id,  child.Name, child.Width, child.Height)
+		// log.Println("\t\t", child.id, child.Width, child.Height, child.Name)
 		if (child.parent != nil) {
-			log.Println("\t\t\tparent =",child.parent.id)
+			if (Config.DebugNode) {
+				log.Println("\t\t\tparent =",child.parent.id)
+			}
 		} else {
 			log.Println("\t\t\tno parent")
 			panic("no parent")
@@ -149,12 +178,17 @@ func (n *Node) ListChildren(dump bool) {
 		if (dump == true) {
 			child.Dump()
 		}
-		if (child.children == nil) {
-			log.Println("\t\t", child.id, "has no children")
-		} else {
-			log.Println("\t\t\tHas children:", child.children)
+		if (Config.DebugNode) {
+			if (child.children == nil) {
+				log.Println("\t\t", child.id, "has no children")
+			} else {
+				log.Println("\t\t\tHas children:", child.children)
+			}
 		}
+		listChildrenParent = n
+		listChildrenDepth += 1
 		child.ListChildren(dump)
+		listChildrenDepth -= 1
 	}
 	return
 }

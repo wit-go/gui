@@ -46,7 +46,7 @@ func (n *Node) AddComboBox(title string, s ...string) *Node {
 
 	ecbox.OnChanged(func(*ui.EditableCombobox) {
 		test := ecbox.Text()
-		log.Println("text is now:", test)
+		log.Println("node.Name = '" + n.Name + "' text for '" + title + "' is now: '" + test + "'")
 	})
 
 	box.Append(ecbox, false)
