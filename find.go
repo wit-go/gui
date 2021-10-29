@@ -18,6 +18,13 @@ func (n *Node) FindControl() *ui.Control {
 }
 
 func (n *Node) FindBox() *GuiBox {
+	if (n.box != nil) {
+		return n.box
+	}
+	if (n.parent != nil) {
+		p := n.parent
+		return p.box
+	}
 	return n.box
 }
 
