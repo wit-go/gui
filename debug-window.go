@@ -16,7 +16,7 @@ var nodeNames = make([]string, 100)
 func DebugWindow() {
 	Config.Title = "DebugWindow()"
 	node := NewWindow()
-	node.AddDebugTab("WIT GUI Debug Tab")
+	node.DebugTab("WIT GUI Debug Tab")
 }
 
 // TODO: remove this crap
@@ -236,22 +236,9 @@ func makeWindowDebug() *ui.Box {
 		log.Println("nodeNames[y] =", nodeNames[y])
 		node := Data.findId(nodeNames[y])
 		if (node != nil) {
-			node.AddDebugTab("added this DebugTab")
+			node.DebugTab("added this DebugTab")
 		}
 	})
-
-	/*
-	n1 = addButton(vbox, "Node.DemoTab")
-	n1.OnClicked(func(*ui.Button) {
-		y := nodeCombo.Selected()
-		log.Println("y =", y)
-		log.Println("nodeNames[y] =", nodeNames[y])
-		node := Data.findId(nodeNames[y])
-		if (node != nil) {
-			node.AddDemoTab("ran gui.AddDemoTab() " + strconv.Itoa(Config.counter))
-		}
-	})
-	*/
 
 	n1 = addButton(vbox, "Node.DemoAndlabsUiTab")
 	n1.OnClicked(func(*ui.Button) {
@@ -260,17 +247,9 @@ func makeWindowDebug() *ui.Box {
 		log.Println("nodeNames[y] =", nodeNames[y])
 		node := Data.findId(nodeNames[y])
 		if (node != nil) {
-			node.AddDemoAndlabsUiTab("ran gui.AddDemoAndlabsUiTab() " + strconv.Itoa(Config.counter))
+			node.DemoAndlabsUiTab("ran gui.AddDemoAndlabsUiTab() " + strconv.Itoa(Config.counter))
 		}
 	})
-
-/*
-	/////////////////////////////////////////////////////
-	vbox = addGroup(hbox, "Numbers")
-	pbar := ui.NewProgressBar()
-	vbox.Append(pbar, false)
-*/
-
 
 	return hbox
 }
@@ -351,7 +330,7 @@ func addButton(box *ui.Box, name string) *ui.Button {
 	return button
 }
 
-func (n *Node) AddDebugTab(title string) {
+func (n *Node) DebugTab(title string) {
 	newNode := n.AddTab(title, makeWindowDebug())
 	if (Config.DebugNode) {
 		newNode.Dump()

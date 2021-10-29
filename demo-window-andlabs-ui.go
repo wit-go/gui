@@ -8,7 +8,7 @@ import _ "github.com/andlabs/ui/winmanifest"
 // calls to andlabs/ui. This can be used to bypass
 // the obvuscation added in this package if it is desired
 // or needed.
-func (n *Node) AddDemoAndlabsUiTab(title string) {
+func (n *Node) DemoAndlabsUiTab(title string) {
 	newNode := n.AddTab(title, makeAndlabsUiTab())
 	if (Config.DebugNode) {
 		newNode.Dump()

@@ -34,7 +34,7 @@ func initGUI() {
 	gui.Config.Height = 240
 	gui.Config.Exit = myExit
 	node2 := gui.NewWindow()
-	node2.AddDemoAndlabsUiTab("A Simple andlabs/ui Tab Demo")
+	node2.DemoAndlabsUiTab("A Simple andlabs/ui Tab Demo")
 }
 
 // This demonstrates how to properly interact with the GUI
