@@ -183,34 +183,6 @@ func (n *Node) uiNewWindow(title string, x int, y int) {
 }
 
 /*
-func CreateBlankWindow(title string, x int, y int) *Node {
-	node := mapWindow(nil, nil, title, x, y)
-	box := node.box
-	log.Println("gui.CreateBlankWindow() title = box.Name =", box.Name)
-
-	node.uiNewWindow(box.Name, x, y)
-	window := node.uiWindow
-
-	ui.OnShouldQuit(func() bool {
-		log.Println("createWindow().Destroy()", box.Name)
-		window.Destroy()
-		return true
-	})
-
-	box.Window.UiWindow = window
-	return node
-}
-*/
-
-/*
-func (n *Node) initBlankWindow() ui.Control {
-	hbox := ui.NewHorizontalBox()
-	hbox.SetPadded(true)
-
-	return hbox
-}
-*/
-
 func makeBlankNode(title string) *Node {
 	log.Println("gui.makeBlankNode() title =", title)
 	if Data.NodeMap[title] != nil {
@@ -226,6 +198,7 @@ func makeBlankNode(title string) *Node {
 	node := makeNode(nil, title, x, y)
 	return node
 }
+*/
 
 func mapWindow(parent *Node, window *ui.Window, title string, x int, y int) *Node {
 	log.Println("gui.WindowMap START title =", title)

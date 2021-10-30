@@ -125,23 +125,23 @@ type GuiBox struct {
 	UiBox *ui.Box
 }
 
-func (gb *GuiBox) Dump() {
-	log.Println("gui.GuiBox.Dump() Name       = ", gb.Name)
-	log.Println("gui.GuiBox.Dump() Axis       = ", gb.Axis)
-	log.Println("gui.GuiBox.Dump() GuiWindow  = ", gb.Window)
-	log.Println("gui.GuiBox.Dump() node       = ", gb.node)
-	log.Println("gui.GuiBox.Dump() UiBox      = ", gb.UiBox)
+func (b *GuiBox) Dump() {
+	log.Println("gui.GuiBox.Dump() Name       = ", b.Name)
+	log.Println("gui.GuiBox.Dump() Axis       = ", b.Axis)
+	log.Println("gui.GuiBox.Dump() GuiWindow  = ", b.Window)
+	log.Println("gui.GuiBox.Dump() node       = ", b.node)
+	log.Println("gui.GuiBox.Dump() UiBox      = ", b.UiBox)
 }
 
-func (s GuiBox) SetTitle(title string) {
+func (b *GuiBox) SetTitle(title string) {
 	log.Println("DID IT!", title)
-	if s.Window == nil {
+	if b.Window == nil {
 		return
 	}
-	if s.Window.UiWindow == nil {
+	if b.Window.UiWindow == nil {
 		return
 	}
-	s.Window.UiWindow.SetTitle(title)
+	b.Window.UiWindow.SetTitle(title)
 	return
 }
 
@@ -169,11 +169,12 @@ func (b *GuiBox) SetNode(n *Node) {
 	}
 }
 
-func (s GuiBox) Append(child ui.Control, x bool) {
-	if s.UiBox == nil {
+func (b *GuiBox) Append(child ui.Control, x bool) {
+	if b.UiBox == nil {
+		panic("GuiBox.Append() can't work. UiBox == nil")
 		return
 	}
-	s.UiBox.Append(child, x)
+	b.UiBox.Append(child, x)
 }
 
 // Note: every mouse click is handled

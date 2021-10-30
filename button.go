@@ -51,7 +51,7 @@ func guiButtonClick(button *GuiButton) {
 }
 
 func (n *Node) CreateButton(custom func(*GuiButton), name string, values interface {}) *Node {
-	newNode := n.AddBox(Xaxis, "test")
+	newNode := n.AddBox(Xaxis, "test CreateButton")
 	box := newNode.FindBox()
 	if (box == nil) {
 		panic("node.CreateButton().FindBox() == nil")
@@ -66,6 +66,9 @@ func (n *Node) CreateButton(custom func(*GuiButton), name string, values interfa
 		log.Println("CreateButton() box.Window == nil")
 		// ErrorWindow(box.Window, "Login Failed", msg) // can't even do this
 		panic("maybe print an error and return nil? or make a fake button?")
+	} else {
+		// uibox := box.UiBox
+		// uibox.Append(newUiB, true)
 	}
 	newB.Box	= box
 	newB.Custom	= custom
