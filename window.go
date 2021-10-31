@@ -77,9 +77,9 @@ func makeNode(parent *Node, title string, x int, y int) *Node {
 		// panic("gui.makeNode() after NodeMap()")
 		return &node
 	} else {
-		panic("gui.makeNode() before Append()")
+		// panic("gui.makeNode() before Append()")
 		parent.Append(&node)
-		panic("gui.makeNode() after Append()")
+		// panic("gui.makeNode() after Append()")
 	}
 	node.parent = parent
 	return &node

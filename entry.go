@@ -40,6 +40,19 @@ func (b *GuiBox) GetText(name string) string {
 	return e.UiEntry.Text()
 }
 
+func (n *Node) SetText(value string) error {
+	log.Println("gui.SetText() value =", value)
+	if (n.uiText == nil) {
+		n.uiText.SetText(value)
+		return nil
+	}
+	if (n.uiButton == nil) {
+		n.uiButton.SetText(value)
+		return nil
+	}
+	return nil
+}
+
 func SetText(box *GuiBox, name string, value string) error {
 	if (box == nil) {
 		return fmt.Errorf("gui.SetText() ERROR box == nil")
