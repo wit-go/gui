@@ -184,23 +184,26 @@ func NewWindow() *Node {
 	w     := Config.Width
 	h     := Config.Height
 
-	var node *Node
-	node = mapWindow(nil, nil, title, w, h)
-	box := node.box
+	var n *Node
+	n = mapWindow(nil, nil, title, w, h)
+	box := n.box
 	log.Println("gui.NewWindow() title = box.Name =", box.Name)
 
-	node.uiNewWindow(box.Name, w, h)
-	window := node.uiWindow
+	n.uiNewWindow(box.Name, w, h)
+	window := n.uiWindow
 
 	f := Config.Exit
 	ui.OnShouldQuit(func() bool {
-		log.Println("createWindow().Destroy() on node.Name =", node.Name)
+		log.Println("createWindow().Destroy() on node.Name =", n.Name)
 		if (f != nil) {
-			f(node)
+			f(n)
 		}
 		return true
 	})
 
 	box.Window.UiWindow = window
-	return node
+	if(n.uiWindow == nil) {
+		panic("node.uiWindow == nil. This should never happen")
+	}
+	return n
 }

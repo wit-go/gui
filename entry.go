@@ -42,11 +42,11 @@ func (b *GuiBox) GetText(name string) string {
 
 func (n *Node) SetText(value string) error {
 	log.Println("gui.SetText() value =", value)
-	if (n.uiText == nil) {
+	if (n.uiText != nil) {
 		n.uiText.SetText(value)
 		return nil
 	}
-	if (n.uiButton == nil) {
+	if (n.uiButton != nil) {
 		n.uiButton.SetText(value)
 		return nil
 	}

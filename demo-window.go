@@ -7,6 +7,9 @@ import _ "github.com/andlabs/ui/winmanifest"
 var mybox *ui.Box
 
 func (n *Node) AddGroup(title string) *Node {
+	if (n == nil) {
+		return nil
+	}
 	hbox := n.uiBox
 	if (hbox == nil) {
 		return n

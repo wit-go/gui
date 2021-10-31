@@ -235,7 +235,8 @@ func (n *Node) AddTab(title string, uiC *ui.Box) *Node {
 	log.Println("gui.Node.AddTab() START name =", title)
 	if parent.uiWindow == nil {
 		parent.Dump()
-		panic("gui.AddTab() ERROR ui.Window == nil")
+		log.Println("gui.Node.AddTab() ERROR ui.Window == nil")
+		return nil
 	}
 	if parent.box == nil {
 		parent.Dump()
