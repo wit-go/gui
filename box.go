@@ -187,12 +187,16 @@ func VerticalBreak(box *GuiBox) {
 }
 
 func (n *Node) AddComboBox(title string, s ...string) *Node {
+	newNode := n.AddNode(title)
 	box := n.uiBox
 	if (box == nil) {
 		return n
 	}
 
 	ecbox := ui.NewEditableCombobox()
+	newNode.uiText = ecbox
+	// newNode.Dump()
+	// log.Println("ecbox", ecbox)
 
 	for id, name := range s {
 		log.Println("Adding Combobox Entry:", id, name)
@@ -201,19 +205,27 @@ func (n *Node) AddComboBox(title string, s ...string) *Node {
 
 	ecbox.OnChanged(func(*ui.EditableCombobox) {
 		test := ecbox.Text()
-		log.Println("node.Name = '" + n.Name + "' text for '" + title + "' is now: '" + test + "'")
+		log.Println("node.Name = '" + newNode.Name + "' text for '" + title + "' is now: '" + test + "'")
+		if (newNode.OnChanged == nil) {
+			log.Println("Not doing custom OnChanged since OnChanged == nil")
+			newNode.Dump()
+		} else {
+			newNode.OnChanged()
+		}
 	})
 
 	box.Append(ecbox, false)
 
-	newNode := n.AddNode(title)
-	newNode.uiText = ecbox
+	// newNode.Dump()
+	// panic("junk")
 	return newNode
 }
 
+/*
 func (n *Node) OnChanged(f func()) {
 	f()
 }
+*/
 
 func (n *Node) GetText() string {
 	if (n.uiText == nil) {

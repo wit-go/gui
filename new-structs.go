@@ -44,6 +44,7 @@ type Node struct {
 	Name   string
 	Width  int
 	Height int
+	OnChanged	func ()
 
 	parent	*Node
 	children []*Node
@@ -73,6 +74,7 @@ func (n *Node) Dump() {
 	log.Println("gui.Node.Dump() Name       = ", n.Name)
 	log.Println("gui.Node.Dump() Width      = ", n.Width)
 	log.Println("gui.Node.Dump() Height     = ", n.Height)
+	log.Println("gui.Node.Dump() OnChanged  = ", n.OnChanged)
 
 	if (n.parent == nil) {
 		log.Println("gui.Node.Dump() parent     = nil")
@@ -89,6 +91,7 @@ func (n *Node) Dump() {
 	log.Println("gui.Node.Dump() uiBox      = ", n.uiBox)
 	log.Println("gui.Node.Dump() uiControl  = ", n.uiControl)
 	log.Println("gui.Node.Dump() uiButton   = ", n.uiButton)
+	log.Println("gui.Node.Dump() uiText     = ", n.uiText)
 	if (n.id == "") {
 		panic("gui.Node.Dump() id == nil")
 	}

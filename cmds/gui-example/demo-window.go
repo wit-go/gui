@@ -33,9 +33,9 @@ func addDemoTab(n *gui.Node, title string) {
 
 	groupNode1 := newNode.AddGroup("group 1")
 	cbNode := groupNode1.AddComboBox("username", "root", "jcarr", "hugo")
-	cbNode.OnChanged(func () {
+	cbNode.OnChanged = func () {
 		username = cbNode.GetText()
-	})
+	}
 	groupNode1.AddComboBox("demoCombo3", "foo 3", "bar", "stuff")
 
 	groupNode1.Dump()
