@@ -1,6 +1,7 @@
 package gui
 
 import "log"
+import "os"
 // import "reflect"
 
 import "github.com/andlabs/ui"
@@ -34,6 +35,7 @@ func add(box *GuiBox, newbox *GuiBox) {
 
 			newbox.Window.BoxMap["MAINBOX"] = newbox
 			log.Println("gui.add() END")
+			panic("gui.add() MAINBOX gui.add() END")
 			return
 		} else {
 			log.Println("\tgui.add() ERROR DONT KNOW HOW TO ADD TO A RAW WINDOW YET")
@@ -41,33 +43,77 @@ func add(box *GuiBox, newbox *GuiBox) {
 		}
 		log.Println("\tgui.add() ERROR DON'T KNOW HOW TO add to Window as MAINBOX DONE")
 		log.Println("gui.add() END")
+		panic("gui.add() gui.add() END")
 		return
 	}
 	log.Println("\tgui.add() adding", newbox.Name, "to", box.Name)
 	// copy the box settings over
 	newbox.Window = box.Window
-	if (box.UiBox == nil) {
-		log.Println("\tgui.add() ERROR box.UiBox == nil")
-		panic("crap")
+	if (box.node == nil) {
+		box.Dump()
+		panic("gui.add() ERROR box.node == nil")
 	}
+
 	if (newbox.UiBox == nil) {
-		log.Println("\tgui.add() ERROR newbox.UiBox == nil")
-		panic("crap")
+		panic("gui.add() ERROR newbox.UiBox == nil")
 	}
-	// log.Println("\tgui.add() newbox.UiBox == ", newbox.UiBox.GetParent())
-	// spew.Dump(newbox.UiBox)
+
+	if (box.UiBox == nil) {
+		box.Dump()
+		// panic("gui.add() ERROR box.UiBox == nil")
+		return
+		// TODO: fix this whole add() function // Oct 9
+	}
 	box.UiBox.Append(newbox.UiBox, false)
+	box.Dump()
+	panic("gui.add()")
 
 	// add the newbox to the Window.BoxMap[]
 	box.Window.BoxMap[newbox.Name] = newbox
 	log.Println("gui.add() END")
 }
 
-func NewBox(box *GuiBox, axis int, name string) *GuiBox {
-	log.Println("VerticalBox START")
+func (n *Node) AddBox(axis int, name string) *Node {
+	newBox		:= new(GuiBox)
+	newBox.Window	= n.window
+	newBox.Name	= name
+
+	if (n.box == nil) {
+		n.box = newBox
+	}
+
+	// make a new box & a new node
+	newNode := n.makeNode(name, 111, 100 + Config.counter)
+	newNode.box = newBox
+	Config.counter += 1
+
+	var uiBox *ui.Box
+	if (axis == Xaxis) {
+		uiBox = ui.NewHorizontalBox()
+	} else {
+		uiBox = ui.NewVerticalBox()
+	}
+	uiBox.SetPadded(true)
+	newBox.UiBox = uiBox
+	newNode.uiBox = uiBox
+
+	n.Append(newNode)
+	// add(n.box, newBox)
+	return newNode
+}
+
+func (b *GuiBox) NewBox(axis int, name string) *GuiBox {
+	log.Println("gui.NewBox() START")
+	n := b.FindNode()
+	if (n == nil) {
+		log.Println("gui.NewBox() SERIOUS ERROR. CAN NOT FIND NODE")
+		os.Exit(0)
+	} else {
+		log.Println("gui.NewBox() node =", n.Name)
+	}
 	var newbox *GuiBox
 	newbox		= new(GuiBox)
-	newbox.Window	= box.Window
+	newbox.Window	= b.Window
 	newbox.Name	= name
 
 	var uiBox *ui.Box
@@ -78,13 +124,18 @@ func NewBox(box *GuiBox, axis int, name string) *GuiBox {
 	}
 	uiBox.SetPadded(true)
 	newbox.UiBox = uiBox
-	add(box, newbox)
+	add(b, newbox)
+	// panic("gui.NewBox")
 	return newbox
 }
 
 func HardBox(gw *GuiWindow, axis int, name string) *GuiBox {
 	log.Println("HardBox() START axis =", axis)
 
+	if (gw.node == nil) {
+		gw.Dump()
+		panic("gui.HardBox() gw.node == nil")
+	}
 	// add a Vertical Seperator if there is already a box
 	// Is this right?
 	box := gw.BoxMap["MAINBOX"]
@@ -133,4 +184,41 @@ func VerticalBreak(box *GuiBox) {
 	log.Println("VerticalSeparator  added to box =", box.Name)
 	tmp := ui.NewVerticalSeparator()
 	box.UiBox.Append(tmp, false)
+}
+
+func (n *Node) AddComboBox(title string, s ...string) *Node {
+	box := n.uiBox
+	if (box == nil) {
+		return n
+	}
+
+	ecbox := ui.NewEditableCombobox()
+
+	for id, name := range s {
+		log.Println("Adding Combobox Entry:", id, name)
+		ecbox.Append(name)
+	}
+
+	ecbox.OnChanged(func(*ui.EditableCombobox) {
+		test := ecbox.Text()
+		log.Println("node.Name = '" + n.Name + "' text for '" + title + "' is now: '" + test + "'")
+	})
+
+	box.Append(ecbox, false)
+
+	newNode := n.AddNode(title)
+	newNode.uiText = ecbox
+	return newNode
+}
+
+func (n *Node) OnChanged(f func()) {
+	f()
+}
+
+func (n *Node) GetText() string {
+	if (n.uiText == nil) {
+		return ""
+	}
+	ecbox := n.uiText
+	return ecbox.Text()
 }

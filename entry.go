@@ -13,24 +13,44 @@ func NewLabel(box *GuiBox, text string) {
 	box.Append(ui.NewLabel(text), false)
 }
 
-func GetText(box *GuiBox, name string) string {
-	if (box == nil) {
-		log.Println("gui.GetText() ERROR box == nil")
-		return ""
-	}
-	if (box.Window.EntryMap == nil) {
+func (n *Node) NewLabel(text string) *Node {
+	// make new node here
+	// n.Append(ui.NewLabel(text), false)
+	newNode := makeNode(n, text, 333, 334)
+	newNode.Dump()
+	// panic("node.NewLabel()")
+
+	n.Append(newNode)
+	return newNode
+}
+
+func (b *GuiBox) GetText(name string) string {
+	if (b.Window.EntryMap == nil) {
 		log.Println("gui.GetText() ERROR b.Box.Window.EntryMap == nil")
 		return ""
 	}
-	spew.Dump(box.Window.EntryMap)
-	if (box.Window.EntryMap[name] == nil) {
+	spew.Dump(b.Window.EntryMap)
+	if (b.Window.EntryMap[name] == nil) {
 		log.Println("gui.GetText() ERROR box.Window.EntryMap[", name, "] == nil ")
 		return ""
 	}
-	e := box.Window.EntryMap[name]
+	e := b.Window.EntryMap[name]
 	log.Println("gui.GetText() box.Window.EntryMap[", name, "] = ", e.UiEntry.Text())
 	log.Println("gui.GetText() END")
 	return e.UiEntry.Text()
+}
+
+func (n *Node) SetText(value string) error {
+	log.Println("gui.SetText() value =", value)
+	if (n.uiText != nil) {
+		n.uiText.SetText(value)
+		return nil
+	}
+	if (n.uiButton != nil) {
+		n.uiButton.SetText(value)
+		return nil
+	}
+	return nil
 }
 
 func SetText(box *GuiBox, name string, value string) error {
@@ -42,7 +62,7 @@ func SetText(box *GuiBox, name string, value string) error {
 	}
 	spew.Dump(box.Window.EntryMap)
 	if (box.Window.EntryMap[name] == nil) {
-		return fmt.Errorf("gui.SetText() ERROR box.Window.EntryMap[", name, "] == nil ")
+		return fmt.Errorf("gui.SetText() ERROR box.Window.EntryMap[" + name + "] == nil ")
 	}
 	e := box.Window.EntryMap[name]
 	log.Println("gui.SetText() box.Window.EntryMap[", name, "] = ", e.UiEntry.Text())

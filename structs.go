@@ -19,11 +19,20 @@ var Data GuiData
 var Config GuiConfig
 
 type GuiConfig struct {
+	Title      string
 	Width      int
 	Height     int
-	Debug      bool
-	DebugTable bool
-	Exit       func(*GuiWindow)
+	Exit       func(*Node)
+
+	Debug       bool
+	DebugNode   bool
+	DebugTabs   bool
+	DebugTable  bool
+	DebugWindow bool
+
+	depth      int
+	counter    int  // used to make unique ID's
+	prefix     string
 }
 
 type GuiData struct {
@@ -35,7 +44,10 @@ type GuiData struct {
 	AllEntries []*GuiEntry
 	WindowMap  map[string]*GuiWindow
 
-	// Windows		[]*GuiWindow
+	// Store access to everything via binary tree's
+	NodeMap    map[string]*Node
+	NodeArray  []*Node
+	NodeSlice  []*Node
 
 	// A map of all buttons everywhere on all
 	// windows, all tabs, across all goroutines
@@ -45,7 +57,6 @@ type GuiData struct {
 	// andlabs/ui & andlabs/libui work
 	AllButtons []*GuiButton
 	buttonMap  map[*ui.Button]*GuiButton
-	Nodes      *Node
 }
 
 type GuiTab struct {
@@ -87,9 +98,18 @@ type GuiWindow struct {
 	EntryMap map[string]*GuiEntry
 	Area     *GuiArea
 
+	node	*Node
+
 	// andlabs/ui abstraction mapping
 	UiWindow *ui.Window
 	UiTab    *ui.Tab // if this != nil, the window is 'tabbed'
+}
+
+func (w *GuiWindow) Dump() {
+	log.Println("gui.GuiWindow.Dump() Name       = ", w.Name)
+	log.Println("gui.GuiWindow.Dump() node       = ", w.node)
+	log.Println("gui.GuiWindow.Dump() Width      = ", w.Width)
+	log.Println("gui.GuiWindow.Dump() Height     = ", w.Height)
 }
 
 // GuiBox is any type of ui.Hbox or ui.Vbox
@@ -99,121 +119,62 @@ type GuiBox struct {
 	Axis   int        // does it add items to the X or Y axis
 	Window *GuiWindow // the parent Window
 
+	node	*Node
+
 	// andlabs/ui abstraction mapping
 	UiBox *ui.Box
 }
 
-func (s GuiBox) SetTitle(title string) {
+func (b *GuiBox) Dump() {
+	log.Println("gui.GuiBox.Dump() Name       = ", b.Name)
+	log.Println("gui.GuiBox.Dump() Axis       = ", b.Axis)
+	log.Println("gui.GuiBox.Dump() GuiWindow  = ", b.Window)
+	log.Println("gui.GuiBox.Dump() node       = ", b.node)
+	log.Println("gui.GuiBox.Dump() UiBox      = ", b.UiBox)
+}
+
+func (b *GuiBox) SetTitle(title string) {
 	log.Println("DID IT!", title)
-	if s.Window == nil {
+	if b.Window == nil {
 		return
 	}
-	if s.Window.UiWindow == nil {
+	if b.Window.UiWindow == nil {
 		return
 	}
-	s.Window.UiWindow.SetTitle(title)
+	b.Window.UiWindow.SetTitle(title)
 	return
 }
 
-func (s GuiBox) Append(child ui.Control, x bool) {
-	if s.UiBox == nil {
+func (w *GuiWindow) SetNode(n *Node) {
+	if (w.node != nil) {
+		w.Dump()
+		panic("gui.SetNode() Error not nil")
+	}
+	w.node = n
+	if (w.node == nil) {
+		w.Dump()
+		panic("gui.SetNode() node == nil")
+	}
+}
+
+func (b *GuiBox) SetNode(n *Node) {
+	if (b.node != nil) {
+		b.Dump()
+		panic("gui.SetNode() Error not nil")
+	}
+	b.node = n
+	if (b.node == nil) {
+		b.Dump()
+		panic("gui.SetNode() node == nil")
+	}
+}
+
+func (b *GuiBox) Append(child ui.Control, x bool) {
+	if b.UiBox == nil {
+		panic("GuiBox.Append() can't work. UiBox == nil")
 		return
 	}
-	s.UiBox.Append(child, x)
-}
-
-/*
-func (w GuiWindow) InitWindow(title string) *GuiBox {
-	if w.UiWindow == nil {
-		log.Println("gui.InitBox() THIS SHOULD NEVER HAPPEN. Window doesn't exist", w)
-		return nil
-	}
-	tab := ui.NewTab()
-	w.UiWindow.SetChild(tab)
-	w.UiWindow.SetMargined(true)
-
-	tab.Append(title, InitBlankWindow())
-	tab.SetMargined(0, true)
-
-	w.UiTab = tab
-	return nil
-}
-*/
-
-func (s GuiBox) InitTab(title string, custom func() ui.Control) *ui.Tab {
-	if s.Window == nil {
-		return nil
-	}
-	if s.Window.UiWindow == nil {
-		return nil
-	}
-
-	window := s.Window.UiWindow
-	tab := ui.NewTab()
-	window.SetChild(tab)
-	window.SetMargined(true)
-
-	tab.Append(title, custom())
-	tab.SetMargined(0, true)
-	// tab.SetMargined(1, true)
-
-	s.Window.UiTab = tab
-	return tab
-}
-
-func (s GuiBox) AddTab(title string, custom ui.Control) *ui.Tab {
-	if s.Window == nil {
-		return nil
-	}
-	if s.Window.UiTab == nil {
-		return nil
-	}
-
-	tab := s.Window.UiTab
-
-	tab.Append(title, custom)
-	return tab
-}
-
-func (s GuiBox) AddTab2(title string, custom ui.Control) *ui.Tab {
-	if s.Window == nil {
-		return nil
-	}
-	if s.Window.UiTab == nil {
-		return nil
-	}
-
-	tab := s.Window.UiTab
-	tab.Append(title, custom)
-	return tab
-}
-
-func (s GuiBox) AddBoxTab(title string) *GuiBox {
-	uiTab := s.AddTab2(title, InitBlankWindow())
-	tabSetMargined(uiTab)
-
-	var box *GuiBox
-	box = HardBox(s.Window, Xaxis, "jcarrAddBoxTab")
-	box.Window.UiTab = uiTab
-	return box
-}
-
-func (s GuiBox) AddDemoTab(title string) {
-	uiTab := s.AddTab(title, makeWindowTemplate())
-	tabSetMargined(uiTab)
-}
-
-func (s GuiBox) AddDebugTab(title string) {
-	uiTab := s.AddTab(title, makeWindowDebug())
-	tabSetMargined(uiTab)
-}
-
-func tabSetMargined(tab *ui.Tab) {
-	c := tab.NumPages()
-	for i := 0; i < c; i++ {
-		log.Println("tabSetMargined() i =", i)
-		// tab.SetMargined(i, true)
-	}
+	b.UiBox.Append(child, x)
 }
 
 // Note: every mouse click is handled

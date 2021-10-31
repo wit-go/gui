@@ -1,9 +1,11 @@
 package gui
 
 import "log"
+import "reflect"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 // import "github.com/davecgh/go-spew/spew"
+
 
 // This is the default mouse click handler
 // Every mouse click that hasn't been assigned to
@@ -48,6 +50,60 @@ func guiButtonClick(button *GuiButton) {
 	} else {
 		log.Println("\tgui.guiButtonClick() IGNORING BUTTON. MouseClick() is nil")
 	}
+}
+
+func (n *Node) AddButton(name string, custom func(*Node)) *Node {
+	if (n.uiBox == nil) {
+		log.Println("gui.Node.AppendButton() filed node.UiBox == nil")
+		return n
+	}
+	button := ui.NewButton(name)
+	log.Println("reflect.TypeOF(uiBox) =", reflect.TypeOf(n.uiBox))
+	log.Println("reflect.TypeOF(uiButton) =", reflect.TypeOf(button))
+	n.uiBox.Append(button, false)
+	n.uiButton = button
+
+	newNode := n.makeNode(name, 888, 888 + Config.counter)
+	newNode.uiButton = button
+	newNode.custom = custom
+
+	button.OnClicked(func(*ui.Button) {
+		log.Println("gui.AppendButton() Button Clicked. Running custom()")
+		custom(newNode)
+	})
+	// panic("AppendButton")
+	// time.Sleep(3 * time.Second)
+	return newNode
+}
+
+func (n *Node) CreateButton(custom func(*GuiButton), name string, values interface {}) *Node {
+	newNode := n.AddBox(Xaxis, "test CreateButton")
+	box := newNode.FindBox()
+	if (box == nil) {
+		panic("node.CreateButton().FindBox() == nil")
+	}
+	newUiB := ui.NewButton(name)
+	newUiB.OnClicked(defaultButtonClick)
+
+	var newB *GuiButton
+	newB		= new(GuiButton)
+	newB.B		= newUiB
+	if (box.UiBox == nil) {
+		log.Println("CreateButton() box.Window == nil")
+		// ErrorWindow(box.Window, "Login Failed", msg) // can't even do this
+		panic("maybe print an error and return nil? or make a fake button?")
+	} else {
+		// uibox := box.UiBox
+		// uibox.Append(newUiB, true)
+	}
+	newB.Box	= box
+	newB.Custom	= custom
+	newB.Values	= values
+
+	Data.AllButtons	= append(Data.AllButtons, newB)
+
+	box.Append(newB.B, false)
+	return newNode
 }
 
 func CreateButton(box *GuiBox, custom func(*GuiButton), name string, values interface {}) *GuiButton {

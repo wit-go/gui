@@ -12,7 +12,7 @@ func Main(f func()) {
 	ui.Main(f)
 }
 
-// Other goroutines must use this
+// Other goroutines must use this to access the GUI
 //
 // You can not acess / process the GUI thread directly from
 // other goroutines. This is due to the nature of how
@@ -23,28 +23,12 @@ func Queue(f func()) {
 	ui.QueueMain(f)
 }
 
+/*
 func ExampleWindow() {
 	log.Println("START gui.ExampleWindow()")
 
-	title := "Test Window"
-	box := InitWindow(nil, title, 0)
-	window := box.Window
-	log.Println("box =", box)
-	log.Println("window =", window)
-	box.AddDebugTab("jcarr Debug")
-
-	window.UiWindow.Show()
+	Config.Title = "ExampleWindow"
+	node := NewWindow()
+	node.AddDebugTab("jcarr Debug")
 }
-
-func DebugWindow() {
-	log.Println("START gui.ExampleWindow()")
-
-	title := "Debug Window"
-	box := InitWindow(nil, title, 0)
-	window := box.Window
-	log.Println("box =", box)
-	log.Println("window =", window)
-	box.AddDebugTab("jcarr Debug")
-
-	window.UiWindow.Show()
-}
+*/

@@ -8,14 +8,13 @@ import (
 	"github.com/davecgh/go-spew/spew"
 )
 
-// import "reflect"
-
-// import "github.com/andlabs/ui"
-// import _ "github.com/andlabs/ui/winmanifest"
-
+// WatchGUI() opens a goroutine
 //
-// Dump out debugging information every 4 seconds
-//
+// From that goroutine, it dumps out debugging information every 4 seconds
+/*
+	TODO: add configuration triggers on what to dump out
+	TODO: allow this to be sent to /var/log, syslogd, systemd's journalctl, etc
+*/
 func WatchGUI() {
 	count := 0
 
@@ -29,6 +28,12 @@ func WatchGUI() {
 		}
 		count += 1
 		time.Sleep(200 * time.Millisecond)
+	}
+}
+
+func DumpWindows() {
+	for name, _ := range Data.WindowMap {
+		log.Println("gui.DumpWindows() window =", name)
 	}
 }
 
@@ -105,4 +110,51 @@ func addTableTab() {
 
 	log.Println("Sleep for 1 second, then try to add new tabs")
 	time.Sleep(1 * time.Second)
+}
+
+func (dn *GuiData) DumpNodeMap() {
+	log.Println("DebugDataNodeMap():")
+	for name, node := range dn.NodeMap {
+		log.Println("\tNode =", node.id, node.Width, node.Height, name)
+		if (node.children == nil) {
+			log.Println("\t\tNo children")
+		} else {
+			log.Println("\t\tHas children:", node.children)
+		}
+		// node.SetName("yahoo")
+		// log.Println("\tData.NodeMap node =", node)
+	}
+}
+
+/*
+func DebugDataNodeChildren() {
+	if Data.NodeMap == nil {
+		log.Println("DebugDataNodeChildren() NodeMap == nil")
+		return
+	}
+	log.Println("DebugDataNodeChildren():")
+	for name, node := range Data.NodeMap {
+		log.Println("\tNode name =", node.Width, node.Height, name)
+		if (node.children == nil) {
+			log.Println("\t\tNo children")
+			break
+		}
+		log.Println("\t\tHas children:", node.children)
+	}
+}
+*/
+
+func (dn *GuiData) ListChildren(dump bool) {
+	if Data.NodeMap == nil {
+		log.Println("gui.Data.ListChildren() Data.NodeMap == nil")
+		return
+	}
+	log.Println("gui.Data.ListChildren() Data.NodeMap:")
+	for name, node := range Data.NodeMap {
+		log.Println("\tgui.Data.ListChildren() node =", node.id, node.Width, node.Height, name)
+		if (dump == true) {
+			node.Dump()
+		}
+		node.ListChildren(dump)
+	}
 }
