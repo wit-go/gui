@@ -3,6 +3,7 @@ package gui
 import (
 	"log"
 	"fmt"
+	"reflect"
 
 	// "github.com/davecgh/go-spew/spew"
 
@@ -50,7 +51,8 @@ type Node struct {
 	window	*GuiWindow
 	box	*GuiBox
 
-	uiControl  *ui.Control
+	uiControl *ui.Control
+	uiButton  *ui.Button
 	uiWindow  *ui.Window
 	uiTab  *ui.Tab
 	uiBox  *ui.Box
@@ -85,6 +87,7 @@ func (n *Node) Dump() {
 	log.Println("gui.Node.Dump() uiTab      = ", n.uiTab)
 	log.Println("gui.Node.Dump() uiBox      = ", n.uiBox)
 	log.Println("gui.Node.Dump() uiControl  = ", n.uiControl)
+	log.Println("gui.Node.Dump() uiButton   = ", n.uiButton)
 	if (n.id == "") {
 		panic("gui.Node.Dump() id == nil")
 	}
@@ -118,6 +121,25 @@ func (n *Node) Append(child *Node) {
 		n.Dump()
 	}
 	// time.Sleep(3 * time.Second)
+}
+
+func (n *Node) AppendButton(name string, custom func(*Node)) *Node {
+	if (n.uiBox == nil) {
+		log.Println("gui.Node.AppendButton() filed node.UiBox == nil")
+		return n
+	}
+	button := ui.NewButton(name)
+	log.Println("reflect.TypeOF(uiBox) =", reflect.TypeOf(n.uiBox))
+	log.Println("reflect.TypeOF(uiButton) =", reflect.TypeOf(button))
+	n.uiBox.Append(button, false)
+	n.uiButton = button
+	button.OnClicked(func(*ui.Button) {
+		log.Println("gui.AppendButton() Button Clicked. Running custom()")
+		custom(n)
+	})
+	// panic("AppendButton")
+	// time.Sleep(3 * time.Second)
+	return n
 }
 
 func (n *Node) List() {

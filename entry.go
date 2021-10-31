@@ -24,21 +24,17 @@ func (n *Node) NewLabel(text string) *Node {
 	return newNode
 }
 
-func GetText(box *GuiBox, name string) string {
-	if (box == nil) {
-		log.Println("gui.GetText() ERROR box == nil")
-		return ""
-	}
-	if (box.Window.EntryMap == nil) {
+func (b *GuiBox) GetText(name string) string {
+	if (b.Window.EntryMap == nil) {
 		log.Println("gui.GetText() ERROR b.Box.Window.EntryMap == nil")
 		return ""
 	}
-	spew.Dump(box.Window.EntryMap)
-	if (box.Window.EntryMap[name] == nil) {
+	spew.Dump(b.Window.EntryMap)
+	if (b.Window.EntryMap[name] == nil) {
 		log.Println("gui.GetText() ERROR box.Window.EntryMap[", name, "] == nil ")
 		return ""
 	}
-	e := box.Window.EntryMap[name]
+	e := b.Window.EntryMap[name]
 	log.Println("gui.GetText() box.Window.EntryMap[", name, "] = ", e.UiEntry.Text())
 	log.Println("gui.GetText() END")
 	return e.UiEntry.Text()

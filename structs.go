@@ -105,11 +105,11 @@ type GuiWindow struct {
 	UiTab    *ui.Tab // if this != nil, the window is 'tabbed'
 }
 
-func (gw *GuiWindow) Dump() {
-	log.Println("gui.GuiWindow.Dump() Name       = ", gw.Name)
-	log.Println("gui.GuiWindow.Dump() node       = ", gw.node)
-	log.Println("gui.GuiWindow.Dump() Width      = ", gw.Width)
-	log.Println("gui.GuiWindow.Dump() Height     = ", gw.Height)
+func (w *GuiWindow) Dump() {
+	log.Println("gui.GuiWindow.Dump() Name       = ", w.Name)
+	log.Println("gui.GuiWindow.Dump() node       = ", w.node)
+	log.Println("gui.GuiWindow.Dump() Width      = ", w.Width)
+	log.Println("gui.GuiWindow.Dump() Height     = ", w.Height)
 }
 
 // GuiBox is any type of ui.Hbox or ui.Vbox

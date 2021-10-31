@@ -102,9 +102,9 @@ func (n *Node) AddBox(axis int, name string) *Node {
 	return newNode
 }
 
-func NewBox(box *GuiBox, axis int, name string) *GuiBox {
+func (b *GuiBox) NewBox(axis int, name string) *GuiBox {
 	log.Println("gui.NewBox() START")
-	n := box.FindNode()
+	n := b.FindNode()
 	if (n == nil) {
 		log.Println("gui.NewBox() SERIOUS ERROR. CAN NOT FIND NODE")
 		os.Exit(0)
@@ -113,7 +113,7 @@ func NewBox(box *GuiBox, axis int, name string) *GuiBox {
 	}
 	var newbox *GuiBox
 	newbox		= new(GuiBox)
-	newbox.Window	= box.Window
+	newbox.Window	= b.Window
 	newbox.Name	= name
 
 	var uiBox *ui.Box
@@ -124,7 +124,7 @@ func NewBox(box *GuiBox, axis int, name string) *GuiBox {
 	}
 	uiBox.SetPadded(true)
 	newbox.UiBox = uiBox
-	add(box, newbox)
+	add(b, newbox)
 	// panic("gui.NewBox")
 	return newbox
 }
