@@ -52,53 +52,6 @@ func DeleteWindow(name string) {
 	}
 }
 
-/*
-func CreateWindow(title string, tabname string, x int, y int, custom func() ui.Control) *Node {
-	n := CreateBlankWindow(title, x, y)
-	if (n.box == nil) {
-		log.Println("SERIOUS ERROR n.box == nil in CreateWindow()")
-		log.Println("SERIOUS ERROR n.box == nil in CreateWindow()")
-		log.Println("SERIOUS ERROR n.box == nil in CreateWindow()")
-		log.Println("SERIOUS ERROR n.box == nil in CreateWindow()")
-	}
-	n.AddTab(title, custom())
-	// TODO: run custom() here // Oct 9
-	return n
-}
-*/
-
-/*
-func (n *Node) Add(e Element) *Node {
-	newNode := n.addNode("testingAdd")
-	if(e == Tab) {
-		log.Println("gui.Add() SHOULD ADD element =", e.String())
-	}
-	return newNode
-}
-*/
-
-/*
-//
-// Create a new node
-// if parent == nil, that means it is a new window and needs to be put
-// in the window map (aka Data.NodeMap)
-//
-func (parent *Node) addNode(title string) *Node {
-	var node Node
-	node.Name = title
-	node.Width = parent.Width
-	node.Height = parent.Height
-	node.parent = parent
-
-	id := Config.prefix + strconv.Itoa(Config.counter)
-	Config.counter += 1
-	node.id = id
-
-	parent.Append(&node)
-	return &node
-}
-*/
-
 func makeNode(parent *Node, title string, x int, y int) *Node {
 	var node Node
 	node.Name = title
@@ -181,24 +134,6 @@ func (n *Node) uiNewWindow(title string, x int, y int) {
 	// w.node = &node
 	return
 }
-
-/*
-func makeBlankNode(title string) *Node {
-	log.Println("gui.makeBlankNode() title =", title)
-	if Data.NodeMap[title] != nil {
-		log.Println("gui.makeBlankNode() already exists title =", title)
-		title = title + Config.prefix + strconv.Itoa(Config.counter)
-		Config.counter += 1
-	}
-	if Data.NodeMap[title] != nil {
-		panic("gui.makeBlankNode() already exists")
-		return nil
-	}
-
-	node := makeNode(nil, title, x, y)
-	return node
-}
-*/
 
 func mapWindow(parent *Node, window *ui.Window, title string, x int, y int) *Node {
 	log.Println("gui.WindowMap START title =", title)
