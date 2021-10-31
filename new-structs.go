@@ -3,7 +3,7 @@ package gui
 import (
 	"log"
 	"fmt"
-	"reflect"
+//	"reflect"
 
 	// "github.com/davecgh/go-spew/spew"
 
@@ -124,30 +124,6 @@ func (n *Node) Append(child *Node) {
 	// time.Sleep(3 * time.Second)
 }
 
-func (n *Node) AddButton(name string, custom func(*Node)) *Node {
-	if (n.uiBox == nil) {
-		log.Println("gui.Node.AppendButton() filed node.UiBox == nil")
-		return n
-	}
-	button := ui.NewButton(name)
-	log.Println("reflect.TypeOF(uiBox) =", reflect.TypeOf(n.uiBox))
-	log.Println("reflect.TypeOF(uiButton) =", reflect.TypeOf(button))
-	n.uiBox.Append(button, false)
-	n.uiButton = button
-
-	newNode := n.makeNode(name, 888, 888 + Config.counter)
-	newNode.uiButton = button
-	newNode.custom = custom
-
-	button.OnClicked(func(*ui.Button) {
-		log.Println("gui.AppendButton() Button Clicked. Running custom()")
-		custom(newNode)
-	})
-	// panic("AppendButton")
-	// time.Sleep(3 * time.Second)
-	return newNode
-}
-
 func (n *Node) List() {
 	findByIdDFS(n, "test")
 }
@@ -254,7 +230,6 @@ func (n *Node) AddTabNode(title string, b *GuiBox) *Node {
 	return newNode
 }
 
-// func (parent *Node) AddTab(title string, uiC ui.Control) *Node {
 func (n *Node) AddTab(title string, uiC *ui.Box) *Node {
 	parent := n
 	log.Println("gui.Node.AddTab() START name =", title)
