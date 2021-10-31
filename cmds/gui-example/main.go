@@ -27,14 +27,14 @@ func initGUI() {
 	gui.Config.Height = 480
 	gui.Config.Exit = myExit
 	node1 := gui.NewWindow()
-	node1.AddDemoTab("A Simple Tab Demo")
+	addDemoTab(node1, "A Simple Tab Demo")
 
 	gui.Config.Title = "WIT GUI Window Demo 2"
 	gui.Config.Width = 640
 	gui.Config.Height = 240
 	gui.Config.Exit = myExit
 	node2 := gui.NewWindow()
-	node2.AddDemoAndlabsUiTab("A Simple andlabs/ui Tab Demo")
+	node2.DemoAndlabsUiTab("A Simple andlabs/ui Tab Demo")
 }
 
 // This demonstrates how to properly interact with the GUI

@@ -185,3 +185,40 @@ func VerticalBreak(box *GuiBox) {
 	tmp := ui.NewVerticalSeparator()
 	box.UiBox.Append(tmp, false)
 }
+
+func (n *Node) AddComboBox(title string, s ...string) *Node {
+	box := n.uiBox
+	if (box == nil) {
+		return n
+	}
+
+	ecbox := ui.NewEditableCombobox()
+
+	for id, name := range s {
+		log.Println("Adding Combobox Entry:", id, name)
+		ecbox.Append(name)
+	}
+
+	ecbox.OnChanged(func(*ui.EditableCombobox) {
+		test := ecbox.Text()
+		log.Println("node.Name = '" + n.Name + "' text for '" + title + "' is now: '" + test + "'")
+	})
+
+	box.Append(ecbox, false)
+
+	newNode := n.AddNode(title)
+	newNode.uiText = ecbox
+	return newNode
+}
+
+func (n *Node) OnChanged(f func()) {
+	f()
+}
+
+func (n *Node) GetText() string {
+	if (n.uiText == nil) {
+		return ""
+	}
+	ecbox := n.uiText
+	return ecbox.Text()
+}
