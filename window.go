@@ -9,14 +9,19 @@ import (
 	_ "github.com/andlabs/ui/winmanifest"
 )
 
-func MessageWindow(gw *GuiWindow, msg1 string, msg2 string) {
-	ui.MsgBox(gw.UiWindow, msg1, msg2)
+func (n *Node) MessageWindow2(msg1 string, msg2 string) (*Node) {
+	ui.MsgBox(n.uiWindow, msg1, msg2)
+	// TODO: make new node
+	return n
 }
 
-func ErrorWindow(gw *GuiWindow, msg1 string, msg2 string) {
-	ui.MsgBoxError(gw.UiWindow, msg1, msg2)
+func (n *Node) ErrorWindow2(msg1 string, msg2 string) (*Node) {
+	ui.MsgBoxError(n.uiWindow, msg1, msg2)
+	// TODO: make new node
+	return n
 }
 
+/*
 func DeleteWindow(name string) {
 	log.Println("gui.DeleteWindow() START name =", name)
 	window := Data.WindowMap[name]
@@ -51,6 +56,7 @@ func DeleteWindow(name string) {
 		}
 	}
 }
+*/
 
 func makeNode(parent *Node, title string, x int, y int) *Node {
 	var node Node
@@ -137,26 +143,6 @@ func (n *Node) uiNewWindow(title string, x int, y int) {
 
 func mapWindow(parent *Node, window *ui.Window, title string, x int, y int) *Node {
 	log.Println("gui.WindowMap START title =", title)
-	if Data.WindowMap[title] != nil {
-		log.Println("Data.WindowMap[title] already exists title =", title)
-		title = title + Config.prefix + strconv.Itoa(Config.counter)
-		Config.counter += 1
-	}
-	if Data.WindowMap[title] != nil {
-		log.Println("Data.WindowMap[title] already exists title =", title)
-		panic("Data.WindowMap[newGuiWindow.Name] already exists")
-		return nil
-	}
-
-	var newGuiWindow GuiWindow
-	newGuiWindow.Width = x
-	newGuiWindow.Height = y
-	newGuiWindow.Name = title
-	newGuiWindow.UiWindow = window
-
-	newGuiWindow.EntryMap = make(map[string]*GuiEntry)
-
-	Data.WindowMap[newGuiWindow.Name] = &newGuiWindow
 
 	node := makeNode(parent, title, x, y)
 	node.uiWindow = window

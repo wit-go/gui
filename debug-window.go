@@ -7,7 +7,7 @@ import (
 
 	"github.com/andlabs/ui"
 	_ "github.com/andlabs/ui/winmanifest"
-	"github.com/davecgh/go-spew/spew"
+//	"github.com/davecgh/go-spew/spew"
 )
 
 var names = make([]string, 100)
@@ -33,6 +33,7 @@ func makeWindowDebug() *ui.Box {
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
 
+/*
 	/////////////////////////////////////////////////////
 	vbox := addGroup(hbox, "range Data.WindowMap")
 	cbox := ui.NewCombobox()
@@ -44,7 +45,6 @@ func makeWindowDebug() *ui.Box {
 		addName(cbox, name)
 	}
 	cbox.SetSelected(0)
-
 	vbox.Append(cbox, false)
 
 	cbox.OnSelected(func(*ui.Combobox) {
@@ -65,76 +65,6 @@ func makeWindowDebug() *ui.Box {
 		dumpBox(names[x])
 	})
 
-	b2 := addButton(vbox, "SetMargined(tab)")
-	b2.OnClicked(func(*ui.Button) {
-		x := cbox.Selected()
-		log.Println("x =", x)
-		log.Println("FindWindow; names[x] =", names[x])
-		gw := FindWindow(names[x])
-		if gw == nil {
-			return
-		}
-		if gw.UiTab == nil {
-			return
-		}
-		if gw.TabNumber == nil {
-			return
-		}
-		scs := spew.ConfigState{MaxDepth: 1}
-		scs.Dump(gw)
-		log.Println("gui.DumpBoxes()\tWindow.UiTab     =", gw.UiTab)
-		log.Println("gui.DumpBoxes()\tWindow.TabNumber =", *gw.TabNumber)
-		gw.UiTab.SetMargined(*gw.TabNumber, true)
-	})
-
-	b3 := addButton(vbox, "Hide(tab)")
-	b3.OnClicked(func(*ui.Button) {
-		x := cbox.Selected()
-		log.Println("x =", x)
-		log.Println("FindWindow; names[x] =", names[x])
-		gw := FindWindow(names[x])
-		if gw == nil {
-			return
-		}
-		if gw.UiTab == nil {
-			return
-		}
-		gw.UiTab.Hide()
-	})
-
-	b4 := addButton(vbox, "Show(tab)")
-	b4.OnClicked(func(*ui.Button) {
-		x := cbox.Selected()
-		log.Println("x =", x)
-		log.Println("FindWindow; names[x] =", names[x])
-		gw := FindWindow(names[x])
-		if gw == nil {
-			return
-		}
-		if gw.UiTab == nil {
-			return
-		}
-		gw.UiTab.Show()
-	})
-
-	b5 := addButton(vbox, "Delete(tab)")
-	b5.OnClicked(func(*ui.Button) {
-		x := cbox.Selected()
-		log.Println("x =", x)
-		log.Println("FindWindow; names[x] =", names[x])
-		gw := FindWindow(names[x])
-		if gw == nil {
-			return
-		}
-		if gw.UiTab == nil {
-			return
-		}
-		if gw.TabNumber == nil {
-			return
-		}
-		gw.UiTab.Delete(*gw.TabNumber)
-	})
-
 	/////////////////////////////////////////////////////
 	vbox = addGroup(hbox, "Global Debug")
 
@@ -152,6 +82,7 @@ func makeWindowDebug() *ui.Box {
 	dump1.OnClicked(func(*ui.Button) {
 		DumpMap()
 	})
+*/
 
 	/////////////////////////////////////////////////////
 	nodeBox := addGroup(hbox, "Windows:")
@@ -179,7 +110,7 @@ func makeWindowDebug() *ui.Box {
 	})
 
 	/////////////////////////////////////////////////////
-	vbox = addGroup(hbox, "Node Debug")
+	vbox := addGroup(hbox, "Node Debug")
 
 	n1 := addButton(vbox, "Data.DumpNodeMap()")
 	n1.OnClicked(func(*ui.Button) {
@@ -277,6 +208,7 @@ func addGroup(b *ui.Box, name string) *ui.Box {
 	return vbox
 }
 
+/*
 func dumpBox(s string) {
 	var name string
 	var window *GuiWindow
@@ -295,20 +227,6 @@ func dumpBox(s string) {
 		// log.Println("gui.DumpBoxes()\tWindow.UiWindow type =", reflect.TypeOf(window.UiWindow))
 		log.Println("gui.DumpBoxes()\tWindow.UiWindow =", window.UiWindow)
 		log.Println("gui.DumpBoxes()\tWindow.UiTab    =", window.UiTab)
-		/*
-		log.Println("gui.dumpBox() BoxMap START")
-		for name, abox := range window.BoxMap {
-			log.Printf("gui.DumpBoxes() \tBOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
-			abox.Dump()
-			if name == "MAINBOX" {
-				if Config.Debug {
-					scs := spew.ConfigState{MaxDepth: 1}
-					scs.Dump(abox.UiBox)
-				}
-			}
-		}
-		log.Println("gui.dumpBox() BoxMap END")
-		*/
 		if window.UiTab != nil {
 			pages := window.UiTab.NumPages()
 			log.Println("gui.DumpBoxes()\tWindow.UiTab.NumPages() =", pages)
@@ -320,6 +238,7 @@ func dumpBox(s string) {
 		}
 	}
 }
+*/
 
 func addButton(box *ui.Box, name string) *ui.Button {
 	button := ui.NewButton(name)

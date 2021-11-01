@@ -17,19 +17,11 @@ func (n *Node) FindControl() *ui.Control {
 	return n.uiControl
 }
 
+/*
 func (w *GuiWindow) FindNode() *Node {
 	return w.node
 }
-
-func FindWindow(s string) *GuiWindow {
-	for name, window := range Data.WindowMap {
-		if name == s {
-			return window
-		}
-	}
-	log.Printf("COULD NOT FIND WINDOW " + s)
-	return nil
-}
+*/
 
 func FindNode(name string) *Node {
 	if Data.NodeMap == nil {

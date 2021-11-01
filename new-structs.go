@@ -49,16 +49,18 @@ type Node struct {
 	parent	*Node
 	children []*Node
 
-	window	*GuiWindow
+	// window	*GuiWindow
 	area	*GuiArea
 	custom func(*Node)
 
 	uiControl *ui.Control
 	uiButton  *ui.Button
 	uiWindow  *ui.Window
-	uiTab  *ui.Tab
-	uiBox  *ui.Box
-	uiText *ui.EditableCombobox
+	uiAttrstr *ui.AttributedString
+	uiTab     *ui.Tab
+	uiBox     *ui.Box
+	uiArea    *ui.Area
+	uiText    *ui.EditableCombobox
 }
 
 func (n *Node) Parent() *Node {
@@ -83,7 +85,7 @@ func (n *Node) Dump() {
 	}
 	log.Println("gui.Node.Dump() children   = ", n.children)
 
-	log.Println("gui.Node.Dump() window     = ", n.window)
+	// log.Println("gui.Node.Dump() window     = ", n.window)
 	// log.Println("gui.Node.Dump() box        = ", n.box)
 
 	log.Println("gui.Node.Dump() uiWindow   = ", n.uiWindow)

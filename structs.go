@@ -2,7 +2,7 @@ package gui
 
 import (
 	"image/color"
-	"log"
+//	"log"
 
 	"github.com/andlabs/ui"
 	"golang.org/x/image/font"
@@ -42,7 +42,7 @@ type GuiData struct {
 
 	// A map of all the entry boxes
 	AllEntries []*GuiEntry
-	WindowMap  map[string]*GuiWindow
+	// WindowMap  map[string]*GuiWindow
 
 	// Store access to everything via binary tree's
 	NodeMap    map[string]*Node
@@ -62,7 +62,7 @@ type GuiData struct {
 type GuiTab struct {
 	Name   string     // field for human readable name
 	Number int        // the andlabs/ui tab index
-	Window *GuiWindow // the parent Window
+	// Window *GuiWindow // the parent Window
 }
 
 //
@@ -83,6 +83,7 @@ type GuiTab struct {
 // This struct keeps track of what is in the window so you
 // can destroy and replace it with something else
 //
+/*
 type GuiWindow struct {
 	Name      string // field for human readable name
 	Width     int
@@ -90,11 +91,7 @@ type GuiWindow struct {
 	Axis      int  // does it add items to the X or Y axis
 	TabNumber *int // the andlabs/ui tab index
 
-	// the callback function to make the window contents
-	// MakeWindow	func(*GuiBox) *GuiBox
-
 	// the components of the window
-	// BoxMap   map[string]*GuiBox
 	EntryMap map[string]*GuiEntry
 	Area     *GuiArea
 
@@ -104,50 +101,15 @@ type GuiWindow struct {
 	UiWindow *ui.Window
 	UiTab    *ui.Tab // if this != nil, the window is 'tabbed'
 }
+*/
 
+/*
 func (w *GuiWindow) Dump() {
 	log.Println("gui.GuiWindow.Dump() Name       = ", w.Name)
 	log.Println("gui.GuiWindow.Dump() node       = ", w.node)
 	log.Println("gui.GuiWindow.Dump() Width      = ", w.Width)
 	log.Println("gui.GuiWindow.Dump() Height     = ", w.Height)
 }
-
-/*
-// GuiBox is any type of ui.Hbox or ui.Vbox
-// There can be lots of these for each GuiWindow
-type GuiBox struct {
-	Name   string     // field for human readable name
-	Axis   int        // does it add items to the X or Y axis
-	Window *GuiWindow // the parent Window
-
-	node	*Node
-
-	// andlabs/ui abstraction mapping
-	UiBox *ui.Box
-}
-*/
-
-/*
-func (b *GuiBox) Dump() {
-	log.Println("gui.GuiBox.Dump() Name       = ", b.Name)
-	log.Println("gui.GuiBox.Dump() Axis       = ", b.Axis)
-	log.Println("gui.GuiBox.Dump() GuiWindow  = ", b.Window)
-	log.Println("gui.GuiBox.Dump() node       = ", b.node)
-	log.Println("gui.GuiBox.Dump() UiBox      = ", b.UiBox)
-}
-
-func (b *GuiBox) SetTitle(title string) {
-	log.Println("DID IT!", title)
-	if b.Window == nil {
-		return
-	}
-	if b.Window.UiWindow == nil {
-		return
-	}
-	b.Window.UiWindow.SetTitle(title)
-	return
-}
-*/
 
 func (w *GuiWindow) SetNode(n *Node) {
 	if (w.node != nil) {
@@ -160,27 +122,6 @@ func (w *GuiWindow) SetNode(n *Node) {
 		panic("gui.SetNode() node == nil")
 	}
 }
-
-/*
-func (b *GuiBox) SetNode(n *Node) {
-	if (b.node != nil) {
-		b.Dump()
-		panic("gui.SetNode() Error not nil")
-	}
-	b.node = n
-	if (b.node == nil) {
-		b.Dump()
-		panic("gui.SetNode() node == nil")
-	}
-}
-
-func (b *GuiBox) Append(child ui.Control, x bool) {
-	if b.UiBox == nil {
-		panic("GuiBox.Append() can't work. UiBox == nil")
-		return
-	}
-	b.UiBox.Append(child, x)
-}
 */
 
 // Note: every mouse click is handled
@@ -189,7 +130,6 @@ func (b *GuiBox) Append(child ui.Control, x bool) {
 // call this 'GuiMouseClick'
 type GuiButton struct {
 	Name string  // field for human readable name
-	// box2  *GuiBox // what box the button click was in
 
 	// a callback function for the main application
 	Custom func(*GuiButton)
@@ -210,7 +150,6 @@ type GuiEntry struct {
 	Normalize func(string) string // function to 'normalize' the data
 
 	B   *GuiButton
-	// Box *GuiBox
 
 	// andlabs/ui abstraction mapping
 	UiEntry *ui.Entry
@@ -223,7 +162,6 @@ type GuiEntry struct {
 //
 type GuiArea struct {
 	Button *GuiButton // what button handles mouse events
-	// Box    *GuiBox
 
 	UiAttrstr *ui.AttributedString
 	UiArea    *ui.Area
@@ -261,7 +199,6 @@ type TableData struct {
 	Cells [20]CellData
 	Human [20]HumanMap
 
-	// Box *GuiBox
 	n *Node
 
 	lastRow    int

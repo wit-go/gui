@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
+	// "github.com/davecgh/go-spew/spew"
 )
 
 // WatchGUI() opens a goroutine
@@ -22,7 +22,7 @@ func WatchGUI() {
 		if count > 20 {
 			log.Println("Sleep() in watchGUI()")
 			if Config.Debug {
-				DumpBoxes()
+				// DumpBoxes()
 			}
 			count = 0
 		}
@@ -31,6 +31,7 @@ func WatchGUI() {
 	}
 }
 
+/*
 func DumpWindows() {
 	for name, _ := range Data.WindowMap {
 		log.Println("gui.DumpWindows() window =", name)
@@ -41,11 +42,9 @@ func DumpMap() {
 	for name, window := range Data.WindowMap {
 		log.Println("gui.DumpBoxes() MAP: ", name)
 		log.Println("gui.DumpBoxes()   window:", window)
-		/*
 		for name, abox := range window.BoxMap {
 			log.Printf("gui.DumpBoxes() \tBOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
 		}
-		*/
 	}
 }
 
@@ -61,7 +60,6 @@ func DumpBoxes() {
 		// log.Println("gui.DumpBoxes()\tWindow.UiWindow type =", reflect.TypeOf(window.UiWindow))
 		log.Println("gui.DumpBoxes()\tWindow.UiWindow =", window.UiWindow)
 		log.Println("gui.DumpBoxes()\tWindow.UiTab =", window.UiTab)
-		/*
 		for name, abox := range window.BoxMap {
 			log.Printf("gui.DumpBoxes() \tBOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
 			if name == "MAINBOX" {
@@ -71,7 +69,6 @@ func DumpBoxes() {
 				}
 			}
 		}
-		*/
 		if window.UiTab != nil {
 			// log.Println("gui.DumpBoxes()\tWindow.UiTab type =", reflect.TypeOf(window.UiTab))
 			// log.Println("gui.DumpBoxes()\tWindow.UiTab =", window.UiTab)
@@ -89,7 +86,6 @@ func DumpBoxes() {
 			}
 		}
 	}
-	/*
 		for i, window := range Data.Windows {
 			if (window.TabNumber == nil) {
 				log.Println("gui.DumpBoxes() Data.Windows", i, "Name =", window.Name, "TabNumber = nil")
@@ -97,8 +93,8 @@ func DumpBoxes() {
 				log.Println("gui.DumpBoxes() Data.Windows", i, "Name =", window.Name, "TabNumber =", *window.TabNumber)
 			}
 		}
-	*/
 }
+*/
 
 func addTableTab() {
 	var parts []TableColumnData

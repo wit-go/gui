@@ -12,22 +12,24 @@ func makeGenericArea(n *Node, newText *ui.AttributedString, custom func(*GuiButt
 	// There should be another way to do this (?)
 	var newB *GuiButton
 	newB		= CreateFontButton(n, "AREA")
-	// newB.Box	= gb
 	newB.Custom	= custom
 
+/*
 	gw := n.window
 	// initialize the GuiArea{}
-	gw.Area			= new(GuiArea)
 	gw.Area.Button		= newB
+*/
+	area			:= new(GuiArea)
+
 	// gw.Area.Box		= gb
-	gw.Area.UiAttrstr	= newText
-	gw.Area.UiArea		= ui.NewArea(gw.Area)
+	n.uiAttrstr		= newText
+	n.uiArea		= ui.NewArea(area)
 
 	if (Config.Debug) {
-		spew.Dump(gw.Area.UiArea)
+		spew.Dump(n.uiArea)
 		log.Println("DEBUGGING", Config.Debug)
 	} else {
-		log.Println("NOT DEBUGGING AREA mhAH.Button =", gw.Area.Button)
+		log.Println("NOT DEBUGGING AREA mhAH.Button =", n.uiButton)
 	}
 }
 

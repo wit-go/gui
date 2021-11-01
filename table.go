@@ -97,7 +97,7 @@ func InitColumns(mh *TableData, parts []TableColumnData) {
 	}
 }
 
-func AddTableTab(gw *GuiWindow, name string, rowcount int, parts []TableColumnData) *TableData {
+func AddTableTab(name string, rowcount int, parts []TableColumnData) *TableData {
 	n := NewWindow()
 	return n.AddTableBox(name, rowcount, parts)
 }
