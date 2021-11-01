@@ -237,6 +237,31 @@ func (n *Node) AddTabNode(title string) *Node {
 	return newNode
 }
 
+func (n *Node) AddHorizontalBreak() *Node {
+	log.Println("AddHorizontalBreak  added to node =", n.Name)
+	if (n.uiBox != nil) {
+		tmp := ui.NewHorizontalSeparator()
+		n.uiBox.Append(tmp, false)
+	} else {
+		n.Dump()
+		// panic("AddHorizontalBreak")
+		return nil
+	}
+	return n
+}
+
+func (n *Node) AddVerticalBreak() *Node {
+	log.Println("AddVerticalBreak  added to node =", n.Name)
+	if (n.uiBox != nil) {
+		tmp := ui.NewVerticalSeparator()
+		n.uiBox.Append(tmp, false)
+	} else {
+		n.Dump()
+		return nil
+	}
+	return n
+}
+
 func (n *Node) AddHorizontalBox(title string) *Node {
 	hbox := ui.NewHorizontalBox()
 	hbox.SetPadded(true)
