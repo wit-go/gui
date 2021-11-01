@@ -1,17 +1,13 @@
 package gui
 
 import "log"
-import "fmt"
+// import "fmt"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
-import "github.com/davecgh/go-spew/spew"
+// import "github.com/davecgh/go-spew/spew"
 
 // functions for handling text entry boxes
-
-func NewLabel(box *GuiBox, text string) {
-	box.Append(ui.NewLabel(text), false)
-}
 
 func (n *Node) NewLabel(text string) *Node {
 	// make new node here
@@ -22,22 +18,6 @@ func (n *Node) NewLabel(text string) *Node {
 
 	n.Append(newNode)
 	return newNode
-}
-
-func (b *GuiBox) GetText(name string) string {
-	if (b.Window.EntryMap == nil) {
-		log.Println("gui.GetText() ERROR b.Box.Window.EntryMap == nil")
-		return ""
-	}
-	spew.Dump(b.Window.EntryMap)
-	if (b.Window.EntryMap[name] == nil) {
-		log.Println("gui.GetText() ERROR box.Window.EntryMap[", name, "] == nil ")
-		return ""
-	}
-	e := b.Window.EntryMap[name]
-	log.Println("gui.GetText() box.Window.EntryMap[", name, "] = ", e.UiEntry.Text())
-	log.Println("gui.GetText() END")
-	return e.UiEntry.Text()
 }
 
 func (n *Node) SetText(value string) error {
@@ -51,71 +31,6 @@ func (n *Node) SetText(value string) error {
 		return nil
 	}
 	return nil
-}
-
-func SetText(box *GuiBox, name string, value string) error {
-	if (box == nil) {
-		return fmt.Errorf("gui.SetText() ERROR box == nil")
-	}
-	if (box.Window.EntryMap == nil) {
-		return fmt.Errorf("gui.SetText() ERROR b.Box.Window.EntryMap == nil")
-	}
-	spew.Dump(box.Window.EntryMap)
-	if (box.Window.EntryMap[name] == nil) {
-		return fmt.Errorf("gui.SetText() ERROR box.Window.EntryMap[" + name + "] == nil ")
-	}
-	e := box.Window.EntryMap[name]
-	log.Println("gui.SetText() box.Window.EntryMap[", name, "] = ", e.UiEntry.Text())
-	e.UiEntry.SetText(value)
-	log.Println("gui.SetText() box.Window.EntryMap[", name, "] = ", e.UiEntry.Text())
-	log.Println("gui.SetText() END")
-	return nil
-}
-
-// makeEntryBox(box, "hostname:", "blah.foo.org") {
-func MakeEntryVbox(box *GuiBox, a string, startValue string, edit bool, action string) *GuiEntry {
-	// Start 'Nickname' vertical box
-	vboxN := ui.NewVerticalBox()
-	vboxN.SetPadded(true)
-	vboxN.Append(ui.NewLabel(a), false)
-
-	e := defaultMakeEntry(startValue, edit, action)
-
-	vboxN.Append(e.UiEntry, false)
-	box.UiBox.Append(vboxN, false)
-	// End 'Nickname' vertical box
-
-	return e
-}
-
-func MakeEntryHbox(box *GuiBox, a string, startValue string, edit bool, action string) *GuiEntry {
-	hboxN := ui.NewHorizontalBox()
-	hboxN.SetPadded(true)
-	hboxN.Append(ui.NewLabel(a), false)
-
-	e := defaultMakeEntry(startValue, edit, action)
-	hboxN.Append(e.UiEntry, true)
-
-	box.UiBox.Append(hboxN, true)
-
-	return e
-}
-
-func AddEntry(box *GuiBox, name string) *GuiEntry {
-	var ge *GuiEntry
-	ge = new(GuiEntry)
-
-	ue := ui.NewEntry()
-	ue.SetReadOnly(false)
-	ue.OnChanged(func(*ui.Entry) {
-		log.Println("gui.AddEntry() OK. ue.Text() =", ue.Text())
-	})
-	box.UiBox.Append(ue, false)
-
-	ge.UiEntry = ue
-	box.Window.EntryMap[name] = ge
-
-	return ge
 }
 
 func defaultEntryChange(e *ui.Entry) {

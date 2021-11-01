@@ -13,7 +13,8 @@ import _ "github.com/andlabs/ui/winmanifest"
 // add(gw.BoxMap["MAINBOX"], newbox, name)	// use this to add a box off the main box
 // add(gw.BoxMap["BUTTONBOX"], newbox, name)	// use this to add something to the box called 'BUTTONBOX'
 // add(box, newbox, name)			// add 'newbox' to 'box' and call it 'name'
-func add(box *GuiBox, newbox *GuiBox) {
+/*
+func add2(box *GuiBox, newbox *GuiBox) {
 	log.Println("gui.add() START box =", box)
 	log.Println("gui.add() START newbox =", newbox)
 	if (box == nil) {
@@ -72,6 +73,7 @@ func add(box *GuiBox, newbox *GuiBox) {
 	box.Window.BoxMap[newbox.Name] = newbox
 	log.Println("gui.add() END")
 }
+*/
 
 func (n *Node) AddBox(axis int, name string) *Node {
 	newBox		:= new(GuiBox)
@@ -101,35 +103,6 @@ func (n *Node) AddBox(axis int, name string) *Node {
 	// add(n.box, newBox)
 	return newNode
 }
-
-/*
-func (b *GuiBox) NewBox(axis int, name string) *GuiBox {
-	log.Println("gui.NewBox() START")
-	n := b.FindNode()
-	if (n == nil) {
-		log.Println("gui.NewBox() SERIOUS ERROR. CAN NOT FIND NODE")
-		panic("gui.NewBox() SERIOUS ERROR. CAN NOT FIND NODE")
-	} else {
-		log.Println("gui.NewBox() node =", n.Name)
-	}
-	var newbox *GuiBox
-	newbox		= new(GuiBox)
-	newbox.Window	= b.Window
-	newbox.Name	= name
-
-	var uiBox *ui.Box
-	if (axis == Xaxis) {
-		uiBox = ui.NewHorizontalBox()
-	} else {
-		uiBox = ui.NewVerticalBox()
-	}
-	uiBox.SetPadded(true)
-	newbox.UiBox = uiBox
-	add(b, newbox)
-	// panic("gui.NewBox")
-	return newbox
-}
-*/
 
 func HardBox(gw *GuiWindow, axis int, name string) *GuiBox {
 	log.Println("HardBox() START axis =", axis)
@@ -164,7 +137,8 @@ func HardBox(gw *GuiWindow, axis int, name string) *GuiBox {
 	newbox.UiBox	= uiBox
 	newbox.Name	= name
 
-	add(gw.BoxMap["MAINBOX"], newbox)
+	// TODO: removed Oct 31
+	// add(gw.BoxMap["MAINBOX"], newbox)
 
 	log.Println("HardBox END")
 	return newbox
