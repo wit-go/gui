@@ -51,6 +51,7 @@ type Node struct {
 
 	window	*GuiWindow
 	box	*GuiBox
+	area	*GuiArea
 	custom func(*Node)
 
 	uiControl *ui.Control

@@ -7,19 +7,19 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 import "github.com/davecgh/go-spew/spew"
 
-func makeGenericArea(gb *GuiBox, newText *ui.AttributedString, custom func(*GuiButton)) {
+func makeGenericArea(n *Node, newText *ui.AttributedString, custom func(*GuiButton)) {
 	// make this button just to get the default font (but don't display the button)
 	// There should be another way to do this (?)
 	var newB *GuiButton
-	newB		= CreateFontButton(gb, "AREA")
-	newB.Box	= gb
+	newB		= CreateFontButton(n, "AREA")
+	// newB.Box	= gb
 	newB.Custom	= custom
 
-	gw := gb.Window
+	gw := n.window
 	// initialize the GuiArea{}
 	gw.Area			= new(GuiArea)
 	gw.Area.Button		= newB
-	gw.Area.Box		= gb
+	// gw.Area.Box		= gb
 	gw.Area.UiAttrstr	= newText
 	gw.Area.UiArea		= ui.NewArea(gw.Area)
 
@@ -107,10 +107,10 @@ func (ah GuiArea) KeyEvent(a *ui.Area, ke *ui.AreaKeyEvent) (handled bool) {
 	return false
 }
 
-func (b *GuiBox) ShowTextBox(newText *ui.AttributedString, custom func(*GuiButton), name string) {
+func (n *Node) ShowTextBox(newText *ui.AttributedString, custom func(*GuiButton), name string) {
 	log.Println("ShowTextBox() START")
 
-	gw := b.Window
+	gw := n.Window
 	if (gw == nil) {
 		log.Println("ShowTextBox() ERROR gw = nil")
 		return
@@ -127,10 +127,10 @@ func (b *GuiBox) ShowTextBox(newText *ui.AttributedString, custom func(*GuiButto
 	*/
 
 	// TODO: allow padded & axis here
-	b.UiBox.SetPadded(true)
+	n.uiBox.SetPadded(true)
 
 	// add(gw.BoxMap["MAINBOX"], newbox)
 
-	makeGenericArea(b, newText, custom)
-	b.UiBox.Append(b.Window.Area.UiArea, true)
+	makeGenericArea(n, newText, custom)
+	n.uiBox.Append(n.area.UiArea, true)
 }

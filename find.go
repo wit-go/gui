@@ -17,43 +17,9 @@ func (n *Node) FindControl() *ui.Control {
 	return n.uiControl
 }
 
-/*
-func (n *Node) FindBox() *GuiBox {
-	if (n.box != nil) {
-		return n.box
-	}
-	if (n.parent != nil) {
-		p := n.parent
-		return p.box
-	}
-	return n.box
-}
-
-func (n *Node) FindWindowBox() *GuiBox {
-	if (n.box == nil) {
-		panic("SERIOUS ERROR n.box == nil in FindWindowBox()")
-	}
-	return n.box
-}
-*/
-
 func (w *GuiWindow) FindNode() *Node {
 	return w.node
 }
-
-/*
-func (b *GuiBox) FindNode() *Node {
-	log.Println("gui.FindNode() on GuiBox")
-	if b.node != nil {
-		return b.node
-	}
-	Data.ListChildren(true)
-	b.Dump()
-	log.Println("gui.FindNode() on GuiBox is nil")
-	os.Exit(-1)
-	return nil
-}
-*/
 
 func FindWindow(s string) *GuiWindow {
 	for name, window := range Data.WindowMap {
@@ -62,21 +28,6 @@ func FindWindow(s string) *GuiWindow {
 		}
 	}
 	log.Printf("COULD NOT FIND WINDOW " + s)
-	return nil
-}
-
-func FindBox(s string) *GuiBox {
-	for name, window := range Data.WindowMap {
-		if name != s {
-			continue
-		}
-		for name, abox := range window.BoxMap {
-			log.Printf("gui.DumpBoxes() \tBOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
-			return abox
-		}
-		log.Println("gui.FindBox() NEED TO INIT WINDOW name =", name)
-	}
-	log.Println("gui.FindBox() COULD NOT FIND BOX", s)
 	return nil
 }
 
