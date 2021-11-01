@@ -256,6 +256,7 @@ type TableData struct {
 	Human [20]HumanMap
 
 	Box *GuiBox
+	n *Node
 
 	lastRow    int
 	lastColumn int
