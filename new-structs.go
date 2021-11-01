@@ -97,10 +97,11 @@ func (n *Node) Dump() {
 	}
 }
 
-
+/*
 func (n *Node) SetBox(box *GuiBox) {
 	n.box = box
 }
+*/
 
 func (n *Node) SetName(name string) {
 	// n.uiType.SetName(name)

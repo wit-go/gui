@@ -17,6 +17,7 @@ func (n *Node) FindControl() *ui.Control {
 	return n.uiControl
 }
 
+/*
 func (n *Node) FindBox() *GuiBox {
 	if (n.box != nil) {
 		return n.box
@@ -34,11 +35,13 @@ func (n *Node) FindWindowBox() *GuiBox {
 	}
 	return n.box
 }
+*/
 
 func (w *GuiWindow) FindNode() *Node {
 	return w.node
 }
 
+/*
 func (b *GuiBox) FindNode() *Node {
 	log.Println("gui.FindNode() on GuiBox")
 	if b.node != nil {
@@ -50,6 +53,7 @@ func (b *GuiBox) FindNode() *Node {
 	os.Exit(-1)
 	return nil
 }
+*/
 
 func FindWindow(s string) *GuiWindow {
 	for name, window := range Data.WindowMap {
