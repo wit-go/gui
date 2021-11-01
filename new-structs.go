@@ -293,22 +293,12 @@ func (n *Node) AddTab(title string, uiC *ui.Box) *Node {
 		log.Println("gui.Node.AddTab() ERROR ui.Window == nil")
 		return nil
 	}
-	/*
-	if parent.box == nil {
-		parent.Dump()
-		// panic("gui.AddTab() ERROR box == nil")
-	}
-	*/
 	if parent.uiTab == nil {
 		inittab := ui.NewTab() // no, not that 'inittab'
 		parent.uiWindow.SetChild(inittab)
 		parent.uiWindow.SetMargined(true)
 		parent.uiTab = inittab
-
-		// parent.Dump()
-		// panic("gui.AddTab() ERROR uiTab == nil")
 	}
-
 	tab := parent.uiTab
 	parent.uiWindow.SetMargined(true)
 
@@ -322,7 +312,6 @@ func (n *Node) AddTab(title string, uiC *ui.Box) *Node {
 	newNode := parent.makeNode(title, 555, 600 + Config.counter)
 	newNode.uiTab = tab
 	newNode.uiBox = uiC
-	// panic("gui.AddTab() after makeNode()")
 	tabSetMargined(newNode.uiTab)
 	return newNode
 }
