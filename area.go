@@ -117,15 +117,6 @@ func (n *Node) ShowTextBox(newText *ui.AttributedString, custom func(*GuiButton)
 	}
 	log.Println("ShowTextBox() START gw =", gw)
 
-	/*
-	var newbox *GuiBox
-	newbox		= new(GuiBox)
-	newbox.Window	= gw
-	newbox.Name	= name
-	hbox		:= ui.NewVerticalBox()
-	newbox.UiBox	= hbox
-	*/
-
 	// TODO: allow padded & axis here
 	n.uiBox.SetPadded(true)
 

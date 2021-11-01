@@ -159,16 +159,18 @@ func mapWindow(parent *Node, window *ui.Window, title string, x int, y int) *Nod
 
 	Data.WindowMap[newGuiWindow.Name] = &newGuiWindow
 
+	/*
 	var box GuiBox
 	box.Window = &newGuiWindow
 	box.Name = title
+	*/
 
 	node := makeNode(parent, title, x, y)
-	node.box = &box
 	node.uiWindow = window
-	box.node = node
+	// node.box = &box
+	// box.node = node
 
-	newGuiWindow.BoxMap["jcarrInitTest"] = &box
+	// newGuiWindow.BoxMap["jcarrInitTest"] = &box
 
 	return node
 }
@@ -186,10 +188,10 @@ func NewWindow() *Node {
 
 	var n *Node
 	n = mapWindow(nil, nil, title, w, h)
-	box := n.box
-	log.Println("gui.NewWindow() title = box.Name =", box.Name)
+//	box := n.box
+//	log.Println("gui.NewWindow() title = box.Name =", box.Name)
 
-	n.uiNewWindow(box.Name, w, h)
+	n.uiNewWindow(title, w, h)
 	window := n.uiWindow
 
 	f := Config.Exit
@@ -201,7 +203,7 @@ func NewWindow() *Node {
 		return true
 	})
 
-	box.Window.UiWindow = window
+	n.uiWindow = window
 	if(n.uiWindow == nil) {
 		panic("node.uiWindow == nil. This should never happen")
 	}

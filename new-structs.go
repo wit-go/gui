@@ -98,12 +98,6 @@ func (n *Node) Dump() {
 	}
 }
 
-/*
-func (n *Node) SetBox(box *GuiBox) {
-	n.box = box
-}
-*/
-
 func (n *Node) SetName(name string) {
 	// n.uiType.SetName(name)
 	if (n.uiWindow != nil) {
@@ -207,13 +201,13 @@ func (n *Node) ListChildren(dump bool) {
 //
 // This function should make a new node with the parent and
 // the 'stuff' Node as a child
-func (n *Node) AddTabNode(title string, b *GuiBox) *Node {
+func (n *Node) AddTabNode(title string) *Node {
 	var newNode *Node
 	parent := n
 
 	newNode = parent.makeNode(title, 444, 400 + Config.counter)
 	newNode.uiTab = parent.uiTab
-	newNode.box = b
+	// newNode.box = b
 
 	if (Config.DebugNode) {
 		fmt.Println("")
@@ -225,12 +219,12 @@ func (n *Node) AddTabNode(title string, b *GuiBox) *Node {
 		newNode.Dump()
 	}
 
-	if (newNode.uiTab == nil) {
+	if (newNode.uiTab != nil) {
 		log.Println("wit/gui/ AddTabNode() Something went wrong tab == nil")
 		// TODO: try to find the tab or window and make them if need be
-		return newNode
+		// newNode.uiTab.Append(title, b.UiBox)
+		panic("newNode.uiTab")
 	}
-	newNode.uiTab.Append(title, b.UiBox)
 
 	return newNode
 }
@@ -245,7 +239,7 @@ func (n *Node) AddTab(title string, uiC *ui.Box) *Node {
 	}
 	if parent.box == nil {
 		parent.Dump()
-		panic("gui.AddTab() ERROR box == nil")
+		// panic("gui.AddTab() ERROR box == nil")
 	}
 	if parent.uiTab == nil {
 		inittab := ui.NewTab() // no, not that 'inittab'
