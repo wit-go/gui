@@ -135,19 +135,22 @@ func (n *Node) List() {
 var listChildrenParent *Node
 var listChildrenDepth int = 0
 
+// var indent string = "\t"
+var indent string = "    "
+
 func indentPrintln(depth int, format string, a ...interface{}) {
-	var tabs string
+	var space string
 	for i := 0; i < depth; i++ {
-		tabs = tabs + "\t"
+		space = space + indent
 	}
 
 	// newFormat := tabs + strconv.Itoa(depth) + " " + format
-	newFormat := tabs + format
+	newFormat := space + format
 	log.Println(newFormat, a)
 }
 
 func (n *Node) ListChildren(dump bool) {
-	indentPrintln(listChildrenDepth, "\t", n.id, n.Width, n.Height, n.Name)
+	indentPrintln(listChildrenDepth, "", n.id, n.Width, n.Height, n.Name)
 
 	if (dump == true) {
 		n.Dump()

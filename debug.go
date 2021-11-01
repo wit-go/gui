@@ -31,71 +31,6 @@ func WatchGUI() {
 	}
 }
 
-/*
-func DumpWindows() {
-	for name, _ := range Data.WindowMap {
-		log.Println("gui.DumpWindows() window =", name)
-	}
-}
-
-func DumpMap() {
-	for name, window := range Data.WindowMap {
-		log.Println("gui.DumpBoxes() MAP: ", name)
-		log.Println("gui.DumpBoxes()   window:", window)
-		for name, abox := range window.BoxMap {
-			log.Printf("gui.DumpBoxes() \tBOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
-		}
-	}
-}
-
-func DumpBoxes() {
-	for name, window := range Data.WindowMap {
-		log.Println("gui.DumpBoxes() MAP: ", name)
-		if window.TabNumber == nil {
-			log.Println("gui.DumpBoxes() \tWindows.TabNumber = nil")
-		} else {
-			log.Println("gui.DumpBoxes() \tWindows.TabNumber =", *window.TabNumber)
-		}
-		log.Println("gui.DumpBoxes()\tWindow.name =", window.Name)
-		// log.Println("gui.DumpBoxes()\tWindow.UiWindow type =", reflect.TypeOf(window.UiWindow))
-		log.Println("gui.DumpBoxes()\tWindow.UiWindow =", window.UiWindow)
-		log.Println("gui.DumpBoxes()\tWindow.UiTab =", window.UiTab)
-		for name, abox := range window.BoxMap {
-			log.Printf("gui.DumpBoxes() \tBOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
-			if name == "MAINBOX" {
-				if Config.Debug {
-					scs := spew.ConfigState{MaxDepth: 1}
-					scs.Dump(abox.UiBox)
-				}
-			}
-		}
-		if window.UiTab != nil {
-			// log.Println("gui.DumpBoxes()\tWindow.UiTab type =", reflect.TypeOf(window.UiTab))
-			// log.Println("gui.DumpBoxes()\tWindow.UiTab =", window.UiTab)
-			pages := window.UiTab.NumPages()
-			log.Println("gui.DumpBoxes()\tWindow.UiTab.NumPages() =", pages)
-			// for i := 0; i < pages; i++ {
-			// 	log.Println("gui.DumpBoxes()\t\tWindow.UiTab.Margined(", i, ") =", window.UiTab.Margined(i))
-			// }
-			// tmp := spew.NewDefaultConfig()
-			// tmp.MaxDepth = 2
-			// tmp.Dump(window.UiTab)
-			if Config.Debug {
-				scs := spew.ConfigState{MaxDepth: 2}
-				scs.Dump(window.UiTab)
-			}
-		}
-	}
-		for i, window := range Data.Windows {
-			if (window.TabNumber == nil) {
-				log.Println("gui.DumpBoxes() Data.Windows", i, "Name =", window.Name, "TabNumber = nil")
-			} else {
-				log.Println("gui.DumpBoxes() Data.Windows", i, "Name =", window.Name, "TabNumber =", *window.TabNumber)
-			}
-		}
-}
-*/
-
 func addTableTab() {
 	var parts []TableColumnData
 
@@ -126,24 +61,6 @@ func (dn *GuiData) DumpNodeMap() {
 	}
 }
 
-/*
-func DebugDataNodeChildren() {
-	if Data.NodeMap == nil {
-		log.Println("DebugDataNodeChildren() NodeMap == nil")
-		return
-	}
-	log.Println("DebugDataNodeChildren():")
-	for name, node := range Data.NodeMap {
-		log.Println("\tNode name =", node.Width, node.Height, name)
-		if (node.children == nil) {
-			log.Println("\t\tNo children")
-			break
-		}
-		log.Println("\t\tHas children:", node.children)
-	}
-}
-*/
-
 func (dn *GuiData) ListChildren(dump bool) {
 	if Data.NodeMap == nil {
 		log.Println("gui.Data.ListChildren() Data.NodeMap == nil")
@@ -151,8 +68,9 @@ func (dn *GuiData) ListChildren(dump bool) {
 	}
 	log.Println("gui.Data.ListChildren() Data.NodeMap:")
 	for name, node := range Data.NodeMap {
-		log.Println("\tgui.Data.ListChildren() node =", node.id, node.Width, node.Height, name)
+		listChildrenDepth = 0
 		if (dump == true) {
+			log.Println("tgui.Data.ListChildren() node =", node.id, node.Width, node.Height, name)
 			node.Dump()
 		}
 		node.ListChildren(dump)
