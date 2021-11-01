@@ -8,6 +8,8 @@ import _ "github.com/andlabs/ui/winmanifest"
 // import "github.com/davecgh/go-spew/spew"
 
 
+// TODO: bring this generic mouse click function back
+//
 // This is the default mouse click handler
 // Every mouse click that hasn't been assigned to
 // something specific will fall into this routine
@@ -17,8 +19,6 @@ import _ "github.com/andlabs/ui/winmanifest"
 // This routine MUST be here as this is how the andlabs/ui works
 // This is the raw routine passed to every button in andlabs libui / ui
 //
-// There is a []GuiButton which has all the buttons. We search
-// for the button and then call the function below
 //
 
 func (n *Node) AddButton(name string, custom func(*Node)) *Node {
@@ -47,12 +47,7 @@ func (n *Node) AddButton(name string, custom func(*Node)) *Node {
 }
 
 func (n *Node) CreateFontButton(action string) *Node {
-        // create a 'fake' button entry for the mouse clicks
-	// var newGB	GuiButton
-	// newGB.Name	= "FONT"
 	n.uiFontButton	= ui.NewFontButton()
-	// newGB.Box	= n.box
-	// Data.AllButtons	= append(Data.AllButtons, &newGB)
 
 	n.uiFontButton.OnChanged(func (*ui.FontButton) {
 		log.Println("FontButton.OnChanged() START")

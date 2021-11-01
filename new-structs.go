@@ -234,6 +234,29 @@ func (n *Node) AddTabNode(title string) *Node {
 	return newNode
 }
 
+func (n *Node) AddHorizontalBox(title string) *Node {
+	hbox := ui.NewHorizontalBox()
+	hbox.SetPadded(true)
+	if (n.uiBox != nil) {
+		log.Println("add new hbox to uiBox =", n.uiBox)
+		n.uiBox.Append(hbox, false)
+		newNode := n.makeNode(title, 333, 333 + Config.counter)
+		newNode.parent = n
+		newNode.uiBox = hbox
+		// newNode.uiControl = hbox
+		return newNode
+	}
+	if (n.uiTab != nil) {
+		log.Println("add new hbox to uiTab =", n.uiTab)
+		n.uiTab.Append(title, hbox)
+		newNode := n.makeNode(title, 333, 333 + Config.counter)
+		newNode.parent = n
+		newNode.uiBox = hbox
+		// newNode.uiControl = hbox
+		return newNode
+	}
+	return n
+}
 func (n *Node) AddTab(title string, uiC *ui.Box) *Node {
 	parent := n
 	log.Println("gui.Node.AddTab() START name =", title)

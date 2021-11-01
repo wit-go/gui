@@ -42,50 +42,12 @@ type GuiData struct {
 
 	// A map of all the entry boxes
 	AllEntries []*GuiEntry
-	// WindowMap  map[string]*GuiWindow
 
 	// Store access to everything via binary tree's
 	NodeMap    map[string]*Node
 	NodeArray  []*Node
 	NodeSlice  []*Node
-
-	// A map of all buttons everywhere on all
-	// windows, all tabs, across all goroutines
-	// This is "GLOBAL"
-	//
-	// This has to work this way because of how
-	// andlabs/ui & andlabs/libui work
-	// AllButtons []*GuiButton
-	// buttonMap  map[*ui.Button]*GuiButton
 }
-
-/*
-type GuiTab struct {
-	Name   string     // field for human readable name
-	Number int        // the andlabs/ui tab index
-	// Window *GuiWindow // the parent Window
-}
-*/
-
-/*
-// Note: every mouse click is handled
-// as a 'Button' regardless of where
-// the user clicks it. You could probably
-// call this 'GuiMouseClick'
-type GuiButton struct {
-	Name string  // field for human readable name
-
-	// a callback function for the main application
-	Custom func(*GuiButton)
-	Values interface{}
-	Color  color.RGBA
-
-	// andlabs/ui abstraction mapping
-	B  *ui.Button
-	FB *ui.FontButton
-	CB *ui.ColorButton
-}
-*/
 
 // text entry fields
 type GuiEntry struct {
@@ -94,21 +56,14 @@ type GuiEntry struct {
 	Last      string              // the last value
 	Normalize func(string) string // function to 'normalize' the data
 
-	// B   *GuiButton
 	N   *Node
 
 	// andlabs/ui abstraction mapping
 	UiEntry *ui.Entry
 }
 
-//
-// AREA STRUCTURES START
-// AREA STRUCTURES START
-// AREA STRUCTURES START
-//
 type GuiArea struct {
-	// Button *GuiButton // what button handles mouse events
-	N *Node // what button handles mouse events
+	N *Node	// what node to pass mouse events
 
 	UiAttrstr *ui.AttributedString
 	UiArea    *ui.Area
@@ -122,14 +77,6 @@ type FontString struct {
 }
 
 //
-// AREA STRUCTURES END
-// AREA STRUCTURES END
-// AREA STRUCTURES END
-//
-
-//
-// TABLE DATA STRUCTURES START
-// TABLE DATA STRUCTURES START
 // TABLE DATA STRUCTURES START
 //
 
@@ -173,7 +120,6 @@ type HumanCellData struct {
 	TextID  int
 	Color   color.RGBA
 	ColorID int
-	// Button  *GuiButton
 	N  *Node
 }
 
