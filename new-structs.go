@@ -49,7 +49,6 @@ type Node struct {
 	parent	*Node
 	children []*Node
 
-	// window	*GuiWindow
 	area	*GuiArea
 	custom func(*Node)
 

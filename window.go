@@ -21,43 +21,6 @@ func (n *Node) ErrorWindow2(msg1 string, msg2 string) (*Node) {
 	return n
 }
 
-/*
-func DeleteWindow(name string) {
-	log.Println("gui.DeleteWindow() START name =", name)
-	window := Data.WindowMap[name]
-	if window == nil {
-		log.Println("gui.DeleteWindow() NO WINDOW WITH name =", name)
-		return
-	}
-
-	log.Println("gui.DumpBoxes() MAP: ", name)
-	log.Println("gui.DumpBoxes()\tWindow.name =", window.Name)
-	if window.TabNumber == nil {
-		log.Println("gui.DumpBoxes() \tWindows.TabNumber = nil")
-	}
-	tab := *window.TabNumber
-	log.Println("gui.DumpBoxes() \tWindows.TabNumber =", tab)
-	log.Println("gui.DumpBoxes() \tSHOULD DELETE TAB", tab, "HERE")
-	window.UiTab.Delete(tab)
-	delete(Data.WindowMap, name)
-
-	// renumber tabs here
-	for name, window := range Data.WindowMap {
-		log.Println("gui.DumpBoxes() MAP: ", name)
-		if window.TabNumber == nil {
-			log.Println("gui.DumpBoxes() \tWindows.TabNumber = nil")
-		} else {
-			log.Println("gui.DumpBoxes() \tWindows.TabNumber =", *window.TabNumber)
-			if tab < *window.TabNumber {
-				log.Println("gui.DumpBoxes() \tSubtracting 1 from TabNumber")
-				*window.TabNumber -= 1
-				log.Println("gui.DumpBoxes() \tWindows.TabNumber is now =", *window.TabNumber)
-			}
-		}
-	}
-}
-*/
-
 func makeNode(parent *Node, title string, x int, y int) *Node {
 	var node Node
 	node.Name = title

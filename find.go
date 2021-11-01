@@ -17,12 +17,6 @@ func (n *Node) FindControl() *ui.Control {
 	return n.uiControl
 }
 
-/*
-func (w *GuiWindow) FindNode() *Node {
-	return w.node
-}
-*/
-
 func FindNode(name string) *Node {
 	if Data.NodeMap == nil {
 		log.Println("gui.FindNode() gui.Data.NodeMap == nil")

@@ -65,65 +65,6 @@ type GuiTab struct {
 	// Window *GuiWindow // the parent Window
 }
 
-//
-// stores information on the 'window'
-//
-// This merges the concept of andlabs/ui *Window and *Tab
-//
-// More than one Window is not supported in a cross platform
-// sense & may never be. On Windows and MacOS, you have to have
-// 'tabs'. Even under Linux, more than one Window is currently
-// unstable
-//
-// This code will make a 'GuiWindow' regardless of if it is
-// a stand alone window (which is more or less working on Linux)
-// or a 'tab' inside a window (which is all that works on MacOS
-// and MSWindows.
-//
-// This struct keeps track of what is in the window so you
-// can destroy and replace it with something else
-//
-/*
-type GuiWindow struct {
-	Name      string // field for human readable name
-	Width     int
-	Height    int
-	Axis      int  // does it add items to the X or Y axis
-	TabNumber *int // the andlabs/ui tab index
-
-	// the components of the window
-	EntryMap map[string]*GuiEntry
-	Area     *GuiArea
-
-	node	*Node
-
-	// andlabs/ui abstraction mapping
-	UiWindow *ui.Window
-	UiTab    *ui.Tab // if this != nil, the window is 'tabbed'
-}
-*/
-
-/*
-func (w *GuiWindow) Dump() {
-	log.Println("gui.GuiWindow.Dump() Name       = ", w.Name)
-	log.Println("gui.GuiWindow.Dump() node       = ", w.node)
-	log.Println("gui.GuiWindow.Dump() Width      = ", w.Width)
-	log.Println("gui.GuiWindow.Dump() Height     = ", w.Height)
-}
-
-func (w *GuiWindow) SetNode(n *Node) {
-	if (w.node != nil) {
-		w.Dump()
-		panic("gui.SetNode() Error not nil")
-	}
-	w.node = n
-	if (w.node == nil) {
-		w.Dump()
-		panic("gui.SetNode() node == nil")
-	}
-}
-*/
-
 // Note: every mouse click is handled
 // as a 'Button' regardless of where
 // the user clicks it. You could probably
