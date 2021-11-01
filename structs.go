@@ -94,7 +94,7 @@ type GuiWindow struct {
 	// MakeWindow	func(*GuiBox) *GuiBox
 
 	// the components of the window
-	BoxMap   map[string]*GuiBox
+	// BoxMap   map[string]*GuiBox
 	EntryMap map[string]*GuiEntry
 	Area     *GuiArea
 
@@ -112,6 +112,7 @@ func (w *GuiWindow) Dump() {
 	log.Println("gui.GuiWindow.Dump() Height     = ", w.Height)
 }
 
+/*
 // GuiBox is any type of ui.Hbox or ui.Vbox
 // There can be lots of these for each GuiWindow
 type GuiBox struct {
@@ -124,7 +125,9 @@ type GuiBox struct {
 	// andlabs/ui abstraction mapping
 	UiBox *ui.Box
 }
+*/
 
+/*
 func (b *GuiBox) Dump() {
 	log.Println("gui.GuiBox.Dump() Name       = ", b.Name)
 	log.Println("gui.GuiBox.Dump() Axis       = ", b.Axis)
@@ -144,6 +147,7 @@ func (b *GuiBox) SetTitle(title string) {
 	b.Window.UiWindow.SetTitle(title)
 	return
 }
+*/
 
 func (w *GuiWindow) SetNode(n *Node) {
 	if (w.node != nil) {
@@ -157,6 +161,7 @@ func (w *GuiWindow) SetNode(n *Node) {
 	}
 }
 
+/*
 func (b *GuiBox) SetNode(n *Node) {
 	if (b.node != nil) {
 		b.Dump()
@@ -176,6 +181,7 @@ func (b *GuiBox) Append(child ui.Control, x bool) {
 	}
 	b.UiBox.Append(child, x)
 }
+*/
 
 // Note: every mouse click is handled
 // as a 'Button' regardless of where
@@ -183,7 +189,7 @@ func (b *GuiBox) Append(child ui.Control, x bool) {
 // call this 'GuiMouseClick'
 type GuiButton struct {
 	Name string  // field for human readable name
-	Box  *GuiBox // what box the button click was in
+	// box2  *GuiBox // what box the button click was in
 
 	// a callback function for the main application
 	Custom func(*GuiButton)
@@ -204,7 +210,7 @@ type GuiEntry struct {
 	Normalize func(string) string // function to 'normalize' the data
 
 	B   *GuiButton
-	Box *GuiBox
+	// Box *GuiBox
 
 	// andlabs/ui abstraction mapping
 	UiEntry *ui.Entry
@@ -217,7 +223,7 @@ type GuiEntry struct {
 //
 type GuiArea struct {
 	Button *GuiButton // what button handles mouse events
-	Box    *GuiBox
+	// Box    *GuiBox
 
 	UiAttrstr *ui.AttributedString
 	UiArea    *ui.Area
@@ -255,7 +261,7 @@ type TableData struct {
 	Cells [20]CellData
 	Human [20]HumanMap
 
-	Box *GuiBox
+	// Box *GuiBox
 	n *Node
 
 	lastRow    int

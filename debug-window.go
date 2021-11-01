@@ -295,6 +295,7 @@ func dumpBox(s string) {
 		// log.Println("gui.DumpBoxes()\tWindow.UiWindow type =", reflect.TypeOf(window.UiWindow))
 		log.Println("gui.DumpBoxes()\tWindow.UiWindow =", window.UiWindow)
 		log.Println("gui.DumpBoxes()\tWindow.UiTab    =", window.UiTab)
+		/*
 		log.Println("gui.dumpBox() BoxMap START")
 		for name, abox := range window.BoxMap {
 			log.Printf("gui.DumpBoxes() \tBOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
@@ -307,6 +308,7 @@ func dumpBox(s string) {
 			}
 		}
 		log.Println("gui.dumpBox() BoxMap END")
+		*/
 		if window.UiTab != nil {
 			pages := window.UiTab.NumPages()
 			log.Println("gui.DumpBoxes()\tWindow.UiTab.NumPages() =", pages)

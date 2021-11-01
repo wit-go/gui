@@ -154,23 +154,12 @@ func mapWindow(parent *Node, window *ui.Window, title string, x int, y int) *Nod
 	newGuiWindow.Name = title
 	newGuiWindow.UiWindow = window
 
-	newGuiWindow.BoxMap = make(map[string]*GuiBox)
 	newGuiWindow.EntryMap = make(map[string]*GuiEntry)
 
 	Data.WindowMap[newGuiWindow.Name] = &newGuiWindow
 
-	/*
-	var box GuiBox
-	box.Window = &newGuiWindow
-	box.Name = title
-	*/
-
 	node := makeNode(parent, title, x, y)
 	node.uiWindow = window
-	// node.box = &box
-	// box.node = node
-
-	// newGuiWindow.BoxMap["jcarrInitTest"] = &box
 
 	return node
 }

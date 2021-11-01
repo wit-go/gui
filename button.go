@@ -50,7 +50,7 @@ func CreateFontButton(n *Node, action string) *GuiButton {
 	var newGB	GuiButton
 	newGB.Name	= "FONT"
 	newGB.FB	= ui.NewFontButton()
-	newGB.Box	= n.box
+	// newGB.Box	= n.box
 	Data.AllButtons	= append(Data.AllButtons, &newGB)
 
 	newGB.FB.OnChanged(func (*ui.FontButton) {
@@ -67,7 +67,7 @@ func CreateColorButton(n *Node, custom func(*GuiButton), name string, values int
 	var newCB	GuiButton
 	newCB.Name	= name
 	newCB.CB	= ui.NewColorButton()
-	newCB.Box	= n.box
+	// newCB.Box	= n.box
 	newCB.Custom	= custom
 	newCB.Values	= values
 
@@ -83,6 +83,6 @@ func CreateColorButton(n *Node, custom func(*GuiButton), name string, values int
 			Data.MouseClick(&newCB)
 		}
 	})
-	n.box.Append(newCB.CB, false)
+	n.uiBox.Append(newCB.CB, false)
 	return &newCB
 }

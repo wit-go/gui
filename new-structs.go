@@ -50,7 +50,6 @@ type Node struct {
 	children []*Node
 
 	window	*GuiWindow
-	box	*GuiBox
 	area	*GuiArea
 	custom func(*Node)
 
@@ -85,7 +84,7 @@ func (n *Node) Dump() {
 	log.Println("gui.Node.Dump() children   = ", n.children)
 
 	log.Println("gui.Node.Dump() window     = ", n.window)
-	log.Println("gui.Node.Dump() box        = ", n.box)
+	// log.Println("gui.Node.Dump() box        = ", n.box)
 
 	log.Println("gui.Node.Dump() uiWindow   = ", n.uiWindow)
 	log.Println("gui.Node.Dump() uiTab      = ", n.uiTab)
@@ -237,10 +236,12 @@ func (n *Node) AddTab(title string, uiC *ui.Box) *Node {
 		log.Println("gui.Node.AddTab() ERROR ui.Window == nil")
 		return nil
 	}
+	/*
 	if parent.box == nil {
 		parent.Dump()
 		// panic("gui.AddTab() ERROR box == nil")
 	}
+	*/
 	if parent.uiTab == nil {
 		inittab := ui.NewTab() // no, not that 'inittab'
 		parent.uiWindow.SetChild(inittab)

@@ -40,10 +40,12 @@ func DumpWindows() {
 func DumpMap() {
 	for name, window := range Data.WindowMap {
 		log.Println("gui.DumpBoxes() MAP: ", name)
-		log.Println("gui.DumpBoxes()     BOXES:", name)
+		log.Println("gui.DumpBoxes()   window:", window)
+		/*
 		for name, abox := range window.BoxMap {
 			log.Printf("gui.DumpBoxes() \tBOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
 		}
+		*/
 	}
 }
 
@@ -59,6 +61,7 @@ func DumpBoxes() {
 		// log.Println("gui.DumpBoxes()\tWindow.UiWindow type =", reflect.TypeOf(window.UiWindow))
 		log.Println("gui.DumpBoxes()\tWindow.UiWindow =", window.UiWindow)
 		log.Println("gui.DumpBoxes()\tWindow.UiTab =", window.UiTab)
+		/*
 		for name, abox := range window.BoxMap {
 			log.Printf("gui.DumpBoxes() \tBOX mapname=%-12s abox.Name=%-12s", name, abox.Name)
 			if name == "MAINBOX" {
@@ -68,6 +71,7 @@ func DumpBoxes() {
 				}
 			}
 		}
+		*/
 		if window.UiTab != nil {
 			// log.Println("gui.DumpBoxes()\tWindow.UiTab type =", reflect.TypeOf(window.UiTab))
 			// log.Println("gui.DumpBoxes()\tWindow.UiTab =", window.UiTab)
