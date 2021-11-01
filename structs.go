@@ -38,7 +38,7 @@ type GuiConfig struct {
 type GuiData struct {
 	// a fallback default function to handle mouse events
 	// if nothing else is defined to handle them
-	MouseClick func(*GuiButton)
+	MouseClick func(*Node)
 
 	// A map of all the entry boxes
 	AllEntries []*GuiEntry
@@ -55,16 +55,19 @@ type GuiData struct {
 	//
 	// This has to work this way because of how
 	// andlabs/ui & andlabs/libui work
-	AllButtons []*GuiButton
-	buttonMap  map[*ui.Button]*GuiButton
+	// AllButtons []*GuiButton
+	// buttonMap  map[*ui.Button]*GuiButton
 }
 
+/*
 type GuiTab struct {
 	Name   string     // field for human readable name
 	Number int        // the andlabs/ui tab index
 	// Window *GuiWindow // the parent Window
 }
+*/
 
+/*
 // Note: every mouse click is handled
 // as a 'Button' regardless of where
 // the user clicks it. You could probably
@@ -82,6 +85,7 @@ type GuiButton struct {
 	FB *ui.FontButton
 	CB *ui.ColorButton
 }
+*/
 
 // text entry fields
 type GuiEntry struct {
@@ -90,7 +94,8 @@ type GuiEntry struct {
 	Last      string              // the last value
 	Normalize func(string) string // function to 'normalize' the data
 
-	B   *GuiButton
+	// B   *GuiButton
+	N   *Node
 
 	// andlabs/ui abstraction mapping
 	UiEntry *ui.Entry
@@ -102,7 +107,8 @@ type GuiEntry struct {
 // AREA STRUCTURES START
 //
 type GuiArea struct {
-	Button *GuiButton // what button handles mouse events
+	// Button *GuiButton // what button handles mouse events
+	N *Node // what button handles mouse events
 
 	UiAttrstr *ui.AttributedString
 	UiArea    *ui.Area
@@ -167,7 +173,8 @@ type HumanCellData struct {
 	TextID  int
 	Color   color.RGBA
 	ColorID int
-	Button  *GuiButton
+	// Button  *GuiButton
+	N  *Node
 }
 
 type HumanMap struct {

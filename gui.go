@@ -16,7 +16,7 @@ const Yaxis = 1 // box that is vertical
 func init() {
 	log.Println("gui.init() has been run")
 
-	Data.buttonMap = make(map[*ui.Button]*GuiButton)
+	// Data.buttonMap = make(map[*ui.Button]*GuiButton)
 	Data.NodeMap = make(map[string]*Node)
 
 	Data.NodeSlice = make([]*Node, 0)

@@ -3,6 +3,7 @@ package gui
 import (
 	"log"
 	"fmt"
+	"image/color"
 //	"reflect"
 
 	// "github.com/davecgh/go-spew/spew"
@@ -45,15 +46,19 @@ type Node struct {
 	Width  int
 	Height int
 	OnChanged	func ()
+	Color	color.RGBA
 
 	parent	*Node
 	children []*Node
 
 	area	*GuiArea
 	custom func(*Node)
+	values	interface {}
 
 	uiControl *ui.Control
 	uiButton  *ui.Button
+	uiFontButton  *ui.FontButton
+	uiColorButton  *ui.ColorButton
 	uiWindow  *ui.Window
 	uiAttrstr *ui.AttributedString
 	uiTab     *ui.Tab

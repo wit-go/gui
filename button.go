@@ -2,6 +2,7 @@ package gui
 
 import "log"
 import "reflect"
+// import "image/color"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 // import "github.com/davecgh/go-spew/spew"
@@ -45,44 +46,38 @@ func (n *Node) AddButton(name string, custom func(*Node)) *Node {
 	return newNode
 }
 
-func CreateFontButton(n *Node, action string) *GuiButton {
+func (n *Node) CreateFontButton(action string) *Node {
         // create a 'fake' button entry for the mouse clicks
-	var newGB	GuiButton
-	newGB.Name	= "FONT"
-	newGB.FB	= ui.NewFontButton()
+	// var newGB	GuiButton
+	// newGB.Name	= "FONT"
+	n.uiFontButton	= ui.NewFontButton()
 	// newGB.Box	= n.box
-	Data.AllButtons	= append(Data.AllButtons, &newGB)
+	// Data.AllButtons	= append(Data.AllButtons, &newGB)
 
-	newGB.FB.OnChanged(func (*ui.FontButton) {
-		log.Println("FontButton.OnChanged() START mouseClick(&newBM)", newGB)
-		if (Data.MouseClick != nil) {
-			Data.MouseClick(&newGB)
-		}
+	n.uiFontButton.OnChanged(func (*ui.FontButton) {
+		log.Println("FontButton.OnChanged() START")
+		n.Dump()
 	})
-	return &newGB
+	return n
 }
 
-func CreateColorButton(n *Node, custom func(*GuiButton), name string, values interface {}) *GuiButton {
+func (n *Node) CreateColorButton(custom func(*Node), name string, values interface {}) *Node {
         // create a 'fake' button entry for the mouse clicks
-	var newCB	GuiButton
-	newCB.Name	= name
-	newCB.CB	= ui.NewColorButton()
-	// newCB.Box	= n.box
-	newCB.Custom	= custom
-	newCB.Values	= values
+	n.uiColorButton	= ui.NewColorButton()
+	n.custom	= custom
+	n.values	= values
 
-	Data.AllButtons	= append(Data.AllButtons, &newCB)
-
-	newCB.CB.OnChanged(func (*ui.ColorButton) {
+	n.uiColorButton.OnChanged(func (*ui.ColorButton) {
 		log.Println("ColorButton.OnChanged() START Color Button Click")
-		r, g, b, a := newCB.CB.Color()
+		rgba := n.Color
+		r, g, b, a := rgba.R, rgba.G, rgba.B, rgba.A
 		log.Println("ColorButton.OnChanged() Color() =", r, g, b, a)
-		if (newCB.Custom != nil) {
-			newCB.Custom(&newCB)
+		if (n.custom != nil) {
+			n.custom(n)
 		} else if (Data.MouseClick != nil) {
-			Data.MouseClick(&newCB)
+			Data.MouseClick(n)
 		}
 	})
-	n.uiBox.Append(newCB.CB, false)
-	return &newCB
+	n.uiBox.Append(n.uiColorButton, false)
+	return n
 }
