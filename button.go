@@ -19,6 +19,7 @@ import _ "github.com/andlabs/ui/winmanifest"
 // There is a []GuiButton which has all the buttons. We search
 // for the button and then call the function below
 //
+/*
 func defaultButtonClick(button *ui.Button) {
 	log.Println("gui.defaultButtonClick() LOOK FOR BUTTON button =", button)
 	for key, foo := range Data.AllButtons {
@@ -51,6 +52,7 @@ func guiButtonClick(button *GuiButton) {
 		log.Println("\tgui.guiButtonClick() IGNORING BUTTON. MouseClick() is nil")
 	}
 }
+*/
 
 func (n *Node) AddButton(name string, custom func(*Node)) *Node {
 	if (n.uiBox == nil) {
@@ -60,6 +62,7 @@ func (n *Node) AddButton(name string, custom func(*Node)) *Node {
 	button := ui.NewButton(name)
 	log.Println("reflect.TypeOF(uiBox) =", reflect.TypeOf(n.uiBox))
 	log.Println("reflect.TypeOF(uiButton) =", reflect.TypeOf(button))
+	// true == expand, false == make normal size button
 	n.uiBox.Append(button, false)
 	n.uiButton = button
 
@@ -76,6 +79,7 @@ func (n *Node) AddButton(name string, custom func(*Node)) *Node {
 	return newNode
 }
 
+/*
 func (n *Node) CreateButton(custom func(*GuiButton), name string, values interface {}) *Node {
 	newNode := n.AddBox(Xaxis, "test CreateButton")
 	box := newNode.FindBox()
@@ -127,6 +131,7 @@ func CreateButton(box *GuiBox, custom func(*GuiButton), name string, values inte
 	box.Append(newB.B, false)
 	return newB
 }
+*/
 
 func CreateFontButton(box *GuiBox, action string) *GuiButton {
         // create a 'fake' button entry for the mouse clicks
