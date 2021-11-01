@@ -2,7 +2,7 @@ package gui
 
 import (
 	"log"
-	"fmt"
+//	"fmt"
 	"strconv"
 
 	"github.com/andlabs/ui"
@@ -21,7 +21,7 @@ func (n *Node) ErrorWindow2(msg1 string, msg2 string) (*Node) {
 	return n
 }
 
-func makeNode(parent *Node, title string, x int, y int) *Node {
+func initNode(title string, x int, y int) *Node {
 	var node Node
 	node.Name = title
 	node.Width = x
@@ -31,26 +31,18 @@ func makeNode(parent *Node, title string, x int, y int) *Node {
 	Config.counter += 1
 	node.id = id
 
-	// panic("gui.makeNode() START")
-	if (parent == nil) {
-		if (Data.NodeMap[title] != nil) {
-			log.Println("Duplicate window name =", title)
-			// TODO: just change the 'title' to something unique
-			panic(fmt.Sprintf("Duplicate window name = %s\n", title))
-			return nil
-		}
-		// panic("gui.makeNode() before NodeMap()")
-		Data.NodeMap[title] = &node
-		Data.NodeArray = append(Data.NodeArray, &node)
-		Data.NodeSlice = append(Data.NodeSlice, &node)
-		// panic("gui.makeNode() after NodeMap()")
-		return &node
-	} else {
-		// panic("gui.makeNode() before Append()")
-		parent.Append(&node)
-		// panic("gui.makeNode() after Append()")
+	if (Data.NodeMap[title] != nil) {
+		log.Println("Duplicate window name =", title)
+		// TODO: just change the 'title' to something unique
+		// panic(fmt.Sprintf("Duplicate window name = %s\n", title))
+		return Data.NodeMap[title]
 	}
-	node.parent = parent
+	Data.NodeMap[title] = &node
+	Data.NodeArray = append(Data.NodeArray, &node)
+	Data.NodeSlice = append(Data.NodeSlice, &node)
+	return &node
+	//	parent.Append(&node)
+	//node.parent = parent
 	return &node
 }
 
@@ -104,6 +96,7 @@ func (n *Node) uiNewWindow(title string, x int, y int) {
 	return
 }
 
+/*
 func mapWindow(parent *Node, window *ui.Window, title string, x int, y int) *Node {
 	log.Println("gui.WindowMap START title =", title)
 
@@ -112,6 +105,7 @@ func mapWindow(parent *Node, window *ui.Window, title string, x int, y int) *Nod
 
 	return node
 }
+*/
 
 // This routine creates a blank window with a Title and size (W x H)
 //
@@ -124,11 +118,13 @@ func NewWindow() *Node {
 	w     := Config.Width
 	h     := Config.Height
 
-	var n *Node
-	n = mapWindow(nil, nil, title, w, h)
-//	box := n.box
-//	log.Println("gui.NewWindow() title = box.Name =", box.Name)
+	if (Data.NodeMap[title] != nil) {
+		log.Println("Duplicate window name =", title)
+		return Data.NodeMap[title]
+	}
 
+	var n *Node
+	n = initNode(title, w, h)
 	n.uiNewWindow(title, w, h)
 	window := n.uiWindow
 
