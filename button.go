@@ -27,8 +27,10 @@ func (n *Node) AddButton(name string, custom func(*Node)) *Node {
 		return n
 	}
 	button := ui.NewButton(name)
-	log.Println("reflect.TypeOF(uiBox) =", reflect.TypeOf(n.uiBox))
-	log.Println("reflect.TypeOF(uiButton) =", reflect.TypeOf(button))
+	if (Config.Debug) {
+		log.Println("reflect.TypeOF(uiBox) =", reflect.TypeOf(n.uiBox))
+		log.Println("reflect.TypeOF(uiButton) =", reflect.TypeOf(button))
+	}
 	// true == expand, false == make normal size button
 	n.uiBox.Append(button, false)
 	n.uiButton = button

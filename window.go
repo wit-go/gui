@@ -120,6 +120,13 @@ func NewWindow() *Node {
 
 	if (Data.NodeMap[title] != nil) {
 		log.Println("Duplicate window name =", title)
+		Data.NodeMap[title].Dump()
+		Data.NodeMap[title].ListChildren(false)
+		uiW := Data.NodeMap[title].uiWindow
+		if (uiW != nil) {
+			uiW.Show()
+		}
+		panic("check here to see if window is really alive")
 		return Data.NodeMap[title]
 	}
 
