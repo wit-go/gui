@@ -65,6 +65,8 @@ type Node struct {
 	uiBox     *ui.Box
 	uiArea    *ui.Area
 	uiText    *ui.EditableCombobox
+	uiMultilineEntry    *ui.MultilineEntry
+	uiGroup	*ui.Group
 }
 
 func (n *Node) Parent() *Node {

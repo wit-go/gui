@@ -1,6 +1,6 @@
 package gui
 
-// import "log"
+import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
@@ -70,4 +70,41 @@ func (n *Node) MakeBasicControlsPage(title string) *Node {
 	newNode := n.AddNode(title)
 	newNode.uiBox = vbox
 	return newNode
+}
+
+func (n *Node) MakeGroupEdit(title string) *Node {
+	n.Dump()
+
+	group := ui.NewGroup(title)
+	group.SetMargined(true)
+	n.uiBox.Append(group, true)
+
+	entrybox := ui.NewNonWrappingMultilineEntry()
+
+	group.SetChild(entrybox)
+
+	log.Println("entrybox =", entrybox)
+	n.uiMultilineEntry = entrybox
+	newNode := n.AddNode(title)
+	newNode.uiMultilineEntry = entrybox
+	newNode.uiGroup = group
+	return newNode
+
+/*
+	panic("dump")
+	entryForm := ui.NewForm()
+	entryForm.SetPadded(true)
+	group.SetChild(entryForm)
+
+	entryForm.Append("Entry", ui.NewEntry(), false)
+	entryForm.Append("Password Entry", ui.NewPasswordEntry(), false)
+	entryForm.Append("Search Entry", ui.NewSearchEntry(), false)
+	entryForm.Append("Multiline Entry", ui.NewMultilineEntry(), true)
+	entryForm.Append("Multiline Entry No Wrap", ui.NewNonWrappingMultilineEntry(), true)
+
+	origbox.Append(vbox, false)
+	newNode := n.AddNode(title)
+	newNode.uiBox = vbox
+*/
+	return n
 }

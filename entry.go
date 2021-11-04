@@ -1,6 +1,7 @@
 package gui
 
 import "log"
+import "errors"
 // import "fmt"
 
 import "github.com/andlabs/ui"
@@ -29,7 +30,20 @@ func (n *Node) SetText(value string) error {
 		n.uiButton.SetText(value)
 		return nil
 	}
-	return nil
+	if (n.uiMultilineEntry != nil) {
+		n.uiMultilineEntry.SetText(value)
+		return nil
+	}
+	n.Dump()
+	return errors.New("couldn't find something to set the text to")
+}
+
+func (n *Node) SetMargined(x bool) {
+	if (n.uiGroup != nil) {
+		n.uiGroup.SetMargined(x)
+		return
+	}
+	log.Println("Couldn't find something that has a Margin setting")
 }
 
 func defaultEntryChange(e *ui.Entry) {
