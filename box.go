@@ -42,6 +42,9 @@ func (n *Node) AddComboBox(title string, s ...string) *Node {
 }
 
 func (n *Node) GetText() string {
+	if (n.uiMultilineEntry != nil) {
+		return n.uiMultilineEntry.Text()
+	}
 	if (n.uiText == nil) {
 		return ""
 	}
