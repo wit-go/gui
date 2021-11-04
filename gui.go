@@ -14,10 +14,9 @@ const Xaxis = 0 // box that is horizontal
 const Yaxis = 1 // box that is vertical
 
 func init() {
-	log.Println("gui.init() has been run")
+	log.Println("gui.init() REMOVE THIS init()")
 
 	Data.NodeMap = make(map[string]*Node)
-
 	Data.NodeSlice = make([]*Node, 0)
 
 	Config.counter = 0
