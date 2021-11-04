@@ -242,7 +242,7 @@ func (n *Node) AddHorizontalBreak() *Node {
 	log.Println("AddHorizontalBreak  added to node =", n.Name)
 	if (n.uiBox != nil) {
 		tmp := ui.NewHorizontalSeparator()
-		n.uiBox.Append(tmp, false)
+		n.uiBox.Append(tmp, Config.Stretchy)
 	} else {
 		n.Dump()
 		return nil
@@ -254,7 +254,7 @@ func (n *Node) AddVerticalBreak() *Node {
 	log.Println("AddVerticalBreak  added to node =", n.Name)
 	if (n.uiBox != nil) {
 		tmp := ui.NewVerticalSeparator()
-		n.uiBox.Append(tmp, false)
+		n.uiBox.Append(tmp, Config.Stretchy)
 	} else {
 		n.Dump()
 		return nil
@@ -267,7 +267,7 @@ func (n *Node) AddHorizontalBox(title string) *Node {
 	hbox.SetPadded(true)
 	if (n.uiBox != nil) {
 		log.Println("add new hbox to uiBox =", n.uiBox)
-		n.uiBox.Append(hbox, false)
+		n.uiBox.Append(hbox, Config.Stretchy)
 		newNode := n.makeNode(title, 333, 333 + Config.counter)
 		newNode.parent = n
 		newNode.uiBox = hbox

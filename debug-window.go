@@ -46,7 +46,7 @@ func makeWindowDebug() *ui.Box {
 	}
 	nodeCombo.SetSelected(0)
 
-	nodeBox.Append(nodeCombo, false)
+	nodeBox.Append(nodeCombo, Config.Stretchy)
 
 	nodeCombo.OnSelected(func(*ui.Combobox) {
 		y := nodeCombo.Selected()
@@ -148,7 +148,7 @@ func addName(c *ui.Combobox, s string) {
 func addGroup(b *ui.Box, name string) *ui.Box {
 	group := ui.NewGroup(name)
 	group.SetMargined(true)
-	b.Append(group, true)
+	b.Append(group, Config.Stretchy)
 
 	vbox := ui.NewVerticalBox()
 	vbox.SetPadded(true)
@@ -164,7 +164,7 @@ func addButton(box *ui.Box, name string) *ui.Button {
 		log.Println("Should do something here")
 	})
 
-	box.Append(button, false)
+	box.Append(button, Config.Stretchy)
 	return button
 }
 

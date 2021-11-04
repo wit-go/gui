@@ -12,8 +12,7 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 func (n *Node) NewLabel(text string) *Node {
 	// make new node here
-	// n.Append(ui.NewLabel(text), false)
-	newNode := n.makeNode(text, 333, 334)
+newNode := n.makeNode(text, 333, 334)
 	newNode.Dump()
 
 	n.Append(newNode)

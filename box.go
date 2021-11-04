@@ -37,7 +37,7 @@ func (n *Node) AddComboBox(title string, s ...string) *Node {
 		}
 	})
 
-	box.Append(ecbox, false)
+	box.Append(ecbox, Config.Stretchy)
 	return newNode
 }
 

@@ -32,7 +32,7 @@ func (n *Node) AddButton(name string, custom func(*Node)) *Node {
 		log.Println("reflect.TypeOF(uiButton) =", reflect.TypeOf(button))
 	}
 	// true == expand, false == make normal size button
-	n.uiBox.Append(button, false)
+	n.uiBox.Append(button, Config.Stretchy)
 	n.uiButton = button
 
 	newNode := n.makeNode(name, 888, 888 + Config.counter)
@@ -73,6 +73,6 @@ func (n *Node) CreateColorButton(custom func(*Node), name string, values interfa
 			Data.MouseClick(n)
 		}
 	})
-	n.uiBox.Append(n.uiColorButton, false)
+	n.uiBox.Append(n.uiColorButton, Config.Stretchy)
 	return n
 }

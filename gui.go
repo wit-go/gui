@@ -24,6 +24,7 @@ func init() {
 	Config.prefix = "wit"
 	Config.DebugNode = false
 	Config.DebugTabs = false
+	Config.Stretchy = true
 }
 
 func GuiInit() {
