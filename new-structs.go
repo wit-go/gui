@@ -67,6 +67,7 @@ type Node struct {
 	uiText    *ui.EditableCombobox
 	uiMultilineEntry    *ui.MultilineEntry
 	uiGroup	*ui.Group
+	uiGrid	*ui.Grid
 }
 
 func (n *Node) Parent() *Node {

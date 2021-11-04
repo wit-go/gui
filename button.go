@@ -54,6 +54,9 @@ func (n *Node) CreateFontButton(action string) *Node {
 		n.Dump()
 	})
 	n.uiBox.Append(n.uiFontButton, Config.Stretchy)
+
+	// TODO: implement Grid
+	n.uiGrid = ui.NewGrid()
 	return n
 }
 

@@ -86,7 +86,7 @@ func (n *Node) AddNode(title string) *Node {
 }
 
 func (n *Node) uiNewWindow(title string, x int, y int) {
-	w := ui.NewWindow(title, x, y, false)
+	w := ui.NewWindow(title, x, y, Config.Menu)
 	w.SetBorderless(false)
 	f := Config.Exit
 	w.OnClosing(func(*ui.Window) bool {
@@ -126,6 +126,9 @@ func mapWindow(parent *Node, window *ui.Window, title string, x int, y int) *Nod
 // it can be passed via the 'andlabs/ui' queue which, because it is
 // cross platform, must pass UI changes into the OS threads (that is
 // my guess).
+//
+// There is probably some way to pass arguements here that I'm can't think of right now
+//
 func NewWindow() *Node {
 	title := Config.Title
 	w     := Config.Width

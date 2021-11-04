@@ -23,6 +23,7 @@ type GuiConfig struct {
 	Width      int
 	Height     int
 	Stretchy   bool
+	Menu       bool
 	Exit       func(*Node)
 
 	Debug       bool
