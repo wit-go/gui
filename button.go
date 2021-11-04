@@ -53,6 +53,7 @@ func (n *Node) CreateFontButton(action string) *Node {
 		log.Println("FontButton.OnChanged() START")
 		n.Dump()
 	})
+	n.uiBox.Append(n.uiFontButton, Config.Stretchy)
 	return n
 }
 
