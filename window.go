@@ -42,9 +42,8 @@ func initNode(title string, x int, y int) *Node {
 	node.id = id
 
 	if (Data.NodeMap[title] != nil) {
-		log.Println("Duplicate window name =", title)
+		log.Println("ERROR: Duplicate window name =", title)
 		// TODO: just change the 'title' to something unique
-		// panic(fmt.Sprintf("Duplicate window name = %s\n", title))
 		return Data.NodeMap[title]
 	}
 	Data.NodeMap[title] = &node
@@ -91,11 +90,15 @@ func (n *Node) uiNewWindow(title string, x int, y int) {
 	w.SetBorderless(false)
 	f := Config.Exit
 	w.OnClosing(func(*ui.Window) bool {
-		if (Config.Debug) {
-			log.Println("ui.Window().OnClosing()")
-		}
+		log.Println("RUNNING the ui.Window().OnClosing() function")
 		if (f != nil) {
 			f(n)
+		} else {
+			n.Dump()
+			log.Println("gui.uiWindow().OnClosing() NOT SURE WHAT TO DO HERE")
+			// TODO: always do this here?  // by default delete the node?
+			name := n.Name
+			delete(Data.NodeMap, name)
 		}
 		return true
 	})
@@ -136,7 +139,7 @@ func NewWindow() *Node {
 		if (uiW != nil) {
 			uiW.Show()
 		}
-		panic("check here to see if window is really alive")
+		log.Println("PROBABLY BAD ERROR: check here to see if window is really alive")
 		return Data.NodeMap[title]
 	}
 
@@ -156,7 +159,7 @@ func NewWindow() *Node {
 
 	n.uiWindow = window
 	if(n.uiWindow == nil) {
-		panic("node.uiWindow == nil. This should never happen")
+		log.Println("ERROR: node.uiWindow == nil. This should never happen")
 	}
 	return n
 }

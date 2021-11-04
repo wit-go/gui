@@ -99,7 +99,7 @@ func (n *Node) Dump() {
 	log.Println("gui.Node.Dump() uiButton   = ", n.uiButton)
 	log.Println("gui.Node.Dump() uiText     = ", n.uiText)
 	if (n.id == "") {
-		panic("gui.Node.Dump() id == nil")
+		log.Println("THIS SHOULD NOT HAPPEN: gui.Node.Dump() id == nil")
 	}
 }
 
@@ -228,10 +228,9 @@ func (n *Node) AddTabNode(title string) *Node {
 	}
 
 	if (newNode.uiTab != nil) {
-		log.Println("wit/gui/ AddTabNode() Something went wrong tab == nil")
+		log.Println("ERROR: wit/gui/ AddTabNode() Something went wrong tab == nil")
 		// TODO: try to find the tab or window and make them if need be
 		// newNode.uiTab.Append(title, b.UiBox)
-		panic("newNode.uiTab")
 	}
 
 	return newNode
@@ -244,7 +243,6 @@ func (n *Node) AddHorizontalBreak() *Node {
 		n.uiBox.Append(tmp, false)
 	} else {
 		n.Dump()
-		// panic("AddHorizontalBreak")
 		return nil
 	}
 	return n

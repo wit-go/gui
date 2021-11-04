@@ -43,8 +43,6 @@ func (n *Node) AddButton(name string, custom func(*Node)) *Node {
 		log.Println("gui.AppendButton() Button Clicked. Running custom()")
 		custom(newNode)
 	})
-	// panic("AppendButton")
-	// time.Sleep(3 * time.Second)
 	return newNode
 }
 

@@ -14,7 +14,6 @@ func (n *Node) NewLabel(text string) *Node {
 	// n.Append(ui.NewLabel(text), false)
 	newNode := n.makeNode(text, 333, 334)
 	newNode.Dump()
-	// panic("node.NewLabel()")
 
 	n.Append(newNode)
 	return newNode

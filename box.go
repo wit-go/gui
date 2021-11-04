@@ -38,9 +38,6 @@ func (n *Node) AddComboBox(title string, s ...string) *Node {
 	})
 
 	box.Append(ecbox, false)
-
-	// newNode.Dump()
-	// panic("junk")
 	return newNode
 }
 
