@@ -9,16 +9,26 @@ import (
 	_ "github.com/andlabs/ui/winmanifest"
 )
 
-func (n *Node) MessageWindow2(msg1 string, msg2 string) (*Node) {
-	ui.MsgBox(n.uiWindow, msg1, msg2)
-	// TODO: make new node
-	return n
+func findUiWindow() *ui.Window {
+	for _, node := range Data.NodeMap {
+		if (node.uiWindow != nil) {
+			return node.uiWindow
+		}
+	}
+	return nil
 }
 
-func (n *Node) ErrorWindow2(msg1 string, msg2 string) (*Node) {
-	ui.MsgBoxError(n.uiWindow, msg1, msg2)
+func MessageWindow(msg1 string, msg2 string) (*Node) {
+	uiW := findUiWindow()
+	ui.MsgBox(uiW, msg1, msg2)
 	// TODO: make new node
-	return n
+	return nil
+}
+
+func ErrorWindow(msg1 string, msg2 string) (*Node) {
+	uiW := findUiWindow()
+	ui.MsgBoxError(uiW, msg1, msg2)
+	return nil
 }
 
 func initNode(title string, x int, y int) *Node {
