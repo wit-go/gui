@@ -5,6 +5,7 @@ import "errors"
 // import "fmt"
 
 import "github.com/andlabs/ui"
+// import ui "git.wit.org/interesting/andlabs-ui"
 import _ "github.com/andlabs/ui/winmanifest"
 // import "github.com/davecgh/go-spew/spew"
 
