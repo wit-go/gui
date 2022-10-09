@@ -3,7 +3,6 @@ package gui
 import (
 	"log"
 	"fmt"
-	"image/color"
 //	"reflect"
 
 	// "github.com/davecgh/go-spew/spew"
@@ -45,29 +44,20 @@ type Node struct {
 	Name   string
 	Width  int
 	Height int
-	OnChanged	func ()
-	Color	color.RGBA
 
 	parent	*Node
 	children []*Node
 
-	area	*GuiArea
+	window	*GuiWindow
+	box	*GuiBox
 	custom func(*Node)
-	values	interface {}
 
 	uiControl *ui.Control
 	uiButton  *ui.Button
-	uiFontButton  *ui.FontButton
-	uiColorButton  *ui.ColorButton
 	uiWindow  *ui.Window
-	uiAttrstr *ui.AttributedString
-	uiTab     *ui.Tab
-	uiBox     *ui.Box
-	uiArea    *ui.Area
-	uiText    *ui.EditableCombobox
-	uiMultilineEntry    *ui.MultilineEntry
-	uiGroup	*ui.Group
-	uiGrid	*ui.Grid
+	uiTab  *ui.Tab
+	uiBox  *ui.Box
+	uiText *ui.EditableCombobox
 }
 
 func (n *Node) Parent() *Node {
@@ -83,7 +73,6 @@ func (n *Node) Dump() {
 	log.Println("gui.Node.Dump() Name       = ", n.Name)
 	log.Println("gui.Node.Dump() Width      = ", n.Width)
 	log.Println("gui.Node.Dump() Height     = ", n.Height)
-	log.Println("gui.Node.Dump() OnChanged  = ", n.OnChanged)
 
 	if (n.parent == nil) {
 		log.Println("gui.Node.Dump() parent     = nil")
@@ -92,18 +81,22 @@ func (n *Node) Dump() {
 	}
 	log.Println("gui.Node.Dump() children   = ", n.children)
 
-	// log.Println("gui.Node.Dump() window     = ", n.window)
-	// log.Println("gui.Node.Dump() box        = ", n.box)
+	log.Println("gui.Node.Dump() window     = ", n.window)
+	log.Println("gui.Node.Dump() box        = ", n.box)
 
 	log.Println("gui.Node.Dump() uiWindow   = ", n.uiWindow)
 	log.Println("gui.Node.Dump() uiTab      = ", n.uiTab)
 	log.Println("gui.Node.Dump() uiBox      = ", n.uiBox)
 	log.Println("gui.Node.Dump() uiControl  = ", n.uiControl)
 	log.Println("gui.Node.Dump() uiButton   = ", n.uiButton)
-	log.Println("gui.Node.Dump() uiText     = ", n.uiText)
 	if (n.id == "") {
-		log.Println("THIS SHOULD NOT HAPPEN: gui.Node.Dump() id == nil")
+		panic("gui.Node.Dump() id == nil")
 	}
+}
+
+
+func (n *Node) SetBox(box *GuiBox) {
+	n.box = box
 }
 
 func (n *Node) SetName(name string) {
@@ -138,22 +131,19 @@ func (n *Node) List() {
 var listChildrenParent *Node
 var listChildrenDepth int = 0
 
-// var indent string = "\t"
-var indent string = "    "
-
 func indentPrintln(depth int, format string, a ...interface{}) {
-	var space string
+	var tabs string
 	for i := 0; i < depth; i++ {
-		space = space + indent
+		tabs = tabs + "\t"
 	}
 
 	// newFormat := tabs + strconv.Itoa(depth) + " " + format
-	newFormat := space + format
+	newFormat := tabs + format
 	log.Println(newFormat, a)
 }
 
 func (n *Node) ListChildren(dump bool) {
-	indentPrintln(listChildrenDepth, "", n.id, n.Width, n.Height, n.Name)
+	indentPrintln(listChildrenDepth, "\t", n.id, n.Width, n.Height, n.Name)
 
 	if (dump == true) {
 		n.Dump()
@@ -212,13 +202,13 @@ func (n *Node) ListChildren(dump bool) {
 //
 // This function should make a new node with the parent and
 // the 'stuff' Node as a child
-func (n *Node) AddTabNode(title string) *Node {
+func (n *Node) AddTabNode(title string, b *GuiBox) *Node {
 	var newNode *Node
 	parent := n
 
 	newNode = parent.makeNode(title, 444, 400 + Config.counter)
 	newNode.uiTab = parent.uiTab
-	// newNode.box = b
+	newNode.box = b
 
 	if (Config.DebugNode) {
 		fmt.Println("")
@@ -230,62 +220,16 @@ func (n *Node) AddTabNode(title string) *Node {
 		newNode.Dump()
 	}
 
-	if (newNode.uiTab != nil) {
-		log.Println("ERROR: wit/gui/ AddTabNode() Something went wrong tab == nil")
+	if (newNode.uiTab == nil) {
+		log.Println("wit/gui/ AddTabNode() Something went wrong tab == nil")
 		// TODO: try to find the tab or window and make them if need be
-		// newNode.uiTab.Append(title, b.UiBox)
+		return newNode
 	}
+	newNode.uiTab.Append(title, b.UiBox)
 
 	return newNode
 }
 
-func (n *Node) AddHorizontalBreak() *Node {
-	log.Println("AddHorizontalBreak  added to node =", n.Name)
-	if (n.uiBox != nil) {
-		tmp := ui.NewHorizontalSeparator()
-		n.uiBox.Append(tmp, Config.Stretchy)
-	} else {
-		n.Dump()
-		return nil
-	}
-	return n
-}
-
-func (n *Node) AddVerticalBreak() *Node {
-	log.Println("AddVerticalBreak  added to node =", n.Name)
-	if (n.uiBox != nil) {
-		tmp := ui.NewVerticalSeparator()
-		n.uiBox.Append(tmp, Config.Stretchy)
-	} else {
-		n.Dump()
-		return nil
-	}
-	return n
-}
-
-func (n *Node) AddHorizontalBox(title string) *Node {
-	hbox := ui.NewHorizontalBox()
-	hbox.SetPadded(true)
-	if (n.uiBox != nil) {
-		log.Println("add new hbox to uiBox =", n.uiBox)
-		n.uiBox.Append(hbox, Config.Stretchy)
-		newNode := n.makeNode(title, 333, 333 + Config.counter)
-		newNode.parent = n
-		newNode.uiBox = hbox
-		// newNode.uiControl = hbox
-		return newNode
-	}
-	if (n.uiTab != nil) {
-		log.Println("add new hbox to uiTab =", n.uiTab)
-		n.uiTab.Append(title, hbox)
-		newNode := n.makeNode(title, 333, 333 + Config.counter)
-		newNode.parent = n
-		newNode.uiBox = hbox
-		// newNode.uiControl = hbox
-		return newNode
-	}
-	return n
-}
 func (n *Node) AddTab(title string, uiC *ui.Box) *Node {
 	parent := n
 	log.Println("gui.Node.AddTab() START name =", title)
@@ -294,12 +238,20 @@ func (n *Node) AddTab(title string, uiC *ui.Box) *Node {
 		log.Println("gui.Node.AddTab() ERROR ui.Window == nil")
 		return nil
 	}
+	if parent.box == nil {
+		parent.Dump()
+		panic("gui.AddTab() ERROR box == nil")
+	}
 	if parent.uiTab == nil {
 		inittab := ui.NewTab() // no, not that 'inittab'
 		parent.uiWindow.SetChild(inittab)
 		parent.uiWindow.SetMargined(true)
 		parent.uiTab = inittab
+
+		// parent.Dump()
+		// panic("gui.AddTab() ERROR uiTab == nil")
 	}
+
 	tab := parent.uiTab
 	parent.uiWindow.SetMargined(true)
 
@@ -313,6 +265,7 @@ func (n *Node) AddTab(title string, uiC *ui.Box) *Node {
 	newNode := parent.makeNode(title, 555, 600 + Config.counter)
 	newNode.uiTab = tab
 	newNode.uiBox = uiC
+	// panic("gui.AddTab() after makeNode()")
 	tabSetMargined(newNode.uiTab)
 	return newNode
 }
