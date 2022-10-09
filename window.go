@@ -1,82 +1,168 @@
 package gui
 
-import "log"
-import "time"
-// import "regexp"
+import (
+	"log"
+//	"fmt"
+	"strconv"
 
-import "github.com/andlabs/ui"
-import _ "github.com/andlabs/ui/winmanifest"
+	"github.com/andlabs/ui"
+	_ "github.com/andlabs/ui/winmanifest"
+)
 
-func InitGuiWindow(action string, gw *GuiWindow) *GuiWindow {
-	log.Println("InitGuiWindow() START")
-	var newGuiWindow GuiWindow
-	newGuiWindow.Width	= Config.Width
-	newGuiWindow.Height	= Config.Height
-	newGuiWindow.MakeWindow	= gw.MakeWindow
-	newGuiWindow.UiWindow	= gw.UiWindow
-	newGuiWindow.UiTab	= gw.UiTab
-	newGuiWindow.BoxMap	= make(map[string]*GuiBox)
-	newGuiWindow.EntryMap	= make(map[string]*GuiEntry)
-	newGuiWindow.EntryMap["test"] = nil
-	Data.Windows = append(Data.Windows, &newGuiWindow)
-
-	if (Data.buttonMap == nil) {
-		GuiInit()
+func findUiWindow() *ui.Window {
+	for _, node := range Data.NodeMap {
+		if (node.uiWindow != nil) {
+			return node.uiWindow
+		}
 	}
-	log.Println("InitGuiWindow() END *GuiWindow =", &newGuiWindow)
-	return &newGuiWindow
+	return nil
 }
 
-
-func StartNewWindow(bg bool, action string, callback func(*GuiWindow) *GuiBox) {
-	log.Println("StartNewWindow() Create a new window")
-	var junk GuiWindow
-	junk.MakeWindow = callback
-//	junk.Action = action
-	window := InitGuiWindow(action, &junk)
-	if (bg) {
-		log.Println("StartNewWindow() START NEW GOROUTINE for ui.Main()")
-		go ui.Main(func() {
-			log.Println("gui.StartNewWindow() inside ui.Main()")
-			go InitTabWindow(window)
-		})
-		time.Sleep(2000 * time.Millisecond) // this might make it more stable on windows?
-	} else {
-		log.Println("StartNewWindow() WAITING for ui.Main()")
-		ui.Main(func() {
-			log.Println("gui.StartNewWindow() inside ui.Main()")
-			InitTabWindow(window)
-		})
-	}
+func MessageWindow(msg1 string, msg2 string) (*Node) {
+	uiW := findUiWindow()
+	ui.MsgBox(uiW, msg1, msg2)
+	// TODO: make new node
+	return nil
 }
 
-func InitTabWindow(gw *GuiWindow) {
-	log.Println("InitTabWindow() START. THIS WINDOW IS NOT YET SHOWN")
+func ErrorWindow(msg1 string, msg2 string) (*Node) {
+	uiW := findUiWindow()
+	ui.MsgBoxError(uiW, msg1, msg2)
+	return nil
+}
 
-	gw.UiWindow = ui.NewWindow("InitTabWindow()", int(gw.Width), int(gw.Height), true)
-	gw.UiWindow.SetBorderless(false)
+func initNode(title string, x int, y int) *Node {
+	var node Node
+	node.Name = title
+	node.Width = x
+	node.Height = y
 
-	gw.UiWindow.OnClosing(func(*ui.Window) bool {
-		log.Println("InitTabWindow() OnClosing() THIS WINDOW IS CLOSING gw=", gw)
-                ui.Quit()
+	id := Config.prefix + strconv.Itoa(Config.counter)
+	Config.counter += 1
+	node.id = id
+
+	if (Data.NodeMap[title] != nil) {
+		log.Println("ERROR: Duplicate window name =", title)
+		// TODO: just change the 'title' to something unique
+		return Data.NodeMap[title]
+	}
+	Data.NodeMap[title] = &node
+	Data.NodeArray = append(Data.NodeArray, &node)
+	Data.NodeSlice = append(Data.NodeSlice, &node)
+	return &node
+	//	parent.Append(&node)
+	//node.parent = parent
+	return &node
+}
+
+func (parent *Node) makeNode(title string, x int, y int) *Node {
+	var node Node
+	node.Name = title
+	node.Width = x
+	node.Height = y
+
+	id := Config.prefix + strconv.Itoa(Config.counter)
+	Config.counter += 1
+	node.id = id
+
+	parent.Append(&node)
+	node.parent = parent
+	return &node
+}
+
+func (n *Node) AddNode(title string) *Node {
+	var node Node
+	node.Name = title
+	node.Width = n.Width
+	node.Height = n.Height
+
+	id := Config.prefix + strconv.Itoa(Config.counter)
+	Config.counter += 1
+	node.id = id
+
+	n.Append(&node)
+	node.parent = n
+	return &node
+}
+
+func (n *Node) uiNewWindow(title string, x int, y int) {
+	w := ui.NewWindow(title, x, y, Config.Menu)
+	w.SetBorderless(false)
+	f := Config.Exit
+	w.OnClosing(func(*ui.Window) bool {
+		log.Println("RUNNING the ui.Window().OnClosing() function")
+		if (f != nil) {
+			f(n)
+		} else {
+			n.Dump()
+			log.Println("gui.uiWindow().OnClosing() NOT SURE WHAT TO DO HERE")
+			// TODO: always do this here?  // by default delete the node?
+			name := n.Name
+			delete(Data.NodeMap, name)
+		}
+		return true
+	})
+	w.SetMargined(true)
+	w.Show()
+	n.uiWindow = w
+	// w.node = &node
+	return
+}
+
+/*
+func mapWindow(parent *Node, window *ui.Window, title string, x int, y int) *Node {
+	log.Println("gui.WindowMap START title =", title)
+
+	node := makeNode(parent, title, x, y)
+	node.uiWindow = window
+
+	return node
+}
+*/
+
+// This routine creates a blank window with a Title and size (W x H)
+//
+// This routine can not have any arguements due to the nature of how
+// it can be passed via the 'andlabs/ui' queue which, because it is
+// cross platform, must pass UI changes into the OS threads (that is
+// my guess).
+//
+// There is probably some way to pass arguements here that I'm can't think of right now
+//
+func NewWindow() *Node {
+	title := Config.Title
+	w     := Config.Width
+	h     := Config.Height
+
+	if (Data.NodeMap[title] != nil) {
+		log.Println("Duplicate window name =", title)
+		Data.NodeMap[title].Dump()
+		Data.NodeMap[title].ListChildren(false)
+		uiW := Data.NodeMap[title].uiWindow
+		if (uiW != nil) {
+			uiW.Show()
+		}
+		log.Println("PROBABLY BAD ERROR: check here to see if window is really alive")
+		return Data.NodeMap[title]
+	}
+
+	var n *Node
+	n = initNode(title, w, h)
+	n.uiNewWindow(title, w, h)
+	window := n.uiWindow
+
+	f := Config.Exit
+	ui.OnShouldQuit(func() bool {
+		log.Println("createWindow().Destroy() on node.Name =", n.Name)
+		if (f != nil) {
+			f(n)
+		}
 		return true
 	})
 
-	gw.UiTab = ui.NewTab()
-	gw.UiWindow.SetChild(gw.UiTab)
-	gw.UiWindow.SetMargined(true)
-
-
-	box := gw.MakeWindow(gw)
-	log.Println("InitTabWindow() END box =", box)
-	log.Println("InitTabWindow() END gw =", gw)
-	gw.UiWindow.Show()
-}
-
-func MessageWindow(gw *GuiWindow, msg1 string, msg2 string) {
-	ui.MsgBox(gw.UiWindow, msg1, msg2)
-}
-
-func ErrorWindow(gw *GuiWindow, msg1 string, msg2 string) {
-	ui.MsgBoxError(gw.UiWindow, msg1, msg2)
+	n.uiWindow = window
+	if(n.uiWindow == nil) {
+		log.Println("ERROR: node.uiWindow == nil. This should never happen")
+	}
+	return n
 }

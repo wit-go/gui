@@ -1,19 +1,13 @@
-# simple sortcut to push all git changes
-push:
-	git checkout devel
-	git pull
-	git add --all
-	-git commit -a -s
-	git push
+all:
+	@echo
+	@echo "make examples     # will run all the examples"
+	@echo "make update       # full git update"
+	@echo
 
 # should update every go dependancy (?)
 update:
 	git pull
 	go get -v -t -u ./...
 
-merge-devel:
-	git checkout master
-	git pull origin master
-	git merge devel
-	git push origin master
-	git checkout devel
+examples:
+	make -C gui-example

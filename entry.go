@@ -1,103 +1,49 @@
 package gui
 
 import "log"
-import "fmt"
+import "errors"
+// import "fmt"
 
 import "github.com/andlabs/ui"
+// import ui "git.wit.org/interesting/andlabs-ui"
 import _ "github.com/andlabs/ui/winmanifest"
-import "github.com/davecgh/go-spew/spew"
+// import "github.com/davecgh/go-spew/spew"
 
 // functions for handling text entry boxes
 
-func NewLabel(box *GuiBox, text string) {
-	box.UiBox.Append(ui.NewLabel(text), false)
+func (n *Node) NewLabel(text string) *Node {
+	// make new node here
+newNode := n.makeNode(text, 333, 334)
+	newNode.Dump()
+
+	n.Append(newNode)
+	return newNode
 }
 
-func GetText(box *GuiBox, name string) string {
-	if (box == nil) {
-		log.Println("gui.GetText() ERROR box == nil")
-		return ""
+func (n *Node) SetText(value string) error {
+	log.Println("gui.SetText() value =", value)
+	if (n.uiText != nil) {
+		n.uiText.SetText(value)
+		return nil
 	}
-	if (box.Window.EntryMap == nil) {
-		log.Println("gui.GetText() ERROR b.Box.Window.EntryMap == nil")
-		return ""
+	if (n.uiButton != nil) {
+		n.uiButton.SetText(value)
+		return nil
 	}
-	spew.Dump(box.Window.EntryMap)
-	if (box.Window.EntryMap[name] == nil) {
-		log.Println("gui.GetText() ERROR box.Window.EntryMap[", name, "] == nil ")
-		return ""
+	if (n.uiMultilineEntry != nil) {
+		n.uiMultilineEntry.SetText(value)
+		return nil
 	}
-	e := box.Window.EntryMap[name]
-	log.Println("gui.GetText() box.Window.EntryMap[", name, "] = ", e.UiEntry.Text())
-	log.Println("gui.GetText() END")
-	return e.UiEntry.Text()
+	n.Dump()
+	return errors.New("couldn't find something to set the text to")
 }
 
-func SetText(box *GuiBox, name string, value string) error {
-	if (box == nil) {
-		return fmt.Errorf("gui.SetText() ERROR box == nil")
+func (n *Node) SetMargined(x bool) {
+	if (n.uiGroup != nil) {
+		n.uiGroup.SetMargined(x)
+		return
 	}
-	if (box.Window.EntryMap == nil) {
-		return fmt.Errorf("gui.SetText() ERROR b.Box.Window.EntryMap == nil")
-	}
-	spew.Dump(box.Window.EntryMap)
-	if (box.Window.EntryMap[name] == nil) {
-		return fmt.Errorf("gui.SetText() ERROR box.Window.EntryMap[", name, "] == nil ")
-	}
-	e := box.Window.EntryMap[name]
-	log.Println("gui.SetText() box.Window.EntryMap[", name, "] = ", e.UiEntry.Text())
-	e.UiEntry.SetText(value)
-	log.Println("gui.SetText() box.Window.EntryMap[", name, "] = ", e.UiEntry.Text())
-	log.Println("gui.SetText() END")
-	return nil
-}
-
-// makeEntryBox(box, "hostname:", "blah.foo.org") {
-func MakeEntryVbox(box *GuiBox, a string, startValue string, edit bool, action string) *GuiEntry {
-	// Start 'Nickname' vertical box
-	vboxN := ui.NewVerticalBox()
-	vboxN.SetPadded(true)
-	vboxN.Append(ui.NewLabel(a), false)
-
-	e := defaultMakeEntry(startValue, edit, action)
-
-	vboxN.Append(e.UiEntry, false)
-	box.UiBox.Append(vboxN, false)
-	// End 'Nickname' vertical box
-
-	return e
-}
-
-func MakeEntryHbox(box *GuiBox, a string, startValue string, edit bool, action string) *GuiEntry {
-	// Start 'Nickname' vertical box
-	hboxN := ui.NewHorizontalBox()
-	hboxN.SetPadded(true)
-	hboxN.Append(ui.NewLabel(a), false)
-
-	e := defaultMakeEntry(startValue, edit, action)
-	hboxN.Append(e.UiEntry, false)
-
-	box.UiBox.Append(hboxN, false)
-	// End 'Nickname' vertical box
-
-	return e
-}
-
-func AddEntry(box *GuiBox, name string) *GuiEntry {
-	var ge *GuiEntry
-	ge = new(GuiEntry)
-
-	ue := ui.NewEntry()
-	ue.SetReadOnly(false)
-	ue.OnChanged(func(*ui.Entry) {
-		log.Println("gui.AddEntry() OK. ue.Text() =", ue.Text())
-	})
-	box.UiBox.Append(ue, false)
-
-	ge.UiEntry = ue
-	box.Window.EntryMap[name] = ge
-
-	return ge
+	log.Println("Couldn't find something that has a Margin setting")
 }
 
 func defaultEntryChange(e *ui.Entry) {
