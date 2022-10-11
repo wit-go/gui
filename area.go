@@ -7,14 +7,28 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 import "github.com/davecgh/go-spew/spew"
 
-// make this button just to get the default font (but don't display the button)
-// There should be another way to do this (?)
-func (n *Node) makeGenericArea(newText *ui.AttributedString, custom func(*Node)) {
-	newNode			:= n.CreateFontButton("AREA")
-	newNode.custom		= custom
-	area			:= new(GuiArea)
-	newNode.uiArea		= ui.NewArea(area)
-	newNode.uiAttrstr	= newText
+func makeGenericArea(gb *GuiBox, newText *ui.AttributedString, custom func(*GuiButton)) {
+	// make this button just to get the default font (but don't display the button)
+	// There should be another way to do this (?)
+	var newB *GuiButton
+	newB		= CreateFontButton(gb, "AREA")
+	newB.Box	= gb
+	newB.Custom	= custom
+
+	gw := gb.Window
+	// initialize the GuiArea{}
+	gw.Area			= new(GuiArea)
+	gw.Area.Button		= newB
+	gw.Area.Box		= gb
+	gw.Area.UiAttrstr	= newText
+	gw.Area.UiArea		= ui.NewArea(gw.Area)
+
+	if (Config.Debug) {
+		spew.Dump(gw.Area.UiArea)
+		log.Println("DEBUGGING", Config.Debug)
+	} else {
+		log.Println("NOT DEBUGGING AREA mhAH.Button =", gw.Area.Button)
+	}
 }
 
 func AreaAppendText(newText *ui.AttributedString, what string, attrs ...ui.Attribute) {
@@ -38,7 +52,7 @@ func appendWithAttributes(newText *ui.AttributedString, what string, attrs ...ui
 func (ah GuiArea) Draw(a *ui.Area, p *ui.AreaDrawParams) {
 	tl := ui.DrawNewTextLayout(&ui.DrawTextLayoutParams{
 		String:		ah.UiAttrstr,
-		DefaultFont:	ah.N.uiFontButton.Font(),
+		DefaultFont:	ah.Button.FB.Font(),
 		Width:		p.AreaWidth,
 		Align:		ui.DrawTextAlign(1),
 	})
@@ -47,7 +61,6 @@ func (ah GuiArea) Draw(a *ui.Area, p *ui.AreaDrawParams) {
 }
 
 func (ah GuiArea) MouseEvent(a *ui.Area, me *ui.AreaMouseEvent) {
-	/*
 	if (Config.Debug) {
 		log.Println("GOT MouseEvent() ah.Button =", ah.Button)
 		spew.Dump(me)
@@ -67,7 +80,6 @@ func (ah GuiArea) MouseEvent(a *ui.Area, me *ui.AreaMouseEvent) {
 			Data.MouseClick(ah.Button)
 		}
 	}
-	*/
 }
 
 func (ah GuiArea) MouseCrossed(a *ui.Area, left bool) {
@@ -95,14 +107,30 @@ func (ah GuiArea) KeyEvent(a *ui.Area, ke *ui.AreaKeyEvent) (handled bool) {
 	return false
 }
 
-func (n *Node) ShowTextBox(newText *ui.AttributedString, custom func(*Node), name string) {
+func (b *GuiBox) ShowTextBox(newText *ui.AttributedString, custom func(*GuiButton), name string) {
 	log.Println("ShowTextBox() START")
 
+	gw := b.Window
+	if (gw == nil) {
+		log.Println("ShowTextBox() ERROR gw = nil")
+		return
+	}
+	log.Println("ShowTextBox() START gw =", gw)
+
+	/*
+	var newbox *GuiBox
+	newbox		= new(GuiBox)
+	newbox.Window	= gw
+	newbox.Name	= name
+	hbox		:= ui.NewVerticalBox()
+	newbox.UiBox	= hbox
+	*/
+
 	// TODO: allow padded & axis here
-	n.uiBox.SetPadded(true)
+	b.UiBox.SetPadded(true)
 
 	// add(gw.BoxMap["MAINBOX"], newbox)
 
-	n.makeGenericArea(newText, custom)
-	n.uiBox.Append(n.area.UiArea, true)
+	makeGenericArea(b, newText, custom)
+	b.UiBox.Append(b.Window.Area.UiArea, true)
 }

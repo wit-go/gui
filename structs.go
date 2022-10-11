@@ -2,7 +2,7 @@ package gui
 
 import (
 	"image/color"
-//	"log"
+	"log"
 
 	"github.com/andlabs/ui"
 	"golang.org/x/image/font"
@@ -22,8 +22,6 @@ type GuiConfig struct {
 	Title      string
 	Width      int
 	Height     int
-	Stretchy   bool
-	Menu       bool
 	Exit       func(*Node)
 
 	Debug       bool
@@ -40,15 +38,162 @@ type GuiConfig struct {
 type GuiData struct {
 	// a fallback default function to handle mouse events
 	// if nothing else is defined to handle them
-	MouseClick func(*Node)
+	MouseClick func(*GuiButton)
 
 	// A map of all the entry boxes
 	AllEntries []*GuiEntry
+	WindowMap  map[string]*GuiWindow
 
 	// Store access to everything via binary tree's
 	NodeMap    map[string]*Node
 	NodeArray  []*Node
 	NodeSlice  []*Node
+
+	// A map of all buttons everywhere on all
+	// windows, all tabs, across all goroutines
+	// This is "GLOBAL"
+	//
+	// This has to work this way because of how
+	// andlabs/ui & andlabs/libui work
+	AllButtons []*GuiButton
+	buttonMap  map[*ui.Button]*GuiButton
+}
+
+type GuiTab struct {
+	Name   string     // field for human readable name
+	Number int        // the andlabs/ui tab index
+	Window *GuiWindow // the parent Window
+}
+
+//
+// stores information on the 'window'
+//
+// This merges the concept of andlabs/ui *Window and *Tab
+//
+// More than one Window is not supported in a cross platform
+// sense & may never be. On Windows and MacOS, you have to have
+// 'tabs'. Even under Linux, more than one Window is currently
+// unstable
+//
+// This code will make a 'GuiWindow' regardless of if it is
+// a stand alone window (which is more or less working on Linux)
+// or a 'tab' inside a window (which is all that works on MacOS
+// and MSWindows.
+//
+// This struct keeps track of what is in the window so you
+// can destroy and replace it with something else
+//
+type GuiWindow struct {
+	Name      string // field for human readable name
+	Width     int
+	Height    int
+	Axis      int  // does it add items to the X or Y axis
+	TabNumber *int // the andlabs/ui tab index
+
+	// the callback function to make the window contents
+	// MakeWindow	func(*GuiBox) *GuiBox
+
+	// the components of the window
+	BoxMap   map[string]*GuiBox
+	EntryMap map[string]*GuiEntry
+	Area     *GuiArea
+
+	node	*Node
+
+	// andlabs/ui abstraction mapping
+	UiWindow *ui.Window
+	UiTab    *ui.Tab // if this != nil, the window is 'tabbed'
+}
+
+func (w *GuiWindow) Dump() {
+	log.Println("gui.GuiWindow.Dump() Name       = ", w.Name)
+	log.Println("gui.GuiWindow.Dump() node       = ", w.node)
+	log.Println("gui.GuiWindow.Dump() Width      = ", w.Width)
+	log.Println("gui.GuiWindow.Dump() Height     = ", w.Height)
+}
+
+// GuiBox is any type of ui.Hbox or ui.Vbox
+// There can be lots of these for each GuiWindow
+type GuiBox struct {
+	Name   string     // field for human readable name
+	Axis   int        // does it add items to the X or Y axis
+	Window *GuiWindow // the parent Window
+
+	node	*Node
+
+	// andlabs/ui abstraction mapping
+	UiBox *ui.Box
+}
+
+func (b *GuiBox) Dump() {
+	log.Println("gui.GuiBox.Dump() Name       = ", b.Name)
+	log.Println("gui.GuiBox.Dump() Axis       = ", b.Axis)
+	log.Println("gui.GuiBox.Dump() GuiWindow  = ", b.Window)
+	log.Println("gui.GuiBox.Dump() node       = ", b.node)
+	log.Println("gui.GuiBox.Dump() UiBox      = ", b.UiBox)
+}
+
+func (b *GuiBox) SetTitle(title string) {
+	log.Println("DID IT!", title)
+	if b.Window == nil {
+		return
+	}
+	if b.Window.UiWindow == nil {
+		return
+	}
+	b.Window.UiWindow.SetTitle(title)
+	return
+}
+
+func (w *GuiWindow) SetNode(n *Node) {
+	if (w.node != nil) {
+		w.Dump()
+		panic("gui.SetNode() Error not nil")
+	}
+	w.node = n
+	if (w.node == nil) {
+		w.Dump()
+		panic("gui.SetNode() node == nil")
+	}
+}
+
+func (b *GuiBox) SetNode(n *Node) {
+	if (b.node != nil) {
+		b.Dump()
+		panic("gui.SetNode() Error not nil")
+	}
+	b.node = n
+	if (b.node == nil) {
+		b.Dump()
+		panic("gui.SetNode() node == nil")
+	}
+}
+
+func (b *GuiBox) Append(child ui.Control, x bool) {
+	if b.UiBox == nil {
+		panic("GuiBox.Append() can't work. UiBox == nil")
+		return
+	}
+	b.UiBox.Append(child, x)
+}
+
+// Note: every mouse click is handled
+// as a 'Button' regardless of where
+// the user clicks it. You could probably
+// call this 'GuiMouseClick'
+type GuiButton struct {
+	Name string  // field for human readable name
+	Box  *GuiBox // what box the button click was in
+
+	// a callback function for the main application
+	Custom func(*GuiButton)
+	Values interface{}
+	Color  color.RGBA
+
+	// andlabs/ui abstraction mapping
+	B  *ui.Button
+	FB *ui.FontButton
+	CB *ui.ColorButton
 }
 
 // text entry fields
@@ -58,14 +203,21 @@ type GuiEntry struct {
 	Last      string              // the last value
 	Normalize func(string) string // function to 'normalize' the data
 
-	N   *Node
+	B   *GuiButton
+	Box *GuiBox
 
 	// andlabs/ui abstraction mapping
 	UiEntry *ui.Entry
 }
 
+//
+// AREA STRUCTURES START
+// AREA STRUCTURES START
+// AREA STRUCTURES START
+//
 type GuiArea struct {
-	N *Node	// what node to pass mouse events
+	Button *GuiButton // what button handles mouse events
+	Box    *GuiBox
 
 	UiAttrstr *ui.AttributedString
 	UiArea    *ui.Area
@@ -79,6 +231,14 @@ type FontString struct {
 }
 
 //
+// AREA STRUCTURES END
+// AREA STRUCTURES END
+// AREA STRUCTURES END
+//
+
+//
+// TABLE DATA STRUCTURES START
+// TABLE DATA STRUCTURES START
 // TABLE DATA STRUCTURES START
 //
 
@@ -95,7 +255,7 @@ type TableData struct {
 	Cells [20]CellData
 	Human [20]HumanMap
 
-	n *Node
+	Box *GuiBox
 
 	lastRow    int
 	lastColumn int
@@ -122,7 +282,7 @@ type HumanCellData struct {
 	TextID  int
 	Color   color.RGBA
 	ColorID int
-	N  *Node
+	Button  *GuiButton
 }
 
 type HumanMap struct {

@@ -1,0 +1,27 @@
+// This creates a simple hello world window
+package main
+
+import 	(
+	"git.wit.org/wit/gui"
+)
+
+func main() {
+	gui.Main(initGUI)
+}
+
+// This initializes the first window
+func initGUI() {
+	gui.Config.Title = "Hello World golang wit/gui Window"
+	gui.Config.Width = 640
+	gui.Config.Height = 480
+	node1 := gui.NewWindow()
+	addDemoTab(node1, "A Simple Tab Demo")
+	addDemoTab(node1, "A Second Tab")
+}
+
+func addDemoTab(n *gui.Node, title string) {
+	newNode := n.AddTab(title, nil)
+
+	groupNode1 := newNode.AddGroup("group 1")
+	groupNode1.AddComboBox("demoCombo2", "more 1", "more 2", "more 3")
+}

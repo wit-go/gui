@@ -14,16 +14,18 @@ const Xaxis = 0 // box that is horizontal
 const Yaxis = 1 // box that is vertical
 
 func init() {
-	log.Println("gui.init() REMOVE THIS init()")
+	log.Println("gui.init() has been run")
 
+	Data.buttonMap = make(map[*ui.Button]*GuiButton)
+	Data.WindowMap = make(map[string]*GuiWindow)
 	Data.NodeMap = make(map[string]*Node)
+
 	Data.NodeSlice = make([]*Node, 0)
 
 	Config.counter = 0
 	Config.prefix = "wit"
 	Config.DebugNode = false
 	Config.DebugTabs = false
-	Config.Stretchy = true
 }
 
 func GuiInit() {

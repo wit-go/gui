@@ -95,12 +95,9 @@ func defaultSetCellValue(mh *TableData, row int, column int) {
 		humanID := mh.Cells[column].HumanID
 		log.Println("defaultSetCellValue() FOUND THE TABLE BUTTON ", row, humanID)
 
-		n := mh.Rows[row].HumanData[humanID].N
-		if (n != nil) {
-			// TODO: fixme. removed on Oct 31 2021
-			if (n.OnChanged != nil) {
-				n.OnChanged()
-			}
+		button := mh.Rows[row].HumanData[humanID].Button
+		if (button != nil) {
+			guiButtonClick(button)
 			return
 		}
 		log.Println("defaultSetCellValue() ERROR: UNKNOWN BUTTON IN TABLE")

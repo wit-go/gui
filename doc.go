@@ -1,7 +1,6 @@
 /*
-Package wit/gui implements a abstraction layer for Go visual elements in
-a cross platform way. Right now, this abstraction is built on top of
-the GUI toolkit 'andlabs/ui' which does the cross platform support.
+Package gui implements a abstraction layer for Go visual elements in
+a cross platform way.
 
 A quick overview of the features, some general design guidelines
 and principles for how this package should generally work:
@@ -15,9 +14,7 @@ Quick Start
 This section demonstrates how to quickly get started with spew.  See the
 sections below for further details on formatting and configuration options.
 
-To dump a variable with full newlines, indentation, type, and pointer
-information use Dump, Fdump, or Sdump:
-
+	// This creates a simple hello world window
 	package main
 
 	import 	(
@@ -30,11 +27,12 @@ information use Dump, Fdump, or Sdump:
 
 	// This initializes the first window
 	func initGUI() {
-		gui.Config.Title = "WIT GUI Window 1"
+		gui.Config.Title = "Hello World golang wit/gui Window"
 		gui.Config.Width = 640
 		gui.Config.Height = 480
 		node1 := gui.NewWindow()
 		addDemoTab(node1, "A Simple Tab Demo")
+		addDemoTab(node1, "A Second Tab")
 	}
 
 	func addDemoTab(n *gui.Node, title string) {
@@ -60,10 +58,24 @@ The following configuration options are available:
 	* Debug
 		When 'true' log more output
 
-GUI Usage
+Toolkit Usage
+
+Right now, this abstraction is built on top of the go package 'andlabs/ui'
+which does the cross platform support.
+The next step is to intent is to allow this to work directly against GTK and QT.
+It should be able to add Fyne, WASM, native macos & windows, android, etc.
 
 Errors
 
-Not sure about errors yet. To early to document them. This is a work in progress.
+Since it is possible for custom Stringer/error interfaces to panic, spew
+detects them and handles them internally by printing the panic information
+inline with the output.  Since spew is intended to provide deep pretty printing
+capabilities on structures, it intentionally does not return any errors.
+
+Debugging
+
+To dump variables with full newlines, indentation, type, and pointer
+information this uses spew.Dump()
+
 */
 package gui
