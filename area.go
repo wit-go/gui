@@ -107,10 +107,10 @@ func (ah GuiArea) KeyEvent(a *ui.Area, ke *ui.AreaKeyEvent) (handled bool) {
 	return false
 }
 
-func ShowTextBox(box *GuiBox, newText *ui.AttributedString, custom func(*GuiButton), name string) {
+func (b *GuiBox) ShowTextBox(newText *ui.AttributedString, custom func(*GuiButton), name string) {
 	log.Println("ShowTextBox() START")
 
-	gw := box.Window
+	gw := b.Window
 	if (gw == nil) {
 		log.Println("ShowTextBox() ERROR gw = nil")
 		return
@@ -127,10 +127,10 @@ func ShowTextBox(box *GuiBox, newText *ui.AttributedString, custom func(*GuiButt
 	*/
 
 	// TODO: allow padded & axis here
-	box.UiBox.SetPadded(true)
+	b.UiBox.SetPadded(true)
 
 	// add(gw.BoxMap["MAINBOX"], newbox)
 
-	makeGenericArea(box, newText, custom)
-	box.UiBox.Append(box.Window.Area.UiArea, true)
+	makeGenericArea(b, newText, custom)
+	b.UiBox.Append(b.Window.Area.UiArea, true)
 }

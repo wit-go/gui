@@ -1,50 +1,13 @@
 package gui
 
-import "log"
-import "time"
-// import "regexp"
+import (
+	"log"
+	"fmt"
+	"strconv"
 
-import "github.com/andlabs/ui"
-import _ "github.com/andlabs/ui/winmanifest"
-
-func StartNewWindow(bg bool, name string, axis int, callback func(*GuiBox) *GuiBox) {
-	log.Println("StartNewWindow() Create a new window")
-
-	if (bg) {
-		log.Println("StartNewWindow() START NEW GOROUTINE for ui.Main()")
-		go ui.Main(func() {
-			log.Println("gui.StartNewWindow() inside ui.Main() in NEW goroutine")
-
-			// InitWindow must be called from within ui.Main()
-			box := InitWindow(nil, name, axis)
-			box = callback(box)
-			window := box.Window
-			log.Println("StartNewWindow() box =", box)
-
-			runWindow(window.UiWindow)
-		})
-		time.Sleep(500 * time.Millisecond) // this might make it more stable on windows?
-	} else {
-		log.Println("StartNewWindow() WAITING for ui.Main()")
-		ui.Main(func() {
-			log.Println("gui.StartNewWindow() inside ui.Main()")
-
-			// InitWindow must be called from within ui.Main()
-			box := InitWindow(nil, name, axis)
-			box = callback(box)
-			window := box.Window
-			log.Println("StartNewWindow() box =", box)
-
-			runWindow(window.UiWindow)
-		})
-	}
-}
-
-// This creates the raw andlabs/ui Window
-func runWindow(uiWindow *ui.Window) {
-	log.Println("runWindow() START ui.Window.Show()")
-	uiWindow.Show()
-}
+	"github.com/andlabs/ui"
+	_ "github.com/andlabs/ui/winmanifest"
+)
 
 func MessageWindow(gw *GuiWindow, msg1 string, msg2 string) {
 	ui.MsgBox(gw.UiWindow, msg1, msg2)
@@ -54,91 +17,17 @@ func ErrorWindow(gw *GuiWindow, msg1 string, msg2 string) {
 	ui.MsgBoxError(gw.UiWindow, msg1, msg2)
 }
 
-//
-// This creates a new 'window' (which is just a tab in the window)
-// This is this way because on Linux you can have more than one
-// actual window but that does not appear to work on the MacOS or Windows
-//
-func InitWindow(gw *GuiWindow, name string, axis int) *GuiBox {
-	window := Data.WindowMap[name]
-	if (window != nil) {
-		box := window.BoxMap["MAINBOX"]
-		log.Println("gui.InitWindow() tab already exists name =", name)
-		ErrorWindow(box.Window, "Create Window Error", "Window " + name + " already exists")
-		return nil
-	}
-
-	log.Println("InitGuiWindow() START")
-	var newGuiWindow GuiWindow
-	newGuiWindow.Height	= Config.Height
-	newGuiWindow.Width	= Config.Width
-	newGuiWindow.Axis	= axis
-	newGuiWindow.Name       = name
-
-	// This is the first window. One must create it here
-	if (gw == nil) {
-		log.Println("initWindow() ADDING ui.NewWindow()")
-		newGuiWindow.UiWindow = ui.NewWindow(name, int(newGuiWindow.Width), int(newGuiWindow.Height), true)
-		newGuiWindow.UiWindow.SetBorderless(false)
-
-		newGuiWindow.UiWindow.OnClosing(func(*ui.Window) bool {
-			log.Println("initTabWindow() OnClosing() THIS WINDOW IS CLOSING newGuiWindow=", newGuiWindow)
-			// newGuiWindow.UiWindow.Destroy()
-			if (Config.Exit == nil) {
-				ui.Quit()
-			} else {
-				// allow a custom exit function
-				Config.Exit(&newGuiWindow)
-			}
-			return true
-		})
-
-		newGuiWindow.UiTab = ui.NewTab()
-		newGuiWindow.UiWindow.SetChild(newGuiWindow.UiTab)
-		newGuiWindow.UiWindow.SetMargined(true)
-		tmp := 0
-		newGuiWindow.TabNumber = &tmp
-	} else {
-		newGuiWindow.UiWindow	= gw.UiWindow
-		newGuiWindow.UiTab	= gw.UiTab
-	}
-
-
-	newGuiWindow.BoxMap	= make(map[string]*GuiBox)
-	newGuiWindow.EntryMap	= make(map[string]*GuiEntry)
-	// Data.Windows = append(Data.Windows, &newGuiWindow)
-
-	if (newGuiWindow.UiTab == nil) {
-		tabnum			:= 0
-		newGuiWindow.TabNumber	= &tabnum
-	} else {
-		tabnum			:= newGuiWindow.UiTab.NumPages()
-		newGuiWindow.TabNumber	= &tabnum
-	}
-
-	Data.WindowMap[newGuiWindow.Name]    = &newGuiWindow
-
-	var box *GuiBox
-	if (axis == Xaxis) {
-		box = HardBox(&newGuiWindow, Xaxis, name)
-	} else {
-		box = HardBox(&newGuiWindow, Yaxis, name)
-	}
-	log.Println("InitGuiWindow() END *GuiWindow =", &newGuiWindow)
-	return box
-}
-
 func DeleteWindow(name string) {
 	log.Println("gui.DeleteWindow() START name =", name)
 	window := Data.WindowMap[name]
-	if (window == nil) {
+	if window == nil {
 		log.Println("gui.DeleteWindow() NO WINDOW WITH name =", name)
 		return
 	}
 
 	log.Println("gui.DumpBoxes() MAP: ", name)
 	log.Println("gui.DumpBoxes()\tWindow.name =", window.Name)
-	if (window.TabNumber == nil) {
+	if window.TabNumber == nil {
 		log.Println("gui.DumpBoxes() \tWindows.TabNumber = nil")
 	}
 	tab := *window.TabNumber
@@ -156,15 +45,171 @@ func DeleteWindow(name string) {
 	// renumber tabs here
 	for name, window := range Data.WindowMap {
 		log.Println("gui.DumpBoxes() MAP: ", name)
-		if (window.TabNumber == nil) {
+		if window.TabNumber == nil {
 			log.Println("gui.DumpBoxes() \tWindows.TabNumber = nil")
 		} else {
 			log.Println("gui.DumpBoxes() \tWindows.TabNumber =", *window.TabNumber)
-			if (tab < *window.TabNumber) {
+			if tab < *window.TabNumber {
 				log.Println("gui.DumpBoxes() \tSubtracting 1 from TabNumber")
 				*window.TabNumber -= 1
 				log.Println("gui.DumpBoxes() \tWindows.TabNumber is now =", *window.TabNumber)
 			}
 		}
 	}
+}
+
+func makeNode(parent *Node, title string, x int, y int) *Node {
+	var node Node
+	node.Name = title
+	node.Width = x
+	node.Height = y
+
+	id := Config.prefix + strconv.Itoa(Config.counter)
+	Config.counter += 1
+	node.id = id
+
+	// panic("gui.makeNode() START")
+	if (parent == nil) {
+		if (Data.NodeMap[title] != nil) {
+			log.Println("Duplicate window name =", title)
+			// TODO: just change the 'title' to something unique
+			panic(fmt.Sprintf("Duplicate window name = %s\n", title))
+			return nil
+		}
+		// panic("gui.makeNode() before NodeMap()")
+		Data.NodeMap[title] = &node
+		Data.NodeArray = append(Data.NodeArray, &node)
+		Data.NodeSlice = append(Data.NodeSlice, &node)
+		// panic("gui.makeNode() after NodeMap()")
+		return &node
+	} else {
+		// panic("gui.makeNode() before Append()")
+		parent.Append(&node)
+		// panic("gui.makeNode() after Append()")
+	}
+	node.parent = parent
+	return &node
+}
+
+func (parent *Node) makeNode(title string, x int, y int) *Node {
+	var node Node
+	node.Name = title
+	node.Width = x
+	node.Height = y
+
+	id := Config.prefix + strconv.Itoa(Config.counter)
+	Config.counter += 1
+	node.id = id
+
+	parent.Append(&node)
+	node.parent = parent
+	return &node
+}
+
+func (n *Node) AddNode(title string) *Node {
+	var node Node
+	node.Name = title
+	node.Width = n.Width
+	node.Height = n.Height
+
+	id := Config.prefix + strconv.Itoa(Config.counter)
+	Config.counter += 1
+	node.id = id
+
+	n.Append(&node)
+	node.parent = n
+	return &node
+}
+
+func (n *Node) uiNewWindow(title string, x int, y int) {
+	w := ui.NewWindow(title, x, y, false)
+	w.SetBorderless(false)
+	f := Config.Exit
+	w.OnClosing(func(*ui.Window) bool {
+		if (Config.Debug) {
+			log.Println("ui.Window().OnClosing()")
+		}
+		if (f != nil) {
+			f(n)
+		}
+		return true
+	})
+	w.SetMargined(true)
+	w.Show()
+	n.uiWindow = w
+	// w.node = &node
+	return
+}
+
+func mapWindow(parent *Node, window *ui.Window, title string, x int, y int) *Node {
+	log.Println("gui.WindowMap START title =", title)
+	if Data.WindowMap[title] != nil {
+		log.Println("Data.WindowMap[title] already exists title =", title)
+		title = title + Config.prefix + strconv.Itoa(Config.counter)
+		Config.counter += 1
+	}
+	if Data.WindowMap[title] != nil {
+		log.Println("Data.WindowMap[title] already exists title =", title)
+		panic("Data.WindowMap[newGuiWindow.Name] already exists")
+		return nil
+	}
+
+	var newGuiWindow GuiWindow
+	newGuiWindow.Width = x
+	newGuiWindow.Height = y
+	newGuiWindow.Name = title
+	newGuiWindow.UiWindow = window
+
+	newGuiWindow.BoxMap = make(map[string]*GuiBox)
+	newGuiWindow.EntryMap = make(map[string]*GuiEntry)
+
+	Data.WindowMap[newGuiWindow.Name] = &newGuiWindow
+
+	var box GuiBox
+	box.Window = &newGuiWindow
+	box.Name = title
+
+	node := makeNode(parent, title, x, y)
+	node.box = &box
+	node.uiWindow = window
+	box.node = node
+
+	newGuiWindow.BoxMap["jcarrInitTest"] = &box
+
+	return node
+}
+
+// This routine creates a blank window with a Title and size (W x H)
+//
+// This routine can not have any arguements due to the nature of how
+// it can be passed via the 'andlabs/ui' queue which, because it is
+// cross platform, must pass UI changes into the OS threads (that is
+// my guess).
+func NewWindow() *Node {
+	title := Config.Title
+	w     := Config.Width
+	h     := Config.Height
+
+	var n *Node
+	n = mapWindow(nil, nil, title, w, h)
+	box := n.box
+	log.Println("gui.NewWindow() title = box.Name =", box.Name)
+
+	n.uiNewWindow(box.Name, w, h)
+	window := n.uiWindow
+
+	f := Config.Exit
+	ui.OnShouldQuit(func() bool {
+		log.Println("createWindow().Destroy() on node.Name =", n.Name)
+		if (f != nil) {
+			f(n)
+		}
+		return true
+	})
+
+	box.Window.UiWindow = window
+	if(n.uiWindow == nil) {
+		panic("node.uiWindow == nil. This should never happen")
+	}
+	return n
 }

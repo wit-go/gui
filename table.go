@@ -98,12 +98,12 @@ func InitColumns(mh *TableData, parts []TableColumnData) {
 }
 
 func AddTableTab(gw *GuiWindow, name string, rowcount int, parts []TableColumnData) *TableData {
-	box := InitWindow(gw, name, Yaxis)
-
-	return AddTableBox(box, name, rowcount, parts)
+	node := NewWindow()
+	b := node.box
+	return b.AddTableBox(name, rowcount, parts)
 }
 
-func AddTableBox(box *GuiBox, name string, rowcount int, parts []TableColumnData) *TableData {
+func (b *GuiBox) AddTableBox(name string, rowcount int, parts []TableColumnData) *TableData {
 	mh := new(TableData)
 
 	mh.RowCount    = rowcount
@@ -142,9 +142,9 @@ func AddTableBox(box *GuiBox, name string, rowcount int, parts []TableColumnData
 
 	// is this needed?
 	// gw.BoxMap[name] = box
-	mh.Box = box
+	mh.Box = b
 
-	box.UiBox.Append(table, true)
+	b.UiBox.Append(table, true)
 
 	return mh
 }
