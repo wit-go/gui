@@ -42,28 +42,14 @@ sections below for further details on formatting and configuration options.
 		groupNode1.AddComboBox("demoCombo2", "more 1", "more 2", "more 3")
 	}
 
-Configuration Options
-
-Configuration of the GUI is handled by fields in the ConfigType type.  For
-convenience, all of the top-level functions use a global state available
-via the gui.Config global.
-
-The following configuration options are available:
-	* Width
-		When creating a new window, this is the width
-
-	* Height
-		When creating a new window, this is the height
-
-	* Debug
-		When 'true' log more output
-
 Toolkit Usage
 
 Right now, this abstraction is built on top of the go package 'andlabs/ui'
 which does the cross platform support.
 The next step is to intent is to allow this to work directly against GTK and QT.
-It should be able to add Fyne, WASM, native macos & windows, android, etc.
+
+It should be able to add Fyne, WASM, native macos & windows, android and
+hopefully also things like libSDL, faiface/pixel, slint
 
 Errors
 

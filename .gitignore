@@ -1,3 +1,4 @@
 *.swp
 cmds/gui-example/gui-example
 cmds/gui-demo/gui-demo
+cmds/helloworld/helloworld

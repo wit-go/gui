@@ -9,7 +9,10 @@ import (
 
 	"github.com/andlabs/ui"
 	_ "github.com/andlabs/ui/winmanifest"
+
 )
+
+import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
 
 type Element int
 
@@ -39,8 +42,10 @@ func (s Element) String() string {
 	return "unknown"
 }
 
+// The Node is simply the name and the size of whatever GUI element exists
 type Node struct {
 	id     string
+
 	Name   string
 	Width  int
 	Height int
@@ -50,10 +55,15 @@ type Node struct {
 
 	window	*GuiWindow
 	box	*GuiBox
-	custom func(*Node)
+	custom    func(*Node)
+	OnChanged func(*Node)
+
+	Toolkit	*toolkit.Toolkit
 
 	uiControl *ui.Control
 	uiButton  *ui.Button
+	uiSlider  *ui.Slider
+	uiSpinbox *ui.Spinbox
 	uiWindow  *ui.Window
 	uiTab  *ui.Tab
 	uiBox  *ui.Box
@@ -69,28 +79,53 @@ func (n *Node) Window() *Node {
 }
 
 func (n *Node) Dump() {
-	log.Println("gui.Node.Dump() id         = ", n.id)
-	log.Println("gui.Node.Dump() Name       = ", n.Name)
-	log.Println("gui.Node.Dump() Width      = ", n.Width)
-	log.Println("gui.Node.Dump() Height     = ", n.Height)
+	IndentPrintln("id         = ", n.id)
+	IndentPrintln("Name       = ", n.Name)
+	IndentPrintln("Width      = ", n.Width)
+	IndentPrintln("Height     = ", n.Height)
 
 	if (n.parent == nil) {
-		log.Println("gui.Node.Dump() parent     = nil")
+		IndentPrintln("parent     = nil")
 	} else {
-		log.Println("gui.Node.Dump() parent     = ", n.parent.id)
+		IndentPrintln("parent     =", n.parent.id)
 	}
-	log.Println("gui.Node.Dump() children   = ", n.children)
+	if (n.children != nil) {
+		IndentPrintln("children   = ", n.children)
+	}
 
-	log.Println("gui.Node.Dump() window     = ", n.window)
-	log.Println("gui.Node.Dump() box        = ", n.box)
+	if (n.window != nil) {
+		IndentPrintln("window     = ", n.window)
+	}
+	if (n.window != nil) {
+		IndentPrintln("box        = ", n.box)
+	}
 
-	log.Println("gui.Node.Dump() uiWindow   = ", n.uiWindow)
-	log.Println("gui.Node.Dump() uiTab      = ", n.uiTab)
-	log.Println("gui.Node.Dump() uiBox      = ", n.uiBox)
-	log.Println("gui.Node.Dump() uiControl  = ", n.uiControl)
-	log.Println("gui.Node.Dump() uiButton   = ", n.uiButton)
+	if (n.window != nil) {
+		IndentPrintln("uiWindow   = ", n.uiWindow)
+	}
+	if (n.uiTab != nil) {
+		IndentPrintln("uiTab      = ", n.uiTab)
+	}
+	if (n.uiBox != nil) {
+		IndentPrintln("uiBox      = ", n.uiBox)
+	}
+	if (n.uiControl != nil) {
+		IndentPrintln("uiControl  = ", n.uiControl)
+	}
+	if (n.uiButton != nil) {
+		IndentPrintln("uiButton   = ", n.uiButton)
+	}
+	if (n.custom != nil) {
+		IndentPrintln("custom     = ", n.custom)
+	}
+	if (n.OnChanged != nil) {
+		IndentPrintln("OnChanged  = ", n.OnChanged)
+	}
 	if (n.id == "") {
-		panic("gui.Node.Dump() id == nil")
+		// Node structs should never have a nil id.
+		// I probably shouldn't panic here, but this is just to check the sanity of
+		// the gui package to make sure it's not exiting
+		panic("gui.Node.Dump() id == nil TODO: make a unigue id here in the golang gui library")
 	}
 }
 
@@ -130,11 +165,16 @@ func (n *Node) List() {
 
 var listChildrenParent *Node
 var listChildrenDepth int = 0
+var defaultPadding = "  "
+
+func IndentPrintln(a ...interface{}) {
+	indentPrintln(listChildrenDepth, defaultPadding, a)
+}
 
 func indentPrintln(depth int, format string, a ...interface{}) {
 	var tabs string
 	for i := 0; i < depth; i++ {
-		tabs = tabs + "\t"
+		tabs = tabs + format
 	}
 
 	// newFormat := tabs + strconv.Itoa(depth) + " " + format
@@ -143,7 +183,7 @@ func indentPrintln(depth int, format string, a ...interface{}) {
 }
 
 func (n *Node) ListChildren(dump bool) {
-	indentPrintln(listChildrenDepth, "\t", n.id, n.Width, n.Height, n.Name)
+	indentPrintln(listChildrenDepth, defaultPadding, n.id, n.Width, n.Height, n.Name)
 
 	if (dump == true) {
 		n.Dump()

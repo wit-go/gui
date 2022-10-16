@@ -58,6 +58,12 @@ func DeleteWindow(name string) {
 	}
 }
 
+/*
+generic function to create a newnode structure on the tree of nodes
+
+If the parent is null, it tries to find out where it should go otherwise
+it creates a new window or new tab depending on the toolkit or OS
+*/
 func makeNode(parent *Node, title string, x int, y int) *Node {
 	var node Node
 	node.Name = title

@@ -10,4 +10,9 @@ update:
 	go get -v -t -u ./...
 
 examples:
-	make -C gui-example
+	make -C cmds/helloworld
+	make -C cmds/gui-example
+	make -C cmds/gui-demo
+
+doc:
+	godoc -v

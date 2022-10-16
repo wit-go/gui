@@ -7,7 +7,9 @@ import (
 	"github.com/andlabs/ui"
 	"golang.org/x/image/font"
 
-	_ "github.com/andlabs/ui/winmanifest"
+	// "github.com/davecgh/go-spew/spew"
+
+	// _ "github.com/andlabs/ui/winmanifest"
 )
 
 //
@@ -24,11 +26,12 @@ type GuiConfig struct {
 	Height     int
 	Exit       func(*Node)
 
-	Debug       bool
-	DebugNode   bool
-	DebugTabs   bool
-	DebugTable  bool
-	DebugWindow bool
+	Debug        bool
+	DebugNode    bool
+	DebugTabs    bool
+	DebugTable   bool
+	DebugWindow  bool
+	DebugToolkit bool
 
 	depth      int
 	counter    int  // used to make unique ID's
@@ -171,6 +174,8 @@ func (b *GuiBox) SetNode(n *Node) {
 
 func (b *GuiBox) Append(child ui.Control, x bool) {
 	if b.UiBox == nil {
+		// spew.Dump(b)
+		b.Dump()
 		panic("GuiBox.Append() can't work. UiBox == nil")
 		return
 	}

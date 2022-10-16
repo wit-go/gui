@@ -192,6 +192,7 @@ func (n *Node) AddComboBox(title string, s ...string) *Node {
 		return n
 	}
 
+	newNode := n.AddNode(title)
 	ecbox := ui.NewEditableCombobox()
 
 	for id, name := range s {
@@ -202,18 +203,27 @@ func (n *Node) AddComboBox(title string, s ...string) *Node {
 	ecbox.OnChanged(func(*ui.EditableCombobox) {
 		test := ecbox.Text()
 		log.Println("node.Name = '" + n.Name + "' text for '" + title + "' is now: '" + test + "'")
+		log.Println("need to call node.OnChanged() here")
+		if (newNode.OnChanged == nil) {
+			log.Println("node.OnChanged() is nil")
+			log.Println("need to call node.OnChanged() here", newNode.OnChanged)
+			newNode.Dump()
+		} else {
+			log.Println("need to call node.OnChanged() here", newNode.OnChanged)
+			newNode.OnChanged(newNode)
+		}
 	})
 
 	box.Append(ecbox, false)
 
-	newNode := n.AddNode(title)
 	newNode.uiText = ecbox
 	return newNode
 }
 
-func (n *Node) OnChanged(f func()) {
-	f()
-}
+//func (n *Node) OnChanged(f func()) {
+//	log.Println("not doing shit here in Node.OnChanged()")
+//	f()
+//}
 
 func (n *Node) GetText() string {
 	if (n.uiText == nil) {
