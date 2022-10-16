@@ -19,14 +19,15 @@ type Toolkit struct {
 
 	OnChanged func(*Toolkit)
 
-	uiControl *ui.Control
+	uiBox     *ui.Box
 	uiButton  *ui.Button
+	uiControl *ui.Control
+	uiLabel   *ui.Label
 	uiSlider  *ui.Slider
 	uiSpinbox *ui.Spinbox
-	uiWindow  *ui.Window
 	uiTab     *ui.Tab
-	uiBox     *ui.Box
 	uiText    *ui.EditableCombobox
+	uiWindow  *ui.Window
 }
 
 func (t *Toolkit) Value() int {

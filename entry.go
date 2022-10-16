@@ -3,8 +3,12 @@ package gui
 import "log"
 // import "fmt"
 
+import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
+
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
+
+
 import "github.com/davecgh/go-spew/spew"
 
 // functions for handling text entry boxes
@@ -18,7 +22,9 @@ func (n *Node) NewLabel(text string) *Node {
 	newNode := makeNode(n, text, 333, 334)
 	newNode.Dump()
 
-	n.Append(newNode)
+	t := toolkit.NewLabel(n.uiBox, text)
+	newNode.Toolkit = t
+
 	return newNode
 }
 
