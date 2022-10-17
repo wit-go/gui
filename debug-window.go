@@ -14,7 +14,7 @@ var names = make([]string, 100)
 var nodeNames = make([]string, 100)
 
 func DebugWindow() {
-	Config.Title = "DebugWindow()"
+	Config.Title = "git.wit.org/wit/gui debug"
 	node := NewWindow()
 	node.DebugTab("WIT GUI Debug Tab")
 }
