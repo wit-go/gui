@@ -4,6 +4,21 @@ import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
+func ToolkitDemoWindow() {
+	var w *Node
+	log.Println("ToolkitDemoWindow() START")
+
+	Config.Title = "Demo the GUI Toolkit"
+	Config.Width = 640
+	Config.Height = 480
+	Config.Exit = StandardClose
+	w = NewWindow()
+
+	w.DemoAndlabsUiTab("ran AddDemoAndlabsUiTab()")
+
+	log.Println("ToolkitDemoWindow() END")
+}
+
 // This will create a tab in a window using direct
 // calls to andlabs/ui. This can be used to bypass
 // the obvuscation added in this package if it is desired
