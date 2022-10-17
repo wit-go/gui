@@ -4,11 +4,11 @@ import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-func ToolkitDemoWindow() {
+func AndlabsUiDemoWindow() {
 	var w *Node
 	log.Println("ToolkitDemoWindow() START")
 
-	Config.Title = "Demo the GUI Toolkit"
+	Config.Title = "Demo andlabs/ui Toolkit"
 	Config.Width = 640
 	Config.Height = 480
 	Config.Exit = StandardClose
