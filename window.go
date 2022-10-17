@@ -195,6 +195,7 @@ func NewWindow() *Node {
 	title := Config.Title
 	w     := Config.Width
 	h     := Config.Height
+	f     := Config.Exit
 
 	var n *Node
 	n = mapWindow(nil, nil, title, w, h)
@@ -204,7 +205,6 @@ func NewWindow() *Node {
 	n.uiNewWindow(box.Name, w, h)
 	window := n.uiWindow
 
-	f := Config.Exit
 	ui.OnShouldQuit(func() bool {
 		log.Println("createWindow().Destroy() on node.Name =", n.Name)
 		if (f != nil) {

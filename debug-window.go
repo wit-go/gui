@@ -2,8 +2,6 @@ package gui
 
 import (
 	"log"
-	// "fmt"
-	"strconv"
 
 	"github.com/andlabs/ui"
 	_ "github.com/andlabs/ui/winmanifest"
@@ -240,17 +238,6 @@ func makeWindowDebug() *ui.Box {
 		node := Data.findId(nodeNames[y])
 		if (node != nil) {
 			node.DebugTab("added this DebugTab")
-		}
-	})
-
-	n1 = addButton(vbox, "Node.DemoAndlabsUiTab")
-	n1.OnClicked(func(*ui.Button) {
-		y := nodeCombo.Selected()
-		log.Println("y =", y)
-		log.Println("nodeNames[y] =", nodeNames[y])
-		node := Data.findId(nodeNames[y])
-		if (node != nil) {
-			node.DemoAndlabsUiTab("ran gui.AddDemoAndlabsUiTab() " + strconv.Itoa(Config.counter))
 		}
 	})
 
