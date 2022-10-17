@@ -1,7 +1,8 @@
 package gui
 
 import "log"
-import "time"
+// import "time"
+import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
 
 func NewStandardWindow(title string) *Node {
 	log.Println("NewStandardWindow() creating", title)
@@ -13,19 +14,23 @@ func NewStandardWindow(title string) *Node {
 	return NewWindow()
 }
 func ToolkitDemoWindow() {
-	var w, t, g *Node
+	var w, d *Node
+	var tk *toolkit.Toolkit
 
 	w = NewStandardWindow("Demo the GUI Toolkit")
 
-	// w.DemoAndlabsUiTab("ran AddDemoAndlabsUiTab()")
-	t = w.AddTab("Set time delay", nil)
-	g = t.AddGroup("nanoseconds")
+	d = w.makeNode("demo", 767, 676 + Config.counter)
+	d.Name = "demo"
 
-	s := g.NewSlider("t", 2, 80)
-	s.OnChanged = func (td *Node) {
-		t :=  time.Duration(s.Int())
-		log.Println("ToolkitDemoWindow() OnChanged() delay =", t);
+	tk = toolkit.DemoNumbersPage(w.uiWindow)
+	tk.OnChanged = func(t *toolkit.Toolkit) {
+		log.Println("toolkit.NewSlider() value =", t.Value())
+		if (d.OnChanged != nil) {
+			log.Println("toolkit.Demo() running node.OnChanged")
+			d.OnChanged(d)
+		}
 	}
+	d.Toolkit = tk
 
 	log.Println("ToolkitDemoWindow() END")
 }
