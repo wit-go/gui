@@ -31,7 +31,7 @@ func GolangDebugWindow() {
 
 
 	///////////////////////////////  Column DEBUG GOLANG   //////////////////////
-	g := t.AddGroup("GO Language")
+	g := t.NewGroup("GO Language")
 
 	g.AddButton("runtime.Stack()", func (*Node) {
 		log.Println("\tSTART")

@@ -38,7 +38,7 @@ sections below for further details on formatting and configuration options.
 	func addDemoTab(n *gui.Node, title string) {
 		newNode := n.AddTab(title, nil)
 
-		groupNode1 := newNode.AddGroup("group 1")
+		groupNode1 := newNode.NewGroup("group 1")
 		groupNode1.AddComboBox("demoCombo2", "more 1", "more 2", "more 3")
 	}
 

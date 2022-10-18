@@ -20,6 +20,7 @@ func DemoNumbersPage(w *ui.Window) *Toolkit {
 	t.uiBox = makeNumbersPage()
 	t.uiBox.SetPadded(true)
 	w.SetChild(t.uiBox)
+	w.SetTitle("Internal demo of andlabs/ui toolkit")
 
 	if (DebugToolkit) {
 		log.Println("gui.Toolbox.DemoNumbersPage()")

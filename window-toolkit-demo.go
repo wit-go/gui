@@ -17,7 +17,7 @@ func ToolkitDemoWindow() {
 	var w, d *Node
 	var tk *toolkit.Toolkit
 
-	w = NewStandardWindow("Demo the GUI Toolkit")
+	w = NewStandardWindow("Demo of the GUI Toolkit")
 
 	d = w.makeNode("demo", 767, 676 + Config.counter)
 	d.Name = "demo"

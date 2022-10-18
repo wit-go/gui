@@ -9,9 +9,12 @@ update:
 	git pull
 	go get -v -t -u ./...
 
-examples:
+examples: examples-gui-demo examples-helloworld
+
+examples-helloworld:
 	make -C cmds/helloworld
-	make -C cmds/gui-example
+
+examples-gui-demo:
 	make -C cmds/gui-demo
 
 doc:

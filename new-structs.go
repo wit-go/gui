@@ -62,6 +62,7 @@ type Node struct {
 
 	uiControl *ui.Control
 	uiButton  *ui.Button
+	uiGroup   *ui.Group
 	uiSlider  *ui.Slider
 	uiSpinbox *ui.Spinbox
 	uiWindow  *ui.Window
@@ -96,11 +97,11 @@ func (n *Node) Dump() {
 	if (n.window != nil) {
 		IndentPrintln("window     = ", n.window)
 	}
-	if (n.window != nil) {
+	if (n.box != nil) {
 		IndentPrintln("box        = ", n.box)
 	}
 
-	if (n.window != nil) {
+	if (n.uiWindow != nil) {
 		IndentPrintln("uiWindow   = ", n.uiWindow)
 	}
 	if (n.uiTab != nil) {
@@ -108,6 +109,10 @@ func (n *Node) Dump() {
 	}
 	if (n.uiBox != nil) {
 		IndentPrintln("uiBox      = ", n.uiBox)
+	}
+	if (n.Toolkit != nil) {
+		IndentPrintln("Toolkit    = ", n.Toolkit)
+		n.Toolkit.Dump()
 	}
 	if (n.uiControl != nil) {
 		IndentPrintln("uiControl  = ", n.uiControl)

@@ -23,12 +23,18 @@ type Toolkit struct {
 	uiButton  *ui.Button
 	uiControl *ui.Control
 	uiEntry   *ui.Entry
+	uiGroup   *ui.Group
 	uiLabel   *ui.Label
 	uiSlider  *ui.Slider
 	uiSpinbox *ui.Spinbox
 	uiTab     *ui.Tab
 	uiText    *ui.EditableCombobox
 	uiWindow  *ui.Window
+}
+
+func (t *Toolkit) Dump() {
+	log.Println("gui.Toolkit.Dump() uiBox   =", t.uiBox)
+	log.Println("gui.Toolkit.Dump() uiGroup =", t.uiGroup)
 }
 
 func (t *Toolkit) GetText() string {

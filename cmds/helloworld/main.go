@@ -26,8 +26,9 @@ func initGUI() {
 func addDemoTab(n *gui.Node, title string) {
 	newNode := n.AddTab(title, nil)
 
-	groupNode1 := newNode.AddGroup("group 1")
-	groupNode1.AddComboBox("demoCombo2", "more 1", "more 2", "more 3")
+	g := newNode.NewGroup("group 1")
+	// g.Dump()
+	g.AddComboBox("demoCombo2", "more 1", "more 2", "more 3")
 }
 
 func myDefaultExit(n *gui.Node) {
