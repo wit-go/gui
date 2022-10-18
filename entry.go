@@ -54,5 +54,9 @@ func (n *Node) SetText(value string) error {
 		n.uiButton.SetText(value)
 		return nil
 	}
+	if (n.uiWindow != nil) {
+		n.uiWindow.SetTitle(value)
+		return nil
+	}
 	return nil
 }
