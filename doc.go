@@ -1,13 +1,22 @@
 /*
 Package gui implements a abstraction layer for Go visual elements in
-a cross platform way.
+a cross platform and library independent way. (hopefully this is will work)
 
 A quick overview of the features, some general design guidelines
 and principles for how this package should generally work:
 
-	* GUI elements are stored in a tree of nodes
-	* When in doubt, it's ok to guess. We will return something close.
-	* It tries to make your code simple
+Definitions:
+
+	* Toolkit: the underlying library (MacOS gui, Windows gui, gtk, qt, etc)
+	* Node: A binary tree of all the underlying GUI toolkit elements
+
+Principles:
+
+	* Make code using this package simple to use
+	* When in doubt, search upward in the binary tree
+	* It's ok to guess. We will return something close.
+	* Hide complexity internally here
+	* Isolate the GUI toolkit
 
 Quick Start
 
@@ -22,11 +31,11 @@ sections below for further details on formatting and configuration options.
 	)
 
 	func main() {
-		gui.Main(initGUI)
+		gui.Main(helloworld)
 	}
 
 	// This initializes the first window
-	func initGUI() {
+	func helloworld() {
 		gui.Config.Title = "Hello World golang wit/gui Window"
 		gui.Config.Width = 640
 		gui.Config.Height = 480
@@ -42,7 +51,7 @@ sections below for further details on formatting and configuration options.
 		groupNode1.AddComboBox("demoCombo2", "more 1", "more 2", "more 3")
 	}
 
-Toolkit Usage
+Toolkits (hopefully more than one will work)
 
 Right now, this abstraction is built on top of the go package 'andlabs/ui'
 which does the cross platform support.
@@ -62,6 +71,13 @@ Debugging
 
 To dump variables with full newlines, indentation, type, and pointer
 information this uses spew.Dump()
+
+Bugs
+
+"The author's idea of friendly may differ to that of many other people."
+
+-- manpage quote from the excellent minimalistic window manager 'evilwm'
+
 
 */
 package gui

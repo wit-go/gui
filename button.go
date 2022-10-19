@@ -1,7 +1,7 @@
 package gui
 
 import "log"
-import "reflect"
+// import "reflect"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 // import "github.com/davecgh/go-spew/spew"
@@ -53,24 +53,33 @@ func guiButtonClick(button *GuiButton) {
 }
 
 func (n *Node) AddButton(name string, custom func(*Node)) *Node {
-	if (n.uiBox == nil) {
-		log.Println("gui.Node.AppendButton() filed node.UiBox == nil")
+	if (n.Toolkit == nil) {
+		log.Println("gui.Node.AppendButton() filed node.Toolkit == nil")
+		panic("gui.Node.AppendButton() filed node.Toolkit == nil")
 		return n
 	}
+	/*
 	button := ui.NewButton(name)
 	log.Println("reflect.TypeOF(uiBox) =", reflect.TypeOf(n.uiBox))
 	log.Println("reflect.TypeOF(uiButton) =", reflect.TypeOf(button))
 	n.uiBox.Append(button, false)
 	n.uiButton = button
+	*/
 
-	newNode := n.makeNode(name, 888, 888 + Config.counter)
-	newNode.uiButton = button
+	newNode := n.New(name)
+	newNode.Toolkit = n.Toolkit.NewButton(name)
+	newNode.Toolkit.Custom = func() {
+		log.Println("gui.AppendButton() Button Clicked. Running custom()")
+		custom(newNode)
+	}
 	newNode.custom = custom
 
+	/*
 	button.OnClicked(func(*ui.Button) {
 		log.Println("gui.AppendButton() Button Clicked. Running custom()")
 		custom(newNode)
 	})
+	*/
 	// panic("AppendButton")
 	// time.Sleep(3 * time.Second)
 	return newNode
@@ -104,6 +113,10 @@ func (n *Node) CreateButton(custom func(*GuiButton), name string, values interfa
 
 	box.Append(newB.B, false)
 	return newNode
+}
+
+func (n *Node) NewButton(box *GuiBox, custom func(*GuiButton), name string, values interface {}) *GuiButton {
+	return CreateButton(box, custom, name, values)
 }
 
 func CreateButton(box *GuiBox, custom func(*GuiButton), name string, values interface {}) *GuiButton {

@@ -2,13 +2,15 @@ package gui
 
 import (
 	"log"
-	"fmt"
 	"strconv"
 
-	"github.com/andlabs/ui"
-	_ "github.com/andlabs/ui/winmanifest"
+//	"github.com/andlabs/ui"
+//	_ "github.com/andlabs/ui/winmanifest"
 )
 
+import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
+
+/*
 func MessageWindow(gw *GuiWindow, msg1 string, msg2 string) {
 	ui.MsgBox(gw.UiWindow, msg1, msg2)
 }
@@ -16,6 +18,7 @@ func MessageWindow(gw *GuiWindow, msg1 string, msg2 string) {
 func ErrorWindow(gw *GuiWindow, msg1 string, msg2 string) {
 	ui.MsgBoxError(gw.UiWindow, msg1, msg2)
 }
+*/
 
 func DeleteWindow(name string) {
 	log.Println("gui.DeleteWindow() START name =", name)
@@ -58,96 +61,8 @@ func DeleteWindow(name string) {
 	}
 }
 
-/*
-generic function to create a newnode structure on the tree of nodes
-
-If the parent is null, it tries to find out where it should go otherwise
-it creates a new window or new tab depending on the toolkit or OS
-*/
-func makeNode(parent *Node, title string, x int, y int) *Node {
-	var node Node
-	node.Name = title
-	node.Width = x
-	node.Height = y
-
-	id := Config.prefix + strconv.Itoa(Config.counter)
-	Config.counter += 1
-	node.id = id
-
-	// panic("gui.makeNode() START")
-	if (parent == nil) {
-		if (Data.NodeMap[title] != nil) {
-			log.Println("Duplicate window name =", title)
-			// TODO: just change the 'title' to something unique
-			panic(fmt.Sprintf("Duplicate window name = %s\n", title))
-			return nil
-		}
-		// panic("gui.makeNode() before NodeMap()")
-		Data.NodeMap[title] = &node
-		Data.NodeArray = append(Data.NodeArray, &node)
-		Data.NodeSlice = append(Data.NodeSlice, &node)
-		// panic("gui.makeNode() after NodeMap()")
-		return &node
-	} else {
-		// panic("gui.makeNode() before Append()")
-		parent.Append(&node)
-		// panic("gui.makeNode() after Append()")
-	}
-	node.parent = parent
-	return &node
-}
-
-func (parent *Node) makeNode(title string, x int, y int) *Node {
-	var node Node
-	node.Name = title
-	node.Width = x
-	node.Height = y
-
-	id := Config.prefix + strconv.Itoa(Config.counter)
-	Config.counter += 1
-	node.id = id
-
-	parent.Append(&node)
-	node.parent = parent
-	return &node
-}
-
-func (n *Node) AddNode(title string) *Node {
-	var node Node
-	node.Name = title
-	node.Width = n.Width
-	node.Height = n.Height
-
-	id := Config.prefix + strconv.Itoa(Config.counter)
-	Config.counter += 1
-	node.id = id
-
-	n.Append(&node)
-	node.parent = n
-	return &node
-}
-
-func (n *Node) uiNewWindow(title string, x int, y int) {
-	w := ui.NewWindow(title, x, y, false)
-	w.SetBorderless(false)
-	f := Config.Exit
-	w.OnClosing(func(*ui.Window) bool {
-		if (Config.Debug) {
-			log.Println("ui.Window().OnClosing()")
-		}
-		if (f != nil) {
-			f(n)
-		}
-		return true
-	})
-	w.SetMargined(true)
-	w.Show()
-	n.uiWindow = w
-	// w.node = &node
-	return
-}
-
-func mapWindow(parent *Node, window *ui.Window, title string, x int, y int) *Node {
+// func mapWindowOld(parent *Node, window *ui.Window, title string, x int, y int) *Node {
+func mapWindow(title string, w int, h int) *Node {
 	log.Println("gui.WindowMap START title =", title)
 	if Data.WindowMap[title] != nil {
 		log.Println("Data.WindowMap[title] already exists title =", title)
@@ -161,10 +76,10 @@ func mapWindow(parent *Node, window *ui.Window, title string, x int, y int) *Nod
 	}
 
 	var newGuiWindow GuiWindow
-	newGuiWindow.Width = x
-	newGuiWindow.Height = y
+	newGuiWindow.Width = w
+	newGuiWindow.Height = h
 	newGuiWindow.Name = title
-	newGuiWindow.UiWindow = window
+	// newGuiWindow.UiWindow = window
 
 	newGuiWindow.BoxMap = make(map[string]*GuiBox)
 	newGuiWindow.EntryMap = make(map[string]*GuiEntry)
@@ -175,9 +90,8 @@ func mapWindow(parent *Node, window *ui.Window, title string, x int, y int) *Nod
 	box.Window = &newGuiWindow
 	box.Name = title
 
-	node := makeNode(parent, title, x, y)
+	node := addNode(title, w, h)
 	node.box = &box
-	node.uiWindow = window
 	box.node = node
 
 	newGuiWindow.BoxMap["jcarrInitTest"] = &box
@@ -192,19 +106,30 @@ func mapWindow(parent *Node, window *ui.Window, title string, x int, y int) *Nod
 // cross platform, must pass UI changes into the OS threads (that is
 // my guess).
 func NewWindow() *Node {
+	var n *Node
+	var t *toolkit.Toolkit
+
 	title := Config.Title
 	w     := Config.Width
 	h     := Config.Height
 	f     := Config.Exit
 
-	var n *Node
-	n = mapWindow(nil, nil, title, w, h)
+	n = mapWindow(title, w, h)
+	n.custom = f
 	box := n.box
 	log.Println("gui.NewWindow() title = box.Name =", box.Name)
 
-	n.uiNewWindow(box.Name, w, h)
+	t = toolkit.NewWindow(title, w, h)
+	t.Custom = func () {
+		log.Println("GOT TO MY CUSTOM EXIT!!!! for window name:", box.Name)
+		f(n)
+	}
+	n.Toolkit = t
+	n.uiWindow = t.UiWindowBad // this is temporary
+
 	window := n.uiWindow
 
+	/*
 	ui.OnShouldQuit(func() bool {
 		log.Println("createWindow().Destroy() on node.Name =", n.Name)
 		if (f != nil) {
@@ -212,6 +137,7 @@ func NewWindow() *Node {
 		}
 		return true
 	})
+	*/
 
 	box.Window.UiWindow = window
 	if(n.uiWindow == nil) {

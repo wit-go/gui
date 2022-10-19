@@ -13,14 +13,21 @@ func NewStandardWindow(title string) *Node {
 	Config.Exit = StandardClose
 	return NewWindow()
 }
-func ToolkitDemoWindow() {
+
+//
+// This creates a window that shows how the toolkit works
+// internally using it's raw unchanged code for the toolkit itself
+// 
+// This is a way to test and see if the toolkit is working at all
+// right now it shows the andlabs/ui/DemoNumbersPage()
+//
+func DemoToolkitWindow() {
 	var w, d *Node
 	var tk *toolkit.Toolkit
 
 	w = NewStandardWindow("Demo of the GUI Toolkit")
 
-	d = w.makeNode("demo", 767, 676 + Config.counter)
-	d.Name = "demo"
+	d = w.New("demo")
 
 	tk = toolkit.DemoNumbersPage(w.uiWindow)
 	tk.OnChanged = func(t *toolkit.Toolkit) {

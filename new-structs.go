@@ -2,8 +2,6 @@ package gui
 
 import (
 	"log"
-	"fmt"
-//	"reflect"
 
 	// "github.com/davecgh/go-spew/spew"
 
@@ -240,77 +238,4 @@ func (n *Node) ListChildren(dump bool) {
 		listChildrenDepth -= 1
 	}
 	return
-}
-
-// The parent Node needs to be the raw Window
-// The 'stuff' Node needs to be the contents of the tab
-//
-// This function should make a new node with the parent and
-// the 'stuff' Node as a child
-func (n *Node) AddTabNode(title string, b *GuiBox) *Node {
-	var newNode *Node
-	parent := n
-
-	newNode = parent.makeNode(title, 444, 400 + Config.counter)
-	newNode.uiTab = parent.uiTab
-	newNode.box = b
-
-	if (Config.DebugNode) {
-		fmt.Println("")
-		log.Println("parent:")
-		parent.Dump()
-
-		fmt.Println("")
-		log.Println("newNode:")
-		newNode.Dump()
-	}
-
-	if (newNode.uiTab == nil) {
-		log.Println("wit/gui/ AddTabNode() Something went wrong tab == nil")
-		// TODO: try to find the tab or window and make them if need be
-		return newNode
-	}
-	newNode.uiTab.Append(title, b.UiBox)
-
-	return newNode
-}
-
-func (n *Node) AddTab(title string, uiC *ui.Box) *Node {
-	parent := n
-	log.Println("gui.Node.AddTab() START name =", title)
-	if parent.uiWindow == nil {
-		parent.Dump()
-		log.Println("gui.Node.AddTab() ERROR ui.Window == nil")
-		return nil
-	}
-	if parent.box == nil {
-		parent.Dump()
-		panic("gui.AddTab() ERROR box == nil")
-	}
-	if parent.uiTab == nil {
-		inittab := ui.NewTab() // no, not that 'inittab'
-		parent.uiWindow.SetChild(inittab)
-		parent.uiWindow.SetMargined(true)
-		parent.uiTab = inittab
-
-		// parent.Dump()
-		// panic("gui.AddTab() ERROR uiTab == nil")
-	}
-
-	tab := parent.uiTab
-	parent.uiWindow.SetMargined(true)
-
-	if (uiC == nil) {
-		hbox := ui.NewHorizontalBox()
-		hbox.SetPadded(true)
-		uiC = hbox
-	}
-	tab.Append(title, uiC)
-
-	newNode := parent.makeNode(title, 555, 600 + Config.counter)
-	newNode.uiTab = tab
-	newNode.uiBox = uiC
-	// panic("gui.AddTab() after makeNode()")
-	tabSetMargined(newNode.uiTab)
-	return newNode
 }

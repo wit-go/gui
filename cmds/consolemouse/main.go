@@ -4,29 +4,27 @@ package main
 import 	(
 	"os"
 	"log"
+//	"time"
 	"git.wit.org/wit/gui"
 )
 
+import toolkit "git.wit.org/wit/gui/toolkit/gocui"
+
+var w *gui.Node
+
 func main() {
-	f, err := os.OpenFile("/tmp/guilogfile", os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
-	if err != nil {
-		log.Fatalf("error opening file: %v", err)
-	}
-	defer f.Close()
+	go gui.Main(initGUI)
 
-	log.SetOutput(f)
-	log.Println("This is a test log entry")
-
-	gui.Main(initGUI)
+	configureGogui()
+	startGogui()
 }
 
 // This initializes the first window
 func initGUI() {
-	var w *gui.Node
 	gui.Config.Title = "Hello World golang wit/gui Window"
 	gui.Config.Width = 640
 	gui.Config.Height = 480
-	gui.Config.Exit = myDefaultExit
+	gui.Config.Exit = myExit
 
 	w = gui.NewWindow()
 	w.Dump()
@@ -52,12 +50,12 @@ func addDemoTab(window *gui.Node, title string) {
         log.Println("addDemoTab() g.Dump")
 	g.Dump()
 	g.Toolkit.Dump()
-	// os.Exit(0)
+	// myExit(nil)
 	g.AddComboBox("demoCombo2", "more 1", "more 2", "more 3")
 }
 
-func myDefaultExit(n *gui.Node) {
+func myExit(n *gui.Node) {
         log.Println("You can Do exit() things here")
+	toolkit.Exit()
 	os.Exit(0)
 }
-

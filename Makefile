@@ -9,7 +9,10 @@ update:
 	git pull
 	go get -v -t -u ./...
 
-examples: examples-gui-demo examples-helloworld
+examples: examples-consolemouse examples-helloworld examples-gui-demo
+
+examples-consolemouse:
+	make -C cmds/consolemouse
 
 examples-helloworld:
 	make -C cmds/helloworld
@@ -18,4 +21,4 @@ examples-gui-demo:
 	make -C cmds/gui-demo
 
 doc:
-	godoc -v
+	GO111MODULE="off" godoc -v

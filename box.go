@@ -1,6 +1,7 @@
 package gui
 
 import "log"
+import "os"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
@@ -15,7 +16,7 @@ func (n *Node) AddBox(axis int, name string) *Node {
 	}
 
 	// make a new box & a new node
-	newNode := n.makeNode(name, 111, 100 + Config.counter)
+	newNode := n.New(name)
 	newNode.box = newBox
 	Config.counter += 1
 
@@ -53,12 +54,21 @@ func VerticalBreak(box *GuiBox) {
 }
 
 func (n *Node) AddComboBox(title string, s ...string) *Node {
-	box := n.uiBox
-	if (box == nil) {
-		return n
+	if (n.Toolkit == nil) {
+		log.Println("AddComboBox.Toolkit is nil", title, s)
+		n.Dump()
+		os.Exit(0)
 	}
+	if (n.uiBox == nil) {
+		log.Println("AddComboBox.uiBox is nil", title, s)
+		n.Toolkit.Dump()
+		n.uiBox = n.Toolkit.GetBox()
+		// os.Exit(0)
+		// return n
+	}
+	box := n.uiBox
 
-	newNode := n.AddNode(title)
+	newNode := n.New(title)
 	ecbox := ui.NewEditableCombobox()
 
 	for id, name := range s {

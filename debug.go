@@ -15,14 +15,15 @@ import (
 	TODO: add configuration triggers on what to dump out
 	TODO: allow this to be sent to /var/log, syslogd, systemd's journalctl, etc
 */
-func WatchGUI() {
+/*
+func watchGUI() {
 	count := 0
 
 	for {
 		if count > 20 {
 			log.Println("Sleep() in watchGUI()")
 			if Config.Debug {
-				DumpBoxes()
+				dumpBoxes()
 			}
 			count = 0
 		}
@@ -30,14 +31,15 @@ func WatchGUI() {
 		time.Sleep(200 * time.Millisecond)
 	}
 }
+*/
 
-func DumpWindows() {
+func dumpWindows() {
 	for name, _ := range Data.WindowMap {
 		log.Println("gui.DumpWindows() window =", name)
 	}
 }
 
-func DumpMap() {
+func dumpMap() {
 	for name, window := range Data.WindowMap {
 		log.Println("gui.DumpBoxes() MAP: ", name)
 		log.Println("gui.DumpBoxes()     BOXES:", name)
@@ -47,7 +49,7 @@ func DumpMap() {
 	}
 }
 
-func DumpBoxes() {
+func dumpBoxes() {
 	for name, window := range Data.WindowMap {
 		log.Println("gui.DumpBoxes() MAP: ", name)
 		if window.TabNumber == nil {

@@ -1,3 +1,4 @@
 *.swp
 cmds/gui-demo/gui-demo
 cmds/helloworld/helloworld
+cmds/consolemouse/consolemouse

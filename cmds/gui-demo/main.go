@@ -22,7 +22,7 @@ func main() {
 
 // This initializes the first window
 func initGUI() {
-	gui.ToolkitDemoWindow()
+	gui.DemoToolkitWindow()
 }
 
 // This demonstrates how to properly interact with the GUI
@@ -33,24 +33,22 @@ func watchGUI() {
 		log.Println("Waiting", i, "seconds")
 		i += 1
 		time.Sleep(1 * time.Second)
-		if i == 4 {
+		if i == 2 {
 			log.Println("Opening a Debug Window via the gui.Queue()")
 			gui.Config.Width = 800
 			gui.Config.Height = 300
-			gui.Config.Exit = myDebugExit
+			gui.Config.Exit = myExit
 			gui.Queue(gui.DebugWindow)
+			time.Sleep(1 * time.Second)
+			gui.Queue(gui.DebugTab)
 		}
 	}
 }
 
+// TODO: myExit isn't getting used anymore
 func myExit(n *gui.Node) {
 	log.Println()
 	log.Println("Entered myExit() on node.Name =", n.Name)
 	log.Println()
 	os.Exit(0)
-}
-
-func myDebugExit(n *gui.Node) {
-	log.Println("Entered myDebugExit() on node.Name =", n.Name)
-	log.Println("Don't actually os.Exit()")
 }

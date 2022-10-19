@@ -1,5 +1,6 @@
 run: build
-	./helloworld
+	./consolemouse
+	reset
 
 build-release:
 	go get -v -u -x .

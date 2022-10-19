@@ -14,7 +14,7 @@ func NewSpinbox(b *ui.Box, name string, x int, y int) *Toolkit {
 
 	if (b == nil) {
 		log.Println("gui.ToolboxNode.NewSpinbox() node.UiBox == nil. I can't add a range UI element without a place to put it")
-		return &t
+		return nil
 	}
 	spin := ui.NewSpinbox(x, y)
 	t.uiSpinbox = spin

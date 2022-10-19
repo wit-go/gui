@@ -26,12 +26,12 @@ func GolangDebugWindow() {
 	Config.Exit = StandardClose
 	w = NewWindow()
 
-	t = w.AddTab("Debug Tab", nil)
+	t = w.NewTab("Debug Tab")
 	log.Println("debugWindow() START")
 
 
 	///////////////////////////////  Column DEBUG GOLANG   //////////////////////
-	g := t.NewGroup("GO Language")
+	g := t.AddGroup("GO Language")
 
 	g.AddButton("runtime.Stack()", func (*Node) {
 		log.Println("\tSTART")

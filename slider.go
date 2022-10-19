@@ -5,20 +5,22 @@ import "log"
 import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
 
 func (n *Node) NewSlider(name string, x int, y int) *Node {
-	// make new node here
-	log.Println("toolkit.NewSlider", x, y)
+	var newT *toolkit.Toolkit
+	var sNode *Node
 
-	newNode := n.makeNode(name, 767, 676 + Config.counter)
-	newNode.Name = name
+	log.Println("toolkit.NewSlider() START", name)
 
-	t := toolkit.NewSlider(n.uiBox, name, x, y)
-	t.OnChanged = func(t *toolkit.Toolkit) {
-		log.Println("toolkit.NewSlider() value =", t.Value())
-		if (newNode.OnChanged != nil) {
-			newNode.OnChanged(newNode)
-		}
+	if (n.Toolkit == nil) {
+		log.Println("toolkit.NewSlider() Toolkit == nil")
+		panic("Toolkit should never be nil")
 	}
-	newNode.Toolkit = t
 
-	return newNode
+	// make a *Node with a *toolkit.Group
+	sNode = n.New(name + " part1")
+	newT = n.Toolkit.NewSlider(name, x, y)
+	newT.Name = name
+	sNode.Toolkit = newT
+	sNode.Dump()
+
+	return sNode
 }

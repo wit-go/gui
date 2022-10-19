@@ -9,6 +9,10 @@ import "github.com/davecgh/go-spew/spew"
 
 var DebugToolkit bool = false
 
+var streachy = true
+var border = true
+
+
 // stores the raw toolkit internals
 type Toolkit struct {
 	id     string
@@ -18,8 +22,12 @@ type Toolkit struct {
 	Height int
 
 	OnChanged func(*Toolkit)
+	OnExit    func(*Toolkit)
+
+	Custom  func()
 
 	uiBox     *ui.Box
+	uiBox2    *ui.Box	// temporary hack while implementing tabs
 	uiButton  *ui.Button
 	uiControl *ui.Control
 	uiEntry   *ui.Entry
@@ -30,11 +38,7 @@ type Toolkit struct {
 	uiTab     *ui.Tab
 	uiText    *ui.EditableCombobox
 	uiWindow  *ui.Window
-}
-
-func (t *Toolkit) Dump() {
-	log.Println("gui.Toolkit.Dump() uiBox   =", t.uiBox)
-	log.Println("gui.Toolkit.Dump() uiGroup =", t.uiGroup)
+	UiWindowBad  *ui.Window
 }
 
 func (t *Toolkit) GetText() string {
@@ -68,6 +72,31 @@ func (t *Toolkit) SetText(s string) bool {
 	return false
 }
 
+func sanity(t *Toolkit) bool {
+	if (DebugToolkit) {
+		log.Println("gui.Toolkit.Value() Enter")
+		scs := spew.ConfigState{MaxDepth: 1}
+		scs.Dump(t)
+	}
+	if (t.uiEntry == nil) {
+		if (DebugToolkit) {
+			log.Println("gui.Toolkit.Value() =", t.uiEntry.Text)
+		}
+		return false
+	}
+	return true
+}
+
+func (t *Toolkit) SetValue(i int) bool {
+	log.Println("gui.Toolkit.SetValue() START")
+	if (sanity(t)) {
+		return false
+	}
+	t.Dump()
+	// panic("got to toolkit.SetValue")
+	return true
+}
+
 func (t *Toolkit) Value() int {
 	if (DebugToolkit) {
 		log.Println("gui.Toolkit.Value() Enter")
@@ -92,4 +121,29 @@ func (t *Toolkit) Value() int {
 	}
 	log.Println("gui.Toolkit.Value() Could not find a ui element to get a value from")
 	return 0
+}
+
+func (t *Toolkit) Dump() {
+	log.Println("gui.Toolkit.Dump()", t.Name, t.Width, t.Height)
+	if (t.uiBox != nil) {
+		log.Println("gui.Toolkit.Dump() uiBox   =", t.uiBox)
+	}
+	if (t.uiButton != nil) {
+		log.Println("gui.Toolkit.Dump() uiButton =", t.uiButton)
+	}
+	if (t.uiWindow != nil) {
+		log.Println("gui.Toolkit.Dump() uiWindow =", t.uiWindow)
+	}
+	if (t.uiTab != nil) {
+		log.Println("gui.Toolkit.Dump() uiTab =", t.uiTab)
+	}
+	if (t.uiGroup != nil) {
+		log.Println("gui.Toolkit.Dump() uiGroup =", t.uiGroup)
+	}
+	if (t.uiSlider != nil) {
+		log.Println("gui.Toolkit.Dump() uiSlider =", t.uiSlider)
+	}
+	if (t.OnExit != nil) {
+		log.Println("gui.Toolkit.Dump() uiExit =", t.OnExit)
+	}
 }

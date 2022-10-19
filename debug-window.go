@@ -2,6 +2,8 @@ package gui
 
 import (
 	"log"
+//	"time"
+//	"os"
 
 	"github.com/andlabs/ui"
 	_ "github.com/andlabs/ui/winmanifest"
@@ -11,23 +13,31 @@ import (
 var names = make([]string, 100)
 var nodeNames = make([]string, 100)
 
+var bugWin *Node
+/*
+	Creates a window helpful for debugging this package
+*/
 func DebugWindow() {
-	Config.Title = "git.wit.org/wit/gui debug"
-	Config.Width = 640
-	Config.Height = 480
+	Config.Title = "git.wit.org/wit/gui debug fixme"
+	Config.Width = 300
+	Config.Height = 200
 	Config.Exit = StandardClose
-	node := NewWindow()
-	node.DebugTab("WIT GUI Debug Tab")
+	bugWin = NewWindow()
+	bugWin.DebugTab("does this also work?")
+	// node.DebugTab("WIT GUI Debug Tab")
 }
 
 // TODO: remove this crap
 // What does this actually do?
 // It populates the nodeNames in a map. No, not a map, an array.
 // What is the difference again? (other than one being in order and a predefined length)
-func addNodeName(c *ui.Combobox, s string, id string) {
+func addNodeNameBAD(c *ui.Combobox, s string, id string) {
 	c.Append(s)
-	nodeNames[y] = id
-	y = y + 1
+	// nodeNames[y] = id
+	// y = y + 1
+	log.Println("addNodeName:", s)
+	// time.Sleep(1 * time.Second)
+	// os.Exit(0)
 }
 
 func makeWindowDebug() *ui.Box {
@@ -42,7 +52,7 @@ func makeWindowDebug() *ui.Box {
 		if (Config.Debug) {
 			log.Println("range Data.WindowMap() name =", name)
 		}
-		addName(cbox, name)
+		addNameBAD(cbox, name)
 	}
 	cbox.SetSelected(0)
 
@@ -83,8 +93,8 @@ func makeWindowDebug() *ui.Box {
 		}
 		scs := spew.ConfigState{MaxDepth: 1}
 		scs.Dump(gw)
-		log.Println("gui.DumpBoxes()\tWindow.UiTab     =", gw.UiTab)
-		log.Println("gui.DumpBoxes()\tWindow.TabNumber =", *gw.TabNumber)
+		log.Println("gui.dumpBoxes()\tWindow.UiTab     =", gw.UiTab)
+		log.Println("gui.dumpBoxes()\tWindow.TabNumber =", *gw.TabNumber)
 		gw.UiTab.SetMargined(*gw.TabNumber, true)
 	})
 
@@ -141,17 +151,17 @@ func makeWindowDebug() *ui.Box {
 
 	dump3 := addButton(vbox, "Dump Windows")
 	dump3.OnClicked(func(*ui.Button) {
-		DumpWindows()
+		dumpWindows()
 	})
 
 	dump2 := addButton(vbox, "Dump Boxes")
 	dump2.OnClicked(func(*ui.Button) {
-		DumpBoxes()
+		dumpBoxes()
 	})
 
 	dump1 := addButton(vbox, "Dump MAP")
 	dump1.OnClicked(func(*ui.Button) {
-		DumpMap()
+		dumpMap()
 	})
 
 	/////////////////////////////////////////////////////
@@ -159,12 +169,15 @@ func makeWindowDebug() *ui.Box {
 	nodeCombo := ui.NewCombobox()
 
 	for name, node := range Data.NodeMap {
-		if (Config.Debug) {
+		// if (Config.Debug) {
 			log.Println("range Data.NodeMap() name =", name)
-		}
+		// }
 		tmp := node.id + " (" + name + ")"
-		addNodeName(nodeCombo, tmp, node.id)
+		addNodeNameBAD(nodeCombo, tmp, node.id)
 	}
+//	scs := spew.ConfigState{MaxDepth: 1}
+//	scs.Dump(Data.NodeMap)
+//	os.Exit(0)
 	nodeCombo.SetSelected(0)
 
 	nodeBox.Append(nodeCombo, false)
@@ -245,14 +258,17 @@ func makeWindowDebug() *ui.Box {
 }
 
 // TODO: remove this crap
-var x int = 0
-var y int = 0
+// var x int = 0
+// var y int = 0
 
 // TODO: remove this crap
-func addName(c *ui.Combobox, s string) {
+func addNameBAD(c *ui.Combobox, s string) {
 	c.Append(s)
-	names[x] = s
-	x = x + 1
+	// names[x] = s
+	// x = x + 1
+	log.Println("addName:", s)
+	// time.Sleep(1 * time.Second)
+	// os.Exit(0)
 }
 
 func addGroup(b *ui.Box, name string) *ui.Box {
@@ -300,7 +316,7 @@ func dumpBox(s string) {
 		if window.UiTab != nil {
 			pages := window.UiTab.NumPages()
 			log.Println("gui.DumpBoxes()\tWindow.UiTab.NumPages() =", pages)
-			tabSetMargined(window.UiTab)
+			// fixme: tabSetMargined(window.UiTab)
 			if Config.Debug {
 				scs := spew.ConfigState{MaxDepth: 2}
 				scs.Dump(window.UiTab)
@@ -320,26 +336,22 @@ func addButton(box *ui.Box, name string) *ui.Button {
 	return button
 }
 
-func (n *Node) DebugTab(title string) {
-	newNode := n.AddTab(title, makeWindowDebug())
-	if (Config.DebugNode) {
-		newNode.Dump()
-	}
-	tabSetMargined(newNode.uiTab)
+func DebugTab() {
+	bugWin.DebugTab("does this work?")
 }
 
-// This sets _all_ the tabs to Margin = true
-//
-// TODO: do proper tab tracking (will be complicated). low priority
-func tabSetMargined(tab *ui.Tab) {
-	if (Config.DebugTabs) {
-		log.Println("tabSetMargined() IGNORE THIS")
-	}
-	c := tab.NumPages()
-	for i := 0; i < c; i++ {
-		if (Config.DebugTabs) {
-			log.Println("tabSetMargined() i =", i)
-		}
-		tab.SetMargined(i, true)
-	}
+func (n *Node) DebugTab(title string) *Node {
+	var newN *Node
+	var b *ui.Box
+	// var uiBox *ui.Box
+
+	// time.Sleep(1 * time.Second)
+	newN = n.AddTabNew(title + " fix makeWindowDebug")
+	newN.Toolkit.Dump()
+	b = makeWindowDebug()
+	newN.Toolkit.SetTabBox(b)
+	// FIXME: make sure this is getting run to add padding: tabSetMargined(newN.uiTab)
+	// os.Exit(0)
+
+	return newN
 }
