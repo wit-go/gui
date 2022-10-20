@@ -10,6 +10,8 @@ import (
 
 // This initializes the first window
 //
+// BUG: THIS PROGRAM DOESN'T EXIT PROPERLY (NOT REALLY A BUG)
+//
 // Then starts a goroutine to demonstrate how to
 // inject things into the GUI
 func main() {

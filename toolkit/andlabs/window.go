@@ -2,7 +2,6 @@ package toolkit
 
 import (
 	"log"
-	"os"
 
 	"github.com/andlabs/ui"
 	_ "github.com/andlabs/ui/winmanifest"
@@ -33,8 +32,6 @@ func NewWindow(title string, x int, y int) *Toolkit {
 			t.Custom()
 		}
 		log.Println("ui.Window().OnExit() Toolkit.OnExit is nil")
-		t.Dump()
-		os.Exit(0)
 		return true
 	})
 	w.SetMargined(true)
@@ -42,4 +39,14 @@ func NewWindow(title string, x int, y int) *Toolkit {
 	t.uiWindow = w
 	t.UiWindowBad = w // deprecate this as soon as possible
 	return &t
+}
+
+func (t *Toolkit) SetWindowTitle(title string) {
+	log.Println("toolkit NewWindow", t.Name, "title", title)
+	win := t.uiWindow
+	if (win != nil) {
+		win.SetTitle(title)
+	} else {
+		log.Println("Setting the window title", title)
+	}
 }

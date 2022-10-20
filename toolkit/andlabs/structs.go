@@ -30,6 +30,7 @@ type Toolkit struct {
 	uiBox2    *ui.Box	// temporary hack while implementing tabs
 	uiButton  *ui.Button
 	uiControl *ui.Control
+	uiCombobox *ui.Combobox
 	uiEntry   *ui.Entry
 	uiGroup   *ui.Group
 	uiLabel   *ui.Label
@@ -39,6 +40,13 @@ type Toolkit struct {
 	uiText    *ui.EditableCombobox
 	uiWindow  *ui.Window
 	UiWindowBad  *ui.Window
+
+	// used as a counter to work around limitations of widgets like combobox
+	// this is probably fucked up and in many ways wrong because of unsafe goroutine threading
+	// but it's working for now due to the need for need for a correct interaction layer betten toolkits
+	c int
+	val map[int]string
+	text   string
 }
 
 func (t *Toolkit) GetText() string {
@@ -52,6 +60,12 @@ func (t *Toolkit) GetText() string {
 			log.Println("gui.Toolkit.Value() =", t.uiEntry.Text)
 		}
 		return t.uiEntry.Text()
+	}
+	if (t.uiCombobox != nil) {
+		if (DebugToolkit) {
+			log.Println("gui.Toolkit.GetText() =", t.text)
+		}
+		return t.text
 	}
 	return ""
 }
@@ -131,6 +145,9 @@ func (t *Toolkit) Dump() {
 	if (t.uiButton != nil) {
 		log.Println("gui.Toolkit.Dump() uiButton =", t.uiButton)
 	}
+	if (t.uiCombobox != nil) {
+		log.Println("gui.Toolkit.Dump() uiCombobox =", t.uiCombobox)
+	}
 	if (t.uiWindow != nil) {
 		log.Println("gui.Toolkit.Dump() uiWindow =", t.uiWindow)
 	}
@@ -144,6 +161,11 @@ func (t *Toolkit) Dump() {
 		log.Println("gui.Toolkit.Dump() uiSlider =", t.uiSlider)
 	}
 	if (t.OnExit != nil) {
-		log.Println("gui.Toolkit.Dump() uiExit =", t.OnExit)
+		log.Println("gui.Toolkit.Dump() OnExit =", t.OnExit)
 	}
+	if (t.Custom != nil) {
+		log.Println("gui.Toolkit.Dump() Custom =", t.Custom)
+	}
+	log.Println("gui.Toolkit.Dump() c =", t.c)
+	log.Println("gui.Toolkit.Dump() val =", t.val)
 }

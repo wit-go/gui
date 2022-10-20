@@ -25,21 +25,21 @@ func (t *Toolkit) AddTab(name string) *Toolkit {
 	var w *ui.Window
 	var newt *Toolkit
 
-	log.Println("gui.Toolbox.AddTab() sleep 3")
+	log.Println("gui.toolkit.AddTab() sleep 3")
 
 	w = t.uiWindow
 	if (w == nil) {
-		log.Println("gui.Toolbox.NewTab() node.UiWindow == nil. I can't add a tab without a window")
+		log.Println("gui.toolkit.NewTab() node.UiWindow == nil. I can't add a tab without a window")
 		return nil
 	}
 
 	if (t.uiTab == nil) {
 		// this means you have to make a new tab
-		log.Println("gui.Toolbox.NewTab() GOOD. This should be the first tab:", name)
+		log.Println("gui.toolkit.NewTab() GOOD. This should be the first tab:", name)
 		newt = newTab(w, name)
 		t.uiTab = newt.uiTab
 	} else {
-		log.Println("gui.Toolbox.NewTab() GOOD. This should be an additional tab:", name)
+		log.Println("gui.toolkit.NewTab() GOOD. This should be an additional tab:", name)
 		newt = t.appendTab(name)
 		// this means you have to append a tab
 	}
@@ -88,17 +88,17 @@ func tabSetMargined(tab *ui.Tab) {
 }
 
 func newTab(w *ui.Window, name string) *Toolkit {
-	log.Println("gui.Toolbox.NewTab() ADD", name)
+	log.Println("gui.toolkit.NewTab() ADD", name)
 	var t Toolkit
 
 	if (w == nil) {
-		log.Println("gui.Toolbox.NewTab() node.UiWindow == nil. I can't add a tab without a window")
-		log.Println("gui.Toolbox.NewTab() node.UiWindow == nil. I can't add a tab without a window")
-		log.Println("gui.Toolbox.NewTab() node.UiWindow == nil. I can't add a tab without a window")
+		log.Println("gui.toolkit.NewTab() node.UiWindow == nil. I can't add a tab without a window")
+		log.Println("gui.toolkit.NewTab() node.UiWindow == nil. I can't add a tab without a window")
+		log.Println("gui.toolkit.NewTab() node.UiWindow == nil. I can't add a tab without a window")
 		time.Sleep(1 * time.Second)
 		return nil
 	}
-	log.Println("gui.Toolbox.AddTab() START name =", name)
+	log.Println("gui.toolkit.AddTab() START name =", name)
 	// time.Sleep(2 * time.Second)
 	tab := ui.NewTab()
 	w.SetMargined(true)
@@ -117,17 +117,17 @@ func newTab(w *ui.Window, name string) *Toolkit {
 }
 
 func (t *Toolkit) appendTab(name string) *Toolkit {
-	log.Println("gui.Toolbox.NewTab() ADD", name)
+	log.Println("gui.toolkit.NewTab() ADD", name)
 	var newT Toolkit
 
 	if (t.uiWindow == nil) {
-		log.Println("gui.Toolbox.NewTab() node.UiWindow == nil. I can't add a tab without a window")
-		log.Println("gui.Toolbox.NewTab() node.UiWindow == nil. I can't add a tab without a window")
-		log.Println("gui.Toolbox.NewTab() node.UiWindow == nil. I can't add a tab without a window")
+		log.Println("gui.toolkit.NewTab() node.UiWindow == nil. I can't add a tab without a window")
+		log.Println("gui.toolkit.NewTab() node.UiWindow == nil. I can't add a tab without a window")
+		log.Println("gui.toolkit.NewTab() node.UiWindow == nil. I can't add a tab without a window")
 		time.Sleep(1 * time.Second)
 		return nil
 	}
-	log.Println("gui.Toolbox.AddTab() START name =", name)
+	log.Println("gui.toolkit.AddTab() START name =", name)
 
 	hbox := ui.NewHorizontalBox() // this makes everything go along the horizon
 	// hbox := ui.NewVerticalBox()

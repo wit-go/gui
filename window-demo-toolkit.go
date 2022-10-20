@@ -2,7 +2,7 @@ package gui
 
 import "log"
 // import "time"
-import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
+// import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
 
 func NewStandardWindow(title string) *Node {
 	log.Println("NewStandardWindow() creating", title)
@@ -22,14 +22,15 @@ func NewStandardWindow(title string) *Node {
 // right now it shows the andlabs/ui/DemoNumbersPage()
 //
 func DemoToolkitWindow() {
-	var w, d *Node
-	var tk *toolkit.Toolkit
+	var w *Node
 
 	w = NewStandardWindow("Demo of the GUI Toolkit")
 
-	d = w.New("demo")
+//	d = w.New("demo")
 
-	tk = toolkit.DemoNumbersPage(w.uiWindow)
+	w.toolkit.DemoNumbersPage()
+	/*
+	tk = w.Toolkit.DemoNumbersPage()
 	tk.OnChanged = func(t *toolkit.Toolkit) {
 		log.Println("toolkit.NewSlider() value =", t.Value())
 		if (d.OnChanged != nil) {
@@ -38,6 +39,7 @@ func DemoToolkitWindow() {
 		}
 	}
 	d.Toolkit = tk
+	*/
 
 	log.Println("ToolkitDemoWindow() END")
 }

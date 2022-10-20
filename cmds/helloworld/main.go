@@ -37,13 +37,12 @@ func initGUI() {
 func addDemoTab(window *gui.Node, title string) {
 	var newNode, g *gui.Node
 
-	newNode = window.AddTab(title, nil)
+	newNode = window.NewTab(title)
         log.Println("addDemoTab() newNode.Dump")
         log.Println("addDemoTab() newNode.Dump")
         log.Println("addDemoTab() newNode.Dump")
         log.Println("addDemoTab() newNode.Dump")
 	newNode.Dump()
-	newNode.Toolkit.Dump()
 
 	g = newNode.NewGroup("group 1")
         log.Println("addDemoTab() g.Dump")
@@ -51,9 +50,11 @@ func addDemoTab(window *gui.Node, title string) {
         log.Println("addDemoTab() g.Dump")
         log.Println("addDemoTab() g.Dump")
 	g.Dump()
-	g.Toolkit.Dump()
 	// os.Exit(0)
-	g.AddComboBox("demoCombo2", "more 1", "more 2", "more 3")
+	dd := g.NewDropdown("demoCombo2")
+	dd.AddDropdown("more 1")
+	dd.AddDropdown("more 2")
+	dd.AddDropdown("more 3")
 }
 
 func myDefaultExit(n *gui.Node) {

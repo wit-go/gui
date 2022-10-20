@@ -14,9 +14,10 @@ func BlankWindow(w *ui.Window) *ui.Box {
 	return hbox
 }
 
-func DemoNumbersPage(w *ui.Window) *Toolkit {
-	var t Toolkit
+func (t *Toolkit) DemoNumbersPage() {
+	var w *ui.Window
 
+	w = t.uiWindow
 	t.uiBox = makeNumbersPage()
 	t.uiBox.SetPadded(true)
 	w.SetChild(t.uiBox)
@@ -27,8 +28,6 @@ func DemoNumbersPage(w *ui.Window) *Toolkit {
 		scs := spew.ConfigState{MaxDepth: 1}
 		scs.Dump(t)
 	}
-
-	return &t
 }
 
 /*

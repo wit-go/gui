@@ -28,13 +28,6 @@ func addNode(title string, w int, h int) *Node {
 	id := Config.prefix + strconv.Itoa(Config.counter)
 	Config.counter += 1
 	n.id = id
-	/*
-	if (Data.NodeMap[title] != nil) {
-		panic(fmt.Sprintf("Duplicate window name = %s\n", title))
-	} else {
-		Data.NodeMap[title] = &n
-	}
-	*/
 
 	return &n
 }

@@ -20,12 +20,12 @@ func (n *Node) Int() int {
 		scs.Dump(n)
 	}
 
-	if (n.Toolkit == nil) {
+	if (n.toolkit == nil) {
 		log.Println("gui.Node.Int() for toolkit struct = nil")
 		return 0
 	}
 
-	i := n.Toolkit.Value()
+	i := n.toolkit.Value()
 	return i
 }
 
@@ -36,11 +36,11 @@ func (n *Node) Value() int {
 
 func (n *Node) SetValue(i int) {
 	log.Println("gui.SetValue() START")
-	if (n.Toolkit == nil) {
+	if (n.toolkit == nil) {
 		log.Println("gui.Node.SetValue() for toolkit struct = nil")
 		panic("SetValue failed")
 	}
 	n.Dump()
-	n.Toolkit.Dump()
-	n.Toolkit.SetValue(i)
+	n.toolkit.Dump()
+	n.toolkit.SetValue(i)
 }

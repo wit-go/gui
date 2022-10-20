@@ -13,7 +13,7 @@ func StandardClose(n *Node) {
 	// origlog.Println("Should Exit Here")
 	// closed = true
 	log.Println("")
-	log.Println("STANDARD WINDOW CLOSE")
+	log.Println("STANDARD WINDOW CLOSE. Should not exit app.")
 	log.Println("")
 }
 
