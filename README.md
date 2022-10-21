@@ -68,7 +68,7 @@ func addTab(w *gui.Node, title string) {
 
 ## Debian Build
 
-This worked on debian sid on 2022/10/22
+This worked on debian sid on 2022/10/20
 I didn't record the dependances needed
 
 ```go
@@ -143,11 +143,15 @@ right now it shows the andlabs/ui/DemoNumbersPage()
 
 This creates a window that shows how this package works
 
+### func [GetDebugToolkit](/structs.go#L28)
+
+`func GetDebugToolkit() bool`
+
 ### func [GolangDebugWindow](/window-golang-debug.go#L20)
 
 `func GolangDebugWindow()`
 
-### func [IndentPrintln](/structs.go#L161)
+### func [IndentPrintln](/structs.go#L191)
 
 `func IndentPrintln(a ...interface{})`
 
@@ -166,13 +170,21 @@ other goroutines. This is due to the nature of how
 Linux, MacOS and Windows work (they all work differently. suprise. surprise.)
 For example: gui.Queue(NewWindow())
 
+### func [SetDebugToolkit](/structs.go#L24)
+
+`func SetDebugToolkit(s bool)`
+
+### func [ShowDebugValues](/structs.go#L32)
+
+`func ShowDebugValues()`
+
 ### func [StandardClose](/window-golang-debug.go#L12)
 
 `func StandardClose(n *Node)`
 
 ## Types
 
-### type [GuiConfig](/structs.go#L24)
+### type [GuiConfig](/structs.go#L43)
 
 `type GuiConfig struct { ... }`
 
@@ -182,7 +194,7 @@ For example: gui.Queue(NewWindow())
 var Config GuiConfig
 ```
 
-### type [Node](/structs.go#L79)
+### type [Node](/structs.go#L98)
 
 `type Node struct { ... }`
 
@@ -240,7 +252,7 @@ func main() {
 You get a window
 ```
 
-### type [Widget](/structs.go#L49)
+### type [Widget](/structs.go#L68)
 
 `type Widget int`
 
