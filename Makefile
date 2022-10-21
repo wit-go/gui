@@ -1,8 +1,9 @@
-all:
+all: README.md
 	@echo
 	@echo "make examples     # will run all the examples"
 	@echo "make update       # full git update"
 	@echo
+	make -C cmds/helloworld
 
 # should update every go dependancy (?)
 update:
@@ -25,6 +26,5 @@ doc:
 
 
 # GO111MODULE=on go install github.com/posener/goreadme/cmd/goreadme@latest (worked Oct 20 2022)
-readme:
-	# goreadme > README.md 
+README.md: doc.go
 	goreadme -factories -types -functions -variabless > README.md 
