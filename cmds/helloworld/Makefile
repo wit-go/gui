@@ -4,6 +4,7 @@ run: build
 build-release:
 	go get -v -u -x .
 	go build
+	./helloworld
 
 build:
 	GO111MODULE="off" go get -v -x .

@@ -1,4 +1,5 @@
 /*
+
 Package gui implements a abstraction layer for Go visual elements in
 a cross platform and library independent way. (hopefully this is will work)
 
@@ -17,7 +18,8 @@ Principles:
 	* It's ok to guess. We will return something close.
 	* Hide complexity internally here
 	* Isolate the GUI toolkit
-	* Function names should follow https://en.wikipedia.org/wiki/Graphical_widget
+	* Function names should follow [Wikipedia Graphical widget]
+
 
 Quick Start
 
@@ -28,31 +30,51 @@ sections below for further details on formatting and configuration options.
 	package main
 
 	import 	(
+		"log"
 		"git.wit.org/wit/gui"
 	)
 
+	var window *gui.Node // This is the beginning of the binary tree of widgets
+
+	// go will sit here until the window exits
 	func main() {
 		gui.Main(helloworld)
 	}
 
-	// This initializes the first window
+	// This initializes the first window and 2 tabs
 	func helloworld() {
 		gui.Config.Title = "Hello World golang wit/gui Window"
 		gui.Config.Width = 640
 		gui.Config.Height = 480
-		node1 := gui.NewWindow()
-		addDemoTab(node1, "A Simple Tab Demo")
-		addDemoTab(node1, "A Second Tab")
+
+		window := gui.NewWindow()
+		addTab(window, "A Simple Tab Demo")
+		addTab(window, "A Second Tab")
 	}
 
-	func addDemoTab(n *gui.Node, title string) {
-		newNode := n.AddTab(title, nil)
+	func addTab(w *gui.Node, title string) {
+		tab := w.NewTab(title)
 
-		groupNode1 := newNode.NewGroup("group 1")
-		groupNode1.AddComboBox("demoCombo2", "more 1", "more 2", "more 3")
+		group := tab.NewGroup("foo bar")
+		group.NewButton("hello", func() {
+			log.Println("world")
+		})
 	}
 
-Toolkits (hopefully more than one will work)
+
+Debian Build
+
+This worked on debian sid on 2022/10/20
+I didn't record the dependances needed
+
+	GO111MODULE="off" go get -v -t -u git.wit.org/wit/gui
+	cd ~/go/src/git.wit.org/wit/gui/cmds/helloworld/
+	GO111MODULE="off" go build -v -x
+	./helloworld
+
+Toolkits
+
+The goal is to design something that will work with more than one.
 
 Right now, this abstraction is built on top of the go package 'andlabs/ui'
 which does the cross platform support.
@@ -60,6 +82,8 @@ The next step is to intent is to allow this to work directly against GTK and QT.
 
 It should be able to add Fyne, WASM, native macos & windows, android and
 hopefully also things like libSDL, faiface/pixel, slint
+
+[Wikipedia Graphical widget]: https://en.wikipedia.org/wiki/Graphical_widget
 
 Errors
 
@@ -79,6 +103,7 @@ Bugs
 
 -- manpage quote from the excellent minimalistic window manager 'evilwm'
 
+External References
 
 */
 package gui

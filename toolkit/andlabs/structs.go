@@ -7,11 +7,42 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 import "github.com/davecgh/go-spew/spew"
 
-var DebugToolkit bool = false
+var defaultBehavior bool = true
 
-var streachy = true
-var border = true
+var bookshelf bool // do you want things arranged in the box like a bookshelf or a stack?
+var canvas bool // if set to true, the windows are a raw canvas
+var menubar bool // for windows
+var stretchy bool // expand things like buttons to the maximum size
+var padded bool // add space between things like buttons
+var margin bool // add space around the frames of windows
 
+var DebugToolkit bool
+
+func setDefaultBehavior(s bool) {
+	defaultBehavior = s
+	if (defaultBehavior) {
+		log.Println("Setting this toolkit to use the default behavior.")
+		log.Println("This is the 'guessing' part as defined by the wit/gui 'Principles'. Refer to the docs.")
+		stretchy = false
+		padded = true
+		menubar = true
+		margin = true
+		canvas = false
+		bookshelf = true // 99% of the time, things make a vertical stack of objects
+
+		DebugToolkit = false
+	} else {
+		log.Println("This toolkit is set to ignore the default behavior.")
+	}
+}
+
+func SetDebugToolkit (s bool) {
+	DebugToolkit = s
+}
+
+func GetDebugToolkit () bool {
+	return DebugToolkit
+}
 
 // stores the raw toolkit internals
 type Toolkit struct {
@@ -31,7 +62,9 @@ type Toolkit struct {
 	uiButton  *ui.Button
 	uiControl *ui.Control
 	uiCombobox *ui.Combobox
+	uiCheckbox *ui.Checkbox
 	uiEntry   *ui.Entry
+	uiMultilineEntry   *ui.MultilineEntry
 	uiGroup   *ui.Group
 	uiLabel   *ui.Label
 	uiSlider  *ui.Slider
@@ -49,7 +82,18 @@ type Toolkit struct {
 	text   string
 }
 
+func (t *Toolkit) String() string {
+	return t.GetText()
+}
+
+func forceDump(t *Toolkit) {
+	DebugToolkit = true
+	t.Dump()
+	DebugToolkit = false
+}
+
 func (t *Toolkit) GetText() string {
+	forceDump(t)
 	if (DebugToolkit) {
 		log.Println("gui.Toolkit.Text() Enter")
 		scs := spew.ConfigState{MaxDepth: 1}
@@ -57,9 +101,18 @@ func (t *Toolkit) GetText() string {
 	}
 	if (t.uiEntry != nil) {
 		if (DebugToolkit) {
-			log.Println("gui.Toolkit.Value() =", t.uiEntry.Text)
+			log.Println("gui.Toolkit.Value() =", t.uiEntry.Text())
 		}
 		return t.uiEntry.Text()
+	}
+	if (t.uiMultilineEntry != nil) {
+		if (DebugToolkit) {
+			log.Println("gui.Toolkit.Value() =", t.uiMultilineEntry.Text())
+		}
+		text := t.uiMultilineEntry.Text()
+		log.Println("gui.Toolkit.Value() text =", text)
+		t.text = text
+		return text
 	}
 	if (t.uiCombobox != nil) {
 		if (DebugToolkit) {
@@ -81,6 +134,13 @@ func (t *Toolkit) SetText(s string) bool {
 			log.Println("gui.Toolkit.Value() =", t.uiEntry.Text)
 		}
 		t.uiEntry.SetText(s)
+		return true
+	}
+	if (t.uiMultilineEntry != nil) {
+		if (DebugToolkit) {
+			log.Println("gui.Toolkit.Value() =", t.uiMultilineEntry.Text)
+		}
+		t.uiMultilineEntry.SetText(s)
 		return true
 	}
 	return false
@@ -138,34 +198,47 @@ func (t *Toolkit) Value() int {
 }
 
 func (t *Toolkit) Dump() {
-	log.Println("gui.Toolkit.Dump()", t.Name, t.Width, t.Height)
+	if ! DebugToolkit {
+		return
+	}
+	log.Println("gui.Toolkit.Dump() Name  = ", t.Name, t.Width, t.Height)
 	if (t.uiBox != nil) {
-		log.Println("gui.Toolkit.Dump() uiBox   =", t.uiBox)
+		log.Println("gui.Toolkit.Dump() uiBox      =", t.uiBox)
 	}
 	if (t.uiButton != nil) {
-		log.Println("gui.Toolkit.Dump() uiButton =", t.uiButton)
+		log.Println("gui.Toolkit.Dump() uiButton    =", t.uiButton)
 	}
 	if (t.uiCombobox != nil) {
-		log.Println("gui.Toolkit.Dump() uiCombobox =", t.uiCombobox)
+		log.Println("gui.Toolkit.Dump() uiCombobox  =", t.uiCombobox)
 	}
 	if (t.uiWindow != nil) {
-		log.Println("gui.Toolkit.Dump() uiWindow =", t.uiWindow)
+		log.Println("gui.Toolkit.Dump() uiWindow    =", t.uiWindow)
 	}
 	if (t.uiTab != nil) {
-		log.Println("gui.Toolkit.Dump() uiTab =", t.uiTab)
+		log.Println("gui.Toolkit.Dump() uiTab       =", t.uiTab)
 	}
 	if (t.uiGroup != nil) {
-		log.Println("gui.Toolkit.Dump() uiGroup =", t.uiGroup)
+		log.Println("gui.Toolkit.Dump() uiGroup     =", t.uiGroup)
+	}
+	if (t.uiEntry != nil) {
+		log.Println("gui.Toolkit.Dump() uiEntry     =", t.uiEntry)
+	}
+	if (t.uiMultilineEntry != nil) {
+		log.Println("gui.Toolkit.Dump() uiMultilineEntry =", t.uiMultilineEntry)
 	}
 	if (t.uiSlider != nil) {
-		log.Println("gui.Toolkit.Dump() uiSlider =", t.uiSlider)
+		log.Println("gui.Toolkit.Dump() uiSlider    =", t.uiSlider)
+	}
+	if (t.uiCheckbox != nil) {
+		log.Println("gui.Toolkit.Dump() uiCheckbox  =", t.uiCheckbox)
 	}
 	if (t.OnExit != nil) {
-		log.Println("gui.Toolkit.Dump() OnExit =", t.OnExit)
+		log.Println("gui.Toolkit.Dump() OnExit      =", t.OnExit)
 	}
 	if (t.Custom != nil) {
-		log.Println("gui.Toolkit.Dump() Custom =", t.Custom)
+		log.Println("gui.Toolkit.Dump() Custom      =", t.Custom)
 	}
-	log.Println("gui.Toolkit.Dump() c =", t.c)
-	log.Println("gui.Toolkit.Dump() val =", t.val)
+	log.Println("gui.Toolkit.Dump() c         =", t.c)
+	log.Println("gui.Toolkit.Dump() val       =", t.val)
+	log.Println("gui.Toolkit.Dump() text      =", t.text)
 }

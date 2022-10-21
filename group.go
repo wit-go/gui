@@ -17,15 +17,16 @@ func (n *Node) NewGroup(name string) *Node {
 	}
 
 	// make a *Node with a *toolkit.Group
-	gNode = n.New(name + " part1")
+	gNode = n.New(name)
 	newT = n.toolkit.NewGroup(name)
 	gNode.toolkit = newT
-	log.Println("################## gNode #######   ", name)
 	gNode.Dump()
 
 	return gNode
 }
 
+/*
 func (n *Node) AddGroup(title string) *Node {
 	return n.NewGroup(title + " deprecated AddGroup")
 }
+*/

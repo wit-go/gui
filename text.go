@@ -1,7 +1,7 @@
 package gui
 
 import "log"
-import "errors"
+// import "errors"
 import "regexp"
 
 // functions for handling text related GUI elements
@@ -17,10 +17,17 @@ func (n *Node) NewLabel(text string) *Node {
 	return newNode
 }
 
-func (n *Node) SetText(value string) error {
-	log.Println("gui.SetText() value =", value)
-	panic("redo SetText()")
-	return errors.New("nothing found for gui.Node.SetText()")
+func (n *Node) SetText(str string) bool {
+	log.Println("gui.SetText() value =", str)
+	if (n.toolkit == nil) {
+		return false
+	}
+
+	return n.toolkit.SetText(str)
+}
+
+func (n *Node) GetText() string {
+	return n.toolkit.GetText()
 }
 
 /*
@@ -55,8 +62,4 @@ func normalizeInt(s string) string {
 	clean := reg.ReplaceAllString(s, "")
 	log.Println("normalizeInt() s =", clean)
 	return clean
-}
-
-func (n *Node) GetText() string {
-	return n.toolkit.GetText()
 }

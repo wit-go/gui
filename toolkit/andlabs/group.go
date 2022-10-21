@@ -19,11 +19,11 @@ func (t Toolkit) NewGroup(title string) *Toolkit {
 
 	log.Println("gui.Toolbox.NewGroup() create", title)
 	g := ui.NewGroup(title)
-	g.SetMargined(true)
-	t.uiBox.Append(g, streachy)
+	g.SetMargined(margin)
+	t.uiBox.Append(g, stretchy)
 
 	hbox := ui.NewVerticalBox()
-	hbox.SetPadded(true)
+	hbox.SetPadded(padded)
 	g.SetChild(hbox)
 
 	newt.uiGroup = g

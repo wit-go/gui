@@ -23,7 +23,7 @@ func (t Toolkit) NewSpinner(title string, x int, y int) *Toolkit {
 	s := ui.NewSpinbox(x, y)
 	newt.uiSpinbox = s
 	newt.uiBox = t.uiBox
-	t.uiBox.Append(s, false)
+	t.uiBox.Append(s, stretchy)
 
 	s.OnChanged(func(s *ui.Spinbox) {
 		i := s.Value()

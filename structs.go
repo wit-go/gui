@@ -2,7 +2,7 @@ package gui
 
 import (
 	"log"
-
+	"reflect"
 )
 
 import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
@@ -21,6 +21,25 @@ import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
 
 var Config GuiConfig
 
+func SetDebugToolkit (s bool) {
+	toolkit.DebugToolkit = s
+}
+
+func GetDebugToolkit () bool {
+	return toolkit.DebugToolkit
+}
+
+func ShowDebugValues() {
+	log.Println("\t wit/gui Debug =", Config.Debug)
+	log.Println("\t wit/gui DebugDump =", Config.DebugDump)
+	log.Println("\t wit/gui DebugNode =", Config.DebugNode)
+	log.Println("\t wit/gui DebugTabs =", Config.DebugTabs)
+	log.Println("\t wit/gui DebugTable =", Config.DebugTable)
+	log.Println("\t wit/gui DebugWindow =", Config.DebugWindow)
+	log.Println("\t wit/gui DebugWindow =", Config.DebugWindow)
+	log.Println("\t wit/gui DebugToolkit =", toolkit.DebugToolkit)
+}
+
 type GuiConfig struct {
 	// This is the master node. The Binary Tree starts here
 	master	*Node
@@ -34,11 +53,11 @@ type GuiConfig struct {
 	// These are global debugging settings
 	// TODO: move to a standard logging system
 	Debug        bool
+	DebugDump    bool
 	DebugNode    bool
 	DebugTabs    bool
 	DebugTable   bool
 	DebugWindow  bool
-	DebugToolkit bool
 
 	// hacks
 	depth      int
@@ -84,10 +103,14 @@ type Node struct {
 	Height int
 
 	parent	*Node
+	// TODO: make children a double linked list since some toolkits require order
 	children []*Node
 
-	custom    func(*Node)
+	// things that may not really be needed (?)
+	custom    func()
 	OnChanged func(*Node)
+	checked   bool
+	text      string
 
 	toolkit	*toolkit.Toolkit
 }
@@ -101,6 +124,10 @@ func (n *Node) Window() *Node {
 }
 
 func (n *Node) Dump() {
+	if ! Config.DebugDump {
+		return
+	}
+	IndentPrintln("NODE DUMP START")
 	IndentPrintln("id         = ", n.id)
 	IndentPrintln("Name       = ", n.Name)
 	IndentPrintln("Width      = ", n.Width)
@@ -109,20 +136,22 @@ func (n *Node) Dump() {
 	if (n.parent == nil) {
 		IndentPrintln("parent     = nil")
 	} else {
-		IndentPrintln("parent     =", n.parent.id)
+		IndentPrintln("parent.id  =", n.parent.id)
 	}
 	if (n.children != nil) {
 		IndentPrintln("children   = ", n.children)
 	}
-	if (n.toolkit != nil) {
-		IndentPrintln("toolkit    = ", n.toolkit)
-		n.toolkit.Dump()
-	}
 	if (n.custom != nil) {
 		IndentPrintln("custom     = ", n.custom)
 	}
+	IndentPrintln("checked    = ", n.checked)
 	if (n.OnChanged != nil) {
 		IndentPrintln("OnChanged  = ", n.OnChanged)
+	}
+	IndentPrintln("text       = ", reflect.ValueOf(n.text).Kind(), n.text)
+	if (n.toolkit != nil) {
+		IndentPrintln("toolkit    = ", reflect.ValueOf(n.toolkit).Kind())
+		n.toolkit.Dump()
 	}
 	if (n.id == "") {
 		// Node structs should never have a nil id.
@@ -130,6 +159,7 @@ func (n *Node) Dump() {
 		// the gui package to make sure it's not exiting
 		panic("gui.Node.Dump() id == nil TODO: make a unigue id here in the golang gui library")
 	}
+	IndentPrintln("NODE DUMP END")
 }
 
 func (n *Node) SetName(name string) {

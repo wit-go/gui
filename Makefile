@@ -22,3 +22,9 @@ examples-gui-demo:
 
 doc:
 	GO111MODULE="off" godoc -v
+
+
+# GO111MODULE=on go install github.com/posener/goreadme/cmd/goreadme@latest (worked Oct 20 2022)
+readme:
+	# goreadme > README.md 
+	goreadme -factories -types -functions -variabless > README.md 

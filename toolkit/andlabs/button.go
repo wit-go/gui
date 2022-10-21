@@ -44,7 +44,7 @@ func (t Toolkit) NewButton(name string) *Toolkit {
 		log.Println("TODO: LEFT TOOLKIT GOROUTINE button name =", name)
 	})
 
-	t.uiBox.Append(b, false)
+	t.uiBox.Append(b, stretchy)
 
 	return &newt
 }

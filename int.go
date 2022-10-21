@@ -4,6 +4,8 @@ import "log"
 
 import "github.com/davecgh/go-spew/spew"
 
+import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
+
 /*
 	Get the int from the gui toolkit
 	because eventually this gui package should become it's own seperate go routine and never interact from the
@@ -14,7 +16,7 @@ import "github.com/davecgh/go-spew/spew"
 	Is it "has to go" or "should go"? Probably it makes sense to strictly inforce it. No "callback" functions. IPC only (go channels)
 */
 func (n *Node) Int() int {
-	if (Config.DebugToolkit) {
+	if (toolkit.DebugToolkit) {
 		log.Println("gui.Node.Int() for node name =", n.Name)
 		scs := spew.ConfigState{MaxDepth: 1}
 		scs.Dump(n)

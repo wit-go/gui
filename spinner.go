@@ -10,17 +10,18 @@ func (n *Node) NewSpinner(name string, x int, y int) *Node {
 
 	log.Println("toolkit.NewSpinner() START", name)
 
-	if (n.toolkit == nil) {
-		log.Println("toolkit.NewSpinner() toolkit == nil")
-		panic("toolkit should never be nil")
-	}
+	n.verify()
 
 	// make a *Node with a *toolkit.Group
 	sNode = n.New(name + " part1")
 	newT = n.toolkit.NewSpinner(name, x, y)
 	newT.Name = name
 	sNode.toolkit = newT
-	sNode.Dump()
+	// sNode.Dump()
+
+	newT.Custom = func () {
+		commonCallback(sNode)
+	}
 
 	return sNode
 }

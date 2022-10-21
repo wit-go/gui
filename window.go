@@ -19,21 +19,21 @@ func NewWindow() *Node {
 	title := Config.Title
 	w     := Config.Width
 	h     := Config.Height
-	f     := Config.Exit
+	// f     := Config.Exit
 
 	// Windows are created off of the master node of the Binary Tree
 	n = Config.master.New(title)
-	n.custom = f
+	// n.custom = f
 
 	t = toolkit.NewWindow(title, w, h)
 	t.Custom = func () {
-		log.Println("Got to wit/gui Window Close for window:", title)
+		log.Println("Got to wit/gui Window Close START user defined close()")
 		if (n.custom == nil) {
-			log.Println("Got to wit/gui Window Close custom() == nil")
+			log.Println("Got to wit/gui Window Close SKIP node.custom() == nil")
+			return
 		}
-		log.Println("Got to wit/gui Window Close START custom()")
-		n.custom(n)
-		log.Println("Got to wit/gui Window Close END custom()")
+		n.custom()
+		log.Println("Got to wit/gui Window Close END user defined close()")
 	}
 	n.toolkit = t
 

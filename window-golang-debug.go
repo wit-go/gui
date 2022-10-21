@@ -31,46 +31,46 @@ func GolangDebugWindow() {
 
 
 	///////////////////////////////  Column DEBUG GOLANG   //////////////////////
-	g := t.AddGroup("GO Language")
+	g := t.NewGroup("GO Language")
 
-	g.AddButton("runtime.Stack()", func (*Node) {
+	g.NewButton("runtime.Stack()", func () {
 		log.Println("\tSTART")
 		buf := make([]byte, 1<<16)
 		runtime.Stack(buf, true)
 		log.Printf("%s", buf)
 		log.Println("\tEND")
 	})
-	g.AddButton("dumpModuleInfo()", func (*Node) {
+	g.NewButton("dumpModuleInfo()", func () {
 		log.Println("\tSTART")
 		dumpModuleInfo()
 		log.Println("\tEND")
 	})
-	g.AddButton("debug.PrintStack()", func (*Node) {
+	g.NewButton("debug.PrintStack()", func () {
 		log.Println("\tSTART")
 		debug.PrintStack()
 		log.Println("\tEND")
 	})
-	g.AddButton("pprof.Lookup(goroutine)", func (*Node) {
+	g.NewButton("pprof.Lookup(goroutine)", func () {
 		log.Println("\tSTART")
 		pprof.Lookup("goroutine").WriteTo(os.Stdout, 1)
 		log.Println("\tEND")
 	})
-	g.AddButton("pprof.Lookup(heap)", func (*Node) {
+	g.NewButton("pprof.Lookup(heap)", func () {
 		log.Println("\tSTART")
 		pprof.Lookup("heap").WriteTo(os.Stdout, 1)
 		log.Println("\tEND")
 	})
-	g.AddButton("pprof.Lookup(block)", func (*Node) {
+	g.NewButton("pprof.Lookup(block)", func () {
 		log.Println("\tSTART")
 		pprof.Lookup("block").WriteTo(os.Stdout, 1)
 		log.Println("\tEND")
 	})
-	g.AddButton("pprof.Lookup threadcreate", func (*Node) {
+	g.NewButton("pprof.Lookup threadcreate", func () {
 		log.Println("\tSTART")
 		pprof.Lookup("threadcreate").WriteTo(os.Stdout, 1)
 		log.Println("\tEND")
 	})
-	g.AddButton("runtime.ReadMemStats", func (*Node) {
+	g.NewButton("runtime.ReadMemStats", func () {
 		var s runtime.MemStats
 		runtime.ReadMemStats(&s)
 		log.Printf("alloc: %v bytes\n", s.Alloc)

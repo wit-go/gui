@@ -23,10 +23,10 @@ func init() {
 	title := "master"
 	w     := 640
 	h     := 480
-	f     := StandardClose
+	// f     := StandardClose
 
 	Config.master = addNode(title, w, h)
-	Config.master.custom = f
+	// Config.master.custom = f
 
 	Config.master.Dump()
 }

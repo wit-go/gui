@@ -24,7 +24,7 @@ func (t Toolkit) NewSlider(title string, x int, y int) *Toolkit {
 	s := ui.NewSlider(x, y)
 	newt.uiSlider = s
 	newt.uiBox = t.uiBox
-	t.uiBox.Append(s, false)
+	t.uiBox.Append(s, stretchy)
 
 	s.OnChanged(func(spin *ui.Slider) {
 		i := spin.Value()

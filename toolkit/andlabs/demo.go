@@ -5,7 +5,12 @@ import "log"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-import "github.com/davecgh/go-spew/spew"
+/*
+	This is a code example taken directly from the toolkit andlabs/ui
+
+	This code is here to double check that the toolkit itself still works
+	the same way. This is intended as a sanity check.
+*/
 
 func BlankWindow(w *ui.Window) *ui.Box {
 	hbox := ui.NewHorizontalBox()
@@ -17,53 +22,14 @@ func BlankWindow(w *ui.Window) *ui.Box {
 func (t *Toolkit) DemoNumbersPage() {
 	var w *ui.Window
 
+	log.Println("Starting wit/gui toolkit andlabs/ui DemoNumbersPage()")
+
 	w = t.uiWindow
 	t.uiBox = makeNumbersPage()
 	t.uiBox.SetPadded(true)
 	w.SetChild(t.uiBox)
 	w.SetTitle("Internal demo of andlabs/ui toolkit")
-
-	if (DebugToolkit) {
-		log.Println("gui.Toolbox.DemoNumbersPage()")
-		scs := spew.ConfigState{MaxDepth: 1}
-		scs.Dump(t)
-	}
 }
-
-/*
-func Demo(b *ui.Box) *Toolkit {
-	x := 22
-	y := 33
-
-	// make new node here
-	log.Println("gui.Toolbox.NewSpinbox()", x, y)
-	var t Toolkit
-
-	if (b == nil) {
-		log.Println("gui.ToolboxNode.NewSpinbox() node.UiBox == nil. I can't add a range UI element without a place to put it")
-		return nil
-	}
-	s := ui.NewSlider(x, y)
-	t.uiSlider = s
-	t.uiBox = b
-	t.uiBox.Append(s, false)
-
-	s.OnChanged(func(spin *ui.Slider) {
-		i := spin.Value()
-		if (DebugToolkit) {
-			log.Println("gui.Toolbox.ui.OnChanged() val =", i)
-			scs := spew.ConfigState{MaxDepth: 1}
-			scs.Dump(t)
-		}
-		if (t.OnChanged != nil) {
-			log.Println("gui.Toolbox.OnChanged() entered val =", i)
-			t.OnChanged(&t)
-		}
-	})
-
-	return &t
-}
-*/
 
 func makeNumbersPage() *ui.Box {
 	hbox := ui.NewHorizontalBox()

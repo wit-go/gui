@@ -18,8 +18,9 @@ func (t *Toolkit) ErrorWindow(msg1 string, msg2 string) {
 func NewWindow(title string, x int, y int) *Toolkit {
 	var t Toolkit
 	log.Println("toolkit NewWindow", title, x, y)
-	w := ui.NewWindow(title, x, y, false)
-	w.SetBorderless(false)
+	w := ui.NewWindow(title, x, y, menubar)
+	w.SetBorderless(canvas)
+	w.SetMargined(margin)
 	w.OnClosing(func(*ui.Window) bool {
 		log.Println("ui.Window().OnExit() SHOULD ATTEMPT CALLBACK here")
 		t.Dump()
@@ -34,7 +35,6 @@ func NewWindow(title string, x int, y int) *Toolkit {
 		log.Println("ui.Window().OnExit() Toolkit.OnExit is nil")
 		return true
 	})
-	w.SetMargined(true)
 	w.Show()
 	t.uiWindow = w
 	t.UiWindowBad = w // deprecate this as soon as possible

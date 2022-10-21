@@ -15,35 +15,29 @@ func (t *Toolkit) NewBox() *Toolkit {
 	log.Println("gui.Toolbox.NewBox() START create default")
 	t.Dump()
 	if (t.uiGroup != nil) {
-		log.Println("gui.Toolbox.NewBox() is a Group")
+		log.Println("\tgui.Toolbox.NewBox() is a Group")
 		var newTK Toolkit
 
 		vbox := ui.NewVerticalBox()
-		vbox.SetPadded(true)
+		vbox.SetPadded(padded)
 		t.uiGroup.SetChild(vbox)
 		newTK.uiBox = vbox
 
 		return &newTK
 	}
 	if (t.uiBox != nil) {
-		log.Println("gui.Toolbox.NewBox() is a Box")
-		// return t
+		log.Println("\tgui.Toolbox.NewBox() is a Box")
+		var newTK Toolkit
+
+		vbox := ui.NewVerticalBox()
+		vbox.SetPadded(padded)
+		t.uiBox.Append(vbox, stretchy)
+		newTK.uiBox = vbox
+		newTK.Name = t.Name
+
+		return &newTK
 	}
-	log.Println("gui.Toolbox.NewBox() FAILED. Couldn't figure out where to make a box")
+	log.Println("\tgui.Toolbox.NewBox() FAILED. Couldn't figure out where to make a box")
 	t.Dump()
 	return nil
-}
-
-// Make a new box
-func MakeBox(name string) *Toolkit {
-	var newt Toolkit
-
-	vbox := ui.NewVerticalBox()
-	vbox.SetPadded(border)
-	newt.uiBox = vbox
-	newt.Name = name
-
-	log.Println("gui.Toolbox.MakeBox() name =", name)
-	newt.Dump()
-	return &newt
 }
