@@ -83,8 +83,6 @@ The next step is to intent is to allow this to work directly against GTK and QT.
 It should be able to add Fyne, WASM, native macos & windows, android and
 hopefully also things like libSDL, faiface/pixel, slint
 
-[Wikipedia Graphical widget]: https://en.wikipedia.org/wiki/Graphical_widget
-
 Errors
 
 Since it is possible for custom Stringer/error interfaces to panic, spew
