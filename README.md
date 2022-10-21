@@ -21,7 +21,7 @@ Principles:
 * It's ok to guess. We will return something close.
 * Hide complexity internally here
 * Isolate the GUI toolkit
-* Function names should follow [Wikipedia Graphical widget](https://en.wikipedia.org/wiki/Graphical_widget)
+* Function names should follow [[Graphical widget]]
 ```
 
 ## Quick Start

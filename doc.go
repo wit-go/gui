@@ -103,7 +103,18 @@ Bugs
 
 -- manpage quote from the excellent minimalistic window manager 'evilwm'
 
-External References
+References
+
+Useful links and other
+external things
+which might be useful
+
+[Wikipedia Graphical widget]: https://en.wikipedia.org/wiki/Graphical_widget
+[Github mirror]: https://github.com/witorg/gui
+
+	* [Wikipedia Graphical widget]
+	* [Github mirror]
+
 
 */
 package gui

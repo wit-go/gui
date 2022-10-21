@@ -21,6 +21,11 @@ examples-helloworld:
 examples-gui-demo:
 	make -C cmds/gui-demo
 
+# sync repo to the github backup
+github:
+	git push origin master
+	git push github master
+
 doc:
 	GO111MODULE="off" godoc -v
 
