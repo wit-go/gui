@@ -7,16 +7,24 @@ import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
 func commonCallback(n *Node) {
 	// TODO: make all of this common code to all the widgets
 	if (n.OnChanged == nil) {
-		log.Println("Not Running n.OnChanged(n) == nil")
+		if (Config.Options.DebugChange) {
+			log.Println("Not Running n.OnChanged(n) == nil")
+		}
 	} else {
-		log.Println("Running n.OnChanged(n)")
+		if (Config.Options.DebugChange) {
+			log.Println("Running n.OnChanged(n)")
+		}
 		n.OnChanged(n)
 	}
 
 	if (n.custom == nil) {
-		log.Println("Not Running n.custom(n) == nil")
+		if (Config.Options.DebugChange) {
+			log.Println("Not Running n.custom(n) == nil")
+		}
 	} else {
-		log.Println("Running n.custom()")
+		if (Config.Options.DebugChange) {
+			log.Println("Running n.custom()")
+		}
 		n.custom()
 	}
 }
@@ -25,7 +33,9 @@ func (n *Node) NewDropdown(name string) *Node {
 	var newT *toolkit.Toolkit
 	var sNode *Node
 
-	log.Println("toolkit.NewDropdown() START", name)
+	if (Config.Options.Debug) {
+		log.Println("toolkit.NewDropdown() START", name)
+	}
 
 	n.verify()
 

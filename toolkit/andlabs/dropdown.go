@@ -9,7 +9,9 @@ import _ "github.com/andlabs/ui/winmanifest"
 
 func (t *Toolkit) NewDropdown(title string) *Toolkit {
 	// make new node here
-	log.Println("gui.Toolbox.NewDropdownCombobox()")
+	if (DebugToolkit) {
+		log.Println("gui.Toolbox.NewDropdownCombobox()", title)
+	}
 	var newt Toolkit
 
 	if t.broken() {

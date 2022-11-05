@@ -6,7 +6,9 @@ import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
 func (t Toolkit) NewTextbox(name string) *Toolkit {
-	log.Println("gui.Toolkit.NewTextbox()", name)
+	if (DebugToolkit) {
+		log.Println("gui.Toolkit.NewTextbox()", name)
+	}
 	var newt Toolkit
 
 	if t.broken() {

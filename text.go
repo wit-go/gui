@@ -18,7 +18,9 @@ func (n *Node) NewLabel(text string) *Node {
 }
 
 func (n *Node) SetText(str string) bool {
-	log.Println("gui.SetText() value =", str)
+	if (Config.Options.DebugChange) {
+		log.Println("gui.SetText() value =", str)
+	}
 	if (n.toolkit == nil) {
 		return false
 	}

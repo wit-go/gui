@@ -6,9 +6,6 @@ import "os"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-import "github.com/davecgh/go-spew/spew"
-
-// func NewSlider(b *ui.Box, name string *Toolkit {
 func (t Toolkit) NewSpinner(title string, x int, y int) *Toolkit {
 	// make new node here
 	log.Println("gui.Toolkit.NewSpinner()", x, y)
@@ -26,16 +23,7 @@ func (t Toolkit) NewSpinner(title string, x int, y int) *Toolkit {
 	t.uiBox.Append(s, stretchy)
 
 	s.OnChanged(func(s *ui.Spinbox) {
-		i := s.Value()
-		if (DebugToolkit) {
-			log.Println("gui.Toolkit.ui.OnChanged() val =", i)
-			scs := spew.ConfigState{MaxDepth: 1}
-			scs.Dump(newt)
-		}
-		if (t.OnChanged != nil) {
-			log.Println("gui.Toolkit.OnChanged() entered val =", i)
-			newt.OnChanged(&newt)
-		}
+		newt.commonChange("Spinner")
 	})
 
 	return &newt

@@ -93,7 +93,7 @@ func forceDump(t *Toolkit) {
 }
 
 func (t *Toolkit) GetText() string {
-	forceDump(t)
+	t.Dump()
 	if (DebugToolkit) {
 		log.Println("gui.Toolkit.Text() Enter")
 		scs := spew.ConfigState{MaxDepth: 1}
@@ -110,7 +110,9 @@ func (t *Toolkit) GetText() string {
 			log.Println("gui.Toolkit.Value() =", t.uiMultilineEntry.Text())
 		}
 		text := t.uiMultilineEntry.Text()
-		log.Println("gui.Toolkit.Value() text =", text)
+		if (DebugToolkit) {
+			log.Println("gui.Toolkit.Value() text =", text)
+		}
 		t.text = text
 		return text
 	}

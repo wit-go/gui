@@ -13,9 +13,13 @@ func (n *Node) NewButton(name string, custom func()) *Node {
 
 	// TODO: this is still confusing and probably wrong. This needs to communicate through a channel
 	newNode.toolkit.Custom = func() {
-		log.Println("gui.AppendButton() Button Clicked. Running custom() from outside toolkit START")
+		if (Config.Options.Debug) {
+			log.Println("gui.AppendButton() Button Clicked. Running custom() from outside toolkit START")
+		}
 		custom()
-		log.Println("gui.AppendButton() Button Clicked. Running custom() from outside toolkit END")
+		if (Config.Options.Debug) {
+			log.Println("gui.AppendButton() Button Clicked. Running custom() from outside toolkit END")
+		}
 	}
 	newNode.custom = custom
 

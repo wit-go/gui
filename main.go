@@ -17,8 +17,8 @@ func init() {
 
 	Config.counter = 0
 	Config.prefix = "wit"
-	Config.DebugNode = false
-	Config.DebugTabs = false
+	Config.Options.DebugNode = false
+	Config.Options.DebugTabs = false
 
 	title := "master"
 	w     := 640

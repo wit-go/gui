@@ -12,30 +12,38 @@ func init() {
 
 func (t Toolkit) commonChange(widget string) {
 	s := t.String()
-	log.Println("gui.Toolkit.ui.OnChanged() =", s)
 	if (DebugToolkit) {
 		log.Println("gui.Toolkit.ui.OnChanged() =", s)
 	}
 	if (t.OnChanged != nil) {
-		log.Println("gui.Toolkit.OnChanged() trying to run toolkit.OnChanged() entered val =", s)
+		if (DebugToolkit) {
+			log.Println("gui.Toolkit.OnChanged() trying to run toolkit.OnChanged() entered val =", s)
+		}
 		t.OnChanged(&t)
 		return
 	}
 	if (t.Custom != nil) {
-		log.Println("gui.Toolkit.OnChanged() Running toolkit.Custom()")
-		t.Dump()
+		if (DebugToolkit) {
+			log.Println("gui.Toolkit.OnChanged() Running toolkit.Custom()")
+			t.Dump()
+		}
 		t.Custom()
 		return
 	}
-	log.Println("gui.Toolkit.OnChanged() ENDED without finding any callback")
+	if (DebugToolkit) {
+		log.Println("gui.Toolkit.OnChanged() ENDED without finding any callback")
+	}
 }
 
+// does some sanity checks on the internal structs of the binary tree
+// TODO: probably this should not panic unless it's running in devel mode (?)
 func (t Toolkit) broken() bool {
 	if (t.uiBox == nil) {
 		log.Println("gui.Toolkit.UiBox == nil. I can't add a widget without a place to put it")
 		// log.Println("probably could just make a box here?")
 		// corruption or something horrible?
 		panic("wit/gui toolkit/andlabs func broken() invalid goroutine access into this toolkit?")
+		panic("wit/gui toolkit/andlabs func broken() this probably should not cause the app to panic here (?)")
 		return true
 	}
 	if (t.uiWindow == nil) {

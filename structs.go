@@ -30,14 +30,27 @@ func GetDebugToolkit () bool {
 }
 
 func ShowDebugValues() {
-	log.Println("\t wit/gui Debug =", Config.Debug)
-	log.Println("\t wit/gui DebugDump =", Config.DebugDump)
-	log.Println("\t wit/gui DebugNode =", Config.DebugNode)
-	log.Println("\t wit/gui DebugTabs =", Config.DebugTabs)
-	log.Println("\t wit/gui DebugTable =", Config.DebugTable)
-	log.Println("\t wit/gui DebugWindow =", Config.DebugWindow)
-	log.Println("\t wit/gui DebugWindow =", Config.DebugWindow)
+	log.Println("\t wit/gui Debug =", Config.Options.Debug)
+	log.Println("\t wit/gui DebugDump =", Config.Options.DebugDump)
+	log.Println("\t wit/gui DebugNode =", Config.Options.DebugNode)
+	log.Println("\t wit/gui DebugTabs =", Config.Options.DebugTabs)
+//	log.Println("\t wit/gui DebugTable =", Config.Options.DebugTable)
+//	log.Println("\t wit/gui DebugWindow =", Config.Options.DebugWindow)
+	log.Println("\t wit/gui DebugChange =", Config.Options.DebugChange)
+
 	log.Println("\t wit/gui DebugToolkit =", toolkit.DebugToolkit)
+}
+
+type GuiOptions struct {
+	// These are global debugging settings
+	// TODO: move to a standard logging system
+	Debug        bool
+	DebugDump    bool
+	DebugNode    bool
+	DebugTabs    bool
+//	DebugTable   bool
+//	DebugWindow  bool
+	DebugChange  bool `help:"debug mouse clicks and keyboard input"`
 }
 
 type GuiConfig struct {
@@ -50,14 +63,7 @@ type GuiConfig struct {
 	Height     int
 	Exit       func(*Node)
 
-	// These are global debugging settings
-	// TODO: move to a standard logging system
-	Debug        bool
-	DebugDump    bool
-	DebugNode    bool
-	DebugTabs    bool
-	DebugTable   bool
-	DebugWindow  bool
+	Options GuiOptions
 
 	// hacks
 	depth      int
@@ -124,7 +130,7 @@ func (n *Node) Window() *Node {
 }
 
 func (n *Node) Dump() {
-	if ! Config.DebugDump {
+	if ! Config.Options.DebugDump {
 		return
 	}
 	IndentPrintln("NODE DUMP START")
@@ -162,14 +168,16 @@ func (n *Node) Dump() {
 	IndentPrintln("NODE DUMP END")
 }
 
+/*
 func (n *Node) SetName(name string) {
 	n.toolkit.SetWindowTitle(name)
 	return
 }
+*/
 
 func (n *Node) Append(child *Node) {
 	n.children = append(n.children, child)
-	if (Config.Debug) {
+	if (Config.Options.Debug) {
 		log.Println("child node:")
 		child.Dump()
 		log.Println("parent node:")
@@ -212,11 +220,11 @@ func (n *Node) ListChildren(dump bool) {
 	if len(n.children) == 0 {
 		if (n.parent == nil) {
 		} else {
-			if (Config.DebugNode) {
+			if (Config.Options.DebugNode) {
 				log.Println("\t\t\tparent =",n.parent.id)
 			}
 			if (listChildrenParent != nil) {
-				if (Config.DebugNode) {
+				if (Config.Options.DebugNode) {
 					log.Println("\t\t\tlistChildrenParent =",listChildrenParent.id)
 				}
 				if (listChildrenParent.id != n.parent.id) {
@@ -225,7 +233,7 @@ func (n *Node) ListChildren(dump bool) {
 				}
 			}
 		}
-		if (Config.DebugNode) {
+		if (Config.Options.DebugNode) {
 			log.Println("\t\t", n.id, "has no children")
 		}
 		return
@@ -233,7 +241,7 @@ func (n *Node) ListChildren(dump bool) {
 	for _, child := range n.children {
 		// log.Println("\t\t", child.id, child.Width, child.Height, child.Name)
 		if (child.parent != nil) {
-			if (Config.DebugNode) {
+			if (Config.Options.DebugNode) {
 				log.Println("\t\t\tparent =",child.parent.id)
 			}
 		} else {
@@ -243,7 +251,7 @@ func (n *Node) ListChildren(dump bool) {
 		if (dump == true) {
 			child.Dump()
 		}
-		if (Config.DebugNode) {
+		if (Config.Options.DebugNode) {
 			if (child.children == nil) {
 				log.Println("\t\t", child.id, "has no children")
 			} else {

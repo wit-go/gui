@@ -17,7 +17,9 @@ func (t Toolkit) NewGroup(title string) *Toolkit {
 		return nil
 	}
 
-	log.Println("gui.Toolbox.NewGroup() create", title)
+	if (DebugToolkit) {
+		log.Println("gui.Toolbox.NewGroup() create", title)
+	}
 	g := ui.NewGroup(title)
 	g.SetMargined(margin)
 	t.uiBox.Append(g, stretchy)

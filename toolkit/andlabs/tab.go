@@ -61,14 +61,18 @@ func (t *Toolkit) AddTab(name string) *Toolkit {
 func tabSetMargined(tab *ui.Tab) {
 	c := tab.NumPages()
 	for i := 0; i < c; i++ {
-		log.Println("SetMargined", i, margin)
+		if (DebugToolkit) {
+			log.Println("SetMargined", i, margin)
+		}
 		tab.SetMargined(i, margin)
 	}
 }
 
 func newTab(w *ui.Window, name string) *Toolkit {
-	log.Println("gui.toolkit.NewTab() ADD", name)
 	var t Toolkit
+	if (DebugToolkit) {
+		log.Println("gui.toolkit.NewTab() ADD", name)
+	}
 
 	if (w == nil) {
 		log.Println("gui.toolkit.NewTab() node.UiWindow == nil. I can't add a tab without a window")
@@ -77,7 +81,9 @@ func newTab(w *ui.Window, name string) *Toolkit {
 		time.Sleep(1 * time.Second)
 		return nil
 	}
-	log.Println("gui.toolkit.AddTab() START name =", name)
+	if (DebugToolkit) {
+		log.Println("gui.toolkit.AddTab() START name =", name)
+	}
 	tab := ui.NewTab()
 	w.SetMargined(margin)
 
@@ -94,14 +100,18 @@ func newTab(w *ui.Window, name string) *Toolkit {
 }
 
 func (t *Toolkit) appendTab(name string) *Toolkit {
-	log.Println("gui.toolkit.NewTab() ADD", name)
 	var newT Toolkit
+	if (DebugToolkit) {
+		log.Println("gui.toolkit.NewTab() ADD", name)
+	}
 
 	if (t.uiTab == nil) {
 		log.Println("gui.Toolkit.UiWindow == nil. I can't add a widget without a place to put it")
 		panic("should never have happened. wit/gui/toolkit has ui.Tab == nil")
 	}
-	log.Println("gui.toolkit.AddTab() START name =", name)
+	if (DebugToolkit) {
+		log.Println("gui.toolkit.AddTab() START name =", name)
+	}
 
 	var hbox *ui.Box
 	if (defaultBehavior) {

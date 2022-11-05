@@ -21,7 +21,7 @@ Principles:
 * It's ok to guess. We will return something close.
 * Hide complexity internally here
 * Isolate the GUI toolkit
-* Function names should follow [[Graphical widget]]
+* Function names should follow [Wikipedia Graphical widget]
 ```
 
 ## Quick Start
@@ -107,12 +107,19 @@ information this uses spew.Dump()
 
 -- manpage quote from the excellent minimalistic window manager 'evilwm'
 
-## External References
+## References
 
-Useful links and other external things which might be useful
+Useful links and other
+external things
+which might be useful
 
-* [Wikipedia Graphical widget](https://en.wikipedia.org/wiki/Graphical_widget)
-* [Github mirror](https://github.com/witorg/gui)
+[Wikipedia Graphical widget]: [https://en.wikipedia.org/wiki/Graphical_widget](https://en.wikipedia.org/wiki/Graphical_widget)
+[Github mirror]: [https://github.com/witorg/gui](https://github.com/witorg/gui)
+
+```go
+* [Wikipedia Graphical widget]
+* [Github mirror]
+```
 
 ## Functions
 
@@ -154,7 +161,7 @@ This creates a window that shows how this package works
 
 `func GolangDebugWindow()`
 
-### func [IndentPrintln](/structs.go#L191)
+### func [IndentPrintln](/structs.go#L190)
 
 `func IndentPrintln(a ...interface{})`
 
@@ -187,7 +194,7 @@ For example: gui.Queue(NewWindow())
 
 ## Types
 
-### type [GuiConfig](/structs.go#L43)
+### type [GuiConfig](/structs.go#L42)
 
 `type GuiConfig struct { ... }`
 
@@ -197,7 +204,7 @@ For example: gui.Queue(NewWindow())
 var Config GuiConfig
 ```
 
-### type [Node](/structs.go#L98)
+### type [Node](/structs.go#L97)
 
 `type Node struct { ... }`
 
@@ -255,7 +262,7 @@ func main() {
 You get a window
 ```
 
-### type [Widget](/structs.go#L68)
+### type [Widget](/structs.go#L67)
 
 `type Widget int`
 

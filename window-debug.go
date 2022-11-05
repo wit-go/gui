@@ -33,51 +33,58 @@ func DebugTab() {
 
 var checkd, checkdn, checkdt, checkdtk *Node
 
+//////////////////////// debug flags //////////////////////////////////
+func debugFlags(n *Node) {
+	var df, checkd, checkdn, checkdd, changeCheckbox *Node
+	df = n.NewGroup("Debug Flags")
+	df.NewLabel("flags to control debugging output")
+
+	checkd = df.NewCheckbox("Debug")
+	checkd.OnChanged = func(*Node) {
+		checkd.checked = checkd.toolkit.Checked()
+		Config.Options.Debug = checkd.checked
+		if (Config.Options.Debug) {
+			log.Println("Debug turned on")
+		} else {
+			log.Println("Debug turned off")
+		}
+	}
+
+	checkdn = df.NewCheckbox("Debug Node")
+	checkdn.OnChanged = func(*Node) {
+		checkdn.checked = checkdn.toolkit.Checked()
+		Config.Options.DebugNode = checkdn.checked
+	}
+
+	checkdd = df.NewCheckbox("Debug node.Dump()")
+	checkdd.OnChanged = func(*Node) {
+		Config.Options.DebugDump = checkdd.toolkit.Checked()
+	}
+
+	changeCheckbox = df.NewCheckbox("Debug Change")
+	changeCheckbox.OnChanged = func(*Node) {
+		Config.Options.DebugChange = changeCheckbox.toolkit.Checked()
+	}
+
+	df.NewButton("Dump Debug Flags", func () {
+		ShowDebugValues()
+	})
+
+}
+
 func (n *Node) DebugTab(title string) *Node {
-	var newN, gog, g1, g2, g3, dd, gf *Node
+	var newN, gog, g1, g2, g3, dd *Node
 
 	// time.Sleep(1 * time.Second)
 	newN = n.NewTab(title)
 	newN.Dump()
 
+//////////////////////// main debug things //////////////////////////////////
 	gog = newN.NewGroup("GOLANG")
 	gog.NewLabel("go language")
 	gog.NewButton("GO Language Debug", func () {
 		GolangDebugWindow()
 	})
-
-	gf = newN.NewGroup("Debug Flags")
-	gf.NewLabel("flags to control debugging output")
-
-	checkd = gf.NewCheckbox("Debug")
-	checkd.OnChanged = func(*Node) {
-		checkd.checked = checkd.toolkit.Checked()
-		Config.Debug = checkd.checked
-		if (Config.Debug) {
-		} else {
-		}
-	}
-
-	checkdn = gf.NewCheckbox("Debug Node")
-	checkdn.OnChanged = func(*Node) {
-		checkdn.checked = checkdn.toolkit.Checked()
-		Config.DebugNode = checkdn.checked
-	}
-
-	checkdd := gf.NewCheckbox("Debug node.Dump()")
-	checkdd.OnChanged = func(*Node) {
-		Config.DebugDump = checkdd.toolkit.Checked()
-	}
-
-	checkdt = gf.NewCheckbox("Debug Tabs")
-	checkdtk = gf.NewCheckbox("Debug Toolkit")
-
-//	Debug        bool
-//	DebugNode    bool
-//	DebugTabs    bool
-//	DebugTable   bool
-//	DebugWindow  bool
-//	DebugToolkit bool
 
 	gog.NewLabel("wit/gui package")
 	gog.NewButton("WIT/GUI Package Debug", func () {
@@ -92,6 +99,9 @@ func (n *Node) DebugTab(title string) *Node {
 		DemoToolkitWindow()
 	})
 
+	debugFlags(newN)
+
+//////////////////////// window debugging things //////////////////////////////////
 	g1 = newN.NewGroup("Current Windows")
 	dd = g1.NewDropdown("Window Dropdown")
 	log.Println("dd =", dd)

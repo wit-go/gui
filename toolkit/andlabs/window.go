@@ -22,17 +22,25 @@ func NewWindow(title string, x int, y int) *Toolkit {
 	w.SetBorderless(canvas)
 	w.SetMargined(margin)
 	w.OnClosing(func(*ui.Window) bool {
-		log.Println("ui.Window().OnExit() SHOULD ATTEMPT CALLBACK here")
-		t.Dump()
+		if (DebugToolkit) {
+			log.Println("ui.Window().OnExit() SHOULD ATTEMPT CALLBACK here")
+			t.Dump()
+		}
 		if (t.OnExit != nil) {
-			log.Println("ui.Window().OnExit() ATTEMPTING toolkit.OnExit CALLBACK")
+			if (DebugToolkit) {
+				log.Println("ui.Window().OnExit() ATTEMPTING toolkit.OnExit CALLBACK")
+			}
 			t.OnExit(&t)
 		}
 		if (t.Custom != nil) {
-			log.Println("ui.Window().Custom() ATTEMPTING toolkit.Custom CALLBACK")
+			if (DebugToolkit) {
+				log.Println("ui.Window().Custom() ATTEMPTING toolkit.Custom CALLBACK")
+			}
 			t.Custom()
 		}
-		log.Println("ui.Window().OnExit() Toolkit.OnExit is nil")
+		if (DebugToolkit) {
+			log.Println("ui.Window().OnExit() Toolkit.OnExit is nil")
+		}
 		return true
 	})
 	w.Show()

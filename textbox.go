@@ -22,13 +22,26 @@ func (n *Node) NewTextbox(name string) *Node {
 	newt.Name = name
 	// newt.Custom = func () {
 	newt.OnChanged = func (*toolkit.Toolkit) {
-		println("AM IN CALLBACK. SETTING NODE.checked START")
+		if (Config.Options.DebugChange) {
+			log.Println("AM IN CALLBACK. SETTING NODE.checked START")
+			c.Dump()
+			c.toolkit.Dump()
+		}
 		c.text = c.toolkit.GetText()
-		c.Dump()
-		c.toolkit.Dump()
-		c.OnChanged(n)
-		println("n.toolkit.GetText() =", c.text)
-		println("AM IN CALLBACK. SETTING NODE.checked END")
+		if (c.OnChanged == nil) {
+			if (Config.Options.DebugChange) {
+				log.Println("this is println?")
+			}
+		} else {
+			if (Config.Options.DebugChange) {
+				log.Println("this is println? running c.OnChanged() here")
+			}
+			c.OnChanged(n)
+		}
+		if (Config.Options.DebugChange) {
+			log.Println("n.toolkit.GetText() =", c.text)
+			log.Println("AM IN CALLBACK. SETTING NODE.checked END")
+		}
 	}
 
 	return c
