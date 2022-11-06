@@ -87,9 +87,10 @@ func (t *Toolkit) String() string {
 }
 
 func forceDump(t *Toolkit) {
+	tmp := DebugToolkit
 	DebugToolkit = true
 	t.Dump()
-	DebugToolkit = false
+	DebugToolkit = tmp
 }
 
 func (t *Toolkit) GetText() string {

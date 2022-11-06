@@ -1,44 +1,24 @@
-// This creates a simple hello world window
+// This is a simple example
 package main
 
 import 	(
-	"os"
 	"log"
 	"git.wit.org/wit/gui"
 )
 
 func main() {
-	gui.Main(myGUI)
+	gui.Main(helloworld)
 }
 
-// This initializes the first window
-func myGUI() {
+// This creates a window
+func helloworld() {
 	var w *gui.Node
-	gui.Config.Title = "Hello World golang wit/gui Window"
+	gui.Config.Title = "helloworld golang wit/gui window"
 	gui.Config.Width = 640
 	gui.Config.Height = 480
-	gui.Config.Exit = myExit
 
 	w = gui.NewWindow()
-	addHelloWorld(w, "A Simple Tab")
+	w.NewButton("hello", func () {
+		log.Println("world")
+	})
 }
-
-func addHelloWorld(window *gui.Node, title string) {
-	var newNode, g, tb *gui.Node
-
-	newNode = window.NewTab(title)
-
-	g = newNode.NewGroup("hello")
-	tb = g.NewTextbox("hello world box") // when debugging, this string will be used
-	tb.OnChanged = func(*gui.Node) {
-		s := tb.GetText()
-		log.Println("text box =", s)
-	}
-	tb.SetText("world")
-}
-
-func myExit(n *gui.Node) {
-        log.Println("exit() here")
-	os.Exit(0)
-}
-

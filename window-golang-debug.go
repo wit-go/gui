@@ -9,14 +9,6 @@ import (
 	"runtime/pprof"
 )
 
-func StandardClose(n *Node) {
-	// origlog.Println("Should Exit Here")
-	// closed = true
-	log.Println("")
-	log.Println("STANDARD WINDOW CLOSE. Should not exit app.")
-	log.Println("")
-}
-
 func GolangDebugWindow() {
 	var w, t *Node
 

@@ -18,8 +18,7 @@ Principles:
 	* It's ok to guess. We will return something close.
 	* Hide complexity internally here
 	* Isolate the GUI toolkit
-	* Function names should follow [Wikipedia Graphical widget]
-
+	* Try to use [Wikipedia Graphical widget] names
 
 Quick Start
 

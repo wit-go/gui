@@ -37,6 +37,19 @@ func (t *Toolkit) NewBox() *Toolkit {
 
 		return &newTK
 	}
+	if (t.uiWindow != nil) {
+		log.Println("\tgui.Toolbox.NewBox() is a Window")
+		var newT Toolkit
+
+		vbox := ui.NewVerticalBox()
+		vbox.SetPadded(padded)
+		t.uiWindow.SetChild(vbox)
+		newT.uiBox = vbox
+		newT.Name = t.Name
+
+		// panic("WTF")
+		return &newT
+	}
 	log.Println("\tgui.Toolbox.NewBox() FAILED. Couldn't figure out where to make a box")
 	t.Dump()
 	return nil

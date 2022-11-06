@@ -2,9 +2,6 @@ package toolkit
 
 import "log"
 
-// import "github.com/andlabs/ui"
-// import _ "github.com/andlabs/ui/winmanifest"
-
 func init() {
 	log.Println("gui/toolkit init() Setting defaultBehavior = true")
 	setDefaultBehavior(true)
@@ -37,8 +34,13 @@ func (t Toolkit) commonChange(widget string) {
 
 // does some sanity checks on the internal structs of the binary tree
 // TODO: probably this should not panic unless it's running in devel mode (?)
-func (t Toolkit) broken() bool {
+func (t *Toolkit) broken() bool {
 	if (t.uiBox == nil) {
+		if (t.uiWindow != nil) {
+			log.Println("gui.Toolkit.UiBox == nil. This is an empty window. Try to add a box")
+			t.NewBox()
+			return false
+		}
 		log.Println("gui.Toolkit.UiBox == nil. I can't add a widget without a place to put it")
 		// log.Println("probably could just make a box here?")
 		// corruption or something horrible?
@@ -48,6 +50,7 @@ func (t Toolkit) broken() bool {
 	}
 	if (t.uiWindow == nil) {
 		log.Println("gui.Toolkit.UiWindow == nil. I can't add a widget without a place to put it (IGNORING FOR NOW)")
+		forceDump(t)
 		return false
 	}
 	return false

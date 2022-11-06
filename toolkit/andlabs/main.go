@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/andlabs/ui"
+	// the _ means we only need this for the init()
 	_ "github.com/andlabs/ui/winmanifest"
 )
 

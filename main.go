@@ -2,33 +2,33 @@ package gui
 
 import (
 	"log"
+	"os"
 )
 
 import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
 
-
-// the _ means we only need this for the init()
-
-const Xaxis = 0 // box that is horizontal
-const Yaxis = 1 // box that is vertical
+const Xaxis = 0 // stack things horizontally
+const Yaxis = 1 // stack things vertically
 
 func init() {
 	log.Println("gui.init() has been run")
 
 	Config.counter = 0
 	Config.prefix = "wit"
-	Config.Options.DebugNode = false
-	Config.Options.DebugTabs = false
 
-	title := "master"
+	// Config.Options.Debug = true
+	// Config.Options.DebugNode = true
+	// Config.Options.DebugTabs = true
+
+	title := "guiBinaryTree"
 	w     := 640
 	h     := 480
-	// f     := StandardClose
 
+	// Populates the top of the binary tree
 	Config.master = addNode(title, w, h)
-	// Config.master.custom = f
-
-	Config.master.Dump()
+	if (Config.Options.Debug) {
+		Config.master.Dump()
+	}
 }
 
 func Main(f func()) {
@@ -45,4 +45,20 @@ func Main(f func()) {
 func Queue(f func()) {
 	log.Println("Sending function to gui.Main() (using gtk via andlabs/ui)")
 	toolkit.Queue(f)
+}
+
+// The window is destroyed but the application does not quit
+func StandardClose(n *Node) {
+	if (Config.Options.Debug) {
+		log.Println("wit/gui Standard Window Close. name =", n.Name)
+	}
+}
+
+
+// The window is destroyed but the application does not quit
+func StandardExit(n *Node) {
+	if (Config.Options.Debug) {
+		log.Println("wit/gui Standard Window Exit. running os.Exit()")
+	}
+	os.Exit(0)
 }

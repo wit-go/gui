@@ -1,3 +1,5 @@
+.PHONY: README.md
+
 all: README.md
 	@echo
 	@echo "make examples     # will run all the examples"
@@ -33,3 +35,6 @@ doc:
 # GO111MODULE=on go install github.com/posener/goreadme/cmd/goreadme@latest (worked Oct 20 2022)
 README.md: doc.go
 	goreadme -factories -types -functions -variabless > README.md 
+
+plugins:
+	GO111MODULE="off" go build -buildmode=plugin -o toolkit/gocli.so toolkit/gocli/greeter.go

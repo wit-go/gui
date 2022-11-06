@@ -1,8 +1,5 @@
 package gui
 
-import "strconv"
-// import "fmt"
-
 /*
 	generic function to create a new node on the binary tree
 */
@@ -25,9 +22,12 @@ func addNode(title string, w int, h int) *Node {
 	n.Width = w
 	n.Height = h
 
-	id := Config.prefix + strconv.Itoa(Config.counter)
+	// no longer a string
+	// id := Config.prefix + strconv.Itoa(Config.counter)
+	// n.id = id
+
+	n.id = Config.counter
 	Config.counter += 1
-	n.id = id
 
 	return &n
 }

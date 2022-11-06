@@ -21,7 +21,7 @@ Principles:
 * It's ok to guess. We will return something close.
 * Hide complexity internally here
 * Isolate the GUI toolkit
-* Function names should follow [Wikipedia Graphical widget]
+* Try to use [Wikipedia Graphical widget] names
 ```
 
 ## Quick Start
@@ -161,15 +161,15 @@ This creates a window that shows how this package works
 
 `func GolangDebugWindow()`
 
-### func [IndentPrintln](/structs.go#L190)
+### func [IndentPrintln](/structs.go#L199)
 
 `func IndentPrintln(a ...interface{})`
 
-### func [Main](/main.go#L34)
+### func [Main](/main.go#L31)
 
 `func Main(f func())`
 
-### func [Queue](/main.go#L45)
+### func [Queue](/main.go#L42)
 
 `func Queue(f func())`
 
@@ -194,7 +194,7 @@ For example: gui.Queue(NewWindow())
 
 ## Types
 
-### type [GuiConfig](/structs.go#L42)
+### type [GuiConfig](/structs.go#L56)
 
 `type GuiConfig struct { ... }`
 
@@ -204,7 +204,11 @@ For example: gui.Queue(NewWindow())
 var Config GuiConfig
 ```
 
-### type [Node](/structs.go#L97)
+### type [GuiOptions](/structs.go#L44)
+
+`type GuiOptions struct { ... }`
+
+### type [Node](/structs.go#L104)
 
 `type Node struct { ... }`
 
@@ -262,7 +266,7 @@ func main() {
 You get a window
 ```
 
-### type [Widget](/structs.go#L67)
+### type [Widget](/structs.go#L74)
 
 `type Widget int`
 

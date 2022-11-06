@@ -1,7 +1,7 @@
 package toolkit
 
 import "log"
-import "os"
+// import "os"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
@@ -11,15 +11,12 @@ func (t Toolkit) NewButton(name string) *Toolkit {
 	var newt Toolkit
 	var b *ui.Button
 
-	if (t.uiBox == nil) {
-		log.Println("gui.ToolboxNode.NewButton() node.UiBox == nil. I can't add a range UI element without a place to put it")
-		log.Println("probably could just make a box here?")
-		os.Exit(0)
+	if t.broken() {
 		return nil
 	}
 
 	if (DebugToolkit) {
-		log.Println("gui.Toolbox.NewGroup() create", name)
+		log.Println("gui.Toolbox.NewButton() create", name)
 	}
 	b = ui.NewButton(name)
 	newt.uiButton = b
@@ -40,6 +37,7 @@ func (t Toolkit) NewButton(name string) *Toolkit {
 				log.Println("wit/gui/toolkit NewButton() toolkit.Custom() START")
 			}
 			newt.Custom()
+			return
 			if (DebugToolkit) {
 				log.Println("wit/gui/toolkit NewButton() toolkit.Custom() END")
 			}
@@ -53,14 +51,29 @@ func (t Toolkit) NewButton(name string) *Toolkit {
 				log.Println("wit/gui/toolkit NewButton() running parent toolkit.Custom() START (IS THIS A BAD IDEA?)")
 			}
 			t.Custom()
+			return
 			if (DebugToolkit) {
 				log.Println("wit/gui/toolkit NewButton() running parent toolkit.Custom() END   (IS THIS A BAD IDEA?)")
 			}
 		}
-		log.Println("TODO: LEFT TOOLKIT GOROUTINE button name =", name)
+		log.Println("TODO: LEFT TOOLKIT GOROUTINE WITH NOTHING TO DO button name =", name)
 	})
 
-	t.uiBox.Append(b, stretchy)
+	if (DebugToolkit) {
+		log.Println("gui.Toolbox.NewButton() about to append to Box parent t:", name)
+		t.Dump()
+		log.Println("gui.Toolbox.NewButton() about to append to Box new t:", name)
+		newt.Dump()
+	}
+	if (t.uiBox != nil) {
+		t.uiBox.Append(b, stretchy)
+	} else if (t.uiWindow != nil) {
+		t.uiWindow.SetChild(b)
+	} else {
+		log.Println("ERROR: wit/gui andlabs couldn't place this button in a box or a window")
+		log.Println("ERROR: wit/gui andlabs couldn't place this button in a box or a window")
+		return &t
+	}
 
 	return &newt
 }

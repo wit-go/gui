@@ -21,12 +21,24 @@ import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
 
 var Config GuiConfig
 
-func SetDebugToolkit (s bool) {
+func GetDebug () bool {
+	return Config.Options.Debug
+}
+
+func SetDebug (s bool) {
+	Config.Options.Debug = s
+	// also set these
+	Config.Options.DebugDump = s
+	Config.Options.DebugNode = s
 	toolkit.DebugToolkit = s
 }
 
 func GetDebugToolkit () bool {
 	return toolkit.DebugToolkit
+}
+
+func SetDebugToolkit (s bool) {
+	toolkit.DebugToolkit = s
 }
 
 func ShowDebugValues() {
@@ -102,23 +114,27 @@ func (s Widget) String() string {
 
 // The Node is simply the name and the size of whatever GUI element exists
 type Node struct {
-	id     string
+	id     int
 
 	Name   string
 	Width  int
 	Height int
 
+	// this function is run when there are mouse or keyboard events
+	OnChanged func(*Node)
+
 	parent	*Node
-	// TODO: make children a double linked list since some toolkits require order
+	// TODO: make children a double linked list since some toolkits require order (?)
 	children []*Node
+
+	// hmm. how do you handle this when the toolkits are plugins?
+	toolkit	*toolkit.Toolkit
 
 	// things that may not really be needed (?)
 	custom    func()
-	OnChanged func(*Node)
 	checked   bool
 	text      string
 
-	toolkit	*toolkit.Toolkit
 }
 
 func (n *Node) Parent() *Node {
@@ -159,12 +175,12 @@ func (n *Node) Dump() {
 		IndentPrintln("toolkit    = ", reflect.ValueOf(n.toolkit).Kind())
 		n.toolkit.Dump()
 	}
-	if (n.id == "") {
-		// Node structs should never have a nil id.
-		// I probably shouldn't panic here, but this is just to check the sanity of
-		// the gui package to make sure it's not exiting
-		panic("gui.Node.Dump() id == nil TODO: make a unigue id here in the golang gui library")
-	}
+//	if (n.id == nil) {
+//		// Node structs should never have a nil id.
+//		// I probably shouldn't panic here, but this is just to check the sanity of
+//		// the gui package to make sure it's not exiting
+//		panic("gui.Node.Dump() id == nil TODO: make a unigue id here in the golang gui library")
+//	}
 	IndentPrintln("NODE DUMP END")
 }
 
