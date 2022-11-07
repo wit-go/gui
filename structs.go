@@ -46,13 +46,13 @@ func ShowDebugValues() {
 	log.Println("\t wit/gui DebugDump =", Config.Options.DebugDump)
 	log.Println("\t wit/gui DebugNode =", Config.Options.DebugNode)
 	log.Println("\t wit/gui DebugTabs =", Config.Options.DebugTabs)
-//	log.Println("\t wit/gui DebugTable =", Config.Options.DebugTable)
-//	log.Println("\t wit/gui DebugWindow =", Config.Options.DebugWindow)
+	log.Println("\t wit/gui DebugPlugin =", Config.Options.DebugPlugin)
 	log.Println("\t wit/gui DebugChange =", Config.Options.DebugChange)
 
 	log.Println("\t wit/gui DebugToolkit =", toolkit.DebugToolkit)
 }
 
+// This struct can be used with go-arg
 type GuiOptions struct {
 	// These are global debugging settings
 	// TODO: move to a standard logging system
@@ -60,8 +60,7 @@ type GuiOptions struct {
 	DebugDump    bool
 	DebugNode    bool
 	DebugTabs    bool
-//	DebugTable   bool
-//	DebugWindow  bool
+	DebugPlugin  bool
 	DebugChange  bool `help:"debug mouse clicks and keyboard input"`
 }
 

@@ -3,7 +3,9 @@ package toolkit
 import "log"
 
 func init() {
-	log.Println("gui/toolkit init() Setting defaultBehavior = true")
+	if (DebugToolkit) {
+		log.Println("gui/toolkit init() Setting defaultBehavior = true")
+	}
 	setDefaultBehavior(true)
 }
 
@@ -37,7 +39,9 @@ func (t Toolkit) commonChange(widget string) {
 func (t *Toolkit) broken() bool {
 	if (t.uiBox == nil) {
 		if (t.uiWindow != nil) {
-			log.Println("gui.Toolkit.UiBox == nil. This is an empty window. Try to add a box")
+			if (DebugToolkit) {
+				log.Println("gui.Toolkit.UiBox == nil. This is an empty window. Try to add a box")
+			}
 			t.NewBox()
 			return false
 		}

@@ -29,10 +29,15 @@ func init() {
 	if (Config.Options.Debug) {
 		Config.master.Dump()
 	}
+
+	// load the gocli plugin
+	PlugGocli = LoadPlugin("../../toolkit/gocli.so")
 }
 
 func Main(f func()) {
-	log.Println("Starting gui.Main() (using gtk via andlabs/ui)")
+	if (Config.Options.Debug) {
+		log.Println("Starting gui.Main() (using gtk via andlabs/ui)")
+	}
 	toolkit.Main(f)
 }
 

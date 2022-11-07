@@ -1,5 +1,5 @@
 run: build
-	./buttonAsPlugin
+	./buttonAsPlugin >/tmp/buttonAsPlugin.log 2>&1
 
 build-release:
 	go get -v -u -x .

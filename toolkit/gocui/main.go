@@ -50,18 +50,18 @@ func Init() {
 		log.Panicln(err)
 	}
 
-	AddButton("hello")
-	AddButton("world")
-	AddButton("foo")
+	addButton("hello")
+	addButton("world")
+	addButton("foo")
 
-	AddGroup("blank")
-	AddButton("bar")
-	AddButton("bar none")
-	AddButton("bar going")
+	addGroup("blank")
+	addButton("bar")
+	addButton("bar none")
+	addButton("bar going")
 
-	AddGroup("te")
-	AddButton("world 2")
-	AddButton("foo 2")
+	addGroup("te")
+	addButton("world 2")
+	addButton("foo 2")
 
 	if err := baseGui.MainLoop(); err != nil && !errors.Is(err, gocui.ErrQuit) {
 		log.Panicln(err)

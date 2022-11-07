@@ -9,7 +9,10 @@ import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
 func (n *Node) NewGroup(name string) *Node {
 	var newT *toolkit.Toolkit
 	var gNode *Node
-	log.Println("toolkit.NewGroup() START", name)
+
+	if (GetDebug()) {
+		log.Println("toolkit.NewGroup() START", name)
+	}
 
 	if (n.toolkit == nil) {
 		log.Println("toolkit.NewGroup() toolkit == nil")

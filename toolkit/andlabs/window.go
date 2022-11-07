@@ -17,7 +17,9 @@ func (t *Toolkit) ErrorWindow(msg1 string, msg2 string) {
 
 func NewWindow(title string, x int, y int) *Toolkit {
 	var t Toolkit
-	log.Println("toolkit NewWindow", title, x, y)
+	if (DebugToolkit) {
+		log.Println("toolkit NewWindow", title, x, y)
+	}
 	w := ui.NewWindow(title, x, y, menubar)
 	w.SetBorderless(canvas)
 	w.SetMargined(margin)
@@ -50,11 +52,15 @@ func NewWindow(title string, x int, y int) *Toolkit {
 }
 
 func (t *Toolkit) SetWindowTitle(title string) {
-	log.Println("toolkit NewWindow", t.Name, "title", title)
+	if (DebugToolkit) {
+		log.Println("toolkit NewWindow", t.Name, "title", title)
+	}
 	win := t.uiWindow
 	if (win != nil) {
 		win.SetTitle(title)
 	} else {
-		log.Println("Setting the window title", title)
+		if (DebugToolkit) {
+			log.Println("Setting the window title", title)
+		}
 	}
 }

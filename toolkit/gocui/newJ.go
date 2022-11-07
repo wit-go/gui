@@ -20,7 +20,7 @@ var bottomY int = 7
 
 func newJ(g *gocui.Gui) error {
 	// maxX, maxY := g.Size()
-	name := fmt.Sprintf("jcarr %v test ", idxView)
+	name := fmt.Sprintf("jcarr %v foo ", idxView)
 	v, err := g.SetView(name, topX, topY, bottomX, bottomY, 0)
 	if err == nil {
 		return err

@@ -9,7 +9,9 @@ import (
 )
 
 func Main(f func()) {
-	log.Println("Starting gui.Main() (using gtk via andlabs/ui)")
+	if (DebugToolkit) {
+		log.Println("Starting gui.Main() (using gtk via andlabs/ui)")
+	}
 	ui.Main(f)
 }
 
@@ -22,6 +24,8 @@ func Main(f func()) {
 // For example: Queue(NewWindow())
 //
 func Queue(f func()) {
-	log.Println("Sending function to gui.Main() (using gtk via andlabs/ui)")
+	if (DebugToolkit) {
+		log.Println("Sending function to gui.Main() (using gtk via andlabs/ui)")
+	}
 	ui.QueueMain(f)
 }

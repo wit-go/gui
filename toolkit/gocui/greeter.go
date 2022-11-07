@@ -11,6 +11,8 @@ import (
 
 type greeting string
 
+// this is exported
+var Greeter greeting
 
 // func main() {
 func (g greeting) Greet() {
@@ -19,16 +21,25 @@ func (g greeting) Greet() {
 	// ToolkitMain()
 }
 
-// this is exported
-var Greeter greeting
+func (g greeting) JcarrButton() {
+	fmt.Println("Hello GreetButton meet Universe")
+	addButton("Greet foo")
+	addButton("Greet foo 2")
+}
 
-func AddGroup(name string) {
+func addGroup(name string) {
 	log.Println("addGroup()", name)
 	currentY = 2
 	currentX += groupSize + 6
 }
 
-func AddButton(name string) error {
+func (g greeting) AddButton(name string) {
+// func (g greeting) AddButton() {
+	log.Println("gui.gocui.AddButton()", name)
+	addButton(name)
+}
+
+func addButton(name string) error {
 	t := len(name)
 	v, err := baseGui.SetView(name, currentX, currentY, currentX+t+3, currentY+2, 0)
 	if err == nil {

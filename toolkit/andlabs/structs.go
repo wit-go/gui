@@ -21,8 +21,10 @@ var DebugToolkit bool
 func setDefaultBehavior(s bool) {
 	defaultBehavior = s
 	if (defaultBehavior) {
-		log.Println("Setting this toolkit to use the default behavior.")
-		log.Println("This is the 'guessing' part as defined by the wit/gui 'Principles'. Refer to the docs.")
+		if (DebugToolkit) {
+			log.Println("Setting this toolkit to use the default behavior.")
+			log.Println("This is the 'guessing' part as defined by the wit/gui 'Principles'. Refer to the docs.")
+		}
 		stretchy = false
 		padded = true
 		menubar = true

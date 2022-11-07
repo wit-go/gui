@@ -7,6 +7,12 @@ import 	(
 )
 
 func main() {
+	// go loadPlugin(plugHello, "../../toolkit/hello.so")
+
+	// this doesn't seem to work
+	captureSTDOUT()
+
+	// go loadPlugin("../../toolkit/gocli.so")
 	gui.Main(buttonWindow)
 }
 
@@ -17,9 +23,6 @@ func buttonWindow() {
 	gui.Config.Width = 640
 	gui.Config.Height = 480
 
-//	gui.Config.Exit = gui.StandardClose
-//	gui.SetDebug(true)
-
 	w = gui.NewWindow()
 	g = w.NewGroup("buttonGroup")
 
@@ -27,7 +30,25 @@ func buttonWindow() {
 		log.Println("world")
 	})
 
-	g.NewButton("foo", func () {
-		log.Println("bar")
+	/*
+	g.NewButton("LoadPlugin()", func () {
+		log.Println("world")
+		gui.LoadPlugin("../../toolkit/gocli.so")
+	})
+	*/
+
+	g.NewButton("RunGreet()", func () {
+		log.Println("world")
+		go gui.RunGreet()
+	})
+
+	g.NewButton("gui.LookupJcarrButton()", func () {
+		log.Println("gui.LookupJcarrButton()")
+		gui.LookupJcarrButton()
+	})
+
+	g.NewButton("gui.GocuiAddButton()", func () {
+		log.Println("gui.GocuiAddButton()")
+		gui.GocuiAddButton("new foobar")
 	})
 }

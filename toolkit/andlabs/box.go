@@ -12,10 +12,14 @@ func (t *Toolkit) GetBox() *ui.Box {
 
 // create a new box
 func (t *Toolkit) NewBox() *Toolkit {
-	log.Println("gui.Toolbox.NewBox() START create default")
+	if (DebugToolkit) {
+		log.Println("gui.Toolbox.NewBox() START create default")
+	}
 	t.Dump()
 	if (t.uiGroup != nil) {
-		log.Println("\tgui.Toolbox.NewBox() is a Group")
+		if (DebugToolkit) {
+			log.Println("\tgui.Toolbox.NewBox() is a Group")
+		}
 		var newTK Toolkit
 
 		vbox := ui.NewVerticalBox()
@@ -26,7 +30,9 @@ func (t *Toolkit) NewBox() *Toolkit {
 		return &newTK
 	}
 	if (t.uiBox != nil) {
-		log.Println("\tgui.Toolbox.NewBox() is a Box")
+		if (DebugToolkit) {
+			log.Println("\tgui.Toolbox.NewBox() is a Box")
+		}
 		var newTK Toolkit
 
 		vbox := ui.NewVerticalBox()
@@ -38,7 +44,9 @@ func (t *Toolkit) NewBox() *Toolkit {
 		return &newTK
 	}
 	if (t.uiWindow != nil) {
-		log.Println("\tgui.Toolbox.NewBox() is a Window")
+		if (DebugToolkit) {
+			log.Println("\tgui.Toolbox.NewBox() is a Window")
+		}
 		var newT Toolkit
 
 		vbox := ui.NewVerticalBox()
@@ -50,7 +58,9 @@ func (t *Toolkit) NewBox() *Toolkit {
 		// panic("WTF")
 		return &newT
 	}
-	log.Println("\tgui.Toolbox.NewBox() FAILED. Couldn't figure out where to make a box")
+	if (DebugToolkit) {
+		log.Println("\tgui.Toolbox.NewBox() FAILED. Couldn't figure out where to make a box")
+	}
 	t.Dump()
 	return nil
 }
