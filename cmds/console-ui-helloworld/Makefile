@@ -1,6 +1,7 @@
 run: build
-	./consolemouse
+	./console-ui-helloworld
 	reset
+	ldd ./console-ui-helloworld
 
 build-release:
 	go get -v -u -x .

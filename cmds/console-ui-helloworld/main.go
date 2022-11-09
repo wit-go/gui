@@ -51,17 +51,9 @@ func main() {
 	}
 
 	addButton("hello")
-	addButton("world")
-	addButton("foo")
 
 	addGroup("blank")
-	addButton("bar")
-	addButton("bar none")
-	addButton("bar going")
-
-	addGroup("te")
-	addButton("world 2")
-	addButton("foo 2")
+	addButton("world")
 
 	if err := g.MainLoop(); err != nil && !errors.Is(err, gocui.ErrQuit) {
 		log.Panicln(err)

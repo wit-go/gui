@@ -3,18 +3,18 @@ package main
 
 import 	(
 	"log"
+	"strconv"
 	"git.wit.org/wit/gui"
 )
 
 func main() {
-	// go loadPlugin(plugHello, "../../toolkit/hello.so")
-
 	// this doesn't seem to work
 	captureSTDOUT()
 
-	// go loadPlugin("../../toolkit/gocli.so")
 	gui.Main(buttonWindow)
 }
+
+var counter int = 10
 
 // This creates a window
 func buttonWindow() {
@@ -30,13 +30,6 @@ func buttonWindow() {
 		log.Println("world")
 	})
 
-	/*
-	g.NewButton("LoadPlugin()", func () {
-		log.Println("world")
-		gui.LoadPlugin("../../toolkit/gocli.so")
-	})
-	*/
-
 	g.NewButton("RunGreet()", func () {
 		log.Println("world")
 		go gui.RunGreet()
@@ -47,8 +40,10 @@ func buttonWindow() {
 		gui.LookupJcarrButton()
 	})
 
-	g.NewButton("gui.GocuiAddButton()", func () {
-		log.Println("gui.GocuiAddButton()")
-		gui.GocuiAddButton("new foobar")
+	g.NewButton("new foobar 2", func () {
+		log.Println("new foobar 2. Adding button 'foobar 3'")
+		name := "foobar " + strconv.Itoa(counter)
+		counter += 1
+		g.NewButton(name, nil)
 	})
 }

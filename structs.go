@@ -82,35 +82,6 @@ type GuiConfig struct {
 	prefix     string
 }
 
-type Widget int
-
-// https://ieftimov.com/post/golang-datastructures-trees/
-const (
-	Unknown Widget = iota
-	Window
-	Tab
-	Frame
-	Dropbox
-	Spinner
-	Label
-)
-
-func (s Widget) String() string {
-	switch s {
-	case Window:
-		return "Window"
-	case Tab:
-		return "Tab"
-	case Frame:
-		return "Frame"
-	case Label:
-		return "Label"
-	case Dropbox:
-		return "Dropbox"
-	}
-	return "unknown"
-}
-
 // The Node is simply the name and the size of whatever GUI element exists
 type Node struct {
 	id     int

@@ -30,8 +30,9 @@ func init() {
 		Config.master.Dump()
 	}
 
-	// load the gocli plugin
-	PlugGocli = LoadPlugin("../../toolkit/gocli.so")
+	// load the gocui plugin
+	PlugGocli = LoadPlugin("../../toolkit/gocui.so")
+	PlugGocliOk = false
 }
 
 func Main(f func()) {

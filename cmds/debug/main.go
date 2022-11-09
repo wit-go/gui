@@ -17,14 +17,10 @@ import (
 func main() {
 	log.Println("Starting my Control Panel")
 
-	go gui.Main(initGUI)
+	go gui.Main(helloworld)
+//	go gui.DemoToolkitWindow()
 
 	watchGUI()
-}
-
-// This initializes the first window
-func initGUI() {
-	gui.DemoToolkitWindow()
 }
 
 // This demonstrates how to properly interact with the GUI

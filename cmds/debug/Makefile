@@ -1,5 +1,5 @@
 run: build
-	./gui-demo
+	./debug
 
 build:
 	go build

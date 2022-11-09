@@ -1,10 +1,10 @@
 run: build
-	./gocli-as-plugin
-	# ldd ./gocli-as-plugin
+	./buttonplugin >/tmp/buttonplugin.log 2>&1
 
 build-release:
 	go get -v -u -x .
 	go build
+	./buttonplugin
 
 build:
 	GO111MODULE="off" go get -v -x .

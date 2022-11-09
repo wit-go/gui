@@ -1,12 +1,10 @@
 *.swp
+
+# ignore compiled plugins
+toolkit/*.so
+
+cmds/buttonplugin/buttonplugin
+cmds/console-ui-helloworld/console-ui-helloworld
+cmds/debug/debug
 cmds/helloworld/helloworld
 cmds/textbox/textbox
-cmds/gui-demo/gui-demo
-cmds/consolemouse/consolemouse
-cmds/console-hello-world/console-hello-world
-cmds/gocli-as-plugin/gocli-as-plugin
-cmds/buttonAsPlugin/buttonAsPlugin
-
-tookit/gocui/gocli
-
-toolkit/*.so

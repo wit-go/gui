@@ -73,6 +73,9 @@ I didn't record the dependances needed
 
 Toolkits
 
+* Andlabs - https://github.com/andlabs/ui
+* gocui - https://github.com/awesome-gocui/gocui
+
 The goal is to design something that will work with more than one.
 
 Right now, this abstraction is built on top of the go package 'andlabs/ui'

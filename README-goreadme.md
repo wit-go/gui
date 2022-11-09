@@ -8,17 +8,21 @@ and principles for how this package should generally work:
 
 Definitions:
 
+```go
 * Toolkit: the underlying library (MacOS gui, Windows gui, gtk, qt, etc)
 * Node: A binary tree of all the underlying GUI toolkit elements
+```
 
 Principles:
 
+```go
 * Make code using this package simple to use
 * When in doubt, search upward in the binary tree
 * It's ok to guess. We will return something close.
 * Hide complexity internally here
 * Isolate the GUI toolkit
 * Try to use [Wikipedia Graphical widget] names
+```
 
 ## Quick Start
 
@@ -76,6 +80,9 @@ GO111MODULE="off" go build -v -x
 
 ## Toolkits
 
+* Andlabs - [https://github.com/andlabs/ui](https://github.com/andlabs/ui)
+* gocui - [https://github.com/awesome-gocui/gocui](https://github.com/awesome-gocui/gocui)
+
 The goal is to design something that will work with more than one.
 
 Right now, this abstraction is built on top of the go package 'andlabs/ui'
@@ -109,12 +116,31 @@ Useful links and other
 external things
 which might be useful
 
-* [Wikipedia Graphical widget](https://en.wikipedia.org/wiki/Graphical_widget)
-* [Github mirror](https://github.com/witorg/gui)
+[Wikipedia Graphical widget]: [https://en.wikipedia.org/wiki/Graphical_widget](https://en.wikipedia.org/wiki/Graphical_widget)
+[Github mirror]: [https://github.com/witorg/gui](https://github.com/witorg/gui)
+
+```go
+* [Wikipedia Graphical widget]
+* [Github mirror]
+```
+
+## Variables
+
+```golang
+var PlugGocli *plugin.Plugin
+```
+
+```golang
+var PlugGocliOk bool
+```
+
+```golang
+var PlugHello *plugin.Plugin
+```
 
 ## Functions
 
-### func [DebugTab](/window-debug.go#L26)
+### func [DebugTab](/example_window_debug.go#L26)
 
 `func DebugTab()`
 
@@ -122,13 +148,13 @@ this function is used by the examples to add a tab
 dynamically to the bugWin node
 TODO: make this smarter once this uses toolkit/
 
-### func [DebugWindow](/window-debug.go#L14)
+### func [DebugWindow](/example_window_debug.go#L14)
 
 `func DebugWindow()`
 
 Creates a window helpful for debugging this package
 
-### func [DemoToolkitWindow](/window-demo-toolkit.go#L24)
+### func [DemoToolkitWindow](/example_window_demo_toolkit.go#L24)
 
 `func DemoToolkitWindow()`
 
@@ -138,29 +164,45 @@ internally using it's raw unchanged code for the toolkit itself
 This is a way to test and see if the toolkit is working at all
 right now it shows the andlabs/ui/DemoNumbersPage()
 
-### func [DemoWindow](/window-demo.go#L10)
+### func [DemoWindow](/example_window_demo.go#L10)
 
 `func DemoWindow()`
 
 This creates a window that shows how this package works
 
-### func [GetDebugToolkit](/structs.go#L28)
+### func [GetDebug](/structs.go#L24)
+
+`func GetDebug() bool`
+
+### func [GetDebugToolkit](/structs.go#L36)
 
 `func GetDebugToolkit() bool`
 
-### func [GolangDebugWindow](/window-golang-debug.go#L20)
+### func [GocuiAddButton](/plugin.go#L108)
+
+`func GocuiAddButton(name string)`
+
+### func [GolangDebugWindow](/example_window_golang_debug.go#L12)
 
 `func GolangDebugWindow()`
 
-### func [IndentPrintln](/structs.go#L199)
+### func [IndentPrintln](/structs.go#L216)
 
 `func IndentPrintln(a ...interface{})`
 
-### func [Main](/main.go#L31)
+### func [LoadPlugin](/plugin.go#L36)
+
+`func LoadPlugin(name string) *plugin.Plugin`
+
+### func [LookupJcarrButton](/plugin.go#L98)
+
+`func LookupJcarrButton()`
+
+### func [Main](/main.go#L38)
 
 `func Main(f func())`
 
-### func [Queue](/main.go#L42)
+### func [Queue](/main.go#L51)
 
 `func Queue(f func())`
 
@@ -171,21 +213,43 @@ other goroutines. This is due to the nature of how
 Linux, MacOS and Windows work (they all work differently. suprise. surprise.)
 For example: gui.Queue(NewWindow())
 
-### func [SetDebugToolkit](/structs.go#L24)
+### func [RunGreet](/plugin.go#L88)
+
+`func RunGreet()`
+
+### func [SetDebug](/structs.go#L28)
+
+`func SetDebug(s bool)`
+
+### func [SetDebugToolkit](/structs.go#L40)
 
 `func SetDebugToolkit(s bool)`
 
-### func [ShowDebugValues](/structs.go#L32)
+### func [ShowDebugValues](/structs.go#L44)
 
 `func ShowDebugValues()`
 
-### func [StandardClose](/window-golang-debug.go#L12)
+### func [StandardClose](/main.go#L57)
 
 `func StandardClose(n *Node)`
 
+The window is destroyed but the application does not quit
+
+### func [StandardExit](/main.go#L65)
+
+`func StandardExit(n *Node)`
+
+The window is destroyed but the application does not quit
+
 ## Types
 
-### type [GuiConfig](/structs.go#L56)
+### type [Greeter](/plugin.go#L17)
+
+`type Greeter interface { ... }`
+
+TODO: could a protobuf work here?
+
+### type [GuiConfig](/structs.go#L67)
 
 `type GuiConfig struct { ... }`
 
@@ -195,17 +259,19 @@ For example: gui.Queue(NewWindow())
 var Config GuiConfig
 ```
 
-### type [GuiOptions](/structs.go#L44)
+### type [GuiOptions](/structs.go#L56)
 
 `type GuiOptions struct { ... }`
 
-### type [Node](/structs.go#L104)
+This struct can be used with go-arg
+
+### type [Node](/structs.go#L117)
 
 `type Node struct { ... }`
 
 The Node is simply the name and the size of whatever GUI element exists
 
-#### func [NewStandardWindow](/window-demo-toolkit.go#L7)
+#### func [NewStandardWindow](/example_window_demo_toolkit.go#L7)
 
 `func NewStandardWindow(title string) *Node`
 
@@ -257,9 +323,13 @@ func main() {
 You get a window
 ```
 
-### type [Widget](/structs.go#L74)
+### type [Widget](/widget.go#L12)
 
-`type Widget int`
+`type Widget struct { ... }`
+
+what names should be used? This is not part of [[Graphical Widget]]
+Event() seems like a good name.
+Could a protobuf be used here? (Can functions be passed?)
 
 ---
 Readme created from Go doc with [goreadme](https://github.com/posener/goreadme)

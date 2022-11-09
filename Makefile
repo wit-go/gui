@@ -2,7 +2,7 @@
 
 all: README.md
 	@echo
-	@echo "make examples     # will run all the examples"
+	@echo "make cmds     # will run all the cmds"
 	@echo "make update       # full git update"
 	@echo
 	make -C cmds/helloworld
@@ -12,16 +12,22 @@ update:
 	git pull
 	go get -v -t -u ./...
 
-examples: examples-consolemouse examples-helloworld examples-gui-demo
+cmds: cmds-buttonplugin cmds-console-ui-helloworld cmds-debug cmds-helloworld cmds-textbox
 
-examples-consolemouse:
-	make -C cmds/consolemouse
+cmds-buttonplugin:
+	make -C cmds/buttonplugin
 
-examples-helloworld:
+cmds-console-ui-helloworld:
+	make -C cmds/console-ui-helloworld
+
+cmds-helloworld:
 	make -C cmds/helloworld
 
-examples-gui-demo:
-	make -C cmds/gui-demo
+cmds-debug:
+	make -C cmds/debug
+
+cmds-textbox:
+	make -C cmds/textbox
 
 # sync repo to the github backup
 github:
@@ -34,7 +40,11 @@ doc:
 
 # GO111MODULE=on go install github.com/posener/goreadme/cmd/goreadme@latest (worked Oct 20 2022)
 README.md: doc.go
-	goreadme -factories -types -functions -variabless > README.md 
+	goreadme -factories -types -functions -variabless > README-goreadme.md 
+
+clean:
+	rm -f toolkit/*.so
 
 plugins:
-	GO111MODULE="off" go build -buildmode=plugin -o toolkit/gocli.so toolkit/gocli/greeter.go
+	# GO111MODULE="off" go build -buildmode=plugin -o toolkit/test.so toolkit/gocui/*.go
+	make -C  toolkit/gocui

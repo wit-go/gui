@@ -1,28 +1,37 @@
 package main
 
 import (
-	"errors"
-	"fmt"
 	"log"
-	"strings"
 
-	"github.com/awesome-gocui/gocui"
+	// "errors"
+	// "fmt"
+	// "strings"
+	// "github.com/awesome-gocui/gocui"
 )
 
 type greeting string
 
+// stores the raw toolkit internals
+type toolkit struct {
+	id     string
+	Name   string
+
+	OnChanged	func(toolkit)
+}
+
 // this is exported
 var Greeter greeting
+var Toolkit toolkit
 
 // func main() {
 func (g greeting) Greet() {
-	fmt.Println("Hello Universe")
+	log.Println("Hello Universe")
 	Init()
 	// ToolkitMain()
 }
 
 func (g greeting) JcarrButton() {
-	fmt.Println("Hello GreetButton meet Universe")
+	log.Println("Hello GreetButton meet Universe")
 	addButton("Greet foo")
 	addButton("Greet foo 2")
 }
@@ -39,6 +48,7 @@ func (g greeting) AddButton(name string) {
 	addButton(name)
 }
 
+/*
 func addButton(name string) error {
 	t := len(name)
 	v, err := baseGui.SetView(name, currentX, currentY, currentX+t+3, currentY+2, 0)
@@ -66,3 +76,4 @@ func addButton(name string) error {
 	}
 	return nil
 }
+*/
