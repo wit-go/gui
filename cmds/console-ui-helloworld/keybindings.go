@@ -115,7 +115,7 @@ func initKeybindings(g *gocui.Gui) error {
 		func(g *gocui.Gui, v *gocui.View) error {
 			log.Println("help", v.Name())
 			tmp, _ := g.SetViewOnTop("help")
-			log.Println("help 2", tmp.Name(), "blah")
+			log.Println("help 2", tmp.Name())
 //			g.SetView("help", 2, 2, 30, 15, 0);
 			g.SetCurrentView("help")
 //			moveView(g, tmp, 0, -delta)

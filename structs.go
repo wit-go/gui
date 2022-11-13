@@ -5,7 +5,8 @@ import (
 	"reflect"
 )
 
-import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
+// import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
+import newtoolkit	"git.wit.org/wit/gui/toolkit"
 
 //
 // All GUI Data Structures and functions that are external
@@ -22,46 +23,46 @@ import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
 var Config GuiConfig
 
 func GetDebug () bool {
-	return Config.Options.Debug
+	return Config.Debug.Debug
 }
 
 func SetDebug (s bool) {
-	Config.Options.Debug = s
+	Config.Debug.Debug = s
 	// also set these
-	Config.Options.DebugDump = s
-	Config.Options.DebugNode = s
-	toolkit.DebugToolkit = s
+	Config.Debug.Dump = s
+	Config.Debug.Node = s
+	// toolkit.DebugToolkit = s
 }
 
 func GetDebugToolkit () bool {
-	return toolkit.DebugToolkit
+	return Config.Debug.Toolkit
 }
 
 func SetDebugToolkit (s bool) {
-	toolkit.DebugToolkit = s
+	Config.Debug.Toolkit = s
 }
 
 func ShowDebugValues() {
-	log.Println("\t wit/gui Debug =", Config.Options.Debug)
-	log.Println("\t wit/gui DebugDump =", Config.Options.DebugDump)
-	log.Println("\t wit/gui DebugNode =", Config.Options.DebugNode)
-	log.Println("\t wit/gui DebugTabs =", Config.Options.DebugTabs)
-	log.Println("\t wit/gui DebugPlugin =", Config.Options.DebugPlugin)
-	log.Println("\t wit/gui DebugChange =", Config.Options.DebugChange)
-
-	log.Println("\t wit/gui DebugToolkit =", toolkit.DebugToolkit)
+	log.Println("\t wit/gui Debug =", Config.Debug.Debug)
+	log.Println("\t wit/gui DebugDump =", Config.Debug.Dump)
+	log.Println("\t wit/gui DebugNode =", Config.Debug.Node)
+	log.Println("\t wit/gui DebugTabs =", Config.Debug.Tabs)
+	log.Println("\t wit/gui DebugPlugin =", Config.Debug.Plugin)
+	log.Println("\t wit/gui DebugChange =", Config.Debug.Change)
+	log.Println("\t wit/gui DebugToolkit =", Config.Debug.Toolkit)
 }
 
 // This struct can be used with go-arg
-type GuiOptions struct {
+type GuiDebug struct {
 	// These are global debugging settings
 	// TODO: move to a standard logging system
-	Debug        bool
-	DebugDump    bool
-	DebugNode    bool
-	DebugTabs    bool
-	DebugPlugin  bool
-	DebugChange  bool `help:"debug mouse clicks and keyboard input"`
+	Debug   bool
+	Dump    bool
+	Node    bool
+	Tabs    bool
+	Plugin  bool
+	Change  bool `help:"debug mouse clicks and keyboard input"`
+	Toolkit bool `help:"debug toolkit"`
 }
 
 type GuiConfig struct {
@@ -74,7 +75,7 @@ type GuiConfig struct {
 	Height     int
 	Exit       func(*Node)
 
-	Options GuiOptions
+	Debug GuiDebug
 
 	// hacks
 	depth      int
@@ -86,9 +87,12 @@ type GuiConfig struct {
 type Node struct {
 	id     int
 
+	// deprecate these and use toolkit.Widget
 	Name   string
 	Width  int
 	Height int
+
+	Widget	newtoolkit.Widget
 
 	// this function is run when there are mouse or keyboard events
 	OnChanged func(*Node)
@@ -98,13 +102,12 @@ type Node struct {
 	children []*Node
 
 	// hmm. how do you handle this when the toolkits are plugins?
-	toolkit	*toolkit.Toolkit
+	// toolkit	*toolkit.Toolkit
 
 	// things that may not really be needed (?)
 	custom    func()
 	checked   bool
 	text      string
-
 }
 
 func (n *Node) Parent() *Node {
@@ -116,7 +119,7 @@ func (n *Node) Window() *Node {
 }
 
 func (n *Node) Dump() {
-	if ! Config.Options.DebugDump {
+	if ! Config.Debug.Dump {
 		return
 	}
 	IndentPrintln("NODE DUMP START")
@@ -141,10 +144,10 @@ func (n *Node) Dump() {
 		IndentPrintln("OnChanged  = ", n.OnChanged)
 	}
 	IndentPrintln("text       = ", reflect.ValueOf(n.text).Kind(), n.text)
-	if (n.toolkit != nil) {
-		IndentPrintln("toolkit    = ", reflect.ValueOf(n.toolkit).Kind())
-		n.toolkit.Dump()
-	}
+//	if (n.toolkit != nil) {
+//		IndentPrintln("toolkit    = ", reflect.ValueOf(n.toolkit).Kind())
+//		n.toolkit.Dump()
+//	}
 //	if (n.id == nil) {
 //		// Node structs should never have a nil id.
 //		// I probably shouldn't panic here, but this is just to check the sanity of
@@ -163,7 +166,7 @@ func (n *Node) SetName(name string) {
 
 func (n *Node) Append(child *Node) {
 	n.children = append(n.children, child)
-	if (Config.Options.Debug) {
+	if (Config.Debug.Debug) {
 		log.Println("child node:")
 		child.Dump()
 		log.Println("parent node:")
@@ -206,11 +209,11 @@ func (n *Node) ListChildren(dump bool) {
 	if len(n.children) == 0 {
 		if (n.parent == nil) {
 		} else {
-			if (Config.Options.DebugNode) {
+			if (Config.Debug.Node) {
 				log.Println("\t\t\tparent =",n.parent.id)
 			}
 			if (listChildrenParent != nil) {
-				if (Config.Options.DebugNode) {
+				if (Config.Debug.Node) {
 					log.Println("\t\t\tlistChildrenParent =",listChildrenParent.id)
 				}
 				if (listChildrenParent.id != n.parent.id) {
@@ -219,7 +222,7 @@ func (n *Node) ListChildren(dump bool) {
 				}
 			}
 		}
-		if (Config.Options.DebugNode) {
+		if (Config.Debug.Node) {
 			log.Println("\t\t", n.id, "has no children")
 		}
 		return
@@ -227,7 +230,7 @@ func (n *Node) ListChildren(dump bool) {
 	for _, child := range n.children {
 		// log.Println("\t\t", child.id, child.Width, child.Height, child.Name)
 		if (child.parent != nil) {
-			if (Config.Options.DebugNode) {
+			if (Config.Debug.Node) {
 				log.Println("\t\t\tparent =",child.parent.id)
 			}
 		} else {
@@ -237,7 +240,7 @@ func (n *Node) ListChildren(dump bool) {
 		if (dump == true) {
 			child.Dump()
 		}
-		if (Config.Options.DebugNode) {
+		if (Config.Debug.Node) {
 			if (child.children == nil) {
 				log.Println("\t\t", child.id, "has no children")
 			} else {

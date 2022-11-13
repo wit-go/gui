@@ -21,7 +21,7 @@ var args struct {
 	Foo string
 	Bar bool
 	LogOptions
-	gui.GuiOptions
+	gui.GuiDebug
 }
 
 
@@ -29,11 +29,13 @@ func main() {
 	arg.MustParse(&args)
 	fmt.Println(args.Foo, args.Bar, args.User)
 
-	gui.Config.Options.Debug = args.Debug
-	gui.Config.Options.DebugChange = args.DebugChange
-	gui.Config.Options.DebugDump = args.DebugDump
-	gui.Config.Options.DebugNode = args.DebugNode
-	gui.Config.Options.DebugTabs = args.DebugTabs
+	gui.Config.Debug.Debug = args.Debug
+	/*
+	gui.Config.Debug.Change = args.DebugChange
+	gui.Config.Debug.Dump = args.DebugDump
+	gui.Config.Debug.Node = args.DebugNode
+	gui.Config.Debug.Tabs = args.DebugTabs
+	*/
 
 	/*
 	f, err := os.OpenFile("/tmp/guilogfile", os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
@@ -46,6 +48,7 @@ func main() {
 	log.Println("This is a test log entry")
 	*/
 
+	gui.Init()
 	gui.Main(initGUI)
 }
 
@@ -62,6 +65,8 @@ func initGUI() {
 	addDemoTab(w, "A Simple Tab Demo")
 	addDemoTab(w, "A Second Tab")
 
+	/*
+	TODO: add these back
 	if (args.GuiDemo) {
 		gui.DemoToolkitWindow()
 	}
@@ -69,6 +74,7 @@ func initGUI() {
 	if (args.GuiDebug) {
 		gui.DebugWindow()
 	}
+	*/
 }
 
 func addDemoTab(window *gui.Node, title string) {
@@ -80,9 +86,9 @@ func addDemoTab(window *gui.Node, title string) {
 
 	g = newNode.NewGroup("group 1")
 	dd := g.NewDropdown("demoCombo2")
-	dd.AddDropdown("more 1")
-	dd.AddDropdown("more 2")
-	dd.AddDropdown("more 3")
+	dd.AddDropdownName("more 1")
+	dd.AddDropdownName("more 2")
+	dd.AddDropdownName("more 3")
 	dd.OnChanged = func(*gui.Node) {
 		s := dd.GetText()
 		tb.SetText("hello world " + args.User + "\n" + s)

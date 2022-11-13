@@ -17,7 +17,9 @@ import (
 func main() {
 	log.Println("Starting my Control Panel")
 
-	go gui.Main(helloworld)
+	gui.Init()
+//	go gui.Main(helloworld)
+	go gui.Main(gui.DebugWindow)
 //	go gui.DemoToolkitWindow()
 
 	watchGUI()
@@ -36,9 +38,9 @@ func watchGUI() {
 			gui.Config.Width = 800
 			gui.Config.Height = 300
 			gui.Config.Exit = myExit
-			gui.Queue(gui.DebugWindow)
+			// gui.DebugWindow()
 			time.Sleep(1 * time.Second)
-			gui.Queue(gui.DebugTab)
+			// gui.DebugTab()
 		}
 	}
 }

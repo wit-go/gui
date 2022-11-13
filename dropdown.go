@@ -2,61 +2,30 @@ package gui
 
 import "log"
 
-import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
-
-func commonCallback(n *Node) {
-	// TODO: make all of this common code to all the widgets
-	if (n.OnChanged == nil) {
-		if (Config.Options.DebugChange) {
-			log.Println("Not Running n.OnChanged(n) == nil")
+func (n *Node) AddDropdownName(name string) {
+	for _, aplug := range allPlugins {
+		log.Println("gui.AddDropdownName() aplug =", aplug.name, "name =", name)
+		if (aplug.AddDropdownName == nil) {
+			log.Println("\tgui.AddDropdownName() aplug.NewDropdown = nil", aplug.name)
+			continue
 		}
-	} else {
-		if (Config.Options.DebugChange) {
-			log.Println("Running n.OnChanged(n)")
-		}
-		n.OnChanged(n)
+		aplug.AddDropdownName(&n.Widget, name)
 	}
-
-	if (n.custom == nil) {
-		if (Config.Options.DebugChange) {
-			log.Println("Not Running n.custom(n) == nil")
-		}
-	} else {
-		if (Config.Options.DebugChange) {
-			log.Println("Running n.custom()")
-		}
-		n.custom()
-	}
-}
-
-func (n *Node) NewDropdown(name string) *Node {
-	var newT *toolkit.Toolkit
-	var sNode *Node
-
-	if (Config.Options.Debug) {
-		log.Println("toolkit.NewDropdown() START", name)
-	}
-
-	n.verify()
-
-	sNode = n.New(name + " part1")
-	newT = n.toolkit.NewDropdown(name)
-	newT.Name = name
-	sNode.custom = n.custom
-	newT.Custom = func () {
-		commonCallback(sNode)
-	}
-	sNode.toolkit = newT
-	sNode.Dump()
-	// panic("checking Custom()")
-
-	return sNode
-}
-
-func (n *Node) AddDropdown(name string) {
-	n.toolkit.AddDropdown(name)
 }
 
 func (n *Node) SetDropdown(i int) {
-	n.toolkit.SetDropdown(i)
+}
+
+func (n *Node) NewDropdown(text string) *Node {
+	newNode := n.New(text)
+
+	for _, aplug := range allPlugins {
+		log.Println("gui.NewDropdown() aplug =", aplug.name, "name =", newNode.Widget.Name)
+		if (aplug.NewDropdown == nil) {
+			log.Println("\tgui.NewDropdown() aplug.NewDropdown = nil", aplug.name)
+			continue
+		}
+		aplug.NewDropdown(&n.Widget, &newNode.Widget)
+	}
+	return newNode
 }

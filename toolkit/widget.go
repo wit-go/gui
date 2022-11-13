@@ -1,4 +1,4 @@
-package gui
+package toolkit
 
 // passes information between the toolkit library (plugin)
 
@@ -16,13 +16,25 @@ type Widget struct {
 	Name   string
 	Width  int
 	Height int
+	X      int
+	Y      int
 
+	Custom    func()
 	Event     func(*Widget) *Widget
 
 	// Probably deprecate these
-	OnChanged func(*Widget)
-	Custom    func(*Widget)
-	OnExit    func(*Widget)
+//	OnChanged func(*Widget)
+//	Custom    func(*Widget)
+//	OnExit    func(*Widget)
+}
+
+type Blah struct {
+	i     int
+	s     string
+
+	Name   string
+	Width  int
+	Height int
 }
 
 /*

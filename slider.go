@@ -2,27 +2,24 @@ package gui
 
 import "log"
 
-import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
-
 func (n *Node) NewSlider(name string, x int, y int) *Node {
-	var newT *toolkit.Toolkit
-	var sNode *Node
+	newNode := n.New(name)
+	newNode.Widget.Name = name
+	newNode.Widget.X = x
+	newNode.Widget.Y = y
 
-	log.Println("toolkit.NewSlider() START", name)
-
-	n.verify()
-
-	// make a *Node with a *toolkit.Group
-	sNode = n.New(name + " part1")
-	newT = n.toolkit.NewSlider(name, x, y)
-	newT.Name = name
-	sNode.custom = n.custom
-	newT.Custom = func () {
-		commonCallback(sNode)
+	newNode.Widget.Custom = func() {
+		log.Println("even newer clicker() name in NewSlider", newNode.Widget)
 	}
-	sNode.toolkit = newT
-	sNode.Dump()
-	// panic("checking Custom()")
 
-	return sNode
+	for _, aplug := range allPlugins {
+		log.Println("gui.NewSlider() aplug =", aplug.name, "name =", newNode.Widget.Name)
+		if (aplug.NewSlider == nil) {
+			log.Println("\tgui.NewSlider() aplug.NewSlider = nil", aplug.name)
+			continue
+		}
+		aplug.NewSlider(&n.Widget, &newNode.Widget)
+	}
+
+	return newNode
 }

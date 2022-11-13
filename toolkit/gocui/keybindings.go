@@ -11,6 +11,7 @@ import (
 //	"strings"
 
 	"github.com/awesome-gocui/gocui"
+	"git.wit.org/wit/gui/toolkit"
 )
 
 func initKeybindings(g *gocui.Gui) error {
@@ -87,6 +88,21 @@ func initKeybindings(g *gocui.Gui) error {
 	if err := g.SetKeybinding("", gocui.KeyEnter, gocui.ModNone,
 		func(g *gocui.Gui, v *gocui.View) error {
 			log.Println("enter", v.Name())
+			var w *toolkit.Widget
+			w = stringWidget[v.Name()]
+			if (w == nil) {
+				log.Println("COULD NOT FIND WIDGET", v.Name())
+			} else {
+				log.Println("FOUND WIDGET!", w)
+				if (w.Custom != nil) {
+					w.Custom()
+					return nil
+				}
+				if (w.Event != nil) {
+					w.Event(w)
+					return nil
+				}
+			}
 			return nil
 		}); err != nil {
 		return err
@@ -105,17 +121,11 @@ func initKeybindings(g *gocui.Gui) error {
 		}); err != nil {
 		return err
 	}
-	if err := g.SetKeybinding("", 'j', gocui.ModNone,
-		func(g *gocui.Gui, v *gocui.View) error {
-			return newJ(g)
-		}); err != nil {
-		return err
-	}
 	if err := g.SetKeybinding("", 'h', gocui.ModNone,
 		func(g *gocui.Gui, v *gocui.View) error {
 			log.Println("help", v.Name())
 			tmp, _ := g.SetViewOnTop("help")
-			log.Println("help 2", tmp.Name(), "blah")
+			log.Println("help 2", tmp.Name())
 //			g.SetView("help", 2, 2, 30, 15, 0);
 			g.SetCurrentView("help")
 //			moveView(g, tmp, 0, -delta)

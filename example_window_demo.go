@@ -18,3 +18,13 @@ func DemoWindow() {
 
 	log.Println("DemoWindow() END")
 }
+
+func NewStandardWindow(title string) *Node {
+	log.Println("NewStandardWindow() creating", title)
+
+	Config.Title = title
+	Config.Width = 640
+	Config.Height = 480
+	Config.Exit = StandardClose
+	return NewWindow()
+}

@@ -41,9 +41,9 @@ func debugFlags(n *Node) {
 
 	checkd = df.NewCheckbox("Debug")
 	checkd.OnChanged = func(*Node) {
-		checkd.checked = checkd.toolkit.Checked()
-		Config.Options.Debug = checkd.checked
-		if (Config.Options.Debug) {
+		// checkd.checked = checkd.toolkit.Checked()
+		Config.Debug.Debug = true
+		if (Config.Debug.Debug) {
 			log.Println("Debug turned on")
 		} else {
 			log.Println("Debug turned off")
@@ -52,18 +52,17 @@ func debugFlags(n *Node) {
 
 	checkdn = df.NewCheckbox("Debug Node")
 	checkdn.OnChanged = func(*Node) {
-		checkdn.checked = checkdn.toolkit.Checked()
-		Config.Options.DebugNode = checkdn.checked
+		Config.Debug.Node = true
 	}
 
 	checkdd = df.NewCheckbox("Debug node.Dump()")
 	checkdd.OnChanged = func(*Node) {
-		Config.Options.DebugDump = checkdd.toolkit.Checked()
+		Config.Debug.Dump = true
 	}
 
 	changeCheckbox = df.NewCheckbox("Debug Change")
 	changeCheckbox.OnChanged = func(*Node) {
-		Config.Options.DebugChange = changeCheckbox.toolkit.Checked()
+		Config.Debug.Change = true
 	}
 
 	df.NewButton("Dump Debug Flags", func () {
@@ -83,20 +82,20 @@ func (n *Node) DebugTab(title string) *Node {
 	gog = newN.NewGroup("GOLANG")
 	gog.NewLabel("go language")
 	gog.NewButton("GO Language Debug", func () {
-		GolangDebugWindow()
+		// GolangDebugWindow()
 	})
 
 	gog.NewLabel("wit/gui package")
 	gog.NewButton("WIT/GUI Package Debug", func () {
 		Config.Width = 640
 		Config.Height = 480
-		Queue(DebugWindow)
+		// Queue(DebugWindow)
 	})
 	gog.NewButton("Demo wit/gui", func () {
-		DemoWindow()
+		// DemoWindow()
 	})
 	gog.NewButton("Demo toolkit andlabs/ui", func () {
-		DemoToolkitWindow()
+		// DemoToolkitWindow()
 	})
 
 	debugFlags(newN)
@@ -118,7 +117,7 @@ func (n *Node) DebugTab(title string) *Node {
 		if (dump == true) {
 			child.Dump()
 		}
-		dd.AddDropdown(child.Name)
+		dd.AddDropdownName(child.Name)
 	}
 	dd.SetDropdown(0)
 

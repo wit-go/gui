@@ -6,30 +6,16 @@ import "regexp"
 
 // functions for handling text related GUI elements
 
-func (n *Node) NewLabel(text string) *Node {
-	// make new node here
-	newNode := n.New(text)
-	newNode.Dump()
-
-	t := n.toolkit.NewLabel(text)
-	newNode.toolkit = t
-
-	return newNode
-}
-
 func (n *Node) SetText(str string) bool {
-	if (Config.Options.DebugChange) {
+	if (Config.Debug.Change) {
 		log.Println("gui.SetText() value =", str)
 	}
-	if (n.toolkit == nil) {
-		return false
-	}
 
-	return n.toolkit.SetText(str)
+	return true
 }
 
 func (n *Node) GetText() string {
-	return n.toolkit.GetText()
+	return "not implemented"
 }
 
 /*
@@ -64,4 +50,29 @@ func normalizeInt(s string) string {
 	clean := reg.ReplaceAllString(s, "")
 	log.Println("normalizeInt() s =", clean)
 	return clean
+}
+
+func commonCallback(n *Node) {
+	// TODO: make all of this common code to all the widgets
+	if (n.OnChanged == nil) {
+		if (Config.Debug.Change) {
+			log.Println("Not Running n.OnChanged(n) == nil")
+		}
+	} else {
+		if (Config.Debug.Change) {
+			log.Println("Running n.OnChanged(n)")
+		}
+		n.OnChanged(n)
+	}
+
+	if (n.custom == nil) {
+		if (Config.Debug.Change) {
+			log.Println("Not Running n.custom(n) == nil")
+		}
+	} else {
+		if (Config.Debug.Change) {
+			log.Println("Running n.custom()")
+		}
+		n.custom()
+	}
 }

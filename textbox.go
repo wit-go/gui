@@ -2,47 +2,21 @@ package gui
 
 import "log"
 
-import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
-
 func (n *Node) NewTextbox(name string) *Node {
-	var newt *toolkit.Toolkit
-	var c *Node
+	newNode := n.New(name)
 
-	log.Println("toolkit.NewTextbox() START", name)
-
-	n.verify()
-
-	// make a new Node and a new toolbox struct
-	c = n.New(name)
-	newt = n.toolkit.NewTextbox(name)
-
-	c.toolkit = newt
-	c.custom = n.custom
-
-	newt.Name = name
-	// newt.Custom = func () {
-	newt.OnChanged = func (*toolkit.Toolkit) {
-		if (Config.Options.DebugChange) {
-			log.Println("AM IN CALLBACK. SETTING NODE.checked START")
-			c.Dump()
-			c.toolkit.Dump()
-		}
-		c.text = c.toolkit.GetText()
-		if (c.OnChanged == nil) {
-			if (Config.Options.DebugChange) {
-				log.Println("this is println?")
-			}
-		} else {
-			if (Config.Options.DebugChange) {
-				log.Println("this is println? running c.OnChanged() here")
-			}
-			c.OnChanged(n)
-		}
-		if (Config.Options.DebugChange) {
-			log.Println("n.toolkit.GetText() =", c.text)
-			log.Println("AM IN CALLBACK. SETTING NODE.checked END")
-		}
+	newNode.Widget.Custom = func() {
+		log.Println("even newer clicker() name in NewTextBox", newNode.Widget)
 	}
 
-	return c
+	for _, aplug := range allPlugins {
+		log.Println("gui.NewTextbox() aplug =", aplug.name, "name =", newNode.Widget.Name)
+		if (aplug.NewTextbox == nil) {
+			log.Println("\tgui.NewTextbox() aplug.NewTextbox = nil", aplug.name)
+			continue
+		}
+		aplug.NewTextbox(&n.Widget, &newNode.Widget)
+	}
+
+	return newNode
 }

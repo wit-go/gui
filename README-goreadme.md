@@ -1,33 +1,26 @@
 # gui
 
-Package gui implements a abstraction layer for Go visual elements in
-a cross platform and library independent way. (hopefully this is will work)
-
-A quick overview of the features, some general design guidelines
-and principles for how this package should generally work:
+Package gui implements a abstraction layer for Go visual elements.
 
 Definitions:
 
 ```go
-* Toolkit: the underlying library (MacOS gui, Windows gui, gtk, qt, etc)
-* Node: A binary tree of all the underlying GUI toolkit elements
+* Toolkit: the underlying GUI library (MacOS gui, Windows gui, gtk, qt, etc)
+* Node: A binary tree of all the underlying widgets
 ```
 
 Principles:
 
 ```go
 * Make code using this package simple to use
-* When in doubt, search upward in the binary tree
-* It's ok to guess. We will return something close.
 * Hide complexity internally here
 * Isolate the GUI toolkit
-* Try to use [Wikipedia Graphical widget] names
+* Widget names should try to match [Wikipedia Graphical widget]
+* When in doubt, search upward in the binary tree
+* It's ok to guess. Try to do something sensible.
 ```
 
-## Quick Start
-
-This section demonstrates how to quickly get started with spew.  See the
-sections below for further details on formatting and configuration options.
+Quick Start
 
 ```go
 // This creates a simple hello world window
@@ -42,6 +35,7 @@ var window *gui.Node // This is the beginning of the binary tree of widgets
 
 // go will sit here until the window exits
 func main() {
+	gui.Init()
 	gui.Main(helloworld)
 }
 
@@ -78,37 +72,23 @@ GO111MODULE="off" go build -v -x
 [./helloworld](./helloworld)
 ```
 
-## Toolkits
+Toolkits
 
-* Andlabs - [https://github.com/andlabs/ui](https://github.com/andlabs/ui)
+```go
+* andlabs - [https://github.com/andlabs/ui](https://github.com/andlabs/ui)
 * gocui - [https://github.com/awesome-gocui/gocui](https://github.com/awesome-gocui/gocui)
+```
 
-The goal is to design something that will work with more than one.
+The next step is to allow this to work against go-gtk and go-qt.
 
-Right now, this abstraction is built on top of the go package 'andlabs/ui'
-which does the cross platform support.
-The next step is to intent is to allow this to work directly against GTK and QT.
-
-It should be able to add Fyne, WASM, native macos & windows, android and
+TODO: Add Fyne, WASM, native macos & windows, android and
 hopefully also things like libSDL, faiface/pixel, slint
-
-## Errors
-
-Since it is possible for custom Stringer/error interfaces to panic, spew
-detects them and handles them internally by printing the panic information
-inline with the output.  Since spew is intended to provide deep pretty printing
-capabilities on structures, it intentionally does not return any errors.
-
-## Debugging
-
-To dump variables with full newlines, indentation, type, and pointer
-information this uses spew.Dump()
 
 ## Bugs
 
 "The author's idea of friendly may differ to that of many other people."
 
--- manpage quote from the excellent minimalistic window manager 'evilwm'
+-- quote from the minimalistic window manager 'evilwm'
 
 ## References
 
@@ -118,24 +98,12 @@ which might be useful
 
 [Wikipedia Graphical widget]: [https://en.wikipedia.org/wiki/Graphical_widget](https://en.wikipedia.org/wiki/Graphical_widget)
 [Github mirror]: [https://github.com/witorg/gui](https://github.com/witorg/gui)
+[Federated git pull]: [https://github.com/forgefed/forgefed](https://github.com/forgefed/forgefed)
 
 ```go
 * [Wikipedia Graphical widget]
 * [Github mirror]
-```
-
-## Variables
-
-```golang
-var PlugGocli *plugin.Plugin
-```
-
-```golang
-var PlugGocliOk bool
-```
-
-```golang
-var PlugHello *plugin.Plugin
+* [Federated git pull]
 ```
 
 ## Functions
@@ -154,102 +122,80 @@ TODO: make this smarter once this uses toolkit/
 
 Creates a window helpful for debugging this package
 
-### func [DemoToolkitWindow](/example_window_demo_toolkit.go#L24)
-
-`func DemoToolkitWindow()`
-
-This creates a window that shows how the toolkit works
-internally using it's raw unchanged code for the toolkit itself
-
-This is a way to test and see if the toolkit is working at all
-right now it shows the andlabs/ui/DemoNumbersPage()
-
 ### func [DemoWindow](/example_window_demo.go#L10)
 
 `func DemoWindow()`
 
 This creates a window that shows how this package works
 
-### func [GetDebug](/structs.go#L24)
+### func [GetDebug](/structs.go#L25)
 
 `func GetDebug() bool`
 
-### func [GetDebugToolkit](/structs.go#L36)
+### func [GetDebugToolkit](/structs.go#L37)
 
 `func GetDebugToolkit() bool`
-
-### func [GocuiAddButton](/plugin.go#L108)
-
-`func GocuiAddButton(name string)`
 
 ### func [GolangDebugWindow](/example_window_golang_debug.go#L12)
 
 `func GolangDebugWindow()`
 
-### func [IndentPrintln](/structs.go#L216)
+### func [IndentPrintln](/structs.go#L188)
 
 `func IndentPrintln(a ...interface{})`
 
-### func [LoadPlugin](/plugin.go#L36)
+### func [Init](/main.go#L41)
 
-`func LoadPlugin(name string) *plugin.Plugin`
+`func Init()`
 
-### func [LookupJcarrButton](/plugin.go#L98)
+### func [LoadToolkit](/plugin.go#L50)
 
-`func LookupJcarrButton()`
+`func LoadToolkit(name string) bool`
 
-### func [Main](/main.go#L38)
+loads and initializes a toolkit (andlabs/ui, gocui, etc)
+
+### func [Main](/main.go#L86)
 
 `func Main(f func())`
 
-### func [Queue](/main.go#L51)
+This should not pass a function
 
-`func Queue(f func())`
-
-Other goroutines must use this to access the GUI
-
-You can not acess / process the GUI thread directly from
-other goroutines. This is due to the nature of how
-Linux, MacOS and Windows work (they all work differently. suprise. surprise.)
-For example: gui.Queue(NewWindow())
-
-### func [RunGreet](/plugin.go#L88)
-
-`func RunGreet()`
-
-### func [SetDebug](/structs.go#L28)
+### func [SetDebug](/structs.go#L29)
 
 `func SetDebug(s bool)`
 
-### func [SetDebugToolkit](/structs.go#L40)
+### func [SetDebugToolkit](/structs.go#L41)
 
 `func SetDebugToolkit(s bool)`
 
-### func [ShowDebugValues](/structs.go#L44)
+### func [ShowDebugValues](/structs.go#L45)
 
 `func ShowDebugValues()`
 
-### func [StandardClose](/main.go#L57)
+### func [StandardClose](/main.go#L128)
 
 `func StandardClose(n *Node)`
 
 The window is destroyed but the application does not quit
 
-### func [StandardExit](/main.go#L65)
+### func [StandardExit](/main.go#L135)
 
 `func StandardExit(n *Node)`
 
 The window is destroyed but the application does not quit
 
+### func [Watchdog](/watchdog.go#L16)
+
+`func Watchdog()`
+
+This program sits here.
+If you exit here, the whole thing will os.Exit()
+
+This goroutine can be used like a watchdog timer
+
 ## Types
 
-### type [Greeter](/plugin.go#L17)
-
-`type Greeter interface { ... }`
-
-TODO: could a protobuf work here?
-
-### type [GuiConfig](/structs.go#L67)
+### type [GuiConfig](/structs.go#L68)
 
 `type GuiConfig struct { ... }`
 
@@ -259,19 +205,19 @@ TODO: could a protobuf work here?
 var Config GuiConfig
 ```
 
-### type [GuiOptions](/structs.go#L56)
+### type [GuiDebug](/structs.go#L56)
 
-`type GuiOptions struct { ... }`
+`type GuiDebug struct { ... }`
 
 This struct can be used with go-arg
 
-### type [Node](/structs.go#L117)
+### type [Node](/structs.go#L87)
 
 `type Node struct { ... }`
 
 The Node is simply the name and the size of whatever GUI element exists
 
-#### func [NewStandardWindow](/example_window_demo_toolkit.go#L7)
+#### func [NewStandardWindow](/example_window_demo.go#L22)
 
 `func NewStandardWindow(title string) *Node`
 
@@ -323,13 +269,13 @@ func main() {
 You get a window
 ```
 
-### type [Widget](/widget.go#L12)
+### type [Symbol](/plugin.go#L17)
 
-`type Widget struct { ... }`
+`type Symbol any`
 
-what names should be used? This is not part of [[Graphical Widget]]
-Event() seems like a good name.
-Could a protobuf be used here? (Can functions be passed?)
+## Sub Packages
+
+* [toolkit](./toolkit)
 
 ---
 Readme created from Go doc with [goreadme](https://github.com/posener/goreadme)

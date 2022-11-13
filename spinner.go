@@ -2,26 +2,24 @@ package gui
 
 import "log"
 
-import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
-
 func (n *Node) NewSpinner(name string, x int, y int) *Node {
-	var newT *toolkit.Toolkit
-	var sNode *Node
+	newNode := n.New(name)
+	newNode.Widget.Name = name
+	newNode.Widget.X = x
+	newNode.Widget.Y = y
 
-	log.Println("toolkit.NewSpinner() START", name)
-
-	n.verify()
-
-	// make a *Node with a *toolkit.Group
-	sNode = n.New(name + " part1")
-	newT = n.toolkit.NewSpinner(name, x, y)
-	newT.Name = name
-	sNode.toolkit = newT
-	// sNode.Dump()
-
-	newT.Custom = func () {
-		commonCallback(sNode)
+	newNode.Widget.Custom = func() {
+		log.Println("even newer clicker() name in NewSpinner", newNode.Widget)
 	}
 
-	return sNode
+	for _, aplug := range allPlugins {
+		log.Println("gui.NewSpinner() aplug =", aplug.name, "name =", newNode.Widget.Name)
+		if (aplug.NewSpinner == nil) {
+			log.Println("\tgui.NewSpinner() aplug.NewSpinner = nil", aplug.name)
+			continue
+		}
+		aplug.NewSpinner(&n.Widget, &newNode.Widget)
+	}
+
+	return newNode
 }

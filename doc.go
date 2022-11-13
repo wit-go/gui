@@ -1,29 +1,22 @@
 /*
 
-Package gui implements a abstraction layer for Go visual elements in
-a cross platform and library independent way. (hopefully this is will work)
-
-A quick overview of the features, some general design guidelines
-and principles for how this package should generally work:
+Package gui implements a abstraction layer for Go visual elements.
 
 Definitions:
 
-	* Toolkit: the underlying library (MacOS gui, Windows gui, gtk, qt, etc)
-	* Node: A binary tree of all the underlying GUI toolkit elements
+	* Toolkit: the underlying GUI library (MacOS gui, Windows gui, gtk, qt, etc)
+	* Node: A binary tree of all the underlying widgets
 
 Principles:
 
 	* Make code using this package simple to use
-	* When in doubt, search upward in the binary tree
-	* It's ok to guess. We will return something close.
 	* Hide complexity internally here
 	* Isolate the GUI toolkit
-	* Try to use [Wikipedia Graphical widget] names
+	* Widget names should try to match [Wikipedia Graphical widget]
+	* When in doubt, search upward in the binary tree
+	* It's ok to guess. Try to do something sensible.
 
 Quick Start
-
-This section demonstrates how to quickly get started with spew.  See the
-sections below for further details on formatting and configuration options.
 
 	// This creates a simple hello world window
 	package main
@@ -37,6 +30,7 @@ sections below for further details on formatting and configuration options.
 
 	// go will sit here until the window exits
 	func main() {
+		gui.Init()
 		gui.Main(helloworld)
 	}
 
@@ -73,35 +67,19 @@ I didn't record the dependances needed
 
 Toolkits
 
-* Andlabs - https://github.com/andlabs/ui
-* gocui - https://github.com/awesome-gocui/gocui
+	* andlabs - https://github.com/andlabs/ui
+	* gocui - https://github.com/awesome-gocui/gocui
 
-The goal is to design something that will work with more than one.
+The next step is to allow this to work against go-gtk and go-qt.
 
-Right now, this abstraction is built on top of the go package 'andlabs/ui'
-which does the cross platform support.
-The next step is to intent is to allow this to work directly against GTK and QT.
-
-It should be able to add Fyne, WASM, native macos & windows, android and
+TODO: Add Fyne, WASM, native macos & windows, android and
 hopefully also things like libSDL, faiface/pixel, slint
-
-Errors
-
-Since it is possible for custom Stringer/error interfaces to panic, spew
-detects them and handles them internally by printing the panic information
-inline with the output.  Since spew is intended to provide deep pretty printing
-capabilities on structures, it intentionally does not return any errors.
-
-Debugging
-
-To dump variables with full newlines, indentation, type, and pointer
-information this uses spew.Dump()
 
 Bugs
 
 "The author's idea of friendly may differ to that of many other people."
 
--- manpage quote from the excellent minimalistic window manager 'evilwm'
+-- quote from the minimalistic window manager 'evilwm'
 
 References
 
@@ -111,9 +89,11 @@ which might be useful
 
 [Wikipedia Graphical widget]: https://en.wikipedia.org/wiki/Graphical_widget
 [Github mirror]: https://github.com/witorg/gui
+[Federated git pull]: https://github.com/forgefed/forgefed
 
 	* [Wikipedia Graphical widget]
 	* [Github mirror]
+	* [Federated git pull]
 
 
 */

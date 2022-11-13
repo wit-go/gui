@@ -2,48 +2,97 @@
 package main
 
 import 	(
+	"fmt"
 	"log"
+	"time"
 	"strconv"
 	"git.wit.org/wit/gui"
 )
 
+var title string = "Demo Plugin Window"
+
 func main() {
+	fmt.Println("\033]0;" + title + "\007")
+	// time.Sleep(5 * time.Second)
+	// var w *gui.Node
 	// this doesn't seem to work
 	captureSTDOUT()
 
-	gui.Main(buttonWindow)
+	// gui.LoadToolkit("default")
+	// panic("WTF gocui not happening")
+	// gui.LoadToolkit("gocui")
+	gui.Init()
+
+	// buttonWindow()
+	go gui.Main(func () {
+		log.Println("START Main f()")
+		buttonWindow()
+		/*
+		log.Println("END NewWindow()")
+		log.Println("START NewGroup()")
+		g := w.NewGroup("new Group 22")
+		log.Println("END NewGroup()")
+		g.NewButton("asdjkl", func () {
+			log.Println("world")
+		})
+		*/
+		log.Println("END Main f()")
+		// gui.StandardExit(nil)
+	})
+	log.Println("Main() END")
+	time.Sleep(1 * time.Second)
+	gui.Watchdog()
+	gui.StandardExit(nil)
 }
 
-var counter int = 10
+var counter int = 5
 
 // This creates a window
 func buttonWindow() {
 	var w, g *gui.Node
-	gui.Config.Title = "Demo Plugin Window"
+	gui.Config.Title = title
 	gui.Config.Width = 640
 	gui.Config.Height = 480
 
 	w = gui.NewWindow()
 	g = w.NewGroup("buttonGroup")
 
+	g.NewButton("NewButton()", func () {
+		log.Println("new foobar 2. Adding button 'foobar 3'")
+		name := "foobar " + strconv.Itoa(counter)
+		counter += 1
+		g.NewButton(name, func () {
+			log.Println("Got all the way to main() name =", name)
+		})
+	})
+
+	g.NewButton("NewGroup()", func () {
+		log.Println("new foobar 2. Adding button 'foobar 3'")
+		name := "neat " + strconv.Itoa(counter)
+		counter += 1
+		g.NewGroup(name)
+	})
+
 	g.NewButton("hello", func () {
 		log.Println("world")
 	})
 
-	g.NewButton("RunGreet()", func () {
-		log.Println("world")
-		go gui.RunGreet()
+	g.NewButton("LoadToolkit(andlabs2)", func () {
+		gui.LoadToolkit("andlabs2")
 	})
 
-	g.NewButton("gui.LookupJcarrButton()", func () {
-		log.Println("gui.LookupJcarrButton()")
-		gui.LookupJcarrButton()
+	g.NewButton("LoadToolkit(gocui)", func () {
+		gui.LoadToolkit("gocui")
 	})
 
-	g.NewButton("new foobar 2", func () {
-		log.Println("new foobar 2. Adding button 'foobar 3'")
-		name := "foobar " + strconv.Itoa(counter)
-		counter += 1
-		g.NewButton(name, nil)
+	g.NewButton("Init()", func () {
+		gui.Init()
+	})
+
+	g.NewButton("Main()", func () {
+		go gui.Main(func () {
+			w := gui.NewWindow()
+			w.NewGroup("buttonGroup")
+		})
 	})
 }

@@ -2,10 +2,11 @@
 
 all: README.md
 	@echo
-	@echo "make cmds     # will run all the cmds"
-	@echo "make update       # full git update"
+	@echo "make cmds     # will run all the Example demos and commands"
+	@echo "make update       # full git update of all the dependencies"
 	@echo
-	make -C cmds/helloworld
+	#make -C cmds/helloworld
+	make plugins
 
 # should update every go dependancy (?)
 update:
@@ -33,6 +34,9 @@ cmds-textbox:
 github:
 	git push origin master
 	git push github master
+	@echo
+	@echo check https://github.com/witorg/gui
+	@echo
 
 doc:
 	GO111MODULE="off" godoc -v
@@ -45,6 +49,14 @@ README.md: doc.go
 clean:
 	rm -f toolkit/*.so
 
-plugins:
-	# GO111MODULE="off" go build -buildmode=plugin -o toolkit/test.so toolkit/gocui/*.go
+plugins: plugins-gocui plugins-andlabs2
+
+plugins-gocui:
 	make -C  toolkit/gocui
+
+plugins-andlabs2:
+	cd toolkit/andlabs2/ && GO111MODULE="off" go build -buildmode=plugin -o ../andlabs2.so
+	# make -C  toolkit/andlabs2
+
+objdump:
+	objdump -t toolkit/andlabs.so |less

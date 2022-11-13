@@ -8,109 +8,234 @@ package gui
 import (
 	"log"
 	"os"
-
 	"plugin"
-	"github.com/davecgh/go-spew/spew"
+
+	"git.wit.org/wit/gui/toolkit"
 )
 
-// TODO: could a protobuf work here?
-type Greeter interface {
-	Greet()
-	JcarrButton()
-	AddButton(string)
+var err error
+type Symbol any
+
+type aplug struct {
+	// Ok bool
+	name string
+	filename string
+	plug *plugin.Plugin
+	sym *plugin.Symbol
+	LoadOk bool
+	InitOk bool
+	MainOk bool
+
+	Init func()
+	Main func(func ())
+	Queue func(func ())
+	Quit func()
+	NewWindow func(*toolkit.Widget)
+	NewButton func(*toolkit.Widget, *toolkit.Widget)
+	NewGroup func(*toolkit.Widget, *toolkit.Widget)
+	NewCheckbox func(*toolkit.Widget, *toolkit.Widget)
+	NewTab func(*toolkit.Widget, *toolkit.Widget)
+	NewLabel func(*toolkit.Widget, *toolkit.Widget)
+	NewTextbox func(*toolkit.Widget, *toolkit.Widget)
+	NewSlider func(*toolkit.Widget, *toolkit.Widget)
+	NewSpinner func(*toolkit.Widget, *toolkit.Widget)
+
+	NewDropdown func(*toolkit.Widget, *toolkit.Widget)
+	AddDropdownName func(*toolkit.Widget, string)
 }
 
-var PlugGocli *plugin.Plugin
-var PlugGocliOk bool
-var PlugHello *plugin.Plugin
+var allPlugins []*aplug
 
-// var gBut plugin.Symbol
-var jcarrBut plugin.Symbol
-var symGreeter plugin.Symbol
-var greeter Greeter
-var ok bool
+// loads and initializes a toolkit (andlabs/ui, gocui, etc)
+func LoadToolkit(name string) bool {
+	var newPlug aplug
 
-var typeToolkit plugin.Symbol
-var typeToolkitCast Greeter
+	log.Println("gui.LoadToolkit() START")
+	newPlug.LoadOk = false
 
-func LoadPlugin(name string) *plugin.Plugin {
-	scs := spew.ConfigState{MaxDepth: 1}
+	for _, aplug := range allPlugins {
+		log.Println("gui.LoadToolkit() already loaded toolkit plugin =", aplug.name)
+		if (aplug.name == name) {
+			log.Println("gui.LoadToolkit() SKIPPING")
+			return true
+		}
+	}
 
-	// load module
-	// 1. open the so file to load the symbols
-	plug, err := plugin.Open(name)
-	log.Println("plug =")
-	log.Println(scs.Sdump(plug))
+	// locate the shared library file
+	filename := name + ".so"
+	loadPlugin(&newPlug, filename)
+	if (newPlug.plug == nil) {
+		return false
+	}
+	// newPlug.Ok = true
+	newPlug.name = name
+
+	// map all the functions
+	newPlug.Init = loadFuncE(&newPlug, "Init")
+	newPlug.Quit = loadFuncE(&newPlug, "Quit")
+
+	// this should be laodFuncE()
+	newPlug.Main  = loadFuncF(&newPlug, "Main")
+	newPlug.Queue = loadFuncF(&newPlug, "Queue")
+
+	newPlug.NewWindow = loadFunc1(&newPlug, "NewWindow")
+
+	newPlug.NewButton = loadFunc2(&newPlug, "NewButton")
+	newPlug.NewGroup = loadFunc2(&newPlug, "NewGroup")
+	newPlug.NewCheckbox = loadFunc2(&newPlug, "NewCheckbox")
+	newPlug.NewTab = loadFunc2(&newPlug, "NewTab")
+	newPlug.NewLabel = loadFunc2(&newPlug, "NewLabel")
+	newPlug.NewTextbox = loadFunc2(&newPlug, "NewTextbox")
+	newPlug.NewSlider = loadFunc2(&newPlug, "NewSlider")
+	newPlug.NewSpinner = loadFunc2(&newPlug, "NewSpinner")
+
+	newPlug.NewDropdown = loadFunc2(&newPlug, "NewDropdown")
+	newPlug.AddDropdownName = loadFuncS(&newPlug, "AddDropdownName")
+
+	allPlugins = append(allPlugins, &newPlug)
+
+	log.Println("gui.LoadToolkit() END", newPlug.name, filename)
+	newPlug.LoadOk = true
+	return true
+}
+
+func loadFuncE(p *aplug, funcName string) func() {
+	var newfunc func()
+	var ok bool
+	var test plugin.Symbol
+
+	test, err = p.plug.Lookup(funcName)
+	if err != nil {
+		log.Println("DID NOT FIND: name =", test, "err =", err)
+		return nil
+	}
+
+	newfunc, ok = test.(func())
+	if !ok {
+		log.Println("function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
+		return nil
+	}
+	return newfunc
+}
+
+func loadFunc1(p *aplug, funcName string) func(*toolkit.Widget) {
+	var newfunc func(*toolkit.Widget)
+	var ok bool
+	var test plugin.Symbol
+
+	test, err = p.plug.Lookup(funcName)
+	if err != nil {
+		log.Println("DID NOT FIND: name =", test, "err =", err)
+		return nil
+	}
+
+	newfunc, ok = test.(func(*toolkit.Widget))
+	if !ok {
+		log.Println("function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
+		return nil
+	}
+	return newfunc
+}
+
+func loadFuncS(p *aplug, funcName string) func(*toolkit.Widget, string) {
+	var newfunc func(*toolkit.Widget, string)
+	var ok bool
+	var test plugin.Symbol
+
+	test, err = p.plug.Lookup(funcName)
+	if err != nil {
+		log.Println("DID NOT FIND: name =", test, "err =", err)
+		return nil
+	}
+
+	newfunc, ok = test.(func(*toolkit.Widget, string))
+	if !ok {
+		log.Println("function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
+		return nil
+	}
+	return newfunc
+}
+
+func loadFunc2(p *aplug, funcName string) func(*toolkit.Widget, *toolkit.Widget) {
+	var newfunc func(*toolkit.Widget, *toolkit.Widget)
+	var ok bool
+	var test plugin.Symbol
+
+	test, err = p.plug.Lookup(funcName)
+	if err != nil {
+		log.Println("DID NOT FIND: name =", test, "err =", err)
+		return nil
+	}
+
+	newfunc, ok = test.(func(*toolkit.Widget, *toolkit.Widget))
+	if !ok {
+		log.Println("function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
+		return nil
+	}
+	return newfunc
+}
+
+// This is probably dangerous and should never be done
+// executing arbitrary functions will cause them to run inside the goroutine that
+// the GUI toolkit itself is running in. TODO: move to channels here
+func loadFuncF(p *aplug, funcName string) func(func ()) {
+	var newfunc func(func ())
+	var ok bool
+	var test plugin.Symbol
+
+	test, err = p.plug.Lookup(funcName)
+	if err != nil {
+		log.Println("DID NOT FIND: name =", test, "err =", err)
+		return nil
+	}
+
+	newfunc, ok = test.(func(func ()))
+	if !ok {
+		log.Println("function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
+		return nil
+	}
+	return newfunc
+}
+
+func loadPlugin(p *aplug, name string) {
+	var filename string
+
+	// attempt to write out the file from the internal resource
+	internalName := "toolkit/" + name 
+	soFile, err := res.ReadFile(internalName)
+	if (err != nil) {
+		log.Println(err)
+	} else {
+		err = os.WriteFile("/tmp/wit/" + name, soFile, 0644)
+		if (err != nil) {
+			log.Println(err)
+		}
+	}
+
+	filename = "/tmp/wit/" + name
+	p.plug = loadfile(filename)
+	if (p.plug != nil) {
+		p.filename = filename
+		return
+	}
+
+	filename = "/usr/share/wit/gui/" + name
+	p.plug = loadfile(filename)
+	if (p.plug != nil) {
+		p.filename = filename
+		return
+	}
+	return
+}
+
+// load module
+// 1. open the shared object file to load the symbols
+func loadfile(filename string) *plugin.Plugin {
+	plug, err := plugin.Open(filename)
+	log.Println("plug =", plug)
 	if err != nil {
 		log.Println(err)
 		return nil
 	}
-
-	// 2. look up a symbol (an exported function or variable)
-	// in this case, variable Greeter
-	typeToolkit, err = plug.Lookup("Toolkit")
-	log.Println("plugin.Toolkit", typeToolkit)
-	log.Println(scs.Sdump(typeToolkit))
-	if err != nil {
-		log.Println(err)
-		os.Exit(1)
-	}
-
-	symGreeter, err = plug.Lookup("Greeter")
-	log.Println("symGreater", symGreeter)
-	log.Println(scs.Sdump(symGreeter))
-	if err != nil {
-		log.Println(err)
-		os.Exit(1)
-	}
-
-	// 3. Assert that loaded symbol is of a desired type
-	// in this case interface type Greeter (defined above)
-	// var greeter Greeter
-	greeter, ok = symGreeter.(Greeter)
-	log.Println("greeter", symGreeter)
-	log.Println(scs.Sdump(greeter))
-	if !ok {
-		log.Println("unexpected type from module symbol")
-		os.Exit(1)
-	}
-
-	/*
-	typeToolkitCast, ok = typeToolkit.(Greeter)
-	if !ok {
-		log.Println("unexpected cast of Toolkit to Greeter")
-		os.Exit(1)
-	}
-	*/
 	return plug
-}
-
-func RunGreet() {
-	log.Println("gui.RunGreet() START")
-	if (greeter == nil) {
-		log.Println("wit/gui gocui plugin didn't load")
-		return
-	}
-	PlugGocliOk = true
-	greeter.Greet()
-}
-
-func LookupJcarrButton() {
-	log.Println("lookupJcarrButton() START")
-
-	if (greeter == nil) {
-		log.Println("wit/gui gocui plugin didn't load")
-		return
-	}
-	greeter.JcarrButton()
-}
-
-func GocuiAddButton(name string) {
-	log.Println("GocuiAddButton() START", name)
-
-	if (greeter == nil) {
-		log.Println("wit/gui gocui plugin didn't load")
-		return
-	}
-	greeter.AddButton(name)
 }
