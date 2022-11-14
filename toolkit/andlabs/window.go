@@ -1,57 +1,69 @@
-package toolkit
+package main
 
 import (
 	"log"
 
 	"github.com/andlabs/ui"
 	_ "github.com/andlabs/ui/winmanifest"
+
+	"git.wit.org/wit/gui/toolkit"
 )
 
-func (t *Toolkit) MessageWindow(msg1 string, msg2 string) {
+func (t *andlabsT) MessageWindow(msg1 string, msg2 string) {
 	ui.MsgBox(t.uiWindow, msg1, msg2)
 }
 
-func (t *Toolkit) ErrorWindow(msg1 string, msg2 string) {
+func (t *andlabsT) ErrorWindow(msg1 string, msg2 string) {
 	ui.MsgBoxError(t.uiWindow, msg1, msg2)
 }
 
-func NewWindow(title string, x int, y int) *Toolkit {
-	var t Toolkit
+func NewWindow(w *toolkit.Widget) {
+	var t *andlabsT
+
 	if (DebugToolkit) {
-		log.Println("toolkit NewWindow", title, x, y)
+		log.Println("toolkit NewWindow", w.Name, w.Width, w.Height)
 	}
-	w := ui.NewWindow(title, x, y, menubar)
-	w.SetBorderless(canvas)
-	w.SetMargined(margin)
-	w.OnClosing(func(*ui.Window) bool {
+
+	if (w == nil) {
+		log.Println("wit/gui plugin error. widget == nil")
+		return
+	}
+	t = new(andlabsT)
+	// t = NewWindow2(w.Name, w.Width, w.Height)
+
+// func NewWindow2(title string, x int, y int) *andlabsT {
+	// menubar bool is if the OS defined border on the window should be used
+	win := ui.NewWindow(w.Name, w.Width, w.Height, menubar)
+	win.SetBorderless(canvas)
+	win.SetMargined(margin)
+	win.OnClosing(func(*ui.Window) bool {
 		if (DebugToolkit) {
 			log.Println("ui.Window().OnExit() SHOULD ATTEMPT CALLBACK here")
 			t.Dump()
 		}
-		if (t.OnExit != nil) {
-			if (DebugToolkit) {
-				log.Println("ui.Window().OnExit() ATTEMPTING toolkit.OnExit CALLBACK")
-			}
-			t.OnExit(&t)
+		if (w.Custom != nil) {
+			w.Custom()
+			return true
 		}
-		if (t.Custom != nil) {
-			if (DebugToolkit) {
-				log.Println("ui.Window().Custom() ATTEMPTING toolkit.Custom CALLBACK")
-			}
-			t.Custom()
+		if (w.Event != nil) {
+			w.Event(w)
+			return true
 		}
 		if (DebugToolkit) {
-			log.Println("ui.Window().OnExit() Toolkit.OnExit is nil")
+			log.Println("andlabs.ui.Window().OnClosing() was not defined")
 		}
-		return true
+		return false
 	})
-	w.Show()
-	t.uiWindow = w
-	t.UiWindowBad = w // deprecate this as soon as possible
-	return &t
+	win.Show()
+	t.uiWindow = win
+	t.UiWindowBad = win // deprecate this as soon as possible
+	t.Name = w.Name
+
+	mapWidgetsToolkits(w, t)
+	return
 }
 
-func (t *Toolkit) SetWindowTitle(title string) {
+func (t *andlabsT) SetWindowTitle(title string) {
 	if (DebugToolkit) {
 		log.Println("toolkit NewWindow", t.Name, "title", title)
 	}

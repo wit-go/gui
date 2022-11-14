@@ -52,12 +52,12 @@ func Init() {
 	// the program didn't specify a plugin. Try to load one
 	// TODO: detect the OS & user preferences to load the best one
 	if (initBAD) {
-		if (LoadToolkit("andlabs2")) {
+		if (LoadToolkit("andlabs")) {
 			initBAD = false
 		}
 	}
 
-	// andlabs2 gui failed. fall back to the terminal gui (should be compiled into the binary)
+	// andlabs gui plugin failed. fall back to the terminal gui (should be compiled into the binary)
 	if (initBAD) {
 		if (LoadToolkit("gocui")) {
 			initBAD = false
@@ -112,7 +112,7 @@ func Main(f func()) {
 // other goroutines. This is due to the nature of how
 // Linux, MacOS and Windows work (they all work differently. suprise. surprise.)
 // For example: gui.Queue(NewWindow())
-func queue(f func()) {
+func Queue(f func()) {
 	log.Println("Sending function to gui.Main() (using gtk via andlabs/ui)")
 	// toolkit.Queue(f)
 	for _, aplug := range allPlugins {

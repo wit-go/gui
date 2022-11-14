@@ -130,7 +130,7 @@ func initKeybindings(g *gocui.Gui) error {
 			g.SetCurrentView("help")
 //			moveView(g, tmp, 0, -delta)
 			if err := g.DeleteView("help"); err != nil {
-				panic(err)
+				log.Fatalln("gocui SetKeybinding()", err)
 			}
 			return nil
 		}); err != nil {

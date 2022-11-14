@@ -77,8 +77,8 @@ func buttonWindow() {
 		log.Println("world")
 	})
 
-	g.NewButton("LoadToolkit(andlabs2)", func () {
-		gui.LoadToolkit("andlabs2")
+	g.NewButton("LoadToolkit(andlabs)", func () {
+		gui.LoadToolkit("andlabs")
 	})
 
 	g.NewButton("LoadToolkit(gocui)", func () {

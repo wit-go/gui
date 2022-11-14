@@ -24,7 +24,7 @@ isAlpha := regexp.MustCompile(`^[A-Za-z]+$`).MatchString
 
 for _, username := range []string{"userone", "user2", "user-three"} {
     if !isAlpha(username) {
-        fmt.Printf("%q is not valid\n", username)
+        log.Printf("%q is not valid\n", username)
     }
 }
 

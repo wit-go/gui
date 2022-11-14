@@ -14,7 +14,6 @@ import (
 // my guess).
 func NewWindow() *Node {
 	var newNode *Node
-//	var t *toolkit.Toolkit
 
 	title := Config.Title
 	// Windows are created off of the master node of the Binary Tree
@@ -38,9 +37,6 @@ func NewWindow() *Node {
 
 	log.Println("gui.Node.Window()", title)
 
-	// t = toolkit.NewWindow(title, w, h)
-	// n.toolkit = t
-
 	for _, aplug := range allPlugins {
 		log.Println("gui.Node.NewWindow() toolkit plugin =", aplug.name)
 		if (aplug.NewWindow == nil) {
@@ -49,10 +45,6 @@ func NewWindow() *Node {
 		}
 		aplug.NewWindow(&newNode.Widget)
 	}
-
-	// TODO: this is still confusing and probably wrong. This needs to communicate through a channel
-	// newNode.toolkit = n.toolkit.NewButton(name)
-	// newNode.toolkit.Custom = newNode.Widget.Custom
 
 	return newNode
 }

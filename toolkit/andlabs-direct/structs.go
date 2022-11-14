@@ -1,4 +1,4 @@
-package main
+package toolkit
 
 import "log"
 
@@ -47,15 +47,15 @@ func GetDebugToolkit () bool {
 }
 
 // stores the raw toolkit internals
-type andlabsT struct {
+type Toolkit struct {
 	id     string
 
 	Name   string
 	Width  int
 	Height int
 
-	OnChanged func(*andlabsT)
-	OnExit    func(*andlabsT)
+	OnChanged func(*Toolkit)
+	OnExit    func(*Toolkit)
 
 	Custom  func()
 
@@ -84,18 +84,18 @@ type andlabsT struct {
 	text   string
 }
 
-func (t *andlabsT) String() string {
+func (t *Toolkit) String() string {
 	return t.GetText()
 }
 
-func forceDump(t *andlabsT) {
+func forceDump(t *Toolkit) {
 	tmp := DebugToolkit
 	DebugToolkit = true
 	t.Dump()
 	DebugToolkit = tmp
 }
 
-func (t *andlabsT) GetText() string {
+func (t *Toolkit) GetText() string {
 	t.Dump()
 	if (DebugToolkit) {
 		log.Println("gui.Toolkit.Text() Enter")
@@ -128,7 +128,7 @@ func (t *andlabsT) GetText() string {
 	return ""
 }
 
-func (t *andlabsT) SetText(s string) bool {
+func (t *Toolkit) SetText(s string) bool {
 	if (DebugToolkit) {
 		log.Println("gui.Toolkit.Text() Enter")
 		scs := spew.ConfigState{MaxDepth: 1}
@@ -151,7 +151,7 @@ func (t *andlabsT) SetText(s string) bool {
 	return false
 }
 
-func sanity(t *andlabsT) bool {
+func sanity(t *Toolkit) bool {
 	if (DebugToolkit) {
 		log.Println("gui.Toolkit.Value() Enter")
 		scs := spew.ConfigState{MaxDepth: 1}
@@ -166,7 +166,7 @@ func sanity(t *andlabsT) bool {
 	return true
 }
 
-func (t *andlabsT) SetValue(i int) bool {
+func (t *Toolkit) SetValue(i int) bool {
 	log.Println("gui.Toolkit.SetValue() START")
 	if (sanity(t)) {
 		return false
@@ -176,7 +176,7 @@ func (t *andlabsT) SetValue(i int) bool {
 	return true
 }
 
-func (t *andlabsT) Value() int {
+func (t *Toolkit) Value() int {
 	if (DebugToolkit) {
 		log.Println("gui.Toolkit.Value() Enter")
 		scs := spew.ConfigState{MaxDepth: 1}
@@ -202,7 +202,7 @@ func (t *andlabsT) Value() int {
 	return 0
 }
 
-func (t *andlabsT) Dump() {
+func (t *Toolkit) Dump() {
 	if ! DebugToolkit {
 		return
 	}

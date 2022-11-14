@@ -207,8 +207,6 @@ my guess).
 
 ## Sub Packages
 
-* [need-to-redo](./need-to-redo)
-
 * [toolkit](./toolkit)
 
 ---

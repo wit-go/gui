@@ -1,12 +1,13 @@
-package toolkit
+package main
 
 import (
 	"log"
 	"time"
 
+	"git.wit.org/wit/gui/toolkit"
+
 	"github.com/andlabs/ui"
 	_ "github.com/andlabs/ui/winmanifest"
-
 )
 
 /*
@@ -21,9 +22,9 @@ import (
 	once there is one. If you send a Window here, it will replace
 	any existing tabs rather than adding a new one
 */
-func (t *Toolkit) AddTab(name string) *Toolkit {
+func (t *andlabsT) newTab(name string) *andlabsT {
 	// var w *ui.Window
-	var newt *Toolkit
+	var newt *andlabsT
 
 	log.Println("gui.toolkit.AddTab() sleep 3")
 
@@ -68,8 +69,8 @@ func tabSetMargined(tab *ui.Tab) {
 	}
 }
 
-func newTab(w *ui.Window, name string) *Toolkit {
-	var t Toolkit
+func newTab(w *ui.Window, name string) *andlabsT {
+	var t andlabsT
 	if (DebugToolkit) {
 		log.Println("gui.toolkit.NewTab() ADD", name)
 	}
@@ -99,8 +100,8 @@ func newTab(w *ui.Window, name string) *Toolkit {
 	return &t
 }
 
-func (t *Toolkit) appendTab(name string) *Toolkit {
-	var newT Toolkit
+func (t *andlabsT) appendTab(name string) *andlabsT {
+	var newT andlabsT
 	if (DebugToolkit) {
 		log.Println("gui.toolkit.NewTab() ADD", name)
 	}
@@ -130,4 +131,17 @@ func (t *Toolkit) appendTab(name string) *Toolkit {
 	newT.uiTab = t.uiTab
 	newT.uiBox = hbox
 	return &newT
+}
+
+func NewTab(parentW *toolkit.Widget, w *toolkit.Widget) {
+	var newt *andlabsT
+	log.Println("gui.andlabs.NewTab()", w.Name)
+
+	t := mapToolkits[parentW]
+	if (t == nil) {
+		log.Println("go.andlabs.NewTab() toolkit struct == nil. name=", parentW.Name, w.Name)
+		return
+	}
+	newt = t.newTab(w.Name)
+	mapWidgetsToolkits(w, newt)
 }

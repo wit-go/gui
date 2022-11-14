@@ -1,13 +1,13 @@
-package main
+package toolkit
 
 import "log"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-func (t andlabsT) NewCheckbox(name string) *andlabsT {
+func (t Toolkit) NewCheckbox(name string) *Toolkit {
 	log.Println("gui.Toolkit.NewCheckbox()", name)
-	var newt andlabsT
+	var newt Toolkit
 
 	if t.broken() {
 		return nil
@@ -25,7 +25,7 @@ func (t andlabsT) NewCheckbox(name string) *andlabsT {
 	return &newt
 }
 
-func (t andlabsT) Checked() bool {
+func (t Toolkit) Checked() bool {
 	if t.broken() {
 		return false
 	}

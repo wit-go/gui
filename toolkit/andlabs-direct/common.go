@@ -1,4 +1,4 @@
-package main
+package toolkit
 
 import "log"
 
@@ -9,7 +9,7 @@ func init() {
 	setDefaultBehavior(true)
 }
 
-func (t andlabsT) commonChange(widget string) {
+func (t Toolkit) commonChange(widget string) {
 	s := t.String()
 	if (DebugToolkit) {
 		log.Println("gui.Toolkit.ui.OnChanged() =", s)
@@ -36,7 +36,7 @@ func (t andlabsT) commonChange(widget string) {
 
 // does some sanity checks on the internal structs of the binary tree
 // TODO: probably this should not panic unless it's running in devel mode (?)
-func (t *andlabsT) broken() bool {
+func (t *Toolkit) broken() bool {
 	if (t.uiBox == nil) {
 		if (t.uiWindow != nil) {
 			if (DebugToolkit) {

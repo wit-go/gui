@@ -1,4 +1,4 @@
-package main
+package toolkit
 
 import "log"
 
@@ -6,12 +6,12 @@ import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
 // create a new box
-func (t *andlabsT) GetBox() *ui.Box {
+func (t *Toolkit) GetBox() *ui.Box {
 	return t.uiBox
 }
 
 // create a new box
-func (t *andlabsT) NewBox() *andlabsT {
+func (t *Toolkit) NewBox() *Toolkit {
 	if (DebugToolkit) {
 		log.Println("gui.Toolbox.NewBox() START create default")
 	}
@@ -20,7 +20,7 @@ func (t *andlabsT) NewBox() *andlabsT {
 		if (DebugToolkit) {
 			log.Println("\tgui.Toolbox.NewBox() is a Group")
 		}
-		var newTK andlabsT
+		var newTK Toolkit
 
 		vbox := ui.NewVerticalBox()
 		vbox.SetPadded(padded)
@@ -33,7 +33,7 @@ func (t *andlabsT) NewBox() *andlabsT {
 		if (DebugToolkit) {
 			log.Println("\tgui.Toolbox.NewBox() is a Box")
 		}
-		var newTK andlabsT
+		var newTK Toolkit
 
 		vbox := ui.NewVerticalBox()
 		vbox.SetPadded(padded)
@@ -47,7 +47,7 @@ func (t *andlabsT) NewBox() *andlabsT {
 		if (DebugToolkit) {
 			log.Println("\tgui.Toolbox.NewBox() is a Window")
 		}
-		var newT andlabsT
+		var newT Toolkit
 
 		vbox := ui.NewVerticalBox()
 		vbox.SetPadded(padded)

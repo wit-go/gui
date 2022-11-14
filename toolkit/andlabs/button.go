@@ -1,68 +1,56 @@
-package toolkit
+package main
 
 import "log"
 // import "os"
 
+
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-// make new Group here
-func (t Toolkit) NewButton(name string) *Toolkit {
-	var newt Toolkit
+import "git.wit.org/wit/gui/toolkit"
+func NewButton(parentW *toolkit.Widget, w *toolkit.Widget) {
+	var t, newt *andlabsT
 	var b *ui.Button
+	log.Println("gui.andlabs.NewButton()", w.Name)
+
+	t = mapToolkits[parentW]
+	if (t == nil) {
+		log.Println("go.andlabs.NewButton() toolkit struct == nil. name=", parentW.Name, w.Name)
+		return
+	}
 
 	if t.broken() {
-		return nil
+		return
 	}
+	newt = new(andlabsT)
 
-	if (DebugToolkit) {
-		log.Println("gui.Toolbox.NewButton() create", name)
-	}
-	b = ui.NewButton(name)
+	b = ui.NewButton(w.Name)
 	newt.uiButton = b
 
 	b.OnClicked(func(*ui.Button) {
-		log.Println("TODO: IN TOOLKIT GOROUTINE. SHOULD LEAVE HERE VIA channels. button name =", name)
+		if (DebugToolkit) {
+			log.Println("TODO: IN TOOLKIT GOROUTINE. SHOULD LEAVE HERE VIA channels. button name =", w.Name)
+			log.Println("FOUND WIDGET!", w)
+		}
+		if (w.Custom != nil) {
+			w.Custom()
+			return
+		}
+		if (w.Event != nil) {
+			w.Event(w)
+			return
+		}
 		t.Dump()
 		newt.Dump()
 		if (DebugToolkit) {
-			log.Println("wit/gui/toolkit NewButton() Should do something here")
+			log.Println("TODO: LEFT TOOLKIT GOROUTINE WITH NOTHING TO DO button name =", w.Name)
 		}
-		if (newt.Custom == nil) {
-			if (DebugToolkit) {
-				log.Println("wit/gui/toolkit NewButton() toolkit.Custom == nil")
-			}
-		} else {
-			if (DebugToolkit) {
-				log.Println("wit/gui/toolkit NewButton() toolkit.Custom() START")
-			}
-			newt.Custom()
-			return
-			if (DebugToolkit) {
-				log.Println("wit/gui/toolkit NewButton() toolkit.Custom() END")
-			}
-		}
-		if (t.Custom == nil) {
-			if (DebugToolkit) {
-				log.Println("wit/gui/toolkit NewButton() parent toolkit.Custom == nil")
-			}
-		} else {
-			if (DebugToolkit) {
-				log.Println("wit/gui/toolkit NewButton() running parent toolkit.Custom() START (IS THIS A BAD IDEA?)")
-			}
-			t.Custom()
-			return
-			if (DebugToolkit) {
-				log.Println("wit/gui/toolkit NewButton() running parent toolkit.Custom() END   (IS THIS A BAD IDEA?)")
-			}
-		}
-		log.Println("TODO: LEFT TOOLKIT GOROUTINE WITH NOTHING TO DO button name =", name)
 	})
 
 	if (DebugToolkit) {
-		log.Println("gui.Toolbox.NewButton() about to append to Box parent t:", name)
+		log.Println("gui.Toolbox.NewButton() about to append to Box parent t:", w.Name)
 		t.Dump()
-		log.Println("gui.Toolbox.NewButton() about to append to Box new t:", name)
+		log.Println("gui.Toolbox.NewButton() about to append to Box new t:", w.Name)
 		newt.Dump()
 	}
 	if (t.uiBox != nil) {
@@ -72,8 +60,8 @@ func (t Toolkit) NewButton(name string) *Toolkit {
 	} else {
 		log.Println("ERROR: wit/gui andlabs couldn't place this button in a box or a window")
 		log.Println("ERROR: wit/gui andlabs couldn't place this button in a box or a window")
-		return &t
+		return
 	}
 
-	return &newt
+	mapWidgetsToolkits(w, newt)
 }

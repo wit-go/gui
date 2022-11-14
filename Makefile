@@ -31,9 +31,12 @@ cmds-textbox:
 	make -C cmds/textbox
 
 # sync repo to the github backup
+# git remote add github git@github.com:witorg/gui.git
 github:
 	git push origin master
 	git push github master
+	git push github devel
+	git push github jcarr
 	@echo
 	@echo check https://github.com/witorg/gui
 	@echo
@@ -49,14 +52,14 @@ README.md: doc.go
 clean:
 	rm -f toolkit/*.so
 
-plugins: plugins-gocui plugins-andlabs2
+plugins: plugins-gocui plugins-andlabs
 
 plugins-gocui:
 	make -C  toolkit/gocui
 
-plugins-andlabs2:
-	cd toolkit/andlabs2/ && GO111MODULE="off" go build -buildmode=plugin -o ../andlabs2.so
-	# make -C  toolkit/andlabs2
+plugins-andlabs:
+	cd toolkit/andlabs/ && GO111MODULE="off" go build -buildmode=plugin -o ../andlabs.so
+	# make -C  toolkit/andlabs
 
 objdump:
 	objdump -t toolkit/andlabs.so |less

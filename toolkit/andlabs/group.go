@@ -1,14 +1,29 @@
-package toolkit
+package main
 
-import "log"
-import "os"
+import (
+	"log"
 
-import "github.com/andlabs/ui"
-import _ "github.com/andlabs/ui/winmanifest"
+	"git.wit.org/wit/gui/toolkit"
+
+	"github.com/andlabs/ui"
+	_ "github.com/andlabs/ui/winmanifest"
+)
+
+func NewGroup(parentW *toolkit.Widget, w *toolkit.Widget) {
+	log.Println("gui.andlabs.NewGroup()", w.Name)
+
+	t := mapToolkits[parentW]
+	if (t == nil) {
+		log.Println("go.andlabs.NewGroup() toolkit struct == nil. name=", parentW.Name, w.Name)
+		listMap()
+	}
+	newt := t.NewGroup(w.Name)
+	mapWidgetsToolkits(w, newt)
+}
 
 // make new Group here
-func (t Toolkit) NewGroup(title string) *Toolkit {
-	var newt Toolkit
+func (t andlabsT) NewGroup(title string) *andlabsT {
+	var newt andlabsT
 
 	if (DebugToolkit) {
 		log.Println("gui.Toolbox.NewGroup() create", title)
@@ -22,8 +37,7 @@ func (t Toolkit) NewGroup(title string) *Toolkit {
 		t.uiWindow.SetChild(g)
 	} else {
 		log.Println("gui.ToolboxNode.NewGroup() node.UiBox == nil. I can't add a range UI element without a place to put it")
-		log.Println("probably could just make a box here?")
-		os.Exit(0)
+		log.Fatalln("probably could just make a box here?")
 	}
 
 	hbox := ui.NewVerticalBox()

@@ -1,4 +1,4 @@
-package main
+package toolkit
 
 import "log"
 
@@ -19,7 +19,7 @@ func BlankWindow(w *ui.Window) *ui.Box {
 	return hbox
 }
 
-func (t *andlabsT) DemoNumbersPage() {
+func (t *Toolkit) DemoNumbersPage() {
 	var w *ui.Window
 
 	log.Println("Starting wit/gui toolkit andlabs/ui DemoNumbersPage()")

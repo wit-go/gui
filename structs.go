@@ -3,10 +3,8 @@ package gui
 import (
 	"log"
 	"reflect"
+	"git.wit.org/wit/gui/toolkit"
 )
-
-// import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
-import newtoolkit	"git.wit.org/wit/gui/toolkit"
 
 //
 // All GUI Data Structures and functions that are external
@@ -31,7 +29,6 @@ func SetDebug (s bool) {
 	// also set these
 	Config.Debug.Dump = s
 	Config.Debug.Node = s
-	// toolkit.DebugToolkit = s
 }
 
 func GetDebugToolkit () bool {
@@ -92,7 +89,7 @@ type Node struct {
 	Width  int
 	Height int
 
-	Widget	newtoolkit.Widget
+	Widget	toolkit.Widget
 
 	// this function is run when there are mouse or keyboard events
 	OnChanged func(*Node)
@@ -100,9 +97,6 @@ type Node struct {
 	parent	*Node
 	// TODO: make children a double linked list since some toolkits require order (?)
 	children []*Node
-
-	// hmm. how do you handle this when the toolkits are plugins?
-	// toolkit	*toolkit.Toolkit
 
 	// things that may not really be needed (?)
 	custom    func()
@@ -144,25 +138,8 @@ func (n *Node) Dump() {
 		IndentPrintln("OnChanged  = ", n.OnChanged)
 	}
 	IndentPrintln("text       = ", reflect.ValueOf(n.text).Kind(), n.text)
-//	if (n.toolkit != nil) {
-//		IndentPrintln("toolkit    = ", reflect.ValueOf(n.toolkit).Kind())
-//		n.toolkit.Dump()
-//	}
-//	if (n.id == nil) {
-//		// Node structs should never have a nil id.
-//		// I probably shouldn't panic here, but this is just to check the sanity of
-//		// the gui package to make sure it's not exiting
-//		panic("gui.Node.Dump() id == nil TODO: make a unigue id here in the golang gui library")
-//	}
 	IndentPrintln("NODE DUMP END")
 }
-
-/*
-func (n *Node) SetName(name string) {
-	n.toolkit.SetWindowTitle(name)
-	return
-}
-*/
 
 func (n *Node) Append(child *Node) {
 	n.children = append(n.children, child)
@@ -174,12 +151,6 @@ func (n *Node) Append(child *Node) {
 	}
 	// time.Sleep(3 * time.Second)
 }
-
-/*
-func (n *Node) List() {
-	findByIdDFS(n, "test")
-}
-*/
 
 var listChildrenParent *Node
 var listChildrenDepth int = 0
@@ -217,8 +188,7 @@ func (n *Node) ListChildren(dump bool) {
 					log.Println("\t\t\tlistChildrenParent =",listChildrenParent.id)
 				}
 				if (listChildrenParent.id != n.parent.id) {
-					log.Println("parent.child does not match child.parent")
-					panic("parent.child does not match child.parent")
+					log.Fatalln("parent.child does not match child.parent")
 				}
 			}
 		}

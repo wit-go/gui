@@ -28,6 +28,7 @@ var (
 	helpLabel *gocui.View
 	err error
 	ch chan(func ())
+	outf *os.File
 )
 
 func Init() {
@@ -50,6 +51,16 @@ func Init() {
 	stringWidget = make(map[string]*toolkit.Widget)
 
 	ch = make(chan func())
+
+	outf, err = os.OpenFile("/tmp/witgui.log", os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("error opening file: %v", err)
+	}
+	// hmm. where to put this?
+	// defer outf.Close()
+
+	log.SetOutput(outf)
+	log.Println("This is a test log entry")
 }
 
 func Queue(f func()) {
@@ -58,6 +69,8 @@ func Queue(f func()) {
 }
 
 func Main(f func()) {
+	// close the STDOUT log file
+	defer outf.Close()
 	if (baseGui == nil) {
 		panic("WTF Main()")
 	}
@@ -76,7 +89,7 @@ func layout(g *gocui.Gui) error {
 	var err error
 	maxX, _ := g.Size()
 
-	helpLabel, err = g.SetView("help", maxX-32, 0, maxX-1, 11, 0)
+	helpLabel, err = g.SetView("help", maxX-32, 0, maxX-1, 12, 0)
 	if err != nil {
 		if !errors.Is(err, gocui.ErrUnknownView) {
 			return err
@@ -90,6 +103,7 @@ func layout(g *gocui.Gui) error {
 		fmt.Fprintln(helpLabel, "Arrow keys: Move Button")
 		fmt.Fprintln(helpLabel, "t: Move Button to the top")
 		fmt.Fprintln(helpLabel, "b: Move Button to the button")
+		fmt.Fprintln(helpLabel, "STDOUT: /tmp/witgui.log")
 		fmt.Fprintln(helpLabel, "Ctrl-C or Q: Exit")
 	}
 	return nil

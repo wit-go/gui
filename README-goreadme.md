@@ -128,11 +128,11 @@ Creates a window helpful for debugging this package
 
 This creates a window that shows how this package works
 
-### func [GetDebug](/structs.go#L25)
+### func [GetDebug](/structs.go#L23)
 
 `func GetDebug() bool`
 
-### func [GetDebugToolkit](/structs.go#L37)
+### func [GetDebugToolkit](/structs.go#L34)
 
 `func GetDebugToolkit() bool`
 
@@ -140,7 +140,7 @@ This creates a window that shows how this package works
 
 `func GolangDebugWindow()`
 
-### func [IndentPrintln](/structs.go#L188)
+### func [IndentPrintln](/structs.go#L159)
 
 `func IndentPrintln(a ...interface{})`
 
@@ -160,15 +160,26 @@ loads and initializes a toolkit (andlabs/ui, gocui, etc)
 
 This should not pass a function
 
-### func [SetDebug](/structs.go#L29)
+### func [Queue](/main.go#L115)
+
+`func Queue(f func())`
+
+Other goroutines must use this to access the GUI
+
+You can not acess / process the GUI thread directly from
+other goroutines. This is due to the nature of how
+Linux, MacOS and Windows work (they all work differently. suprise. surprise.)
+For example: gui.Queue(NewWindow())
+
+### func [SetDebug](/structs.go#L27)
 
 `func SetDebug(s bool)`
 
-### func [SetDebugToolkit](/structs.go#L41)
+### func [SetDebugToolkit](/structs.go#L38)
 
 `func SetDebugToolkit(s bool)`
 
-### func [ShowDebugValues](/structs.go#L45)
+### func [ShowDebugValues](/structs.go#L42)
 
 `func ShowDebugValues()`
 
@@ -195,7 +206,7 @@ This goroutine can be used like a watchdog timer
 
 ## Types
 
-### type [GuiConfig](/structs.go#L68)
+### type [GuiConfig](/structs.go#L65)
 
 `type GuiConfig struct { ... }`
 
@@ -205,13 +216,13 @@ This goroutine can be used like a watchdog timer
 var Config GuiConfig
 ```
 
-### type [GuiDebug](/structs.go#L56)
+### type [GuiDebug](/structs.go#L53)
 
 `type GuiDebug struct { ... }`
 
 This struct can be used with go-arg
 
-### type [Node](/structs.go#L87)
+### type [Node](/structs.go#L84)
 
 `type Node struct { ... }`
 

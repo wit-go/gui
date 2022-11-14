@@ -1,4 +1,4 @@
-package main
+package toolkit
 
 import "log"
 import "os"
@@ -6,23 +6,9 @@ import "os"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-import "git.wit.org/wit/gui/toolkit"
-
-func NewGroup(parentW *toolkit.Widget, w *toolkit.Widget) {
-	log.Println("gui.andlabs.NewGroup()", w.Name)
-
-	t := mapToolkits[parentW]
-	if (t == nil) {
-		log.Println("go.andlabs.NewGroup() toolkit struct == nil. name=", parentW.Name, w.Name)
-		listMap()
-	}
-	newt := t.NewGroup(w.Name)
-	mapWidgetsToolkits(w, newt)
-}
-
 // make new Group here
-func (t andlabsT) NewGroup(title string) *andlabsT {
-	var newt andlabsT
+func (t Toolkit) NewGroup(title string) *Toolkit {
+	var newt Toolkit
 
 	if (DebugToolkit) {
 		log.Println("gui.Toolbox.NewGroup() create", title)
