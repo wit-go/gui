@@ -1,37 +1,63 @@
 package main
 
-import "log"
-
+// This is important. This sets the defaults for the gui. Without this, there isn't correct padding, etc
 func init() {
-	if (DebugToolkit) {
-		log.Println("gui/toolkit init() Setting defaultBehavior = true")
-	}
+	// Can you pass values to a plugin init() ? Otherwise, there is no way to safely print
+	// log(debugToolkit, "gui/toolkit init() Setting defaultBehavior = true")
 	setDefaultBehavior(true)
 }
 
 func (t andlabsT) commonChange(widget string) {
 	s := t.String()
-	if (DebugToolkit) {
-		log.Println("gui.Toolkit.ui.OnChanged() =", s)
-	}
+	log(debugChange, "commonChange() START widget   =", widget)
+	log(debugChange, "commonChange() t.String =", s)
 	if (t.OnChanged != nil) {
-		if (DebugToolkit) {
-			log.Println("gui.Toolkit.OnChanged() trying to run toolkit.OnChanged() entered val =", s)
-		}
-		t.OnChanged(&t)
+		// log(debugChange, "commonChange() toolkit.OnChanged() START")
+		// t.OnChanged(&t)
+		exit("OnChanged is not implemented. TODO: FIX THIS")
 		return
 	}
 	if (t.Custom != nil) {
-		if (DebugToolkit) {
-			log.Println("gui.Toolkit.OnChanged() Running toolkit.Custom()")
-			t.Dump()
-		}
+		log(debugChange, "commonChange() START toolkit.Custom()")
 		t.Custom()
+		log(debugChange, "commonChange() END toolkit.Custom()")
 		return
 	}
-	if (DebugToolkit) {
-		log.Println("gui.Toolkit.OnChanged() ENDED without finding any callback")
+	if (widget == "Checkbox") {
+		log(debugChange, "commonChange() END Need to read the Checkbox value")
+		return
 	}
+	if (widget == "Dropdown") {
+		t.getDropdown()
+		if (t.tw == nil) {
+			log(debugChange, "commonChange() END tw.Custom == nil")
+		}
+		if (t.tw.Custom == nil) {
+			log(debugChange, "commonChange() END Dropdown (no custom())")
+		}
+		t.tw.Custom()
+		log(debugChange, "commonChange() END Dropdown")
+		return
+	}
+	log(debugChange, "commonChange() t.String =", s)
+	log(debugChange, "commonChange() ENDED without finding any callback")
+}
+
+func (t *andlabsT) getDropdown() {
+	log(debugChange, "commonChange() Need to read the dropdown menu")
+	if (t.uiCombobox == nil) {
+		log(debugChange, "commonChange() END BAD NEWS. t.uiCombobox == nil")
+		return
+	}
+	i := t.uiCombobox.Selected()
+	log(debugChange, "commonChange() t.uiCombobox = ", i)
+	if (t.tw == nil) {
+		log(debugChange, "commonChange() END tw = nil")
+		return
+	}
+	t.tw.S = t.String()
+	log(debugChange, "commonChange() END tw = ", t.tw)
+	return
 }
 
 // does some sanity checks on the internal structs of the binary tree
@@ -39,21 +65,19 @@ func (t andlabsT) commonChange(widget string) {
 func (t *andlabsT) broken() bool {
 	if (t.uiBox == nil) {
 		if (t.uiWindow != nil) {
-			if (DebugToolkit) {
-				log.Println("gui.Toolkit.UiBox == nil. This is an empty window. Try to add a box")
-			}
+			log(debugToolkit, "gui.Toolkit.UiBox == nil. This is an empty window. Try to add a box")
 			t.NewBox()
 			return false
 		}
-		log.Println("gui.Toolkit.UiBox == nil. I can't add a widget without a place to put it")
-		// log.Println("probably could just make a box here?")
+		log(debugToolkit, "gui.Toolkit.UiBox == nil. I can't add a widget without a place to put it")
+		// log(debugToolkit, "probably could just make a box here?")
 		// corruption or something horrible?
 		panic("wit/gui toolkit/andlabs func broken() invalid goroutine access into this toolkit?")
 		panic("wit/gui toolkit/andlabs func broken() this probably should not cause the app to panic here (?)")
 		return true
 	}
 	if (t.uiWindow == nil) {
-		log.Println("gui.Toolkit.UiWindow == nil. I can't add a widget without a place to put it (IGNORING FOR NOW)")
+		log(debugToolkit, "gui.Toolkit.UiWindow == nil. I can't add a widget without a place to put it (IGNORING FOR NOW)")
 		forceDump(t)
 		return false
 	}

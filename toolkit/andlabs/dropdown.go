@@ -1,8 +1,5 @@
 package main
 
-import "log"
-// import "time"
-
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
@@ -10,10 +7,9 @@ import "git.wit.org/wit/gui/toolkit"
 
 func (t *andlabsT) NewDropdown(title string) *andlabsT {
 	// make new node here
-	if (DebugToolkit) {
-		log.Println("gui.Toolbox.NewDropdownCombobox()", title)
-	}
 	var newt andlabsT
+
+	log(debugToolkit, "gui.Toolbox.NewDropdownCombobox()", title)
 
 	if t.broken() {
 		return nil
@@ -31,7 +27,7 @@ func (t *andlabsT) NewDropdown(title string) *andlabsT {
 	s.OnSelected(func(spin *ui.Combobox) {
 		i := spin.Selected()
 		if (newt.val == nil) {
-			log.Println("make map didn't work")
+			log(debugToolkit, "make map didn't work")
 			newt.text = "error"
 		}
 		newt.text = newt.val[i]
@@ -44,7 +40,7 @@ func (t *andlabsT) NewDropdown(title string) *andlabsT {
 func (t *andlabsT) AddDropdownName(title string) {
 	t.uiCombobox.Append(title)
 	if (t.val == nil) {
-		log.Println("make map didn't work")
+		log(debugToolkit, "make map didn't work")
 		return
 	}
 	t.val[t.c] = title
@@ -56,34 +52,36 @@ func (t andlabsT) SetDropdown(i int) {
 }
 
 func NewDropdown(parentW *toolkit.Widget, w *toolkit.Widget) {
-	log.Println("gui.andlabs.NewDropdown()", w.Name)
+	log(debugToolkit, "gui.andlabs.NewDropdown()", w.Name)
 
 	t := mapToolkits[parentW]
 	if (t == nil) {
-		log.Println("go.andlabs.NewDropdown() toolkit struct == nil. name=", parentW.Name, w.Name)
+		log(debugToolkit, "go.andlabs.NewDropdown() toolkit struct == nil. name=", parentW.Name, w.Name)
 		listMap()
 	}
 	newt := t.NewDropdown(w.Name)
+	newt.Custom = w.Custom
+	newt.tw = w
 	mapWidgetsToolkits(w, newt)
 }
 
 func AddDropdownName(w *toolkit.Widget, s string) {
-	log.Println("gui.andlabs.AddDropdownName()", w.Name, "add:", s)
+	log(debugToolkit, "gui.andlabs.AddDropdownName()", w.Name, "add:", s)
 
 	t := mapToolkits[w]
 	if (t == nil) {
-		log.Println("go.andlabs.AddDropdownName() toolkit struct == nil. name=", w.Name, s)
+		log(debugToolkit, "go.andlabs.AddDropdownName() toolkit struct == nil. name=", w.Name, s)
 		listMap()
 	}
 	t.AddDropdownName(s)
 }
 
 func SetDropdown(w *toolkit.Widget, i int) {
-	log.Println("gui.andlabs.SetDropdown()", i)
+	log(debugToolkit, "gui.andlabs.SetDropdown()", i)
 
 	t := mapToolkits[w]
 	if (t == nil) {
-		log.Println("go.andlabs.SetDropdown() toolkit struct == nil. name=", w.Name, i)
+		log(debugToolkit, "go.andlabs.SetDropdown() toolkit struct == nil. name=", w.Name, i)
 		listMap()
 	}
 	t.SetDropdown(i)

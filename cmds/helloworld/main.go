@@ -7,7 +7,7 @@ import 	(
 )
 
 func main() {
-	gui.Init()
+	// gui.Init()
 	gui.Main(helloworld)
 }
 

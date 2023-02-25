@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	"git.wit.org/wit/gui/toolkit"
 
 	"github.com/andlabs/ui"
@@ -10,11 +8,11 @@ import (
 )
 
 func NewGroup(parentW *toolkit.Widget, w *toolkit.Widget) {
-	log.Println("gui.andlabs.NewGroup()", w.Name)
+	log(debugToolkit, "gui.andlabs.NewGroup()", w.Name)
 
 	t := mapToolkits[parentW]
 	if (t == nil) {
-		log.Println("go.andlabs.NewGroup() toolkit struct == nil. name=", parentW.Name, w.Name)
+		log(debugToolkit, "go.andlabs.NewGroup() toolkit struct == nil. name=", parentW.Name, w.Name)
 		listMap()
 	}
 	newt := t.NewGroup(w.Name)
@@ -25,9 +23,8 @@ func NewGroup(parentW *toolkit.Widget, w *toolkit.Widget) {
 func (t andlabsT) NewGroup(title string) *andlabsT {
 	var newt andlabsT
 
-	if (DebugToolkit) {
-		log.Println("gui.Toolbox.NewGroup() create", title)
-	}
+	log(debugToolkit, "gui.Toolbox.NewGroup() create", title)
+
 	g := ui.NewGroup(title)
 	g.SetMargined(margin)
 
@@ -36,8 +33,9 @@ func (t andlabsT) NewGroup(title string) *andlabsT {
 	} else if (t.uiWindow != nil) {
 		t.uiWindow.SetChild(g)
 	} else {
-		log.Println("gui.ToolboxNode.NewGroup() node.UiBox == nil. I can't add a range UI element without a place to put it")
-		log.Fatalln("probably could just make a box here?")
+		log(debugToolkit, "gui.ToolboxNode.NewGroup() node.UiBox == nil. I can't add a range UI element without a place to put it")
+		log(debugToolkit, "probably could just make a box here?")
+		exit("internal wit/gui error")
 	}
 
 	hbox := ui.NewVerticalBox()

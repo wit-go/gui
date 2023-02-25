@@ -6,7 +6,6 @@ package gui
 // It's a pleasure to be here with all of you
 
 import (
-	"log"
 	"os"
 	"plugin"
 
@@ -42,6 +41,10 @@ type aplug struct {
 
 	NewDropdown func(*toolkit.Widget, *toolkit.Widget)
 	AddDropdownName func(*toolkit.Widget, string)
+
+	SetDebugToolkit func(bool)
+	SetDebugChange func(bool)
+	ShowDebug func()
 }
 
 var allPlugins []*aplug
@@ -50,13 +53,13 @@ var allPlugins []*aplug
 func LoadToolkit(name string) bool {
 	var newPlug aplug
 
-	log.Println("gui.LoadToolkit() START")
+	log(debugGui, "gui.LoadToolkit() START")
 	newPlug.LoadOk = false
 
 	for _, aplug := range allPlugins {
-		log.Println("gui.LoadToolkit() already loaded toolkit plugin =", aplug.name)
+		log(debugGui, "gui.LoadToolkit() already loaded toolkit plugin =", aplug.name)
 		if (aplug.name == name) {
-			log.Println("gui.LoadToolkit() SKIPPING")
+			log(debugGui, "gui.LoadToolkit() SKIPPING")
 			return true
 		}
 	}
@@ -92,13 +95,20 @@ func LoadToolkit(name string) bool {
 	newPlug.NewDropdown = loadFunc2(&newPlug, "NewDropdown")
 	newPlug.AddDropdownName = loadFuncS(&newPlug, "AddDropdownName")
 
+	newPlug.SetDebugToolkit = loadFuncB(&newPlug, "SetDebugToolkit")
+	newPlug.SetDebugChange = loadFuncB(&newPlug, "SetDebugChange")
+	newPlug.ShowDebug = loadFuncE(&newPlug, "ShowDebug")
+
 	allPlugins = append(allPlugins, &newPlug)
 
-	log.Println("gui.LoadToolkit() END", newPlug.name, filename)
+	log(debugGui, "gui.LoadToolkit() END", newPlug.name, filename)
+	newPlug.Init()
 	newPlug.LoadOk = true
 	return true
 }
 
+// TODO: All these functions need to be done a smarter way
+// but I haven't worked out the golang syntax to make it smarter
 func loadFuncE(p *aplug, funcName string) func() {
 	var newfunc func()
 	var ok bool
@@ -106,13 +116,13 @@ func loadFuncE(p *aplug, funcName string) func() {
 
 	test, err = p.plug.Lookup(funcName)
 	if err != nil {
-		log.Println("DID NOT FIND: name =", test, "err =", err)
+		log(debugGui, "DID NOT FIND: name =", test, "err =", err)
 		return nil
 	}
 
 	newfunc, ok = test.(func())
 	if !ok {
-		log.Println("function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
+		log(debugGui, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
 		return nil
 	}
 	return newfunc
@@ -125,13 +135,13 @@ func loadFunc1(p *aplug, funcName string) func(*toolkit.Widget) {
 
 	test, err = p.plug.Lookup(funcName)
 	if err != nil {
-		log.Println("DID NOT FIND: name =", test, "err =", err)
+		log(debugGui, "DID NOT FIND: name =", test, "err =", err)
 		return nil
 	}
 
 	newfunc, ok = test.(func(*toolkit.Widget))
 	if !ok {
-		log.Println("function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
+		log(debugGui, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
 		return nil
 	}
 	return newfunc
@@ -144,13 +154,32 @@ func loadFuncS(p *aplug, funcName string) func(*toolkit.Widget, string) {
 
 	test, err = p.plug.Lookup(funcName)
 	if err != nil {
-		log.Println("DID NOT FIND: name =", test, "err =", err)
+		log(debugGui, "DID NOT FIND: name =", test, "err =", err)
 		return nil
 	}
 
 	newfunc, ok = test.(func(*toolkit.Widget, string))
 	if !ok {
-		log.Println("function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
+		log(debugGui, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
+		return nil
+	}
+	return newfunc
+}
+
+func loadFuncB(p *aplug, funcName string) func(bool) {
+	var newfunc func(bool)
+	var ok bool
+	var test plugin.Symbol
+
+	test, err = p.plug.Lookup(funcName)
+	if err != nil {
+		log(debugGui, "DID NOT FIND: name =", test, "err =", err)
+		return nil
+	}
+
+	newfunc, ok = test.(func(bool))
+	if !ok {
+		log(debugGui, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
 		return nil
 	}
 	return newfunc
@@ -163,13 +192,13 @@ func loadFunc2(p *aplug, funcName string) func(*toolkit.Widget, *toolkit.Widget)
 
 	test, err = p.plug.Lookup(funcName)
 	if err != nil {
-		log.Println("DID NOT FIND: name =", test, "err =", err)
+		log(debugGui, "DID NOT FIND: name =", test, "err =", err)
 		return nil
 	}
 
 	newfunc, ok = test.(func(*toolkit.Widget, *toolkit.Widget))
 	if !ok {
-		log.Println("function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
+		log(debugGui, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
 		return nil
 	}
 	return newfunc
@@ -185,41 +214,48 @@ func loadFuncF(p *aplug, funcName string) func(func ()) {
 
 	test, err = p.plug.Lookup(funcName)
 	if err != nil {
-		log.Println("DID NOT FIND: name =", test, "err =", err)
+		log(debugGui, "DID NOT FIND: name =", test, "err =", err)
 		return nil
 	}
 
 	newfunc, ok = test.(func(func ()))
 	if !ok {
-		log.Println("function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
+		log(debugGui, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
 		return nil
 	}
 	return newfunc
 }
 
+/*
+	This searches in the following order for the plugin .so files:
+		./toolkit/
+		~/go/src/go.wit.org/gui/toolkit/
+		/usr/lib/go-gui/
+*/
 func loadPlugin(p *aplug, name string) {
 	var filename string
 
-	// attempt to write out the file from the internal resource
-	internalName := "toolkit/" + name 
-	soFile, err := res.ReadFile(internalName)
-	if (err != nil) {
-		log.Println(err)
-	} else {
-		err = os.WriteFile("/tmp/wit/" + name, soFile, 0644)
-		if (err != nil) {
-			log.Println(err)
-		}
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		exit(err)
 	}
 
-	filename = "/tmp/wit/" + name
+	// attempt to write out the file from the internal resource
+	filename = "toolkit/" + name
 	p.plug = loadfile(filename)
 	if (p.plug != nil) {
 		p.filename = filename
 		return
 	}
 
-	filename = "/usr/share/wit/gui/" + name
+	filename = homeDir + "/go/src/git.wit.org/wit/gui/toolkit/" + name
+	p.plug = loadfile(filename)
+	if (p.plug != nil) {
+		p.filename = filename
+		return
+	}
+
+	filename = "/usr/lib/go-gui/" + name
 	p.plug = loadfile(filename)
 	if (p.plug != nil) {
 		p.filename = filename
@@ -232,10 +268,10 @@ func loadPlugin(p *aplug, name string) {
 // 1. open the shared object file to load the symbols
 func loadfile(filename string) *plugin.Plugin {
 	plug, err := plugin.Open(filename)
-	log.Println("plug =", plug)
 	if err != nil {
-		log.Println(err)
+		log(debugGui, "plugin FAILED =", filename, err)
 		return nil
 	}
+	log(debugGui, "plugin WORKED =", filename)
 	return plug
 }

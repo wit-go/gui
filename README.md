@@ -87,12 +87,14 @@ hopefully also things like libSDL, faiface/pixel, slint
 ## References
 
 Useful links and other
-external things
-which might be useful
+external things which might be useful
 
 * [Wikipedia Graphical widget](https://en.wikipedia.org/wiki/Graphical_widget)
-* [Github mirror](https://github.com/witorg/gui)
-* [Federated git pull](https://github.com/forgefed/forgefed)
+* [GO Style Guide](https://google.github.io/styleguide/go/index) Code this way
+* [MS Windows Application Library Kit](https://github.com/lxn/walk)
+* [Federated git pull](https://github.com/forgefed/forgefed) Hopefully this will work for me with gitea
+* [Github mirror](https://github.com/wit-go/gui) This repo on mirror. Hopefully I won't have to use this.
+* [WIT GO projects](https://go.wit.org/) Attempt to model go.uber.org
 
 ## Functions
 

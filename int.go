@@ -1,8 +1,7 @@
 package gui
 
-import "log"
+// import "github.com/davecgh/go-spew/spew"
 
-import "github.com/davecgh/go-spew/spew"
 
 /*
 	Get the int from the gui toolkit
@@ -14,12 +13,10 @@ import "github.com/davecgh/go-spew/spew"
 	Is it "has to go" or "should go"? Probably it makes sense to strictly inforce it. No "callback" functions. IPC only (go channels)
 */
 func (n *Node) Int() int {
-	if (Config.Debug.Toolkit) {
-		log.Println("gui.Node.Int() for node name =", n.Name)
-		scs := spew.ConfigState{MaxDepth: 1}
-		scs.Dump(n)
-	}
+	log(debugToolkit, "gui.Node.Int() for node name =", n.Name)
+	log(debugToolkit, SPEW, n)
 
+	// FIXME: this needs to be redone
 	// i := n.toolkit.Value()
 	i := 3333
 	return i
@@ -31,7 +28,8 @@ func (n *Node) Value() int {
 }
 
 func (n *Node) SetValue(i int) {
-	log.Println("gui.SetValue() START")
+	log(debugGui, "gui.SetValue() START")
 	n.Dump()
+	// FIXME: this needs to be redone
 	// n.toolkit.SetValue(i)
 }

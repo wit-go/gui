@@ -21,7 +21,7 @@ func main() {
 	// gui.LoadToolkit("default")
 	// panic("WTF gocui not happening")
 	// gui.LoadToolkit("gocui")
-	gui.Init()
+//	gui.Init()
 
 	// buttonWindow()
 	go gui.Main(func () {
@@ -57,6 +57,10 @@ func buttonWindow() {
 	w = gui.NewWindow()
 	g = w.NewGroup("buttonGroup")
 
+	g.NewButton("hello", func () {
+		log.Println("world")
+	})
+
 	g.NewButton("NewButton()", func () {
 		log.Println("new foobar 2. Adding button 'foobar 3'")
 		name := "foobar " + strconv.Itoa(counter)
@@ -73,8 +77,12 @@ func buttonWindow() {
 		g.NewGroup(name)
 	})
 
-	g.NewButton("hello", func () {
-		log.Println("world")
+	g.NewButton("gui.DebugWindow()", func () {
+		gui.DebugWindow()
+	})
+
+	g.NewButton("gui.GolangDebugWindow()", func () {
+		gui.GolangDebugWindow()
 	})
 
 	g.NewButton("LoadToolkit(andlabs)", func () {
@@ -86,7 +94,8 @@ func buttonWindow() {
 	})
 
 	g.NewButton("Init()", func () {
-		gui.Init()
+		log.Println("gui.Init() is deprecated(?)")
+		//gui.Init()
 	})
 
 	g.NewButton("Main()", func () {

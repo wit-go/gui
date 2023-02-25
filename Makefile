@@ -1,11 +1,12 @@
 .PHONY: README.md
 
 all: README.md
+	reset
 	@echo
-	@echo "make cmds     # will run all the Example demos and commands"
+	@echo "make examples     # will run all the Example demos and commands"
 	@echo "make update       # full git update of all the dependencies"
 	@echo
-	#make -C cmds/helloworld
+	make clean
 	make plugins
 
 # should update every go dependancy (?)
@@ -13,7 +14,16 @@ update:
 	git pull
 	go get -v -t -u ./...
 
-cmds: cmds-buttonplugin cmds-console-ui-helloworld cmds-debug cmds-helloworld cmds-textbox
+deb:
+	cd debian && make
+	-wit mirrors
+
+examples:   \
+	cmds-buttonplugin \
+	cmds-console-ui-helloworld \
+	cmds-helloworld \
+	cmds-debug \
+	cmds-textbox
 
 cmds-buttonplugin:
 	make -C cmds/buttonplugin
@@ -51,6 +61,7 @@ README.md: doc.go
 
 clean:
 	rm -f toolkit/*.so
+	cd debian && make clean
 
 plugins: plugins-gocui plugins-andlabs
 

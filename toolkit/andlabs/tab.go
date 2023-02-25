@@ -1,9 +1,6 @@
 package main
 
 import (
-	"log"
-	"time"
-
 	"git.wit.org/wit/gui/toolkit"
 
 	"github.com/andlabs/ui"
@@ -26,32 +23,30 @@ func (t *andlabsT) newTab(name string) *andlabsT {
 	// var w *ui.Window
 	var newt *andlabsT
 
-	log.Println("gui.toolkit.AddTab() sleep 3")
+	log(debugToolkit, "gui.toolkit.AddTab()")
 
 	if (t.uiWindow == nil) {
-		log.Println("gui.Toolkit.UiWindow == nil. I can't add a toolbar without window")
+		log(debugToolkit, "gui.Toolkit.UiWindow == nil. I can't add a toolbar without window")
 		return nil
 	}
 
 	if (t.uiTab == nil) {
 		// this means you have to make a new tab
-		log.Println("gui.toolkit.NewTab() GOOD. This should be the first tab:", name)
+		log(debugToolkit, "gui.toolkit.NewTab() GOOD. This should be the first tab:", name)
 		newt = newTab(t.uiWindow, name)
 		t.uiTab = newt.uiTab
 	} else {
 		// this means you have to append a tab
-		log.Println("gui.toolkit.NewTab() GOOD. This should be an additional tab:", name)
+		log(debugToolkit, "gui.toolkit.NewTab() GOOD. This should be an additional tab:", name)
 		newt = t.appendTab(name)
 	}
 
 	newt.Name = name
 
-	if (DebugToolkit) {
-		log.Println("t:")
-		t.Dump()
-		log.Println("newt:")
-		newt.Dump()
-	}
+	log(debugToolkit, "t:")
+	t.Dump()
+	log(debugToolkit, "newt:")
+	newt.Dump()
 
 	return newt
 }
@@ -62,29 +57,23 @@ func (t *andlabsT) newTab(name string) *andlabsT {
 func tabSetMargined(tab *ui.Tab) {
 	c := tab.NumPages()
 	for i := 0; i < c; i++ {
-		if (DebugToolkit) {
-			log.Println("SetMargined", i, margin)
-		}
+		log(debugToolkit, "SetMargined", i, margin)
 		tab.SetMargined(i, margin)
 	}
 }
 
 func newTab(w *ui.Window, name string) *andlabsT {
 	var t andlabsT
-	if (DebugToolkit) {
-		log.Println("gui.toolkit.NewTab() ADD", name)
-	}
+	log(debugToolkit, "gui.toolkit.NewTab() ADD", name)
 
 	if (w == nil) {
-		log.Println("gui.toolkit.NewTab() node.UiWindow == nil. I can't add a tab without a window")
-		log.Println("gui.toolkit.NewTab() node.UiWindow == nil. I can't add a tab without a window")
-		log.Println("gui.toolkit.NewTab() node.UiWindow == nil. I can't add a tab without a window")
-		time.Sleep(1 * time.Second)
+		log(debugToolkit, "gui.toolkit.NewTab() node.UiWindow == nil. I can't add a tab without a window")
+		log(debugToolkit, "gui.toolkit.NewTab() node.UiWindow == nil. I can't add a tab without a window")
+		log(debugToolkit, "gui.toolkit.NewTab() node.UiWindow == nil. I can't add a tab without a window")
+		sleep(1)
 		return nil
 	}
-	if (DebugToolkit) {
-		log.Println("gui.toolkit.AddTab() START name =", name)
-	}
+	log(debugToolkit, "gui.toolkit.AddTab() START name =", name)
 	tab := ui.NewTab()
 	w.SetMargined(margin)
 
@@ -102,17 +91,13 @@ func newTab(w *ui.Window, name string) *andlabsT {
 
 func (t *andlabsT) appendTab(name string) *andlabsT {
 	var newT andlabsT
-	if (DebugToolkit) {
-		log.Println("gui.toolkit.NewTab() ADD", name)
-	}
+	log(debugToolkit, "gui.toolkit.NewTab() ADD", name)
 
 	if (t.uiTab == nil) {
-		log.Println("gui.Toolkit.UiWindow == nil. I can't add a widget without a place to put it")
+		log(debugToolkit, "gui.Toolkit.UiWindow == nil. I can't add a widget without a place to put it")
 		panic("should never have happened. wit/gui/toolkit has ui.Tab == nil")
 	}
-	if (DebugToolkit) {
-		log.Println("gui.toolkit.AddTab() START name =", name)
-	}
+	log(debugToolkit, "gui.toolkit.AddTab() START name =", name)
 
 	var hbox *ui.Box
 	if (defaultBehavior) {
@@ -135,11 +120,11 @@ func (t *andlabsT) appendTab(name string) *andlabsT {
 
 func NewTab(parentW *toolkit.Widget, w *toolkit.Widget) {
 	var newt *andlabsT
-	log.Println("gui.andlabs.NewTab()", w.Name)
+	log(debugToolkit, "gui.andlabs.NewTab()", w.Name)
 
 	t := mapToolkits[parentW]
 	if (t == nil) {
-		log.Println("go.andlabs.NewTab() toolkit struct == nil. name=", parentW.Name, w.Name)
+		log(debugToolkit, "go.andlabs.NewTab() toolkit struct == nil. name=", parentW.Name, w.Name)
 		return
 	}
 	newt = t.newTab(w.Name)

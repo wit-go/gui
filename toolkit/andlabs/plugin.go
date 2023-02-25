@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	"git.wit.org/wit/gui/toolkit"
 )
 
@@ -13,15 +11,15 @@ var mapToolkits map[*toolkit.Widget]*andlabsT
 
 // This lists out the know mappings
 func listMap() {
-	log.Println("listMap() HERE")
-	log.Println("listMap() HERE")
-	log.Println("listMap() HERE mapWidgets()")
+	log(debugToolkit, "listMap() HERE")
+	log(debugToolkit, "listMap() HERE")
+	log(debugToolkit, "listMap() HERE mapWidgets()")
 	for t, w := range mapWidgets {
-		log.Println("andlabs =", t.Name, "widget =", w.Name)
+		log(debugToolkit, "andlabs =", t.Name, "widget =", w.Name)
 	}
-	log.Println("listMap() HERE mapToolkits()")
+	log(debugToolkit, "listMap() HERE mapToolkits()")
 	for w, t := range mapToolkits {
-		log.Println("andlabs =", t, "widget =", w.Name)
+		log(debugToolkit, "andlabs =", t, "widget =", w.Name)
 		forceDump(t)
 	}
 }
@@ -30,14 +28,22 @@ func mapWidgetsToolkits(w *toolkit.Widget, t *andlabsT) {
 	if (mapToolkits[w] == nil) {
 		mapToolkits[w] = t
 	} else {
-		log.Println("WTF: mapToolkits already installed")
-		panic("WTF")
+		log(debugToolkit, "WTF: mapToolkits was sent nil. this should not happen w =", w)
+		log(debugToolkit, "WTF: mapToolkits was sent nil. this should not happen t =", t.Width)
+		log(debugToolkit, "WTF: mapToolkits map already set to ", mapToolkits[w])
+		panic("WTF mapWidgetsToolkits() w == nil")
 	}
 
 	if (mapWidgets[t] == nil) {
 		mapWidgets[t] = w
 	} else {
-		log.Println("WTF: mapWidgets already installed")
-		panic("WTF")
+		log(debugToolkit, "WTF: mapWidgets already installed. w =", w)
+		log(debugToolkit, "WTF: mapWidgets already installed. t =", t.Width, t)
+		log(SPEW, &t)
+		log(SPEW, t)
+		log(SPEW, *t)
+		log(debugToolkit, "WTF: mapWidgets already mapped to", mapWidgets[t])
+		log(SPEW, mapWidgets[t])
+		panic("WTF. mapWidget andlabs toolkit already mapped to gui toolkit")
 	}
 }

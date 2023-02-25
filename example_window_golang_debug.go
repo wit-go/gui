@@ -1,7 +1,5 @@
 package gui
 
-import "log"
-
 import (
 	"os"
 	"runtime"
@@ -19,88 +17,88 @@ func GolangDebugWindow() {
 	w = NewWindow()
 
 	t = w.NewTab("Debug Tab")
-	log.Println("debugWindow() START")
+	log("debugWindow() START")
 
 
 	///////////////////////////////  Column DEBUG GOLANG   //////////////////////
 	g := t.NewGroup("GO Language")
 
 	g.NewButton("runtime.Stack()", func () {
-		log.Println("\tSTART")
+		log("\tSTART")
 		buf := make([]byte, 1<<16)
 		runtime.Stack(buf, true)
-		log.Printf("%s", buf)
-		log.Println("\tEND")
+		log("\t %s", buf)
+		log("\tEND")
 	})
 	g.NewButton("dumpModuleInfo()", func () {
-		log.Println("\tSTART")
+		log("\tSTART")
 		dumpModuleInfo()
-		log.Println("\tEND")
+		log("\tEND")
 	})
 	g.NewButton("debug.PrintStack()", func () {
-		log.Println("\tSTART")
+		log("\tSTART")
 		debug.PrintStack()
-		log.Println("\tEND")
+		log("\tEND")
 	})
 	g.NewButton("pprof.Lookup(goroutine)", func () {
-		log.Println("\tSTART")
+		log("\tSTART")
 		pprof.Lookup("goroutine").WriteTo(os.Stdout, 1)
-		log.Println("\tEND")
+		log("\tEND")
 	})
 	g.NewButton("pprof.Lookup(heap)", func () {
-		log.Println("\tSTART")
+		log("\tSTART")
 		pprof.Lookup("heap").WriteTo(os.Stdout, 1)
-		log.Println("\tEND")
+		log("\tEND")
 	})
 	g.NewButton("pprof.Lookup(block)", func () {
-		log.Println("\tSTART")
+		log("\tSTART")
 		pprof.Lookup("block").WriteTo(os.Stdout, 1)
-		log.Println("\tEND")
+		log("\tEND")
 	})
 	g.NewButton("pprof.Lookup threadcreate", func () {
-		log.Println("\tSTART")
+		log("\tSTART")
 		pprof.Lookup("threadcreate").WriteTo(os.Stdout, 1)
-		log.Println("\tEND")
+		log("\tEND")
 	})
 	g.NewButton("runtime.ReadMemStats", func () {
 		var s runtime.MemStats
 		runtime.ReadMemStats(&s)
-		log.Printf("alloc: %v bytes\n", s.Alloc)
-		log.Printf("total-alloc: %v bytes\n", s.TotalAlloc)
-		log.Printf("sys: %v bytes\n", s.Sys)
-		log.Printf("lookups: %v\n", s.Lookups)
-		log.Printf("mallocs: %v\n", s.Mallocs)
-		log.Printf("frees: %v\n", s.Frees)
-		log.Printf("heap-alloc: %v bytes\n", s.HeapAlloc)
-		log.Printf("heap-sys: %v bytes\n", s.HeapSys)
-		log.Printf("heap-idle: %v bytes\n", s.HeapIdle)
-		log.Printf("heap-in-use: %v bytes\n", s.HeapInuse)
-		log.Printf("heap-released: %v bytes\n", s.HeapReleased)
-		log.Printf("heap-objects: %v\n", s.HeapObjects)
-		log.Printf("stack-in-use: %v bytes\n", s.StackInuse)
-		log.Printf("stack-sys: %v bytes\n", s.StackSys)
-		log.Printf("next-gc: when heap-alloc >= %v bytes\n", s.NextGC)
-		log.Printf("last-gc: %v ns\n", s.LastGC)
-		log.Printf("gc-pause: %v ns\n", s.PauseTotalNs)
-		log.Printf("num-gc: %v\n", s.NumGC)
-		log.Printf("enable-gc: %v\n", s.EnableGC)
-		log.Printf("debug-gc: %v\n", s.DebugGC)
+		log("alloc: %v bytes\n", s.Alloc)
+		log("total-alloc: %v bytes\n", s.TotalAlloc)
+		log("sys: %v bytes\n", s.Sys)
+		log("lookups: %v\n", s.Lookups)
+		log("mallocs: %v\n", s.Mallocs)
+		log("frees: %v\n", s.Frees)
+		log("heap-alloc: %v bytes\n", s.HeapAlloc)
+		log("heap-sys: %v bytes\n", s.HeapSys)
+		log("heap-idle: %v bytes\n", s.HeapIdle)
+		log("heap-in-use: %v bytes\n", s.HeapInuse)
+		log("heap-released: %v bytes\n", s.HeapReleased)
+		log("heap-objects: %v\n", s.HeapObjects)
+		log("stack-in-use: %v bytes\n", s.StackInuse)
+		log("stack-sys: %v bytes\n", s.StackSys)
+		log("next-gc: when heap-alloc >= %v bytes\n", s.NextGC)
+		log("last-gc: %v ns\n", s.LastGC)
+		log("gc-pause: %v ns\n", s.PauseTotalNs)
+		log("num-gc: %v\n", s.NumGC)
+		log("enable-gc: %v\n", s.EnableGC)
+		log("debug-gc: %v\n", s.DebugGC)
 	})
 }
 
 func dumpModuleInfo() {
 	tmp, _ := debug.ReadBuildInfo()
 	if tmp == nil {
-		log.Println("This wasn't compiled with go module support")
+		log("This wasn't compiled with go module support")
 		return
 	}
-	log.Println("mod.Path         = ", tmp.Path)
-	log.Println("mod.Main.Path    = ", tmp.Main.Path)
-	log.Println("mod.Main.Version = ", tmp.Main.Version)
-	log.Println("mod.Main.Sum     = ", tmp.Main.Sum)
+	log("mod.Path         = ", tmp.Path)
+	log("mod.Main.Path    = ", tmp.Main.Path)
+	log("mod.Main.Version = ", tmp.Main.Version)
+	log("mod.Main.Sum     = ", tmp.Main.Sum)
 	for _, value := range tmp.Deps {
-		log.Println("\tmod.Path    = ", value.Path)
-		log.Println("\tmod.Version = ", value.Version)
+		log("\tmod.Path    = ", value.Path)
+		log("\tmod.Version = ", value.Version)
 	}
 }
 

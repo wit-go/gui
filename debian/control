@@ -1,0 +1,9 @@
+Source: go-wit-gui
+Build-Depends: golang
+Package: go-wit-gui 
+Maintainer: Jeff Carr <jcarr@wit.com>
+Architecture: amd64
+Depends:
+Recommends: libgtk-3-0
+Description: a abstraction layer for Go visual elements (GTK, QT, etc)
+ Package gui implements a abstraction layer for Go visual elements.

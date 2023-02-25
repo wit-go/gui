@@ -7,12 +7,10 @@
 package gui
 
 import (
-	"log"
-
 	"git.wit.org/wit/gui/toolkit/andlabs-direct"
 )
 
 func trythis() {
-	log.Println("not sure what to try")
+	log(debugGui, "not sure what to try")
 	toolkit.DebugToolkit = true
 }

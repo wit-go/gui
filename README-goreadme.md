@@ -93,74 +93,93 @@ hopefully also things like libSDL, faiface/pixel, slint
 ## References
 
 Useful links and other
-external things
-which might be useful
+external things which might be useful
 
 [Wikipedia Graphical widget]: [https://en.wikipedia.org/wiki/Graphical_widget](https://en.wikipedia.org/wiki/Graphical_widget)
 [Github mirror]: [https://github.com/witorg/gui](https://github.com/witorg/gui)
 [Federated git pull]: [https://github.com/forgefed/forgefed](https://github.com/forgefed/forgefed)
+[GO Style Guide]: [https://google.github.io/styleguide/go/index](https://google.github.io/styleguide/go/index)
 
 ```go
 * [Wikipedia Graphical widget]
 * [Github mirror]
 * [Federated git pull]
+* [GO Style Guide]
+```
+
+version v1.3
+
+I like things to be easy.
+
+this means all the log settings are in one place. it should allow
+things to be over-ridden externally to the library
+but still allow command line --args to pass debugging settings
+
+## I also have a generic sleep() and exit() in here because it's simple
+
+Usage:
+
+log("something", foo, bar)
+var DEBUG bool = true
+log(DEBUG, "something else", someOtherVariable)  # if DEBUG == false, return doing nothing
+log(SPEW, "something else", someOtherVariable)   # this get's sent to spew.Dump(). Very useful for debugging!
+
+## Variables
+
+```golang
+var INFO bool
+```
+
+```golang
+var LOGOFF bool = false // turn this off, all logging stops
+
+```
+
+```golang
+var SPEW spewt
+```
+
+```golang
+var WARN bool
 ```
 
 ## Functions
 
-### func [DebugTab](/example_window_debug.go#L26)
-
-`func DebugTab()`
-
-this function is used by the examples to add a tab
-dynamically to the bugWin node
-TODO: make this smarter once this uses toolkit/
-
-### func [DebugWindow](/example_window_debug.go#L14)
+### func [DebugWindow](/debug_window.go#L9)
 
 `func DebugWindow()`
 
 Creates a window helpful for debugging this package
 
-### func [DemoWindow](/example_window_demo.go#L10)
-
-`func DemoWindow()`
-
-This creates a window that shows how this package works
-
-### func [GetDebug](/structs.go#L23)
+### func [GetDebug](/debug.go#L20)
 
 `func GetDebug() bool`
 
-### func [GetDebugToolkit](/structs.go#L34)
-
-`func GetDebugToolkit() bool`
-
-### func [GolangDebugWindow](/example_window_golang_debug.go#L12)
+### func [GolangDebugWindow](/example_window_golang_debug.go#L10)
 
 `func GolangDebugWindow()`
 
-### func [IndentPrintln](/structs.go#L159)
+### func [Indent](/debug.go#L120)
 
-`func IndentPrintln(a ...interface{})`
+`func Indent(a ...interface{})`
 
-### func [Init](/main.go#L41)
+### func [InitPlugins](/main.go#L35)
 
-`func Init()`
+`func InitPlugins(names []string)`
 
-### func [LoadToolkit](/plugin.go#L50)
+### func [LoadToolkit](/plugin.go#L53)
 
 `func LoadToolkit(name string) bool`
 
 loads and initializes a toolkit (andlabs/ui, gocui, etc)
 
-### func [Main](/main.go#L86)
+### func [Main](/main.go#L76)
 
 `func Main(f func())`
 
 This should not pass a function
 
-### func [Queue](/main.go#L115)
+### func [Queue](/main.go#L106)
 
 `func Queue(f func())`
 
@@ -171,31 +190,39 @@ other goroutines. This is due to the nature of how
 Linux, MacOS and Windows work (they all work differently. suprise. surprise.)
 For example: gui.Queue(NewWindow())
 
-### func [SetDebug](/structs.go#L27)
+### func [SetDebug](/debug.go#L24)
 
 `func SetDebug(s bool)`
 
-### func [SetDebugToolkit](/structs.go#L38)
+### func [SetDebugChange](/debug.go#L52)
+
+`func SetDebugChange(s bool)`
+
+This passes the debugChange flag to the toolkit plugin
+
+### func [SetDebugToolkit](/debug.go#L37)
 
 `func SetDebugToolkit(s bool)`
 
-### func [ShowDebugValues](/structs.go#L42)
+This passes the debugToolkit flag to the toolkit plugin
+
+### func [ShowDebugValues](/debug.go#L66)
 
 `func ShowDebugValues()`
 
-### func [StandardClose](/main.go#L128)
+### func [StandardClose](/main.go#L119)
 
 `func StandardClose(n *Node)`
 
 The window is destroyed but the application does not quit
 
-### func [StandardExit](/main.go#L135)
+### func [StandardExit](/main.go#L125)
 
 `func StandardExit(n *Node)`
 
 The window is destroyed but the application does not quit
 
-### func [Watchdog](/watchdog.go#L16)
+### func [Watchdog](/watchdog.go#L15)
 
 `func Watchdog()`
 
@@ -206,7 +233,13 @@ This goroutine can be used like a watchdog timer
 
 ## Types
 
-### type [GuiConfig](/structs.go#L65)
+### type [GuiArgs](/structs.go#L25)
+
+`type GuiArgs struct { ... }`
+
+This struct can be used with the go-arg package
+
+### type [GuiConfig](/structs.go#L30)
 
 `type GuiConfig struct { ... }`
 
@@ -216,23 +249,14 @@ This goroutine can be used like a watchdog timer
 var Config GuiConfig
 ```
 
-### type [GuiDebug](/structs.go#L53)
-
-`type GuiDebug struct { ... }`
-
-This struct can be used with go-arg
-
-### type [Node](/structs.go#L84)
+### type [Node](/structs.go#L48)
 
 `type Node struct { ... }`
 
-The Node is simply the name and the size of whatever GUI element exists
+The Node is a binary tree. This is how all GUI elements are stored
+simply the name and the size of whatever GUI element exists
 
-#### func [NewStandardWindow](/example_window_demo.go#L22)
-
-`func NewStandardWindow(title string) *Node`
-
-#### func [NewWindow](/window.go#L15)
+#### func [NewWindow](/window.go#L14)
 
 `func NewWindow() *Node`
 
@@ -280,7 +304,7 @@ func main() {
 You get a window
 ```
 
-### type [Symbol](/plugin.go#L17)
+### type [Symbol](/plugin.go#L16)
 
 `type Symbol any`
 

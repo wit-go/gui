@@ -1,7 +1,5 @@
 package gui
 
-import "log"
-
 func (n *Node) Checked() bool {
 	n.Dump()
 	return n.checked
@@ -25,22 +23,29 @@ This was the old code
 
 
 func (n *Node) NewCheckbox(name string) *Node {
-	newNode := n.New(name)
+	newNode := n.New(name, "Checkbox")
 	newNode.custom = n.custom
 
 	newNode.Widget.Custom = func() {
-		log.Println("even newer clicker() name", newNode.Widget)
+		log(debugChange, "wit go gui checkbox", newNode.Widget)
 		if (n.custom != nil) {
+			log(debugChange, "trying parent.custom() callback() name =", name)
 			n.custom()
 		} else {
-			log.Println("wit/gui No callback function is defined for button name =", name)
+			log(debugChange, "wit/gui No parent.custom() function is defined for button name =", name)
+		}
+		if (newNode.custom != nil) {
+			log(debugChange, "trying newNode.custom() callback name =", name)
+			newNode.custom()
+		} else {
+			log(debugChange, "wit/gui No newNode.custom() function is defined for button name =", name)
 		}
 	}
 
 	for _, aplug := range allPlugins {
-		log.Println("gui.NewCheckbox() aplug =", aplug.name, "name =", newNode.Widget.Name)
+		log(debugGui, "gui.NewCheckbox() aplug =", aplug.name, "name =", newNode.Widget.Name)
 		if (aplug.NewCheckbox == nil) {
-			log.Println("\tgui.NewCheckbox() aplug.NewCheckbox = nil", aplug.name)
+			log(debugGui, "\tgui.NewCheckbox() aplug.NewCheckbox = nil", aplug.name)
 			continue
 		}
 		aplug.NewCheckbox(&n.Widget, &newNode.Widget)

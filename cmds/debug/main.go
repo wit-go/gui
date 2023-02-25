@@ -17,7 +17,7 @@ import (
 func main() {
 	log.Println("Starting my Control Panel")
 
-	gui.Init()
+//	gui.Init()
 //	go gui.Main(helloworld)
 	go gui.Main(gui.DebugWindow)
 //	go gui.DemoToolkitWindow()

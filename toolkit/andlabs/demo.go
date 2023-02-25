@@ -1,7 +1,5 @@
 package main
 
-import "log"
-
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
@@ -22,7 +20,7 @@ func BlankWindow(w *ui.Window) *ui.Box {
 func (t *andlabsT) DemoNumbersPage() {
 	var w *ui.Window
 
-	log.Println("Starting wit/gui toolkit andlabs/ui DemoNumbersPage()")
+	log(debugToolkit, "Starting wit/gui toolkit andlabs/ui DemoNumbersPage()")
 
 	w = t.uiWindow
 	t.uiBox = makeNumbersPage()

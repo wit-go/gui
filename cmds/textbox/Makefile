@@ -1,5 +1,5 @@
 run: build
-	./textbox --guidebug
+	./textbox --gui-debug
 
 build-release:
 	go get -v -u -x .

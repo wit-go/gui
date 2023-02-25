@@ -4,7 +4,6 @@ package main
 import 	(
 	"os"
 	"log"
-	"fmt"
 	"git.wit.org/wit/gui"
 	arg "github.com/alexflint/go-arg"
 )
@@ -12,30 +11,20 @@ import 	(
 type LogOptions struct {
 	LogFile string
 	Verbose bool
-	GuiDebug bool `help:"open up the wit/gui Debugging Window"`
-	GuiDemo bool `help:"open the wit/gui Demo Window"`
+	// GuiDebug bool `help:"open up the wit/gui Debugging Window"`
+	// GuiDemo bool `help:"open the wit/gui Demo Window"`
 	User string `arg:"env:USER"`
 }
 
 var args struct {
-	Foo string
-	Bar bool
 	LogOptions
-	gui.GuiDebug
+	gui.GuiArgs
 }
-
 
 func main() {
 	arg.MustParse(&args)
-	fmt.Println(args.Foo, args.Bar, args.User)
-
-	gui.Config.Debug.Debug = args.Debug
-	/*
-	gui.Config.Debug.Change = args.DebugChange
-	gui.Config.Debug.Dump = args.DebugDump
-	gui.Config.Debug.Node = args.DebugNode
-	gui.Config.Debug.Tabs = args.DebugTabs
-	*/
+	// fmt.Println(args.Foo, args.Bar, args.User)
+	log.Println("Toolkit = ", args.Toolkit)
 
 	/*
 	f, err := os.OpenFile("/tmp/guilogfile", os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
@@ -48,14 +37,14 @@ func main() {
 	log.Println("This is a test log entry")
 	*/
 
-	gui.Init()
+	// gui.InitPlugins([]string{"andlabs"})
 	gui.Main(initGUI)
 }
 
 // This initializes the first window
 func initGUI() {
 	var w *gui.Node
-	gui.Config.Title = "Hello World golang wit/gui Window"
+	gui.Config.Title = "Hello World"
 	gui.Config.Width = 640
 	gui.Config.Height = 480
 	gui.Config.Exit = myDefaultExit
@@ -65,16 +54,9 @@ func initGUI() {
 	addDemoTab(w, "A Simple Tab Demo")
 	addDemoTab(w, "A Second Tab")
 
-	/*
-	TODO: add these back
-	if (args.GuiDemo) {
-		gui.DemoToolkitWindow()
-	}
-
 	if (args.GuiDebug) {
 		gui.DebugWindow()
 	}
-	*/
 }
 
 func addDemoTab(window *gui.Node, title string) {

@@ -98,10 +98,10 @@ func initKeybindings(g *gocui.Gui) error {
 					w.Custom()
 					return nil
 				}
-				if (w.Event != nil) {
-					w.Event(w)
-					return nil
-				}
+				// if (w.Event != nil) {
+				// 	w.Event(w)
+				// 	return nil
+				// }
 			}
 			return nil
 		}); err != nil {

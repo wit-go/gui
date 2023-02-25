@@ -8,3 +8,7 @@ cmds/console-ui-helloworld/console-ui-helloworld
 cmds/debug/debug
 cmds/helloworld/helloworld
 cmds/textbox/textbox
+
+# temporary files when building debian packages
+/*.deb
+/files

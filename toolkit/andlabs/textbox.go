@@ -1,7 +1,5 @@
 package main
 
-import "log"
-
 import "git.wit.org/wit/gui/toolkit"
 
 import "github.com/andlabs/ui"
@@ -10,9 +8,7 @@ import _ "github.com/andlabs/ui/winmanifest"
 func (t andlabsT) NewTextbox(name string) *andlabsT {
 	var newt andlabsT
 
-	if (DebugToolkit) {
-		log.Println("gui.Toolkit.NewTextbox()", name)
-	}
+	log(debugToolkit, "gui.Toolkit.NewTextbox()", name)
 	if t.broken() {
 		return nil
 	}
@@ -37,11 +33,11 @@ func (t andlabsT) NewTextbox(name string) *andlabsT {
 
 func NewTextbox(parentW *toolkit.Widget, w *toolkit.Widget) {
 	var t, newt *andlabsT
-	log.Println("gui.andlabs.NewTextbox()", w.Name)
+	log(debugToolkit, "gui.andlabs.NewTextbox()", w.Name)
 
 	t = mapToolkits[parentW]
 	if (t == nil) {
-		log.Println("go.andlabs.NewTextbox() toolkit struct == nil. name=", parentW.Name, w.Name)
+		log(debugToolkit, "go.andlabs.NewTextbox() toolkit struct == nil. name=", parentW.Name, w.Name)
 		return
 	}
 
@@ -53,16 +49,15 @@ func NewTextbox(parentW *toolkit.Widget, w *toolkit.Widget) {
 	newt.uiLabel = ui.NewLabel(w.Name)
 	newt.uiBox = t.uiBox
 
-	if (DebugToolkit) {
-		log.Println("gui.Toolbox.NewTextbox() about to append to Box parent t:", w.Name)
-		t.Dump()
-		log.Println("gui.Toolbox.NewTextbox() about to append to Box new t:", w.Name)
-		newt.Dump()
-	}
+	log(debugToolkit, "gui.Toolbox.NewTextbox() about to append to Box parent t:", w.Name)
+	t.Dump()
+	log(debugToolkit, "gui.Toolbox.NewTextbox() about to append to Box new t:", w.Name)
+	newt.Dump()
+
 	if (t.uiBox != nil) {
 		t.uiBox.Append(newt.uiLabel, false)
 	} else {
-		log.Println("ERROR: wit/gui andlabs couldn't place this Textbox in a box")
+		log(debugToolkit, "ERROR: wit/gui andlabs couldn't place this Textbox in a box")
 		return
 	}
 

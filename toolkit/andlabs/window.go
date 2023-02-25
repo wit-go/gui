@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	"github.com/andlabs/ui"
 	_ "github.com/andlabs/ui/winmanifest"
 
@@ -20,12 +18,10 @@ func (t *andlabsT) ErrorWindow(msg1 string, msg2 string) {
 func NewWindow(w *toolkit.Widget) {
 	var t *andlabsT
 
-	if (DebugToolkit) {
-		log.Println("toolkit NewWindow", w.Name, w.Width, w.Height)
-	}
+	log(debugToolkit, "toolkit NewWindow", w.Name, w.Width, w.Height)
 
 	if (w == nil) {
-		log.Println("wit/gui plugin error. widget == nil")
+		log(debugToolkit, "wit/gui plugin error. widget == nil")
 		return
 	}
 	t = new(andlabsT)
@@ -37,21 +33,17 @@ func NewWindow(w *toolkit.Widget) {
 	win.SetBorderless(canvas)
 	win.SetMargined(margin)
 	win.OnClosing(func(*ui.Window) bool {
-		if (DebugToolkit) {
-			log.Println("ui.Window().OnExit() SHOULD ATTEMPT CALLBACK here")
-			t.Dump()
-		}
+		log(debugToolkit, "ui.Window().OnExit() SHOULD ATTEMPT CALLBACK here")
+		t.Dump()
 		if (w.Custom != nil) {
 			w.Custom()
 			return true
 		}
-		if (w.Event != nil) {
-			w.Event(w)
-			return true
-		}
-		if (DebugToolkit) {
-			log.Println("andlabs.ui.Window().OnClosing() was not defined")
-		}
+		// if (w.Event != nil) {
+		// 	w.Event(w)
+		// 	return true
+		// }
+		log(debugToolkit, "andlabs.ui.Window().OnClosing() was not defined")
 		return false
 	})
 	win.Show()
@@ -64,15 +56,11 @@ func NewWindow(w *toolkit.Widget) {
 }
 
 func (t *andlabsT) SetWindowTitle(title string) {
-	if (DebugToolkit) {
-		log.Println("toolkit NewWindow", t.Name, "title", title)
-	}
+	log(debugToolkit, "toolkit NewWindow", t.Name, "title", title)
 	win := t.uiWindow
 	if (win != nil) {
 		win.SetTitle(title)
 	} else {
-		if (DebugToolkit) {
-			log.Println("Setting the window title", title)
-		}
+		log(debugToolkit, "Setting the window title", title)
 	}
 }

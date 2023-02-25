@@ -1,7 +1,5 @@
 package main
 
-import "log"
-
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
@@ -12,14 +10,10 @@ func (t *andlabsT) GetBox() *ui.Box {
 
 // create a new box
 func (t *andlabsT) NewBox() *andlabsT {
-	if (DebugToolkit) {
-		log.Println("gui.Toolbox.NewBox() START create default")
-	}
+	log(debugToolkit, "gui.Toolbox.NewBox() START create default")
 	t.Dump()
 	if (t.uiGroup != nil) {
-		if (DebugToolkit) {
-			log.Println("\tgui.Toolbox.NewBox() is a Group")
-		}
+		log(debugToolkit, "\tgui.Toolbox.NewBox() is a Group")
 		var newTK andlabsT
 
 		vbox := ui.NewVerticalBox()
@@ -30,9 +24,7 @@ func (t *andlabsT) NewBox() *andlabsT {
 		return &newTK
 	}
 	if (t.uiBox != nil) {
-		if (DebugToolkit) {
-			log.Println("\tgui.Toolbox.NewBox() is a Box")
-		}
+		log(debugToolkit, "\tgui.Toolbox.NewBox() is a Box")
 		var newTK andlabsT
 
 		vbox := ui.NewVerticalBox()
@@ -44,9 +36,7 @@ func (t *andlabsT) NewBox() *andlabsT {
 		return &newTK
 	}
 	if (t.uiWindow != nil) {
-		if (DebugToolkit) {
-			log.Println("\tgui.Toolbox.NewBox() is a Window")
-		}
+		log(debugToolkit, "\tgui.Toolbox.NewBox() is a Window")
 		var newT andlabsT
 
 		vbox := ui.NewVerticalBox()
@@ -58,9 +48,7 @@ func (t *andlabsT) NewBox() *andlabsT {
 		// panic("WTF")
 		return &newT
 	}
-	if (DebugToolkit) {
-		log.Println("\tgui.Toolbox.NewBox() FAILED. Couldn't figure out where to make a box")
-	}
+	log(debugToolkit, "\tgui.Toolbox.NewBox() FAILED. Couldn't figure out where to make a box")
 	t.Dump()
 	return nil
 }

@@ -1,8 +1,6 @@
 package gui
 
 import (
-	"log"
-	"reflect"
 	"git.wit.org/wit/gui/toolkit"
 )
 
@@ -10,56 +8,23 @@ import (
 // All GUI Data Structures and functions that are external
 // within the toolkit/ abstraction layer
 //
-// More than one Window is not supported in a cross platform
-// sense & may never be. On many toolkits you have to have 'tabs'
-// Native Windows and MacOS toolkits work with tabs
+// More than one Window does not exist in every GUI situtaion and
+// can never be. On many toolkits you have to have 'tabs', like
+// Native Windows and MacOS toolkits
 //
-// If that is the case, this code should abstract the concept of
-// windows and make everything 'tabs'
+// If that is the case, this code abstracts the concept of
+// windows and makes each window a 'tabs' in a single window.
+//
+// Reminder from Goals: This is for simple GUI's.
+// For example, a "Mouse Control Panel" not the GIMP or blender.
 //
 
 var Config GuiConfig
 
-func GetDebug () bool {
-	return Config.Debug.Debug
-}
-
-func SetDebug (s bool) {
-	Config.Debug.Debug = s
-	// also set these
-	Config.Debug.Dump = s
-	Config.Debug.Node = s
-}
-
-func GetDebugToolkit () bool {
-	return Config.Debug.Toolkit
-}
-
-func SetDebugToolkit (s bool) {
-	Config.Debug.Toolkit = s
-}
-
-func ShowDebugValues() {
-	log.Println("\t wit/gui Debug =", Config.Debug.Debug)
-	log.Println("\t wit/gui DebugDump =", Config.Debug.Dump)
-	log.Println("\t wit/gui DebugNode =", Config.Debug.Node)
-	log.Println("\t wit/gui DebugTabs =", Config.Debug.Tabs)
-	log.Println("\t wit/gui DebugPlugin =", Config.Debug.Plugin)
-	log.Println("\t wit/gui DebugChange =", Config.Debug.Change)
-	log.Println("\t wit/gui DebugToolkit =", Config.Debug.Toolkit)
-}
-
-// This struct can be used with go-arg
-type GuiDebug struct {
-	// These are global debugging settings
-	// TODO: move to a standard logging system
-	Debug   bool
-	Dump    bool
-	Node    bool
-	Tabs    bool
-	Plugin  bool
-	Change  bool `help:"debug mouse clicks and keyboard input"`
-	Toolkit bool `help:"debug toolkit"`
+// This struct can be used with the go-arg package
+type GuiArgs struct {
+	Toolkit []string `arg:"--toolkit" help:"The order to attempt loading plugins [gocui,andlabs,gtk,qt]"`
+	GuiDebug bool `arg:"--gui-debug" help:"debug the GUI"`
 }
 
 type GuiConfig struct {
@@ -72,33 +37,32 @@ type GuiConfig struct {
 	Height     int
 	Exit       func(*Node)
 
-	Debug GuiDebug
-
 	// hacks
 	depth      int
 	counter    int  // used to make unique ID's
 	prefix     string
 }
 
-// The Node is simply the name and the size of whatever GUI element exists
+// The Node is a binary tree. This is how all GUI elements are stored
+// simply the name and the size of whatever GUI element exists
 type Node struct {
 	id     int
+
+	Widget	toolkit.Widget
 
 	// deprecate these and use toolkit.Widget
 	Name   string
 	Width  int
 	Height int
 
-	Widget	toolkit.Widget
-
 	// this function is run when there are mouse or keyboard events
 	OnChanged func(*Node)
 
 	parent	*Node
-	// TODO: make children a double linked list since some toolkits require order (?)
 	children []*Node
 
-	// things that may not really be needed (?)
+	// is keeping
+	// deprecate these things if they don't really need to exist
 	custom    func()
 	checked   bool
 	text      string
@@ -112,115 +76,12 @@ func (n *Node) Window() *Node {
 	return n.parent
 }
 
-func (n *Node) Dump() {
-	if ! Config.Debug.Dump {
-		return
-	}
-	IndentPrintln("NODE DUMP START")
-	IndentPrintln("id         = ", n.id)
-	IndentPrintln("Name       = ", n.Name)
-	IndentPrintln("Width      = ", n.Width)
-	IndentPrintln("Height     = ", n.Height)
-
-	if (n.parent == nil) {
-		IndentPrintln("parent     = nil")
-	} else {
-		IndentPrintln("parent.id  =", n.parent.id)
-	}
-	if (n.children != nil) {
-		IndentPrintln("children   = ", n.children)
-	}
-	if (n.custom != nil) {
-		IndentPrintln("custom     = ", n.custom)
-	}
-	IndentPrintln("checked    = ", n.checked)
-	if (n.OnChanged != nil) {
-		IndentPrintln("OnChanged  = ", n.OnChanged)
-	}
-	IndentPrintln("text       = ", reflect.ValueOf(n.text).Kind(), n.text)
-	IndentPrintln("NODE DUMP END")
-}
-
 func (n *Node) Append(child *Node) {
 	n.children = append(n.children, child)
-	if (Config.Debug.Debug) {
-		log.Println("child node:")
+	if (debugGui) {
+		log(debugNode, "child node:")
 		child.Dump()
-		log.Println("parent node:")
+		log(debugNode, "parent node:")
 		n.Dump()
 	}
-	// time.Sleep(3 * time.Second)
-}
-
-var listChildrenParent *Node
-var listChildrenDepth int = 0
-var defaultPadding = "  "
-
-func IndentPrintln(a ...interface{}) {
-	indentPrintln(listChildrenDepth, defaultPadding, a)
-}
-
-func indentPrintln(depth int, format string, a ...interface{}) {
-	var tabs string
-	for i := 0; i < depth; i++ {
-		tabs = tabs + format
-	}
-
-	// newFormat := tabs + strconv.Itoa(depth) + " " + format
-	newFormat := tabs + format
-	log.Println(newFormat, a)
-}
-
-func (n *Node) ListChildren(dump bool) {
-	indentPrintln(listChildrenDepth, defaultPadding, n.id, n.Width, n.Height, n.Name)
-
-	if (dump == true) {
-		n.Dump()
-	}
-	if len(n.children) == 0 {
-		if (n.parent == nil) {
-		} else {
-			if (Config.Debug.Node) {
-				log.Println("\t\t\tparent =",n.parent.id)
-			}
-			if (listChildrenParent != nil) {
-				if (Config.Debug.Node) {
-					log.Println("\t\t\tlistChildrenParent =",listChildrenParent.id)
-				}
-				if (listChildrenParent.id != n.parent.id) {
-					log.Fatalln("parent.child does not match child.parent")
-				}
-			}
-		}
-		if (Config.Debug.Node) {
-			log.Println("\t\t", n.id, "has no children")
-		}
-		return
-	}
-	for _, child := range n.children {
-		// log.Println("\t\t", child.id, child.Width, child.Height, child.Name)
-		if (child.parent != nil) {
-			if (Config.Debug.Node) {
-				log.Println("\t\t\tparent =",child.parent.id)
-			}
-		} else {
-			log.Println("\t\t\tno parent")
-			panic("no parent")
-		}
-		if (dump == true) {
-			child.Dump()
-		}
-		if (Config.Debug.Node) {
-			if (child.children == nil) {
-				log.Println("\t\t", child.id, "has no children")
-			} else {
-				log.Println("\t\t\tHas children:", child.children)
-			}
-		}
-		listChildrenParent = n
-		listChildrenDepth += 1
-		child.ListChildren(dump)
-		listChildrenDepth -= 1
-	}
-	return
 }
