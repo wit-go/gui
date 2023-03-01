@@ -1,19 +1,14 @@
 package gui
 
-// import "errors"
-// import "regexp"
+import (
+	"git.wit.org/wit/gui/toolkit"
+)
 
 func (n *Node) NewLabel(text string) *Node {
-	newNode := n.New(text, "Label")
+	newNode := n.New(text, toolkit.Label, func() {
+		log(debugChange, "TextBox changed", text)
+	})
 
-	for _, aplug := range allPlugins {
-		log(debugGui, "gui.NewLabel() aplug =", aplug.name, "name =", newNode.Widget.Name)
-		if (aplug.NewLabel == nil) {
-			log(debugGui, "\tgui.NewLabel() aplug.NewLabel = nil", aplug.name)
-			continue
-		}
-		aplug.NewLabel(&n.Widget, &newNode.Widget)
-	}
-
+	send(n, newNode)
 	return newNode
 }

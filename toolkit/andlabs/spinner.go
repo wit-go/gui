@@ -1,27 +1,43 @@
 package main
 
-import "github.com/andlabs/ui"
-import _ "github.com/andlabs/ui/winmanifest"
+import (
+	"git.wit.org/wit/gui/toolkit"
 
-func (t andlabsT) NewSpinner(title string, x int, y int) *andlabsT {
+	"github.com/andlabs/ui"
+	_ "github.com/andlabs/ui/winmanifest"
+)
+
+func (t andlabsT) newSpinner(w *toolkit.Widget) *andlabsT {
 	// make new node here
-	log(debugToolkit, "gui.Toolkit.NewSpinner()", x, y)
+	log(debugToolkit, "newSpinner()", w.X, w.Y)
 	var newt andlabsT
 
 	if (t.uiBox == nil) {
-		log(debugToolkit, "gui.ToolkitNode.NewSpinner() node.UiBox == nil. I can't add a range UI element without a place to put it")
-		exit("internal golang wit/gui error")
+		log(debugToolkit, "newSpinner() node.UiBox == nil. I can't add a range UI element without a place to put it")
 		return nil
 	}
 
-	s := ui.NewSpinbox(x, y)
+	s := ui.NewSpinbox(w.X, w.Y)
 	newt.uiSpinbox = s
 	newt.uiBox = t.uiBox
+	newt.tw = w
 	t.uiBox.Append(s, stretchy)
 
 	s.OnChanged(func(s *ui.Spinbox) {
-		newt.commonChange("Spinner")
+		newt.commonChange(newt.tw)
 	})
 
 	return &newt
+}
+
+func newSpinner(parentW *toolkit.Widget, w *toolkit.Widget) {
+	var newt *andlabsT
+
+	t := mapToolkits[parentW]
+	if (t == nil) {
+		log(debugToolkit, "go.andlabs.NewTab() toolkit struct == nil. name=", parentW.Name, w.Name)
+		return
+	}
+	newt = t.newSpinner(w)
+	mapWidgetsToolkits(w, newt)
 }

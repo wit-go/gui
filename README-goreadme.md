@@ -145,41 +145,41 @@ var WARN bool
 
 ## Functions
 
+### func [DebugWidgetWindow](/debug_widget.go#L7)
+
+`func DebugWidgetWindow(w *Node)`
+
 ### func [DebugWindow](/debug_window.go#L9)
 
 `func DebugWindow()`
 
 Creates a window helpful for debugging this package
 
-### func [GetDebug](/debug.go#L20)
+### func [Delete](/common.go#L66)
 
-`func GetDebug() bool`
+`func Delete(c *Node)`
 
-### func [GolangDebugWindow](/example_window_golang_debug.go#L10)
-
-`func GolangDebugWindow()`
-
-### func [Indent](/debug.go#L120)
+### func [Indent](/debug.go#L123)
 
 `func Indent(a ...interface{})`
 
-### func [InitPlugins](/main.go#L35)
+### func [InitPlugins](/main.go#L46)
 
 `func InitPlugins(names []string)`
 
-### func [LoadToolkit](/plugin.go#L53)
+### func [LoadToolkit](/plugin.go#L56)
 
 `func LoadToolkit(name string) bool`
 
 loads and initializes a toolkit (andlabs/ui, gocui, etc)
 
-### func [Main](/main.go#L76)
+### func [Main](/main.go#L87)
 
 `func Main(f func())`
 
 This should not pass a function
 
-### func [Queue](/main.go#L106)
+### func [Queue](/main.go#L117)
 
 `func Queue(f func())`
 
@@ -194,31 +194,25 @@ For example: gui.Queue(NewWindow())
 
 `func SetDebug(s bool)`
 
-### func [SetDebugChange](/debug.go#L52)
+### func [SetDebugChange](/debug.go#L58)
 
 `func SetDebugChange(s bool)`
 
 This passes the debugChange flag to the toolkit plugin
 
-### func [SetDebugToolkit](/debug.go#L37)
+### func [SetDebugToolkit](/debug.go#L43)
 
 `func SetDebugToolkit(s bool)`
 
 This passes the debugToolkit flag to the toolkit plugin
 
-### func [ShowDebugValues](/debug.go#L66)
+### func [ShowDebugValues](/debug.go#L72)
 
 `func ShowDebugValues()`
 
-### func [StandardClose](/main.go#L119)
+### func [StandardExit](/main.go#L136)
 
-`func StandardClose(n *Node)`
-
-The window is destroyed but the application does not quit
-
-### func [StandardExit](/main.go#L125)
-
-`func StandardExit(n *Node)`
+`func StandardExit()`
 
 The window is destroyed but the application does not quit
 
@@ -239,7 +233,7 @@ This goroutine can be used like a watchdog timer
 
 This struct can be used with the go-arg package
 
-### type [GuiConfig](/structs.go#L30)
+### type [GuiConfig](/structs.go#L33)
 
 `type GuiConfig struct { ... }`
 
@@ -249,14 +243,14 @@ This struct can be used with the go-arg package
 var Config GuiConfig
 ```
 
-### type [Node](/structs.go#L48)
+### type [Node](/structs.go#L54)
 
 `type Node struct { ... }`
 
 The Node is a binary tree. This is how all GUI elements are stored
 simply the name and the size of whatever GUI element exists
 
-#### func [NewWindow](/window.go#L14)
+#### func [NewWindow](/window.go#L15)
 
 `func NewWindow() *Node`
 

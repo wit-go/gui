@@ -33,7 +33,7 @@ func (t *andlabsT) newTab(name string) *andlabsT {
 	if (t.uiTab == nil) {
 		// this means you have to make a new tab
 		log(debugToolkit, "gui.toolkit.NewTab() GOOD. This should be the first tab:", name)
-		newt = newTab(t.uiWindow, name)
+		newt = rawTab(t.uiWindow, name)
 		t.uiTab = newt.uiTab
 	} else {
 		// this means you have to append a tab
@@ -44,9 +44,9 @@ func (t *andlabsT) newTab(name string) *andlabsT {
 	newt.Name = name
 
 	log(debugToolkit, "t:")
-	t.Dump()
+	t.Dump(debugToolkit)
 	log(debugToolkit, "newt:")
-	newt.Dump()
+	newt.Dump(debugToolkit)
 
 	return newt
 }
@@ -62,7 +62,7 @@ func tabSetMargined(tab *ui.Tab) {
 	}
 }
 
-func newTab(w *ui.Window, name string) *andlabsT {
+func rawTab(w *ui.Window, name string) *andlabsT {
 	var t andlabsT
 	log(debugToolkit, "gui.toolkit.NewTab() ADD", name)
 
@@ -118,7 +118,7 @@ func (t *andlabsT) appendTab(name string) *andlabsT {
 	return &newT
 }
 
-func NewTab(parentW *toolkit.Widget, w *toolkit.Widget) {
+func newTab(parentW *toolkit.Widget, w *toolkit.Widget) {
 	var newt *andlabsT
 	log(debugToolkit, "gui.andlabs.NewTab()", w.Name)
 

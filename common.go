@@ -1,17 +1,32 @@
 package gui
 
-// import "errors"
-import "regexp"
+import (
+	"regexp"
+	// "errors"
+	// "git.wit.org/wit/gui/toolkit"
+)
 
 // functions for handling text related GUI elements
 
 func (n *Node) SetText(str string) bool {
-	log(debugChange, "gui.SetText() value = FIXME. NOT DOING ANYTHING", str)
+	log(debugChange, "gui.SetText() value =", str)
+	n.widget.Action = "Set"
+	n.widget.S = str
+	send(n.parent, n)
+	return true
+}
+
+func (n *Node) AppendText(str string) bool {
+	n.widget.Action = "Set"
+	tmp := n.widget.S + str
+	log(debugChange, "gui.AppendText() value =", tmp)
+	n.widget.S = tmp
+	send(n.parent, n)
 	return true
 }
 
 func (n *Node) GetText() string {
-	return "TODO: GetText() = {}"
+	return n.widget.S
 }
 
 /*
@@ -48,19 +63,18 @@ func normalizeInt(s string) string {
 	return clean
 }
 
+func Delete(c *Node) {
+	c.widget.Action = "Delete"
+	send(c.parent, c)
+}
+
 func commonCallback(n *Node) {
 	// TODO: make all of this common code to all the widgets
-	if (n.OnChanged == nil) {
-		log(debugChange, "Not Running n.OnChanged(n) == nil")
+	// This might be common everywhere finally (2023/03/01)
+	if (n.Custom == nil) {
+		log(debugChange, "Not Running n.Custom(n) == nil")
 	} else {
-		log(debugChange, "Running n.OnChanged(n)")
-		n.OnChanged(n)
-	}
-
-	if (n.custom == nil) {
-		log(debugChange, "Not Running n.custom(n) == nil")
-	} else {
-		log(debugChange, "Running n.custom()")
-		n.custom()
+		log(debugChange, "Running n.Custom(n)")
+		n.Custom()
 	}
 }

@@ -26,21 +26,24 @@ type aplug struct {
 	MainOk bool
 
 	Init func()
-	Main func(func ())
-	Queue func(func ())
+	// TODO: make Main() main() and never allow the user to call it
+	// run plugin.Main() when the plugin is loaded
+	Main func(func ())	// this never returns. Each plugin must have it's own goroutine
+	Queue func(func ())	// Should this return right away? Should it wait (can it wait?)
 	Quit func()
-	NewWindow func(*toolkit.Widget)
+	// NewWindow func(*toolkit.Widget)
+
+	// simplifies passing to the plugin
+	Send func(*toolkit.Widget, *toolkit.Widget)
+
 	NewButton func(*toolkit.Widget, *toolkit.Widget)
 	NewGroup func(*toolkit.Widget, *toolkit.Widget)
 	NewCheckbox func(*toolkit.Widget, *toolkit.Widget)
 	NewTab func(*toolkit.Widget, *toolkit.Widget)
-	NewLabel func(*toolkit.Widget, *toolkit.Widget)
-	NewTextbox func(*toolkit.Widget, *toolkit.Widget)
-	NewSlider func(*toolkit.Widget, *toolkit.Widget)
-	NewSpinner func(*toolkit.Widget, *toolkit.Widget)
 
 	NewDropdown func(*toolkit.Widget, *toolkit.Widget)
 	AddDropdownName func(*toolkit.Widget, string)
+	SetDropdownName func(*toolkit.Widget, string)
 
 	SetDebugToolkit func(bool)
 	SetDebugChange func(bool)
@@ -73,27 +76,27 @@ func LoadToolkit(name string) bool {
 	// newPlug.Ok = true
 	newPlug.name = name
 
-	// map all the functions
+	// deprecate Init(?)
 	newPlug.Init = loadFuncE(&newPlug, "Init")
-	newPlug.Quit = loadFuncE(&newPlug, "Quit")
 
-	// this should be laodFuncE()
+	// should make a goroutine that never exits
 	newPlug.Main  = loadFuncF(&newPlug, "Main")
+
+	// should send things to the goroutine above
 	newPlug.Queue = loadFuncF(&newPlug, "Queue")
 
-	newPlug.NewWindow = loadFunc1(&newPlug, "NewWindow")
+	// unload the plugin and restore state
+	newPlug.Quit = loadFuncE(&newPlug, "Quit")
 
-	newPlug.NewButton = loadFunc2(&newPlug, "NewButton")
-	newPlug.NewGroup = loadFunc2(&newPlug, "NewGroup")
-	newPlug.NewCheckbox = loadFunc2(&newPlug, "NewCheckbox")
-	newPlug.NewTab = loadFunc2(&newPlug, "NewTab")
-	newPlug.NewLabel = loadFunc2(&newPlug, "NewLabel")
-	newPlug.NewTextbox = loadFunc2(&newPlug, "NewTextbox")
-	newPlug.NewSlider = loadFunc2(&newPlug, "NewSlider")
-	newPlug.NewSpinner = loadFunc2(&newPlug, "NewSpinner")
+	// Sends a widget (button, checkbox, etc) and it's parent widget
+	// This includes instructions like "Add", "Delete", "Disable", etc
+	newPlug.Send = loadFunc2(&newPlug, "Send")
+
+	// newPlug.NewGroup = loadFunc2(&newPlug, "NewGroup")
 
 	newPlug.NewDropdown = loadFunc2(&newPlug, "NewDropdown")
 	newPlug.AddDropdownName = loadFuncS(&newPlug, "AddDropdownName")
+	newPlug.SetDropdownName = loadFuncS(&newPlug, "SetDropdownName")
 
 	newPlug.SetDebugToolkit = loadFuncB(&newPlug, "SetDebugToolkit")
 	newPlug.SetDebugChange = loadFuncB(&newPlug, "SetDebugChange")
@@ -274,4 +277,17 @@ func loadfile(filename string) *plugin.Plugin {
 	}
 	log(debugGui, "plugin WORKED =", filename)
 	return plug
+}
+
+// Sends a widget and what to do with it to the plugin
+// parent = n, child = c
+func send(p *Node, c *Node) {
+	for _, aplug := range allPlugins {
+		log(debugPlugin, "Send() aplug =", aplug.name, "name =", c.widget.Name)
+		if (aplug.Send == nil) {
+			log(debugPlugin, "\tSend() failed (aplug.Selete = nil) for", aplug.name)
+			continue
+		}
+		aplug.Send(&c.parent.widget, &c.widget)
+	}
 }

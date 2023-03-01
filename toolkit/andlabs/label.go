@@ -7,66 +7,74 @@ import (
 	"git.wit.org/wit/gui/toolkit"
 )
 
-var pwLabel *toolkit.Widget
-var wLabel *toolkit.Widget
-var tmpNewt *andlabsT
+func newLabel(parentW *toolkit.Widget, w *toolkit.Widget) {
+	var newt *andlabsT
+	log(debugToolkit, "NewLabel()", w.Name)
 
-func NewLabel(parentW *toolkit.Widget, w *toolkit.Widget) {
-	pwLabel = parentW
-	wLabel = w
-	tmpNewt = new(andlabsT)
-	tmpNewt.Width = 10
-	log(debugToolkit, "mapWidgets in ui.QueueMain() START newt =", tmpNewt.Width, tmpNewt)
-	if (tmpNewt == nil) {
-		log(debugToolkit, "mapWidgets WHY THE HELL IS THIS NIL?", tmpNewt.Width, tmpNewt)
-	}
-	ui.QueueMain(newLabel)
-
-	log(true, "sleep(.2) HACK. TODO: wrap spinlock around andlabs.ui goroutine")
-	// log(true, "sleep(.2) HACK. TODO: verify newLabel() is running inside andlabs/ui goroutine") // verified that worked
-	sleep(.2)
-	log(debugToolkit, "mapWidgets parentW/wLabel =", pwLabel)
-	log(debugToolkit, "mapWidgets new/newt =", tmpNewt)
-	mapWidgetsToolkits(w, tmpNewt)
-
-	/*
 	t := mapToolkits[parentW]
 	if (t == nil) {
-		log(debugToolkit, "go.andlabs.NewDropdown() toolkit struct == nil. name=", parentW.Name, w.Name)
-		listMap()
-	}
-	newt := t.NewDropdown(w.Name)
-	mapWidgetsToolkits(w, newt)
-	*/
-}
-
-func newLabel() {
-	var t, newt *andlabsT
-	log(debugToolkit, "gui.andlabs.NewButton()", wLabel.Name)
-
-	t = mapToolkits[pwLabel]
-	if (t == nil) {
-		log(debugToolkit, "go.andlabs.NewButton() toolkit struct == nil. name=", pwLabel.Name, wLabel.Name)
+		listMap(debugError)
+		log(debugError, "ERROR newLabel() listMap()")
+		log(debugError, "ERROR FFFFFFFFFFFF listMap()")
+		log(debugError, "ERROR FFFFFFFFFFFF listMap()")
 		return
 	}
 
+	log(debugToolkit, "NewLabel()", w.Name)
 	if t.broken() {
 		return
 	}
-	newt = tmpNewt
 
-	newt.uiLabel = ui.NewLabel(wLabel.Name)
+	newt = new(andlabsT)
+
+	c := ui.NewLabel(w.Name + " FIX")
+	newt.uiLabel = c
+
 	newt.uiBox = t.uiBox
+	newt.tw = w
+	if (defaultBehavior) {
+		t.uiBox.Append(c, stretchy)
+	}
 
-	log(debugToolkit, "gui.Toolbox.NewButton() about to append to Box parent t:", wLabel.Name)
-	t.Dump()
-	log(debugToolkit, "gui.Toolbox.NewButton() about to append to Box new t:", wLabel.Name)
-	newt.Dump()
+	mapWidgetsToolkits(w, newt)
+}
 
-	if (t.uiBox != nil) {
-		t.uiBox.Append(newt.uiLabel, false)
-	} else {
-		log(debugToolkit, "ERROR: wit/gui andlabs couldn't place this label in a box")
+
+func doLabel(p *toolkit.Widget, c *toolkit.Widget) {
+	if broken(c) {
 		return
+	}
+	if (c.Action == "New") {
+		newLabel(p, c)
+		return
+	}
+	ct := mapToolkits[c]
+	if (ct == nil) {
+		log(true, "Trying to do something on a widget that doesn't work or doesn't exist or something", c)
+		return
+	}
+	if ct.broken() {
+		log(true, "Label() ct.broken", ct)
+		return
+	}
+	if (ct.uiLabel == nil) {
+	
+		log(true, "Label() uiLabel == nil", ct)
+		return
+	}
+	log(true, "Going to attempt:", c.Action)
+	switch c.Action {
+	case "Enable":
+		ct.uiLabel.Enable()
+	case "Disable":
+		ct.uiLabel.Disable()
+	case "Show":
+		ct.uiLabel.Show()
+	case "Hide":
+		ct.uiLabel.Hide()
+	case "Set":
+		ct.uiLabel.SetText(c.S)
+	default:
+		log(true, "Can't do", c.Action, "to a Label")
 	}
 }

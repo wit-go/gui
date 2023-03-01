@@ -11,7 +11,7 @@ func (t *andlabsT) GetBox() *ui.Box {
 // create a new box
 func (t *andlabsT) NewBox() *andlabsT {
 	log(debugToolkit, "gui.Toolbox.NewBox() START create default")
-	t.Dump()
+	t.Dump(debugToolkit)
 	if (t.uiGroup != nil) {
 		log(debugToolkit, "\tgui.Toolbox.NewBox() is a Group")
 		var newTK andlabsT
@@ -49,6 +49,6 @@ func (t *andlabsT) NewBox() *andlabsT {
 		return &newT
 	}
 	log(debugToolkit, "\tgui.Toolbox.NewBox() FAILED. Couldn't figure out where to make a box")
-	t.Dump()
+	t.Dump(debugToolkit)
 	return nil
 }

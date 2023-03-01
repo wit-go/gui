@@ -5,19 +5,32 @@ import "git.wit.org/wit/gui/toolkit"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-func (t andlabsT) NewTextbox(name string) *andlabsT {
-	var newt andlabsT
+func newTextbox(parentW *toolkit.Widget, w *toolkit.Widget) {
+	log(debugToolkit, "NewTexbox()", w.Name)
 
-	log(debugToolkit, "gui.Toolkit.NewTextbox()", name)
+	t := mapToolkits[parentW]
+	if (t == nil) {
+		listMap(debugError)
+		log(debugError, "newTextbox() listMap()")
+		log(debugError, "FFFFFFFFFFFF listMap()")
+		log(debugError, "FFFFFFFFFFFF listMap()")
+	}
+	// t.NewTextbox(w)
+// func (t andlabsT) NewTextbox(w *toolkit.Widget) *andlabsT {
+	var newt *andlabsT
+	newt = new(andlabsT)
+
+	log(debugToolkit, "gui.Toolkit.NewTextbox()", w.Name)
 	if t.broken() {
-		return nil
+		return
 	}
 
 	c := ui.NewNonWrappingMultilineEntry()
 	newt.uiMultilineEntry = c
 
 	newt.uiBox = t.uiBox
-	newt.Name = name
+	newt.Name = w.Name
+	newt.tw = w
 	if (defaultBehavior) {
 		t.uiBox.Append(c, true)
 	} else {
@@ -25,41 +38,59 @@ func (t andlabsT) NewTextbox(name string) *andlabsT {
 	}
 
 	c.OnChanged(func(spin *ui.MultilineEntry) {
-		newt.commonChange("Textbox")
+		w.S = newt.uiMultilineEntry.Text()
+		// this is still dangerous
+		// newt.commonChange(newt.tw)
+		log(debugChange, "Not yet safe to trigger on change for ui.MultilineEntry")
 	})
-
-	return &newt
+	mapWidgetsToolkits(w, newt)
 }
 
-func NewTextbox(parentW *toolkit.Widget, w *toolkit.Widget) {
-	var t, newt *andlabsT
-	log(debugToolkit, "gui.andlabs.NewTextbox()", w.Name)
 
-	t = mapToolkits[parentW]
-	if (t == nil) {
-		log(debugToolkit, "go.andlabs.NewTextbox() toolkit struct == nil. name=", parentW.Name, w.Name)
+func doTextbox(p *toolkit.Widget, c *toolkit.Widget) {
+	if broken(c) {
 		return
 	}
-
-	if t.broken() {
+	if (c.Action == "New") {
+		newTextbox(p, c)
 		return
 	}
-	newt = new(andlabsT)
-
-	newt.uiLabel = ui.NewLabel(w.Name)
-	newt.uiBox = t.uiBox
-
-	log(debugToolkit, "gui.Toolbox.NewTextbox() about to append to Box parent t:", w.Name)
-	t.Dump()
-	log(debugToolkit, "gui.Toolbox.NewTextbox() about to append to Box new t:", w.Name)
-	newt.Dump()
-
-	if (t.uiBox != nil) {
-		t.uiBox.Append(newt.uiLabel, false)
-	} else {
-		log(debugToolkit, "ERROR: wit/gui andlabs couldn't place this Textbox in a box")
+	ct := mapToolkits[c]
+	if (ct == nil) {
+		log(true, "Trying to do something on a widget that doesn't work or doesn't exist or something", c)
 		return
 	}
+	if ct.broken() {
+		log(true, "Textbox() ct.broken", ct)
+		return
+	}
+	if (ct.uiMultilineEntry == nil) {
+		log(debugError, "Textbox() uiMultilineEntry == nil", ct)
+		return
+	}
+	// the dns control panel isn't crashing anymore (?)
+	Queue(ct.doSimpleAction)
+}
 
-	mapWidgetsToolkits(w, newt)
+func (t *andlabsT) doSimpleAction() {
+	if (t.tw == nil) {
+		log(true, "doSimpleAction() got an empty widget")
+		log(true, "THIS SHOULD NEVER HAPPEN")
+		panic("crap. panic. widget == nil")
+	}
+	log(debugChange, "Going to attempt:", t.tw.Action)
+	switch  t.tw.Action {
+	case "Enable":
+		t.uiMultilineEntry.Enable()
+	case "Disable":
+		t.uiMultilineEntry.Disable()
+	case "Show":
+		t.uiMultilineEntry.Show()
+	case "Hide":
+		t.uiMultilineEntry.Hide()
+	case "Set":
+		t.uiMultilineEntry.SetText(t.tw.S)
+	default:
+		log(debugError, "Can't do", t.tw.Action, "to a Textbox")
+	}
 }

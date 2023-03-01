@@ -98,8 +98,9 @@ func log(a ...any) {
 	if (a == nil) {
 		return
 	}
-	var blah bool
-	if (reflect.TypeOf(a[0]) == reflect.TypeOf(blah)) {
+
+	var tbool bool
+	if (reflect.TypeOf(a[0]) == reflect.TypeOf(tbool)) {
 		// golog.Println("\t a[0] = bool")
 		if (a[0] == false) {
 			return

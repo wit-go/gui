@@ -32,20 +32,19 @@ func Main(f func()) {
 // For example: Queue(NewWindow())
 //
 func Queue(f func()) {
-	log(debugToolkit, "Sending function to ui.QueueMain() (using gtk via andlabs/ui)")
-	log("THIS MIGHT BREAK")
+	log(debugToolkit, "Sending function to ui.QueueMain()")
+	log(true, "THIS DOES BREAK. TODO: wrap this")
 	ui.QueueMain(f)
 	// f()
 }
 
 func Init() {
-	log(debugToolkit, "should Init() here")
+	log(debugToolkit, "Init()")
 
 	mapWidgets = make(map[*andlabsT]*toolkit.Widget)
 	mapToolkits = make(map[*toolkit.Widget]*andlabsT)
 }
 
 func Quit() {
-	log(debugToolkit, "should Quit() here")
-	// myExit(nil)
+	log(debugToolkit, "Quit() TODO: close the toolkit cleanly")
 }

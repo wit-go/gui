@@ -11,8 +11,19 @@ package toolkit
 // Event() seems like a good name.
 // Could a protobuf be used here? (Can functions be passed?)
 type Widget struct {
-	Name   string
-	Type   string	// after lots of back and forth, a simple string
+	Name   string   // "New", "Delete", "Set", aka something to do
+	Action string   // "New", "Delete", "Set", aka something to do
+	// Type   string	// after lots of back and forth, a simple string
+	Type  WidgetType
+
+	// This is how the values are passed back and forth
+	// values from things like checkboxes & dropdown's
+	// The string is also used to set the button name
+	B	bool
+	I	int
+	// maybe safe if there is correctly working Custom() between goroutines
+	// (still probably not, almost certainly not)
+	S	string // not safe to have 'S'
 
 	// This GUI is intended for simple things
 	// We are not laying out PDF's here
@@ -22,49 +33,61 @@ type Widget struct {
 	X      int
 	Y      int
 
-	// latest attempt
+	// Put space around elements to improve look & feel
+	Margin	bool
+
+	// Make widgets fill up the space available
+	Expand	bool
+
+	// latest attempt. seems to work so far (2023/02/28)
+	// Hopefully this will be the barrier between the goroutines
 	Custom    func()
-
-	// This might be useful to simplify retrieving 
-	// values from things like checkboxes & dropdown's
-	B	bool
-	I	int
-	S	string
-
-	// other things I've tried
-	// Event     func(*Widget) *Widget
-//	OnChanged func(*Widget)
-//	Custom    func(*Widget)
-//	OnExit    func(*Widget)
 }
 
-/*
-type Widget int
+type WidgetType int
 
 // https://ieftimov.com/post/golang-datastructures-trees/
 const (
-	Unknown Widget = iota
+	Unknown WidgetType = iota
 	Window
 	Tab
+	Group
 	Frame
-	Dropbox
-	Spinner
+	Button
+	Checkbox
+	Dropdown
 	Label
+	Textbox
+	Slider
+	Spinner
 )
 
-func (s Widget) String() string {
+func (s WidgetType) String() string {
 	switch s {
 	case Window:
 		return "Window"
 	case Tab:
 		return "Tab"
+	case Group:
+		return "Group"
 	case Frame:
 		return "Frame"
+	case Button:
+		return "Button"
+	case Checkbox:
+		return "Checkbox"
+	case Dropdown:
+		return "Dropdown"
 	case Label:
 		return "Label"
-	case Dropbox:
-		return "Dropbox"
+	case Textbox:
+		return "Textbox"
+	case Slider:
+		return "Slider"
+	case Spinner:
+		return "Spinner"
+	case Unknown:
+		return "Unknown"
 	}
-	return "unknown"
+	return "GuiToolkitTUndefinedType"
 }
-*/

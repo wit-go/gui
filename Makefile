@@ -19,11 +19,12 @@ deb:
 	-wit mirrors
 
 examples:   \
+	all \
 	cmds-buttonplugin \
 	cmds-console-ui-helloworld \
 	cmds-helloworld \
-	cmds-debug \
-	cmds-textbox
+	cmds-textbox \
+	cmds-debug
 
 cmds-buttonplugin:
 	make -C cmds/buttonplugin
@@ -35,20 +36,21 @@ cmds-helloworld:
 	make -C cmds/helloworld
 
 cmds-debug:
-	make -C cmds/debug
+	-make -C cmds/debug
 
 cmds-textbox:
 	make -C cmds/textbox
 
 # sync repo to the github backup
 # git remote add github git@github.com:witorg/gui.git
+# git remote add github2 git@github.com:wit-go/gui.git
 github:
 	git push origin master
+	git push github2 master
+	git push github2 --tags
 	git push github master
-	git push github devel
-	git push github jcarr
 	@echo
-	@echo check https://github.com/witorg/gui
+	@echo check https://github.com/wit-go/gui
 	@echo
 
 doc:

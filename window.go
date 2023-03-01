@@ -1,6 +1,7 @@
 package gui
 
 import (
+	"git.wit.org/wit/gui/toolkit"
 )
 
 //import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
@@ -13,39 +14,33 @@ import (
 // my guess).
 func NewWindow() *Node {
 	var newNode *Node
+	var custom func()
 
-	title := Config.Title
-	// Windows are created off of the master node of the Binary Tree
-	newNode = Config.master.New(title, "Window")
-
-	newNode.Widget.Width     = Config.Width
-	newNode.Widget.Height    = Config.Height
-
+	// If the user didn't set a custom Exit() use the standard exit() function
+	// This makes sure the GUI properly closes everything (GTK, QT, console ui, etc exit)
 	if (Config.Exit != nil) {
-		log("setting a custom exit")
-		newNode.custom = func() {
+		log(debugGui, "setting a custom exit")
+		custom = func() {
+			log(debugChange, "Running a custom exit()", Config.Exit)
+			log(debugChange, "Running a custom exit() Config.Title =", Config.Title)
+			log(debugChange, "Running a custom exit() Config.Width =", Config.Width)
 			Config.Exit(newNode)
 		}
 	} else {
-		log("not setting a custom exit")
-	}
-
-	if (newNode.custom == nil) {
-		newNode.custom = func () {StandardExit(newNode)}
-	}
-
-	newNode.Widget.Custom = newNode.custom
-
-	log(debugGui, "gui.Node.Window()", title)
-
-	for _, aplug := range allPlugins {
-		log(debugGui, "gui.Node.NewWindow() toolkit plugin =", aplug.name)
-		if (aplug.NewWindow == nil) {
-			log(debugGui, "gui.Node.NewWindow() is nil")
-			continue
+		log(debugGui, "setting the standard exit")
+		custom = func () {
+			log(debugChange, "Running StandardExit()")
+			StandardExit()
 		}
-		aplug.NewWindow(&newNode.Widget)
 	}
+	// Windows are created off of the master node of the Binary Tree
+	newNode = Config.master.New(Config.Title, toolkit.Window, custom)
 
+	newNode.widget.Width     = Config.Width
+	newNode.widget.Height    = Config.Height
+
+	log(debugGui, "Window()", Config.Title)
+
+	send(nil, newNode)
 	return newNode
 }

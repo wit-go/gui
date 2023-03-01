@@ -1,6 +1,6 @@
 package main
 
-// import "git.wit.org/wit/gui/toolkit"
+import "git.wit.org/wit/gui/toolkit"
 
 import "github.com/davecgh/go-spew/spew"
 
@@ -15,6 +15,8 @@ var margin bool // add space around the frames of windows
 
 var debugToolkit bool
 var debugChange bool
+var debugPlugin bool
+var debugError bool = true
 // var DebugToolkit bool
 
 // This is important. This sets the defaults for the gui. Without this, there isn't correct padding, etc
@@ -59,42 +61,35 @@ func (t *andlabsT) String() string {
 	return t.GetText()
 }
 
-func forceDump(t *andlabsT) {
-	tmp := debugToolkit
-	debugToolkit = true
-	t.Dump()
-	debugToolkit = tmp
-}
-
 func (t *andlabsT) GetText() string {
-	log(debugToolkit, "gui.Toolkit.GetText() Enter debugToolkit=", debugToolkit)
+	log(debugToolkit, "GetText() Enter debugToolkit=", debugToolkit)
 	if (t.uiEntry != nil) {
-		log(debugToolkit, "gui.Toolkit.uiEntry.Text() =", t.uiEntry.Text())
+		log(debugToolkit, "uiEntry.Text() =", t.uiEntry.Text())
 		return t.uiEntry.Text()
 	}
 	if (t.uiMultilineEntry != nil) {
-		log(debugToolkit, "gui.Toolkit.uiMultilineEntry.Text() =", t.uiMultilineEntry.Text())
+		log(debugToolkit, "uiMultilineEntry.Text() =", t.uiMultilineEntry.Text())
 		text := t.uiMultilineEntry.Text()
-		log(debugToolkit, "gui.Toolkit.uiMultilineEntry.Text() =", text)
+		log(debugToolkit, "uiMultilineEntry.Text() =", text)
 		t.text = text
 		return text
 	}
 	if (t.uiCombobox != nil) {
-		log(debugToolkit, "gui.Toolkit.uiCombobox() =", t.text)
+		log(debugToolkit, "uiCombobox() =", t.text)
 		return t.text
 	}
 	return ""
 }
 
 func (t *andlabsT) SetText(s string) bool {
-	log(debugToolkit, "gui.Toolkit.Text() SetText() Enter")
+	log(debugToolkit, "Text() SetText() Enter")
 	if (t.uiEntry != nil) {
-		log(debugToolkit, "gui.Toolkit.Value() =", t.uiEntry.Text)
+		log(debugToolkit, "Value() =", t.uiEntry.Text)
 		t.uiEntry.SetText(s)
 		return true
 	}
 	if (t.uiMultilineEntry != nil) {
-		log(debugToolkit, "gui.Toolkit.Value() =", t.uiMultilineEntry.Text)
+		log(debugToolkit, "Value() =", t.uiMultilineEntry.Text)
 		t.uiMultilineEntry.SetText(s)
 		return true
 	}
@@ -103,91 +98,101 @@ func (t *andlabsT) SetText(s string) bool {
 
 func sanity(t *andlabsT) bool {
 	if (debugToolkit) {
-		log(debugToolkit, "gui.Toolkit.Value() Enter")
+		log(debugToolkit, "Value() Enter")
 		scs := spew.ConfigState{MaxDepth: 1}
 		scs.Dump(t)
 	}
 	if (t.uiEntry == nil) {
-		log(debugToolkit, "gui.Toolkit.Value() =", t.uiEntry.Text)
+		log(debugToolkit, "Value() =", t.uiEntry.Text)
 		return false
 	}
 	return true
 }
 
 func (t *andlabsT) SetValue(i int) bool {
-	log(debugToolkit, "gui.Toolkit.SetValue() START")
+	log(debugToolkit, "SetValue() START")
 	if (sanity(t)) {
 		return false
 	}
-	t.Dump()
+	t.Dump(debugToolkit)
 	// panic("got to toolkit.SetValue")
 	return true
 }
 
 func (t *andlabsT) Value() int {
 	if (debugToolkit) {
-		log(debugToolkit, "gui.Toolkit.Value() Enter")
+		log(debugToolkit, "Value() Enter")
 		scs := spew.ConfigState{MaxDepth: 1}
 		scs.Dump(t)
 	}
 	if (t == nil) {
-		log(debugToolkit, "gui.Toolkit.Value() can not get value t == nil")
+		log(debugToolkit, "Value() can not get value t == nil")
 		return 0
 	}
 	if (t.uiSlider != nil) {
-		log(debugToolkit, "gui.Toolkit.Value() =", t.uiSlider.Value)
+		log(debugToolkit, "Value() =", t.uiSlider.Value)
 		return t.uiSlider.Value()
 	}
 	if (t.uiSpinbox != nil) {
-		log(debugToolkit, "gui.Toolkit.Value() =", t.uiSpinbox.Value)
+		log(debugToolkit, "Value() =", t.uiSpinbox.Value)
 		return t.uiSpinbox.Value()
 	}
-	log(debugToolkit, "gui.Toolkit.Value() Could not find a ui element to get a value from")
+	log(debugToolkit, "Value() Could not find a ui element to get a value from")
 	return 0
 }
 
-func (t *andlabsT) Dump() {
-	if ! debugToolkit {
+func (t *andlabsT) Dump(b bool) {
+	if ! b {
 		return
 	}
-	log(debugToolkit, "gui.Toolkit.Dump() Name  = ", t.Name, t.Width, t.Height)
+	log(b, "Name  = ", t.Name, t.Width, t.Height)
 	if (t.uiBox != nil) {
-		log(debugToolkit, "gui.Toolkit.Dump() uiBox      =", t.uiBox)
+		log(b, "uiBox      =", t.uiBox)
 	}
 	if (t.uiButton != nil) {
-		log(debugToolkit, "gui.Toolkit.Dump() uiButton    =", t.uiButton)
+		log(b, "uiButton    =", t.uiButton)
 	}
 	if (t.uiCombobox != nil) {
-		log(debugToolkit, "gui.Toolkit.Dump() uiCombobox  =", t.uiCombobox)
+		log(b, "uiCombobox  =", t.uiCombobox)
 	}
 	if (t.uiWindow != nil) {
-		log(debugToolkit, "gui.Toolkit.Dump() uiWindow    =", t.uiWindow)
+		log(b, "uiWindow    =", t.uiWindow)
 	}
 	if (t.uiTab != nil) {
-		log(debugToolkit, "gui.Toolkit.Dump() uiTab       =", t.uiTab)
+		log(b, "uiTab       =", t.uiTab)
 	}
 	if (t.uiGroup != nil) {
-		log(debugToolkit, "gui.Toolkit.Dump() uiGroup     =", t.uiGroup)
+		log(b, "uiGroup     =", t.uiGroup)
 	}
 	if (t.uiEntry != nil) {
-		log(debugToolkit, "gui.Toolkit.Dump() uiEntry     =", t.uiEntry)
+		log(b, "uiEntry     =", t.uiEntry)
 	}
 	if (t.uiMultilineEntry != nil) {
-		log(debugToolkit, "gui.Toolkit.Dump() uiMultilineEntry =", t.uiMultilineEntry)
+		log(b, "uiMultilineEntry =", t.uiMultilineEntry)
 	}
 	if (t.uiSlider != nil) {
-		log(debugToolkit, "gui.Toolkit.Dump() uiSlider    =", t.uiSlider)
+		log(b, "uiSlider    =", t.uiSlider)
 	}
 	if (t.uiCheckbox != nil) {
-		log(debugToolkit, "gui.Toolkit.Dump() uiCheckbox  =", t.uiCheckbox)
+		log(b, "uiCheckbox  =", t.uiCheckbox)
 	}
-	if (t.OnExit != nil) {
-		log(debugToolkit, "gui.Toolkit.Dump() OnExit      =", t.OnExit)
+	widgetDump(b, t.tw)
+}
+
+func widgetDump(b bool, w *toolkit.Widget) {
+	if (w == nil) {
+		log(b, "widget = nil")
+		return
 	}
-	if (t.Custom != nil) {
-		log(debugToolkit, "gui.Toolkit.Dump() Custom      =", t.Custom)
-	}
-	log(debugToolkit, "gui.Toolkit.Dump() c         =", t.c)
-	log(debugToolkit, "gui.Toolkit.Dump() val       =", t.val)
-	log(debugToolkit, "gui.Toolkit.Dump() text      =", t.text)
+
+	log(b, "widget.Name        =", w.Name)
+	log(b, "widget.Action      =", w.Action)
+	log(b, "widget.Type        =", w.Type)
+	log(b, "widget.Custom      =", w.Custom)
+	log(b, "widget.B           =", w.B)
+	log(b, "widget.I           =", w.I)
+	log(b, "widget.Width       =", w.Width)
+	log(b, "widget.Height      =", w.Height)
+	log(b, "widget.X           =", w.X)
+	log(b, "widget.Y           =", w.Y)
 }

@@ -1,36 +1,29 @@
 package main
 
-import "git.wit.org/wit/gui/toolkit"
+import (
+	"git.wit.org/wit/gui/toolkit"
+	"github.com/andlabs/ui"
+	_ "github.com/andlabs/ui/winmanifest"
+)
 
-import "github.com/andlabs/ui"
-import _ "github.com/andlabs/ui/winmanifest"
-
-func (t andlabsT) NewCheckbox(name string, f func()) *andlabsT {
-	log(debugToolkit, "gui.Toolkit.NewCheckbox()", name)
+func (t andlabsT) NewCheckbox(w *toolkit.Widget) *andlabsT {
+	log(debugToolkit, "NewCheckbox()", w.Name, w.Type)
 	var newt andlabsT
+	newt.tw = w
 
 	if t.broken() {
 		return nil
 	}
 
-	c := ui.NewCheckbox(name)
+	c := ui.NewCheckbox(w.Name)
 	newt.uiCheckbox = c
 	newt.uiBox = t.uiBox
 	t.uiBox.Append(c, stretchy)
-	// newt.Custom = f
 
 	c.OnToggled(func(spin *ui.Checkbox) {
-		// log(debugToolkit, "gui.Toolkit.NewCheckbox() clicked", name)
-		newt.commonChange("Checkbox")
-		/*
-		if (f != nil) {
-			log(debugToolkit, "Run custom() here", f)
-			log(SPEW, f)
-			f()
-		} else {
-			log(debugToolkit, "No custom() function here")
-		}
-		*/
+		newt.tw.B = newt.Checked()
+		log(debugChange, "val =", newt.tw.B)
+		newt.commonChange(newt.tw)
 	})
 
 	return &newt
@@ -45,25 +38,52 @@ func (t andlabsT) Checked() bool {
 }
 
 func NewCheckbox(parentW *toolkit.Widget, w *toolkit.Widget) {
-	log(debugToolkit, "gui.andlabs.NewCheckbox()", w.Name)
+	log(debugToolkit, "NewCheckbox()", w.Name)
 
 	t := mapToolkits[parentW]
 	if (t == nil) {
-		listMap()
+		listMap(debugError)
+		return
 	}
-	newt := t.NewCheckbox(w.Name, w.Custom)
-	newt.Custom = w.Custom
-	/*
-	if (w.Custom != nil) {
-		log(true, "go.andlabs.NewCheckbox() toolkit struct == nil. name=", parentW.Name, w.Name)
-		log(true, "Run custom() START here", w.Custom)
-		w.Custom()
-		log(true, "Run custom() END")
-		// exit("ran it here")
-	} else {
-		log(true, "No custom() function here")
-		// exit("nothing here")
-	}
-	*/
+	newt := t.NewCheckbox(w)
 	mapWidgetsToolkits(w, newt)
+}
+
+func doCheckbox(p *toolkit.Widget, c *toolkit.Widget) {
+	if broken(c) {
+		return
+	}
+	if (c.Action == "New") {
+		NewCheckbox(p, c)
+		return
+	}
+	ct := mapToolkits[c]
+	if (ct == nil) {
+		log(true, "Trying to do something on a widget that doesn't work or doesn't exist or something", c)
+		return
+	}
+	if ct.broken() {
+		log(true, "checkbox() ct.broken", ct)
+		return
+	}
+	if (ct.uiCheckbox == nil) {
+		log(true, "checkbox() uiCheckbox == nil", ct)
+		return
+	}
+	log(true, "Going to attempt:", c.Action)
+	switch c.Action {
+	case "Enable":
+		ct.uiCheckbox.Enable()
+	case "Disable":
+		ct.uiCheckbox.Disable()
+	case "Show":
+		ct.uiCheckbox.Show()
+	case "Hide":
+		ct.uiCheckbox.Hide()
+	case "Set":
+		ct.uiCheckbox.SetText(c.S)
+		ct.uiCheckbox.SetChecked(c.B)
+	default:
+		log(true, "Can't do", c.Action, "to a checkbox")
+	}
 }

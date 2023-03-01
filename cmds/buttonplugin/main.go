@@ -42,7 +42,7 @@ func main() {
 	log.Println("Main() END")
 	time.Sleep(1 * time.Second)
 	gui.Watchdog()
-	gui.StandardExit(nil)
+	gui.StandardExit()
 }
 
 var counter int = 5
@@ -82,7 +82,9 @@ func buttonWindow() {
 	})
 
 	g.NewButton("gui.GolangDebugWindow()", func () {
-		gui.GolangDebugWindow()
+		// make a seperate window out of this
+		// w.GolangDebugWindow(false)
+		w.GolangDebugWindow(true)
 	})
 
 	g.NewButton("LoadToolkit(andlabs)", func () {

@@ -1,22 +1,15 @@
 package gui
 
 import (
+	"git.wit.org/wit/gui/toolkit"
 )
 
 // This function should make a new node with the parent and
 // the 'tab' as a child
 
 func (n *Node) NewTab(text string) *Node {
-	newNode := n.New(text, "Tab")
+	newNode := n.New(text, toolkit.Tab, nil)
 
-	for _, aplug := range allPlugins {
-		log(debugGui, "gui.NewTab() aplug =", aplug.name, "name =", newNode.Widget.Name)
-		if (aplug.NewTab == nil) {
-			log(debugGui, "\tgui.NewTab() aplug.NewTab = nil", aplug.name)
-			continue
-		}
-		aplug.NewTab(&n.Widget, &newNode.Widget)
-	}
-
+	send(n, newNode)
 	return newNode
 }

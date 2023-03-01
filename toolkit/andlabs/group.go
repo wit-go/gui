@@ -7,13 +7,13 @@ import (
 	_ "github.com/andlabs/ui/winmanifest"
 )
 
-func NewGroup(parentW *toolkit.Widget, w *toolkit.Widget) {
+func newGroup(parentW *toolkit.Widget, w *toolkit.Widget) {
 	log(debugToolkit, "gui.andlabs.NewGroup()", w.Name)
 
 	t := mapToolkits[parentW]
 	if (t == nil) {
 		log(debugToolkit, "go.andlabs.NewGroup() toolkit struct == nil. name=", parentW.Name, w.Name)
-		listMap()
+		listMap(debugToolkit)
 	}
 	newt := t.NewGroup(w.Name)
 	mapWidgetsToolkits(w, newt)
@@ -23,18 +23,23 @@ func NewGroup(parentW *toolkit.Widget, w *toolkit.Widget) {
 func (t andlabsT) NewGroup(title string) *andlabsT {
 	var newt andlabsT
 
-	log(debugToolkit, "gui.Toolbox.NewGroup() create", title)
+	log(debugToolkit, "NewGroup() create", title)
 
 	g := ui.NewGroup(title)
 	g.SetMargined(margin)
 
 	if (t.uiBox != nil) {
-		t.uiBox.Append(g, stretchy)
+		// TODO: temporary hack to make the output textbox 'fullscreen'
+		if (title == "output") {
+			t.uiBox.Append(g, true)
+		} else {
+			t.uiBox.Append(g, stretchy)
+		}
 	} else if (t.uiWindow != nil) {
 		t.uiWindow.SetChild(g)
 	} else {
-		log(debugToolkit, "gui.ToolboxNode.NewGroup() node.UiBox == nil. I can't add a range UI element without a place to put it")
-		log(debugToolkit, "probably could just make a box here?")
+		log(debugError, "NewGroup() node.UiBox == nil. I can't add a range UI element without a place to put it")
+		log(debugError, "probably could just make a box here?")
 		exit("internal wit/gui error")
 	}
 
@@ -47,8 +52,5 @@ func (t andlabsT) NewGroup(title string) *andlabsT {
 	newt.uiWindow = t.uiWindow
 	newt.Name = title
 
-	t.Dump()
-	newt.Dump()
-	// panic("toolkit.NewGroup")
 	return &newt
 }

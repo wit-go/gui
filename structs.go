@@ -25,7 +25,10 @@ var Config GuiConfig
 type GuiArgs struct {
 	Toolkit []string `arg:"--toolkit" help:"The order to attempt loading plugins [gocui,andlabs,gtk,qt]"`
 	GuiDebug bool `arg:"--gui-debug" help:"debug the GUI"`
+	GuiVerbose bool `arg:"--gui-verbose" help:"enable all GUI flags"`
 }
+
+// var verbose GuiArgs.GuiDebug
 
 type GuiConfig struct {
 	// This is the master node. The Binary Tree starts here
@@ -41,6 +44,9 @@ type GuiConfig struct {
 	depth      int
 	counter    int  // used to make unique ID's
 	prefix     string
+
+	ActionCh1 chan int
+	ActionCh2 chan int
 }
 
 // The Node is a binary tree. This is how all GUI elements are stored
@@ -48,7 +54,7 @@ type GuiConfig struct {
 type Node struct {
 	id     int
 
-	Widget	toolkit.Widget
+	widget	toolkit.Widget
 
 	// deprecate these and use toolkit.Widget
 	Name   string
@@ -56,16 +62,15 @@ type Node struct {
 	Height int
 
 	// this function is run when there are mouse or keyboard events
-	OnChanged func(*Node)
+	Custom func()
 
 	parent	*Node
 	children []*Node
 
 	// is keeping
 	// deprecate these things if they don't really need to exist
-	custom    func()
-	checked   bool
-	text      string
+	// checked   bool
+	// text      string
 }
 
 func (n *Node) Parent() *Node {

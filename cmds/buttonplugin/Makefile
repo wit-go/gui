@@ -7,8 +7,8 @@
 #
 
 run: build
-	./buttonplugin >/tmp/buttonplugin.log 2>&1
-	# ./buttonplugin
+	# ./buttonplugin >/tmp/buttonplugin.log 2>&1
+	./buttonplugin
 
 build-release:
 	go get -v -u -x .

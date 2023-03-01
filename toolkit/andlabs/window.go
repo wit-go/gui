@@ -15,8 +15,8 @@ func (t *andlabsT) ErrorWindow(msg1 string, msg2 string) {
 	ui.MsgBoxError(t.uiWindow, msg1, msg2)
 }
 
-func NewWindow(w *toolkit.Widget) {
-	var t *andlabsT
+func newWindow(w *toolkit.Widget) {
+	var newt *andlabsT
 
 	log(debugToolkit, "toolkit NewWindow", w.Name, w.Width, w.Height)
 
@@ -24,34 +24,23 @@ func NewWindow(w *toolkit.Widget) {
 		log(debugToolkit, "wit/gui plugin error. widget == nil")
 		return
 	}
-	t = new(andlabsT)
-	// t = NewWindow2(w.Name, w.Width, w.Height)
+	newt = new(andlabsT)
+	newt.tw = w
 
-// func NewWindow2(title string, x int, y int) *andlabsT {
 	// menubar bool is if the OS defined border on the window should be used
 	win := ui.NewWindow(w.Name, w.Width, w.Height, menubar)
 	win.SetBorderless(canvas)
 	win.SetMargined(margin)
 	win.OnClosing(func(*ui.Window) bool {
-		log(debugToolkit, "ui.Window().OnExit() SHOULD ATTEMPT CALLBACK here")
-		t.Dump()
-		if (w.Custom != nil) {
-			w.Custom()
-			return true
-		}
-		// if (w.Event != nil) {
-		// 	w.Event(w)
-		// 	return true
-		// }
-		log(debugToolkit, "andlabs.ui.Window().OnClosing() was not defined")
-		return false
+		newt.commonChange(newt.tw)
+		return true
 	})
 	win.Show()
-	t.uiWindow = win
-	t.UiWindowBad = win // deprecate this as soon as possible
-	t.Name = w.Name
+	newt.uiWindow = win
+	// newt.UiWindowBad = win // deprecate this as soon as possible
+	newt.Name = w.Name
 
-	mapWidgetsToolkits(w, t)
+	mapWidgetsToolkits(w, newt)
 	return
 }
 

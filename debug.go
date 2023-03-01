@@ -4,8 +4,8 @@ package gui
 // A function dump out the binary tree
 
 import (
-	// "fmt"
-	"reflect"
+	"strconv"
+	"git.wit.org/wit/gui/toolkit"
 )
 
 // various debugging flags
@@ -17,14 +17,20 @@ var debugChange bool = false	// shows user events like mouse and keyboard
 var debugPlugin	bool = false
 var debugToolkit bool = false
 
-func GetDebug () bool {
-	return debugGui
-}
+// func GetDebug () bool {
+// 	return debugGui
+// }
 
 func SetDebug (s bool) {
-	debugGui = s
-	// debugDump = s
-	// debugNode = s
+	debugGui     = s
+	debugChange  = s
+	debugDump    = s
+	debugTabs    = s
+	debugPlugin  = s
+	debugNode    = s
+	debugToolkit = s
+	SetDebugChange(s)
+	SetDebugToolkit(s)
 }
 
 /*
@@ -64,12 +70,14 @@ func SetDebugChange (s bool) {
 }
 
 func ShowDebugValues() {
-	log(true, "Debug =", debugGui)
-	log(true, "DebugDump =", debugDump)
-	log(true, "DebugNode =", debugNode)
-	log(true, "DebugTabs =", debugTabs)
-	log(true, "DebugPlugin =", debugPlugin)
-	log(true, "DebugChange =", debugChange)
+	// The order here should match the order in the GUI
+	// TODO: get the order from the node binary tree
+	log(true, "Debug        =", debugGui)
+	log(true, "DebugChange  =", debugChange)
+	log(true, "DebugDump    =", debugDump)
+	log(true, "DebugTabs    =", debugTabs)
+	log(true, "DebugPlugin  =", debugPlugin)
+	log(true, "DebugNode    =", debugNode)
 	log(true, "DebugToolkit =", debugToolkit)
 
 	// dump out the debugging flags for the plugins
@@ -102,14 +110,9 @@ func (n *Node) Dump() {
 	if (n.children != nil) {
 		Indent("children   = ", n.children)
 	}
-	if (n.custom != nil) {
-		Indent("custom     = ", n.custom)
+	if (n.Custom != nil) {
+		Indent("Custom     = ", n.Custom)
 	}
-	Indent("checked    = ", n.checked)
-	if (n.OnChanged != nil) {
-		Indent("OnChanged  = ", n.OnChanged)
-	}
-	Indent("text       = ", reflect.ValueOf(n.text).Kind(), n.text)
 	Indent("NODE DUMP END")
 }
 
@@ -124,14 +127,14 @@ func Indent(a ...interface{}) {
 func (n *Node) dumpWidget() {
 	var info string
 
-	if (n.Widget.Type == "") {
-		n.Widget.Type = "UNDEF"
-	}
-	info = n.Widget.Type
+	info = n.widget.Type.String()
 
-	info += ", " + n.Widget.Name
-	if (n.Name != n.Widget.Name) {
+	info += ", " + n.widget.Name
+	if (n.Name != n.widget.Name) {
 		info += " NAME MISMATCH"
+	}
+	if (n.widget.Type == toolkit.Checkbox) {
+		info += " = " + strconv.FormatBool(n.widget.B)
 	}
 
 	logindent(listChildrenDepth, defaultPadding, n.id, info)

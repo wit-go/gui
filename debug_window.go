@@ -10,88 +10,16 @@ func DebugWindow() {
 	Config.Title = "go.wit.org/gui debug window"
 	Config.Width = 300
 	Config.Height = 200
-	Config.Exit = StandardClose
 	bugWin = NewWindow()
+	bugWin.Custom = bugWin.StandardClose
 	bugWin.DebugTab("Debug Tab")
 }
 
-var checkd, checkdn, checkdt, checkdtk *Node
-
-//////////////////////// debug flags //////////////////////////////////
-func debugFlags(n *Node) {
-	var df, checkdn, checkdd, changeCheckbox *Node
-	df = n.NewGroup("Debug Flags")
-	df.NewLabel("flags to control debugging output")
-
-	cb := df.NewCheckbox("debugGui")
-	cb.custom = func() {
-		log(true, "custom ran correctly for =", n.Name)
-		debugGui = true
-	}
-
-	checkdd = df.NewCheckbox("debugDump")
-	checkdd.custom = func() {
-		log(true, "debugDump() custom ran correctly for =", n.Name)
-		debugDump = true
-	}
-
-	checkdn = df.NewCheckbox("debugNode")
-	checkdn.custom = func() {
-		log(true, "debugNode() custom ran correctly for =", n.Name)
-		debugNode = true
-	}
-
-
-	cb = df.NewCheckbox("debugChange")
-	cb.custom = func() {
-		log(true, "checkbox: custom() ran correctly for =", cb.Name)
-		log(true, "START debugChange =", debugChange)
-		if (debugChange) {
-			debugChange = false
-			SetDebugChange(false)
-			log(true, "debugToolkitChange turned off node.Name =", cb.Name)
-		} else {
-			debugChange = true
-			SetDebugChange(true)
-			log(true, "debugToolkitChange turned on Name =", cb.Name)
-		}
-		log(true, "END   debugChange =", debugChange)
-	}
-
-	cb = df.NewCheckbox("debugTabs")
-	cb.custom = func() {
-		log(true, "debugTabs() custom ran correctly for =", n.Name)
-		debugTabs = true
-	}
-
-	cb = df.NewCheckbox("debugPlugin")
-	cb.custom = func() {
-		log(true, "debugPlugin() custom ran correctly for =", n.Name)
-		debugPlugin = true
-	}
-
-	changeCheckbox = df.NewCheckbox("debugToolkit")
-	changeCheckbox.custom = func() {
-		SetDebugToolkit(true)
-	}
-
-	df.NewButton("Debug Toolkit", func() {
-		if (debugToolkit) {
-			SetDebugToolkit(false)
-			log(true, "debugToolkit turned off node.Name =", n.Name)
-		} else {
-			SetDebugToolkit(true)
-			log(true, "debugToolkit turned on Name =", n.Name)
-		}
-	})
-
-	df.NewButton("Dump Debug Flags", func () {
-		ShowDebugValues()
-	})
-}
+var checkd, checkdn, checkdt, checkdtk, lb1, lb2 *Node
+var myButton *Node
 
 func (n *Node) DebugTab(title string) *Node {
-	var newN, gog, g1, g2, g3, dd *Node
+	var newN, gog, g1, g2, g3, dd, junk, newThing *Node
 
 	// time.Sleep(1 * time.Second)
 	newN = n.NewTab(title)
@@ -101,7 +29,13 @@ func (n *Node) DebugTab(title string) *Node {
 	gog = newN.NewGroup("GOLANG")
 	gog.NewLabel("go language")
 	gog.NewButton("GO Language Debug", func () {
-		GolangDebugWindow()
+		newN.GolangDebugWindow(false)
+	})
+	gog.NewButton("Debug Flags", func () {
+		newN.debugFlags(false)
+	})
+	gog.NewButton("Debug Widgets", func () {
+		newN.debugWidgets(false)
 	})
 
 	gog.NewLabel("wit/gui package")
@@ -109,11 +43,21 @@ func (n *Node) DebugTab(title string) *Node {
 		// DemoToolkitWindow()
 	})
 
-	debugFlags(newN)
+	junk = gog.NewButton("junk", func () {
+		log("click junk, get junk")
+	})
+
+	gog.NewLabel("tmp label")
+
 
 //////////////////////// window debugging things //////////////////////////////////
 	g1 = newN.NewGroup("Current Windows")
 	dd = g1.NewDropdown("Window Dropdown")
+	dd.Custom = func() {
+		name := dd.widget.S
+		bugWin = mapWindows[name]
+		log("The Window was set to", name)
+	}
 	log(debugGui, "dd =", dd)
 
 	// initialize the windows map if it hasn't been
@@ -122,6 +66,7 @@ func (n *Node) DebugTab(title string) *Node {
 	}
 
 	var dump = false
+	var last = ""
 	for _, child := range Config.master.children {
 		log(debugGui, "\t\t", child.id, child.Width, child.Height, child.Name)
 		if (child.parent != nil) {
@@ -134,16 +79,44 @@ func (n *Node) DebugTab(title string) *Node {
 			child.Dump()
 		}
 		dd.AddDropdownName(child.Name)
+		last = child.Name
 		mapWindows[child.Name] = child
 	}
-
-	dd.SetDropdown(0)
+	dd.SetDropdownName(last)
+	dd.NewButton("Delete(junk)", func () {
+		Delete(junk)
+	})
+	dd.NewButton("myButton", func () {
+		gog.NewButton("myButton", func () {
+			log("this code is better")
+		})
+	})
+	dd.NewButton("add Hope", func () {
+		var i int = 1
+		log("add hope?", i)
+		gog.NewButton("hope", func () {
+			i += 1
+			log("write better code", i)
+		})
+	})
+	dd.NewButton("add newThing", func () {
+		var i, j int = 1, 1
+		newThing = gog.NewThing("NewThing")
+		newThing.Custom = func() {
+			f := i + j
+			log("newThing!!! n.widget =", newThing.widget.Name, newThing.widget.B, f)
+			j = i
+			i = f
+		}
+		log("newThing!!! n.widget")
+	})
 
 	g2 = newN.NewGroup("Debug Window")
 	g2.NewButton("SetMargined(tab)", func () {
 		log(debugChange, "START SetMargined(tab)", g2.Name)
 		// name := dd.GetText()
-		name := dd.Widget.S
+		name := dd.widget.S
+		log(true, "name =", name)
 		log(debugChange, "name =", name)
 		log(debugChange, "mapWindows[name] =", mapWindows[name])
 		/*
@@ -154,7 +127,7 @@ func (n *Node) DebugTab(title string) *Node {
 		}
 		*/
 		bugWin = mapWindows[name]
-		log(debugChange, "END dd.Widget.S =", dd.Widget.S)
+		log(debugChange, "END dd.widget.S =", dd.widget.S)
 		// gw.UiTab.SetMargined(*gw.TabNumber, true)
 	})
 	g2.NewButton("Hide(tab)", func () {
@@ -169,6 +142,9 @@ func (n *Node) DebugTab(title string) *Node {
 	})
 	g2.NewButton("change Title", func () {
 		// mainWindow.SetText("hello world")
+	})
+	g2.NewButton("Quit", func () {
+		exit()
 	})
 
 	/////////////////////////////////////////////////////

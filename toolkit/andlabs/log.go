@@ -98,9 +98,8 @@ func log(a ...any) {
 	if (a == nil) {
 		return
 	}
-	var blah bool
-	if (reflect.TypeOf(a[0]) == reflect.TypeOf(blah)) {
-		// golog.Println("\t a[0] = bool")
+	var tbool bool
+	if (reflect.TypeOf(a[0]) == reflect.TypeOf(tbool)) {
 		if (a[0] == false) {
 			return
 		}
@@ -111,7 +110,9 @@ func log(a ...any) {
 		// a = a[1:]
 		a[0] = "WIT/GUI/Toolkit"
 		if (debugToolkit) {
-			spew.Dump(a)
+			scs := spew.ConfigState{MaxDepth: 1}
+			scs.Dump(a)
+			// spew.Dump(a)
 		}
 		return
 	}

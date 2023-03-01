@@ -16,20 +16,31 @@ const Yaxis = 1 // stack things vertically
 var res embed.FS
 
 func init() {
-	debugGui = true
-	log(debugGui, "gui.init() has been run")
+	log("init() has been run")
 
 	Config.counter = 0
 	Config.prefix = "wit"
-
-	title := "guiBinaryTree"
-	w     := 640
-	h     := 480
+	Config.Width = 640
+	Config.Height = 480
 
 	// Populates the top of the binary tree
-	Config.master = addNode(title, w, h)
-	// Config.master.Dump()
-	debugGui = false
+	Config.master = addNode("guiBinaryTree")
+
+	go doGuiChan()
+}
+
+func doGuiChan() {
+	for {
+		select {
+		case <-Config.ActionCh1:
+			log(true, "CHANNEL ACTION 1  !!!!!")
+			return
+		case <-Config.ActionCh2:
+			log(true, "CHANNEL ACTION 2  !!!!!")
+			return
+		default:
+		}
+	}
 }
 
 func InitPlugins(names []string) {
@@ -116,21 +127,21 @@ func Queue(f func()) {
 }
 
 // The window is destroyed but the application does not quit
-func StandardClose(n *Node) {
+func (n *Node) StandardClose() {
 	log(debugGui, "wit/gui Standard Window Close. name =", n.Name)
-	log(debugGui, "wit/gui Standard Window Close. n.custom exit =", n.custom)
+	log(debugGui, "wit/gui Standard Window Close. n.Custom exit =", n.Custom)
 }
 
 // The window is destroyed but the application does not quit
-func StandardExit(n *Node) {
-	log(debugGui, "wit/gui Standard Window Exit. running os.Exit()")
-	log(debugGui, "gui.Node.StandardExit() attempt to exit each toolkit plugin")
+func StandardExit() {
+	log("wit/gui Standard Window Exit. running os.Exit()")
+	log("gui.Node.StandardExit() attempt to exit each toolkit plugin")
 	for i, aplug := range allPlugins {
-		log(debugGui, "gui.Node.NewButton()", i, aplug)
+		log("gui.Node.NewButton()", i, aplug)
 		if (aplug.Quit != nil) {
 			aplug.Quit()
 		}
 	}
 
-	exit("StandardExit")
+	exit(0)
 }
