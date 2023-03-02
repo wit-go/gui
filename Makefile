@@ -46,9 +46,8 @@ cmds-textbox:
 # git remote add github2 git@github.com:wit-go/gui.git
 github:
 	git push origin master
-	git push github2 master
-	git push github2 --tags
 	git push github master
+	git push github --tags
 	@echo
 	@echo check https://github.com/wit-go/gui
 	@echo
