@@ -34,6 +34,9 @@ type GuiConfig struct {
 	// This is the master node. The Binary Tree starts here
 	master	*Node
 
+	// A node off of master for passing debugging flags
+	flag	*Node
+
 	// These are shortcuts to pass default values to make a new window
 	Title      string
 	Width      int

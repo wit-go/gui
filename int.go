@@ -13,13 +13,7 @@ package gui
 	Is it "has to go" or "should go"? Probably it makes sense to strictly inforce it. No "callback" functions. IPC only (go channels)
 */
 func (n *Node) Int() int {
-	log(debugToolkit, "gui.Node.Int() for node name =", n.Name)
-	log(debugToolkit, SPEW, n)
-
-	// FIXME: this needs to be redone
-	// i := n.toolkit.Value()
-	i := 3333
-	return i
+	return n.widget.I
 }
 
 // which name to use?

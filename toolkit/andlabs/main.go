@@ -1,12 +1,16 @@
 package main
 
 import (
+	"embed"
 	"git.wit.org/wit/gui/toolkit"
 
 	"github.com/andlabs/ui"
 	// the _ means we only need this for the init()
 	_ "github.com/andlabs/ui/winmanifest"
 )
+
+//go:embed resources
+var res embed.FS
 
 func Main(f func()) {
 	log(debugToolkit, "Starting gui.Main() (using gtk via andlabs/ui)")
@@ -33,9 +37,8 @@ func Main(f func()) {
 //
 func Queue(f func()) {
 	log(debugToolkit, "Sending function to ui.QueueMain()")
-	log(true, "THIS DOES BREAK. TODO: wrap this")
+	log(true, "using gui.Queue() in this plugin DOES BREAK. TODO: wrap this")
 	ui.QueueMain(f)
-	// f()
 }
 
 func Init() {

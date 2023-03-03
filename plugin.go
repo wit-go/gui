@@ -35,19 +35,6 @@ type aplug struct {
 
 	// simplifies passing to the plugin
 	Send func(*toolkit.Widget, *toolkit.Widget)
-
-	NewButton func(*toolkit.Widget, *toolkit.Widget)
-	NewGroup func(*toolkit.Widget, *toolkit.Widget)
-	NewCheckbox func(*toolkit.Widget, *toolkit.Widget)
-	NewTab func(*toolkit.Widget, *toolkit.Widget)
-
-	NewDropdown func(*toolkit.Widget, *toolkit.Widget)
-	AddDropdownName func(*toolkit.Widget, string)
-	SetDropdownName func(*toolkit.Widget, string)
-
-	SetDebugToolkit func(bool)
-	SetDebugChange func(bool)
-	ShowDebug func()
 }
 
 var allPlugins []*aplug
@@ -71,6 +58,7 @@ func LoadToolkit(name string) bool {
 	filename := name + ".so"
 	loadPlugin(&newPlug, filename)
 	if (newPlug.plug == nil) {
+		log(true, "attempt to find plugin", filename, "failed")
 		return false
 	}
 	// newPlug.Ok = true
@@ -92,19 +80,9 @@ func LoadToolkit(name string) bool {
 	// This includes instructions like "Add", "Delete", "Disable", etc
 	newPlug.Send = loadFunc2(&newPlug, "Send")
 
-	// newPlug.NewGroup = loadFunc2(&newPlug, "NewGroup")
-
-	newPlug.NewDropdown = loadFunc2(&newPlug, "NewDropdown")
-	newPlug.AddDropdownName = loadFuncS(&newPlug, "AddDropdownName")
-	newPlug.SetDropdownName = loadFuncS(&newPlug, "SetDropdownName")
-
-	newPlug.SetDebugToolkit = loadFuncB(&newPlug, "SetDebugToolkit")
-	newPlug.SetDebugChange = loadFuncB(&newPlug, "SetDebugChange")
-	newPlug.ShowDebug = loadFuncE(&newPlug, "ShowDebug")
-
 	allPlugins = append(allPlugins, &newPlug)
 
-	log(debugGui, "gui.LoadToolkit() END", newPlug.name, filename)
+	log(debugPlugin, "gui.LoadToolkit() END", newPlug.name, filename)
 	newPlug.Init()
 	newPlug.LoadOk = true
 	return true
@@ -124,63 +102,6 @@ func loadFuncE(p *aplug, funcName string) func() {
 	}
 
 	newfunc, ok = test.(func())
-	if !ok {
-		log(debugGui, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
-		return nil
-	}
-	return newfunc
-}
-
-func loadFunc1(p *aplug, funcName string) func(*toolkit.Widget) {
-	var newfunc func(*toolkit.Widget)
-	var ok bool
-	var test plugin.Symbol
-
-	test, err = p.plug.Lookup(funcName)
-	if err != nil {
-		log(debugGui, "DID NOT FIND: name =", test, "err =", err)
-		return nil
-	}
-
-	newfunc, ok = test.(func(*toolkit.Widget))
-	if !ok {
-		log(debugGui, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
-		return nil
-	}
-	return newfunc
-}
-
-func loadFuncS(p *aplug, funcName string) func(*toolkit.Widget, string) {
-	var newfunc func(*toolkit.Widget, string)
-	var ok bool
-	var test plugin.Symbol
-
-	test, err = p.plug.Lookup(funcName)
-	if err != nil {
-		log(debugGui, "DID NOT FIND: name =", test, "err =", err)
-		return nil
-	}
-
-	newfunc, ok = test.(func(*toolkit.Widget, string))
-	if !ok {
-		log(debugGui, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
-		return nil
-	}
-	return newfunc
-}
-
-func loadFuncB(p *aplug, funcName string) func(bool) {
-	var newfunc func(bool)
-	var ok bool
-	var test plugin.Symbol
-
-	test, err = p.plug.Lookup(funcName)
-	if err != nil {
-		log(debugGui, "DID NOT FIND: name =", test, "err =", err)
-		return nil
-	}
-
-	newfunc, ok = test.(func(bool))
 	if !ok {
 		log(debugGui, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
 		return nil
@@ -276,6 +197,7 @@ func loadfile(filename string) *plugin.Plugin {
 		return nil
 	}
 	log(debugGui, "plugin WORKED =", filename)
+	log(true, "loading plugin", filename, "worked")
 	return plug
 }
 

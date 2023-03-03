@@ -10,69 +10,60 @@ import (
 
 // various debugging flags
 var debugGui bool = false
+var debugError bool = false
 var debugDump bool = false
 var debugNode bool = false
 var debugTabs bool = false
+var debugFlags bool = false
 var debugChange bool = false	// shows user events like mouse and keyboard
 var debugPlugin	bool = false
 var debugToolkit bool = false
 
-// func GetDebug () bool {
-// 	return debugGui
-// }
+// for printing out the binary tree
+var listChildrenParent *Node
+var listChildrenDepth int = 0
+var defaultPadding = "  "
 
 func SetDebug (s bool) {
 	debugGui     = s
-	debugChange  = s
 	debugDump    = s
 	debugTabs    = s
 	debugPlugin  = s
 	debugNode    = s
 	debugToolkit = s
-	SetDebugChange(s)
-	SetDebugToolkit(s)
+
+	SetFlag("Flags", s)
+	SetFlag("Toolkit", s)
+	SetFlag("Change", s)
+	SetFlag("Error", s)
 }
 
-/*
-func GetDebugToolkit () bool {
-	return debugToolkit
-}
-*/
-
-// This passes the debugToolkit flag to the toolkit plugin
-func SetDebugToolkit (s bool) {
-	debugToolkit = s
-	for _, aplug := range allPlugins {
-		log(debugPlugin, "gui.SetDebugToolkit() aplug =", aplug.name)
-		if (aplug.SetDebugToolkit == nil) {
-			log(debugPlugin, "\tgui.SetDebugToolkit() = nil", aplug.name)
-			continue
-		}
-		aplug.SetDebugToolkit(s)
-		return
+func SetFlag (s string, b bool) {
+	switch s {
+	case "Error":
+		debugError = b
+	case "Change":
+		debugChange = b
+	case "Show":
+		// print them here? For now, just used to print settings in the plugins
+	default:
+		log(debugError, "Can't set unknown flag", s)
 	}
-	log(debugPlugin, "\tgui.SetDebugToolkit() = nil in all plugins")
-}
 
-// This passes the debugChange flag to the toolkit plugin
-func SetDebugChange (s bool) {
-	// debugToolkit = s
-	for _, aplug := range allPlugins {
-		log(debugPlugin, "gui.SetDebugChange() aplug =", aplug.name)
-		if (aplug.SetDebugChange == nil) {
-			log(debugPlugin, "\tgui.SetDebugChange() = nil", aplug.name)
-			continue
-		}
-		aplug.SetDebugChange(s)
-		return
-	}
-	log(debugPlugin, "\tgui.SetDebugChange() = nil in all plugins")
+	// send the flag to the toolkit
+	n := Config.flag
+	log(debugChange, "Set() toolkit flag", s, "to", b)
+	n.widget.Action = "Set"
+	n.widget.S = s
+	n.widget.B = b
+	send(nil, n)
 }
 
 func ShowDebugValues() {
 	// The order here should match the order in the GUI
 	// TODO: get the order from the node binary tree
 	log(true, "Debug        =", debugGui)
+	log(true, "DebugError   =", debugError)
 	log(true, "DebugChange  =", debugChange)
 	log(true, "DebugDump    =", debugDump)
 	log(true, "DebugTabs    =", debugTabs)
@@ -80,16 +71,7 @@ func ShowDebugValues() {
 	log(true, "DebugNode    =", debugNode)
 	log(true, "DebugToolkit =", debugToolkit)
 
-	// dump out the debugging flags for the plugins
-	for _, aplug := range allPlugins {
-		log(debugPlugin, "gui.ShowDebug() aplug =", aplug.name)
-		if (aplug.ShowDebug == nil) {
-			log(debugPlugin, "\tgui.ShowDebug() = nil", aplug.name)
-			continue
-		}
-		aplug.ShowDebug()
-		return
-	}
+	SetFlag("Show", true)
 }
 
 func (n *Node) Dump() {
@@ -115,10 +97,6 @@ func (n *Node) Dump() {
 	}
 	Indent("NODE DUMP END")
 }
-
-var listChildrenParent *Node
-var listChildrenDepth int = 0
-var defaultPadding = "  "
 
 func Indent(a ...interface{}) {
 	logindent(listChildrenDepth, defaultPadding, a...)

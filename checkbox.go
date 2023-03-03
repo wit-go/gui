@@ -12,9 +12,3 @@ func (n *Node) NewCheckbox(name string) *Node {
 	send(n, newNode)
 	return newNode
 }
-
-func (n *Node) NewThing(name string) *Node {
-	newNode := n.New(name, toolkit.Button, nil)
-	send(n, newNode)
-	return newNode
-}

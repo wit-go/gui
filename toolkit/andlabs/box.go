@@ -4,16 +4,16 @@ import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
 // create a new box
-func (t *andlabsT) GetBox() *ui.Box {
+func (t *andlabsT) getBox() *ui.Box {
 	return t.uiBox
 }
 
 // create a new box
-func (t *andlabsT) NewBox() *andlabsT {
-	log(debugToolkit, "gui.Toolbox.NewBox() START create default")
+func (t *andlabsT) newBox() *andlabsT {
+	log(debugToolkit, "newBox() START create default")
 	t.Dump(debugToolkit)
 	if (t.uiGroup != nil) {
-		log(debugToolkit, "\tgui.Toolbox.NewBox() is a Group")
+		log(debugToolkit, "\tnewBox() is a Group")
 		var newTK andlabsT
 
 		vbox := ui.NewVerticalBox()
@@ -24,7 +24,7 @@ func (t *andlabsT) NewBox() *andlabsT {
 		return &newTK
 	}
 	if (t.uiBox != nil) {
-		log(debugToolkit, "\tgui.Toolbox.NewBox() is a Box")
+		log(debugToolkit, "\tnewBox() is a Box")
 		var newTK andlabsT
 
 		vbox := ui.NewVerticalBox()
@@ -36,7 +36,7 @@ func (t *andlabsT) NewBox() *andlabsT {
 		return &newTK
 	}
 	if (t.uiWindow != nil) {
-		log(debugToolkit, "\tgui.Toolbox.NewBox() is a Window")
+		log(debugToolkit, "\tnewBox() is a Window")
 		var newT andlabsT
 
 		vbox := ui.NewVerticalBox()
@@ -48,7 +48,7 @@ func (t *andlabsT) NewBox() *andlabsT {
 		// panic("WTF")
 		return &newT
 	}
-	log(debugToolkit, "\tgui.Toolbox.NewBox() FAILED. Couldn't figure out where to make a box")
+	log(debugToolkit, "\tnewBox() FAILED. Couldn't figure out where to make a box")
 	t.Dump(debugToolkit)
 	return nil
 }

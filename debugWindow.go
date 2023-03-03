@@ -19,36 +19,27 @@ var checkd, checkdn, checkdt, checkdtk, lb1, lb2 *Node
 var myButton *Node
 
 func (n *Node) DebugTab(title string) *Node {
-	var newN, gog, g1, g2, g3, dd, junk, newThing *Node
+	var newN, gog, g1, g2, g3, dd *Node
 
 	// time.Sleep(1 * time.Second)
 	newN = n.NewTab(title)
 	newN.Dump()
 
 //////////////////////// main debug things //////////////////////////////////
-	gog = newN.NewGroup("GOLANG")
-	gog.NewLabel("go language")
-	gog.NewButton("GO Language Debug", func () {
-		newN.GolangDebugWindow(false)
-	})
+	gog = newN.NewGroup("Debugging")
+
 	gog.NewButton("Debug Flags", func () {
 		newN.debugFlags(false)
 	})
 	gog.NewButton("Debug Widgets", func () {
 		newN.debugWidgets(false)
 	})
-
-	gog.NewLabel("wit/gui package")
-	gog.NewButton("Demo toolkit andlabs/ui", func () {
-		// DemoToolkitWindow()
+	gog.NewButton("GO Language Internals", func () {
+		newN.debugGolangWindow(false)
 	})
-
-	junk = gog.NewButton("junk", func () {
-		log("click junk, get junk")
+	gog.NewButton("GO Channels debug", func () {
+		newN.debugGoChannels(false)
 	})
-
-	gog.NewLabel("tmp label")
-
 
 //////////////////////// window debugging things //////////////////////////////////
 	g1 = newN.NewGroup("Current Windows")
@@ -83,33 +74,6 @@ func (n *Node) DebugTab(title string) *Node {
 		mapWindows[child.Name] = child
 	}
 	dd.SetDropdownName(last)
-	dd.NewButton("Delete(junk)", func () {
-		Delete(junk)
-	})
-	dd.NewButton("myButton", func () {
-		gog.NewButton("myButton", func () {
-			log("this code is better")
-		})
-	})
-	dd.NewButton("add Hope", func () {
-		var i int = 1
-		log("add hope?", i)
-		gog.NewButton("hope", func () {
-			i += 1
-			log("write better code", i)
-		})
-	})
-	dd.NewButton("add newThing", func () {
-		var i, j int = 1, 1
-		newThing = gog.NewThing("NewThing")
-		newThing.Custom = func() {
-			f := i + j
-			log("newThing!!! n.widget =", newThing.widget.Name, newThing.widget.B, f)
-			j = i
-			i = f
-		}
-		log("newThing!!! n.widget")
-	})
 
 	g2 = newN.NewGroup("Debug Window")
 	g2.NewButton("SetMargined(tab)", func () {

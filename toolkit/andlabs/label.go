@@ -27,7 +27,7 @@ func newLabel(parentW *toolkit.Widget, w *toolkit.Widget) {
 
 	newt = new(andlabsT)
 
-	c := ui.NewLabel(w.Name + " FIX")
+	c := ui.NewLabel(w.Name)
 	newt.uiLabel = c
 
 	newt.uiBox = t.uiBox
@@ -38,7 +38,6 @@ func newLabel(parentW *toolkit.Widget, w *toolkit.Widget) {
 
 	mapWidgetsToolkits(w, newt)
 }
-
 
 func doLabel(p *toolkit.Widget, c *toolkit.Widget) {
 	if broken(c) {

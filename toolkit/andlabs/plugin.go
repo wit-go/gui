@@ -26,6 +26,12 @@ func Send(p *toolkit.Widget, c *toolkit.Widget) {
 	}
 	log(debugPlugin, "Send() child  =", c.Name, ",", c.Action, ",", c.Type)
 
+	if (c.Action == "SetMargin") {
+		log(true, "need to implement SetMargin here")
+		setMargin(p, c, c.B)
+		return
+	}
+
 	switch c.Type {
 	case toolkit.Window:
 		newWindow(c)
@@ -45,10 +51,36 @@ func Send(p *toolkit.Widget, c *toolkit.Widget) {
 		newSlider(p, c)
 	case toolkit.Spinner:
 		newSpinner(p, c)
+	case toolkit.Dropdown:
+		doDropdown(p, c)
+	case toolkit.Combobox:
+		doCombobox(p, c)
+	case toolkit.Grid:
+		doGrid(p, c)
+	case toolkit.Flag:
+		log(debugFlag, "plugin Send() flag parent =", p.Name, p.Type)
+		log(debugFlag, "plugin Send() flag child  =", c.Name, c.Type)
+		log(debugFlag, "plugin Send() flag child.Action  =", c.Action)
+		log(debugFlag, "plugin Send() flag child.S  =", c.S)
+		log(debugFlag, "plugin Send() flag child.B  =", c.B)
+		log(debugFlag, "plugin Send() what to flag?")
+		// should set the checkbox to this value
+		switch c.S {
+		case "Error":
+			debugError = c.B
+		case "Toolkit":
+			debugToolkit = c.B
+		case "Change":
+			debugChange = c.B
+		case "Show":
+			ShowDebug()
+		default:
+			log(debugError, "Can't set unknown flag", c.S)
+		}
 	default:
-		log(true, "unknown parent =", p.Name, p.Type)
-		log(true, "unknown child  =", c.Name, c.Type)
-		log(true, "Don't know how to do", c.Type, "yet")
+		log(true, "plugin Send() unknown parent =", p.Name, p.Type)
+		log(true, "plugin Send() unknown child  =", c.Name, c.Type)
+		log(true, "plugin Send() Don't know how to do", c.Type, "yet")
 	}
 }
 

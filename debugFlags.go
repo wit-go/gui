@@ -15,7 +15,7 @@ func (n *Node) debugFlags(makeWindow bool) {
 		w = NewWindow()
 		w.Custom = w.StandardClose
 	} else {
-		w = n.NewTab("Debug Flags")
+		w = n.NewTab("Flags")
 	}
 	w.Dump()
 
@@ -36,12 +36,19 @@ func (n *Node) debugFlags(makeWindow bool) {
 		log(debugGui, "Custom() n.widget =", cb1.widget.Name, cb1.widget.B)
 	}
 
+	// errors. by default these always output somewhere
+	cbE := g.NewCheckbox("debugError")
+	cbE.Custom = func() {
+		debugError = cbE.widget.B
+		SetFlag("Error", debugError)
+	}
+
 	// debugging that will show you things like mouse clicks, user inputing text, etc
 	// also set toolkit.DebugChange
 	cb2 := g.NewCheckbox("debugChange")
 	cb2.Custom = func() {
 		debugChange = cb2.widget.B
-		SetDebugChange(cb2.widget.B)
+		SetFlag("Change", debugChange)
 		log(debugGui, "Custom() n.widget =", cb2.widget.Name, cb2.widget.B)
 	}
 
@@ -74,8 +81,9 @@ func (n *Node) debugFlags(makeWindow bool) {
 	// turns on debugging inside the plugin toolkit
 	cb7 := g.NewCheckbox("debugToolkit")
 	cb7.Custom = func() {
-		SetDebugToolkit(cb7.widget.B)
-		log(debugGui, "Custom() n.widget =", cb7.widget.Name, cb7.widget.B)
+		// SetDebugToolkit(cb7.widget.B)
+		SetFlag("Toolkit", cb7.widget.B)
+		log(debugFlags, "Custom() n.widget =", cb7.widget.Name, cb7.widget.B)
 	}
 
 	g.NewButton("Dump Debug Flags", func () {

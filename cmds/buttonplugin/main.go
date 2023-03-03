@@ -81,12 +81,6 @@ func buttonWindow() {
 		gui.DebugWindow()
 	})
 
-	g.NewButton("gui.GolangDebugWindow()", func () {
-		// make a seperate window out of this
-		// w.GolangDebugWindow(false)
-		w.GolangDebugWindow(true)
-	})
-
 	g.NewButton("LoadToolkit(andlabs)", func () {
 		gui.LoadToolkit("andlabs")
 	})

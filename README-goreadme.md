@@ -145,41 +145,41 @@ var WARN bool
 
 ## Functions
 
-### func [DebugWidgetWindow](/debug_widget.go#L7)
+### func [DebugWidgetWindow](/debugWidget.go#L107)
 
 `func DebugWidgetWindow(w *Node)`
 
-### func [DebugWindow](/debug_window.go#L9)
+### func [DebugWindow](/debugWindow.go#L9)
 
 `func DebugWindow()`
 
 Creates a window helpful for debugging this package
 
-### func [Delete](/common.go#L66)
+### func [Delete](/common.go#L90)
 
 `func Delete(c *Node)`
 
-### func [Indent](/debug.go#L123)
+### func [Indent](/debug.go#L101)
 
 `func Indent(a ...interface{})`
 
-### func [InitPlugins](/main.go#L46)
+### func [InitPlugins](/main.go#L50)
 
 `func InitPlugins(names []string)`
 
-### func [LoadToolkit](/plugin.go#L56)
+### func [LoadToolkit](/plugin.go#L43)
 
 `func LoadToolkit(name string) bool`
 
 loads and initializes a toolkit (andlabs/ui, gocui, etc)
 
-### func [Main](/main.go#L87)
+### func [Main](/main.go#L91)
 
 `func Main(f func())`
 
 This should not pass a function
 
-### func [Queue](/main.go#L117)
+### func [Queue](/main.go#L121)
 
 `func Queue(f func())`
 
@@ -190,27 +190,19 @@ other goroutines. This is due to the nature of how
 Linux, MacOS and Windows work (they all work differently. suprise. surprise.)
 For example: gui.Queue(NewWindow())
 
-### func [SetDebug](/debug.go#L24)
+### func [SetDebug](/debug.go#L27)
 
 `func SetDebug(s bool)`
 
-### func [SetDebugChange](/debug.go#L58)
+### func [SetFlag](/debug.go#L41)
 
-`func SetDebugChange(s bool)`
+`func SetFlag(s string, b bool)`
 
-This passes the debugChange flag to the toolkit plugin
-
-### func [SetDebugToolkit](/debug.go#L43)
-
-`func SetDebugToolkit(s bool)`
-
-This passes the debugToolkit flag to the toolkit plugin
-
-### func [ShowDebugValues](/debug.go#L72)
+### func [ShowDebugValues](/debug.go#L62)
 
 `func ShowDebugValues()`
 
-### func [StandardExit](/main.go#L136)
+### func [StandardExit](/main.go#L140)
 
 `func StandardExit()`
 
@@ -243,7 +235,7 @@ This struct can be used with the go-arg package
 var Config GuiConfig
 ```
 
-### type [Node](/structs.go#L54)
+### type [Node](/structs.go#L57)
 
 `type Node struct { ... }`
 

@@ -9,7 +9,7 @@ import (
 	"runtime/pprof"
 )
 
-func (n *Node) GolangDebugWindow(makeWindow bool) {
+func (n *Node) debugGolangWindow(makeWindow bool) {
 	var w, g, og, outputTextbox *Node
 
 	// Either:
@@ -22,7 +22,7 @@ func (n *Node) GolangDebugWindow(makeWindow bool) {
 		w = NewWindow()
 		w.Custom = w.StandardClose
 	} else {
-		w = n.NewTab("GO")
+		w = n.NewTab("GOLANG")
 	}
 	w.Dump()
 
@@ -93,6 +93,11 @@ func (n *Node) GolangDebugWindow(makeWindow bool) {
 
 	g.NewLabel("TODO:")
 
+	g.NewButton("runtime.Stack(true)", func () {
+		// TODO: https://stackoverflow.com/questions/61127053/how-to-list-all-the-running-goroutines-in-a-go-program
+		// func Stack(buf []byte, all bool) int
+	})
+
 	g.NewButton("debug.SetMemoryLimit(int)", func () {
 		// TODO:
 		//debug.SetMemoryLimit(1024 * 1024 * 100)
@@ -108,6 +113,13 @@ func (n *Node) GolangDebugWindow(makeWindow bool) {
 
 	g.NewButton("debug.SetTraceback('all')", func () {
 		debug.SetTraceback("all")
+	})
+	g.NewButton("runtime.NumGoroutine()", func () {
+		buf := new(bytes.Buffer)
+		pprof.Lookup("goroutine").WriteTo(buf, 1)
+		outputTextbox.SetText(buf.String())
+
+		outputTextbox.AppendText(fmt.Sprintln("runtime.NumGoroutine() = ", runtime.NumGoroutine()))
 	})
 
 	// deprecated (probably) by String() implementation within golang

@@ -63,7 +63,7 @@ func tabSetMargined(tab *ui.Tab) {
 }
 
 func rawTab(w *ui.Window, name string) *andlabsT {
-	var t andlabsT
+	var newt andlabsT
 	log(debugToolkit, "gui.toolkit.NewTab() ADD", name)
 
 	if (w == nil) {
@@ -83,10 +83,10 @@ func rawTab(w *ui.Window, name string) *andlabsT {
 	tabSetMargined(tab) // TODO: run this in the right place(?)
 	w.SetChild(tab)
 
-	t.uiWindow = w
-	t.uiTab = tab
-	t.uiBox = hbox
-	return &t
+	newt.uiWindow = w
+	newt.uiTab = tab
+	newt.uiBox = hbox
+	return &newt
 }
 
 func (t *andlabsT) appendTab(name string) *andlabsT {

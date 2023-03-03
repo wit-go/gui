@@ -1,5 +1,5 @@
 run: build
-	./textbox --gui-debug
+	GOTRACEBACK=all ./textbox --gui-debug
 
 build-release:
 	go get -v -u -x .
@@ -7,7 +7,7 @@ build-release:
 
 build:
 	GO111MODULE="off" go get -v -x .
-	GO111MODULE="off" go build
+	GO111MODULE="off" GOTRACEBACK=all go build
 
 update:
 	GO111MODULE="off" go get -v -u -x .

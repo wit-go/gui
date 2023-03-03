@@ -8,10 +8,34 @@ import (
 
 // functions for handling text related GUI elements
 
+func (n *Node) Add(str string) {
+	log(debugGui, "gui.Add() value =", str)
+	n.widget.Action = "Add"
+	n.widget.S = str
+	send(n.parent, n)
+}
+
 func (n *Node) SetText(str string) bool {
 	log(debugChange, "gui.SetText() value =", str)
 	n.widget.Action = "Set"
 	n.widget.S = str
+	send(n.parent, n)
+	return true
+}
+
+func (n *Node) Set(a any) bool {
+	log(debugChange, "gui.Set() value =", a)
+	n.widget.Action = "Set"
+	switch v := a.(type) {
+	case bool:
+		n.widget.B = a.(bool)
+	case string:
+		n.widget.S = a.(string)
+	case int:
+		n.widget.I = a.(int)
+	default:
+		log(debugError, "gui.Set() unknown type =", v, "a =", a)
+	}
 	send(n.parent, n)
 	return true
 }

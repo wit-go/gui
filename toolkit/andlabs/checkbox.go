@@ -6,8 +6,8 @@ import (
 	_ "github.com/andlabs/ui/winmanifest"
 )
 
-func (t andlabsT) NewCheckbox(w *toolkit.Widget) *andlabsT {
-	log(debugToolkit, "NewCheckbox()", w.Name, w.Type)
+func (t *andlabsT) newCheckbox(w *toolkit.Widget) *andlabsT {
+	log(debugToolkit, "newCheckbox()", w.Name, w.Type)
 	var newt andlabsT
 	newt.tw = w
 
@@ -15,13 +15,13 @@ func (t andlabsT) NewCheckbox(w *toolkit.Widget) *andlabsT {
 		return nil
 	}
 
-	c := ui.NewCheckbox(w.Name)
-	newt.uiCheckbox = c
+	newt.uiCheckbox = ui.NewCheckbox(w.Name)
 	newt.uiBox = t.uiBox
-	t.uiBox.Append(c, stretchy)
+	// t.doAppend(&newt, *newt.uiCheckbox)
+	t.uiBox.Append(newt.uiCheckbox, stretchy)
 
-	c.OnToggled(func(spin *ui.Checkbox) {
-		newt.tw.B = newt.Checked()
+	newt.uiCheckbox.OnToggled(func(spin *ui.Checkbox) {
+		newt.tw.B = newt.checked()
 		log(debugChange, "val =", newt.tw.B)
 		newt.commonChange(newt.tw)
 	})
@@ -29,7 +29,7 @@ func (t andlabsT) NewCheckbox(w *toolkit.Widget) *andlabsT {
 	return &newt
 }
 
-func (t andlabsT) Checked() bool {
+func (t *andlabsT) checked() bool {
 	if t.broken() {
 		return false
 	}
@@ -37,15 +37,15 @@ func (t andlabsT) Checked() bool {
 	return t.uiCheckbox.Checked()
 }
 
-func NewCheckbox(parentW *toolkit.Widget, w *toolkit.Widget) {
-	log(debugToolkit, "NewCheckbox()", w.Name)
+func newCheckbox(parentW *toolkit.Widget, w *toolkit.Widget) {
+	log(debugToolkit, "newCheckbox()", w.Name)
 
 	t := mapToolkits[parentW]
 	if (t == nil) {
 		listMap(debugError)
 		return
 	}
-	newt := t.NewCheckbox(w)
+	newt := t.newCheckbox(w)
 	mapWidgetsToolkits(w, newt)
 }
 
@@ -54,7 +54,7 @@ func doCheckbox(p *toolkit.Widget, c *toolkit.Widget) {
 		return
 	}
 	if (c.Action == "New") {
-		NewCheckbox(p, c)
+		newCheckbox(p, c)
 		return
 	}
 	ct := mapToolkits[c]

@@ -56,10 +56,13 @@ const (
 	Button
 	Checkbox
 	Dropdown
+	Combobox
 	Label
 	Textbox
 	Slider
 	Spinner
+	Grid
+	Flag
 )
 
 func (s WidgetType) String() string {
@@ -78,6 +81,8 @@ func (s WidgetType) String() string {
 		return "Checkbox"
 	case Dropdown:
 		return "Dropdown"
+	case Combobox:
+		return "Combobox"
 	case Label:
 		return "Label"
 	case Textbox:
@@ -86,6 +91,10 @@ func (s WidgetType) String() string {
 		return "Slider"
 	case Spinner:
 		return "Spinner"
+	case Grid:
+		return "Grid"
+	case Flag:
+		return "Flag"
 	case Unknown:
 		return "Unknown"
 	}

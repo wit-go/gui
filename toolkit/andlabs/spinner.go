@@ -7,7 +7,7 @@ import (
 	_ "github.com/andlabs/ui/winmanifest"
 )
 
-func (t andlabsT) newSpinner(w *toolkit.Widget) *andlabsT {
+func (t *andlabsT) newSpinner(w *toolkit.Widget) *andlabsT {
 	// make new node here
 	log(debugToolkit, "newSpinner()", w.X, w.Y)
 	var newt andlabsT
@@ -24,6 +24,7 @@ func (t andlabsT) newSpinner(w *toolkit.Widget) *andlabsT {
 	t.uiBox.Append(s, stretchy)
 
 	s.OnChanged(func(s *ui.Spinbox) {
+		newt.tw.I = newt.uiSpinbox.Value()
 		newt.commonChange(newt.tw)
 	})
 

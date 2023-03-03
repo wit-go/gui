@@ -28,9 +28,9 @@ type andlabsT struct {
 	uiSpinbox *ui.Spinbox
 	uiTab     *ui.Tab
 	uiWindow  *ui.Window
-	// UiWindowBad  *ui.Window // erase this
 	uiMultilineEntry   *ui.MultilineEntry
 	uiEditableCombobox    *ui.EditableCombobox
+	uiGrid    *ui.Grid
 
 	// used as a counter to work around limitations of widgets like combobox
 	// this is probably fucked up and in many ways wrong because of unsafe goroutine threading

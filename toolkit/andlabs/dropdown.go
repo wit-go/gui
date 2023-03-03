@@ -6,9 +6,9 @@ import (
 	"git.wit.org/wit/gui/toolkit"
 )
 
-func (t *andlabsT) NewDropdown(w *toolkit.Widget) *andlabsT {
+func (t *andlabsT) newDropdown(w *toolkit.Widget) *andlabsT {
 	var newt andlabsT
-	log(debugToolkit, "gui.Toolbox.NewDropdown() START", w.Name)
+	log(debugToolkit, "gui.Toolbox.newDropdown() START", w.Name)
 
 	if t.broken() {
 		return nil
@@ -53,21 +53,8 @@ func (t *andlabsT) AddDropdownName(title string) {
 	t.c = t.c + 1
 }
 
-func (t andlabsT) SetDropdown(i int) {
+func (t *andlabsT) SetDropdown(i int) {
 	t.uiCombobox.SetSelected(i)
-}
-
-func NewDropdown(parentW *toolkit.Widget, w *toolkit.Widget) {
-	log(debugToolkit, "gui.andlabs.NewDropdown()", w.Name)
-
-	t := mapToolkits[parentW]
-	if (t == nil) {
-		log(debugToolkit, "go.andlabs.NewDropdown() toolkit struct == nil. name=", parentW.Name, w.Name)
-		listMap(debugToolkit)
-		return
-	}
-	newt := t.NewDropdown(w)
-	mapWidgetsToolkits(w, newt)
 }
 
 func AddDropdownName(w *toolkit.Widget, s string) {
@@ -93,4 +80,58 @@ func SetDropdownName(w *toolkit.Widget, s string) {
 	}
 	t.SetDropdown(1)
 	t.tw.S = s
+}
+
+func newDropdown(parentW *toolkit.Widget, w *toolkit.Widget) {
+	log(debugToolkit, "gui.andlabs.newDropdown()", w.Name)
+
+	t := mapToolkits[parentW]
+	if (t == nil) {
+		log(debugToolkit, "go.andlabs.newDropdown() toolkit struct == nil. name=", parentW.Name, w.Name)
+		listMap(debugToolkit)
+		return
+	}
+	newt := t.newDropdown(w)
+	mapWidgetsToolkits(w, newt)
+}
+
+func doDropdown(p *toolkit.Widget, c *toolkit.Widget) {
+	if broken(c) {
+		return
+	}
+	if (c.Action == "New") {
+		newDropdown(p, c)
+		return
+	}
+	ct := mapToolkits[c]
+	if (ct == nil) {
+		log(true, "Trying to do something on a widget that doesn't work or doesn't exist or something", c)
+		return
+	}
+	if ct.broken() {
+		log(true, "Dropdown() ct.broken", ct)
+		return
+	}
+	if (ct.uiCombobox == nil) {
+		log(true, "Dropdown() uiCombobox == nil", ct)
+		return
+	}
+	log(true, "Going to attempt:", c.Action)
+	switch c.Action {
+	case "Add":
+		ct.AddDropdownName(c.S)
+		// ct.uiCombobox.Enable()
+	case "Enable":
+		ct.uiCombobox.Enable()
+	case "Disable":
+		ct.uiCombobox.Disable()
+	case "Show":
+		ct.uiCombobox.Show()
+	case "Hide":
+		ct.uiCombobox.Hide()
+	case "Set":
+		ct.uiCombobox.SetSelected(1)
+	default:
+		log(true, "Can't do", c.Action, "to a Dropdown")
+	}
 }

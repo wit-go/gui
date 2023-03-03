@@ -7,7 +7,7 @@ import (
 	_ "github.com/andlabs/ui/winmanifest"
 )
 
-func (t andlabsT) newSlider(w *toolkit.Widget) *andlabsT {
+func (t *andlabsT) newSlider(w *toolkit.Widget) *andlabsT {
 	// make new node here
 	log(debugToolkit, w.Name, w.Type, w.X, w.Y)
 	var newt andlabsT
@@ -26,6 +26,7 @@ func (t andlabsT) newSlider(w *toolkit.Widget) *andlabsT {
 	t.uiBox.Append(s, stretchy)
 
 	s.OnChanged(func(spin *ui.Slider) {
+		newt.tw.I = newt.uiSlider.Value()
 		newt.commonChange(newt.tw)
 	})
 
