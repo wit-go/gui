@@ -16,11 +16,6 @@ func Main(f func()) {
 	log(debugToolkit, "Starting gui.Main() (using gtk via andlabs/ui)")
 	ui.Main( func() {
 		log(debugToolkit, "Starting gui.Main() (using gtk via andlabs/ui)")
-		log(debugToolkit, "Starting gui.Main() (using gtk via andlabs/ui)")
-		log(debugToolkit, "Starting gui.Main() (using gtk via andlabs/ui)")
-		log(debugToolkit, "Starting gui.Main() (using gtk via andlabs/ui)")
-		log(debugToolkit, "Starting gui.Main() (using gtk via andlabs/ui)")
-		log(debugToolkit, "Starting gui.Main() (using gtk via andlabs/ui)")
 		// time.Sleep(1 * time.Second)
 		// NewWindow2("helloworld2", 200, 100)
 		f()
@@ -37,17 +32,22 @@ func Main(f func()) {
 //
 func Queue(f func()) {
 	log(debugToolkit, "Sending function to ui.QueueMain()")
-	log(true, "using gui.Queue() in this plugin DOES BREAK. TODO: wrap this")
+	log(debugPlugin, "using gui.Queue() in this plugin DOES BREAK. TODO: solve this with channels")
 	ui.QueueMain(f)
 }
 
+// This is important. This sets the defaults for the gui. Without this, there isn't correct padding, etc
 func Init() {
 	log(debugToolkit, "Init()")
+	// Can you pass values to a plugin init() ? Otherwise, there is no way to safely print
+	// log(debugToolkit, "gui/toolkit init() Setting defaultBehavior = true")
+	setDefaultBehavior(true)
 
 	mapWidgets = make(map[*andlabsT]*toolkit.Widget)
 	mapToolkits = make(map[*toolkit.Widget]*andlabsT)
 }
 
+// TODO: properly exit the plugin since Quit() doesn't do it
 func Quit() {
 	log(debugToolkit, "Quit() TODO: close the toolkit cleanly")
 }

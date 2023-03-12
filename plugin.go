@@ -205,7 +205,7 @@ func loadfile(filename string) *plugin.Plugin {
 // parent = n, child = c
 func send(p *Node, c *Node) {
 	for _, aplug := range allPlugins {
-		log(debugPlugin, "Send() aplug =", aplug.name, "name =", c.widget.Name)
+		log(debugPlugin, "Send() aplug =", aplug.name, "type=", c.widget.Type, "action=", c.widget.Action, "name=", c.widget.Name)
 		if (aplug.Send == nil) {
 			log(debugPlugin, "\tSend() failed (aplug.Selete = nil) for", aplug.name)
 			continue

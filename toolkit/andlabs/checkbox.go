@@ -70,7 +70,7 @@ func doCheckbox(p *toolkit.Widget, c *toolkit.Widget) {
 		log(true, "checkbox() uiCheckbox == nil", ct)
 		return
 	}
-	log(true, "Going to attempt:", c.Action)
+	log(debugChange, "Going to attempt:", c.Action)
 	switch c.Action {
 	case "Enable":
 		ct.uiCheckbox.Enable()
@@ -80,10 +80,11 @@ func doCheckbox(p *toolkit.Widget, c *toolkit.Widget) {
 		ct.uiCheckbox.Show()
 	case "Hide":
 		ct.uiCheckbox.Hide()
-	case "Set":
+	case "SetText":
 		ct.uiCheckbox.SetText(c.S)
+	case "Set":
 		ct.uiCheckbox.SetChecked(c.B)
 	default:
-		log(true, "Can't do", c.Action, "to a checkbox")
+		log(debugError, "Can't do", c.Action, "to a checkbox")
 	}
 }

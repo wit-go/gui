@@ -1,7 +1,7 @@
 package gui
 
 import (
-	"embed"
+	// "embed"
 	"git.wit.org/wit/gui/toolkit"
 )
 
@@ -12,9 +12,15 @@ import (
 const Xaxis = 0 // stack things horizontally
 const Yaxis = 1 // stack things vertically
 
-// may this plugin work when all other plugins fail
-//go:embed toolkit/gocui.so
-var res embed.FS
+/*
+	// TODO: 2023/03/03 rethink how to get a plugin or figure out how
+	// golang packages can include a binary. Pull from /usr/go/go-gui/ ?
+	// may this plugin work when all other plugins fail
+
+	// if this is in the plugin, the packages can't work with go.mod builds
+	# don't do this in the plugin // go:embed /usr/lib/go-gui/toolkit/gocui.so
+	# don't do this in the plugin var res embed.FS
+*/
 
 func init() {
 	log("init() has been run")
@@ -136,7 +142,8 @@ func (n *Node) StandardClose() {
 	log(debugGui, "wit/gui Standard Window Close. n.Custom exit =", n.Custom)
 }
 
-// The window is destroyed but the application does not quit
+// The window is destroyed and the application exits
+// TODO: properly exit the plugin since Quit() doesn't do it
 func StandardExit() {
 	log("wit/gui Standard Window Exit. running os.Exit()")
 	log("gui.Node.StandardExit() attempt to exit each toolkit plugin")
@@ -146,6 +153,5 @@ func StandardExit() {
 			aplug.Quit()
 		}
 	}
-
 	exit(0)
 }

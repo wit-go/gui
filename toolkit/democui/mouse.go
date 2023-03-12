@@ -2,12 +2,11 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package toolkit
+package main
 
 import (
 	"errors"
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/awesome-gocui/gocui"
@@ -30,26 +29,26 @@ func mouseClick(name string) {
 	// log.Println("g.Close()")
 	// g.Close()
 
-	log.Println("Found andlabs Running custom function for the mouse click")
+	log("Found andlabs Running custom function for the mouse click")
 	Custom(name)
 	// panic("got andlabs")
 }
 
 func Init() {
-	log.Println("start Init()")
+	log("start Init()")
 
 	f, err := os.OpenFile("/tmp/guilogfile", os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
 	if err != nil {
-		log.Fatalf("error opening file: %v", err)
+		exit("error opening file: %v", err)
 	}
 	defer f.Close()
 
-	log.SetOutput(f)
-	log.Println("This is a test log entry")
+	setOutput(f)
+	log("This is a test log entry")
 
 	g, err = gocui.NewGui(gocui.OutputNormal, true)
 	if err != nil {
-		log.Panicln(err)
+		exit(err)
 	}
 
 	g.Cursor = true
@@ -58,19 +57,19 @@ func Init() {
 	g.SetManagerFunc(layout)
 
 	if err := keybindings(g); err != nil {
-		log.Panicln(err)
+		exit(err)
 	}
-	log.Println("exit Init()")
+	log("exit Init()")
 }
 
 func StartConsoleMouse() {
 	defer g.Close()
-	log.Println("start Main()")
+	log("start Main()")
 
 	if err := g.MainLoop(); err != nil && !errors.Is(err, gocui.ErrQuit) {
-		log.Panicln(err)
+		exit(err)
 	}
-	log.Println("exit Main()")
+	log("exit Main()")
 }
 
 func layout(g *gocui.Gui) error {

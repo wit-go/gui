@@ -27,7 +27,11 @@ func init() {
 	arg.MustParse(&args)
 	fmt.Println(args.Foo, args.Bar, args.User)
 
-	f1, err = os.OpenFile("/tmp/guilogfile", os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
+	log.Println()
+	log.Println("STDOUT is now at /tmp/guilogfile")
+	log.Println("STDOUT is now at /tmp/guilogfile")
+	log.Println()
+	f1, err = os.OpenFile(outfile, os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
 	}

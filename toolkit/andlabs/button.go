@@ -10,11 +10,11 @@ import (
 func newButton(parentW *toolkit.Widget, w *toolkit.Widget) {
 	var t, newt *andlabsT
 	var b *ui.Button
-	log(debugToolkit, "gui.andlabs.NewButton()", w.Name)
+	log(debugToolkit, "newButton()", w.Name)
 
 	t = mapToolkits[parentW]
 	if (t == nil) {
-		log(debugToolkit, "go.andlabs.NewButton() toolkit struct == nil. name=", parentW.Name, w.Name)
+		log(debugToolkit, "newButton() toolkit struct == nil. name=", parentW.Name, w.Name)
 		return
 	}
 
@@ -32,21 +32,31 @@ func newButton(parentW *toolkit.Widget, w *toolkit.Widget) {
 		newt.commonChange(newt.tw)
 	})
 
-	log(debugToolkit, "gui.Toolbox.NewButton() about to append to Box parent t:", w.Name)
-	log(debugToolkit, "gui.Toolbox.NewButton() about to append to Box new t:", w.Name)
+	log(debugToolkit, "newButton() about to append to Box parent t:", w.Name)
+	log(debugToolkit, "newButton() about to append to Box new t:", w.Name)
+	if (debugToolkit) {
+		ShowDebug ()
+	}
 
 	if (t.uiBox != nil) {
 		t.uiBox.Append(b, stretchy)
 	} else if (t.uiWindow != nil) {
 		t.uiWindow.SetChild(b)
 	} else {
-		log(debugToolkit, "ERROR: wit/gui andlabs couldn't place this button in a box or a window")
-		log(debugToolkit, "ERROR: wit/gui andlabs couldn't place this button in a box or a window")
+		log(debugError, "ERROR: wit/gui andlabs couldn't place this button in a box or a window")
+		log(debugError, "ERROR: wit/gui andlabs couldn't place this button in a box or a window")
 		return
 	}
 
 	mapWidgetsToolkits(w, newt)
 }
+
+// This routine is very specific to this toolkit
+// It's annoying and has to be copied to each widget when there are changes
+// it could be 'simplfied' maybe or made to be more generic, but this is as far as I've gotten
+// it's probably not worth working much more on this toolkit, the andlabs/ui has been great and got me here!
+// but it's time to write direct GTK, QT, macos and windows toolkit plugins
+// -- jcarr 2023/03/09
 
 func doButton(p *toolkit.Widget, c *toolkit.Widget) {
 	if broken(c) {
@@ -58,18 +68,18 @@ func doButton(p *toolkit.Widget, c *toolkit.Widget) {
 	}
 	ct := mapToolkits[c]
 	if (ct == nil) {
-		log(true, "Trying to do something on a widget that doesn't work or doesn't exist or something", c)
+		log(debugError, "Trying to do something on a widget that doesn't work or doesn't exist or something", c)
 		return
 	}
 	if ct.broken() {
-		log(true, "Button() ct.broken", ct)
+		log(debugError, "Button() ct.broken", ct)
 		return
 	}
 	if (ct.uiButton == nil) {
-		log(true, "Button() uiButton == nil", ct)
+		log(debugError, "Button() uiButton == nil", ct)
 		return
 	}
-	log(true, "Going to attempt:", c.Action)
+	log(debugToolkit, "Going to attempt:", c.Action)
 	switch c.Action {
 	case "Enable":
 		ct.uiButton.Enable()
@@ -82,6 +92,6 @@ func doButton(p *toolkit.Widget, c *toolkit.Widget) {
 	case "Set":
 		ct.uiButton.SetText(c.S)
 	default:
-		log(true, "Can't do", c.Action, "to a Button")
+		log(debugError, "Can't do", c.Action, "to a Button")
 	}
 }

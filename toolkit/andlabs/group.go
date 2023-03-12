@@ -8,8 +8,7 @@ import (
 )
 
 func newGroup(parentW *toolkit.Widget, w *toolkit.Widget) {
-	// log(debugToolkit, "gui.andlabs.NewGroup()", w.Name)
-	log(true, "NewGroup()", w.Name)
+	log(debugToolkit, "NewGroup()", w.Name)
 
 	t := mapToolkits[parentW]
 	if (t == nil) {
@@ -31,31 +30,7 @@ func (t *andlabsT) rawGroup(title string) *andlabsT {
 	g.SetMargined(margin)
 	newt.uiGroup = g
 
-	t.doAppend(&newt, nil)
-	/*
-	if (t.uiBox != nil) {
-		// TODO: temporary hack to make the output textbox 'fullscreen'
-		if (newt.Name == "output") {
-			t.uiBox.Append(g, true)
-		} else {
-			t.uiBox.Append(g, stretchy)
-		}
-	} else if (t.uiWindow != nil) {
-		log(true, "This is a raw window without a box. probably make a box here and add the group to that")
-		t.uiBox = ui.NewHorizontalBox()
-		t.uiWindow.SetChild(t.uiBox)
-		log(true, "tried to make a box")
-		if (newt.Name == "output") {
-			t.uiBox.Append(g, true)
-		} else {
-			t.uiBox.Append(g, stretchy)
-		}
-	} else {
-		log(debugError, "NewGroup() node.UiBox == nil. I can't add a range UI element without a place to put it")
-		log(debugError, "probably could just make a box here?")
-		exit("internal wit/gui error")
-	}
-	*/
+	t.doAppend(toolkit.Group, &newt, nil)
 
 	hbox := ui.NewVerticalBox()
 	hbox.SetPadded(padded)
@@ -66,4 +41,57 @@ func (t *andlabsT) rawGroup(title string) *andlabsT {
 	newt.uiTab = t.uiTab
 
 	return &newt
+}
+
+// This routine is very specific to this toolkit
+// It's annoying and has to be copied to each widget when there are changes
+// it could be 'simplfied' maybe or made to be more generic, but this is as far as I've gotten
+// it's probably not worth working much more on this toolkit, the andlabs/ui has been great and got me here!
+// but it's time to write direct GTK, QT, macos and windows toolkit plugins
+// -- jcarr 2023/03/09
+
+func doGroup(p *toolkit.Widget, c *toolkit.Widget) {
+	if broken(c) {
+		return
+	}
+	log(debugChange, "Going to attempt:", c.Action)
+	if (c.Action == "New") {
+		newGroup(p, c)
+		return
+	}
+	ct := mapToolkits[c]
+	if (ct == nil) {
+		log(debugError, "Trying to do something on a widget that doesn't work or doesn't exist or something", c)
+		return
+	}
+	if ct.broken() {
+		log(debugError, "Group() ct.broken", ct)
+		return
+	}
+	if (ct.uiGroup == nil) {
+		log(debugError, "Label() uiGroup == nil", ct)
+		return
+	}
+	switch c.Action {
+	case "Enable":
+		ct.uiGroup.Enable()
+	case "Disable":
+		ct.uiGroup.Disable()
+	case "Show":
+		ct.uiGroup.Show()
+	case "Hide":
+		ct.uiGroup.Hide()
+	case "Get":
+		c.S = ct.uiGroup.Title()
+	case "Set":
+		ct.uiGroup.SetTitle(c.S)
+	case "SetText":
+		ct.uiGroup.SetTitle(c.S)
+	case "SetMargin":
+		ct.uiGroup.SetMargined(c.B)
+	case "Destroy":
+		ct.uiGroup.Destroy()
+	default:
+		log(debugError, "Can't do", c.Action, "to a Group")
+	}
 }

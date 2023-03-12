@@ -1,7 +1,19 @@
 package gui
 
+import (
+	"git.wit.org/wit/gui/toolkit"
+)
+
+// TODO: move all this shit into somewhere not global
+
+// main debugging window
 var bugWin *Node
+// if there should be new windows or just tabs
+var makeTabs bool = true
+
 var mapWindows map[string]*Node
+var checkd, checkdn, checkdt, checkdtk, lb1, lb2 *Node
+var myButton *Node
 
 /*
 	Creates a window helpful for debugging this package
@@ -15,120 +27,122 @@ func DebugWindow() {
 	bugWin.DebugTab("Debug Tab")
 }
 
-var checkd, checkdn, checkdt, checkdtk, lb1, lb2 *Node
-var myButton *Node
-
 func (n *Node) DebugTab(title string) *Node {
-	var newN, gog, g1, g2, g3, dd *Node
+	var newN, gog, g1 *Node
 
 	// time.Sleep(1 * time.Second)
 	newN = n.NewTab(title)
 	newN.Dump()
 
 //////////////////////// main debug things //////////////////////////////////
-	gog = newN.NewGroup("Debugging")
+	gog = newN.NewGroup("Debugging Windows:")
+
+	// generally useful debugging
+	cb := gog.NewCheckbox("Seperate windows")
+	cb.Custom = func() {
+		makeTabs = cb.widget.B
+		log(debugGui, "Custom() n.widget =", cb.widget.Name, cb.widget.B)
+	}
+	makeTabs = false
+	cb.Set(false)
 
 	gog.NewButton("Debug Flags", func () {
-		newN.debugFlags(false)
+		newN.DebugFlags(makeTabs)
 	})
 	gog.NewButton("Debug Widgets", func () {
-		newN.debugWidgets(false)
+		DebugWidgetWindow(newN)
 	})
 	gog.NewButton("GO Language Internals", func () {
-		newN.debugGolangWindow(false)
+		newN.DebugGolangWindow(makeTabs)
 	})
 	gog.NewButton("GO Channels debug", func () {
-		newN.debugGoChannels(false)
+		newN.DebugGoChannels(makeTabs)
+	})
+
+	gog.NewLabel("Force Quit:")
+
+	gog.NewButton("os.Exit()", func () {
+		exit()
 	})
 
 //////////////////////// window debugging things //////////////////////////////////
-	g1 = newN.NewGroup("Current Windows")
-	dd = g1.NewDropdown("Window Dropdown")
+	g1 = newN.NewGroup("list things")
+
+	g1.NewButton("List Windows", func () {
+		dropdownWindow(g1)
+	})
+	g1.NewButton("List Window Widgets", func () {
+		dropdownWindowWidgets(g1)
+	})
+
+	g2 := newN.NewGroup("node things")
+
+	g2.NewButton("Actions Window", func () {
+		DebugWidgetWindow(activeWidget)
+	})
+	g2.NewButton("Node.ListChildren(false)", func () {
+		g := debugGui
+		d := debugDump
+		debugGui = true
+		debugDump = true
+		activeWidget.ListChildren(false, nil, nil)
+		debugGui = g
+		debugDump = d
+	})
+	g2.NewButton("Node.ListChildren(true)", func () {
+		g := debugGui
+		d := debugDump
+		debugGui = true
+		debugDump = true
+		activeWidget.ListChildren(true, nil, nil)
+		debugGui = g
+		debugDump = d
+	})
+
+	return newN
+}
+
+func dropdownWindow(p *Node) {
+	var mapWindows map[string]*Node
+	mapWindows = make(map[string]*Node)
+
+	dd := p.NewDropdown("Window Dropdown")
 	dd.Custom = func() {
 		name := dd.widget.S
-		bugWin = mapWindows[name]
+		activeWidget = mapWindows[name]
+		setActiveWidget(activeWidget)
 		log("The Window was set to", name)
 	}
 	log(debugGui, "dd =", dd)
 
-	// initialize the windows map if it hasn't been
-	if (mapWindows == nil) {
-		mapWindows = make(map[string]*Node)
-	}
-
-	var dump = false
-	var last = ""
+	// var last = ""
 	for _, child := range Config.master.children {
 		log(debugGui, "\t\t", child.id, child.Width, child.Height, child.Name)
-		if (child.parent != nil) {
-			log(debugGui, "\t\t\tparent =",child.parent.id)
-		} else {
-			log(debugGui, "\t\t\tno parent")
-			panic("no parent")
-		}
-		if (dump == true) {
-			child.Dump()
+		// skip the fake "Flag" node
+		if (child.widget.Type == toolkit.Flag) {
+			continue
 		}
 		dd.AddDropdownName(child.Name)
-		last = child.Name
+		// last = child.Name
 		mapWindows[child.Name] = child
-	}
-	dd.SetDropdownName(last)
-
-	g2 = newN.NewGroup("Debug Window")
-	g2.NewButton("SetMargined(tab)", func () {
-		log(debugChange, "START SetMargined(tab)", g2.Name)
-		// name := dd.GetText()
-		name := dd.widget.S
-		log(true, "name =", name)
-		log(debugChange, "name =", name)
-		log(debugChange, "mapWindows[name] =", mapWindows[name])
-		/*
-		for s, n := range mapWindows {
-			log(debugChange, "\tname =", name)
-			log(debugChange, "\tmapWindows s =", s)
-			log(debugChange, "\tmapWindows[s] =", n)
+		if (activeWidget == nil) {
+			activeWidget = child
 		}
-		*/
-		bugWin = mapWindows[name]
-		log(debugChange, "END dd.widget.S =", dd.widget.S)
-		// gw.UiTab.SetMargined(*gw.TabNumber, true)
-	})
-	g2.NewButton("Hide(tab)", func () {
-		log(debugChange, "\tclick() START", g2.Name)
-		// gw.UiTab.Hide()
-	})
-	g2.NewButton("Show(tab)", func () {
-		// gw.UiTab.Show()
-	})
-	g2.NewButton("Delete(tab)", func () {
-		// gw.UiTab.Delete(*gw.TabNumber)
-	})
-	g2.NewButton("change Title", func () {
-		// mainWindow.SetText("hello world")
-	})
-	g2.NewButton("Quit", func () {
-		exit()
-	})
+	}
+	// dd.SetDropdownName(last)
+}
 
-	/////////////////////////////////////////////////////
-	g3 = newN.NewGroup("Node Debug")
+func dropdownWindowWidgets(p *Node) {
+	var mapWindows map[string]*Node
+	mapWindows = make(map[string]*Node)
 
-	g3.NewButton("Node.Dump()", func () {
-		debugGui = true
-		debugDump = true
-		bugWin.Dump()
-	})
-	g3.NewButton("Node.ListChildren(false)", func () {
-		debugGui = true
-		debugDump = true
-		bugWin.ListChildren(false)
-	})
-	g3.NewButton("Node.ListChildren(true)", func () {
-		debugGui = true
-		debugDump = true
-		bugWin.ListChildren(true)
-	})
+	dd := p.NewDropdown("Window Widgets Dropdown")
+	dd.Custom = func() {
+		name := dd.widget.S
+		activeWidget = mapWindows[name]
+		setActiveWidget(activeWidget)
+	}
+	log(debugGui, "dd =", dd)
 
-	return newN
+	activeWidget.ListChildren(true, dd, mapWindows)
 }

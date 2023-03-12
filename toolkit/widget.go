@@ -11,18 +11,26 @@ package toolkit
 // Event() seems like a good name.
 // Could a protobuf be used here? (Can functions be passed?)
 type Widget struct {
-	Name   string   // "New", "Delete", "Set", aka something to do
-	Action string   // "New", "Delete", "Set", aka something to do
-	// Type   string	// after lots of back and forth, a simple string
+	Name   string
+	Action string		// "New", "Delete", "Set", aka something to do
 	Type  WidgetType
+
+	// This function is how you interact with the toolkit
+	// latest attempt. seems to work so far (2023/02/28)
+	// Hopefully this will be the barrier between the goroutines
+	// TODO: move this interaction to channels
+	Custom    func()
+
+	// re-adding an id to test channels
+	id     int
 
 	// This is how the values are passed back and forth
 	// values from things like checkboxes & dropdown's
 	// The string is also used to set the button name
 	B	bool
 	I	int
-	// maybe safe if there is correctly working Custom() between goroutines
-	// (still probably not, almost certainly not)
+	// maybe safe if there is correctly working Custom() between goroutines?
+	// (still probably not, almost certainly not. not possible. layer violation?)
 	S	string // not safe to have 'S'
 
 	// This GUI is intended for simple things
@@ -38,10 +46,6 @@ type Widget struct {
 
 	// Make widgets fill up the space available
 	Expand	bool
-
-	// latest attempt. seems to work so far (2023/02/28)
-	// Hopefully this will be the barrier between the goroutines
-	Custom    func()
 }
 
 type WidgetType int
@@ -62,6 +66,8 @@ const (
 	Slider
 	Spinner
 	Grid
+	Box
+	Image
 	Flag
 )
 
@@ -93,10 +99,26 @@ func (s WidgetType) String() string {
 		return "Spinner"
 	case Grid:
 		return "Grid"
+	case Box:
+		return "Box"
+	case Image:
+		return "Image"
 	case Flag:
 		return "Flag"
 	case Unknown:
 		return "Unknown"
 	}
 	return "GuiToolkitTUndefinedType"
+}
+
+// this is hopefully just used in a very few places for
+// debuging the interaction between go apps and the underlying
+// toolkits. Hopefully this is less prone to problems and can
+// detect memory leaks, threading problems, memory allocation & mapping errors, etc
+func (w *Widget) GetId() int {
+	return w.id
+}
+
+func (w *Widget) SetId(i int) {
+	w.id = i
 }

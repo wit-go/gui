@@ -145,11 +145,11 @@ var WARN bool
 
 ## Functions
 
-### func [DebugWidgetWindow](/debugWidget.go#L107)
+### func [DebugWidgetWindow](/debugWidget.go#L56)
 
 `func DebugWidgetWindow(w *Node)`
 
-### func [DebugWindow](/debugWindow.go#L9)
+### func [DebugWindow](/debugWindow.go#L21)
 
 `func DebugWindow()`
 
@@ -159,11 +159,11 @@ Creates a window helpful for debugging this package
 
 `func Delete(c *Node)`
 
-### func [Indent](/debug.go#L101)
+### func [Indent](/debug.go#L116)
 
 `func Indent(a ...interface{})`
 
-### func [InitPlugins](/main.go#L50)
+### func [InitPlugins](/main.go#L56)
 
 `func InitPlugins(names []string)`
 
@@ -173,13 +173,13 @@ Creates a window helpful for debugging this package
 
 loads and initializes a toolkit (andlabs/ui, gocui, etc)
 
-### func [Main](/main.go#L91)
+### func [Main](/main.go#L97)
 
 `func Main(f func())`
 
 This should not pass a function
 
-### func [Queue](/main.go#L121)
+### func [Queue](/main.go#L127)
 
 `func Queue(f func())`
 
@@ -190,23 +190,24 @@ other goroutines. This is due to the nature of how
 Linux, MacOS and Windows work (they all work differently. suprise. surprise.)
 For example: gui.Queue(NewWindow())
 
-### func [SetDebug](/debug.go#L27)
+### func [SetDebug](/debug.go#L26)
 
 `func SetDebug(s bool)`
 
-### func [SetFlag](/debug.go#L41)
+### func [SetFlag](/debug.go#L42)
 
 `func SetFlag(s string, b bool)`
 
-### func [ShowDebugValues](/debug.go#L62)
+### func [ShowDebugValues](/debug.go#L75)
 
 `func ShowDebugValues()`
 
-### func [StandardExit](/main.go#L140)
+### func [StandardExit](/main.go#L147)
 
 `func StandardExit()`
 
-The window is destroyed but the application does not quit
+The window is destroyed and the application exits
+TODO: properly exit the plugin since Quit() doesn't do it
 
 ### func [Watchdog](/watchdog.go#L15)
 

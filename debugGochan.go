@@ -11,7 +11,7 @@ import (
 var debugWG *sync.WaitGroup
 var debugNumberChan chan int
 
-func (n *Node) debugGoChannels(makeWindow bool) {
+func (n *Node) DebugGoChannels(makeWindow bool) {
 	var w, g *Node
 
 	// Either:

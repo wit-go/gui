@@ -75,21 +75,3 @@ type Node struct {
 	// checked   bool
 	// text      string
 }
-
-func (n *Node) Parent() *Node {
-	return n.parent
-}
-
-func (n *Node) Window() *Node {
-	return n.parent
-}
-
-func (n *Node) Append(child *Node) {
-	n.children = append(n.children, child)
-	if (debugGui) {
-		log(debugNode, "child node:")
-		child.Dump()
-		log(debugNode, "parent node:")
-		n.Dump()
-	}
-}

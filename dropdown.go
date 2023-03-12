@@ -1,5 +1,10 @@
 package gui
 
+// functions to create 'Dropdown' and 'Combobox'
+// Combobox is a Dropdown you can edit
+// Thererfore, AddDropdownName() is used on both combobox and dropdown nodes
+// since it is the same. confusing names? maybe...
+
 import (
 	"git.wit.org/wit/gui/toolkit"
 )

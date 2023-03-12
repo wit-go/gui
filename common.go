@@ -17,7 +17,7 @@ func (n *Node) Add(str string) {
 
 func (n *Node) SetText(str string) bool {
 	log(debugChange, "gui.SetText() value =", str)
-	n.widget.Action = "Set"
+	n.widget.Action = "SetText"
 	n.widget.S = str
 	send(n.parent, n)
 	return true

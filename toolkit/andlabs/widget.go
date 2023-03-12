@@ -16,7 +16,7 @@ func listMap(b bool) {
 	for t, w := range mapWidgets {
 		log(b, "andlabs =", t.Name, "widget =", w.Name)
 	}
-	log(debugToolkit, "listMap() HERE mapToolkits()")
+	log(b, "listMap() HERE mapToolkits()")
 	for w, t := range mapToolkits {
 		log(b, "andlabs =", t, "widget =", w.Name)
 		t.Dump(b)
@@ -40,12 +40,12 @@ func mapWidgetsToolkits(w *toolkit.Widget, t *andlabsT) {
 			log(true, "mapToolkits[w] is set, but mapWidgets[t] is nil")
 			panic("WTF mapWidgets[t] == nil")
 		}
-		log(true, "mapToolkits[w] is", tw)
+		log(debugToolkit, "mapToolkits[w] is", tw)
 		if (tw == nil) {
-			log(true, "BAD map? mapWidgets[w] tw == nil")
+			log(debugError, "BAD map? mapWidgets[w] tw == nil")
 		} else {
-			log(true, "BAD map? mapWidgets[w] is", tw)
-			tw.Dump(true)
+			log(debugError, "BAD map? mapWidgets[w] is", tw)
+			tw.Dump(debugError)
 		}
 	}
 
@@ -57,10 +57,10 @@ func mapWidgetsToolkits(w *toolkit.Widget, t *andlabsT) {
 			panic("WTF mapToolkits[w] == nil")
 		}
 		if (wt == nil) {
-			log(true, "BAD map? mapWidgets[t] wt == nil")
+			log(debugError, "BAD map? mapWidgets[t] wt == nil")
 		} else {
-			log(true, "BAD map? mapWidgets[t] is", wt)
-			widgetDump(true, wt)
+			log(debugError, "BAD map? mapWidgets[t] is", wt)
+			widgetDump(debugError, wt)
 		}
 	}
 	log(debugToolkit, "map of widget worked", w.Type, ",", w.Name, ",", w.Action)

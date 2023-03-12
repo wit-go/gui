@@ -7,7 +7,6 @@ package main
 import (
 	"errors"
 	"fmt"
-	"log"
 	"os"
 
 	"git.wit.org/wit/gui/toolkit"
@@ -34,17 +33,20 @@ var (
 func Init() {
 	baseGui, err = gocui.NewGui(gocui.OutputNormal, true)
 	if err != nil {
-		log.Panicln(err)
+		exit(err)
 	}
 
 	baseGui.Highlight = true
 	baseGui.SelFgColor = gocui.ColorRed
 	baseGui.SelFrameColor = gocui.ColorRed
 
+	baseGui.Cursor = true
+	baseGui.Mouse = true
+
 	baseGui.SetManagerFunc(layout)
 
 	if err := initKeybindings(baseGui); err != nil {
-		log.Panicln(err)
+		exit(err)
 	}
 
 	viewWidget = make(map[*gocui.View]*toolkit.Widget)
@@ -54,17 +56,17 @@ func Init() {
 
 	outf, err = os.OpenFile("/tmp/witgui.log", os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
 	if err != nil {
-		log.Fatalf("error opening file: %v", err)
+		exit("error opening file: %v", err)
 	}
 	// hmm. where to put this?
 	// defer outf.Close()
 
-	log.SetOutput(outf)
-	log.Println("This is a test log entry")
+	setOutput(outf)
+	log("This is a test log entry")
 }
 
 func Queue(f func()) {
-	log.Println("QUEUEEEEE")
+	log("QUEUEEEEE")
 	f()
 }
 
@@ -79,7 +81,7 @@ func Main(f func()) {
 	// addButton("test 3")
 	f()
 	if err := baseGui.MainLoop(); err != nil && !errors.Is(err, gocui.ErrQuit) {
-		log.Panicln(err)
+		exit(err)
 	}
 	baseGui.Close()
 	os.Exit(0)

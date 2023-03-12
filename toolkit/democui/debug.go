@@ -42,7 +42,8 @@ func ShowDebug () {
 	log(true, "debugError   =", debugError)
 }
 
-func (t *andlabsT) Dump(b bool) {
+/*
+func (t *gocuiT) Dump(b bool) {
 	if ! b {
 		return
 	}
@@ -79,6 +80,7 @@ func (t *andlabsT) Dump(b bool) {
 	}
 	widgetDump(b, t.tw)
 }
+*/
 
 func widgetDump(b bool, w *toolkit.Widget) {
 	if (w == nil) {

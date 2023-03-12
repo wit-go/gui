@@ -7,7 +7,6 @@ package main
 import (
 	"errors"
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/awesome-gocui/gocui"
@@ -71,11 +70,11 @@ func moveView(g *gocui.Gui, v *gocui.View, dx, dy int) error {
 	if err != nil {
 		return err
 	}
-	log.Println(x0, y0, x1, y1)
+	log(x0, y0, x1, y1)
 	if _, err := g.SetView(name, x0+dx, y0+dy, x1+dx, y1+dy, 0); err != nil {
 		return err
 	}
 	x0, y0, x1, y1, err = g.ViewPosition(name)
-	log.Println(x0, y0, x1, y1)
+	log(x0, y0, x1, y1)
 	return nil
 }

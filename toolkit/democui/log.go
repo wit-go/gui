@@ -1,7 +1,9 @@
 //
-// version v1.2
+// version v1.3
 //
 // I like things to be easy.
+//
+// combining logging inside of a gui made me do this
 //
 // this means all the log settings are in one place. it should allow
 // things to be over-ridden externally to the library
@@ -20,13 +22,10 @@ package main
 
 import 	(
 	"os"
-	"runtime"
-	"runtime/pprof"
 	golog "log"
 	"time"
 	"reflect"
 	"github.com/davecgh/go-spew/spew"
-	// "net"
 )
 
 var 	LOGOFF	bool	= false	// turn this off, all logging stops
@@ -103,12 +102,12 @@ func log(a ...any) {
 		if (a[0] == false) {
 			return
 		}
-		a[0] = "GUI/Toolkit/Andlabs"
+		a[0] = "GUI/Toolkit/gocui"
 	}
 
 	if (reflect.TypeOf(a[0]) == reflect.TypeOf(SPEW)) {
 		// a = a[1:]
-		a[0] = "GUI/Toolkit/Andlabs"
+		a[0] = "GUI/Toolkit/gocui"
 		if (debugToolkit) {
 			scs := spew.ConfigState{MaxDepth: 1}
 			scs.Dump(a)
@@ -120,11 +119,6 @@ func log(a ...any) {
 	golog.Println(a...)
 }
 
-func loggo() {
-	pprof.Lookup("goroutine").WriteTo(os.Stdout, 1)
-	golog.Println("runtime.NumGoroutine() = ", runtime.NumGoroutine())
-}
-
 func logindent(depth int, format string, a ...interface{}) {
 	var tabs string
 	for i := 0; i < depth; i++ {
@@ -134,4 +128,8 @@ func logindent(depth int, format string, a ...interface{}) {
 	// newFormat := tabs + strconv.Itoa(depth) + " " + format
 	newFormat := tabs + format
 	log(debugToolkit, newFormat, a)
+}
+
+func setOutput(f *os.File) {
+	golog.SetOutput(f)
 }

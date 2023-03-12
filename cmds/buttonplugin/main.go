@@ -10,13 +10,18 @@ import 	(
 )
 
 var title string = "Demo Plugin Window"
+var outfile string = "/tmp/guilogfile"
+
+// this is broken. delete this
 
 func main() {
+	// this set the xterm and mate-terminal window title. maybe works generally?
 	fmt.Println("\033]0;" + title + "\007")
 	// time.Sleep(5 * time.Second)
 	// var w *gui.Node
+
 	// this doesn't seem to work
-	captureSTDOUT()
+	// captureSTDOUT()
 
 	// gui.LoadToolkit("default")
 	// panic("WTF gocui not happening")
@@ -56,6 +61,10 @@ func buttonWindow() {
 
 	w = gui.NewWindow()
 	g = w.NewGroup("buttonGroup")
+
+	g.NewButton("this app is old", func () {
+	})
+	g.NewLabel("STDOUT is set to: " + outfile)
 
 	g.NewButton("hello", func () {
 		log.Println("world")

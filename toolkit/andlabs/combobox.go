@@ -80,7 +80,7 @@ func doCombobox(p *toolkit.Widget, c *toolkit.Widget) {
 		log(true, "Combobox() uiEditableCombobox == nil", ct)
 		return
 	}
-	log(true, "Going to attempt:", c.Action)
+	log(debugChange, "Going to attempt:", c.Action)
 	switch c.Action {
 	case "Add":
 		ct.AddComboboxName(c.S)
@@ -95,6 +95,6 @@ func doCombobox(p *toolkit.Widget, c *toolkit.Widget) {
 	case "Set":
 		ct.uiEditableCombobox.SetText(c.S)
 	default:
-		log(true, "Can't do", c.Action, "to a Combobox")
+		log(debugError, "Can't do", c.Action, "to a Combobox")
 	}
 }

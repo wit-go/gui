@@ -53,3 +53,47 @@ func (t *andlabsT) SetWindowTitle(title string) {
 		log(debugToolkit, "Setting the window title", title)
 	}
 }
+
+func doWindow(c *toolkit.Widget) {
+	if broken(c) {
+		return
+	}
+	if (c.Action == "New") {
+		newWindow(c)
+		return
+	}
+	ct := mapToolkits[c]
+	if (ct == nil) {
+		log(debugError, "Trying to do something on a widget that doesn't work or doesn't exist or something", c)
+		return
+	}
+	if (ct.uiWindow == nil) {
+		log(debugError, "Window() uiWindow == nil", ct)
+		return
+	}
+	log(debugChange, "Going to attempt:", c.Action)
+	switch c.Action {
+	case "Show":
+		ct.uiWindow.Show()
+	case "Hide":
+		ct.uiWindow.Hide()
+	case "Enable":
+		ct.uiWindow.Enable()
+	case "Disable":
+		ct.uiWindow.Disable()
+	case "Get":
+		c.S = ct.uiWindow.Title()
+	case "Set":
+		ct.uiWindow.SetTitle(c.S)
+	case "SetText":
+		ct.uiWindow.SetTitle(c.S)
+	case "SetMargin":
+		ct.uiWindow.SetMargined(c.B)
+	case "SetBorder":
+		ct.uiWindow.SetBorderless(c.B)
+	case "Delete":
+		ct.uiWindow.Destroy()
+	default:
+		log(debugError, "Can't do", c.Action, "to a Window")
+	}
+}

@@ -2,7 +2,7 @@ package gui
 
 // Let's you toggle on and off the various types of debugging output
 // These checkboxes should be in the same order as the are printed
-func (n *Node) debugFlags(makeWindow bool) {
+func (n *Node) DebugFlags(makeWindow bool) {
 	var w, g *Node
 
 	// Either:
@@ -17,76 +17,68 @@ func (n *Node) debugFlags(makeWindow bool) {
 	} else {
 		w = n.NewTab("Flags")
 	}
-	w.Dump()
 
-	g = w.NewGroup("Debug Flags")
+	g = w.NewGroup("Show")
 
-	g.NewButton("Turn on all Debug Flags", func () {
+	g.NewButton("Dump Flags", func () {
+		ShowDebugValues()
+	})
+
+	g.NewButton("All On", func () {
 		SetDebug(true)
 	})
 
-	g.NewButton("Turn off all Debug Flags", func () {
+	g.NewButton("All Off", func () {
 		SetDebug(false)
 	})
 
+	g = w.NewGroup("List")
 	// generally useful debugging
-	cb1 := g.NewCheckbox("debugGui")
+	cb1 := g.NewCheckbox("debug Gui (like verbose=1)")
 	cb1.Custom = func() {
 		debugGui = cb1.widget.B
 		log(debugGui, "Custom() n.widget =", cb1.widget.Name, cb1.widget.B)
 	}
 
 	// errors. by default these always output somewhere
-	cbE := g.NewCheckbox("debugError")
+	cbE := g.NewCheckbox("debug Error (bad things. default=true)")
 	cbE.Custom = func() {
-		debugError = cbE.widget.B
-		SetFlag("Error", debugError)
+		SetFlag("Error",  cbE.widget.B)
 	}
 
 	// debugging that will show you things like mouse clicks, user inputing text, etc
 	// also set toolkit.DebugChange
-	cb2 := g.NewCheckbox("debugChange")
+	cb2 := g.NewCheckbox("debug Change (keyboard and mouse events)")
 	cb2.Custom = func() {
-		debugChange = cb2.widget.B
-		SetFlag("Change", debugChange)
-		log(debugGui, "Custom() n.widget =", cb2.widget.Name, cb2.widget.B)
+		SetFlag("Change", cb2.widget.B)
 	}
 
 	// supposed to tell if you are going to dump full variable output
-	cb3 := g.NewCheckbox("debugDump")
+	cb3 := g.NewCheckbox("debug Dump (show lots of output)")
 	cb3.Custom = func() {
-		debugDump = cb3.widget.B
-		log(debugGui, "Custom() n.widget =", cb3.widget.Name, cb3.widget.B)
+		SetFlag("Dump",  cbE.widget.B)
 	}
 
-	cb4 := g.NewCheckbox("debugTabs")
+	cb4 := g.NewCheckbox("debug Tabs (tabs and windows)")
 	cb4.Custom = func() {
-		debugTabs = cb4.widget.B
-		log(debugGui, "Custom() n.widget =", cb4.widget.Name, cb4.widget.B)
+		SetFlag("Tabs",  cb4.widget.B)
+	}
+
+	cb6 := g.NewCheckbox("debug Node (the binary tree)")
+	cb6.Custom = func() {
+		SetFlag("Plugin",  cb6.widget.B)
 	}
 
 	// should show you when things go into or come back from the plugin
-	cb5 := g.NewCheckbox("debugPlugin")
+	cb5 := g.NewCheckbox("debug Plugin (plugin interaction)")
 	cb5.Custom = func() {
-		debugPlugin = cb5.widget.B
-		log(debugGui, "Custom() n.widget =", cb5.widget.Name, cb5.widget.B)
-	}
-
-	cb6 := g.NewCheckbox("debugNode")
-	cb6.Custom = func() {
-		debugNode = cb6.widget.B
-		log(debugGui, "Custom() n.widget =", cb6.widget.Name, cb6.widget.B)
+		SetFlag("Plugin",  cb5.widget.B)
 	}
 
 	// turns on debugging inside the plugin toolkit
-	cb7 := g.NewCheckbox("debugToolkit")
+	cb7 := g.NewCheckbox("debug Toolkit (the plugin internals)")
 	cb7.Custom = func() {
 		// SetDebugToolkit(cb7.widget.B)
 		SetFlag("Toolkit", cb7.widget.B)
-		log(debugFlags, "Custom() n.widget =", cb7.widget.Name, cb7.widget.B)
 	}
-
-	g.NewButton("Dump Debug Flags", func () {
-		ShowDebugValues()
-	})
 }

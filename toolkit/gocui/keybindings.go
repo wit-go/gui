@@ -5,17 +5,12 @@
 package main
 
 import (
-//	"errors"
-//	"fmt"
-	"log"
-//	"strings"
-
 	"github.com/awesome-gocui/gocui"
 	"git.wit.org/wit/gui/toolkit"
 )
 
 func initKeybindings(g *gocui.Gui) error {
-	log.Println("got to initKeybindings")
+	log("got to initKeybindings")
 	if err := g.SetKeybinding("", 'q', gocui.ModNone,
 		func(g *gocui.Gui, v *gocui.View) error {
 			return gocui.ErrQuit
@@ -54,7 +49,7 @@ func initKeybindings(g *gocui.Gui) error {
 	}
 	if err := g.SetKeybinding("", gocui.KeyTab, gocui.ModNone,
 		func(g *gocui.Gui, v *gocui.View) error {
-			log.Println("tab", v.Name())
+			log("tab", v.Name())
 			return nextView(g, true)
 		}); err != nil {
 		return err
@@ -73,27 +68,27 @@ func initKeybindings(g *gocui.Gui) error {
 	}
 	if err := g.SetKeybinding("", gocui.KeyArrowDown, gocui.ModNone,
 		func(g *gocui.Gui, v *gocui.View) error {
-			log.Println("down", v.Name())
+			log("down", v.Name())
 			return moveView(g, v, 0, delta)
 		}); err != nil {
 		return err
 	}
 	if err := g.SetKeybinding("", gocui.KeyArrowUp, gocui.ModNone,
 		func(g *gocui.Gui, v *gocui.View) error {
-			log.Println("up", v.Name())
+			log("up", v.Name())
 			return moveView(g, v, 0, -delta)
 		}); err != nil {
 		return err
 	}
 	if err := g.SetKeybinding("", gocui.KeyEnter, gocui.ModNone,
 		func(g *gocui.Gui, v *gocui.View) error {
-			log.Println("enter", v.Name())
+			log("enter", v.Name())
 			var w *toolkit.Widget
 			w = stringWidget[v.Name()]
 			if (w == nil) {
-				log.Println("COULD NOT FIND WIDGET", v.Name())
+				log("COULD NOT FIND WIDGET", v.Name())
 			} else {
-				log.Println("FOUND WIDGET!", w)
+				log("FOUND WIDGET!", w)
 				if (w.Custom != nil) {
 					w.Custom()
 					return nil
@@ -123,14 +118,14 @@ func initKeybindings(g *gocui.Gui) error {
 	}
 	if err := g.SetKeybinding("", 'h', gocui.ModNone,
 		func(g *gocui.Gui, v *gocui.View) error {
-			log.Println("help", v.Name())
+			log("help", v.Name())
 			tmp, _ := g.SetViewOnTop("help")
-			log.Println("help 2", tmp.Name())
+			log("help 2", tmp.Name())
 //			g.SetView("help", 2, 2, 30, 15, 0);
 			g.SetCurrentView("help")
 //			moveView(g, tmp, 0, -delta)
 			if err := g.DeleteView("help"); err != nil {
-				log.Fatalln("gocui SetKeybinding()", err)
+				exit("gocui SetKeybinding()", err)
 			}
 			return nil
 		}); err != nil {

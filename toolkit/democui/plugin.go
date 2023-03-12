@@ -13,7 +13,7 @@ var viewWidget map[*gocui.View]*toolkit.Widget
 var stringWidget map[string]*toolkit.Widget
 
 func Quit() {
-	baseGui.Close()
+	g.Close()
 }
 
 // This lists out the know mappings
@@ -60,12 +60,10 @@ func Send(p *toolkit.Widget, c *toolkit.Widget) {
 		// doWindow(c)
 	case toolkit.Tab:
 		// doTab(p, c)
-		*/
 	case toolkit.Group:
 		newGroup(p, c)
 	case toolkit.Button:
 		newButton(p, c)
-		/*
 	case toolkit.Checkbox:
 		// doCheckbox(p, c)
 	case toolkit.Label:

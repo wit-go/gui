@@ -36,29 +36,7 @@ func newGrid(parentW *toolkit.Widget, w *toolkit.Widget) {
 	newt.uiGrid = c
 	newt.uiBox = t.uiBox
 	newt.tw = w
-	t.doAppend(newt, nil)
-	/*
-	if (defaultBehavior) {
-		t.uiBox.Append(c, stretchy)
-	}
-
-	button1 := ui.NewButton("a(0,0)")
-	c.Append(button1,
-                0, 0, 1, 1,
-                false, ui.AlignFill, false, ui.AlignFill)
-
-	button2 := ui.NewButton("a(1,0)")
-	c.Append(button2,
-                1, 0, 1, 1,
-                false, ui.AlignFill, false, ui.AlignFill)
-	*/
-
-	// Append(child Control, 
-	//	left, top int, 
-	// xspan, yspan int, 
-	// hexpand bool, halign Align, 
-	// vexpand bool, valign Align) {
-
+	t.doAppend(toolkit.Grid, newt, nil)
 	mapWidgetsToolkits(w, newt)
 }
 
@@ -72,19 +50,18 @@ func doGrid(p *toolkit.Widget, c *toolkit.Widget) {
 	}
 	ct := mapToolkits[c]
 	if (ct == nil) {
-		log(true, "Trying to do something on a widget that doesn't work or doesn't exist or something", c)
+		log(debugError, "Trying to do something on a widget that doesn't work or doesn't exist or something", c)
 		return
 	}
 	if ct.broken() {
-		log(true, "Grid() ct.broken", ct)
+		log(debugError, "Grid() ct.broken", ct)
 		return
 	}
 	if (ct.uiGrid == nil) {
-	
-		log(true, "Grid() uiGrid == nil", ct)
+		log(debugError, "Grid() uiGrid == nil", ct)
 		return
 	}
-	log(true, "Going to attempt:", c.Action)
+	log(debugChange, "Going to attempt:", c.Action)
 	switch c.Action {
 	case "Enable":
 		ct.uiGrid.Enable()
@@ -93,10 +70,22 @@ func doGrid(p *toolkit.Widget, c *toolkit.Widget) {
 	case "Show":
 		ct.uiGrid.Show()
 	case "Hide":
+		log(debugError, "trying Hide on grid")
 		ct.uiGrid.Hide()
+	case "SetMargin":
+		log(debugError, "trying SetMargin on grid")
+		ct.uiGrid.SetPadded(c.B)
 	case "Set":
-		log(true, "Can I use 'Set' to place a *Node in a Grid?")
+		log(debugError, "Can I use 'Set' to place a *Node in a Grid?")
+	/*
+	case "AddGrid":
+		log(true, "how do I add a thing to a grid?")
+		dump(p, c, true)
+		newt.uiGrid.Append(button1,
+			0, 2, 1, 1,
+			false, ui.AlignFill, false, ui.AlignFill)
+	*/
 	default:
-		log(true, "Can't do", c.Action, "to a Grid")
+		log(debugError, "Can't do", c.Action, "to a Grid")
 	}
 }

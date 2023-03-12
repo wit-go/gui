@@ -9,6 +9,9 @@ all: README.md
 	make clean
 	make plugins
 
+build-dep:
+	apt install -f libgtk-3-dev
+
 # should update every go dependancy (?)
 update:
 	git pull
@@ -16,13 +19,14 @@ update:
 
 deb:
 	cd debian && make
+	dpkg-deb -c go-wit-gui*.deb
 	-wit mirrors
 
 examples:   \
 	all \
+	cmds-helloworld \
 	cmds-buttonplugin \
 	cmds-console-ui-helloworld \
-	cmds-helloworld \
 	cmds-textbox \
 	cmds-debug
 
@@ -32,6 +36,7 @@ cmds-buttonplugin:
 cmds-console-ui-helloworld:
 	make -C cmds/console-ui-helloworld
 
+# this is the most basic one. This syntax should always work
 cmds-helloworld:
 	make -C cmds/helloworld
 
@@ -40,6 +45,9 @@ cmds-debug:
 
 cmds-textbox:
 	make -C cmds/textbox
+
+cmds-helloconsole:
+	make -C cmds/plugin-consoleonly
 
 # sync repo to the github backup
 # git remote add github git@github.com:witorg/gui.git
@@ -64,10 +72,13 @@ clean:
 	rm -f toolkit/*.so
 	cd debian && make clean
 
-plugins: plugins-gocui plugins-andlabs
+plugins: plugins-gocui plugins-democui plugins-andlabs
 
 plugins-gocui:
 	make -C  toolkit/gocui
+
+plugins-democui:
+	make -C  toolkit/democui
 
 plugins-andlabs:
 	cd toolkit/andlabs/ && GO111MODULE="off" go build -buildmode=plugin -o ../andlabs.so

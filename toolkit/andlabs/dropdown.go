@@ -48,7 +48,7 @@ func (t *andlabsT) AddDropdownName(title string) {
 	// If this is the first menu added, set the dropdown to it
 	if (t.c == 0) {
 		log(debugChange, "THIS IS THE FIRST Dropdown", title)
-		t.uiCombobox.SetSelected(1)
+		t.uiCombobox.SetSelected(0)
 	}
 	t.c = t.c + 1
 }
@@ -105,18 +105,18 @@ func doDropdown(p *toolkit.Widget, c *toolkit.Widget) {
 	}
 	ct := mapToolkits[c]
 	if (ct == nil) {
-		log(true, "Trying to do something on a widget that doesn't work or doesn't exist or something", c)
+		log(debugError, "Trying to do something on a widget that doesn't work or doesn't exist or something", c)
 		return
 	}
 	if ct.broken() {
-		log(true, "Dropdown() ct.broken", ct)
+		log(debugError, "Dropdown() ct.broken", ct)
 		return
 	}
 	if (ct.uiCombobox == nil) {
-		log(true, "Dropdown() uiCombobox == nil", ct)
+		log(debugError, "Dropdown() uiCombobox == nil", ct)
 		return
 	}
-	log(true, "Going to attempt:", c.Action)
+	log(debugChange, "Going to attempt:", c.Action)
 	switch c.Action {
 	case "Add":
 		ct.AddDropdownName(c.S)
@@ -131,7 +131,29 @@ func doDropdown(p *toolkit.Widget, c *toolkit.Widget) {
 		ct.uiCombobox.Hide()
 	case "Set":
 		ct.uiCombobox.SetSelected(1)
+	case "SetText":
+		var orig int
+		var i int = -1
+		var s string
+		orig = ct.uiCombobox.Selected()
+		log(debugError, "TODO: set a Dropdown by the name selected =", orig, ct.c, c.S)
+		// try to find the string
+		for i, s = range ct.val {
+			log(debugError, "i, s", i, s)
+			if (c.S == s) {
+				ct.uiCombobox.SetSelected(i)
+				return
+			}
+		}
+		// if i == -1, then there are not any things in the menu to select
+		if (i == -1) {
+			return
+		}
+		// if the string was never set, then set the dropdown to the last thing added to the menu
+		if (orig == -1) {
+			ct.uiCombobox.SetSelected(i)
+		}
 	default:
-		log(true, "Can't do", c.Action, "to a Dropdown")
+		log(debugError, "Can't do", c.Action, "to a Dropdown")
 	}
 }

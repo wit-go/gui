@@ -95,11 +95,11 @@ func doTextbox(p *toolkit.Widget, c *toolkit.Widget) {
 	}
 	ct := mapToolkits[c]
 	if (ct == nil) {
-		log(true, "Trying to do something on a widget that doesn't work or doesn't exist or something", c)
+		log(debugError, "Trying to do something on a widget that doesn't work or doesn't exist or something", c)
 		return
 	}
 	if ct.broken() {
-		log(true, "Textbox() ct.broken", ct)
+		log(debugError, "Textbox() ct.broken", ct)
 		return
 	}
 	if (ct.uiMultilineEntry == nil) {
@@ -124,7 +124,7 @@ func (t *andlabsT) doSimpleAction() {
 		} else if (t.uiMultilineEntry != nil) {
 			t.uiMultilineEntry.Enable()
 		} else {
-			log(true, "don't know what to enable", t.Name)
+			log(debugError, "don't know what to enable", t.Name)
 		}
 	case "Disable":
 		if (t.uiEntry != nil) {
@@ -132,12 +132,14 @@ func (t *andlabsT) doSimpleAction() {
 		} else if (t.uiMultilineEntry != nil) {
 			t.uiMultilineEntry.Disable()
 		} else {
-			log(true, "don't know what to disable", t.Name)
+			log(debugError, "don't know what to disable", t.Name)
 		}
 	case "Show":
 		t.uiMultilineEntry.Show()
 	case "Hide":
 		t.uiMultilineEntry.Hide()
+	case "SetText":
+		t.uiMultilineEntry.SetText(t.tw.S)
 	case "Set":
 		t.uiMultilineEntry.SetText(t.tw.S)
 	default:

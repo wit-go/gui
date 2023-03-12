@@ -1,13 +1,14 @@
 *.swp
 
 # ignore compiled plugins
-toolkit/*.so
+*.so
 
 cmds/buttonplugin/buttonplugin
 cmds/console-ui-helloworld/console-ui-helloworld
 cmds/debug/debug
 cmds/helloworld/helloworld
 cmds/textbox/textbox
+cmds/*/helloconsole
 
 # temporary files when building debian packages
 /*.deb

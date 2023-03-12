@@ -130,3 +130,53 @@ func newTab(parentW *toolkit.Widget, w *toolkit.Widget) {
 	newt = t.newTab(w.Name)
 	mapWidgetsToolkits(w, newt)
 }
+
+func doTab(p *toolkit.Widget, c *toolkit.Widget) {
+	if broken(c) {
+		return
+	}
+	if (c.Action == "New") {
+		newTab(p, c)
+		return
+	}
+	ct := mapToolkits[c]
+	if (ct == nil) {
+		log(debugError, "Trying to do something on a widget that doesn't work or doesn't exist or something", c)
+		return
+	}
+	if ct.broken() {
+		log(debugError, "Tab() ct.broken", ct)
+		return
+	}
+	if (ct.uiTab == nil) {
+	
+		log(debugError, "Tab() uiTab == nil", ct)
+		return
+	}
+	log(debugChange, "Going to attempt:", c.Action)
+	switch c.Action {
+	case "Enable":
+		ct.uiTab.Enable()
+	case "Disable":
+		ct.uiTab.Disable()
+	case "Show":
+		ct.uiTab.Show()
+	case "Hide":
+		ct.uiTab.Hide()
+	case "Get":
+		c.I = ct.uiTab.NumPages()
+	case "Add":
+		log(true, "how do I add a tab here in doTab()?")
+		dump(p, c, true)
+	case "SetMargin":
+		i := ct.uiTab.NumPages()
+		log(true, "tab.NumPages() =", i)
+		for i > 0 {
+			i -= 1
+			log(true, "uiTab.SetMargined(true) for i =", i)
+			ct.uiTab.SetMargined(i, c.B)
+		}
+	default:
+		log(debugError, "Can't do", c.Action, "to a Tab")
+	}
+}

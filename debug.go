@@ -17,7 +17,6 @@ var debugTabs bool = false
 var debugFlags bool = false
 var debugChange bool = false	// shows user events like mouse and keyboard
 var debugPlugin	bool = false
-var debugToolkit bool = false
 
 // for printing out the binary tree
 var listChildrenParent *Node
@@ -26,28 +25,42 @@ var defaultPadding = "  "
 
 func SetDebug (s bool) {
 	debugGui     = s
-	debugDump    = s
 	debugTabs    = s
-	debugPlugin  = s
-	debugNode    = s
-	debugToolkit = s
 
+	SetFlag("Node", s)
+	SetFlag("Tabs", s)
+	SetFlag("Dump", s)
 	SetFlag("Flags", s)
-	SetFlag("Toolkit", s)
+	SetFlag("Plugin", s)
 	SetFlag("Change", s)
 	SetFlag("Error", s)
+
+	// This flag is only for the internal toolkit debugging
+	SetFlag("Toolkit", s)
 }
 
 func SetFlag (s string, b bool) {
 	switch s {
+	case "Toolkit":
+		// This flag is only for internal toolkit debugging
+	case "Tabs":
+		debugTabs = b
+	case "Node":
+		debugNode = b
+	case "Dump":
+		debugDump = b
 	case "Error":
 		debugError = b
 	case "Change":
 		debugChange = b
+	case "Flags":
+		debugFlags  = b
+	case "Plugin":
+		debugPlugin  = b
 	case "Show":
-		// print them here? For now, just used to print settings in the plugins
+		// ShowDebugValues() // print them here?
 	default:
-		log(debugError, "Can't set unknown flag", s)
+		log(debugGui, "Can't set unknown flag", s)
 	}
 
 	// send the flag to the toolkit
@@ -69,7 +82,6 @@ func ShowDebugValues() {
 	log(true, "DebugTabs    =", debugTabs)
 	log(true, "DebugPlugin  =", debugPlugin)
 	log(true, "DebugNode    =", debugNode)
-	log(true, "DebugToolkit =", debugToolkit)
 
 	SetFlag("Show", true)
 }
@@ -79,21 +91,24 @@ func (n *Node) Dump() {
 		return
 	}
 	Indent("NODE DUMP START")
-	Indent("id         = ", n.id)
-	Indent("Name       = ", n.Name)
-	Indent("Width      = ", n.Width)
-	Indent("Height     = ", n.Height)
+	Indent("id           = ", n.id)
+	Indent("Name         = ", n.Name)
+	Indent("Width        = ", n.Width)
+	Indent("Height       = ", n.Height)
+	Indent("Widget Name  = ", n.widget.Name)
+	Indent("Widget Type  = ", n.widget.Type)
+	Indent("Widget Id    = ", n.widget.GetId())
 
 	if (n.parent == nil) {
-		Indent("parent     = nil")
+		Indent("parent       = nil")
 	} else {
-		Indent("parent.id  =", n.parent.id)
+		Indent("parent.id    =", n.parent.id)
 	}
 	if (n.children != nil) {
-		Indent("children   = ", n.children)
+		Indent("children     = ", n.children)
 	}
 	if (n.Custom != nil) {
-		Indent("Custom     = ", n.Custom)
+		Indent("Custom       = ", n.Custom)
 	}
 	Indent("NODE DUMP END")
 }
@@ -102,8 +117,8 @@ func Indent(a ...interface{}) {
 	logindent(listChildrenDepth, defaultPadding, a...)
 }
 
-func (n *Node) dumpWidget() {
-	var info string
+func (n *Node) dumpWidget() string {
+	var info, d string
 
 	info = n.widget.Type.String()
 
@@ -115,25 +130,39 @@ func (n *Node) dumpWidget() {
 		info += " = " + strconv.FormatBool(n.widget.B)
 	}
 
+	d = strconv.Itoa(n.id) + " " + info
+
+	var tabs string
+	for i := 0; i < listChildrenDepth; i++ {
+		tabs = tabs + defaultPadding
+	}
+	d = tabs + d
 	logindent(listChildrenDepth, defaultPadding, n.id, info)
+	return d
 }
 
-func (n *Node) ListChildren(dump bool) {
-	n.dumpWidget()
+func (n *Node) ListChildren(dump bool, dropdown *Node, mapNodes map[string]*Node) {
+	s := n.dumpWidget()
+	if (dropdown != nil) {
+		dropdown.AddDropdownName(s)
+		if (mapNodes != nil) {
+			mapNodes[s] = n
+		}
+	}
 
 	if (dump == true) {
 		n.Dump()
 	}
 	if len(n.children) == 0 {
 		if (n.parent == nil) {
-		} else {
-			log(debugNode, "\t\t\tparent =",n.parent.id)
-			if (listChildrenParent != nil) {
-				log(debugNode, "\t\t\tlistChildrenParent =",listChildrenParent.id)
-				if (listChildrenParent.id != n.parent.id) {
-					// log("parent.child does not match child.parent")
-					exit("parent.child does not match child.parent")
-				}
+			return
+		}
+		log(debugNode, "\t\t\tparent =",n.parent.id)
+		if (listChildrenParent != nil) {
+			log(debugNode, "\t\t\tlistChildrenParent =",listChildrenParent.id)
+			if (listChildrenParent.id != n.parent.id) {
+				// log("parent.child does not match child.parent")
+				exit("parent.child does not match child.parent")
 			}
 		}
 		log(debugNode, "\t\t", n.id, "has no children")
@@ -158,7 +187,7 @@ func (n *Node) ListChildren(dump bool) {
 		}
 		listChildrenParent = n
 		listChildrenDepth += 1
-		child.ListChildren(dump)
+		child.ListChildren(dump, dropdown, mapNodes)
 		listChildrenDepth -= 1
 	}
 	return
