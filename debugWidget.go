@@ -23,17 +23,17 @@ var debugGridLabel *Node
 var debugWidgetBut1, debugWidgetBut2 *Node
 
 func setActiveWidget(w *Node) {
-	if (activeLabel == nil) {
-		// the debug window doesn't exist yet
-		// TODO: make a fake binary tree for this(?)
-		return
-	}
 	if (w == nil) {
 		log(debugError, "setActiveWidget() was sent nil !!!")
 		return
 	}
 	activeWidget = w
 	log(true, "The Widget is set to", w.id, w.Name)
+	if (activeLabel == nil) {
+		// the debug window doesn't exist yet so you can't display the change
+		// TODO: make a fake binary tree for this(?)
+		return
+	}
 	title := "ID =" + strconv.Itoa(w.id) + " " + w.widget.Name
 	activeLabel.SetText(title)
 	activeLabelType.SetText("widget.Type = " + w.widget.Type.String())
@@ -178,7 +178,9 @@ func DebugWidgetWindow(w *Node) {
 		// debugGrid = gShoactiveWidget.NewGrid("tmp grid", 2, 3)
 	})
 
-	setActiveWidget(g)
+	if (activeWidget == nil) {
+		setActiveWidget(Config.master)
+	}
 }
 
 func (n *Node) debugAddWidgetButtons() {
