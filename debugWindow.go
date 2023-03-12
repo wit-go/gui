@@ -77,9 +77,6 @@ func (n *Node) DebugTab(title string) *Node {
 
 	g2 := newN.NewGroup("node things")
 
-	g2.NewButton("Actions Window", func () {
-		DebugWidgetWindow(activeWidget)
-	})
 	g2.NewButton("Node.ListChildren(false)", func () {
 		g := debugGui
 		d := debugDump
