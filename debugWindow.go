@@ -1,7 +1,7 @@
 package gui
 
 import (
-	"git.wit.org/wit/gui/toolkit"
+//	"git.wit.org/wit/gui/toolkit"
 )
 
 // TODO: move all this shit into somewhere not global
@@ -32,7 +32,6 @@ func (n *Node) DebugTab(title string) *Node {
 
 	// time.Sleep(1 * time.Second)
 	newN = n.NewTab(title)
-	newN.Dump()
 
 //////////////////////// main debug things //////////////////////////////////
 	gog = newN.NewGroup("Debugging Windows:")
@@ -77,23 +76,11 @@ func (n *Node) DebugTab(title string) *Node {
 
 	g2 := newN.NewGroup("node things")
 
-	g2.NewButton("Node.ListChildren(false)", func () {
-		g := debugGui
-		d := debugDump
-		debugGui = true
-		debugDump = true
-		activeWidget.ListChildren(false, nil, nil)
-		debugGui = g
-		debugDump = d
-	})
 	g2.NewButton("Node.ListChildren(true)", func () {
-		g := debugGui
-		d := debugDump
-		debugGui = true
-		debugDump = true
-		activeWidget.ListChildren(true, nil, nil)
-		debugGui = g
-		debugDump = d
+		if (activeWidget == nil) {
+			activeWidget = Config.master
+		}
+		activeWidget.ListChildren(true)
 	})
 
 	return newN
@@ -111,14 +98,15 @@ func dropdownWindow(p *Node) {
 		log("The Window was set to", name)
 	}
 	log(debugGui, "dd =", dd)
+	if (activeWidget == nil) {
+		// the debug window doesn't exist yet so you can't display the change
+		// TODO: make a fake binary tree for this(?)
+		return
+	}
 
 	// var last = ""
 	for _, child := range Config.master.children {
 		log(debugGui, "\t\t", child.id, child.Width, child.Height, child.Name)
-		// skip the fake "Flag" node
-		if (child.widget.Type == toolkit.Flag) {
-			continue
-		}
 		dd.AddDropdownName(child.Name)
 		// last = child.Name
 		mapWindows[child.Name] = child
@@ -141,5 +129,21 @@ func dropdownWindowWidgets(p *Node) {
 	}
 	log(debugGui, "dd =", dd)
 
-	activeWidget.ListChildren(true, dd, mapWindows)
+	// log("dumpWidget() ", b, listChildrenDepth, defaultPadding, n.id, info)
+
+	var addDropdowns func (*Node)
+	addDropdowns = func (n *Node) {
+		s := n.dumpWidget(true)
+		dd.AddDropdownName(s)
+		mapWindows[s] = n
+
+		for _, child := range n.children {
+			listChildrenDepth += 1
+			addDropdowns(child)
+			listChildrenDepth -= 1
+		}
+	}
+
+	// list everything in the binary tree
+	addDropdowns(Config.master)
 }

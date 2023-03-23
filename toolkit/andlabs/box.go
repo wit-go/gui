@@ -1,54 +1,46 @@
 package main
 
-import "github.com/andlabs/ui"
-import _ "github.com/andlabs/ui/winmanifest"
+import (
+	"git.wit.org/wit/gui/toolkit"
 
-// create a new box
-func (t *andlabsT) getBox() *ui.Box {
-	return t.uiBox
+	"github.com/andlabs/ui"
+	_ "github.com/andlabs/ui/winmanifest"
+)
+
+// make new Box here
+func newBox(a *toolkit.Action) {
+	w := a.Widget
+	parentW := a.Where
+	log(debugToolkit, "newBox()", w.Name)
+
+	t := mapToolkits[parentW]
+	if (t == nil) {
+		log(debugToolkit, "newBox() toolkit struct == nil. name=", parentW.Name, w.Name)
+		listMap(debugToolkit)
+	}
+	newt := t.rawBox(w.Name, a.B)
+	newt.boxC = 0
+	place(a, t, newt)
+	mapWidgetsToolkits(a, newt)
 }
 
-// create a new box
-func (t *andlabsT) newBox() *andlabsT {
-	log(debugToolkit, "newBox() START create default")
-	t.Dump(debugToolkit)
-	if (t.uiGroup != nil) {
-		log(debugToolkit, "\tnewBox() is a Group")
-		var newTK andlabsT
+// make new Box using andlabs/ui
+func (t *andlabsT) rawBox(title string, b bool) *andlabsT {
+	var newt andlabsT
+	var box *ui.Box
+	newt.Name = title
 
-		vbox := ui.NewVerticalBox()
-		vbox.SetPadded(padded)
-		t.uiGroup.SetChild(vbox)
-		newTK.uiBox = vbox
+	log(debugToolkit, "rawBox() create", newt.Name)
 
-		return &newTK
+	if (b) {
+		box = ui.NewHorizontalBox()
+	} else {
+		box = ui.NewVerticalBox()
 	}
-	if (t.uiBox != nil) {
-		log(debugToolkit, "\tnewBox() is a Box")
-		var newTK andlabsT
+	box.SetPadded(padded)
 
-		vbox := ui.NewVerticalBox()
-		vbox.SetPadded(padded)
-		t.uiBox.Append(vbox, stretchy)
-		newTK.uiBox = vbox
-		newTK.Name = t.Name
+	newt.uiBox = box
+	newt.uiControl = box
 
-		return &newTK
-	}
-	if (t.uiWindow != nil) {
-		log(debugToolkit, "\tnewBox() is a Window")
-		var newT andlabsT
-
-		vbox := ui.NewVerticalBox()
-		vbox.SetPadded(padded)
-		t.uiWindow.SetChild(vbox)
-		newT.uiBox = vbox
-		newT.Name = t.Name
-
-		// panic("WTF")
-		return &newT
-	}
-	log(debugToolkit, "\tnewBox() FAILED. Couldn't figure out where to make a box")
-	t.Dump(debugToolkit)
-	return nil
+	return &newt
 }

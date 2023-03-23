@@ -10,13 +10,12 @@ func (n *Node) New(title string, t toolkit.WidgetType, custom func()) *Node {
 
 	newN = addNode(title)
 	newN.widget.Type = t
-	newN.widget.Action = "New"
+	// newN.widget.Action = "New"
 	newN.Custom = custom
 
 	// TODO: This should not be defined for each widget. This has to be stupid
 	// or wait a second, is this where I send something to a channel?
 	newN.widget.Custom = func() {
-		log(debugChange, "Trying to find Window Close. widget.Action =", newN.widget.Action)
 		log(debugChange, "Trying to find Window Close. widget.Type =", newN.widget.Type)
 		if (newN.widget.Type == toolkit.Window) {
 			log(debugChange, "Need to delete newN here")
@@ -64,9 +63,9 @@ func (n *Node) Append(child *Node) {
 	n.children = append(n.children, child)
 	if (debugNode) {
 		log(debugNode, "child node:")
-		child.Dump()
+		child.Dump(debugDump)
 		log(debugNode, "parent node:")
-		n.Dump()
+		n.Dump(debugDump)
 	}
 }
 

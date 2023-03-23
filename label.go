@@ -5,10 +5,11 @@ import (
 )
 
 func (n *Node) NewLabel(text string) *Node {
-	newNode := n.New(text, toolkit.Label, func() {
-		log(debugChange, "TextBox changed", text)
-	})
+	newNode := n.New(text, toolkit.Label, nil)
 
-	send(n, newNode)
+	var a toolkit.Action
+	a.Type = toolkit.Add
+	newaction(&a, newNode, n)
+
 	return newNode
 }

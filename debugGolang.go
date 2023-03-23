@@ -24,7 +24,6 @@ func (n *Node) DebugGolangWindow(makeWindow bool) {
 	} else {
 		w = n.NewTab("GOLANG")
 	}
-	w.Dump()
 
 	g = w.NewGroup("Language Internals")
 

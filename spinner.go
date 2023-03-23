@@ -6,11 +6,17 @@ import (
 
 func (n *Node) NewSpinner(name string, x int, y int) *Node {
 	newNode := n.New(name, toolkit.Spinner, func() {
-		log(debugGui, "even newer clicker() name in NewSpinner name =", name)
+		log(debugChange, "default NewSpinner() change", name)
 	})
-	newNode.widget.X = x
-	newNode.widget.Y = y
 
-	send(n, newNode)
+	var a toolkit.Action
+	a.Type = toolkit.Add
+	a.X = x
+	a.Y = y
+	// a.Widget = &newNode.widget
+	// a.Where = &n.widget
+	// action(&a)
+	newaction(&a, newNode, n)
+
 	return newNode
 }

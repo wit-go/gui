@@ -10,6 +10,9 @@ import (
 func (n *Node) NewTab(text string) *Node {
 	newNode := n.New(text, toolkit.Tab, nil)
 
-	send(n, newNode)
+	var a toolkit.Action
+	a.Type = toolkit.Add
+	newaction(&a, newNode, n)
+
 	return newNode
 }

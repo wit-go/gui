@@ -4,34 +4,43 @@ import (
 	"git.wit.org/wit/gui/toolkit"
 )
 
+// Grid numbering examples (X) or (X,Y)
+// ---------
+// -- (1) --
+// -- (2) --
+// ---------
+//
+// -----------------------------
+// -- (1,1) -- (1,2) -- (1,3) --
+// -- (2,1) -- (2,2) -- (2,3) --
+// -- (3,1) --       -- (2,3) --
+// -----------------------------
+
 func (n *Node) NewGrid(name string, x int, y int) *Node {
 	newNode := n.New(name, toolkit.Grid, func() {
 		log(debugChange, "click() NewGrid not defined =", name)
 	})
-	newNode.widget.X = x
-	newNode.widget.Y = y
 
-	send(n, newNode)
+	var a toolkit.Action
+	a.Type = toolkit.Add
+	a.X = x
+	a.Y = y
+	newNode.X = x
+	newNode.Y = y
+	newNode.NextX = 1
+	newNode.NextY = 1
+	newaction(&a, newNode, n)
+
 	return newNode
 }
 
-// a box is just a grid with a single set of widgets that are either horizontal or vertical
-func (n *Node) NewBox(name string, horizontal bool) *Node {
-	var newNode *Node
-	newNode = n.New(name, toolkit.Box, nil)
+func (n *Node) NewBox(name string, b bool) *Node {
+	newNode := n.New(name, toolkit.Box, nil)
 
-	newNode.widget.X = 3
-	newNode.widget.Y = 1
-	newNode.widget.B = horizontal
+	var a toolkit.Action
+	a.Type = toolkit.Add
+	a.B = b
+	newaction(&a, newNode, n)
 
-	send(n, newNode)
 	return newNode
-}
-
-func (n *Node) AddGrid(a *Node, x int, y int) {
-	n.widget.X = x
-	n.widget.Y = y
-
-	a.widget.Action = "AddGrid"
-	send(n, a)
 }

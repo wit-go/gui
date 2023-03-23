@@ -41,6 +41,9 @@ func NewWindow() *Node {
 
 	log(debugGui, "Window()", Config.Title)
 
-	send(nil, newNode)
+	var a toolkit.Action
+	a.Type = toolkit.Add
+	newaction(&a, newNode, Config.master)
+
 	return newNode
 }

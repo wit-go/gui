@@ -35,6 +35,9 @@ type aplug struct {
 
 	// simplifies passing to the plugin
 	Send func(*toolkit.Widget, *toolkit.Widget)
+
+	// should replace Send()
+	Action func(*toolkit.Action)
 }
 
 var allPlugins []*aplug
@@ -78,7 +81,12 @@ func LoadToolkit(name string) bool {
 
 	// Sends a widget (button, checkbox, etc) and it's parent widget
 	// This includes instructions like "Add", "Delete", "Disable", etc
-	newPlug.Send = loadFunc2(&newPlug, "Send")
+//	newPlug.Send = loadFunc2(&newPlug, "Send")
+
+	// This should replace Send()
+	// Sends instructions like "Add", "Delete", "Disable", etc
+	// Sends a widget (button, checkbox, etc) and it's parent widget
+	newPlug.Action = loadFuncA(&newPlug, "Action")
 
 	allPlugins = append(allPlugins, &newPlug)
 
@@ -121,6 +129,27 @@ func loadFunc2(p *aplug, funcName string) func(*toolkit.Widget, *toolkit.Widget)
 	}
 
 	newfunc, ok = test.(func(*toolkit.Widget, *toolkit.Widget))
+	if !ok {
+		log(debugGui, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
+		return nil
+	}
+	return newfunc
+}
+
+// does this fix loadFuncE problems?
+// TODO: still need to move to channels here
+func loadFuncA(p *aplug, funcName string) func(*toolkit.Action) {
+	var newfunc func(*toolkit.Action)
+	var ok bool
+	var test plugin.Symbol
+
+	test, err = p.plug.Lookup(funcName)
+	if err != nil {
+		log(debugGui, "DID NOT FIND: name =", test, "err =", err)
+		return nil
+	}
+
+	newfunc, ok = test.(func(*toolkit.Action))
 	if !ok {
 		log(debugGui, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
 		return nil
@@ -201,15 +230,97 @@ func loadfile(filename string) *plugin.Plugin {
 	return plug
 }
 
+/*
 // Sends a widget and what to do with it to the plugin
 // parent = n, child = c
 func send(p *Node, c *Node) {
 	for _, aplug := range allPlugins {
 		log(debugPlugin, "Send() aplug =", aplug.name, "type=", c.widget.Type, "action=", c.widget.Action, "name=", c.widget.Name)
 		if (aplug.Send == nil) {
-			log(debugPlugin, "\tSend() failed (aplug.Selete = nil) for", aplug.name)
+			log(debugPlugin, "Failed. Send() == nil for", aplug.name)
 			continue
 		}
 		aplug.Send(&c.parent.widget, &c.widget)
+	}
+}
+*/
+
+// Sends a widget and what to do with it to the plugin
+// parent = n, child = c
+/*
+func action(a *toolkit.Action) {
+	for _, aplug := range allPlugins {
+		log(debugPlugin, "Action() aplug =", aplug.name, "Action type=", a.Type)
+		if (aplug.Action == nil) {
+			log(debugPlugin, "Failed Action() == nil for", aplug.name)
+			continue
+		}
+		aplug.Action(a)
+	}
+}
+*/
+
+// Sends a widget and what to do with it to the plugin
+// parent = n, child = c
+
+// THIS COPIES THE WIDGET STRUCT 2023/03/16 as it's not crashing. Queue() is also being used
+// never mind that comment. no it doesn't
+func newaction(a *toolkit.Action, n *Node, where *Node) {
+	if (n != nil) {
+		a.Widget = &n.widget
+	}
+	// action(&a, newNode, n)
+	// newaction(&a, newNode, n)
+
+	if (where != nil) {
+		log(debugGui, "Action() START on where X,Y, Next X,Y =", where.Name, where.X, where.Y, where.NextX, where.NextY)
+		a.Where = &where.widget
+		switch where.widget.Type {
+		case toolkit.Grid:
+			where.Dump(true)
+			log(debugGui, "Action() START on Grid (X,Y)", where.X, where.Y, "put next thing at (X,Y) =", where.NextX, where.NextY)
+			//
+			// fix values here if they are invalid. Index starts at 1
+			if (where.NextX < 1) {
+				where.NextX = 1
+			}
+			if (where.NextY < 1) {
+				where.NextY = 1
+			}
+			//
+			a.Where.X = where.NextX
+			a.Where.Y = where.NextY
+			log(debugGui, "Action() END   on Grid (X,Y)", where.X, where.Y, "put next thing at (X,Y) =", where.NextX, where.NextY)
+		default:
+		}
+	}
+
+	for _, aplug := range allPlugins {
+		log(debugPlugin, "Action() aplug =", aplug.name, "Action type=", a.Type)
+		if (aplug.Action == nil) {
+			log(debugPlugin, "Failed Action() == nil for", aplug.name)
+			continue
+		}
+		aplug.Action(a)
+	}
+	// increment where to put the next widget in a grid or table
+	if (where != nil) {
+		switch where.widget.Type {
+		case toolkit.Grid:
+			log(debugNow, "Action() START size (X,Y)", where.X, where.Y, "put next thing at (X,Y) =", where.NextX, where.NextY)
+			where.NextY += 1
+			if (where.NextY > where.Y) {
+				where.NextX += 1
+				where.NextY = 1
+			}
+			log(debugNow, "Action() END size (X,Y)", where.X, where.Y, "put next thing at (X,Y) =", where.NextX, where.NextY)
+			where.Name = "jwc gridlaksdfjkl"
+			where.Width = 320
+			where.Height = 240
+			// where.NextX = 5
+			// where.NextY = 7
+			where.Dump(true)
+		default:
+		}
 	}
 }

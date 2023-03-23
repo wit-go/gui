@@ -6,9 +6,15 @@ import (
 
 func (n *Node) NewTextbox(name string) *Node {
 	newNode := n.New(name, toolkit.Textbox, func() {
-		log(debugGui, "wit/gui clicker()NewTextBox BUT IS EMPTY. FIXME name =", name)
+		log(debugGui, "NewTextbox changed =", name)
 	})
 
-	send(n, newNode)
+	var a toolkit.Action
+	a.Type = toolkit.Add
+	// a.Widget = &newNode.widget
+	// a.Where = &n.widget
+	// action(&a)
+	newaction(&a, newNode, n)
+
 	return newNode
 }

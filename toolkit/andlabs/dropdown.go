@@ -10,15 +10,10 @@ func (t *andlabsT) newDropdown(w *toolkit.Widget) *andlabsT {
 	var newt andlabsT
 	log(debugToolkit, "gui.Toolbox.newDropdown() START", w.Name)
 
-	if t.broken() {
-		return nil
-	}
-
 	newt.tw = w
 	s := ui.NewCombobox()
 	newt.uiCombobox = s
-	newt.uiBox = t.uiBox
-	t.uiBox.Append(s, stretchy)
+	newt.uiControl = s
 
 	// initialize the index
 	newt.c = 0
@@ -57,16 +52,16 @@ func (t *andlabsT) SetDropdown(i int) {
 	t.uiCombobox.SetSelected(i)
 }
 
-func AddDropdownName(w *toolkit.Widget, s string) {
-	log(debugToolkit, "gui.andlabs.AddDropdownName()", w.Name, "add:", s)
+func AddDropdownName(a *toolkit.Action) {
+	log(debugToolkit, "gui.andlabs.AddDropdownName()", a.Widget.Name, "add:", a.S)
 
-	t := mapToolkits[w]
+	t := mapToolkits[a.Widget]
 	if (t == nil) {
-		log(debugToolkit, "go.andlabs.AddDropdownName() toolkit struct == nil. name=", w.Name, s)
+		log(debugToolkit, "go.andlabs.AddDropdownName() toolkit struct == nil. name=", a.Widget.Name, a.S)
 		listMap(debugToolkit)
 		return
 	}
-	t.AddDropdownName(s)
+	t.AddDropdownName(a.S)
 }
 
 func SetDropdownName(w *toolkit.Widget, s string) {
@@ -82,7 +77,9 @@ func SetDropdownName(w *toolkit.Widget, s string) {
 	t.tw.S = s
 }
 
-func newDropdown(parentW *toolkit.Widget, w *toolkit.Widget) {
+func newDropdown(a *toolkit.Action) {
+	w := a.Widget
+	parentW := a.Where
 	log(debugToolkit, "gui.andlabs.newDropdown()", w.Name)
 
 	t := mapToolkits[parentW]
@@ -92,68 +89,6 @@ func newDropdown(parentW *toolkit.Widget, w *toolkit.Widget) {
 		return
 	}
 	newt := t.newDropdown(w)
-	mapWidgetsToolkits(w, newt)
-}
-
-func doDropdown(p *toolkit.Widget, c *toolkit.Widget) {
-	if broken(c) {
-		return
-	}
-	if (c.Action == "New") {
-		newDropdown(p, c)
-		return
-	}
-	ct := mapToolkits[c]
-	if (ct == nil) {
-		log(debugError, "Trying to do something on a widget that doesn't work or doesn't exist or something", c)
-		return
-	}
-	if ct.broken() {
-		log(debugError, "Dropdown() ct.broken", ct)
-		return
-	}
-	if (ct.uiCombobox == nil) {
-		log(debugError, "Dropdown() uiCombobox == nil", ct)
-		return
-	}
-	log(debugChange, "Going to attempt:", c.Action)
-	switch c.Action {
-	case "Add":
-		ct.AddDropdownName(c.S)
-		// ct.uiCombobox.Enable()
-	case "Enable":
-		ct.uiCombobox.Enable()
-	case "Disable":
-		ct.uiCombobox.Disable()
-	case "Show":
-		ct.uiCombobox.Show()
-	case "Hide":
-		ct.uiCombobox.Hide()
-	case "Set":
-		ct.uiCombobox.SetSelected(1)
-	case "SetText":
-		var orig int
-		var i int = -1
-		var s string
-		orig = ct.uiCombobox.Selected()
-		log(debugError, "TODO: set a Dropdown by the name selected =", orig, ct.c, c.S)
-		// try to find the string
-		for i, s = range ct.val {
-			log(debugError, "i, s", i, s)
-			if (c.S == s) {
-				ct.uiCombobox.SetSelected(i)
-				return
-			}
-		}
-		// if i == -1, then there are not any things in the menu to select
-		if (i == -1) {
-			return
-		}
-		// if the string was never set, then set the dropdown to the last thing added to the menu
-		if (orig == -1) {
-			ct.uiCombobox.SetSelected(i)
-		}
-	default:
-		log(debugError, "Can't do", c.Action, "to a Dropdown")
-	}
+	place(a, t, newt)
+	mapWidgetsToolkits(a, newt)
 }

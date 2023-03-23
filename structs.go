@@ -59,10 +59,24 @@ type Node struct {
 
 	widget	toolkit.Widget
 
-	// deprecate these and use toolkit.Widget
 	Name   string
+
+	// used for Windows
 	Width  int
 	Height int
+
+	// used for anything that needs a range
+	X	int
+	Y	int
+
+	// used for grids and tables
+	NextX	int
+	NextY	int
+
+	// used for values
+	I	int
+	S	string
+	B	bool
 
 	// this function is run when there are mouse or keyboard events
 	Custom func()

@@ -12,6 +12,7 @@ package gui
 	because technically every interaction with the toolkit has to go through the Queue() goroutine.
 	Is it "has to go" or "should go"? Probably it makes sense to strictly inforce it. No "callback" functions. IPC only (go channels)
 */
+/*
 func (n *Node) Int() int {
 	return n.widget.I
 }
@@ -23,7 +24,7 @@ func (n *Node) Value() int {
 
 func (n *Node) SetValue(i int) {
 	log(debugGui, "gui.SetValue() START")
-	n.Dump()
 	// FIXME: this needs to be redone
 	// n.toolkit.SetValue(i)
 }
+*/

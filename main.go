@@ -2,7 +2,7 @@ package gui
 
 import (
 	// "embed"
-	"git.wit.org/wit/gui/toolkit"
+	// "git.wit.org/wit/gui/toolkit"
 )
 
 // Windows doesn't support plugins. How can I keep andlabs and only compile it on windows?
@@ -34,7 +34,7 @@ func init() {
 	Config.master = addNode("guiBinaryTree")
 
 	// used to pass debugging flags to the toolkit plugins
-	Config.flag = Config.master.New("flag", toolkit.Flag, nil)
+	Config.flag = Config.master.New("flag", 0, nil)
 }
 
 func doGuiChan() {

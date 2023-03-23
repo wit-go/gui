@@ -18,7 +18,7 @@ func destroy(p *toolkit.Widget, c *toolkit.Widget) {
 		return
 	}
 
-	switch ct.Type {
+	switch ct.tw.Type {
 	case toolkit.Button:
 		log(true, "Should delete Button here:", c.Name)
 		log(true, "Parent:")
@@ -41,8 +41,8 @@ func destroy(p *toolkit.Widget, c *toolkit.Widget) {
 		log(true, "Should delete Window here:", c.Name)
 	default:
 		log(true, "Don't know how to delete c =", c.Type, c.Name)
-		log(true, "Don't know how to delete pt =", pt.Type, pt.Name, pt.uiButton)
-		log(true, "Don't know how to delete ct =", ct.Type, ct.Name, ct.uiButton)
+		log(true, "Don't know how to delete pt =", pt.tw.Type, pt.tw.Name, pt.uiButton)
+		log(true, "Don't know how to delete ct =", ct.tw.Type, ct.tw.Name, ct.uiButton)
 		log(true, "Parent:")
 		pt.Dump(true)
 		log(true, "Child:")

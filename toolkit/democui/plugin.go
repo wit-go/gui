@@ -44,7 +44,7 @@ func Send(p *toolkit.Widget, c *toolkit.Widget) {
 	} else {
 		log(debugPlugin, "Send() parent =", p.Name, ",", p.Type)
 	}
-	log(debugPlugin, "Send() child  =", c.Name, ",", c.Action, ",", c.Type)
+	log(debugPlugin, "Send() child  =", c.Name, ",", c.Type)
 
 	/*
 	if (c.Action == "SetMargin") {
@@ -81,6 +81,7 @@ func Send(p *toolkit.Widget, c *toolkit.Widget) {
 	case toolkit.Grid:
 		// doGrid(p, c)
 		*/
+	/*
 	case toolkit.Flag:
 		// log(debugFlags, "plugin Send() flag parent =", p.Name, p.Type)
 		// log(debugFlags, "plugin Send() flag child  =", c.Name, c.Type)
@@ -105,6 +106,7 @@ func Send(p *toolkit.Widget, c *toolkit.Widget) {
 		default:
 			log(debugError, "Can't set unknown flag", c.S)
 		}
+	*/
 	default:
 		log(debugError, "plugin Send() unknown parent =", p.Name, p.Type)
 		log(debugError, "plugin Send() unknown child  =", c.Name, c.Type)

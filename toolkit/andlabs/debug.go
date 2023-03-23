@@ -14,7 +14,10 @@ var margin bool // add space around the frames of windows
 var debugToolkit bool
 var debugChange bool
 var debugPlugin bool
+var debugAction bool
 var debugFlags bool
+var debugGrid bool
+var debugNow bool = true
 var debugError bool = true
 
 // This is important. This sets the defaults for the gui. Without this, there isn't correct padding, etc
@@ -37,8 +40,9 @@ func setDefaultBehavior(s bool) {
 func ShowDebug () {
 	log(true, "debugToolkit =", debugToolkit)
 	log(true, "debugChange  =", debugChange)
-	log(true, "debugPlugin  =", debugPlugin)
+	log(true, "debugAction  =", debugPlugin)
 	log(true, "debugFlags    =", debugFlags)
+	log(true, "debugNow      =", debugNow)
 	log(true, "debugError   =", debugError)
 }
 
@@ -87,7 +91,6 @@ func widgetDump(b bool, w *toolkit.Widget) {
 	}
 
 	log(b, "widget.Name        =", w.Name)
-	log(b, "widget.Action      =", w.Action)
 	log(b, "widget.Type        =", w.Type)
 	log(b, "widget.Custom      =", w.Custom)
 	log(b, "widget.B           =", w.B)

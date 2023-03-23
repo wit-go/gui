@@ -11,14 +11,8 @@ func (t *andlabsT) newCheckbox(w *toolkit.Widget) *andlabsT {
 	var newt andlabsT
 	newt.tw = w
 
-	if t.broken() {
-		return nil
-	}
-
 	newt.uiCheckbox = ui.NewCheckbox(w.Name)
-	newt.uiBox = t.uiBox
-	// t.doAppend(&newt, *newt.uiCheckbox)
-	t.uiBox.Append(newt.uiCheckbox, stretchy)
+	newt.uiControl = newt.uiCheckbox
 
 	newt.uiCheckbox.OnToggled(func(spin *ui.Checkbox) {
 		newt.tw.B = newt.checked()
@@ -30,14 +24,12 @@ func (t *andlabsT) newCheckbox(w *toolkit.Widget) *andlabsT {
 }
 
 func (t *andlabsT) checked() bool {
-	if t.broken() {
-		return false
-	}
-
 	return t.uiCheckbox.Checked()
 }
 
-func newCheckbox(parentW *toolkit.Widget, w *toolkit.Widget) {
+func newCheckbox(a *toolkit.Action) {
+	w := a.Widget
+	parentW := a.Where
 	log(debugToolkit, "newCheckbox()", w.Name)
 
 	t := mapToolkits[parentW]
@@ -46,45 +38,6 @@ func newCheckbox(parentW *toolkit.Widget, w *toolkit.Widget) {
 		return
 	}
 	newt := t.newCheckbox(w)
-	mapWidgetsToolkits(w, newt)
-}
-
-func doCheckbox(p *toolkit.Widget, c *toolkit.Widget) {
-	if broken(c) {
-		return
-	}
-	if (c.Action == "New") {
-		newCheckbox(p, c)
-		return
-	}
-	ct := mapToolkits[c]
-	if (ct == nil) {
-		log(true, "Trying to do something on a widget that doesn't work or doesn't exist or something", c)
-		return
-	}
-	if ct.broken() {
-		log(true, "checkbox() ct.broken", ct)
-		return
-	}
-	if (ct.uiCheckbox == nil) {
-		log(true, "checkbox() uiCheckbox == nil", ct)
-		return
-	}
-	log(debugChange, "Going to attempt:", c.Action)
-	switch c.Action {
-	case "Enable":
-		ct.uiCheckbox.Enable()
-	case "Disable":
-		ct.uiCheckbox.Disable()
-	case "Show":
-		ct.uiCheckbox.Show()
-	case "Hide":
-		ct.uiCheckbox.Hide()
-	case "SetText":
-		ct.uiCheckbox.SetText(c.S)
-	case "Set":
-		ct.uiCheckbox.SetChecked(c.B)
-	default:
-		log(debugError, "Can't do", c.Action, "to a checkbox")
-	}
+	place(a, t, newt)
+	mapWidgetsToolkits(a, newt)
 }

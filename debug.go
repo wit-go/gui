@@ -9,14 +9,16 @@ import (
 )
 
 // various debugging flags
+var debugNow bool = true	// useful for active development
 var debugGui bool = false
-var debugError bool = false
+var debugError bool = true
 var debugDump bool = false
 var debugNode bool = false
 var debugTabs bool = false
 var debugFlags bool = false
 var debugChange bool = false	// shows user events like mouse and keyboard
 var debugPlugin	bool = false
+var debugAction	bool = false
 
 // for printing out the binary tree
 var listChildrenParent *Node
@@ -64,12 +66,21 @@ func SetFlag (s string, b bool) {
 	}
 
 	// send the flag to the toolkit
-	n := Config.flag
-	log(debugChange, "Set() toolkit flag", s, "to", b)
-	n.widget.Action = "Set"
-	n.widget.S = s
-	n.widget.B = b
-	send(nil, n)
+//	n := Config.flag
+//	log(debugChange, "Set() toolkit flag", s, "to", b)
+//	n.widget.Action = "Set"
+//	n.widget.S = s
+//	n.widget.B = b
+//	send(nil, n) // set flag in the plugin
+
+	var a toolkit.Action
+	a.Type = toolkit.SetFlag
+	a.S = s
+	a.B = b
+	// a.Widget = &newNode.widget
+	// a.Where = &n.widget
+	// action(&a)
+	newaction(&a, nil, nil)
 }
 
 func ShowDebugValues() {
@@ -86,40 +97,47 @@ func ShowDebugValues() {
 	SetFlag("Show", true)
 }
 
-func (n *Node) Dump() {
-	if ! debugDump {
+func (n *Node) Dump(b bool) {
+	// log("Dump() dump =", b)
+	if ! b {
 		return
 	}
-	Indent("NODE DUMP START")
-	Indent("id           = ", n.id)
-	Indent("Name         = ", n.Name)
-	Indent("Width        = ", n.Width)
-	Indent("Height       = ", n.Height)
-	Indent("Widget Name  = ", n.widget.Name)
-	Indent("Widget Type  = ", n.widget.Type)
-	Indent("Widget Id    = ", n.widget.GetId())
+	Indent(b, "NODE DUMP START")
+	Indent(b, "id           = ", n.id)
+	Indent(b, "Name         = ", n.Name)
+	Indent(b, "Width        = ", n.Width)
+	Indent(b, "Height       = ", n.Height)
+	Indent(b, "(X,Y)        = ", n.X, n.Y)
+	Indent(b, "Next (X,Y)   = ", n.NextX, n.NextY)
+	Indent(b, "Widget Name  = ", n.widget.Name)
+	Indent(b, "Widget Type  = ", n.widget.Type)
+	Indent(b, "Widget Id    = ", n.widget.GetId())
 
 	if (n.parent == nil) {
-		Indent("parent       = nil")
+		Indent(b, "parent       = nil")
 	} else {
-		Indent("parent.id    =", n.parent.id)
+		Indent(b, "parent.id    =", n.parent.id)
 	}
 	if (n.children != nil) {
-		Indent("children     = ", n.children)
+		Indent(b, "children     = ", n.children)
 	}
 	if (n.Custom != nil) {
-		Indent("Custom       = ", n.Custom)
+		Indent(b, "Custom       = ", n.Custom)
 	}
-	Indent("NODE DUMP END")
+	Indent(b, "NODE DUMP END")
 }
 
-func Indent(a ...interface{}) {
-	logindent(listChildrenDepth, defaultPadding, a...)
+func Indent(b bool, a ...interface{}) {
+	logindent(b, listChildrenDepth, defaultPadding, a...)
 }
 
-func (n *Node) dumpWidget() string {
+func (n *Node) dumpWidget(b bool) string {
 	var info, d string
 
+	if (n == nil) {
+		log(debugError, "dumpWidget() node == nil")
+		return ""
+	}
 	info = n.widget.Type.String()
 
 	info += ", " + n.widget.Name
@@ -137,22 +155,18 @@ func (n *Node) dumpWidget() string {
 		tabs = tabs + defaultPadding
 	}
 	d = tabs + d
-	logindent(listChildrenDepth, defaultPadding, n.id, info)
+	logindent(b, listChildrenDepth, defaultPadding, n.id, info)
 	return d
 }
 
-func (n *Node) ListChildren(dump bool, dropdown *Node, mapNodes map[string]*Node) {
-	s := n.dumpWidget()
-	if (dropdown != nil) {
-		dropdown.AddDropdownName(s)
-		if (mapNodes != nil) {
-			mapNodes[s] = n
-		}
+// func (n *Node) ListChildren(dump bool, dropdown *Node, mapNodes map[string]*Node) {
+func (n *Node) ListChildren(dump bool) {
+	if (n == nil) {
+		return
 	}
 
-	if (dump == true) {
-		n.Dump()
-	}
+	n.dumpWidget(dump)
+	// n.Dump(dump)
 	if len(n.children) == 0 {
 		if (n.parent == nil) {
 			return
@@ -161,7 +175,9 @@ func (n *Node) ListChildren(dump bool, dropdown *Node, mapNodes map[string]*Node
 		if (listChildrenParent != nil) {
 			log(debugNode, "\t\t\tlistChildrenParent =",listChildrenParent.id)
 			if (listChildrenParent.id != n.parent.id) {
-				// log("parent.child does not match child.parent")
+				log("parent =",n.parent.id, n.parent.Name)
+				log("listChildrenParent =",listChildrenParent.id, listChildrenParent.Name)
+				log(listChildrenParent.id, "!=", n.parent.id)
 				exit("parent.child does not match child.parent")
 			}
 		}
@@ -177,9 +193,7 @@ func (n *Node) ListChildren(dump bool, dropdown *Node, mapNodes map[string]*Node
 			// can all binary tree changes to Node.parent & Node.child be forced into a singular goroutine?
 			panic("something is wrong with the wit golang gui logic and the binary tree is broken. child has no parent")
 		}
-		if (dump == true) {
-			child.Dump()
-		}
+		child.Dump(debugDump)
 		if (child.children == nil) {
 			log(debugNode, "\t\t", child.id, "has no children")
 		} else {
@@ -187,7 +201,8 @@ func (n *Node) ListChildren(dump bool, dropdown *Node, mapNodes map[string]*Node
 		}
 		listChildrenParent = n
 		listChildrenDepth += 1
-		child.ListChildren(dump, dropdown, mapNodes)
+		// child.ListChildren(dump, dropdown, mapNodes)
+		child.ListChildren(dump)
 		listChildrenDepth -= 1
 	}
 	return

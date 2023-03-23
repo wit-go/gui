@@ -1,52 +1,112 @@
 package gui
 
+// Common actions for widgets like 'Enable' or 'Hide'
+
 import (
 	"regexp"
-	// "errors"
-	// "git.wit.org/wit/gui/toolkit"
+	"git.wit.org/wit/gui/toolkit"
 )
 
 // functions for handling text related GUI elements
 
+func (n *Node) Show() {
+	var a toolkit.Action
+	a.Type = toolkit.Show
+	newaction(&a, n, nil)
+}
+
+func (n *Node) Hide() {
+	var a toolkit.Action
+	a.Type = toolkit.Hide
+	newaction(&a, n, nil)
+}
+
+func (n *Node) Enable() {
+	var a toolkit.Action
+	a.Type = toolkit.Enable
+	newaction(&a, n, nil)
+}
+
+func (n *Node) Disable() {
+	var a toolkit.Action
+	a.Type = toolkit.Disable
+	newaction(&a, n, nil)
+}
+
 func (n *Node) Add(str string) {
 	log(debugGui, "gui.Add() value =", str)
-	n.widget.Action = "Add"
-	n.widget.S = str
-	send(n.parent, n)
+
+	var a toolkit.Action
+	a.Type = toolkit.Add
+	a.S = str
+	// a.Widget = &n.widget
+	// action(&a)
+	newaction(&a, n, nil)
 }
 
-func (n *Node) SetText(str string) bool {
-	log(debugChange, "gui.SetText() value =", str)
-	n.widget.Action = "SetText"
-	n.widget.S = str
-	send(n.parent, n)
-	return true
+func (n *Node) AddText(str string) {
+	log(debugChange, "AddText() value =", str)
+
+	var a toolkit.Action
+	a.Type = toolkit.AddText
+	a.S = str
+	// a.Widget = &n.widget
+	// action(&a)
+	newaction(&a, n, nil)
 }
 
-func (n *Node) Set(a any) bool {
-	log(debugChange, "gui.Set() value =", a)
-	n.widget.Action = "Set"
-	switch v := a.(type) {
+func (n *Node) SetText(str string) {
+	log(debugChange, "SetText() value =", str)
+
+	var a toolkit.Action
+	a.Type = toolkit.SetText
+	a.S = str
+	// a.Widget = &n.widget
+	// action(&a)
+	newaction(&a, n, nil)
+}
+
+func (n *Node) SetNext(x int, y int) {
+	n.NextX = x
+	n.NextY = y
+	log(debugError, "SetNext() x,y =", n.NextX, n.NextY)
+	log(debugError, "SetNext() x,y =", n.NextX, n.NextY)
+	log(debugError, "SetNext() x,y =", n.NextX, n.NextY)
+	log(debugError, "SetNext() x,y =", n.NextX, n.NextY)
+	log(debugError, "SetNext() x,y =", n.NextX, n.NextY)
+	log(debugError, "SetNext() x,y =", n.NextX, n.NextY)
+}
+
+func (n *Node) Set(val any) {
+	log(debugChange, "Set() value =", val)
+	var a toolkit.Action
+	a.Type = toolkit.Set
+
+	switch v := val.(type) {
 	case bool:
-		n.widget.B = a.(bool)
+		a.B = val.(bool)
 	case string:
-		n.widget.S = a.(string)
+		a.S = val.(string)
 	case int:
-		n.widget.I = a.(int)
+		a.I = val.(int)
 	default:
-		log(debugError, "gui.Set() unknown type =", v, "a =", a)
+		log(debugError, "Set() unknown type =", v, "a =", a)
 	}
-	send(n.parent, n)
-	return true
+
+	// a.Widget = &n.widget
+	// action(&a)
+	newaction(&a, n, nil)
 }
 
-func (n *Node) AppendText(str string) bool {
-	n.widget.Action = "Set"
+func (n *Node) AppendText(str string) {
+	var a toolkit.Action
+	a.Type = toolkit.SetText
 	tmp := n.widget.S + str
-	log(debugChange, "gui.AppendText() value =", tmp)
-	n.widget.S = tmp
-	send(n.parent, n)
-	return true
+	log(debugChange, "AppendText() value =", tmp)
+	a.S = tmp
+	// a.Widget = &n.widget
+	// action(&a)
+	newaction(&a, n, nil)
 }
 
 func (n *Node) GetText() string {
@@ -85,11 +145,6 @@ func normalizeInt(s string) string {
 	clean := reg.ReplaceAllString(s, "")
 	log(debugGui, "normalizeInt() s =", clean)
 	return clean
-}
-
-func Delete(c *Node) {
-	c.widget.Action = "Delete"
-	send(c.parent, c)
 }
 
 func commonCallback(n *Node) {

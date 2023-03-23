@@ -145,7 +145,7 @@ var WARN bool
 
 ## Functions
 
-### func [DebugWidgetWindow](/debugWidget.go#L56)
+### func [DebugWidgetWindow](/debugWidget.go#L52)
 
 `func DebugWidgetWindow(w *Node)`
 
@@ -155,19 +155,15 @@ var WARN bool
 
 Creates a window helpful for debugging this package
 
-### func [Delete](/common.go#L90)
+### func [Indent](/debug.go#L130)
 
-`func Delete(c *Node)`
-
-### func [Indent](/debug.go#L116)
-
-`func Indent(a ...interface{})`
+`func Indent(b bool, a ...interface{})`
 
 ### func [InitPlugins](/main.go#L56)
 
 `func InitPlugins(names []string)`
 
-### func [LoadToolkit](/plugin.go#L43)
+### func [LoadToolkit](/plugin.go#L46)
 
 `func LoadToolkit(name string) bool`
 
@@ -190,15 +186,15 @@ other goroutines. This is due to the nature of how
 Linux, MacOS and Windows work (they all work differently. suprise. surprise.)
 For example: gui.Queue(NewWindow())
 
-### func [SetDebug](/debug.go#L26)
+### func [SetDebug](/debug.go#L28)
 
 `func SetDebug(s bool)`
 
-### func [SetFlag](/debug.go#L42)
+### func [SetFlag](/debug.go#L44)
 
 `func SetFlag(s string, b bool)`
 
-### func [ShowDebugValues](/debug.go#L75)
+### func [ShowDebugValues](/debug.go#L86)
 
 `func ShowDebugValues()`
 

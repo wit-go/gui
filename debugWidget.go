@@ -13,9 +13,18 @@ var bugWidget *Node
 
 // the widget all these actions are run against
 var activeWidget *Node
+
+// for testing move, this is the node things are put on
+var activeJunk *Node
+
 // the label where the user can see which widget is active
 var activeLabel *Node
 var activeLabelType *Node
+var activeLabelNewName *Node
+var activeLabelNewType *Node
+var activeLabelNewX *Node
+var activeLabelNewY *Node
+var activeLabelNewB *Node
 
 // tmp junk
 var debugGrid *Node
@@ -37,19 +46,6 @@ func setActiveWidget(w *Node) {
 	title := "ID =" + strconv.Itoa(w.id) + " " + w.widget.Name
 	activeLabel.SetText(title)
 	activeLabelType.SetText("widget.Type = " + w.widget.Type.String())
-
-	// temporary stuff
-	if (w.widget.Type == toolkit.Window) {
-		debugWidgetBut1.widget.Action = "Enable"
-		send(debugWidgetBut1.parent, debugWidgetBut1)
-		debugWidgetBut2.widget.Action = "Enable"
-		send(debugWidgetBut2.parent, debugWidgetBut2)
-	} else {
-		debugWidgetBut1.widget.Action = "Disable"
-		send(debugWidgetBut1.parent, debugWidgetBut1)
-		debugWidgetBut2.widget.Action = "Disable"
-		send(debugWidgetBut2.parent, debugWidgetBut2)
-	}
 	return
 }
 
@@ -75,108 +71,113 @@ func DebugWidgetWindow(w *Node) {
 
 	g := bugWidget.NewGroup("widget:")
 
-	activeLabel = g.NewLabel("undef")
-	activeLabelType = g.NewLabel("undef")
+	g2 := g.NewGroup("widget:")
+	activeLabel = g2.NewLabel("undef")
+	g2 = g.NewGroup("type:")
+	activeLabelType = g2.NewLabel("undef")
+	g2 = g.NewGroup("New name:")
+	activeLabelNewName = g2.NewCombobox("newthing")
+	activeLabelNewName.AddText("penguin")
+	activeLabelNewName.AddText("snow")
+	activeLabelNewName.AddText("GO")
+	activeLabelNewName.AddText("debian")
+	activeLabelNewName.AddText("RiscV")
+
+	g2 = g.NewGroup("At X:")
+	activeLabelNewX = g2.NewSpinner("tmp spinner", -1, 100)
+
+	g2 = g.NewGroup("At Y:")
+	activeLabelNewY = g2.NewSpinner("tmp spinner", -1, 100)
+
+	g2 = g.NewGroup("bool B:")
+	activeLabelNewB = g2.NewCheckbox("tmp bool")
+
 
 	// common things that should work against each widget
 	g = bugWidget.NewGroup("common things")
-	g.NewButton("Disable()", func () {
-		activeWidget.widget.Action = "Disable"
-		send(activeWidget.parent, activeWidget)
-	})
 	g.NewButton("Enable()", func () {
-		activeWidget.widget.Action = "Enable"
-		send(activeWidget.parent, activeWidget)
+		activeWidget.Enable()
+	})
+	g.NewButton("Disable()", func () {
+		activeWidget.Disable()
 	})
 	g.NewButton("Show()", func () {
-		activeWidget.widget.Action = "Show"
-		send(activeWidget.parent, activeWidget)
+		activeWidget.Show()
 	})
 	g.NewButton("Hide()", func () {
-		activeWidget.widget.Action = "Hide"
-		send(activeWidget.parent, activeWidget)
-	})
-	g.NewButton("Delete()", func () {
-		Delete(activeWidget)
+		activeWidget.Hide()
 	})
 	g.NewButton("Dump()", func () {
-		g := debugGui
-		d := debugDump
-		debugGui = true
-		debugDump = true
-		activeWidget.Dump()
-		debugGui = g
-		debugDump = d
+		activeWidget.Dump(true)
+
+		var a toolkit.Action
+		a.Type = toolkit.Dump
+		newaction(&a, activeWidget, nil)
 	})
 
-	newG := bugWidget.NewGroup("add things")
-	newG.debugAddWidgetButtons()
+	g = bugWidget.NewGroup("add things")
+	g.debugAddWidgetButton()
+	g.NewLabel("experiments:")
+	g.debugAddWidgetButtons()
 
 	g = bugWidget.NewGroup("change things")
-	g.NewButton("SetMargin(true)", func () {
-		activeWidget.widget.Action = "SetMargin"
-		activeWidget.widget.B = true
-		send(activeWidget.parent, activeWidget)
+	g.NewButton("AddText()", func () {
+		var a toolkit.Action
+		a.Type = toolkit.AddText
+		a.S = activeLabelNewName.widget.S
+		newaction(&a, activeWidget, nil)
 	})
-	g.NewButton("SetMargin(false)", func () {
-		activeWidget.widget.Action = "SetMargin"
-		activeWidget.widget.B = false
-		send(activeWidget.parent, activeWidget)
+	g.NewButton("SetText()", func () {
+		var a toolkit.Action
+		a.Type = toolkit.SetText
+		a.S = activeLabelNewName.widget.S
+		newaction(&a, activeWidget, nil)
 	})
-	g.NewButton("Value()", func () {
-		log("activeWidget.B =", activeWidget.widget.B)
-		log("activeWidget.I =", activeWidget.widget.I)
-		log("activeWidget.S =", activeWidget.widget.S)
+	g.NewButton("Margin()", func () {
+		var a toolkit.Action
+		a.Type = toolkit.Margin
+		newaction(&a, activeWidget, nil)
 	})
-	g.NewButton("Set(true)", func () {
-		activeWidget.widget.Action = "Set"
-		activeWidget.widget.B = true
-		send(activeWidget.parent, activeWidget)
+	g.NewButton("Unmargin()", func () {
+		var a toolkit.Action
+		a.Type = toolkit.Unmargin
+		newaction(&a, activeWidget, nil)
 	})
-	g.NewButton("Set(false)", func () {
-		activeWidget.widget.Action = "Set"
-		activeWidget.widget.B = false
-		send(activeWidget.parent, activeWidget)
+	g.NewButton("Pad()", func () {
+		var a toolkit.Action
+		a.Type = toolkit.Pad
+		newaction(&a, activeWidget, nil)
 	})
-	g.NewButton("Set(20)", func () {
-		activeWidget.widget.Action = "Set"
-		activeWidget.widget.B = true
-		activeWidget.widget.I = 20
-		activeWidget.widget.S = "20"
-		send(activeWidget.parent, activeWidget)
+	g.NewButton("Unpad()", func () {
+		var a toolkit.Action
+		a.Type = toolkit.Unpad
+		newaction(&a, activeWidget, nil)
 	})
-	g.NewButton("SetText('foo')", func () {
-		activeWidget.widget.Action = "Set"
-		activeWidget.widget.S = "foo"
-		send(activeWidget.parent, activeWidget)
+	g.NewButton("Move(junk)", func () {
+		var a toolkit.Action
+		a.Type = toolkit.Move
+		newaction(&a, activeWidget, activeJunk)
 	})
 	g.NewButton("Delete()", func () {
-		activeWidget.widget.Action = "Delete"
-		send(activeWidget.parent, activeWidget)
-	})
-	debugWidgetBut1 = g.NewButton("SetRaw(true)", func () {
-		activeWidget.widget.Action = "SetRaw"
-		activeWidget.widget.B = true
-		send(activeWidget.parent, activeWidget)
-	})
-	debugWidgetBut2 = g.NewButton("SetRaw(false)", func () {
-		activeWidget.widget.Action = "SetRaw"
-		activeWidget.widget.B = false
-		send(activeWidget.parent, activeWidget)
+		var a toolkit.Action
+		a.Type = toolkit.Delete
+		newaction(&a, activeWidget, activeJunk)
 	})
 
 	g = bugWidget.NewGroup("not working?")
-	g.NewButton("Add('foo')", func () {
-		activeWidget.widget.Action = "Add"
-		activeWidget.widget.S = "foo"
-		send(activeWidget.parent, activeWidget)
+	g.NewButton("Dump Widget Values()", func () {
+		log("activeWidget.B =", activeWidget.widget.B)
+		log("activeWidget.I =", activeWidget.widget.I)
+		log("activeWidget.S =", activeWidget.widget.S)
+		log("activeWidget.X =", activeWidget.widget.X)
+		log("activeWidget.Y =", activeWidget.widget.Y)
+		log("activeWidget.Width =", activeWidget.widget.Width)
+		log("activeWidget.Height =", activeWidget.widget.Height)
+		log("activeWidget.Margin =", activeWidget.widget.Margin)
+		log("activeWidget.Expand =", activeWidget.widget.Expand)
 	})
-	g.NewButton("Add button to (1,1)", func () {
-		activeWidget.widget.Action = "AddGrid"
-		activeWidget.widget.B = false
-		send(activeWidget, debugGridLabel)
-		// debugGrid = gShoactiveWidget.NewGrid("tmp grid", 2, 3)
-	})
+	activeJunk = bugWidget.NewGroup("junk:")
+	activeJunk.NewLabel("test junk")
 
 	if (activeWidget == nil) {
 		setActiveWidget(Config.master)
@@ -184,53 +185,20 @@ func DebugWidgetWindow(w *Node) {
 }
 
 func (n *Node) debugAddWidgetButtons() {
-	n.NewButton("Button", func () {
-		a := activeWidget.NewButton("myButton", nil)
-		a.Custom = func () {
-			log("this code is more better", a.widget.B, "id=", a.id)
-		}
-	})
-	n.NewButton("Checkbox", func () {
-		a := activeWidget.NewCheckbox("myCheckbox")
-		a.Custom = func () {
-			log("custom checkox func a=", a.widget.B, "id=", a.id)
-		}
-	})
-	n.NewButton("Label", func () {
-		activeWidget.NewLabel("mylabel")
-	})
-	n.NewButton("Textbox", func () {
-		a := activeWidget.NewTextbox("mytext")
-		a.Custom = func () {
-			log("custom TextBox() a =", a.widget.S, "id=", a.id)
-		}
-	})
-	n.NewButton("Slider", func () {
-		a := activeWidget.NewSlider("tmp slider", 10, 55)
-		a.Custom = func () {
-			log("custom slider() a =", a.widget.I, "id=", a.id)
-		}
-	})
-	n.NewButton("Spinner", func () {
-		a := activeWidget.NewSpinner("tmp spinner", 6, 32)
-		a.Custom = func () {
-			log("custom spinner() a =", a.widget.I, "id=", a.id)
-		}
-	})
 	n.NewButton("Dropdown", func () {
 		a := activeWidget.NewDropdown("tmp dropdown")
-		a.AddDropdownName("this is better than tcl/tk")
-		a.AddDropdownName("make something for tim")
-		a.AddDropdownName("for qflow")
-		a.Add("and for riscv")
+		a.AddText("this is better than tcl/tk")
+		a.AddText("make something for tim")
+		a.AddText("for qflow")
+		a.AddText("and for riscv")
 		a.Custom = func () {
 			log("custom dropdown() a =", a.widget.Name, a.widget.S, "id=", a.id)
 		}
 	})
 	n.NewButton("Combobox", func () {
 		a := activeWidget.NewCombobox("tmp combobox")
-		a.Add("mirrors.wit.com")
-		a.Add("go.wit.org")
+		a.AddText("mirrors.wit.com")
+		a.AddText("go.wit.org")
 		a.Custom = func () {
 			log("custom combobox() a =", a.widget.Name, a.widget.S, "id=", a.id)
 		}
@@ -245,31 +213,121 @@ func (n *Node) debugAddWidgetButtons() {
 		// SetDebug(true)
 		debugGrid = activeWidget.NewGrid("tmp grid", 2, 3)
 		debugGridLabel = debugGrid.NewLabel("mirrors.wit.com")
+		debugGrid.SetNext(0,1)
+		debugGrid.NewLabel("foo (0,1)")
+		debugGrid.SetNext(1,1)
+		debugGrid.NewLabel("foo (1,1)")
+		debugGrid.SetNext(2,1)
+		debugGrid.NewLabel("foo (2,1)")
 		// SetDebug(false)
 		DebugWidgetWindow(debugGrid)
 	})
 	n.NewButton("Image", func () {
 		activeWidget.NewImage("image")
 	})
-	n.NewButton("Tab", func () {
-		activeWidget.NewTab("myTab")
-	})
-	n.NewButton("Group", func () {
-		a := activeWidget.NewGroup("myGroup")
-		a.Custom = func () {
-			log("this code is more better", a.widget.B, "id=", a.id)
-		}
-	})
 	n.NewButton("Box(horizontal)", func () {
 		a := activeWidget.NewBox("hBox", true)
-		a.Custom = func () {
-			log("this code is more better", a.widget.B, "id=", a.id)
-		}
+		a.NewLabel("hBox")
+		a.NewLabel("hBox 2")
 	})
 	n.NewButton("Box(vertical)", func () {
-		a := activeWidget.NewBox("vBox", true)
-		a.Custom = func () {
-			log("this code is more better", a.widget.B, "id=", a.id)
+		a := activeWidget.NewBox("vBox", false)
+		a.NewLabel("vBox")
+		a.NewLabel("vBox 2")
+	})
+}
+
+func (n *Node) debugAddWidgetButton() {
+	activeLabelNewType = n.NewDropdown("tmp dropdown")
+	activeLabelNewType.AddText("Window")
+	activeLabelNewType.AddText("Tab")
+	activeLabelNewType.AddText("Frame")
+	activeLabelNewType.AddText("Grid")
+	activeLabelNewType.AddText("Group")
+	activeLabelNewType.AddText("Box")
+	activeLabelNewType.AddText("Button")
+	activeLabelNewType.AddText("Checkbox")
+	activeLabelNewType.AddText("Dropdown")
+	activeLabelNewType.AddText("Combobox")
+	activeLabelNewType.AddText("Label")
+	activeLabelNewType.AddText("Textbox")
+	activeLabelNewType.AddText("Slider")
+	activeLabelNewType.AddText("Spinner")
+	activeLabelNewType.AddText("Image")
+	activeLabelNewType.AddText("Area")
+	activeLabelNewType.AddText("Form")
+	activeLabelNewType.AddText("Font")
+	activeLabelNewType.AddText("Color")
+	activeLabelNewType.AddText("Dialog")
+
+	n.NewButton("Add", func () {
+		name :=  activeLabelNewName.widget.S
+		newX :=  activeLabelNewX.widget.I
+		newY :=  activeLabelNewY.widget.I
+		newB :=  activeLabelNewB.widget.B
+
+		if (newY == -1) {
+			name = name + " (" + strconv.Itoa(activeWidget.NextX) + "," + strconv.Itoa(activeWidget.NextY) + ")"
+		} else {
+			activeWidget.SetNext(newX, newY)
+			name = name + " (" + strconv.Itoa(newX) + "," + strconv.Itoa(newY) + ")"
+		}
+		log("New Name =", name)
+		log("New Type =", activeLabelNewType.widget.S)
+		log("New X    =", newX)
+		log("New Y    =", newY)
+		log("activeWidget.NextX    =", activeWidget.NextX)
+		log("activeWidget.NextY    =", activeWidget.NextY)
+		log(debugNow, "Add() size (X,Y)", activeWidget.X, activeWidget.Y, "put next thing at (X,Y) =", activeWidget.NextX, activeWidget.NextY)
+		activeWidget.Dump(true)
+
+		// activeWidget.widget.X = newX
+		// activeWidget.widget.Y = newY
+
+		switch activeLabelNewType.widget.S {
+		case "Grid":
+			activeWidget.NewGrid(name, newX, newY)
+		case "Group":
+			activeWidget.NewGroup(name)
+		case "Box":
+			activeWidget.NewBox(name, newB)
+		case "Button":
+			var n *Node
+			n = activeWidget.NewButton(name, func () {
+				log("got to button", name, n.id)
+			})
+		case "Checkbox":
+			a := activeWidget.NewCheckbox(name)
+			a.Custom = func () {
+				log("custom checkox func a=", a.widget.B, "id=", a.id)
+			}
+		case "Dropdown":
+			a := activeWidget.NewDropdown(name)
+			a.AddText(name + " yay")
+			a.AddText(name + " haha")
+			a.Custom = func () {
+				log("WTF a=", a.widget.B, "id=", a.id)
+			}
+		case "Combobox":
+			a := activeWidget.NewCombobox(name)
+			a.AddText(name + " foo")
+			a.AddText(name + " bar")
+		case "Label":
+			newNode := activeWidget.New(name, toolkit.Label, nil)
+
+			var a toolkit.Action
+			a.Type = toolkit.Add
+			newaction(&a, newNode, activeWidget)
+			// return newNode
+			// activeWidget.NewLabel(name)
+		case "Textbox":
+			activeWidget.NewTextbox(name)
+		case "Slider":
+			activeWidget.NewSlider(name, newX, newY)
+		case "Spinner":
+			activeWidget.NewSpinner(name, newX, newY)
+		default:
+			log(debugError, "make what type?")
 		}
 	})
 }

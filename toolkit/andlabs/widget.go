@@ -9,10 +9,11 @@ import (
 var mapWidgets map[*andlabsT]*toolkit.Widget
 var mapToolkits map[*toolkit.Widget]*andlabsT
 
-// This lists out the know mappings
+// This lists out the known mappings
+// deprecate and use instead the GUI interface
 func listMap(b bool) {
-	log(b, "listMap() HERE")
-	log(b, "listMap() HERE")
+	log(b, "listMap() disabled HERE. output too big")
+	return
 	for t, w := range mapWidgets {
 		log(b, "andlabs =", t.Name, "widget =", w.Name)
 	}
@@ -25,7 +26,8 @@ func listMap(b bool) {
 	log(b, "listMap() HERE FIXME. output too big")
 }
 
-func mapWidgetsToolkits(w *toolkit.Widget, t *andlabsT) {
+func mapWidgetsToolkits(a *toolkit.Action, t *andlabsT) {
+	w := a.Widget
 	if ((mapToolkits[w] == nil) && (mapWidgets[t] == nil)) {
 		log(debugToolkit, "map a new widget", w, t)
 		mapToolkits[w] = t
@@ -63,5 +65,5 @@ func mapWidgetsToolkits(w *toolkit.Widget, t *andlabsT) {
 			widgetDump(debugError, wt)
 		}
 	}
-	log(debugToolkit, "map of widget worked", w.Type, ",", w.Name, ",", w.Action)
+	log(debugToolkit, "map of widget worked", w.Type, ",", w.Name)
 }

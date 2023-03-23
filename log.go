@@ -122,7 +122,8 @@ func loggo() {
 	golog.Println("runtime.NumGoroutine() = ", runtime.NumGoroutine())
 }
 
-func logindent(depth int, format string, a ...any) {
+// b bool, print if true
+func logindent(b bool, depth int, format string, a ...any) {
 	var tabs string
 	for i := 0; i < depth; i++ {
 		tabs = tabs + format
@@ -133,6 +134,6 @@ func logindent(depth int, format string, a ...any) {
 
 	// array prepend(). Why isn't this a standard function. It should be:
 	// a.prepend(debugGui, newFormat)
-	a = append([]any{debugGui, newFormat}, a...)
+	a = append([]any{b, newFormat}, a...)
 	log(a...)
 }

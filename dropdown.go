@@ -11,7 +11,7 @@ import (
 
 // add a new entry to the dropdown name
 func (n *Node) AddDropdownName(name string) {
-	n.Add(name)
+	n.AddText(name)
 }
 
 // Set the dropdown menu to 'name'
@@ -21,12 +21,26 @@ func (n *Node) SetDropdownName(name string) {
 
 func (n *Node) NewDropdown(name string) *Node {
 	newNode := n.New(name, toolkit.Dropdown, nil) 
-	send(n, newNode)
+
+	var a toolkit.Action
+	a.Type = toolkit.Add
+	// a.Widget = &newNode.widget
+	// a.Where = &n.widget
+	// action(&a)
+	newaction(&a, newNode, n)
+
 	return newNode
 }
 
 func (n *Node) NewCombobox(name string) *Node {
 	newNode := n.New(name, toolkit.Combobox, nil) 
-	send(n, newNode)
+
+	var a toolkit.Action
+	a.Type = toolkit.Add
+	// a.Widget = &newNode.widget
+	// a.Where = &n.widget
+	// action(&a)
+	newaction(&a, newNode, n)
+
 	return newNode
 }

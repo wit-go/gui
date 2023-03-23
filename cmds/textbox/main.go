@@ -20,20 +20,9 @@ var args struct {
 }
 
 func main() {
+	// this implements ./cmd --gui-debug --gui-toolkit, etc
 	arg.MustParse(&args)
-	// fmt.Println(args.Foo, args.Bar, args.User)
 	log.Println("Toolkit = ", args.Toolkit)
-
-	/*
-	f, err := os.OpenFile("/tmp/guilogfile", os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
-	if err != nil {
-		log.Fatalf("error opening file: %v", err)
-	}
-	defer f.Close()
-
-	log.SetOutput(f)
-	log.Println("This is a test log entry")
-	*/
 
 	// gui.InitPlugins([]string{"andlabs"})
 	gui.Main(initGUI)
@@ -52,32 +41,40 @@ func initGUI() {
 		log.Println("myDefaultExit(w)")
 		myDefaultExit(w)
 	}
-	w.Dump()
 	addDemoTab(w, "A Simple Tab Demo")
 	addDemoTab(w, "A Second Tab")
 
 	if (args.GuiDebug) {
-		gui.DebugWindow()
+	 	gui.DebugWindow()
 	}
 	if (args.GuiVerbose) {
-		gui.SetDebug(true)
+	 	gui.SetDebug(true)
 	}
 }
 
 func addDemoTab(window *gui.Node, title string) {
-	var newNode, g, g2, tb *gui.Node
+	var newNode, g *gui.Node
 
 	newNode = window.NewTab(title)
-        log.Println("addDemoTab() newNode.Dump")
-	newNode.Dump()
+        log.Println("addDemoTab() newNode START")
+	// newNode.Dump(true)
 
 	g = newNode.NewGroup("group 1")
-	dd := g.NewDropdown("demoCombo2")
+
+	g1 := g.NewGrid("grid 1", 2, 2)
+	g1.NewLabel("less")
+	dd := g1.NewDropdown("more")
 	dd.AddDropdownName("more 1")
 	dd.AddDropdownName("more 2")
 	dd.AddDropdownName("more 3")
-	g2 = newNode.NewGroup("group 2")
-	tb = g2.NewTextbox("tb")
+
+	g.SetNext(3,1)
+	g1.NewLabel("label (3,1)")
+	g.SetNext(3,2)
+	g1.NewLabel("label (3,2)")
+
+	g2 := newNode.NewGroup("group 2")
+	tb := g2.NewTextbox("tb")
 	log.Println("tb =", tb.GetText())
 	tb.Custom = func() {
 		s := tb.GetText()

@@ -26,7 +26,6 @@ func (n *Node) DebugGoChannels(makeWindow bool) {
 	} else {
 		w = n.NewTab("Chan")
 	}
-	w.Dump()
 
 	g = w.NewGroup("Channel stuff")
 

@@ -54,11 +54,11 @@ func (t *andlabsT) newTab(name string) *andlabsT {
 // This sets _all_ the tabs to Margin = true
 //
 // TODO: do proper tab tracking (will be complicated). low priority
-func tabSetMargined(tab *ui.Tab) {
+func tabSetMargined(tab *ui.Tab, b bool) {
 	c := tab.NumPages()
 	for i := 0; i < c; i++ {
-		log(debugToolkit, "SetMargined", i, margin)
-		tab.SetMargined(i, margin)
+		log(debugToolkit, "SetMargined", i, b)
+		tab.SetMargined(i, b)
 	}
 }
 
@@ -80,11 +80,12 @@ func rawTab(w *ui.Window, name string) *andlabsT {
 	hbox := ui.NewHorizontalBox() // this makes everything go along the horizon
 	hbox.SetPadded(padded)
 	tab.Append(name, hbox)
-	tabSetMargined(tab) // TODO: run this in the right place(?)
+	tabSetMargined(tab, margin) // TODO: run this in the right place(?)
 	w.SetChild(tab)
 
 	newt.uiWindow = w
 	newt.uiTab = tab
+	newt.uiControl = tab
 	newt.uiBox = hbox
 	return &newt
 }
@@ -118,7 +119,9 @@ func (t *andlabsT) appendTab(name string) *andlabsT {
 	return &newT
 }
 
-func newTab(parentW *toolkit.Widget, w *toolkit.Widget) {
+func newTab(a *toolkit.Action) {
+	parentW := a.Where
+	w := a.Widget
 	var newt *andlabsT
 	log(debugToolkit, "gui.andlabs.NewTab()", w.Name)
 
@@ -128,55 +131,9 @@ func newTab(parentW *toolkit.Widget, w *toolkit.Widget) {
 		return
 	}
 	newt = t.newTab(w.Name)
-	mapWidgetsToolkits(w, newt)
+	mapWidgetsToolkits(a, newt)
 }
 
-func doTab(p *toolkit.Widget, c *toolkit.Widget) {
-	if broken(c) {
-		return
-	}
-	if (c.Action == "New") {
-		newTab(p, c)
-		return
-	}
-	ct := mapToolkits[c]
-	if (ct == nil) {
-		log(debugError, "Trying to do something on a widget that doesn't work or doesn't exist or something", c)
-		return
-	}
-	if ct.broken() {
-		log(debugError, "Tab() ct.broken", ct)
-		return
-	}
-	if (ct.uiTab == nil) {
-	
-		log(debugError, "Tab() uiTab == nil", ct)
-		return
-	}
-	log(debugChange, "Going to attempt:", c.Action)
-	switch c.Action {
-	case "Enable":
-		ct.uiTab.Enable()
-	case "Disable":
-		ct.uiTab.Disable()
-	case "Show":
-		ct.uiTab.Show()
-	case "Hide":
-		ct.uiTab.Hide()
-	case "Get":
-		c.I = ct.uiTab.NumPages()
-	case "Add":
-		log(true, "how do I add a tab here in doTab()?")
-		dump(p, c, true)
-	case "SetMargin":
-		i := ct.uiTab.NumPages()
-		log(true, "tab.NumPages() =", i)
-		for i > 0 {
-			i -= 1
-			log(true, "uiTab.SetMargined(true) for i =", i)
-			ct.uiTab.SetMargined(i, c.B)
-		}
-	default:
-		log(debugError, "Can't do", c.Action, "to a Tab")
-	}
+func doTab(a *toolkit.Action) {
+	newTab(a)
 }
