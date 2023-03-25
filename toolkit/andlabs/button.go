@@ -10,27 +10,27 @@ import (
 func newButton(a *toolkit.Action) {
 	var t, newt *andlabsT
 	var b *ui.Button
-	w := a.Widget
-	log(debugToolkit, "newButton()", w.Name)
+	log(debugToolkit, "newButton()", a.Title)
 
-	t = mapToolkits[a.Where]
+	t = andlabs[a.WhereId]
 	if (t == nil) {
-		log(debugToolkit, "newButton() toolkit struct == nil. name=", a.Where.Name, w.Name)
+		log(debugToolkit, "newButton() toolkit struct == nil. name=", a.Title)
 		return
 	}
 
 	newt = new(andlabsT)
 
-	b = ui.NewButton(w.Name)
+	b = ui.NewButton(a.Title)
 	newt.uiButton = b
 	newt.uiControl = b
-	newt.tw = w
+	newt.tw = a.Widget
+	newt.Type = a.WidgetT
 	newt.parent = t
 
 	b.OnClicked(func(*ui.Button) {
-		newt.commonChange(newt.tw)
+		newt.commonChange(newt.tw, a.WidgetId)
 	})
 
 	place(a, t, newt)
-	mapWidgetsToolkits(a, newt)
+	// mapWidgetsToolkits(a, newt)
 }

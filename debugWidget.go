@@ -188,8 +188,7 @@ func (n *Node) debugAddWidgetButtons() {
 	n.NewButton("Dropdown", func () {
 		a := activeWidget.NewDropdown("tmp dropdown")
 		a.AddText("this is better than tcl/tk")
-		a.AddText("make something for tim")
-		a.AddText("for qflow")
+		a.AddText("make something for tim for qflow")
 		a.AddText("and for riscv")
 		a.Custom = func () {
 			log("custom dropdown() a =", a.widget.Name, a.widget.S, "id=", a.id)
@@ -198,7 +197,7 @@ func (n *Node) debugAddWidgetButtons() {
 	n.NewButton("Combobox", func () {
 		a := activeWidget.NewCombobox("tmp combobox")
 		a.AddText("mirrors.wit.com")
-		a.AddText("go.wit.org")
+		a.AddText("go.wit.com")
 		a.Custom = func () {
 			log("custom combobox() a =", a.widget.Name, a.widget.S, "id=", a.id)
 		}
@@ -213,12 +212,14 @@ func (n *Node) debugAddWidgetButtons() {
 		// SetDebug(true)
 		debugGrid = activeWidget.NewGrid("tmp grid", 2, 3)
 		debugGridLabel = debugGrid.NewLabel("mirrors.wit.com")
+		/*
 		debugGrid.SetNext(0,1)
 		debugGrid.NewLabel("foo (0,1)")
 		debugGrid.SetNext(1,1)
 		debugGrid.NewLabel("foo (1,1)")
 		debugGrid.SetNext(2,1)
 		debugGrid.NewLabel("foo (2,1)")
+		*/
 		// SetDebug(false)
 		DebugWidgetWindow(debugGrid)
 	})

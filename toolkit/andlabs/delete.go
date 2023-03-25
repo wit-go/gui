@@ -6,21 +6,21 @@ import "git.wit.org/wit/gui/toolkit"
 
 // delete the child widget from the parent
 // p = parent, c = child
-func destroy(p *toolkit.Widget, c *toolkit.Widget) {
-	log(true, "delete()", c.Name, c.Type)
+func destroy(pId int, cId int) {
+	log(true, "delete()", pId, cId)
 
-	pt := mapToolkits[p]
-	ct := mapToolkits[c]
+	pt := andlabs[pId]
+	ct := andlabs[cId]
 	if (ct == nil) {
-		log(true, "delete FAILED (ct = mapToolkit[c] == nil) for c", c.Name, c.Type)
+		log(true, "delete FAILED (ct = mapToolkit[c] == nil) for c", pId, cId)
 		// this pukes out a whole universe of shit
 		// listMap()
 		return
 	}
 
-	switch ct.tw.Type {
+	switch ct.Type {
 	case toolkit.Button:
-		log(true, "Should delete Button here:", c.Name)
+		log(true, "Should delete Button here:", ct.Name)
 		log(true, "Parent:")
 		pt.Dump(true)
 		log(true, "Child:")
@@ -38,16 +38,15 @@ func destroy(p *toolkit.Widget, c *toolkit.Widget) {
 		}
 
 	case toolkit.Window:
-		log(true, "Should delete Window here:", c.Name)
+		log(true, "Should delete Window here:", ct.Name)
 	default:
-		log(true, "Don't know how to delete c =", c.Type, c.Name)
 		log(true, "Don't know how to delete pt =", pt.tw.Type, pt.tw.Name, pt.uiButton)
 		log(true, "Don't know how to delete ct =", ct.tw.Type, ct.tw.Name, ct.uiButton)
 		log(true, "Parent:")
 		pt.Dump(true)
 		log(true, "Child:")
 		ct.Dump(true)
-		log(true, "Fuckit, let's destroy a button", c.Name, c.Type)
+		log(true, "Fuckit, let's destroy a button")
 		if (ct.uiButton != nil) {
 			pt.uiBox.Delete(4)
 			ct.uiButton.Destroy()

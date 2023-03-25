@@ -7,19 +7,21 @@ import (
 	_ "github.com/andlabs/ui/winmanifest"
 )
 
-func (t *andlabsT) newSlider(w *toolkit.Widget) *andlabsT {
-	// make new node here
-	log(debugToolkit, w.Name, w.Type, w.X, w.Y)
+func (t *andlabsT) newSlider(a *toolkit.Action) *andlabsT {
 	var newt andlabsT
+	w := a.Widget
+	log(debugToolkit, w.Name, w.Type, w.X, w.Y)
 
 	s := ui.NewSlider(w.X, w.Y)
 	newt.uiSlider = s
 	newt.uiControl = s
 	newt.tw = w
+	newt.Type = toolkit.Slider
+	newt.wId = a.WidgetId
 
 	s.OnChanged(func(spin *ui.Slider) {
 		newt.tw.I = newt.uiSlider.Value()
-		newt.commonChange(newt.tw)
+		newt.commonChange(newt.tw, a.WidgetId)
 	})
 
 	return &newt
@@ -28,17 +30,15 @@ func (t *andlabsT) newSlider(w *toolkit.Widget) *andlabsT {
 func newSlider(a *toolkit.Action) {
 	var newt *andlabsT
 	w := a.Widget
-	parentW := a.Where
 	log(debugToolkit, "newSlider()", w.Name)
 
-	t := mapToolkits[parentW]
+	t := andlabs[a.WhereId]
 	if (t == nil) {
-		log(debugError, "newSlider() ERROR toolkit struct == nil. name=", parentW.Name, w.Name)
+		log(debugError, "newSlider() ERROR toolkit struct == nil. name=", w.Name)
 		return
 	}
 	w.X = a.X
 	w.Y = a.Y
-	newt = t.newSlider(w)
+	newt = t.newSlider(a)
 	place(a, t, newt)
-	mapWidgetsToolkits(a, newt)
 }

@@ -12,7 +12,7 @@ func newLabel(a *toolkit.Action) {
 	w := a.Widget
 	log(debugToolkit, "NewLabel()", w.Name)
 
-	t := mapToolkits[a.Where]
+	t := andlabs[a.WhereId]
 	if (t == nil) {
 		listMap(debugError)
 		log(debugError, "ERROR newLabel() listMap()")
@@ -30,5 +30,4 @@ func newLabel(a *toolkit.Action) {
 	newt.uiControl = c
 
 	place(a, t, newt)
-	mapWidgetsToolkits(a, newt)
 }

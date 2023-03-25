@@ -18,7 +18,6 @@ type ActionType int
 // Could a protobuf be used here? (Can functions be passed?)
 type Widget struct {
 	Name   string
-	// Action string		// "New", "Delete", "Set", aka something to do
 	Type  WidgetType
 
 	// This function is how you interact with the toolkit
@@ -57,14 +56,17 @@ type Widget struct {
 
 type Action struct {
 	Type ActionType
+	ActionT ActionType
+	WidgetT WidgetType
+
+	WidgetId int
+	WhereId int
+	Title string
 
 	// this should be the widget
 	// if the action is New, Hide, Enable, etc
 	Widget *Widget
-
-	// this is the widget 
-	// where the other one should be put on New, Move, etc
-	Where *Widget
+	Callback  func(int)
 
 	// This is how the values are passed back and forth
 	// values from things like checkboxes & dropdown's

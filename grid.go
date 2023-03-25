@@ -39,6 +39,7 @@ func (n *Node) NewBox(name string, b bool) *Node {
 
 	var a toolkit.Action
 	a.Type = toolkit.Add
+	a.Title = name
 	a.B = b
 	newaction(&a, newNode, n)
 

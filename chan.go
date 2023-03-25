@@ -22,6 +22,7 @@ func makeConc() {
 func startTheThing(wg *conc.WaitGroup) {
 	wg.Go(func() {
 		log(debugNow, "startTheThing()")
+		panic("test conc.WaitGroup")
 	})
 }
 

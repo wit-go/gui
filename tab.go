@@ -12,7 +12,9 @@ func (n *Node) NewTab(text string) *Node {
 
 	var a toolkit.Action
 	a.Type = toolkit.Add
+	a.Title = text
 	newaction(&a, newNode, n)
 
-	return newNode
+	newBox := newNode.NewBox(text, true)
+	return newBox
 }

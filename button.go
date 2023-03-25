@@ -6,11 +6,14 @@ func (n *Node) NewButton(name string, custom func()) *Node {
 	newNode := n.New(name, toolkit.Button, custom)
 
 	var a toolkit.Action
+	a.Title = name
 	a.Type = toolkit.Add
-	// a.Widget = &newNode.widget
-	// a.Where = &n.widget
-	// action(&a)
+	a.Callback = callback
 	newaction(&a, newNode, n)
 
 	return newNode
+}
+
+func callback(i int) {
+	log(debugError, "button callback() i =", i)
 }

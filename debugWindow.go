@@ -83,6 +83,10 @@ func (n *Node) DebugTab(title string) *Node {
 		activeWidget.ListChildren(true)
 	})
 
+	g2.NewButton("test conc", func () {
+		makeConc()
+	})
+
 	return newN
 }
 

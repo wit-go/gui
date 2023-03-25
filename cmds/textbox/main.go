@@ -68,10 +68,10 @@ func addDemoTab(window *gui.Node, title string) {
 	dd.AddDropdownName("more 2")
 	dd.AddDropdownName("more 3")
 
-	g.SetNext(3,1)
-	g1.NewLabel("label (3,1)")
-	g.SetNext(3,2)
-	g1.NewLabel("label (3,2)")
+	// g.SetNext(3,1)
+	// g1.NewLabel("label (3,1)")
+	// g.SetNext(3,2)
+	// g1.NewLabel("label (3,2)")
 
 	g2 := newNode.NewGroup("group 2")
 	tb := g2.NewTextbox("tb")

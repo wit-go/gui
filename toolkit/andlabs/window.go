@@ -27,13 +27,15 @@ func newWindow(a *toolkit.Action) {
 	}
 	newt = new(andlabsT)
 	newt.tw = w
+	newt.Type = toolkit.Window
+	newt.wId = a.WidgetId
 
 	// menubar bool is if the OS defined border on the window should be used
 	win := ui.NewWindow(w.Name, w.Width, w.Height, menubar)
 	win.SetBorderless(canvas)
 	win.SetMargined(margin)
 	win.OnClosing(func(*ui.Window) bool {
-		newt.commonChange(newt.tw)
+		newt.commonChange(newt.tw, a.WidgetId)
 		return true
 	})
 	win.Show()
@@ -42,16 +44,17 @@ func newWindow(a *toolkit.Action) {
 	// newt.UiWindowBad = win // deprecate this as soon as possible
 	newt.Name = w.Name
 
-	mapWidgetsToolkits(a, newt)
+	andlabs[a.WidgetId] = newt
 	return
 }
 
 func (t *andlabsT) SetWindowTitle(title string) {
 	log(debugToolkit, "toolkit NewWindow", t.Name, "title", title)
 	win := t.uiWindow
-	if (win != nil) {
-		win.SetTitle(title)
+	if (win == nil) {
+		log(debugError, "Error: no window", t.wId)
 	} else {
+		win.SetTitle(title)
 		log(debugToolkit, "Setting the window title", title)
 	}
 }

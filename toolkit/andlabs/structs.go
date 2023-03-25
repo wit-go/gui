@@ -5,14 +5,19 @@ import "git.wit.org/wit/gui/toolkit"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
+var andlabs map[int]*andlabsT
+var callback func(int)
+
 // stores the raw toolkit internals
 type andlabsT struct {
-	id     string
+	wId	int	// widget ID
+	Type	toolkit.WidgetType
 
 	Name   string
 	// Type   toolkit.WidgetType
 	Width  int
 	Height int
+
 	tw	*toolkit.Widget
 	parent	*andlabsT
 

@@ -107,42 +107,6 @@ external things which might be useful
 * [GO Style Guide]
 ```
 
-version v1.3
-
-I like things to be easy.
-
-this means all the log settings are in one place. it should allow
-things to be over-ridden externally to the library
-but still allow command line --args to pass debugging settings
-
-## I also have a generic sleep() and exit() in here because it's simple
-
-Usage:
-
-log("something", foo, bar)
-var DEBUG bool = true
-log(DEBUG, "something else", someOtherVariable)  # if DEBUG == false, return doing nothing
-log(SPEW, "something else", someOtherVariable)   # this get's sent to spew.Dump(). Very useful for debugging!
-
-## Variables
-
-```golang
-var INFO bool
-```
-
-```golang
-var LOGOFF bool = false // turn this off, all logging stops
-
-```
-
-```golang
-var SPEW spewt
-```
-
-```golang
-var WARN bool
-```
-
 ## Functions
 
 ### func [DebugWidgetWindow](/debugWidget.go#L52)
@@ -292,6 +256,8 @@ You get a window
 `type Symbol any`
 
 ## Sub Packages
+
+* [log](./log)
 
 * [toolkit](./toolkit)
 

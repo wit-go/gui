@@ -14,9 +14,7 @@ import (
 // -----------------------------
 func newGrid(a *toolkit.Action) {
 	var newt *andlabsT
-	log(debugToolkit, "newGrid()", a.Widget.Name, "to", a.Where.Type)
-
-	t := mapToolkits[a.Where]
+	log(debugToolkit, "newGrid()", a.WidgetId, "to", a.WhereId)
 
 	newt = new(andlabsT)
 
@@ -24,9 +22,10 @@ func newGrid(a *toolkit.Action) {
 	newt.uiGrid = c
 	newt.uiControl = c
 	newt.tw = a.Widget
+	newt.Type = toolkit.Grid
 	newt.gridX = 0
 	newt.gridY = 0
 
+	t := andlabs[a.WhereId]
 	place(a, t, newt)
-	mapWidgetsToolkits(a, newt)
 }
