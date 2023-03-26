@@ -74,7 +74,7 @@ func (n *Node) DebugTab(title string) *Node {
 		dropdownWindowWidgets(g1)
 	})
 
-	g2 := newN.NewGroup("node things")
+	g2 := newN.NewGroup("more things")
 
 	g2.NewButton("Node.ListChildren(true)", func () {
 		if (activeWidget == nil) {
@@ -85,6 +85,20 @@ func (n *Node) DebugTab(title string) *Node {
 
 	g2.NewButton("test conc", func () {
 		makeConc()
+	})
+
+	g2.NewButton("List Plugins", func () {
+		for _, aplug := range allPlugins {
+			log("Loaded plugin:", aplug.name, aplug.filename)
+		}
+	})
+
+	g2.NewButton("load plugin 'gocui'", func () {
+		StartS("gocui")
+	})
+
+	g2.NewButton("load plugin 'democui'", func () {
+		StartS("democui")
 	})
 
 	return newN

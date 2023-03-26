@@ -29,17 +29,24 @@ import 	(
 	// "net"
 )
 
+// various debugging flags
+var LogNow bool = true	// useful for active development
+var LogError bool = true
+var LogWarn bool = false
+var LogInfo bool = false
+var LogVerbose bool = false
+var LogSleep bool = false
+
 var LOGOFF bool = false // turn this off, all logging stops
 var debugToolkit bool = false // does spew stuff?
 
 var Where string = "gui/log"
 
-type spewt struct {
+type Spewt struct {
 	a bool
 }
 
-var SPEW spewt
-
+var SPEW Spewt
 
 /*
 	sleep()		# you know what this does? sleeps for 1 second. yep. dump. easy.
@@ -51,7 +58,7 @@ func Sleep(a ...any) {
 		return
 	}
 
-	Log(true, "sleep", a[0])
+	Log(LogSleep, "sleep", a[0])
 
 	switch a[0].(type) {
 	case int:
@@ -69,7 +76,7 @@ func Sleep(a ...any) {
 	exit("dont like apples")	# ok. I'll make a note of that
 */
 func Exit(a ...any) {
-	Log(true, "exit", a)
+	Log(LogError, "exit", a)
 	//if (a) {
 	//	os.Exit(a)
 	//}

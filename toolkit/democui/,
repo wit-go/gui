@@ -7,32 +7,34 @@ package main
 import (
 	"errors"
 	"fmt"
+	"log"
 
 	"github.com/awesome-gocui/gocui"
 )
 
-func MouseMain() {
+func main() {
 	g, err := gocui.NewGui(gocui.OutputNormal, true)
 	if err != nil {
-		panic(err)
+		log.Panicln(err)
 	}
 	defer g.Close()
 
-	baseGui = g
-
-	g.Cursor = true
+	g.Cursor = false
 	g.Mouse = true
 
 	g.SetManagerFunc(layout)
 
 	if err := keybindings(g); err != nil {
-		panic(err)
+		log.Panicln(err)
 	}
 
 	if err := g.MainLoop(); err != nil && !errors.Is(err, gocui.ErrQuit) {
-		panic(err)
+		log.Panicln(err)
 	}
 }
+
+var initialMouseX, initialMouseY, xOffset, yOffset int
+var globalMouseDown, msgMouseDown, movingMsg bool
 
 func layout(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
@@ -67,7 +69,6 @@ func layout(g *gocui.Gui) error {
 		v.SelFgColor = gocui.ColorBlack
 		fmt.Fprintln(v, "Button 2 - line 1")
 	}
-	helplayout(g)
 	updateHighlightedView(g)
 	return nil
 }

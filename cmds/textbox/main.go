@@ -24,7 +24,9 @@ func main() {
 	arg.MustParse(&args)
 	log.Println("Toolkit = ", args.Toolkit)
 
-	// gui.InitPlugins([]string{"andlabs"})
+	gui.SetDebug(true)
+	// gui.InitPlugins([]string{"gocui"})
+	// gui.InitPlugins([]string{"democui"})
 	gui.Main(initGUI)
 }
 

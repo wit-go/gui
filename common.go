@@ -157,3 +157,50 @@ func commonCallback(n *Node) {
 		n.Custom()
 	}
 }
+
+func (n *Node) Margin() {
+	var a toolkit.Action
+	a.Type = toolkit.Margin
+	newaction(&a, n, nil)
+}
+
+func (n *Node) Unmargin() {
+	var a toolkit.Action
+	a.Type = toolkit.Unmargin
+	newaction(&a, n, nil)
+}
+
+func (n *Node) Pad() {
+	var a toolkit.Action
+	a.Type = toolkit.Pad
+	newaction(&a, n, nil)
+}
+
+func (n *Node) Unpad() {
+	var a toolkit.Action
+	a.Type = toolkit.Unpad
+	newaction(&a, n, nil)
+}
+
+func (n *Node) New2() *Node {
+	var newWin *Node
+	newWin = NewWindow()
+	log(debugError, "New2() END Main(f)")
+	return newWin
+}
+
+func (n *Node) Window(title string) *Node {
+	log(debugError, "Window()", n)
+	n.SetText(title)
+	return n
+}
+
+func (n *Node) Standard() *Node {
+	log(debugError, "Standard()")
+	return n
+}
+
+func (n *Node) DoMargin() *Node {
+	log(debugError, "DoMargin()")
+	return n
+}

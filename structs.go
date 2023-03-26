@@ -2,6 +2,7 @@ package gui
 
 import (
 	"git.wit.org/wit/gui/toolkit"
+	"sync"
 )
 
 //
@@ -56,6 +57,7 @@ type GuiConfig struct {
 // simply the name and the size of whatever GUI element exists
 type Node struct {
 	id     int
+	initOnce sync.Once
 
 	widget	toolkit.Widget
 

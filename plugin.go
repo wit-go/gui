@@ -29,12 +29,12 @@ type aplug struct {
 	// TODO: make Main() main() and never allow the user to call it
 	// run plugin.Main() when the plugin is loaded
 	Main func(func ())	// this never returns. Each plugin must have it's own goroutine
-	Queue func(func ())	// Should this return right away? Should it wait (can it wait?)
+	// Queue func(func ())	// Should this return right away? Should it wait (can it wait?)
 	Quit func()
 	// NewWindow func(*toolkit.Widget)
 
 	// simplifies passing to the plugin
-	Send func(*toolkit.Widget, *toolkit.Widget)
+	// Send func(*toolkit.Widget, *toolkit.Widget)
 
 	// should replace Send()
 	Action func(*toolkit.Action)
@@ -74,7 +74,7 @@ func LoadToolkit(name string) bool {
 	newPlug.Main  = loadFuncF(&newPlug, "Main")
 
 	// should send things to the goroutine above
-	newPlug.Queue = loadFuncF(&newPlug, "Queue")
+	// newPlug.Queue = loadFuncF(&newPlug, "Queue")
 
 	// unload the plugin and restore state
 	newPlug.Quit = loadFuncE(&newPlug, "Quit")

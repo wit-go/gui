@@ -55,9 +55,11 @@ func (n *Node) Parent() *Node {
 	return n.parent
 }
 
+/*
 func (n *Node) Window() *Node {
 	return n.parent
 }
+*/
 
 func (n *Node) Append(child *Node) {
 	n.children = append(n.children, child)

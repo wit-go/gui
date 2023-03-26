@@ -8,8 +8,10 @@ import (
 	// "regexp"
 	// "git.wit.org/wit/gui/toolkit"
 	"sync"
+	"runtime"
 	"github.com/sourcegraph/conc"
 	"github.com/sourcegraph/conc/stream"
+	"github.com/sourcegraph/conc/panics"
 )
 
 func makeConc() {
@@ -17,13 +19,40 @@ func makeConc() {
 	defer wg.Wait()
 
 	startTheThing(&wg)
+	log(debugError, "panic?")
+	sleep(2)
+	log(debugError, "panic? after sleep(5)")
 }
 
 func startTheThing(wg *conc.WaitGroup) {
-	wg.Go(func() {
-		log(debugNow, "startTheThing()")
+	f := func() {
+		log(debugError, "startTheThing() == about to panic now")
 		panic("test conc.WaitGroup")
+	}
+	wg.Go(func() {
+		ExampleCatcher(f)
 	})
+}
+
+func ExampleCatcher(f func()) {
+	var pc panics.Catcher
+	i := 0
+	pc.Try(func() { i += 1 })
+	pc.Try(f)
+	pc.Try(func() { i += 1 })
+
+	recovered := pc.Recovered()
+
+	log(debugError, "panic.Recovered():", recovered.Value.(string))
+	frames := runtime.CallersFrames(recovered.Callers)
+	for {
+		frame, more := frames.Next()
+		log(debugError, "\t", frame.Function)
+
+		if !more {
+			break
+		}
+	}
 }
 
 func mapStream(

@@ -35,9 +35,10 @@ func add(a *toolkit.Action) {
 
 	if (andlabs[a.WhereId] == nil) {
 		// listMap(debugError) // memory corruption?
-		log(debugError, "add() Widget.Name =", a.Title, a.WidgetT)
-		// log(debugError, "add() Where.Name =", a.Where.Name)
-		log(debugError, "ERROR add() ERROR a.Where map to t == nil.", a.WidgetId, a.WhereId)
+		log(debugError, "add() Widget.Name =", a.Title)
+		log(debugError, "add() Widget.Type =", a.WidgetT)
+		log(debugError, "ERROR add() ERROR a.Where map to t == nil. WidgetId =", a.WidgetId, "WhereId =", a.WhereId)
+		exit("can not add()")
 		return
 	}
 

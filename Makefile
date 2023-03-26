@@ -55,6 +55,7 @@ cmds-helloconsole:
 github:
 	git push origin master
 	git push github master
+	git push github devel
 	git push github --tags
 	@echo
 	@echo check https://github.com/wit-go/gui

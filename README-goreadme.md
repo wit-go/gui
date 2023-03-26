@@ -119,6 +119,10 @@ external things which might be useful
 
 Creates a window helpful for debugging this package
 
+### func [ExampleCatcher](/chan.go#L37)
+
+`func ExampleCatcher(f func())`
+
 ### func [Indent](/debug.go#L130)
 
 `func Indent(b bool, a ...interface{})`
@@ -133,22 +137,11 @@ Creates a window helpful for debugging this package
 
 loads and initializes a toolkit (andlabs/ui, gocui, etc)
 
-### func [Main](/main.go#L97)
+### func [Main](/main.go#L118)
 
 `func Main(f func())`
 
 This should not pass a function
-
-### func [Queue](/main.go#L127)
-
-`func Queue(f func())`
-
-Other goroutines must use this to access the GUI
-
-You can not acess / process the GUI thread directly from
-other goroutines. This is due to the nature of how
-Linux, MacOS and Windows work (they all work differently. suprise. surprise.)
-For example: gui.Queue(NewWindow())
 
 ### func [SetDebug](/debug.go#L28)
 
@@ -162,7 +155,7 @@ For example: gui.Queue(NewWindow())
 
 `func ShowDebugValues()`
 
-### func [StandardExit](/main.go#L147)
+### func [StandardExit](/main.go#L170)
 
 `func StandardExit()`
 
@@ -180,13 +173,13 @@ This goroutine can be used like a watchdog timer
 
 ## Types
 
-### type [GuiArgs](/structs.go#L25)
+### type [GuiArgs](/structs.go#L26)
 
 `type GuiArgs struct { ... }`
 
 This struct can be used with the go-arg package
 
-### type [GuiConfig](/structs.go#L33)
+### type [GuiConfig](/structs.go#L34)
 
 `type GuiConfig struct { ... }`
 
@@ -196,7 +189,7 @@ This struct can be used with the go-arg package
 var Config GuiConfig
 ```
 
-### type [Node](/structs.go#L57)
+### type [Node](/structs.go#L58)
 
 `type Node struct { ... }`
 
@@ -250,6 +243,14 @@ func main() {
 ```
 You get a window
 ```
+
+#### func [Start](/main.go#L96)
+
+`func Start() *Node`
+
+#### func [StartS](/main.go#L105)
+
+`func StartS(name string) *Node`
 
 ### type [Symbol](/plugin.go#L16)
 

@@ -113,3 +113,19 @@ func Send(p *toolkit.Widget, c *toolkit.Widget) {
 		log(debugError, "plugin Send() Don't know how to do", c.Type, "yet")
 	}
 }
+
+func Action(a *toolkit.Action) {
+	log(logNow, "Action() START a.Type =", a.Type)
+	log(logNow, "Action() START a.S =", a.S)
+	log(logNow, "Action() START a.Widget =", a.Widget)
+
+	log(logNow, "Action() START a.WidgetId =", a.WidgetId, "a.WhereId =", a.WhereId)
+
+	switch a.Type {
+	case toolkit.Add:
+		log(logError, "Action() do add here() =", a.Type, a.Widget)
+	default:
+		log(logError, "Action() Unknown =", a.Type, a.Widget)
+	}
+	log(logNow, "Action() END =", a.Type, a.Widget)
+}
