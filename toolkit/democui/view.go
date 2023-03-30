@@ -315,3 +315,35 @@ func place(w *cuiWidget, a *toolkit.Action) {
 	log(logInfo, "place() END")
 	return
 }
+
+func (w *cuiWidget) drawView() {
+	var err error
+	if (me.baseGui == nil) {
+		log(logError, "drawView() me.baseGui == nil")
+		return
+	}
+
+	a := w.realSize.w0
+	b := w.realSize.h0
+	c := w.realSize.w1
+	d := w.realSize.h1
+
+	var newName string = ""
+	newName = strconv.Itoa(w.id)
+	w.v, err = me.baseGui.SetView(newName, a, b, c, d, 0)
+	if err == nil {
+		log(logError, "drawView() internal plugin error err = nil")
+		return
+	}
+	if !errors.Is(err, gocui.ErrUnknownView) {
+		log(logError, "drawView() internal plugin error error.IS()", err)
+		return
+	}
+
+	me.baseGui.SetKeybinding(w.v.Name(), gocui.MouseLeft, gocui.ModNone, click)
+
+	w.v.Wrap = true
+	fmt.Fprintln(w.v, " " + w.text)
+
+	w.SetDefaultWidgetColor()
+}

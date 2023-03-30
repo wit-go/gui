@@ -88,26 +88,14 @@ func dumpWidgets(g *gocui.Gui, v *gocui.View) {
 	}
 }
 
-func adjustWidgets() {
-	for i := 0; i <= me.highest; i++ {
-		w := me.widgets[i]
-		if (w == nil) {
-			continue
-		}
-		p := me.widgets[w.parentId]
-		if (p != nil) {
-			w.setParentLogical(p)
-		}
-	}
-}
-
 func (w *cuiWidget) showWidgetPlacement(b bool, s string) {
 	log(b, "dump()", s,
 		fmt.Sprintf("(wId,pId)=(%3d,%3d)", w.id, w.parentId),
 		fmt.Sprintf("real()=(%3d,%3d,%3d,%3d)", w.realSize.w0, w.realSize.h0, w.realSize.w1, w.realSize.h1),
 		"next()=(", w.nextX, ",", w.nextY, ")",
 		"logical()=(", w.logicalSize.w0, ",", w.logicalSize.h0, ",", w.logicalSize.w1, ",", w.logicalSize.h1, ")",
-		w.widgetType, ",", w.name)
+		w.widgetType, ",", w.name, "text=", w.text)
+
 	if (w.realWidth != (w.realSize.w1 - w.realSize.w0)) {
 		log(b, "dump()", s,
 			"badsize()=(", w.realWidth, ",", w.realHeight, ")",

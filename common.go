@@ -39,30 +39,26 @@ func (n *Node) Add(str string) {
 	var a toolkit.Action
 	a.ActionType = toolkit.Add
 	a.S = str
-	// a.Widget = &n.widget
-	// action(&a)
 	newaction(&a, n, nil)
 }
 
 func (n *Node) AddText(str string) {
 	log(debugChange, "AddText() value =", str)
 
+	n.Text = str
 	var a toolkit.Action
 	a.ActionType = toolkit.AddText
 	a.S = str
-	// a.Widget = &n.widget
-	// action(&a)
 	newaction(&a, n, nil)
 }
 
-func (n *Node) SetText(str string) {
-	log(debugChange, "SetText() value =", str)
+func (n *Node) SetText(text string) {
+	log(debugChange, "SetText() value =", text)
 
+	n.Text = text
 	var a toolkit.Action
 	a.ActionType = toolkit.SetText
-	a.S = str
-	// a.Widget = &n.widget
-	// action(&a)
+	a.S = text
 	newaction(&a, n, nil)
 }
 
@@ -84,17 +80,18 @@ func (n *Node) Set(val any) {
 
 	switch v := val.(type) {
 	case bool:
+		n.B = val.(bool)
 		a.B = val.(bool)
 	case string:
+		n.Text = val.(string)
 		a.S = val.(string)
 	case int:
+		n.I = val.(int)
 		a.I = val.(int)
 	default:
 		log(debugError, "Set() unknown type =", v, "a =", a)
 	}
 
-	// a.Widget = &n.widget
-	// action(&a)
 	newaction(&a, n, nil)
 }
 
@@ -104,8 +101,7 @@ func (n *Node) AppendText(str string) {
 	tmp := n.widget.S + str
 	log(debugChange, "AppendText() value =", tmp)
 	a.S = tmp
-	// a.Widget = &n.widget
-	// action(&a)
+	n.Text = tmp
 	newaction(&a, n, nil)
 }
 
@@ -181,6 +177,9 @@ func (n *Node) Unpad() {
 	a.ActionType = toolkit.Unpad
 	newaction(&a, n, nil)
 }
+
+// is this better?
+//  me.window = myGui.New2().Window("DNS and IPv6 Control Panel").Standard()
 
 func (n *Node) New2() *Node {
 	var newWin *Node

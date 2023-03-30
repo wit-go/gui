@@ -32,11 +32,28 @@ func defaultKeybindings(g *gocui.Gui) error {
 
 // dump out the widgets
 func addDebugKeys(g *gocui.Gui) {
+	// dump all widget info to the log
 	g.SetKeybinding("", 'd', gocui.ModNone,
 		func(g *gocui.Gui, v *gocui.View) error {
 			dumpWidgets(g, v)
 			return nil
 	})
+
+	// hide all widgets
+	g.SetKeybinding("", 'h', gocui.ModNone,
+		func(g *gocui.Gui, v *gocui.View) error {
+			hideWidgets()
+			return nil
+	})
+
+	// show all widgets
+	g.SetKeybinding("", 's', gocui.ModNone,
+		func(g *gocui.Gui, v *gocui.View) error {
+			showWidgets()
+			return nil
+	})
+
+	// try to adjust all the widget positions
 	g.SetKeybinding("", 'r', gocui.ModNone,
 		func(g *gocui.Gui, v *gocui.View) error {
 			adjustWidgets()

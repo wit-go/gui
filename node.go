@@ -43,6 +43,7 @@ func (n *Node) New(title string, t toolkit.WidgetType, custom func()) *Node {
 func addNode(title string) *Node {
 	n := new(Node)
 	n.Name = title
+	n.Text = title
 	n.widget.Name = title
 	n.id = Config.counter
 	n.widget.Id = n.id
