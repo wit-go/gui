@@ -8,18 +8,26 @@ import (
 	"os"
 )
 
+/*
 func OnExit(f func(string)) {
 	Custom = f
 }
+*/
 
 func Init() {
-	log("Init() of democui")
+	log(logInfo, "Init() of democui")
+	me.widgets = make(map[int]*cuiWidget)
+	me.defaultWidth = 10
+	me.defaultHeight = 2
+	me.defaultBehavior = true
 }
 
 func Exit() {
-	g.Close()
+	// TODO: exit correctly
+	me.baseGui.Close()
 }
 
+/*
 func mouseClick(name string) {
 	// output screws up the console. Need to fix this by redirecting all console output to a file from log.Println()
 	// log.Println("g.Close()")
@@ -29,6 +37,7 @@ func mouseClick(name string) {
 	Custom(name)
 	// panic("got andlabs")
 }
+*/
 
 func Main(f func()) {
 	log("start Init()")

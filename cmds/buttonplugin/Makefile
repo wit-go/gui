@@ -8,7 +8,7 @@
 
 run: build
 	# ./buttonplugin >/tmp/buttonplugin.log 2>&1
-	./buttonplugin
+	./buttonplugin >/tmp/witgui.log.stderr 2>&1
 
 build-release:
 	go get -v -u -x .
@@ -21,3 +21,7 @@ build:
 
 update:
 	GO111MODULE="off" go get -v -u -x .
+
+log:
+	reset
+	tail -f /tmp/witgui.* /tmp/guilogfile

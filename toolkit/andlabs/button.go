@@ -10,21 +10,21 @@ import (
 func newButton(a *toolkit.Action) {
 	var t, newt *andlabsT
 	var b *ui.Button
-	log(debugToolkit, "newButton()", a.Title)
+	log(debugToolkit, "newButton()", a.Name)
 
-	t = andlabs[a.WhereId]
+	t = andlabs[a.ParentId]
 	if (t == nil) {
-		log(debugToolkit, "newButton() toolkit struct == nil. name=", a.Title)
+		log(debugToolkit, "newButton() toolkit struct == nil. name=", a.Name)
 		return
 	}
 
 	newt = new(andlabsT)
 
-	b = ui.NewButton(a.Title)
+	b = ui.NewButton(a.Text)
 	newt.uiButton = b
 	newt.uiControl = b
 	newt.tw = a.Widget
-	newt.Type = a.WidgetT
+	newt.Type = a.WidgetType
 	newt.parent = t
 
 	b.OnClicked(func(*ui.Button) {

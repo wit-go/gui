@@ -9,3 +9,7 @@ plugin:
 
 objdump:
 	objdump -t ../democui.so |less
+
+log:
+	reset
+	tail -f /tmp/witgui.* /tmp/guilogfile

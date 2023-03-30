@@ -1,86 +1,46 @@
 package main
 
-import "git.wit.org/wit/gui/toolkit"
+import (
+	"fmt"
+	"strconv"
 
-var defaultBehavior bool = true
+	"git.wit.org/wit/gui/toolkit"
+	"github.com/awesome-gocui/gocui"
+)
 
-var bookshelf bool // do you want things arranged in the box like a bookshelf or a stack?
-var canvas bool // if set to true, the windows are a raw canvas
-var menubar bool // for windows
-var stretchy bool // expand things like buttons to the maximum size
-var padded bool // add space between things like buttons
-var margin bool // add space around the frames of windows
-
-var debugToolkit bool
-var debugChange bool
-var debugPlugin bool
-var debugFlags bool
-var debugError bool = true
+// var debugError bool = true
 
 // This is important. This sets the defaults for the gui. Without this, there isn't correct padding, etc
 func setDefaultBehavior(s bool) {
-	defaultBehavior = s
-	if (defaultBehavior) {
-		log(debugToolkit, "Setting this toolkit to use the default behavior.")
-		log(debugToolkit, "This is the 'guessing' part as defined by the wit/gui 'Principles'. Refer to the docs.")
-		stretchy = false
-		padded = true
-		menubar = true
-		margin = true
-		canvas = false
-		bookshelf = true // 99% of the time, things make a vertical stack of objects
+	me.defaultBehavior = s
+	if (me.defaultBehavior) {
+		log(logInfo, "Setting this toolkit to use the default behavior.")
+		log(logInfo, "This is the 'guessing' part as defined by the wit/gui 'Principles'. Refer to the docs.")
+		me.stretchy = false
+		me.padded = true
+		me.menubar = true
+		me.margin = true
+		me.canvas = false
+		me.bookshelf = true // 99% of the time, things make a vertical stack of objects
 	} else {
-		log(debugToolkit, "This toolkit is set to ignore the default behavior.")
+		log(logInfo, "This toolkit is set to ignore the default behavior.")
 	}
 }
 
-func ShowDebug () {
-	log(true, "debugToolkit =", debugToolkit)
-	log(true, "debugChange  =", debugChange)
-	log(true, "debugPlugin  =", debugPlugin)
-	log(true, "debugFlags    =", debugFlags)
-	log(true, "debugError   =", debugError)
-}
-
-/*
-func (t *gocuiT) Dump(b bool) {
-	if ! b {
+func actionDump(b bool, a *toolkit.Action) {
+	if (a == nil) {
+		log(b, "action = nil")
 		return
 	}
-	log(b, "Name  = ", t.Name, t.Width, t.Height)
-	if (t.uiBox != nil) {
-		log(b, "uiBox      =", t.uiBox)
-	}
-	if (t.uiButton != nil) {
-		log(b, "uiButton    =", t.uiButton)
-	}
-	if (t.uiCombobox != nil) {
-		log(b, "uiCombobox  =", t.uiCombobox)
-	}
-	if (t.uiWindow != nil) {
-		log(b, "uiWindow    =", t.uiWindow)
-	}
-	if (t.uiTab != nil) {
-		log(b, "uiTab       =", t.uiTab)
-	}
-	if (t.uiGroup != nil) {
-		log(b, "uiGroup     =", t.uiGroup)
-	}
-	if (t.uiEntry != nil) {
-		log(b, "uiEntry     =", t.uiEntry)
-	}
-	if (t.uiMultilineEntry != nil) {
-		log(b, "uiMultilineEntry =", t.uiMultilineEntry)
-	}
-	if (t.uiSlider != nil) {
-		log(b, "uiSlider    =", t.uiSlider)
-	}
-	if (t.uiCheckbox != nil) {
-		log(b, "uiCheckbox  =", t.uiCheckbox)
-	}
-	widgetDump(b, t.tw)
+
+	log(b, "a.Name             =", a.Name)
+	log(b, "a.Text             =", a.Text)
+	log(b, "a.WidgetId         =", a.WidgetId)
+	log(b, "a.ParentId         =", a.ParentId)
+	log(b, "a.B                =", a.B)
+	log(b, "a.S                =", a.S)
+	widgetDump(b, a.Widget)
 }
-*/
 
 func widgetDump(b bool, w *toolkit.Widget) {
 	if (w == nil) {
@@ -88,6 +48,7 @@ func widgetDump(b bool, w *toolkit.Widget) {
 		return
 	}
 
+	/*
 	log(b, "widget.Name        =", w.Name)
 	log(b, "widget.Type        =", w.Type)
 	log(b, "widget.Custom      =", w.Custom)
@@ -97,10 +58,66 @@ func widgetDump(b bool, w *toolkit.Widget) {
 	log(b, "widget.Height      =", w.Height)
 	log(b, "widget.X           =", w.X)
 	log(b, "widget.Y           =", w.Y)
+	*/
 }
 
-/*
-func GetDebugToolkit () bool {
-	return debugToolkit
+func dumpWidgets(g *gocui.Gui, v *gocui.View) {
+	for _, view := range g.Views() {
+		i, _ := strconv.Atoi(view.Name())
+		if (me.widgets[i] != nil) {
+			continue
+		}
+		log(logNow, "dump() not a widget. view.Name =", view.Name())
+	}
+
+	for i := 0; i <= me.highest; i++ {
+		w := me.widgets[i]
+		if (w == nil) {
+			continue
+		}
+		w.showWidgetPlacement(logNow, "")
+
+		if (w.v == nil) {
+			log(logError, "dump()        ERROR w.v == nil")
+		} else {
+			if (strconv.Itoa(i) != w.v.Name()) {
+				log(logError, "dump()        ERROR unequal str.Itoa(i) =", strconv.Itoa(i))
+				log(logError, "dump()        ERROR unequal w.v.Name()  =", w.v.Name())
+			}
+		}
+	}
 }
-*/
+
+func adjustWidgets() {
+	for i := 0; i <= me.highest; i++ {
+		w := me.widgets[i]
+		if (w == nil) {
+			continue
+		}
+		p := me.widgets[w.parentId]
+		if (p != nil) {
+			w.setParentLogical(p)
+		}
+	}
+}
+
+func (w *cuiWidget) showWidgetPlacement(b bool, s string) {
+	log(b, "dump()", s,
+		fmt.Sprintf("(wId,pId)=(%3d,%3d)", w.id, w.parentId),
+		fmt.Sprintf("real()=(%3d,%3d,%3d,%3d)", w.realSize.w0, w.realSize.h0, w.realSize.w1, w.realSize.h1),
+		"next()=(", w.nextX, ",", w.nextY, ")",
+		"logical()=(", w.logicalSize.w0, ",", w.logicalSize.h0, ",", w.logicalSize.w1, ",", w.logicalSize.h1, ")",
+		w.widgetType, ",", w.name)
+	if (w.realWidth != (w.realSize.w1 - w.realSize.w0)) {
+		log(b, "dump()", s,
+			"badsize()=(", w.realWidth, ",", w.realHeight, ")",
+			"badreal()=(", w.realSize.w0, ",", w.realSize.h0, ",", w.realSize.w1, ",", w.realSize.h1, ")",
+			w.widgetType, ",", w.name)
+	}
+	if (w.realHeight != (w.realSize.h1 - w.realSize.h0)) {
+		log(b, "dump()", s,
+			"badsize()=(", w.realWidth, ",", w.realHeight, ")",
+			"badreal()=(", w.realSize.w0, ",", w.realSize.h0, ",", w.realSize.w1, ",", w.realSize.h1, ")",
+			w.widgetType, ",", w.name)
+	}
+}

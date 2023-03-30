@@ -10,9 +10,9 @@ import (
 func (t *andlabsT) newSlider(a *toolkit.Action) *andlabsT {
 	var newt andlabsT
 	w := a.Widget
-	log(debugToolkit, w.Name, w.Type, w.X, w.Y)
+	// log(debugToolkit, w.Name, w.Type, w.X, w.Y)
 
-	s := ui.NewSlider(w.X, w.Y)
+	s := ui.NewSlider(a.X, a.Y)
 	newt.uiSlider = s
 	newt.uiControl = s
 	newt.tw = w
@@ -32,13 +32,13 @@ func newSlider(a *toolkit.Action) {
 	w := a.Widget
 	log(debugToolkit, "newSlider()", w.Name)
 
-	t := andlabs[a.WhereId]
+	t := andlabs[a.ParentId]
 	if (t == nil) {
 		log(debugError, "newSlider() ERROR toolkit struct == nil. name=", w.Name)
 		return
 	}
-	w.X = a.X
-	w.Y = a.Y
+	// w.X = a.X
+	// w.Y = a.Y
 	newt = t.newSlider(a)
 	place(a, t, newt)
 }

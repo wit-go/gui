@@ -12,7 +12,7 @@ func newImage(a *toolkit.Action) {
 	w := a.Widget
 	log(debugToolkit, "newImage()", w.Name)
 
-	t := andlabs[a.WhereId]
+	t := andlabs[a.ParentId]
 	if (t == nil) {
 		log(debugToolkit, "newImage() toolkit struct == nil. name=", w.Name)
 		listMap(debugToolkit)

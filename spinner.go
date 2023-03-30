@@ -10,7 +10,7 @@ func (n *Node) NewSpinner(name string, x int, y int) *Node {
 	})
 
 	var a toolkit.Action
-	a.Type = toolkit.Add
+	a.ActionType = toolkit.Add
 	a.X = x
 	a.Y = y
 	// a.Widget = &newNode.widget

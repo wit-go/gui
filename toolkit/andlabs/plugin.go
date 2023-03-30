@@ -44,13 +44,18 @@ func Action(a *toolkit.Action) {
 
 func rawAction(a *toolkit.Action) {
 
-	log(debugAction, "Action() START a.Type =", a.Type)
+	log(debugAction, "Action() START a.ActionType =", a.ActionType)
 	log(debugAction, "Action() START a.S =", a.S)
 	log(debugAction, "Action() START a.Widget =", a.Widget)
 
-	log(logInfo, "Action() START a.WidgetId =", a.WidgetId, "a.WhereId =", a.WhereId)
+	log(logInfo, "Action() START a.WidgetId =", a.WidgetId, "a.ParentId =", a.ParentId)
+	switch a.WidgetType {
+	case toolkit.Flag:
+		flag(a)
+		return
+	}
 
-	switch a.Type {
+	switch a.ActionType {
 	case toolkit.Add:
 		add(a)
 	case toolkit.Show:
@@ -75,8 +80,6 @@ func rawAction(a *toolkit.Action) {
 		}
 	case toolkit.Set:
 		setText(a)
-	case toolkit.SetFlag:
-		flag(a)
 	case toolkit.SetText:
 		setText(a)
 	case toolkit.AddText:
@@ -91,15 +94,13 @@ func rawAction(a *toolkit.Action) {
 		pad(a)
 	case toolkit.Delete:
 		uiDelete(a)
-	case toolkit.Flag:
-		flag(a)
 	case toolkit.Move:
-		log(debugNow, "attempt to move() =", a.Type, a.Widget)
+		log(debugNow, "attempt to move() =", a.ActionType, a.Widget)
 		move(a)
 	default:
-		log(debugError, "Action() Unknown =", a.Type, a.Widget)
+		log(debugError, "Action() Unknown =", a.ActionType, a.Widget)
 	}
-	log(debugAction, "Action() END =", a.Type, a.Widget)
+	log(debugAction, "Action() END =", a.ActionType, a.Widget)
 }
 
 func flag(a *toolkit.Action) {
@@ -146,7 +147,7 @@ func setText(a *toolkit.Action) {
 	case toolkit.Group:
 		t.uiGroup.SetTitle(a.S)
 	case toolkit.Checkbox:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.SetText:
 			t.uiCheckbox.SetText(a.S)
 		case toolkit.Get:
@@ -156,10 +157,10 @@ func setText(a *toolkit.Action) {
 			// t.uiCheckbox.SetChecked(a.B)
 			t.tw.B = a.B
 		default:
-			log(debugError, "setText() unknown", a.Type, "on checkbox", t.tw.Name)
+			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.tw.Name)
 		}
 	case toolkit.Textbox:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.Set:
 			t.uiMultilineEntry.SetText(a.S)
 		case toolkit.SetText:
@@ -169,32 +170,32 @@ func setText(a *toolkit.Action) {
 		case toolkit.GetText:
 			t.tw.S = t.s
 		default:
-			log(debugError, "setText() unknown", a.Type, "on checkbox", t.tw.Name)
+			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.tw.Name)
 		}
 	case toolkit.Label:
 		t.uiLabel.SetText(a.S)
 	case toolkit.Button:
 		t.uiButton.SetText(a.S)
 	case toolkit.Slider:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.Get:
 			t.tw.I = t.uiSlider.Value()
 		case toolkit.Set:
 			t.uiSlider.SetValue(a.I)
 		default:
-			log(debugError, "setText() unknown", a.Type, "on checkbox", t.tw.Name)
+			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.tw.Name)
 		}
 	case toolkit.Spinner:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.Get:
 			t.tw.I = t.uiSpinbox.Value()
 		case toolkit.Set:
 			t.uiSpinbox.SetValue(a.I)
 		default:
-			log(debugError, "setText() unknown", a.Type, "on checkbox", t.tw.Name)
+			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.tw.Name)
 		}
 	case toolkit.Dropdown:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.AddText:
 			AddDropdownName(a)
 		case toolkit.Set:
@@ -226,10 +227,10 @@ func setText(a *toolkit.Action) {
 		case toolkit.GetText:
 			t.tw.S = t.s
 		default:
-			log(debugError, "setText() unknown", a.Type, "on checkbox", t.tw.Name)
+			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.tw.Name)
 		}
 	case toolkit.Combobox:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.AddText:
 			t.AddComboboxName(a.S)
 		case toolkit.Set:
@@ -243,9 +244,9 @@ func setText(a *toolkit.Action) {
 		case toolkit.GetText:
 			t.tw.S = t.s
 		default:
-			log(debugError, "setText() unknown", a.Type, "on checkbox", t.tw.Name)
+			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.tw.Name)
 		}
 	default:
-		log(debugError, "plugin Send() Don't know how to setText on", t.tw.Type, "yet", a.Type)
+		log(debugError, "plugin Send() Don't know how to setText on", t.tw.Type, "yet", a.ActionType)
 	}
 }

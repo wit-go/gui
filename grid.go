@@ -22,7 +22,7 @@ func (n *Node) NewGrid(name string, x int, y int) *Node {
 	})
 
 	var a toolkit.Action
-	a.Type = toolkit.Add
+	a.ActionType = toolkit.Add
 	a.X = x
 	a.Y = y
 	newNode.X = x
@@ -38,8 +38,9 @@ func (n *Node) NewBox(name string, b bool) *Node {
 	newNode := n.New(name, toolkit.Box, nil)
 
 	var a toolkit.Action
-	a.Type = toolkit.Add
-	a.Title = name
+	a.ActionType = toolkit.Add
+	a.Name = name
+	a.Text = name
 	a.B = b
 	newaction(&a, newNode, n)
 

@@ -123,11 +123,11 @@ Creates a window helpful for debugging this package
 
 `func ExampleCatcher(f func())`
 
-### func [Indent](/debug.go#L130)
+### func [Indent](/debug.go#L125)
 
 `func Indent(b bool, a ...interface{})`
 
-### func [InitPlugins](/main.go#L56)
+### func [InitPlugins](/main.go#L58)
 
 `func InitPlugins(names []string)`
 
@@ -137,11 +137,15 @@ Creates a window helpful for debugging this package
 
 loads and initializes a toolkit (andlabs/ui, gocui, etc)
 
-### func [Main](/main.go#L118)
+### func [Main](/main.go#L121)
 
 `func Main(f func())`
 
 This should not pass a function
+
+### func [Redraw](/redraw.go#L9)
+
+`func Redraw(s string)`
 
 ### func [SetDebug](/debug.go#L28)
 
@@ -151,11 +155,11 @@ This should not pass a function
 
 `func SetFlag(s string, b bool)`
 
-### func [ShowDebugValues](/debug.go#L86)
+### func [ShowDebugValues](/debug.go#L79)
 
 `func ShowDebugValues()`
 
-### func [StandardExit](/main.go#L170)
+### func [StandardExit](/main.go#L173)
 
 `func StandardExit()`
 
@@ -244,11 +248,11 @@ func main() {
 You get a window
 ```
 
-#### func [Start](/main.go#L96)
+#### func [Start](/main.go#L98)
 
 `func Start() *Node`
 
-#### func [StartS](/main.go#L105)
+#### func [StartS](/main.go#L107)
 
 `func StartS(name string) *Node`
 

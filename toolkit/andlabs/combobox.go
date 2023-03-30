@@ -45,11 +45,11 @@ func (t *andlabsT) AddComboboxName(title string) {
 }
 
 func newCombobox(a *toolkit.Action) {
-	log(debugToolkit, "newCombobox()", a.Title)
+	log(debugToolkit, "newCombobox()", a.Name)
 
-	t := andlabs[a.WhereId]
+	t := andlabs[a.ParentId]
 	if (t == nil) {
-		log(debugToolkit, "newCombobox() toolkit struct == nil. name=", a.Title)
+		log(debugToolkit, "newCombobox() toolkit struct == nil. name=", a.Name)
 		listMap(debugToolkit)
 		return
 	}

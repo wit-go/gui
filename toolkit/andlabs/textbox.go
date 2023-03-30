@@ -32,7 +32,7 @@ func newTextbox(a *toolkit.Action) {
 	w := a.Widget
 	log(debugToolkit, "newCombobox()", w.Name)
 
-	t := andlabs[a.WhereId]
+	t := andlabs[a.ParentId]
 	if (t == nil) {
 		log(debugToolkit, "newCombobox() toolkit struct == nil. name=", w.Name)
 		listMap(debugToolkit)

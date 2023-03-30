@@ -9,14 +9,14 @@ import (
 
 // make new Box here
 func newBox(a *toolkit.Action) {
-	log(debugToolkit, "newBox()", a.Title)
+	log(debugToolkit, "newBox()", a.Name)
 
-	t := andlabs[a.WhereId]
+	t := andlabs[a.ParentId]
 	if (t == nil) {
-		log(debugToolkit, "newBox() toolkit struct == nil. name=", a.Title)
+		log(debugToolkit, "newBox() toolkit struct == nil. name=", a.Name)
 		listMap(debugToolkit)
 	}
-	newt := t.rawBox(a.Title, a.B)
+	newt := t.rawBox(a.Text, a.B)
 	newt.boxC = 0
 	place(a, t, newt)
 	andlabs[a.WidgetId] = newt

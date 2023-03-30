@@ -185,7 +185,8 @@ func loadPlugin(p *aplug, name string) {
 
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
-		exit(err)
+		log(logError, "loadPlugin() error. exiting here?")
+		return
 	}
 
 	// attempt to write out the file from the internal resource
@@ -234,15 +235,15 @@ func newaction(a *toolkit.Action, n *Node, where *Node) {
 	if (n != nil) {
 		a.Widget = &n.widget
 		a.WidgetId = n.id
-		a.WidgetT = n.widget.Type
+		a.WidgetType = n.widget.Type
+		a.ActionType = a.ActionType
 	}
 	// action(&a, newNode, n)
 	// newaction(&a, newNode, n)
 
 	if (where != nil) {
 		log(debugGui, "Action() START on where X,Y, Next X,Y =", where.Name, where.X, where.Y, where.NextX, where.NextY)
-		// a.Where = &where.widget
-		a.WhereId = where.id
+		a.ParentId = where.id
 		switch where.widget.Type {
 		case toolkit.Grid:
 			// where.Dump(true)
@@ -264,7 +265,7 @@ func newaction(a *toolkit.Action, n *Node, where *Node) {
 	}
 
 	for _, aplug := range allPlugins {
-		log(debugPlugin, "Action() aplug =", aplug.name, "Action type=", a.Type)
+		log(debugPlugin, "Action() aplug =", aplug.name, "Action type=", a.ActionType)
 		if (aplug.Action == nil) {
 			log(debugPlugin, "Failed Action() == nil for", aplug.name)
 			continue

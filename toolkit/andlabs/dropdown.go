@@ -9,7 +9,7 @@ import (
 func (t *andlabsT) newDropdown(a *toolkit.Action) *andlabsT {
 	var newt andlabsT
 	w := a.Widget
-	log(debugToolkit, "gui.Toolbox.newDropdown() START", a.Title)
+	log(debugToolkit, "gui.Toolbox.newDropdown() START", a.Name)
 
 	newt.tw = w
 	newt.Type = w.Type
@@ -82,9 +82,9 @@ func SetDropdownName(a *toolkit.Action, s string) {
 }
 
 func newDropdown(a *toolkit.Action) {
-	log(debugToolkit, "gui.andlabs.newDropdown()", a.Title)
+	log(debugToolkit, "gui.andlabs.newDropdown()", a.Name)
 
-	t := andlabs[a.WhereId]
+	t := andlabs[a.ParentId]
 	if (t == nil) {
 		log(debugToolkit, "go.andlabs.newDropdown() toolkit struct == nil. name=", a.WidgetId)
 		listMap(debugToolkit)

@@ -23,7 +23,7 @@ func (n *Node) NewDropdown(name string) *Node {
 	newNode := n.New(name, toolkit.Dropdown, nil) 
 
 	var a toolkit.Action
-	a.Type = toolkit.Add
+	a.ActionType = toolkit.Add
 	// a.Widget = &newNode.widget
 	// a.Where = &n.widget
 	// action(&a)
@@ -36,7 +36,7 @@ func (n *Node) NewCombobox(name string) *Node {
 	newNode := n.New(name, toolkit.Combobox, nil) 
 
 	var a toolkit.Action
-	a.Type = toolkit.Add
+	a.ActionType = toolkit.Add
 	// a.Widget = &newNode.widget
 	// a.Where = &n.widget
 	// action(&a)

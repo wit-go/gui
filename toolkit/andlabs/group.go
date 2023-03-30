@@ -11,7 +11,7 @@ func newGroup(a *toolkit.Action) {
 	w := a.Widget
 	log(debugToolkit, "NewGroup()", w.Name)
 
-	t := andlabs[a.WhereId]
+	t := andlabs[a.ParentId]
 	if (t == nil) {
 		log(debugToolkit, "NewGroup() toolkit struct == nil. name=", w.Name)
 		listMap(debugToolkit)

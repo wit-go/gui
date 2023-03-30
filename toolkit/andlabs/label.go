@@ -12,7 +12,7 @@ func newLabel(a *toolkit.Action) {
 	w := a.Widget
 	log(debugToolkit, "NewLabel()", w.Name)
 
-	t := andlabs[a.WhereId]
+	t := andlabs[a.ParentId]
 	if (t == nil) {
 		listMap(debugError)
 		log(debugError, "ERROR newLabel() listMap()")

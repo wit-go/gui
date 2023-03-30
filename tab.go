@@ -11,8 +11,9 @@ func (n *Node) NewTab(text string) *Node {
 	newNode := n.New(text, toolkit.Tab, nil)
 
 	var a toolkit.Action
-	a.Type = toolkit.Add
-	a.Title = text
+	a.ActionType = toolkit.Add
+	a.Name = text
+	a.Text = text
 	newaction(&a, newNode, n)
 
 	newBox := newNode.NewBox(text, true)

@@ -31,9 +31,9 @@ func (t *andlabsT) checked() bool {
 }
 
 func newCheckbox(a *toolkit.Action) {
-	log(debugToolkit, "newCheckbox()", a.Title)
+	log(debugToolkit, "newCheckbox()", a.Name)
 
-	t := andlabs[a.WhereId]
+	t := andlabs[a.ParentId]
 	if (t == nil) {
 		listMap(debugError)
 		return

@@ -6,8 +6,9 @@ func (n *Node) NewButton(name string, custom func()) *Node {
 	newNode := n.New(name, toolkit.Button, custom)
 
 	var a toolkit.Action
-	a.Title = name
-	a.Type = toolkit.Add
+	a.Name = name
+	a.Text = name
+	a.ActionType = toolkit.Add
 	a.Callback = callback
 	newaction(&a, newNode, n)
 

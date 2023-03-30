@@ -111,7 +111,7 @@ func DebugWidgetWindow(w *Node) {
 		activeWidget.Dump(true)
 
 		var a toolkit.Action
-		a.Type = toolkit.Dump
+		a.ActionType = toolkit.Dump
 		newaction(&a, activeWidget, nil)
 	})
 
@@ -123,64 +123,53 @@ func DebugWidgetWindow(w *Node) {
 	g = bugWidget.NewGroup("change things")
 	g.NewButton("AddText()", func () {
 		var a toolkit.Action
-		a.Type = toolkit.AddText
+		a.ActionType = toolkit.AddText
 		a.S = activeLabelNewName.widget.S
 		newaction(&a, activeWidget, nil)
 	})
 	g.NewButton("SetText()", func () {
 		var a toolkit.Action
-		a.Type = toolkit.SetText
+		a.ActionType = toolkit.SetText
 		a.S = activeLabelNewName.widget.S
 		newaction(&a, activeWidget, nil)
 	})
 	g.NewButton("Margin()", func () {
 		var a toolkit.Action
-		a.Type = toolkit.Margin
+		a.ActionType = toolkit.Margin
 		newaction(&a, activeWidget, nil)
 	})
 	g.NewButton("Unmargin()", func () {
 		var a toolkit.Action
-		a.Type = toolkit.Unmargin
+		a.ActionType = toolkit.Unmargin
 		newaction(&a, activeWidget, nil)
 	})
 	g.NewButton("Pad()", func () {
 		var a toolkit.Action
-		a.Type = toolkit.Pad
+		a.ActionType = toolkit.Pad
 		newaction(&a, activeWidget, nil)
 	})
 	g.NewButton("Unpad()", func () {
 		var a toolkit.Action
-		a.Type = toolkit.Unpad
+		a.ActionType = toolkit.Unpad
 		newaction(&a, activeWidget, nil)
 	})
 	g.NewButton("Move(junk)", func () {
 		var a toolkit.Action
-		a.Type = toolkit.Move
+		a.ActionType = toolkit.Move
 		newaction(&a, activeWidget, activeJunk)
 	})
 	g.NewButton("Delete()", func () {
 		var a toolkit.Action
-		a.Type = toolkit.Delete
+		a.ActionType = toolkit.Delete
 		newaction(&a, activeWidget, activeJunk)
 	})
 
 	g = bugWidget.NewGroup("not working?")
-	g.NewButton("Dump Widget Values()", func () {
-		log("activeWidget.B =", activeWidget.widget.B)
-		log("activeWidget.I =", activeWidget.widget.I)
-		log("activeWidget.S =", activeWidget.widget.S)
-		log("activeWidget.X =", activeWidget.widget.X)
-		log("activeWidget.Y =", activeWidget.widget.Y)
-		log("activeWidget.Width =", activeWidget.widget.Width)
-		log("activeWidget.Height =", activeWidget.widget.Height)
-		log("activeWidget.Margin =", activeWidget.widget.Margin)
-		log("activeWidget.Expand =", activeWidget.widget.Expand)
-	})
 	activeJunk = bugWidget.NewGroup("junk:")
 	activeJunk.NewLabel("test junk")
 
 	if (activeWidget == nil) {
-		setActiveWidget(Config.master)
+		setActiveWidget(Config.rootNode)
 	}
 }
 
@@ -317,7 +306,7 @@ func (n *Node) debugAddWidgetButton() {
 			newNode := activeWidget.New(name, toolkit.Label, nil)
 
 			var a toolkit.Action
-			a.Type = toolkit.Add
+			a.ActionType = toolkit.Add
 			newaction(&a, newNode, activeWidget)
 			// return newNode
 			// activeWidget.NewLabel(name)

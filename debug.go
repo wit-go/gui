@@ -65,16 +65,9 @@ func SetFlag (s string, b bool) {
 		log(debugGui, "Can't set unknown flag", s)
 	}
 
-	// send the flag to the toolkit
-//	n := Config.flag
-//	log(debugChange, "Set() toolkit flag", s, "to", b)
-//	n.widget.Action = "Set"
-//	n.widget.S = s
-//	n.widget.B = b
-//	send(nil, n) // set flag in the plugin
-
 	var a toolkit.Action
-	a.Type = toolkit.SetFlag
+	a.ActionType = toolkit.Set
+	a.WidgetType = toolkit.Flag
 	a.S = s
 	a.B = b
 	// a.Widget = &newNode.widget
@@ -109,9 +102,11 @@ func (n *Node) Dump(b bool) {
 	Indent(b, "Height       = ", n.Height)
 	Indent(b, "(X,Y)        = ", n.X, n.Y)
 	Indent(b, "Next (X,Y)   = ", n.NextX, n.NextY)
+	/*
 	Indent(b, "Widget Name  = ", n.widget.Name)
 	Indent(b, "Widget Type  = ", n.widget.Type)
-	Indent(b, "Widget Id    = ", n.widget.GetId())
+	Indent(b, "Widget Id    = ", n.widget.Id)
+	*/
 
 	if (n.parent == nil) {
 		Indent(b, "parent       = nil")

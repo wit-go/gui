@@ -1,5 +1,6 @@
 run: build
-	GOTRACEBACK=all ./textbox --gui-debug
+	# GOTRACEBACK=all ./textbox --gui-debug
+	GOTRACEBACK=all ./textbox --gui-debug >/tmp/witgui.log.stderr 2>&1
 
 build-release:
 	go get -v -u -x .

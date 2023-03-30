@@ -8,11 +8,11 @@ import (
 )
 
 func actionDump(b bool, a *toolkit.Action) {
-	log(b, "actionDump() Widget.Type =", a.Type)
+	log(b, "actionDump() Widget.Type =", a.ActionType)
 	log(b, "actionDump() Widget.S =", a.S)
 	log(b, "actionDump() Widget.I =", a.I)
 	log(b, "actionDump() WidgetId =", a.WidgetId)
-	log(b, "actionDump() WhereId =", a.WhereId)
+	log(b, "actionDump() ParentId =", a.ParentId)
 }
 
 func add(a *toolkit.Action) {
@@ -28,21 +28,21 @@ func add(a *toolkit.Action) {
 	}
 
 	// for now, window gets handled without checking where == nil)
-	if (a.WidgetT == toolkit.Window) {
+	if (a.WidgetType == toolkit.Window) {
 		doWindow(a)
 		return
 	}
 
-	if (andlabs[a.WhereId] == nil) {
+	if (andlabs[a.ParentId] == nil) {
 		// listMap(debugError) // memory corruption?
-		log(debugError, "add() Widget.Name =", a.Title)
-		log(debugError, "add() Widget.Type =", a.WidgetT)
-		log(debugError, "ERROR add() ERROR a.Where map to t == nil. WidgetId =", a.WidgetId, "WhereId =", a.WhereId)
+		log(debugError, "add() Widget.Name =", a.Name)
+		log(debugError, "add() Widget.Type =", a.WidgetType)
+		log(debugError, "ERROR add() ERROR a.Parent map to t == nil. WidgetId =", a.WidgetId, "ParentId =", a.ParentId)
 		exit("can not add()")
 		return
 	}
 
-	switch a.WidgetT {
+	switch a.WidgetType {
 	case toolkit.Window:
 		doWindow(a)
 		return
@@ -86,7 +86,7 @@ func add(a *toolkit.Action) {
 		newImage(a)
 		return
 	default:
-		log(debugError, "add() error TODO: ", a.WidgetT, a.Title)
+		log(debugError, "add() error TODO: ", a.WidgetType, a.Name)
 	}
 }
 
@@ -115,32 +115,32 @@ func add(a *toolkit.Action) {
 // -- (0,1) -- (1,1) -- (1,1) --
 // -----------------------------
 func place(a *toolkit.Action, t *andlabsT, newt *andlabsT) bool {
-	log(debugAction, "place() START", a.WidgetT, a.Title)
+	log(debugAction, "place() START", a.WidgetType, a.Name)
 
 	// add the structure to the array
 	if (andlabs[a.WidgetId] == nil) {
-		log(logInfo, "newTab() MAPPED", a.WidgetId, a.WhereId)
+		log(logInfo, "newTab() MAPPED", a.WidgetId, a.ParentId)
 		andlabs[a.WidgetId] = newt
-		newt.Type = a.WidgetT
+		newt.Type = a.WidgetType
 	} else {
-		log(debugError, "newTab() DO WHAT?", a.WidgetId, a.WhereId)
+		log(debugError, "newTab() DO WHAT?", a.WidgetId, a.ParentId)
 		log(debugError, "THIS IS BAD")
 	}
 
 	if (newt.uiControl == nil) {
-		log(debugError, "place() ERROR uiControl == nil", a.WhereId)
+		log(debugError, "place() ERROR uiControl == nil", a.ParentId)
 		return false
 	}
 
-	where := andlabs[a.WhereId]
+	where := andlabs[a.ParentId]
 	if (where == nil) {
-		log(debugError, "place() ERROR where == nil", a.WhereId)
+		log(debugError, "place() ERROR where == nil", a.ParentId)
 		return false
 	}
 
 	switch where.Type {
 	case toolkit.Grid:
-		log(debugGrid, "add() Grid try at Where X,Y =", a.X, a.Y)
+		log(debugGrid, "add() Grid try at Parent X,Y =", a.X, a.Y)
 		newt.gridX = a.X
 		newt.gridY = a.Y
 		log(debugGrid, "add() Grid try at gridX,gridY", newt.gridX, newt.gridY)
@@ -152,14 +152,14 @@ func place(a *toolkit.Action, t *andlabsT, newt *andlabsT) bool {
 	case toolkit.Group:
 		if (t.uiBox == nil) {
 			t.uiGroup.SetChild(newt.uiControl)
-			log(debugGrid, "add() hack Group to use this as the box?", a.Title, a.WidgetT)
+			log(debugGrid, "add() hack Group to use this as the box?", a.Name, a.WidgetType)
 			t.uiBox  = newt.uiBox
 		} else {
 			t.uiBox.Append(newt.uiControl, stretchy)
 		}
 		return true
 	case toolkit.Tab:
-		t.uiTab.Append(a.Title, newt.uiControl)
+		t.uiTab.Append(a.Text, newt.uiControl)
 		t.boxC += 1
 		return true
 	case toolkit.Box:
@@ -170,7 +170,7 @@ func place(a *toolkit.Action, t *andlabsT, newt *andlabsT) bool {
 		t.uiWindow.SetChild(newt.uiControl)
 		return true
 	default:
-		log(debugError, "add() how?", a.WhereId)
+		log(debugError, "add() how?", a.ParentId)
 	}
 	return false
 }

@@ -90,6 +90,7 @@ func widgetDump(b bool, w *toolkit.Widget) {
 		return
 	}
 
+	/*
 	log(b, "widget.Name        =", w.Name)
 	log(b, "widget.Type        =", w.Type)
 	log(b, "widget.Custom      =", w.Custom)
@@ -99,6 +100,7 @@ func widgetDump(b bool, w *toolkit.Widget) {
 	log(b, "widget.Height      =", w.Height)
 	log(b, "widget.X           =", w.X)
 	log(b, "widget.Y           =", w.Y)
+	*/
 }
 
 /*

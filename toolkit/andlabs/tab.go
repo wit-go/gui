@@ -23,34 +23,34 @@ func (t *andlabsT) newTab(a *toolkit.Action) {
 	// var w *ui.Window
 	var newt *andlabsT
 
-	log(debugToolkit, "newTab() START", a.WidgetId, a.WhereId)
+	log(debugToolkit, "newTab() START", a.WidgetId, a.ParentId)
 
 	if (t.uiTab == nil) {
 		if (t.uiWindow == nil) {
-			log(debugToolkit, "newTab() uiWindow == nil. I can't add a toolbar without window", a.WidgetId, a.WhereId)
+			log(debugToolkit, "newTab() uiWindow == nil. I can't add a toolbar without window", a.WidgetId, a.ParentId)
 			return
 		}
 		// this means you have to make a new tab
-		log(debugToolkit, "newTab() GOOD. This should be the first tab:", a.WidgetId, a.WhereId)
-		newt = rawTab(t.uiWindow, a.Title)
+		log(debugToolkit, "newTab() GOOD. This should be the first tab:", a.WidgetId, a.ParentId)
+		newt = rawTab(t.uiWindow, a.Text)
 		t.uiTab = newt.uiTab
 	} else {
 		// this means you have to append a tab
-		log(debugToolkit, "newTab() GOOD. This should be an additional tab:", a.WidgetId, a.WhereId)
-		newt = t.appendTab(a.Title)
+		log(debugToolkit, "newTab() GOOD. This should be an additional tab:", a.WidgetId, a.ParentId)
+		newt = t.appendTab(a.Text)
 	}
 
 	// add the structure to the array
 	if (andlabs[a.WidgetId] == nil) {
-		log(logInfo, "newTab() MAPPED", a.WidgetId, a.WhereId)
+		log(logInfo, "newTab() MAPPED", a.WidgetId, a.ParentId)
 		andlabs[a.WidgetId] = newt
 		newt.Type = a.Widget.Type
 	} else {
-		log(debugError, "newTab() DO WHAT?", a.WidgetId, a.WhereId)
+		log(debugError, "newTab() DO WHAT?", a.WidgetId, a.ParentId)
 		log(debugError, "THIS IS BAD")
 	}
 
-	newt.Name = a.Title
+	newt.Name = a.Name
 
 	log(debugToolkit, "t:")
 	t.Dump(debugToolkit)
@@ -120,11 +120,11 @@ func (t *andlabsT) appendTab(name string) *andlabsT {
 
 func newTab(a *toolkit.Action) {
 	// w := a.Widget
-	log(debugToolkit, "newTab()", a.WhereId)
+	log(debugToolkit, "newTab()", a.ParentId)
 
-	t := andlabs[a.WhereId]
+	t := andlabs[a.ParentId]
 	if (t == nil) {
-		log(debugToolkit, "newTab() parent toolkit == nil. new tab can not be made =", a.WhereId)
+		log(debugToolkit, "newTab() parent toolkit == nil. new tab can not be made =", a.ParentId)
 		log(debugToolkit, "look for a window? check for an existing tab?")
 		return
 	}

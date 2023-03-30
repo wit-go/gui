@@ -11,25 +11,25 @@ import (
 
 func (n *Node) Show() {
 	var a toolkit.Action
-	a.Type = toolkit.Show
+	a.ActionType = toolkit.Show
 	newaction(&a, n, nil)
 }
 
 func (n *Node) Hide() {
 	var a toolkit.Action
-	a.Type = toolkit.Hide
+	a.ActionType = toolkit.Hide
 	newaction(&a, n, nil)
 }
 
 func (n *Node) Enable() {
 	var a toolkit.Action
-	a.Type = toolkit.Enable
+	a.ActionType = toolkit.Enable
 	newaction(&a, n, nil)
 }
 
 func (n *Node) Disable() {
 	var a toolkit.Action
-	a.Type = toolkit.Disable
+	a.ActionType = toolkit.Disable
 	newaction(&a, n, nil)
 }
 
@@ -37,7 +37,7 @@ func (n *Node) Add(str string) {
 	log(debugGui, "gui.Add() value =", str)
 
 	var a toolkit.Action
-	a.Type = toolkit.Add
+	a.ActionType = toolkit.Add
 	a.S = str
 	// a.Widget = &n.widget
 	// action(&a)
@@ -48,7 +48,7 @@ func (n *Node) AddText(str string) {
 	log(debugChange, "AddText() value =", str)
 
 	var a toolkit.Action
-	a.Type = toolkit.AddText
+	a.ActionType = toolkit.AddText
 	a.S = str
 	// a.Widget = &n.widget
 	// action(&a)
@@ -59,7 +59,7 @@ func (n *Node) SetText(str string) {
 	log(debugChange, "SetText() value =", str)
 
 	var a toolkit.Action
-	a.Type = toolkit.SetText
+	a.ActionType = toolkit.SetText
 	a.S = str
 	// a.Widget = &n.widget
 	// action(&a)
@@ -80,7 +80,7 @@ func (n *Node) SetNext(x int, y int) {
 func (n *Node) Set(val any) {
 	log(debugChange, "Set() value =", val)
 	var a toolkit.Action
-	a.Type = toolkit.Set
+	a.ActionType = toolkit.Set
 
 	switch v := val.(type) {
 	case bool:
@@ -100,7 +100,7 @@ func (n *Node) Set(val any) {
 
 func (n *Node) AppendText(str string) {
 	var a toolkit.Action
-	a.Type = toolkit.SetText
+	a.ActionType = toolkit.SetText
 	tmp := n.widget.S + str
 	log(debugChange, "AppendText() value =", tmp)
 	a.S = tmp
@@ -160,25 +160,25 @@ func commonCallback(n *Node) {
 
 func (n *Node) Margin() {
 	var a toolkit.Action
-	a.Type = toolkit.Margin
+	a.ActionType = toolkit.Margin
 	newaction(&a, n, nil)
 }
 
 func (n *Node) Unmargin() {
 	var a toolkit.Action
-	a.Type = toolkit.Unmargin
+	a.ActionType = toolkit.Unmargin
 	newaction(&a, n, nil)
 }
 
 func (n *Node) Pad() {
 	var a toolkit.Action
-	a.Type = toolkit.Pad
+	a.ActionType = toolkit.Pad
 	newaction(&a, n, nil)
 }
 
 func (n *Node) Unpad() {
 	var a toolkit.Action
-	a.Type = toolkit.Unpad
+	a.ActionType = toolkit.Unpad
 	newaction(&a, n, nil)
 }
 

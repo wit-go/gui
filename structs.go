@@ -33,9 +33,9 @@ type GuiArgs struct {
 
 type GuiConfig struct {
 	// This is the master node. The Binary Tree starts here
-	master	*Node
+	rootNode *Node
 
-	// A node off of master for passing debugging flags
+	// A node off of rootNode for passing debugging flags
 	flag	*Node
 
 	// These are shortcuts to pass default values to make a new window
@@ -60,8 +60,13 @@ type Node struct {
 	initOnce sync.Once
 
 	widget	toolkit.Widget
+	WidgetType	toolkit.WidgetType
 
-	Name   string
+//	Title  string  // what is visable to the user
+//	Desc   string  // a name useful for programming
+
+	Text string  // what is visable to the user
+	Name string  // a name useful for programming
 
 	// used for Windows
 	Width  int
@@ -85,9 +90,4 @@ type Node struct {
 
 	parent	*Node
 	children []*Node
-
-	// is keeping
-	// deprecate these things if they don't really need to exist
-	// checked   bool
-	// text      string
 }

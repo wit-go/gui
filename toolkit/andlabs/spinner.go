@@ -10,9 +10,9 @@ import (
 func (t *andlabsT) newSpinner(a *toolkit.Action) *andlabsT {
 	var newt andlabsT
 	w := a.Widget
-	log(debugToolkit, "newSpinner()", w.X, w.Y)
+	// log(debugToolkit, "newSpinner()", w.X, w.Y)
 
-	s := ui.NewSpinbox(w.X, w.Y)
+	s := ui.NewSpinbox(a.X, a.Y)
 	newt.uiSpinbox = s
 	newt.uiControl = s
 	newt.tw = w
@@ -31,13 +31,11 @@ func newSpinner(a *toolkit.Action) {
 	var newt *andlabsT
 	w := a.Widget
 
-	t := andlabs[a.WhereId]
+	t := andlabs[a.ParentId]
 	if (t == nil) {
 		log(debugError, "NewSpinner() toolkit struct == nil. name=", w.Name)
 		return
 	}
-	w.X = a.X
-	w.Y = a.Y
 	newt = t.newSpinner(a)
 	place(a, t, newt)
 }
