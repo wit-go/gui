@@ -7,6 +7,8 @@ type ActionType int
 //
 // All Toolkit interactions should be done via a channel or Queue()
 // TODO: FIGURE OUT HOW TO IMPLEMENT THIS
+// https://ieftimov.com/post/golang-datastructures-trees/
+// TODO: protobuf ?
 //
 // This is the only thing that is passed between the toolkit plugin
 //
@@ -18,7 +20,6 @@ type ActionType int
 // Could a protobuf be used here? (Can functions be passed?)
 type Widget struct {
 	Name   string
-	// Action string		// "New", "Delete", "Set", aka something to do
 	Type  WidgetType
 
 	// This function is how you interact with the toolkit
@@ -29,7 +30,7 @@ type Widget struct {
 	Callback  func()
 
 	// re-adding an id to test channels
-	id     int
+	Id     int
 
 	// This is how the values are passed back and forth
 	// values from things like checkboxes & dropdown's
@@ -39,32 +40,22 @@ type Widget struct {
 	// maybe safe if there is correctly working Custom() between goroutines?
 	// (still probably not, almost certainly not. not possible. layer violation?)
 	S	string // not safe to have 'S'
-
-	// This GUI is intended for simple things
-	// We are not laying out PDF's here
-	// This is used for things like a slider(0,100)
-	Width  int
-	Height int
-	X      int
-	Y      int
-
-	// Put space around elements to improve look & feel
-	Margin	bool
-
-	// Make widgets fill up the space available
-	Expand	bool
 }
 
 type Action struct {
-	Type ActionType
+	ActionType ActionType
+	WidgetType WidgetType
+
+	WidgetId int
+	ParentId int
+
+	Text string  // what is visable to the user
+	Name string  // a name useful for programming
 
 	// this should be the widget
 	// if the action is New, Hide, Enable, etc
 	Widget *Widget
-
-	// this is the widget 
-	// where the other one should be put on New, Move, etc
-	Where *Widget
+	Callback  func(int)
 
 	// This is how the values are passed back and forth
 	// values from things like checkboxes & dropdown's
@@ -90,31 +81,30 @@ type Action struct {
 	Expand	bool
 }
 
-
-// https://ieftimov.com/post/golang-datastructures-trees/
-// TODO: protobuf ?
 const (
 	Unknown WidgetType = iota
-	Window
-	Tab	// internally, this should be a window (?)
-	Frame	// should windows and tab's be frames (?)
-	Grid	// a grid of frames ?
-	Group	// internally, this should be a grid (?)
-	Box	// internally, this should be a grid (?)
+	Root	// the master 'root' node of the binary tree
+	Flag	// used to send configuration values to plugins
+	Window	// in certain gui's (ncurses), these are tabs
+	Tab	// internally, this is a window
+	Frame	// deprecate?
+	Grid	// like drawers in a chest
+	Group	// like the 'Appetizers' section on a menu
+	Box	// a vertical or horizontal stack of widgets
 	Button
-	Checkbox
+	Checkbox // select 'on' or 'off'
 	Dropdown
-	Combobox // dropdown with edit=true (?)
+	Combobox // dropdown with edit=true
 	Label
-	Textbox	// is this a Label with edit=true?
-	Slider
-	Spinner
-	Image
-	Area
-	Form
-	Font
-	Color
-	Dialog
+	Textbox	// is this a Label with edit=true
+	Slider // like a progress bar
+	Spinner // like setting the oven temperature
+	Image // TODO
+	Area // TODO
+	Form // TODO
+	Font // TODO
+	Color // TODO
+	Dialog // TODO
 )
 
 const (
@@ -122,7 +112,6 @@ const (
 	Delete
 	Get
 	Set
-	SetFlag
 	GetText
 	SetText
 	AddText
@@ -137,11 +126,14 @@ const (
 	Append
 	Move
 	Dump
-	Flag
 )
 
 func (s WidgetType) String() string {
 	switch s {
+	case Root:
+		return "Root"
+	case Flag:
+		return "Flag"
 	case Window:
 		return "Window"
 	case Tab:
@@ -185,7 +177,7 @@ func (s WidgetType) String() string {
 	case Unknown:
 		return "Unknown"
 	}
-	return "Widget.Type.String() Error"
+	return "WidgetType.String() Error"
 }
 
 func (s ActionType) String() string {
@@ -198,8 +190,6 @@ func (s ActionType) String() string {
 		return "Get"
 	case Set:
 		return "Set"
-	case SetFlag:
-		return "SetFlag"
 	case GetText:
 		return "GetText"
 	case SetText:
@@ -226,22 +216,8 @@ func (s ActionType) String() string {
 		return "Append"
 	case Move:
 		return "Move"
-	case Flag:
-		return "Flag"
 	case Dump:
 		return "Dump"
 	}
-	return "Action.Type.String() Error"
-}
-
-// this is hopefully just used in a very few places for
-// debuging the interaction between go apps and the underlying
-// toolkits. Hopefully this is less prone to problems and can
-// detect memory leaks, threading problems, memory allocation & mapping errors, etc
-func (w *Widget) GetId() int {
-	return w.id
-}
-
-func (w *Widget) SetId(i int) {
-	w.id = i
+	return "ActionType.String() Error"
 }

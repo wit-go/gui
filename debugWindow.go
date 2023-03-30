@@ -74,13 +74,35 @@ func (n *Node) DebugTab(title string) *Node {
 		dropdownWindowWidgets(g1)
 	})
 
-	g2 := newN.NewGroup("node things")
+	g2 := newN.NewGroup("more things")
 
 	g2.NewButton("Node.ListChildren(true)", func () {
 		if (activeWidget == nil) {
-			activeWidget = Config.master
+			activeWidget = Config.rootNode
 		}
 		activeWidget.ListChildren(true)
+	})
+
+	g2.NewButton("test conc", func () {
+		makeConc()
+	})
+
+	g2.NewButton("List Plugins", func () {
+		for _, aplug := range allPlugins {
+			log("Loaded plugin:", aplug.name, aplug.filename)
+		}
+	})
+
+	g2.NewButton("load plugin 'gocui'", func () {
+		StartS("gocui")
+	})
+
+	g2.NewButton("load plugin 'democui'", func () {
+		StartS("democui")
+	})
+
+	g2.NewButton("Redraw(democui)", func () {
+		Redraw("democui")
 	})
 
 	return newN
@@ -105,7 +127,7 @@ func dropdownWindow(p *Node) {
 	}
 
 	// var last = ""
-	for _, child := range Config.master.children {
+	for _, child := range Config.rootNode.children {
 		log(debugGui, "\t\t", child.id, child.Width, child.Height, child.Name)
 		dd.AddDropdownName(child.Name)
 		// last = child.Name
@@ -145,5 +167,5 @@ func dropdownWindowWidgets(p *Node) {
 	}
 
 	// list everything in the binary tree
-	addDropdowns(Config.master)
+	addDropdowns(Config.rootNode)
 }

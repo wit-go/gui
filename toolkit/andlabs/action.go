@@ -4,40 +4,40 @@ import (
 	"git.wit.org/wit/gui/toolkit"
 )
 
-func show(w *toolkit.Widget) {
-	if (w == nil) {
+func show(a *toolkit.Action) {
+	if (a == nil) {
 		log(debugError, "nil is probably already hidden")
 		return
 	}
-	log(debugError, "show()", w.Name)
+	log(debugError, "show()", a.WidgetId)
 
-	t := mapToolkits[w]
+	t := andlabs[a.WidgetId]
 	if (t == nil) {
-		log(debugToolkit, "show() toolkit struct == nil. for", w.Name)
+		log(debugError, "show() toolkit struct == nil. for", a.WidgetId)
 		return
 	}
 
-	if (w.B) {
+	if (a.B) {
 		t.uiControl.Show()
 	} else {
 		t.uiControl.Hide()
 	}
 }
 
-func enable(w *toolkit.Widget) {
-	if (w == nil) {
+func enable(a *toolkit.Action) {
+	if (a == nil) {
 		log(debugError, "nil is probably already hidden")
 		return
 	}
-	log(debugError, "enable()", w.Name)
+	log(debugError, "enable() name =", a.WidgetId)
 
-	t := mapToolkits[w]
+	t := andlabs[a.WidgetId]
 	if (t == nil) {
-		log(debugToolkit, "enable() toolkit struct == nil. for", w.Name)
+		log(debugToolkit, "enable() toolkit struct == nil. for id =", a.WidgetId)
 		return
 	}
 
-	if (w.B) {
+	if (a.B) {
 		t.uiControl.Enable()
 	} else {
 		t.uiControl.Disable()
@@ -45,21 +45,21 @@ func enable(w *toolkit.Widget) {
 }
 
 func pad(a *toolkit.Action) {
-	if (a.Widget == nil) {
+	if (a == nil) {
 		log(debugError, "pad() ERROR: nil is probably already hidden")
 		return
 	}
-	log(debugError, "pad()", a.Widget.Name)
+	log(debugError, "pad()")
 
-	t := mapToolkits[a.Widget]
+	t := andlabs[a.WidgetId]
 	if (t == nil) {
-		log(debugToolkit, "pad() toolkit struct == nil. for", a.Widget.Name)
+		log(debugError, "pad() toolkit struct == nil. for", a.WidgetId)
 		return
 	}
 
-	switch a.Widget.Type {
+	switch t.Type {
 	case toolkit.Group:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.Margin:
 			t.uiGroup.SetMargined(true)
 		case toolkit.Unmargin:
@@ -70,7 +70,7 @@ func pad(a *toolkit.Action) {
 			t.uiGroup.SetMargined(false)
 		}
 	case toolkit.Tab:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.Margin:
 			tabSetMargined(t.uiTab, true)
 		case toolkit.Unmargin:
@@ -81,7 +81,7 @@ func pad(a *toolkit.Action) {
 			tabSetMargined(t.uiTab, false)
 		}
 	case toolkit.Window:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.Margin:
 			t.uiWindow.SetMargined(true)
 		case toolkit.Unmargin:
@@ -92,7 +92,7 @@ func pad(a *toolkit.Action) {
 			t.uiWindow.SetBorderless(true)
 		}
 	case toolkit.Grid:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.Margin:
 			t.uiGrid.SetPadded(true)
 		case toolkit.Unmargin:
@@ -103,7 +103,7 @@ func pad(a *toolkit.Action) {
 			t.uiGrid.SetPadded(false)
 		}
 	case toolkit.Box:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.Margin:
 			t.uiBox.SetPadded(true)
 		case toolkit.Unmargin:
@@ -114,128 +114,120 @@ func pad(a *toolkit.Action) {
 			t.uiBox.SetPadded(false)
 		}
 	case toolkit.Textbox:
-		log(debugError, "TODO: implement expand for", a.Type)
-		log(debugError, "TODO: implement expand for", a.Type)
-		log(debugError, "TODO: implement expand for", a.Type)
-		log(debugError, "TODO: implement expand for", a.Type)
+		log(debugError, "TODO: implement expand for", a.ActionType)
+		log(debugError, "TODO: implement expand for", a.ActionType)
+		log(debugError, "TODO: implement expand for", a.ActionType)
+		log(debugError, "TODO: implement expand for", a.ActionType)
 	default:
-		log(debugError, "TODO: implement pad() for", a.Type)
+		log(debugError, "TODO: implement pad() for", a.ActionType)
 	}
 }
 
 func move(a *toolkit.Action) {
-	if (a.Where == nil) {
-		log(debugError, "move() ERROR: can not move to nil")
-		return
-	}
-	if (a.Widget == nil) {
-		log(debugError, "move() ERROR: can not move nil")
-		return
-	}
-	log(debugNow, "move()", a.Widget.Name, "to", a.Where.Name)
+	log(debugNow, "move()", a.WidgetId, "to", a.ParentId)
 
-	tWidget := mapToolkits[a.Widget]
+	tWidget := andlabs[a.WidgetId]
 	if (tWidget == nil) {
-		log(debugError, "move() ERROR: toolkit struct == nil. for", a.Widget.Name)
+		log(debugError, "move() ERROR: toolkit struct == nil. for", a.WidgetId)
 		return
 	}
 
-	tWhere := mapToolkits[a.Where]
-	if (tWhere == nil) {
-		log(debugError, "move() ERROR: toolkit struct == nil. for", a.Where.Name)
+	tParent := andlabs[a.ParentId]
+	if (tParent == nil) {
+		log(debugError, "move() ERROR: toolkit struct == nil. for", a.ParentId)
 		return
 	}
 
-	switch a.Where.Type {
+	switch tParent.Type {
 	case toolkit.Group:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.Margin:
-			tWhere.uiGroup.SetMargined(true)
+			tParent.uiGroup.SetMargined(true)
 		}
 	case toolkit.Tab:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.Margin:
-			// tabSetMargined(tWhere.uiTab, true)
+			// tabSetMargined(tParent.uiTab, true)
 		}
 	case toolkit.Window:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.Pad:
 			// t.uiWindow.SetBorderless(false)
 		}
 	case toolkit.Grid:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.Pad:
 			// t.uiGrid.SetPadded(true)
 		}
 	case toolkit.Box:
-		log(debugNow, "TODO: move() for a =", a.Type)
-		log(debugNow, "TODO: move() where =", a.Where.Type)
-		log(debugNow, "TODO: move() for widget =", a.Widget.Type)
+		log(debugNow, "TODO: move() for a =", a.ActionType)
+		log(debugNow, "TODO: move() where =", a.ParentId)
+		log(debugNow, "TODO: move() for widget =", a.WidgetId)
 
 		stretchy = true
-		tWhere.uiBox.Append(tWidget.uiControl, stretchy)
-		// log(debugNow, "is there a tWhere parent? =", tWhere.parent)
-		// tWhere.uiBox.Delete(0)
+		tParent.uiBox.Append(tWidget.uiControl, stretchy)
+		// log(debugNow, "is there a tParent parent? =", tParent.parent)
+		// tParent.uiBox.Delete(0)
 
 		// this didn't work:
 		// tWidget.uiControl.Disable()
 		// sleep(.8)
 	default:
-		log(debugError, "TODO: need to implement move() for a =", a.Type)
-		log(debugError, "TODO: need to implement move() for where =", a.Where.Type)
-		log(debugError, "TODO: need to implement move() for widget =", a.Widget.Type)
+		log(debugError, "TODO: need to implement move() for a =", a.ActionType)
+		log(debugError, "TODO: need to implement move() for where =", a.ParentId)
+		log(debugError, "TODO: need to implement move() for widget =", a.WidgetId)
 	}
 }
 
 func uiDelete(a *toolkit.Action) {
-	if (a.Where == nil) {
+	if (andlabs[a.ParentId] == nil) {
 		log(debugError, "uiDelete() ERROR: can not uiDelete to nil")
 		return
 	}
-	if (a.Widget == nil) {
+	if (andlabs[a.WidgetId] == nil) {
 		log(debugError, "uiDelete() ERROR: can not uiDelete nil")
 		return
 	}
-	log(debugNow, "uiDelete()", a.Widget.Name, "to", a.Where.Name)
+	log(debugNow, "uiDelete()", a.WidgetId, "to", a.ParentId)
 
-	tWidget := mapToolkits[a.Widget]
+	tWidget := andlabs[a.WidgetId]
 	if (tWidget == nil) {
-		log(debugError, "uiDelete() ERROR: toolkit struct == nil. for", a.Widget.Name)
+		log(debugError, "uiDelete() ERROR: toolkit struct == nil. for", a.WidgetId)
 		return
 	}
 
-	tWhere := mapToolkits[a.Where]
-	if (tWhere == nil) {
-		log(debugError, "uiDelete() ERROR: toolkit struct == nil. for", a.Where.Name)
+	tParent := andlabs[a.ParentId]
+	if (tParent == nil) {
+		log(debugError, "uiDelete() ERROR: toolkit struct == nil. for", a.ParentId)
 		return
 	}
 
-	switch a.Where.Type {
+	switch tParent.Type {
 	case toolkit.Group:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.Margin:
-			tWhere.uiGroup.SetMargined(true)
+			tParent.uiGroup.SetMargined(true)
 		}
 	case toolkit.Tab:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.Margin:
-			// tabSetMargined(tWhere.uiTab, true)
+			// tabSetMargined(tParent.uiTab, true)
 		}
 	case toolkit.Window:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.Pad:
 			// t.uiWindow.SetBorderless(false)
 		}
 	case toolkit.Grid:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.Pad:
 			// t.uiGrid.SetPadded(true)
 		}
 	case toolkit.Box:
-		log(debugNow, "tWidget.boxC =", tWhere.Name)
-		log(debugNow, "is there a tWhere parent? =", tWhere.parent)
+		log(debugNow, "tWidget.boxC =", tParent.Name)
+		log(debugNow, "is there a tParent parent? =", tParent.parent)
 		if (tWidget.boxC < 1) {
-			log(debugNow, "Can not delete from Box. already empty. tWidget.boxC =", tWhere.boxC)
+			log(debugNow, "Can not delete from Box. already empty. tWidget.boxC =", tParent.boxC)
 			return
 		}
 		tWidget.uiBox.Delete(0)
@@ -244,10 +236,10 @@ func uiDelete(a *toolkit.Action) {
 		// this didn't work:
 		// tWidget.uiControl.Disable()
 		// sleep(.8)
-		// tWhere.uiBox.Append(tWidget.uiControl, stretchy)
+		// tParent.uiBox.Append(tWidget.uiControl, stretchy)
 	default:
-		log(debugError, "TODO: need to implement uiDelete() for a =", a.Type)
-		log(debugError, "TODO: need to implement uiDelete() for where =", a.Where.Type)
-		log(debugError, "TODO: need to implement uiDelete() for widget =", a.Widget.Type)
+		log(debugError, "TODO: need to implement uiDelete() for a =", a.ActionType)
+		log(debugError, "TODO: need to implement uiDelete() for where =", a.ParentId)
+		log(debugError, "TODO: need to implement uiDelete() for widget =", a.WidgetId)
 	}
 }

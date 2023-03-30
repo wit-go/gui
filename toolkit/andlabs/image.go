@@ -10,17 +10,15 @@ import (
 // make new Image here
 func newImage(a *toolkit.Action) {
 	w := a.Widget
-	parentW := a.Where
 	log(debugToolkit, "newImage()", w.Name)
 
-	t := mapToolkits[parentW]
+	t := andlabs[a.ParentId]
 	if (t == nil) {
-		log(debugToolkit, "newImage() toolkit struct == nil. name=", parentW.Name, w.Name)
+		log(debugToolkit, "newImage() toolkit struct == nil. name=", w.Name)
 		listMap(debugToolkit)
 	}
 	newt := t.rawImage(w.Name)
 	place(a, t, newt)
-	mapWidgetsToolkits(a, newt)
 }
 
 // make new Image using andlabs/ui

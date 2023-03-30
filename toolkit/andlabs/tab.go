@@ -19,36 +19,43 @@ import (
 	once there is one. If you send a Window here, it will replace
 	any existing tabs rather than adding a new one
 */
-func (t *andlabsT) newTab(name string) *andlabsT {
+func (t *andlabsT) newTab(a *toolkit.Action) {
 	// var w *ui.Window
 	var newt *andlabsT
 
-	log(debugToolkit, "gui.toolkit.AddTab()")
-
-	if (t.uiWindow == nil) {
-		log(debugToolkit, "gui.Toolkit.UiWindow == nil. I can't add a toolbar without window")
-		return nil
-	}
+	log(debugToolkit, "newTab() START", a.WidgetId, a.ParentId)
 
 	if (t.uiTab == nil) {
+		if (t.uiWindow == nil) {
+			log(debugToolkit, "newTab() uiWindow == nil. I can't add a toolbar without window", a.WidgetId, a.ParentId)
+			return
+		}
 		// this means you have to make a new tab
-		log(debugToolkit, "gui.toolkit.NewTab() GOOD. This should be the first tab:", name)
-		newt = rawTab(t.uiWindow, name)
+		log(debugToolkit, "newTab() GOOD. This should be the first tab:", a.WidgetId, a.ParentId)
+		newt = rawTab(t.uiWindow, a.Text)
 		t.uiTab = newt.uiTab
 	} else {
 		// this means you have to append a tab
-		log(debugToolkit, "gui.toolkit.NewTab() GOOD. This should be an additional tab:", name)
-		newt = t.appendTab(name)
+		log(debugToolkit, "newTab() GOOD. This should be an additional tab:", a.WidgetId, a.ParentId)
+		newt = t.appendTab(a.Text)
 	}
 
-	newt.Name = name
+	// add the structure to the array
+	if (andlabs[a.WidgetId] == nil) {
+		log(logInfo, "newTab() MAPPED", a.WidgetId, a.ParentId)
+		andlabs[a.WidgetId] = newt
+		newt.Type = a.Widget.Type
+	} else {
+		log(debugError, "newTab() DO WHAT?", a.WidgetId, a.ParentId)
+		log(debugError, "THIS IS BAD")
+	}
+
+	newt.Name = a.Name
 
 	log(debugToolkit, "t:")
 	t.Dump(debugToolkit)
 	log(debugToolkit, "newt:")
 	newt.Dump(debugToolkit)
-
-	return newt
 }
 
 // This sets _all_ the tabs to Margin = true
@@ -64,29 +71,21 @@ func tabSetMargined(tab *ui.Tab, b bool) {
 
 func rawTab(w *ui.Window, name string) *andlabsT {
 	var newt andlabsT
-	log(debugToolkit, "gui.toolkit.NewTab() ADD", name)
+	log(debugToolkit, "rawTab() START", name)
 
 	if (w == nil) {
-		log(debugToolkit, "gui.toolkit.NewTab() node.UiWindow == nil. I can't add a tab without a window")
-		log(debugToolkit, "gui.toolkit.NewTab() node.UiWindow == nil. I can't add a tab without a window")
-		log(debugToolkit, "gui.toolkit.NewTab() node.UiWindow == nil. I can't add a tab without a window")
+		log(debugError, "UiWindow == nil. I can't add a tab without a window")
+		log(debugError, "UiWindow == nil. I can't add a tab without a window")
+		log(debugError, "UiWindow == nil. I can't add a tab without a window")
 		sleep(1)
 		return nil
 	}
-	log(debugToolkit, "gui.toolkit.AddTab() START name =", name)
+
 	tab := ui.NewTab()
-	w.SetMargined(margin)
-
-	hbox := ui.NewHorizontalBox() // this makes everything go along the horizon
-	hbox.SetPadded(padded)
-	tab.Append(name, hbox)
-	tabSetMargined(tab, margin) // TODO: run this in the right place(?)
 	w.SetChild(tab)
-
-	newt.uiWindow = w
 	newt.uiTab = tab
 	newt.uiControl = tab
-	newt.uiBox = hbox
+	log(debugToolkit, "rawTab() END", name)
 	return &newt
 }
 
@@ -120,20 +119,14 @@ func (t *andlabsT) appendTab(name string) *andlabsT {
 }
 
 func newTab(a *toolkit.Action) {
-	parentW := a.Where
-	w := a.Widget
-	var newt *andlabsT
-	log(debugToolkit, "gui.andlabs.NewTab()", w.Name)
+	// w := a.Widget
+	log(debugToolkit, "newTab()", a.ParentId)
 
-	t := mapToolkits[parentW]
+	t := andlabs[a.ParentId]
 	if (t == nil) {
-		log(debugToolkit, "go.andlabs.NewTab() toolkit struct == nil. name=", parentW.Name, w.Name)
+		log(debugToolkit, "newTab() parent toolkit == nil. new tab can not be made =", a.ParentId)
+		log(debugToolkit, "look for a window? check for an existing tab?")
 		return
 	}
-	newt = t.newTab(w.Name)
-	mapWidgetsToolkits(a, newt)
-}
-
-func doTab(a *toolkit.Action) {
-	newTab(a)
+	t.newTab(a)
 }

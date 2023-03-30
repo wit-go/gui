@@ -8,40 +8,46 @@ import (
 )
 
 func actionDump(b bool, a *toolkit.Action) {
-	log(b, "dump() Widget.Type =", a.Type)
-	log(b, "dump() Widget.S =", a.S)
-	log(b, "dump() Widget.I =", a.I)
-	log(b, "dump() Widget =", a.Widget)
-	log(b, "dump() Where =", a.Where)
+	log(b, "actionDump() Widget.Type =", a.ActionType)
+	log(b, "actionDump() Widget.S =", a.S)
+	log(b, "actionDump() Widget.I =", a.I)
+	log(b, "actionDump() WidgetId =", a.WidgetId)
+	log(b, "actionDump() ParentId =", a.ParentId)
 }
 
 func add(a *toolkit.Action) {
-	if (a.Widget == nil) {
-		log(debugError, "add() error. w.Widget == nil")
+	if (andlabs[a.WidgetId] != nil) {
+		log(debugError, "add() error. can't make a widget that already exists. id =", a.WidgetId)
 		actionDump(debugError, a)
 		return
 	}
+	if (a.WidgetId == 0) {
+		log(debugError, "add() error. w.WidgetId == 0")
+		actionDump(debugError, a)
+		return
+	}
+
 	// for now, window gets handled without checking where == nil)
-	if (a.Widget.Type == toolkit.Window) {
+	if (a.WidgetType == toolkit.Window) {
 		doWindow(a)
 		return
 	}
 
-	t := mapToolkits[a.Where]
-	if (t == nil) {
+	if (andlabs[a.ParentId] == nil) {
 		// listMap(debugError) // memory corruption?
-		log(debugError, "add() Widget.Name =", a.Widget.Name, a.Widget.Type)
-		// log(debugError, "add() Where.Name =", a.Where.Name)
-		log(debugError, "ERROR add() ERROR a.Where map to t == nil.")
+		log(debugError, "add() Widget.Name =", a.Name)
+		log(debugError, "add() Widget.Type =", a.WidgetType)
+		log(debugError, "ERROR add() ERROR a.Parent map to t == nil. WidgetId =", a.WidgetId, "ParentId =", a.ParentId)
+		exit("can not add()")
 		return
 	}
 
-	switch a.Widget.Type {
+	switch a.WidgetType {
 	case toolkit.Window:
 		doWindow(a)
 		return
 	case toolkit.Tab:
-		doTab(a)
+		newTab(a)
 		return
 	case toolkit.Label:
 		newLabel(a)
@@ -80,7 +86,7 @@ func add(a *toolkit.Action) {
 		newImage(a)
 		return
 	default:
-		log(debugError, "add() error TODO: ", a.Widget.Type, a.Widget.Name)
+		log(debugError, "add() error TODO: ", a.WidgetType, a.Name)
 	}
 }
 
@@ -109,18 +115,34 @@ func add(a *toolkit.Action) {
 // -- (0,1) -- (1,1) -- (1,1) --
 // -----------------------------
 func place(a *toolkit.Action, t *andlabsT, newt *andlabsT) bool {
-	log(debugAction, "place() START", a.Widget.Type, a.Widget.Name)
+	log(debugAction, "place() START", a.WidgetType, a.Name)
+
+	// add the structure to the array
+	if (andlabs[a.WidgetId] == nil) {
+		log(logInfo, "newTab() MAPPED", a.WidgetId, a.ParentId)
+		andlabs[a.WidgetId] = newt
+		newt.Type = a.WidgetType
+	} else {
+		log(debugError, "newTab() DO WHAT?", a.WidgetId, a.ParentId)
+		log(debugError, "THIS IS BAD")
+	}
 
 	if (newt.uiControl == nil) {
-		log(debugError, "place() ERROR uiControl == nil", a.Where.Type, a.Where.Name)
+		log(debugError, "place() ERROR uiControl == nil", a.ParentId)
 		return false
 	}
 
-	switch a.Where.Type {
+	where := andlabs[a.ParentId]
+	if (where == nil) {
+		log(debugError, "place() ERROR where == nil", a.ParentId)
+		return false
+	}
+
+	switch where.Type {
 	case toolkit.Grid:
-		log(debugGrid, "add() Grid try at Where X,Y =", a.Where.X, a.Where.Y)
-		newt.gridX = a.Where.X
-		newt.gridY = a.Where.Y
+		log(debugGrid, "add() Grid try at Parent X,Y =", a.X, a.Y)
+		newt.gridX = a.X
+		newt.gridY = a.Y
 		log(debugGrid, "add() Grid try at gridX,gridY", newt.gridX, newt.gridY)
 		// at the very end, subtract 1 from X & Y since andlabs/ui starts counting at zero
 		t.uiGrid.Append(newt.uiControl,
@@ -130,14 +152,14 @@ func place(a *toolkit.Action, t *andlabsT, newt *andlabsT) bool {
 	case toolkit.Group:
 		if (t.uiBox == nil) {
 			t.uiGroup.SetChild(newt.uiControl)
-			log(debugGrid, "add() hack Group to use this as the box?", a.Widget.Name, a.Widget.Type)
+			log(debugGrid, "add() hack Group to use this as the box?", a.Name, a.WidgetType)
 			t.uiBox  = newt.uiBox
 		} else {
 			t.uiBox.Append(newt.uiControl, stretchy)
 		}
 		return true
 	case toolkit.Tab:
-		t.uiBox.Append(newt.uiControl, stretchy)
+		t.uiTab.Append(a.Text, newt.uiControl)
 		t.boxC += 1
 		return true
 	case toolkit.Box:
@@ -148,7 +170,7 @@ func place(a *toolkit.Action, t *andlabsT, newt *andlabsT) bool {
 		t.uiWindow.SetChild(newt.uiControl)
 		return true
 	default:
-		log(debugError, "add() how?", a.Where.Type)
+		log(debugError, "add() how?", a.ParentId)
 	}
 	return false
 }

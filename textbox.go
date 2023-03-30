@@ -10,7 +10,7 @@ func (n *Node) NewTextbox(name string) *Node {
 	})
 
 	var a toolkit.Action
-	a.Type = toolkit.Add
+	a.ActionType = toolkit.Add
 	// a.Widget = &newNode.widget
 	// a.Where = &n.widget
 	// action(&a)

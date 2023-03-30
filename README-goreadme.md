@@ -107,42 +107,6 @@ external things which might be useful
 * [GO Style Guide]
 ```
 
-version v1.3
-
-I like things to be easy.
-
-this means all the log settings are in one place. it should allow
-things to be over-ridden externally to the library
-but still allow command line --args to pass debugging settings
-
-## I also have a generic sleep() and exit() in here because it's simple
-
-Usage:
-
-log("something", foo, bar)
-var DEBUG bool = true
-log(DEBUG, "something else", someOtherVariable)  # if DEBUG == false, return doing nothing
-log(SPEW, "something else", someOtherVariable)   # this get's sent to spew.Dump(). Very useful for debugging!
-
-## Variables
-
-```golang
-var INFO bool
-```
-
-```golang
-var LOGOFF bool = false // turn this off, all logging stops
-
-```
-
-```golang
-var SPEW spewt
-```
-
-```golang
-var WARN bool
-```
-
 ## Functions
 
 ### func [DebugWidgetWindow](/debugWidget.go#L52)
@@ -155,11 +119,15 @@ var WARN bool
 
 Creates a window helpful for debugging this package
 
-### func [Indent](/debug.go#L130)
+### func [ExampleCatcher](/chan.go#L37)
+
+`func ExampleCatcher(f func())`
+
+### func [Indent](/debug.go#L125)
 
 `func Indent(b bool, a ...interface{})`
 
-### func [InitPlugins](/main.go#L56)
+### func [InitPlugins](/main.go#L58)
 
 `func InitPlugins(names []string)`
 
@@ -169,22 +137,15 @@ Creates a window helpful for debugging this package
 
 loads and initializes a toolkit (andlabs/ui, gocui, etc)
 
-### func [Main](/main.go#L97)
+### func [Main](/main.go#L121)
 
 `func Main(f func())`
 
 This should not pass a function
 
-### func [Queue](/main.go#L127)
+### func [Redraw](/redraw.go#L9)
 
-`func Queue(f func())`
-
-Other goroutines must use this to access the GUI
-
-You can not acess / process the GUI thread directly from
-other goroutines. This is due to the nature of how
-Linux, MacOS and Windows work (they all work differently. suprise. surprise.)
-For example: gui.Queue(NewWindow())
+`func Redraw(s string)`
 
 ### func [SetDebug](/debug.go#L28)
 
@@ -194,11 +155,11 @@ For example: gui.Queue(NewWindow())
 
 `func SetFlag(s string, b bool)`
 
-### func [ShowDebugValues](/debug.go#L86)
+### func [ShowDebugValues](/debug.go#L79)
 
 `func ShowDebugValues()`
 
-### func [StandardExit](/main.go#L147)
+### func [StandardExit](/main.go#L173)
 
 `func StandardExit()`
 
@@ -216,13 +177,13 @@ This goroutine can be used like a watchdog timer
 
 ## Types
 
-### type [GuiArgs](/structs.go#L25)
+### type [GuiArgs](/structs.go#L26)
 
 `type GuiArgs struct { ... }`
 
 This struct can be used with the go-arg package
 
-### type [GuiConfig](/structs.go#L33)
+### type [GuiConfig](/structs.go#L34)
 
 `type GuiConfig struct { ... }`
 
@@ -232,7 +193,7 @@ This struct can be used with the go-arg package
 var Config GuiConfig
 ```
 
-### type [Node](/structs.go#L57)
+### type [Node](/structs.go#L58)
 
 `type Node struct { ... }`
 
@@ -287,11 +248,21 @@ func main() {
 You get a window
 ```
 
+#### func [Start](/main.go#L98)
+
+`func Start() *Node`
+
+#### func [StartS](/main.go#L107)
+
+`func StartS(name string) *Node`
+
 ### type [Symbol](/plugin.go#L16)
 
 `type Symbol any`
 
 ## Sub Packages
+
+* [log](./log)
 
 * [toolkit](./toolkit)
 

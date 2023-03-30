@@ -9,6 +9,7 @@ func (n *Node) New(title string, t toolkit.WidgetType, custom func()) *Node {
 	var newN *Node
 
 	newN = addNode(title)
+	newN.WidgetType = t
 	newN.widget.Type = t
 	// newN.widget.Action = "New"
 	newN.Custom = custom
@@ -44,7 +45,7 @@ func addNode(title string) *Node {
 	n.Name = title
 	n.widget.Name = title
 	n.id = Config.counter
-	n.widget.SetId(n.id)
+	n.widget.Id = n.id
 	log(debugNode, "addNode = widget setid =", n.id)
 
 	Config.counter += 1
@@ -55,9 +56,11 @@ func (n *Node) Parent() *Node {
 	return n.parent
 }
 
+/*
 func (n *Node) Window() *Node {
 	return n.parent
 }
+*/
 
 func (n *Node) Append(child *Node) {
 	n.children = append(n.children, child)

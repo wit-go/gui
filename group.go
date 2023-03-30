@@ -12,7 +12,7 @@ func (n *Node) NewGroup(name string) *Node {
 	newNode = n.New(name, toolkit.Group, nil)
 
 	var a toolkit.Action
-	a.Type = toolkit.Add
+	a.ActionType = toolkit.Add
 	newaction(&a, newNode, n)
 
 	newBox := newNode.NewBox("group vBox", false)

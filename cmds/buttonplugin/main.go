@@ -12,11 +12,7 @@ import 	(
 var title string = "Demo Plugin Window"
 var outfile string = "/tmp/guilogfile"
 
-// this is broken. delete this
-
 func main() {
-	// this set the xterm and mate-terminal window title. maybe works generally?
-	fmt.Println("\033]0;" + title + "\007")
 	// time.Sleep(5 * time.Second)
 	// var w *gui.Node
 
@@ -54,27 +50,49 @@ var counter int = 5
 
 // This creates a window
 func buttonWindow() {
-	var w, g *gui.Node
+	var w, t, g, more, more2 *gui.Node
 	gui.Config.Title = title
 	gui.Config.Width = 640
 	gui.Config.Height = 480
 
 	w = gui.NewWindow()
-	g = w.NewGroup("buttonGroup")
+	t = w.NewTab("buttonTab")
+	g = t.NewGroup("buttonGroup")
 
-	g.NewButton("this app is old", func () {
+	g.NewButton("this app is useful for plugin debuggin", func () {
 	})
 	g.NewLabel("STDOUT is set to: " + outfile)
 
 	g.NewButton("hello", func () {
 		log.Println("world")
 	})
+	more = g.NewGroup("more")
 
-	g.NewButton("NewButton()", func () {
+	g.NewButton("Load 'democui'", func () {
+		// this set the xterm and mate-terminal window title. maybe works generally?
+		fmt.Println("\033]0;" + title + "blah \007")
+		gui.StartS("democui")
+	})
+
+	g.NewButton("Redraw 'democui'", func () {
+		fmt.Println("\033]0;" + title + "blah2 \007")
+		gui.Redraw("democui")
+	})
+
+	g.NewButton("NewButton(more)", func () {
 		log.Println("new foobar 2. Adding button 'foobar 3'")
 		name := "foobar " + strconv.Itoa(counter)
 		counter += 1
-		g.NewButton(name, func () {
+		more.NewButton(name, func () {
+			log.Println("Got all the way to main() name =", name)
+		})
+	})
+
+	g.NewButton("NewButton(more2)", func () {
+		log.Println("new foobar 2. Adding button 'foobar 3'")
+		name := "foobar " + strconv.Itoa(counter)
+		counter += 1
+		more2.NewButton(name, func () {
 			log.Println("Got all the way to main() name =", name)
 		})
 	})
@@ -83,30 +101,12 @@ func buttonWindow() {
 		log.Println("new foobar 2. Adding button 'foobar 3'")
 		name := "neat " + strconv.Itoa(counter)
 		counter += 1
-		g.NewGroup(name)
+		more.NewGroup(name)
 	})
 
 	g.NewButton("gui.DebugWindow()", func () {
 		gui.DebugWindow()
 	})
 
-	g.NewButton("LoadToolkit(andlabs)", func () {
-		gui.LoadToolkit("andlabs")
-	})
-
-	g.NewButton("LoadToolkit(gocui)", func () {
-		gui.LoadToolkit("gocui")
-	})
-
-	g.NewButton("Init()", func () {
-		log.Println("gui.Init() is deprecated(?)")
-		//gui.Init()
-	})
-
-	g.NewButton("Main()", func () {
-		go gui.Main(func () {
-			w := gui.NewWindow()
-			w.NewGroup("buttonGroup")
-		})
-	})
+	more2 = g.NewGroup("more2")
 }

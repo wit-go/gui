@@ -2,7 +2,7 @@ package gui
 
 import (
 	// "embed"
-	// "git.wit.org/wit/gui/toolkit"
+	"git.wit.org/wit/gui/toolkit"
 )
 
 // Windows doesn't support plugins. How can I keep andlabs and only compile it on windows?
@@ -31,10 +31,12 @@ func init() {
 	Config.Height = 480
 
 	// Populates the top of the binary tree
-	Config.master = addNode("guiBinaryTree")
+	Config.rootNode = addNode("guiBinaryTree")
+	Config.rootNode.WidgetType = toolkit.Root
 
 	// used to pass debugging flags to the toolkit plugins
-	Config.flag = Config.master.New("flag", 0, nil)
+	Config.flag = Config.rootNode.New("flag", 0, nil)
+	Config.flag.WidgetType = toolkit.Flag
 }
 
 func doGuiChan() {
@@ -57,7 +59,7 @@ func InitPlugins(names []string) {
 	log(debugGui, "Starting gui.Init()")
 
 	for _, aplug := range allPlugins {
-		log(debugGui, "gui.LoadToolkit() already loaded toolkit plugin =", aplug.name)
+		log(debugGui, "LoadToolkit() already loaded toolkit plugin =", aplug.name)
 		for _, name := range names {
 			if (name == aplug.name) {
 				return
@@ -93,6 +95,28 @@ func InitPlugins(names []string) {
 	// StandardExit("golang wit/gui could not load a plugin TODO: do something to STDOUT (?)")
 }
 
+func Start() *Node {
+	log(logInfo, "Start() Main(f)")
+	f := func() {
+	}
+	go Main(f)
+	sleep(1)
+	return Config.rootNode
+}
+
+func StartS(name string) *Node {
+	log(logInfo, "Start() Main(f) for name =", name)
+	if (LoadToolkit(name) == false) {
+		return Config.rootNode
+	}
+	// will this really work on mswindows & macos?
+	f := func() {
+	}
+	go Main(f)
+	sleep(1) // temp hack until chan communication is setup
+	return Config.rootNode
+}
+
 // This should not pass a function
 func Main(f func()) {
 	log(debugGui, "Starting gui.Main() (using gtk via andlabs/ui)")
@@ -111,10 +135,11 @@ func Main(f func()) {
 		}
 		aplug.MainOk = true
 		aplug.Main(f)
-		// f()
 	}
-	// toolkit.Main(f)
 }
+
+/*
+This is deprecated and will be implemented more correctly with waitgroups
 
 // This should never be exposed(?)
 
@@ -135,6 +160,7 @@ func Queue(f func()) {
 		aplug.Queue(f)
 	}
 }
+*/
 
 // The window is destroyed but the application does not quit
 func (n *Node) StandardClose() {

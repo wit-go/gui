@@ -9,19 +9,17 @@ import (
 
 // make new Box here
 func newBox(a *toolkit.Action) {
-	w := a.Widget
-	parentW := a.Where
-	log(debugToolkit, "newBox()", w.Name)
+	log(debugToolkit, "newBox()", a.Name)
 
-	t := mapToolkits[parentW]
+	t := andlabs[a.ParentId]
 	if (t == nil) {
-		log(debugToolkit, "newBox() toolkit struct == nil. name=", parentW.Name, w.Name)
+		log(debugToolkit, "newBox() toolkit struct == nil. name=", a.Name)
 		listMap(debugToolkit)
 	}
-	newt := t.rawBox(w.Name, a.B)
+	newt := t.rawBox(a.Text, a.B)
 	newt.boxC = 0
 	place(a, t, newt)
-	mapWidgetsToolkits(a, newt)
+	andlabs[a.WidgetId] = newt
 }
 
 // make new Box using andlabs/ui

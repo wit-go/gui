@@ -4,7 +4,7 @@ import (
 	"git.wit.org/wit/gui/toolkit"
 )
 
-func (t *andlabsT) commonChange(tw *toolkit.Widget) {
+func (t *andlabsT) commonChange(tw *toolkit.Widget, wId int) {
 	log(debugChange, "commonChange() START widget   =", t.tw.Name, t.tw.Type)
 	if (tw == nil) {
 		log(true, "commonChange() What the fuck. there is no widget t.tw == nil")
@@ -15,23 +15,21 @@ func (t *andlabsT) commonChange(tw *toolkit.Widget) {
 		return
 	}
 	tw.Custom()
+
+	if (andlabs[wId] == nil) {
+		log(debugError, "commonChange() ERROR: wId map == nil", wId)
+		return
+	}
+	sendToChan(wId)
+
 	log(debugChange, "commonChange() END   Widget.Custom()", t.tw.Name, t.tw.Type)
 }
 
-func dump(p *toolkit.Widget, c *toolkit.Widget, b bool) {
-	log(b, "Parent:")
-	pt := mapToolkits[p]
-	if (pt == nil) {
-		log(b, "Trying to do something on a widget that doesn't work or doesn't exist or something", c)
+func sendToChan(i int) {
+	if (callback == nil) {
+		log(debugError, "commonChange() SHOULD SEND int back here, but callback == nil", i)
 		return
 	}
-	pt.Dump(b)
-
-	log(b, "Child:")
-	ct := mapToolkits[c]
-	if (ct == nil) {
-		log(b, "Trying to do something on a widget that doesn't work or doesn't exist or something", c)
-		return
-	}
-	ct.Dump(b)
+	log(debugError, "commonChange() Running callback() i =", i)
+	callback(i)
 }

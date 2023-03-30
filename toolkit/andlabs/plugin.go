@@ -31,43 +31,55 @@ func Action(a *toolkit.Action) {
 		rawAction(a)
 	}
 
+	if (callback == nil) {
+		if (a.Callback != nil) {
+			log(debugNow, "setting Callback", a.Callback)
+			callback = a.Callback
+		}
+	}
+
 	// f()
 	Queue(f)
 }
 
 func rawAction(a *toolkit.Action) {
 
-	log(debugAction, "Action() START a.Type =", a.Type)
+	log(debugAction, "Action() START a.ActionType =", a.ActionType)
 	log(debugAction, "Action() START a.S =", a.S)
 	log(debugAction, "Action() START a.Widget =", a.Widget)
 
-	switch a.Type {
+	log(logInfo, "Action() START a.WidgetId =", a.WidgetId, "a.ParentId =", a.ParentId)
+	switch a.WidgetType {
+	case toolkit.Flag:
+		flag(a)
+		return
+	}
+
+	switch a.ActionType {
 	case toolkit.Add:
 		add(a)
 	case toolkit.Show:
 		a.Widget.B = true
-		show(a.Widget)
+		show(a)
 	case toolkit.Hide:
 		a.Widget.B = false
-		show(a.Widget)
+		show(a)
 	case toolkit.Enable:
 		a.Widget.B = true
-		enable(a.Widget)
+		enable(a)
 	case toolkit.Disable:
 		a.Widget.B = false
-		enable(a.Widget)
+		enable(a)
 	case toolkit.Get:
 		setText(a)
 	case toolkit.GetText:
 		switch a.Widget.Type {
 		case toolkit.Textbox:
-			t := mapToolkits[a.Widget]
+			t := andlabs[a.WidgetId]
 			a.S = t.s
 		}
 	case toolkit.Set:
 		setText(a)
-	case toolkit.SetFlag:
-		flag(a)
 	case toolkit.SetText:
 		setText(a)
 	case toolkit.AddText:
@@ -82,15 +94,13 @@ func rawAction(a *toolkit.Action) {
 		pad(a)
 	case toolkit.Delete:
 		uiDelete(a)
-	case toolkit.Flag:
-		flag(a)
 	case toolkit.Move:
-		log(debugNow, "attempt to move() =", a.Type, a.Widget)
+		log(debugNow, "attempt to move() =", a.ActionType, a.Widget)
 		move(a)
 	default:
-		log(debugError, "Action() Unknown =", a.Type, a.Widget)
+		log(debugError, "Action() Unknown =", a.ActionType, a.Widget)
 	}
-	log(debugAction, "Action() END =", a.Type, a.Widget)
+	log(debugAction, "Action() END =", a.ActionType, a.Widget)
 }
 
 func flag(a *toolkit.Action) {
@@ -122,70 +132,70 @@ func flag(a *toolkit.Action) {
 }
 
 func setText(a *toolkit.Action) {
-	w := a.Widget
-	if (w == nil) {
-		log(debugError, "setText error. w.Widget == nil")
+	t := andlabs[a.WidgetId]
+	if (t == nil) {
+		log(debugError, "setText error. andlabs[id] == nil", a.WidgetId)
 		actionDump(debugError, a)
 		return
 	}
-	t := mapToolkits[w]
-	log(debugChange, "setText() Attempt on", w.Type, "with", a.S)
+	log(debugChange, "setText() Attempt on", t.Type, "with", a.S)
 
-	switch w.Type {
+	switch t.Type {
 	case toolkit.Window:
 		t.uiWindow.SetTitle(a.S)
 	case toolkit.Tab:
 	case toolkit.Group:
 		t.uiGroup.SetTitle(a.S)
 	case toolkit.Checkbox:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.SetText:
 			t.uiCheckbox.SetText(a.S)
 		case toolkit.Get:
-			w.B = t.uiCheckbox.Checked()
+			t.tw.B = t.uiCheckbox.Checked()
 		case toolkit.Set:
-			t.uiCheckbox.SetChecked(a.B)
-			w.B = a.B
+			// TODO: commented out while working on chan
+			// t.uiCheckbox.SetChecked(a.B)
+			t.tw.B = a.B
 		default:
-			log(debugError, "setText() unknown", a.Type, "on checkbox", w.Name)
+			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.tw.Name)
 		}
 	case toolkit.Textbox:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.Set:
 			t.uiMultilineEntry.SetText(a.S)
 		case toolkit.SetText:
 			t.uiMultilineEntry.SetText(a.S)
 		case toolkit.Get:
-			w.S = t.s
+			t.tw.S = t.s
 		case toolkit.GetText:
-			w.S = t.s
+			t.tw.S = t.s
 		default:
-			log(debugError, "setText() unknown", a.Type, "on checkbox", w.Name)
+			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.tw.Name)
 		}
 	case toolkit.Label:
 		t.uiLabel.SetText(a.S)
 	case toolkit.Button:
 		t.uiButton.SetText(a.S)
 	case toolkit.Slider:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.Get:
-			w.I = t.uiSlider.Value()
+			t.tw.I = t.uiSlider.Value()
 		case toolkit.Set:
 			t.uiSlider.SetValue(a.I)
 		default:
-			log(debugError, "setText() unknown", a.Type, "on checkbox", w.Name)
+			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.tw.Name)
 		}
 	case toolkit.Spinner:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.Get:
-			w.I = t.uiSpinbox.Value()
+			t.tw.I = t.uiSpinbox.Value()
 		case toolkit.Set:
 			t.uiSpinbox.SetValue(a.I)
 		default:
-			log(debugError, "setText() unknown", a.Type, "on checkbox", w.Name)
+			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.tw.Name)
 		}
 	case toolkit.Dropdown:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.AddText:
 			AddDropdownName(a)
 		case toolkit.Set:
@@ -199,7 +209,7 @@ func setText(a *toolkit.Action) {
 				log(debugChange, "i, s", i, s)
 				if (a.S == s) {
 					t.uiCombobox.SetSelected(i)
-					log(debugChange, "setText() Dropdown worked.", w.S)
+					log(debugChange, "setText() Dropdown worked.", t.tw.S)
 					return
 				}
 			}
@@ -213,14 +223,14 @@ func setText(a *toolkit.Action) {
 				t.uiCombobox.SetSelected(i)
 			}
 		case toolkit.Get:
-			w.S = t.s
+			t.tw.S = t.s
 		case toolkit.GetText:
-			w.S = t.s
+			t.tw.S = t.s
 		default:
-			log(debugError, "setText() unknown", a.Type, "on checkbox", w.Name)
+			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.tw.Name)
 		}
 	case toolkit.Combobox:
-		switch a.Type {
+		switch a.ActionType {
 		case toolkit.AddText:
 			t.AddComboboxName(a.S)
 		case toolkit.Set:
@@ -230,13 +240,13 @@ func setText(a *toolkit.Action) {
 			t.uiEditableCombobox.SetText(a.S)
 			t.s = a.S
 		case toolkit.Get:
-			w.S = t.s
+			t.tw.S = t.s
 		case toolkit.GetText:
-			w.S = t.s
+			t.tw.S = t.s
 		default:
-			log(debugError, "setText() unknown", a.Type, "on checkbox", w.Name)
+			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.tw.Name)
 		}
 	default:
-		log(debugError, "plugin Send() Don't know how to setText on", w.Type, "yet", a.Type)
+		log(debugError, "plugin Send() Don't know how to setText on", t.tw.Type, "yet", a.ActionType)
 	}
 }

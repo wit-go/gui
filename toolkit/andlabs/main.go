@@ -2,7 +2,7 @@ package main
 
 import (
 	"embed"
-	"git.wit.org/wit/gui/toolkit"
+	// "git.wit.org/wit/gui/toolkit"
 
 	"github.com/andlabs/ui"
 	// the _ means we only need this for the init()
@@ -43,8 +43,10 @@ func Init() {
 	// log(debugToolkit, "gui/toolkit init() Setting defaultBehavior = true")
 	setDefaultBehavior(true)
 
-	mapWidgets = make(map[*andlabsT]*toolkit.Widget)
-	mapToolkits = make(map[*toolkit.Widget]*andlabsT)
+	// mapWidgets = make(map[*andlabsT]*toolkit.Widget)
+	// mapToolkits = make(map[*toolkit.Widget]*andlabsT)
+
+	andlabs = make(map[int]*andlabsT)
 }
 
 // TODO: properly exit the plugin since Quit() doesn't do it
