@@ -5,7 +5,7 @@ import (
 	"git.wit.org/wit/gui/toolkit"
 )
 
-var fakeStartWidth int = 10
+var fakeStartWidth int = 40
 var fakeStartHeight int = 3
 func (w *cuiWidget) setFake() {
 	if (w.isFake == false) {

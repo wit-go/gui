@@ -27,13 +27,14 @@ func (w *cuiWidget) doWidgetClick() {
 		// w.toggleTree()
 		// me.rootNode.redoColor(true)
 	case toolkit.Box:
-		w.showWidgetPlacement(logNow, "drawTree()")
+		// w.showWidgetPlacement(logNow, "drawTree()")
 		if (w.horizontal) {
 			log("BOX IS HORIZONTAL", w.nextW, w.nextH, w.name)
 		} else {
 			log("BOX IS VERTICAL", w.nextW, w.nextH, w.name)
 		}
-		// w.redoBox(true)
+		w.redoBox(true)
+		w.toggleTree()
 	default:
 		// w.textResize()
 		// something
@@ -116,13 +117,17 @@ func click(g *gocui.Gui, v *gocui.View) error {
 // display the widgets in the binary tree
 
 func ctrlDown(g *gocui.Gui, v *gocui.View) error {
+	var found *cuiWidget
 	var widgets []*cuiWidget
 	var f func (widget *cuiWidget)
 	w, h := g.MousePosition()
 
+	// find buttons that are below where the mouse button click
 	f = func(widget *cuiWidget) {
-		if ((widget.logicalSize.w0 < w) && (w < widget.logicalSize.w1)) {
+		// if ((widget.logicalSize.w0 < w) && (w < widget.logicalSize.w1)) {
+		if ((widget.realSize.w0 < w) && (w < widget.realSize.w1)) {
 			widgets = append(widgets, widget)
+			found = widget
 		}
 
 		for _, child := range widget.children {
@@ -139,12 +144,26 @@ func ctrlDown(g *gocui.Gui, v *gocui.View) error {
 	t = strings.TrimSpace(t)
 	if (me.ctrlDown == nil) {
 		setupCtrlDownWidget()
+		me.ctrlDown.text = "ctrlDown" // t
+		me.ctrlDown.cuiName = "ctrlDown"
+		me.ctrlDown.parent = me.rootNode
 	}
-	me.ctrlDown.text = t
-	me.ctrlDown.realSize.w0 = w
-	me.ctrlDown.realSize.h0 = h
-	me.ctrlDown.textResize()
-	me.ctrlDown.drawView()
+	if (found == nil) {
+		found = me.rootNode
+	}
+	me.ctrlDown.realSize.w0 = found.logicalSize.w0
+	me.ctrlDown.realSize.w1 = found.logicalSize.w1
+	me.ctrlDown.realSize.h0 = found.logicalSize.h0
+	me.ctrlDown.realSize.h1 = found.logicalSize.h1
+	// me.ctrlDown.textResize()
+
+	if (me.ctrlDown.v == nil) {
+		me.ctrlDown.text = found.text
+		me.ctrlDown.showWidgetPlacement(logNow, "drawTree()")
+		me.ctrlDown.drawView()
+	} else {
+		me.ctrlDown.deleteView()
+	}
 
 	/*
 	v, err := g.SetView("ctrlDown", maxX/2-10, maxY/2, maxX/2+10, maxY/2+2, 0)

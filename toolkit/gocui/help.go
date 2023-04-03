@@ -35,6 +35,7 @@ func helplayout(g *gocui.Gui) error {
 		fmt.Fprintln(help, "Arrow keys: Move Button")
 		fmt.Fprintln(help, "t: Move Button to the top")
 		fmt.Fprintln(help, "b: Move Button to the button")
+		fmt.Fprintln(help, "d: show/hide debugging")
 		fmt.Fprintln(help, "h: hide buttons")
 		fmt.Fprintln(help, "s: show buttons")
 		fmt.Fprintln(help, "p: panic()")

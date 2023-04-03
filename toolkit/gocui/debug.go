@@ -45,7 +45,6 @@ func (w *cuiWidget) showWidgetPlacement(b bool, s string) {
 		log(logError, "showWidgetPlacement() WTF parent == nil", w.id, w.cuiName)
 		log(logError, "showWidgetPlacement() WTF parent == nil", w.id, w.cuiName)
 		log(logError, "showWidgetPlacement() WTF parent == nil", w.id, w.cuiName)
-		return
 	}
 	log(b, "dump()", s,
 		fmt.Sprintf("(wId,pId)=(%3d,%3d)", w.id, w.parent.id),
