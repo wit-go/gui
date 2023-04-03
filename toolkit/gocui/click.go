@@ -125,7 +125,8 @@ func ctrlDown(g *gocui.Gui, v *gocui.View) error {
 	// find buttons that are below where the mouse button click
 	f = func(widget *cuiWidget) {
 		// if ((widget.logicalSize.w0 < w) && (w < widget.logicalSize.w1)) {
-		if ((widget.realSize.w0 < w) && (w < widget.realSize.w1)) {
+		if ((widget.realSize.w0 < w) && (w < widget.realSize.w1) &&
+		(widget.realSize.h0 < h) && (h < widget.realSize.h1)) {
 			widgets = append(widgets, widget)
 			found = widget
 		}
@@ -151,6 +152,7 @@ func ctrlDown(g *gocui.Gui, v *gocui.View) error {
 	if (found == nil) {
 		found = me.rootNode
 	}
+	found.updateLogicalSizes()
 	me.ctrlDown.realSize.w0 = found.logicalSize.w0
 	me.ctrlDown.realSize.w1 = found.logicalSize.w1
 	me.ctrlDown.realSize.h0 = found.logicalSize.h0

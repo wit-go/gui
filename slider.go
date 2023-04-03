@@ -13,9 +13,8 @@ func (n *Node) NewSlider(name string, x int, y int) *Node {
 	a.ActionType = toolkit.Add
 	a.X = x
 	a.Y = y
-	// a.Widget = &newNode.widget
-	// a.Where = &n.widget
-	// action(&a)
+	a.Name = name
+	a.Text = name
 	newaction(&a, newNode, n)
 
 	return newNode
