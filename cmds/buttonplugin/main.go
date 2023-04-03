@@ -63,7 +63,9 @@ func buttonWindow() {
 	g1.NewButton("hello2", func () {
 		log.Println("world2")
 	})
-	more2 = g1.NewGroup("more2")
+	more2 = g1.NewGrid("gridnuts", 3, 3)
+
+	more2.NewLabel("more2")
 
 	g.NewButton("this app is useful for plugin debuggin", func () {
 	})

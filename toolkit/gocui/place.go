@@ -73,30 +73,31 @@ func (w *cuiWidget) redoBox(draw bool) {
 			child.redoBox(draw)
 		}
 	case toolkit.Grid:
+		log("redoBox GRID", p.nextW, p.nextH, p.name)
+		log("redoBox GRID", p.nextW, p.nextH, p.name)
+		log("redoBox GRID", w.nextW, w.nextH, w.name, w.text)
 		// hmm
-		w.logicalSize.w0 = p.nextW
-		w.logicalSize.h0 = p.nextH
-		w.logicalSize.w1 = p.nextW
-		w.logicalSize.h1 = p.nextH
 
 		w.nextW = p.nextW
 		w.nextH = p.nextH
 
-		var wCount, hCount int
-		var b bool = true
+		var wCount int = 0
+		var hCount int = 0
 		for _, child := range w.children {
-			child.redoBox(draw)
-			if (b) {
-				wCount += 1
-				b = false
-			} else {
-				wCount = 0
-				w.nextH += 1
-				b = true
-			}
+			// increment for the next child
 			w.nextW = p.nextW + wCount * 20
 			w.nextH = p.nextH + hCount * 4
-			log(logInfo, "redoBox(GRID) (w,h count)", wCount, hCount, "(X,Y)", w.x, w.y, w.name)
+			child.redoBox(draw)
+
+			log(logNow, "redoBox(GRID) (w,h count)", wCount, hCount, "(X,Y)", w.x, w.y, w.name)
+			child.showWidgetPlacement(logNow, "grid:")
+
+			if ((wCount + 1) < w.y) {
+				wCount += 1
+			} else {
+				wCount = 0
+				hCount += 1
+			}
 		}
 		w.showWidgetPlacement(logNow, "grid:")
 	case toolkit.Box:
