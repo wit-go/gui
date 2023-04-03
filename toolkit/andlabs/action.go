@@ -57,7 +57,7 @@ func pad(a *toolkit.Action) {
 		return
 	}
 
-	switch t.Type {
+	switch t.WidgetType {
 	case toolkit.Group:
 		switch a.ActionType {
 		case toolkit.Margin:
@@ -138,7 +138,7 @@ func move(a *toolkit.Action) {
 		return
 	}
 
-	switch tParent.Type {
+	switch tParent.WidgetType {
 	case toolkit.Group:
 		switch a.ActionType {
 		case toolkit.Margin:
@@ -202,7 +202,7 @@ func uiDelete(a *toolkit.Action) {
 		return
 	}
 
-	switch tParent.Type {
+	switch tParent.WidgetType {
 	case toolkit.Group:
 		switch a.ActionType {
 		case toolkit.Margin:

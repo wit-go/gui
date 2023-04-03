@@ -123,7 +123,7 @@ Creates a window helpful for debugging this package
 
 `func ExampleCatcher(f func())`
 
-### func [Indent](/debug.go#L125)
+### func [Indent](/debug.go#L120)
 
 `func Indent(b bool, a ...interface{})`
 

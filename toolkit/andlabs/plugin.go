@@ -138,9 +138,9 @@ func setText(a *toolkit.Action) {
 		actionDump(debugError, a)
 		return
 	}
-	log(debugChange, "setText() Attempt on", t.Type, "with", a.S)
+	log(debugChange, "setText() Attempt on", t.WidgetType, "with", a.S)
 
-	switch t.Type {
+	switch t.WidgetType {
 	case toolkit.Window:
 		t.uiWindow.SetTitle(a.S)
 	case toolkit.Tab:
@@ -157,7 +157,7 @@ func setText(a *toolkit.Action) {
 			// t.uiCheckbox.SetChecked(a.B)
 			t.tw.B = a.B
 		default:
-			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.tw.Name)
+			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.Name)
 		}
 	case toolkit.Textbox:
 		switch a.ActionType {
@@ -170,7 +170,7 @@ func setText(a *toolkit.Action) {
 		case toolkit.GetText:
 			t.tw.S = t.s
 		default:
-			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.tw.Name)
+			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.Name)
 		}
 	case toolkit.Label:
 		t.uiLabel.SetText(a.S)
@@ -183,7 +183,7 @@ func setText(a *toolkit.Action) {
 		case toolkit.Set:
 			t.uiSlider.SetValue(a.I)
 		default:
-			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.tw.Name)
+			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.Name)
 		}
 	case toolkit.Spinner:
 		switch a.ActionType {
@@ -192,7 +192,7 @@ func setText(a *toolkit.Action) {
 		case toolkit.Set:
 			t.uiSpinbox.SetValue(a.I)
 		default:
-			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.tw.Name)
+			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.Name)
 		}
 	case toolkit.Dropdown:
 		switch a.ActionType {
@@ -227,7 +227,7 @@ func setText(a *toolkit.Action) {
 		case toolkit.GetText:
 			t.tw.S = t.s
 		default:
-			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.tw.Name)
+			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.Name)
 		}
 	case toolkit.Combobox:
 		switch a.ActionType {
@@ -244,9 +244,9 @@ func setText(a *toolkit.Action) {
 		case toolkit.GetText:
 			t.tw.S = t.s
 		default:
-			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.tw.Name)
+			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.Name)
 		}
 	default:
-		log(debugError, "plugin Send() Don't know how to setText on", t.tw.Type, "yet", a.ActionType)
+		log(debugError, "plugin Send() Don't know how to setText on", t.WidgetType, "yet", a.ActionType)
 	}
 }

@@ -19,7 +19,7 @@ type ActionType int
 //	"Interaction" as per wikipedia [[User interface]]
 // Could a protobuf be used here? (Can functions be passed?)
 type Widget struct {
-	Name   string
+	// Name   string
 	Type  WidgetType
 
 	// This function is how you interact with the toolkit
@@ -27,7 +27,6 @@ type Widget struct {
 	// Hopefully this will be the barrier between the goroutines
 	// TODO: move this interaction to channels
 	Custom    func()
-	Callback  func()
 
 	// re-adding an id to test channels
 	Id     int
@@ -55,7 +54,7 @@ type Action struct {
 	// this should be the widget
 	// if the action is New, Hide, Enable, etc
 	Widget *Widget
-	Callback  func(int)
+	Callback  func(int) bool
 
 	// This is how the values are passed back and forth
 	// values from things like checkboxes & dropdown's
@@ -65,6 +64,8 @@ type Action struct {
 	// maybe safe if there is correctly working Custom() between goroutines?
 	// (still probably not, almost certainly not. not possible. layer violation?)
 	S	string // not safe to have 'S'
+
+	A	any
 
 	// This GUI is intended for simple things
 	// We are not laying out PDF's here

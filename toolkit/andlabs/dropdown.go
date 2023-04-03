@@ -12,7 +12,7 @@ func (t *andlabsT) newDropdown(a *toolkit.Action) *andlabsT {
 	log(debugToolkit, "gui.Toolbox.newDropdown() START", a.Name)
 
 	newt.tw = w
-	newt.Type = w.Type
+	newt.WidgetType = a.WidgetType
 	newt.wId = a.WidgetId
 	s := ui.NewCombobox()
 	newt.uiCombobox = s
@@ -60,7 +60,7 @@ func AddDropdownName(a *toolkit.Action) {
 
 	t := andlabs[a.WidgetId]
 	if (t == nil) {
-		log(debugToolkit, "go.andlabs.AddDropdownName() toolkit struct == nil. name=", a.Widget.Name, a.S)
+		log(debugToolkit, "go.andlabs.AddDropdownName() toolkit struct == nil. name=", a.Name, a.S)
 		listMap(debugToolkit)
 		return
 	}

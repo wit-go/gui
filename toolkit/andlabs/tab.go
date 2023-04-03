@@ -44,7 +44,7 @@ func (t *andlabsT) newTab(a *toolkit.Action) {
 	if (andlabs[a.WidgetId] == nil) {
 		log(logInfo, "newTab() MAPPED", a.WidgetId, a.ParentId)
 		andlabs[a.WidgetId] = newt
-		newt.Type = a.Widget.Type
+		newt.WidgetType = a.WidgetType
 	} else {
 		log(debugError, "newTab() DO WHAT?", a.WidgetId, a.ParentId)
 		log(debugError, "THIS IS BAD")

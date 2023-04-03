@@ -37,17 +37,34 @@ func (n *Node) Redraw(p *aplug) {
 }
 
 func (n *Node) redo(p *aplug) {
-	log(logNow, "redo() on n.Widget")
+	log(logNow, "redo()", n.id, n.WidgetType, n.Name)
 
 	var a *toolkit.Action
 	a = new(toolkit.Action)
 	a.Name = n.Name
 	a.Text = n.Text
+
 	a.ActionType = toolkit.Add
 	a.WidgetType = n.WidgetType
 	a.WidgetId = n.id
+
+
+	// used for Windows
 	a.Width = n.Width
 	a.Height = n.Height
+
+	// used for anything that needs a range
+	a.X = n.X
+	a.Y = n.Y
+
+	// used for grids and tables
+//	a.NextX = n.NextX
+//	a.NextY = n.NextY
+
+	// used for values
+	a.I = n.I
+	a.S = n.S
+	a.B = n.B
 
 	if (n.parent == nil) {
 		a.ParentId = 0

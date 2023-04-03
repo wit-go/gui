@@ -58,6 +58,12 @@ func buttonWindow() {
 	w = gui.NewWindow()
 	t = w.NewTab("buttonTab")
 	g = t.NewGroup("buttonGroup")
+	g1 := t.NewGroup("buttonGroup 2")
+	more = g1.NewGroup("more")
+	g1.NewButton("hello2", func () {
+		log.Println("world2")
+	})
+	more2 = g1.NewGroup("more2")
 
 	g.NewButton("this app is useful for plugin debuggin", func () {
 	})
@@ -66,17 +72,16 @@ func buttonWindow() {
 	g.NewButton("hello", func () {
 		log.Println("world")
 	})
-	more = g.NewGroup("more")
 
-	g.NewButton("Load 'democui'", func () {
+	g.NewButton("Load 'gocui'", func () {
 		// this set the xterm and mate-terminal window title. maybe works generally?
 		fmt.Println("\033]0;" + title + "blah \007")
-		gui.StartS("democui")
+		gui.StartS("gocui")
 	})
 
-	g.NewButton("Redraw 'democui'", func () {
+	g.NewButton("Redraw 'gocui'", func () {
 		fmt.Println("\033]0;" + title + "blah2 \007")
-		gui.Redraw("democui")
+		gui.Redraw("gocui")
 	})
 
 	g.NewButton("NewButton(more)", func () {
@@ -107,6 +112,4 @@ func buttonWindow() {
 	g.NewButton("gui.DebugWindow()", func () {
 		gui.DebugWindow()
 	})
-
-	more2 = g.NewGroup("more2")
 }

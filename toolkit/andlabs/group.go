@@ -8,15 +8,15 @@ import (
 )
 
 func newGroup(a *toolkit.Action) {
-	w := a.Widget
-	log(debugToolkit, "NewGroup()", w.Name)
+	// w := a.Widget
+	log(debugToolkit, "NewGroup()", a.Name)
 
 	t := andlabs[a.ParentId]
 	if (t == nil) {
-		log(debugToolkit, "NewGroup() toolkit struct == nil. name=", w.Name)
+		log(debugToolkit, "NewGroup() toolkit struct == nil. name=", a.Name)
 		listMap(debugToolkit)
 	}
-	newt := t.rawGroup(w.Name)
+	newt := t.rawGroup(a.Name)
 	place(a, t, newt)
 }
 

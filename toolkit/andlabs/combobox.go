@@ -9,11 +9,11 @@ import (
 func (t *andlabsT) newCombobox(a *toolkit.Action) *andlabsT {
 	var newt andlabsT
 	w := a.Widget
-	log(debugToolkit, "newCombobox() START", w.Name)
+	log(debugToolkit, "newCombobox() START", a.Name)
 
 	newt.tw = w
 	newt.wId = a.WidgetId
-	newt.Type = w.Type
+	newt.WidgetType = a.WidgetType
 	s := ui.NewEditableCombobox()
 	newt.uiEditableCombobox = s
 	newt.uiControl = s

@@ -7,7 +7,6 @@
 #
 
 run: build
-	# ./buttonplugin >/tmp/buttonplugin.log 2>&1
 	./buttonplugin >/tmp/witgui.log.stderr 2>&1
 
 build-release:

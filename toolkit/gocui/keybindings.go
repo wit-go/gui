@@ -6,130 +6,66 @@ package main
 
 import (
 	"github.com/awesome-gocui/gocui"
-	"git.wit.org/wit/gui/toolkit"
 )
 
-func initKeybindings(g *gocui.Gui) error {
-	log("got to initKeybindings")
-	if err := g.SetKeybinding("", 'q', gocui.ModNone,
-		func(g *gocui.Gui, v *gocui.View) error {
-			return gocui.ErrQuit
-		}); err != nil {
+func defaultKeybindings(g *gocui.Gui) error {
+	if err := g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, quit); err != nil {
 		return err
 	}
-	if err := g.SetKeybinding("", 'Q', gocui.ModNone,
-		func(g *gocui.Gui, v *gocui.View) error {
-			return gocui.ErrQuit
-		}); err != nil {
-		return err
-	}
-	if err := g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone,
-		func(g *gocui.Gui, v *gocui.View) error {
-			return gocui.ErrQuit
-		}); err != nil {
-		return err
-	}
-	if err := g.SetKeybinding("", gocui.KeySpace, gocui.ModNone,
-		func(g *gocui.Gui, v *gocui.View) error {
-			return newView(g)
-		}); err != nil {
-		return err
-	}
-	if err := g.SetKeybinding("", gocui.KeyBackspace, gocui.ModNone,
-		func(g *gocui.Gui, v *gocui.View) error {
-			return delView(g)
-		}); err != nil {
-		return err
-	}
-	if err := g.SetKeybinding("", gocui.KeyBackspace2, gocui.ModNone,
-		func(g *gocui.Gui, v *gocui.View) error {
-			return delView(g)
-		}); err != nil {
-		return err
-	}
-	if err := g.SetKeybinding("", gocui.KeyTab, gocui.ModNone,
-		func(g *gocui.Gui, v *gocui.View) error {
-			log("tab", v.Name())
-			return nextView(g, true)
-		}); err != nil {
-		return err
-	}
-	if err := g.SetKeybinding("", gocui.KeyArrowLeft, gocui.ModNone,
-		func(g *gocui.Gui, v *gocui.View) error {
-			return moveView(g, v, -delta, 0)
-		}); err != nil {
-		return err
-	}
-	if err := g.SetKeybinding("", gocui.KeyArrowRight, gocui.ModNone,
-		func(g *gocui.Gui, v *gocui.View) error {
-			return moveView(g, v, delta, 0)
-		}); err != nil {
-		return err
-	}
-	if err := g.SetKeybinding("", gocui.KeyArrowDown, gocui.ModNone,
-		func(g *gocui.Gui, v *gocui.View) error {
-			log("down", v.Name())
-			return moveView(g, v, 0, delta)
-		}); err != nil {
-		return err
-	}
-	if err := g.SetKeybinding("", gocui.KeyArrowUp, gocui.ModNone,
-		func(g *gocui.Gui, v *gocui.View) error {
-			log("up", v.Name())
-			return moveView(g, v, 0, -delta)
-		}); err != nil {
-		return err
-	}
-	if err := g.SetKeybinding("", gocui.KeyEnter, gocui.ModNone,
-		func(g *gocui.Gui, v *gocui.View) error {
-			log("enter", v.Name())
-			var w *toolkit.Widget
-			w = stringWidget[v.Name()]
-			if (w == nil) {
-				log("COULD NOT FIND WIDGET", v.Name())
-			} else {
-				log("FOUND WIDGET!", w)
-				if (w.Custom != nil) {
-					w.Custom()
-					return nil
-				}
-				// if (w.Event != nil) {
-				// 	w.Event(w)
-				// 	return nil
-				// }
-			}
-			return nil
-		}); err != nil {
-		return err
-	}
-	if err := g.SetKeybinding("", 't', gocui.ModNone,
-		func(g *gocui.Gui, v *gocui.View) error {
-			_, err := g.SetViewOnTop(views[curView])
+	for _, n := range []string{"but1", "but2", "help", "but3"} {
+		if err := g.SetKeybinding(n, gocui.MouseLeft, gocui.ModNone, showMsg); err != nil {
 			return err
-		}); err != nil {
+		}
+	}
+	if err := g.SetKeybinding("", gocui.MouseRelease, gocui.ModNone, mouseUp); err != nil {
 		return err
 	}
-	if err := g.SetKeybinding("", 'b', gocui.ModNone,
-		func(g *gocui.Gui, v *gocui.View) error {
-			_, err := g.SetViewOnBottom(views[curView])
-			return err
-		}); err != nil {
+	if err := g.SetKeybinding("", gocui.MouseLeft, gocui.ModNone, globalDown); err != nil {
 		return err
 	}
-	if err := g.SetKeybinding("", 'h', gocui.ModNone,
-		func(g *gocui.Gui, v *gocui.View) error {
-			log("help", v.Name())
-			tmp, _ := g.SetViewOnTop("help")
-			log("help 2", tmp.Name())
-//			g.SetView("help", 2, 2, 30, 15, 0);
-			g.SetCurrentView("help")
-//			moveView(g, tmp, 0, -delta)
-			if err := g.DeleteView("help"); err != nil {
-				exit("gocui SetKeybinding()", err)
-			}
-			return nil
-		}); err != nil {
+	if err := g.SetKeybinding("", gocui.MouseLeft, gocui.ModMouseCtrl, ctrlDown); err != nil {
 		return err
 	}
+	/*
+	if err := g.SetKeybinding("", gocui.MouseLeft, gocui.ModNone, globalDown); err != nil {
+		return err
+	}
+	*/
+	if err := g.SetKeybinding("msg", gocui.MouseLeft, gocui.ModNone, msgDown); err != nil {
+		return err
+	}
+	addDebugKeys(g)
 	return nil
+}
+
+// dump out the widgets
+func addDebugKeys(g *gocui.Gui) {
+	// dump all widget info to the log
+	g.SetKeybinding("", 'd', gocui.ModNone,
+		func(g *gocui.Gui, v *gocui.View) error {
+			log(logNow, "gocui.SetKeyBinding() dumpTree() START")
+			me.rootNode.dumpTree(true)
+			return nil
+	})
+
+	// hide all widgets
+	g.SetKeybinding("", 'h', gocui.ModNone,
+		func(g *gocui.Gui, v *gocui.View) error {
+			me.rootNode.hideWidgets()
+			return nil
+	})
+
+	// show all widgets
+	g.SetKeybinding("", 's', gocui.ModNone,
+		func(g *gocui.Gui, v *gocui.View) error {
+			me.rootNode.showWidgets()
+			return nil
+	})
+
+	// panic
+	g.SetKeybinding("", 'p', gocui.ModNone,
+		func(g *gocui.Gui, v *gocui.View) error {
+			panic("forced panic in gocui")
+			return nil
+	})
 }

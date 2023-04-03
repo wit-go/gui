@@ -21,9 +21,10 @@ import (
 var me config
 
 type config struct {
-	highest	int // highest widgetId
 	baseGui *gocui.Gui // the main gocui handle
-	widgets map[int]*cuiWidget
+	rootNode *cuiWidget // the base of the binary tree. it should have id == 0
+	ctrlDown *cuiWidget // shown if you click the mouse when the ctrl key is pressed
+
 	callback func(int)
 	helpLabel *gocui.View
 
@@ -38,6 +39,10 @@ type config struct {
 	stretchy bool // expand things like buttons to the maximum size
 	padded bool // add space between things like buttons
 	margin bool // add space around the frames of windows
+
+	horizontalPadding int
+	groupPadding int
+	buttonPadding int
 }
 
 /*
@@ -73,11 +78,14 @@ type realSizeT struct {
 
 type cuiWidget struct {
 	id int	// widget ID
-	parentId int
+	// parentId int
 	widgetType   toolkit.WidgetType
 
 	name   string // a descriptive name of the widget
 	text   string // the current text being displayed
+	cuiName string // what gocui uses to reference the widget
+
+	vals []string // dropdown menu options
 
 	visable bool // widget types like 'box' are 'false'
 	realWidth int // the real width
@@ -85,8 +93,21 @@ type cuiWidget struct {
 	realSize rectType  // the display size of this widget
 	logicalSize rectType  // the logical size. Includes all the child widgets
 
-	nextX	int
-	nextY	int
+	nextW	int
+	nextH	int
+
+	// things from toolkit/action
+	b bool
+	i int
+	s string
+	x int
+	y int
+	width int
+	height int
+
+	//deprecate
+//	nextX	int
+//	nextY	int
 
 	// horizontal=true  means layout widgets like books on a bookshelf
 	// horizontal=false means layout widgets like books in a stack
@@ -94,18 +115,12 @@ type cuiWidget struct {
 
 	tainted bool
 	v *gocui.View
-	baseGui *gocui.Gui // use gogui.Manager ? as 'workspaces?'
 
 	// writeMutex protects locks the write process
 	writeMutex sync.Mutex
 
-	// deprecate
-	// logicalWidth int  `default:8`
-	// logicalHeight int  `default:2`
-	// rect   rectType
-	// current rectType // the logical size. Includes all the child widgets
-	// width  int
-	// height int
+	parent	*cuiWidget
+	children []*cuiWidget
 }
 
 // from the gocui devs:

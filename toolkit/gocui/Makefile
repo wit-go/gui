@@ -9,3 +9,7 @@ plugin:
 
 objdump:
 	objdump -t ../gocui.so |less
+
+log:
+	reset
+	tail -f /tmp/witgui.* /tmp/guilogfile

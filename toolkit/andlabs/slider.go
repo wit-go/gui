@@ -10,13 +10,12 @@ import (
 func (t *andlabsT) newSlider(a *toolkit.Action) *andlabsT {
 	var newt andlabsT
 	w := a.Widget
-	// log(debugToolkit, w.Name, w.Type, w.X, w.Y)
 
 	s := ui.NewSlider(a.X, a.Y)
 	newt.uiSlider = s
 	newt.uiControl = s
 	newt.tw = w
-	newt.Type = toolkit.Slider
+	newt.WidgetType = toolkit.Slider
 	newt.wId = a.WidgetId
 
 	s.OnChanged(func(spin *ui.Slider) {
@@ -29,16 +28,13 @@ func (t *andlabsT) newSlider(a *toolkit.Action) *andlabsT {
 
 func newSlider(a *toolkit.Action) {
 	var newt *andlabsT
-	w := a.Widget
-	log(debugToolkit, "newSlider()", w.Name)
+	log(debugToolkit, "newSlider()", a.Name)
 
 	t := andlabs[a.ParentId]
 	if (t == nil) {
-		log(debugError, "newSlider() ERROR toolkit struct == nil. name=", w.Name)
+		log(debugError, "newSlider() ERROR toolkit struct == nil. name=", a.Name)
 		return
 	}
-	// w.X = a.X
-	// w.Y = a.Y
 	newt = t.newSlider(a)
 	place(a, t, newt)
 }

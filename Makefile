@@ -73,13 +73,10 @@ clean:
 	rm -f toolkit/*.so
 	cd debian && make clean
 
-plugins: plugins-gocui plugins-democui plugins-andlabs
+plugins: plugins-gocui plugins-andlabs
 
 plugins-gocui:
 	make -C  toolkit/gocui
-
-plugins-democui:
-	make -C  toolkit/democui
 
 plugins-andlabs:
 	cd toolkit/andlabs/ && GO111MODULE="off" go build -buildmode=plugin -o ../andlabs.so

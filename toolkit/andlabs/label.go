@@ -9,8 +9,7 @@ import (
 
 func newLabel(a *toolkit.Action) {
 	var newt *andlabsT
-	w := a.Widget
-	log(debugToolkit, "NewLabel()", w.Name)
+	log(debugToolkit, "NewLabel()", a.Name)
 
 	t := andlabs[a.ParentId]
 	if (t == nil) {
@@ -21,11 +20,11 @@ func newLabel(a *toolkit.Action) {
 		return
 	}
 
-	log(debugToolkit, "NewLabel()", w.Name)
+	log(debugToolkit, "NewLabel()", a.Name)
 
 	newt = new(andlabsT)
 
-	c := ui.NewLabel(w.Name)
+	c := ui.NewLabel(a.Name)
 	newt.uiLabel = c
 	newt.uiControl = c
 

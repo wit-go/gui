@@ -43,7 +43,7 @@ func setActiveWidget(w *Node) {
 		// TODO: make a fake binary tree for this(?)
 		return
 	}
-	title := "ID =" + strconv.Itoa(w.id) + " " + w.widget.Name
+	title := "ID =" + strconv.Itoa(w.id) + " " + w.Name
 	activeLabel.SetText(title)
 	activeLabelType.SetText("widget.Type = " + w.widget.Type.String())
 	return
@@ -180,7 +180,7 @@ func (n *Node) debugAddWidgetButtons() {
 		a.AddText("make something for tim for qflow")
 		a.AddText("and for riscv")
 		a.Custom = func () {
-			log("custom dropdown() a =", a.widget.Name, a.widget.S, "id=", a.id)
+			log("custom dropdown() a =", a.Name, a.widget.S, "id=", a.id)
 		}
 	})
 	n.NewButton("Combobox", func () {
@@ -188,7 +188,7 @@ func (n *Node) debugAddWidgetButtons() {
 		a.AddText("mirrors.wit.com")
 		a.AddText("go.wit.com")
 		a.Custom = func () {
-			log("custom combobox() a =", a.widget.Name, a.widget.S, "id=", a.id)
+			log("custom combobox() a =", a.Name, a.widget.S, "id=", a.id)
 		}
 	})
 	n.NewButton("Grid", func () {

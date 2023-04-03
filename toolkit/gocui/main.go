@@ -8,36 +8,21 @@ import (
 	"os"
 )
 
-/*
-func OnExit(f func(string)) {
-	Custom = f
-}
-*/
-
 func Init() {
-	log(logInfo, "Init() of democui")
-	me.widgets = make(map[int]*cuiWidget)
+	log(logInfo, "Init() of awesome-gocui")
 	me.defaultWidth = 10
 	me.defaultHeight = 2
 	me.defaultBehavior = true
+
+	me.horizontalPadding = 20
+	me.groupPadding = 2
+	me.buttonPadding = 2
 }
 
 func Exit() {
 	// TODO: exit correctly
 	me.baseGui.Close()
 }
-
-/*
-func mouseClick(name string) {
-	// output screws up the console. Need to fix this by redirecting all console output to a file from log.Println()
-	// log.Println("g.Close()")
-	// g.Close()
-
-	log("Found andlabs Running custom function for the mouse click")
-	Custom(name)
-	// panic("got andlabs")
-}
-*/
 
 func Main(f func()) {
 	log("start Init()")
@@ -53,15 +38,3 @@ func Main(f func()) {
 
 	MouseMain()
 }
-
-/*
-func StartConsoleMouse() {
-	defer g.Close()
-	log("start Main()")
-
-	if err := g.MainLoop(); err != nil && !errors.Is(err, gocui.ErrQuit) {
-		exit(err)
-	}
-	log("exit Main()")
-}
-*/

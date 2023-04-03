@@ -121,7 +121,7 @@ func place(a *toolkit.Action, t *andlabsT, newt *andlabsT) bool {
 	if (andlabs[a.WidgetId] == nil) {
 		log(logInfo, "newTab() MAPPED", a.WidgetId, a.ParentId)
 		andlabs[a.WidgetId] = newt
-		newt.Type = a.WidgetType
+		newt.WidgetType = a.WidgetType
 	} else {
 		log(debugError, "newTab() DO WHAT?", a.WidgetId, a.ParentId)
 		log(debugError, "THIS IS BAD")
@@ -138,7 +138,7 @@ func place(a *toolkit.Action, t *andlabsT, newt *andlabsT) bool {
 		return false
 	}
 
-	switch where.Type {
+	switch where.WidgetType {
 	case toolkit.Grid:
 		log(debugGrid, "add() Grid try at Parent X,Y =", a.X, a.Y)
 		newt.gridX = a.X

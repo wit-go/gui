@@ -39,7 +39,7 @@ func (n *Node) DebugFlags(makeWindow bool) {
 	g.NewLabel("like verbose=1")
 	cb1.Custom = func() {
 		debugGui = cb1.widget.B
-		log(debugGui, "Custom() n.widget =", cb1.widget.Name, cb1.widget.B)
+		log(debugGui, "Custom() n.widget =", cb1.Name, cb1.widget.B)
 	}
 
 	// errors. by default these always output somewhere

@@ -42,6 +42,8 @@ func NewWindow() *Node {
 	a.ActionType = toolkit.Add
 	a.Width     = Config.Width
 	a.Height    = Config.Height
+	a.Name      = Config.Title
+	a.Text      = Config.Title
 	newaction(&a, newNode, Config.rootNode)
 
 	return newNode

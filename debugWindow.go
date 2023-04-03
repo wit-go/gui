@@ -40,7 +40,7 @@ func (n *Node) DebugTab(title string) *Node {
 	cb := gog.NewCheckbox("Seperate windows")
 	cb.Custom = func() {
 		makeTabs = cb.widget.B
-		log(debugGui, "Custom() n.widget =", cb.widget.Name, cb.widget.B)
+		log(debugGui, "Custom() n.widget =", cb.Name, cb.widget.B)
 	}
 	makeTabs = false
 	cb.Set(false)
@@ -97,12 +97,8 @@ func (n *Node) DebugTab(title string) *Node {
 		StartS("gocui")
 	})
 
-	g2.NewButton("load plugin 'democui'", func () {
-		StartS("democui")
-	})
-
-	g2.NewButton("Redraw(democui)", func () {
-		Redraw("democui")
+	g2.NewButton("Redraw(gocui)", func () {
+		Redraw("gocui")
 	})
 
 	return newN

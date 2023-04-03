@@ -22,7 +22,7 @@ func newGrid(a *toolkit.Action) {
 	newt.uiGrid = c
 	newt.uiControl = c
 	newt.tw = a.Widget
-	newt.Type = toolkit.Grid
+	newt.WidgetType = toolkit.Grid
 	newt.gridX = 0
 	newt.gridY = 0
 

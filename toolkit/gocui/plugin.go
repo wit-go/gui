@@ -4,114 +4,77 @@ import (
 	// if you include more than just this import
 	// then your plugin might be doing something un-ideal (just a guess from 2023/02/27)
 	"git.wit.org/wit/gui/toolkit"
-
-	"github.com/awesome-gocui/gocui"
 )
 
-// This is a map between the widgets in wit/gui and the internal structures of gocui
-var viewWidget map[*gocui.View]*toolkit.Widget
-var stringWidget map[string]*toolkit.Widget
-
 func Quit() {
-	baseGui.Close()
+	me.baseGui.Close()
 }
 
-// This lists out the know mappings
-func listMap() {
-	for v, w := range viewWidget {
-		log("view =", v.Name, "widget name =", w.Name)
+func Action(a *toolkit.Action) {
+	log(logInfo, "Action() START", a.WidgetId, a.ActionType, a.WidgetType, a.Name)
+	w := findWidget(a.WidgetId, me.rootNode)
+	switch a.ActionType {
+	case toolkit.Add:
+		w = setupWidget(a)
+		findPlace(w)
+		w.drawView()
+	case toolkit.Show:
+		if (a.B) {
+			w.drawView()
+		} else {
+			w.hideWidgets()
+		}
+	case toolkit.Set:
+		w.Set(a.A)
+	case toolkit.SetText:
+		w.SetText(a.S)
+	case toolkit.AddText:
+		w.AddText(a.S)
+	case toolkit.Move:
+		log(logNow, "attempt to move() =", a.ActionType, a.WidgetType, a.Name)
+	default:
+		log(logError, "Action() Unknown =", a.ActionType, a.WidgetType, a.Name)
 	}
-	for s, w := range stringWidget {
-		log("string =", s, "widget =", w)
-	}
+	log(logInfo, "Action() END")
 }
 
-
-//
-// This should be called ?
-// Pass() ?
-// This handles all interaction between the wit/gui package (what golang knows about)
-// and this plugin that talks to the OS and does scary and crazy things to make
-// a GUI on whatever OS or whatever GUI toolkit you might have (GTK, QT, WASM, libcurses)
-//
-// Once you are here, you should be in a protected goroutine created by the golang wit/gui package
-//
-// TODO: make sure you can't escape this goroutine
-//
-func Send(p *toolkit.Widget, c *toolkit.Widget) {
-	if (p == nil) {
-		log(debugPlugin, "Send() parent = nil")
-	} else {
-		log(debugPlugin, "Send() parent =", p.Name, ",", p.Type)
-	}
-	log(debugPlugin, "Send() child  =", c.Name, ",", c.Type)
-
-	/*
-	if (c.Action == "SetMargin") {
-		log(debugError, "need to implement SetMargin here")
-		setMargin(c, c.B)
+func (w *cuiWidget) AddText(text string) {
+	if (w == nil) {
+		log(logNow, "widget is nil")
 		return
 	}
-	*/
+	w.vals = append(w.vals, text)
+	for i, s := range w.vals {
+		log(logNow, "AddText()", w.name, i, s)
+	}
+	w.SetText(text)
+}
 
-	switch c.Type {
-		/*
-	case toolkit.Window:
-		// doWindow(c)
-	case toolkit.Tab:
-		// doTab(p, c)
-		*/
-	case toolkit.Group:
-		newGroup(p, c)
-	case toolkit.Button:
-		newButton(p, c)
-		/*
-	case toolkit.Checkbox:
-		// doCheckbox(p, c)
-	case toolkit.Label:
-		// doLabel(p, c)
-	case toolkit.Textbox:
-		// doTextbox(p, c)
-	case toolkit.Slider:
-		// doSlider(p, c)
-	case toolkit.Spinner:
-		// doSpinner(p, c)
-	case toolkit.Dropdown:
-		// doDropdown(p, c)
-	case toolkit.Combobox:
-		// doCombobox(p, c)
-	case toolkit.Grid:
-		// doGrid(p, c)
-		*/
-	/*
-	case toolkit.Flag:
-		// log(debugFlags, "plugin Send() flag parent =", p.Name, p.Type)
-		// log(debugFlags, "plugin Send() flag child  =", c.Name, c.Type)
-		// log(debugFlags, "plugin Send() flag child.Action  =", c.Action)
-		// log(debugFlags, "plugin Send() flag child.S  =", c.S)
-		// log(debugFlags, "plugin Send() flag child.B  =", c.B)
-		// log(debugFlags, "plugin Send() what to flag?")
-		// should set the checkbox to this value
-		switch c.S {
-		case "Toolkit":
-			debugToolkit = c.B
-		case "Change":
-			debugChange = c.B
-		case "Plugin":
-			debugPlugin = c.B
-		case "Flags":
-			debugFlags = c.B
-		case "Error":
-			debugError = c.B
-		case "Show":
-			ShowDebug()
-		default:
-			log(debugError, "Can't set unknown flag", c.S)
-		}
-	*/
+func (w *cuiWidget) SetText(text string) {
+	if (w == nil) {
+		log(logNow, "widget is nil")
+		return
+	}
+	w.text = text
+	w.s = text
+	w.textResize()
+	me.baseGui.DeleteView(w.cuiName)
+	w.drawView()
+}
+
+func (w *cuiWidget) Set(val any) {
+	log(logInfo, "Set() value =", val)
+	var a toolkit.Action
+	a.ActionType = toolkit.Set
+
+	switch v := val.(type) {
+	case bool:
+		w.b = val.(bool)
+	case string:
+		w.SetText(val.(string))
+	case int:
+		w.i = val.(int)
 	default:
-		log(debugError, "plugin Send() unknown parent =", p.Name, p.Type)
-		log(debugError, "plugin Send() unknown child  =", c.Name, c.Type)
-		log(debugError, "plugin Send() Don't know how to do", c.Type, "yet")
+		log(logError, "Set() unknown type =", v, "a =", a)
 	}
 }

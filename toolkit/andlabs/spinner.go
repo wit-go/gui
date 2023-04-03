@@ -17,7 +17,7 @@ func (t *andlabsT) newSpinner(a *toolkit.Action) *andlabsT {
 	newt.uiControl = s
 	newt.tw = w
 	newt.wId = a.WidgetId
-	newt.Type = toolkit.Spinner
+	newt.WidgetType = toolkit.Spinner
 
 	s.OnChanged(func(s *ui.Spinbox) {
 		newt.tw.I = newt.uiSpinbox.Value()
@@ -29,11 +29,10 @@ func (t *andlabsT) newSpinner(a *toolkit.Action) *andlabsT {
 
 func newSpinner(a *toolkit.Action) {
 	var newt *andlabsT
-	w := a.Widget
 
 	t := andlabs[a.ParentId]
 	if (t == nil) {
-		log(debugError, "NewSpinner() toolkit struct == nil. name=", w.Name)
+		log(debugError, "NewSpinner() toolkit struct == nil. name=", a.Name)
 		return
 	}
 	newt = t.newSpinner(a)

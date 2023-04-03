@@ -8,7 +8,6 @@ import 	(
 
 func main() {
 	gui.InitPlugins([]string{"gocui"})
-	// gui.InitPlugins([]string{"democui"})
 	gui.Main(helloworld)
 }
 

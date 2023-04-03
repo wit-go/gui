@@ -45,6 +45,7 @@ func layout(g *gocui.Gui) error {
 		}
 		v.Frame = false
 	}
+	/*
 	if v, err := g.SetView("but1", 2, 2, 22, 7, 0); err != nil {
 		if !errors.Is(err, gocui.ErrUnknownView) {
 			return err
@@ -67,6 +68,7 @@ func layout(g *gocui.Gui) error {
 		v.SelFgColor = gocui.ColorBlack
 		fmt.Fprintln(v, "Button 2 - line 1")
 	}
+	*/
 	helplayout(g)
 	updateHighlightedView(g)
 	return nil

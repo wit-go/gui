@@ -15,9 +15,8 @@ func (t *andlabsT) newTextbox(w *toolkit.Widget) *andlabsT {
 	newt.uiMultilineEntry = c
 	newt.uiControl = c
 
-	newt.Name = w.Name
 	newt.tw = w
-	newt.Type = toolkit.Textbox
+	newt.WidgetType = toolkit.Textbox
 
 	c.OnChanged(func(spin *ui.MultilineEntry) {
 		t.s = spin.Text()
@@ -30,14 +29,15 @@ func (t *andlabsT) newTextbox(w *toolkit.Widget) *andlabsT {
 
 func newTextbox(a *toolkit.Action) {
 	w := a.Widget
-	log(debugToolkit, "newCombobox()", w.Name)
+	log(debugToolkit, "newCombobox()", a.Name)
 
 	t := andlabs[a.ParentId]
 	if (t == nil) {
-		log(debugToolkit, "newCombobox() toolkit struct == nil. name=", w.Name)
+		log(debugToolkit, "newCombobox() toolkit struct == nil. name=", a.Name)
 		listMap(debugToolkit)
 		return
 	}
 	newt := t.newTextbox(w)
+	newt.Name = a.Name
 	place(a, t, newt)
 }

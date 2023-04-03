@@ -9,12 +9,14 @@ import (
 func (t *andlabsT) newCheckbox(a *toolkit.Action) *andlabsT {
 	var newt andlabsT
 	w := a.Widget
-	log(debugToolkit, "newCheckbox()", w.Name, w.Type)
+	log(debugToolkit, "newCheckbox()", a.Name, a.WidgetType)
 	newt.tw = w
-	newt.Type = w.Type
+	newt.WidgetType = a.WidgetType
 	newt.wId = a.WidgetId
+	newt.Name = a.Name
+	newt.Text = a.Text
 
-	newt.uiCheckbox = ui.NewCheckbox(w.Name)
+	newt.uiCheckbox = ui.NewCheckbox(a.Text)
 	newt.uiControl = newt.uiCheckbox
 
 	newt.uiCheckbox.OnToggled(func(spin *ui.Checkbox) {

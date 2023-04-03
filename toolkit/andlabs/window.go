@@ -16,22 +16,14 @@ func (t *andlabsT) ErrorWindow(msg1 string, msg2 string) {
 }
 
 func newWindow(a *toolkit.Action) {
-	w := a.Widget
 	var newt *andlabsT
 
-	// log(debugToolkit, "toolkit NewWindow", w.Name, w.Width, w.Height)
-
-	if (w == nil) {
-		log(debugToolkit, "wit/gui plugin error. widget == nil")
-		return
-	}
 	newt = new(andlabsT)
-	newt.tw = w
-	newt.Type = toolkit.Window
+	newt.WidgetType = toolkit.Window
 	newt.wId = a.WidgetId
 
 	// menubar bool is if the OS defined border on the window should be used
-	win := ui.NewWindow(w.Name, a.Width, a.Height, menubar)
+	win := ui.NewWindow(a.Name, a.Width, a.Height, menubar)
 	win.SetBorderless(canvas)
 	win.SetMargined(margin)
 	win.OnClosing(func(*ui.Window) bool {
@@ -41,8 +33,7 @@ func newWindow(a *toolkit.Action) {
 	win.Show()
 	newt.uiWindow = win
 	newt.uiControl = win
-	// newt.UiWindowBad = win // deprecate this as soon as possible
-	newt.Name = w.Name
+	newt.Name = a.Name
 
 	andlabs[a.WidgetId] = newt
 	return

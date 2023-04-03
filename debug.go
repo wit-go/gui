@@ -102,11 +102,6 @@ func (n *Node) Dump(b bool) {
 	Indent(b, "Height       = ", n.Height)
 	Indent(b, "(X,Y)        = ", n.X, n.Y)
 	Indent(b, "Next (X,Y)   = ", n.NextX, n.NextY)
-	/*
-	Indent(b, "Widget Name  = ", n.widget.Name)
-	Indent(b, "Widget Type  = ", n.widget.Type)
-	Indent(b, "Widget Id    = ", n.widget.Id)
-	*/
 
 	if (n.parent == nil) {
 		Indent(b, "parent       = nil")
@@ -133,13 +128,9 @@ func (n *Node) dumpWidget(b bool) string {
 		log(debugError, "dumpWidget() node == nil")
 		return ""
 	}
-	info = n.widget.Type.String()
+	info = n.WidgetType.String()
 
-	info += ", " + n.widget.Name
-	if (n.Name != n.widget.Name) {
-		info += " NAME MISMATCH"
-	}
-	if (n.widget.Type == toolkit.Checkbox) {
+	if (n.WidgetType == toolkit.Checkbox) {
 		info += " = " + strconv.FormatBool(n.widget.B)
 	}
 

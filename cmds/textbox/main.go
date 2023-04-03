@@ -26,7 +26,6 @@ func main() {
 
 	// gui.SetDebug(true)
 	// gui.InitPlugins([]string{"gocui"})
-	// gui.InitPlugins([]string{"democui"})
 	gui.Main(initGUI)
 }
 

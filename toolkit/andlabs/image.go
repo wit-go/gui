@@ -9,15 +9,14 @@ import (
 
 // make new Image here
 func newImage(a *toolkit.Action) {
-	w := a.Widget
-	log(debugToolkit, "newImage()", w.Name)
+	log(debugToolkit, "newImage()", a.Name)
 
 	t := andlabs[a.ParentId]
 	if (t == nil) {
-		log(debugToolkit, "newImage() toolkit struct == nil. name=", w.Name)
+		log(debugToolkit, "newImage() toolkit struct == nil. name=", a.Name)
 		listMap(debugToolkit)
 	}
-	newt := t.rawImage(w.Name)
+	newt := t.rawImage(a.Name)
 	place(a, t, newt)
 }
 
@@ -37,7 +36,7 @@ func (t *andlabsT) rawImage(title string) *andlabsT {
 	return &newt
 }
 /*
-	if (w.Name == "image") {
+	if (a.Name == "image") {
 		log(true, "NewTextbox() trying to add a new image")
 		i := ui.NewImage(16, 16)
 		img, _, err := image.Decode(bytes.NewReader(rawImage))
