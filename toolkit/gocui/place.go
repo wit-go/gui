@@ -5,10 +5,10 @@ import (
 	"git.wit.org/wit/gui/toolkit"
 )
 
-var fakeStartWidth int = 80
-var fakeStartHeight int = 0
+var fakeStartWidth int = 10
+var fakeStartHeight int = 3
 func (w *cuiWidget) setFake() {
-	if (w.visable) {
+	if (w.isFake == false) {
 		return
 	}
 	t := len(w.name)
@@ -21,29 +21,30 @@ func (w *cuiWidget) setFake() {
 	w.realSize.h1 =  w.realSize.h0 + w.realHeight
 	fakeStartHeight += 3
 	if (fakeStartHeight > 24) {
-		fakeStartHeight = 0
+		fakeStartHeight = 3
 		fakeStartWidth += 20
 	}
 	w.showWidgetPlacement(logNow, "setFake()")
 }
 
 func findPlace(w *cuiWidget) {
+	w.isFake = false
 	w.visable = true
 	switch w.widgetType {
 	case toolkit.Root:
-		w.visable = false
+		w.isFake = true
 		w.setFake()
 	case toolkit.Flag:
-		w.visable = false
+		w.isFake = true
 		w.setFake()
 	case toolkit.Grid:
-		w.visable = false
+		w.isFake = true
 		w.setFake()
 	case toolkit.Box:
-		w.visable = false
+		w.isFake = true
 		w.setFake()
 	default:
-		w.redoBox(true)
+		// w.redoBox(true)
 	}
 }
 

@@ -58,7 +58,7 @@ func (w *cuiWidget) SetText(text string) {
 	w.text = text
 	w.s = text
 	w.textResize()
-	me.baseGui.DeleteView(w.cuiName)
+	w.deleteView()
 	w.drawView()
 }
 

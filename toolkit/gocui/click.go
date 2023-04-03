@@ -18,15 +18,14 @@ func (w *cuiWidget) doWidgetClick() {
 	case toolkit.Flag:
 		me.rootNode.redoColor(true)
 	case toolkit.Window:
-		me.rootNode.redoTabs(true)
 		w.redoBox(true)
 		w.toggleTree()
-		me.rootNode.redoColor(true)
 	case toolkit.Tab:
-		me.rootNode.redoTabs(true)
 		w.redoBox(true)
 		w.toggleTree()
-		me.rootNode.redoColor(true)
+
+		// w.toggleTree()
+		// me.rootNode.redoColor(true)
 	case toolkit.Box:
 		w.showWidgetPlacement(logNow, "drawTree()")
 		if (w.horizontal) {
@@ -63,8 +62,7 @@ func (w *cuiWidget) drawTree(draw bool) {
 		w.textResize()
 		w.drawView()
 	} else {
-		me.baseGui.DeleteView(w.cuiName)
-		w.v = nil
+		w.deleteView()
 	}
 
 	for _, child := range w.children {

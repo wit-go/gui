@@ -22,7 +22,6 @@ func actionDump(b bool, a *toolkit.Action) {
 }
 
 func (w *cuiWidget) dumpTree(draw bool) {
-	log(logNow, "dumpTree() START", w)
 	if (w == nil) {
 		return
 	}

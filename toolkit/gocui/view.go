@@ -69,10 +69,12 @@ func (w *cuiWidget) drawView() {
 
 	w.v, err = me.baseGui.SetView(w.cuiName, a, b, c, d, 0)
 	if err == nil {
+		w.showWidgetPlacement(logError, "drawView()")
 		log(logError, "drawView() internal plugin error err = nil")
 		return
 	}
 	if !errors.Is(err, gocui.ErrUnknownView) {
+		w.showWidgetPlacement(logError, "drawView()")
 		log(logError, "drawView() internal plugin error error.IS()", err)
 		return
 	}
@@ -82,5 +84,5 @@ func (w *cuiWidget) drawView() {
 	w.v.Wrap = true
 	fmt.Fprintln(w.v, " " + w.text)
 
-	// w.SetDefaultWidgetColor()
+	w.setDefaultWidgetColor()
 }

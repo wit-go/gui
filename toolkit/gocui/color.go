@@ -8,13 +8,14 @@ import (
 
 // ColorBlack ColorRed ColorGreen ColorYellow ColorBlue ColorMagenta ColorCyan ColorWhite
 // gocui.GetColor("#FFAA55")  // Dark Purple
-func (w *cuiWidget) SetDefaultWidgetColor() {
-	log(logInfo, "SetDefaultWidgetColor() on", w.widgetType, w.name)
+func (w *cuiWidget) setDefaultWidgetColor() {
+	log(logInfo, "setDefaultWidgetColor() on", w.widgetType, w.name)
 	v, _ := me.baseGui.View(w.cuiName)
 	if (v == nil) {
-		log(logError, "SetDefaultWidgetColor() failed on view == nil")
+		log(logError, "setDefaultWidgetColor() failed on view == nil")
 		return
 	}
+	sleep(.05)
 	// v.BgColor = gocui.GetColor("#FFAA55")  // Dark Purple
 	// v.BgColor = gocui.GetColor("#88AA55") // heavy purple
 	// v.BgColor = gocui.GetColor("#111111") // crazy red
@@ -83,13 +84,13 @@ func (w *cuiWidget) SetColor(c string) {
 	}
 }
 
-func (w *cuiWidget) SetDefaultHighlight() {
+func (w *cuiWidget) setDefaultHighlight() {
 	if (w.v == nil) {
 		log(logError, "SetColor() failed on view == nil")
 		return
 	}
-//	w.v.SelBgColor = gocui.ColorGreen
-//	w.v.SelFgColor = gocui.ColorBlack
+	w.v.SelBgColor = gocui.ColorGreen
+	w.v.SelFgColor = gocui.ColorBlack
 }
 
 func randColor() gocui.Attribute {
@@ -105,7 +106,8 @@ func (w *cuiWidget) redoColor(draw bool) {
 	}
 
 	sleep(.05)
-	w.SetDefaultWidgetColor()
+	w.setDefaultHighlight()
+	// w.setDefaultWidgetColor()
 
 	for _, child := range w.children {
 		child.redoColor(draw)

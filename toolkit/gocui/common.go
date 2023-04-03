@@ -70,6 +70,13 @@ func setupCtrlDownWidget() {
 	// me.rootNode.Append(w)
 }
 
+func (w *cuiWidget) deleteView() {
+	if (w.v != nil) {
+		me.baseGui.DeleteView(w.cuiName)
+	}
+	w.v = nil
+}
+
 func (n *cuiWidget) Append(child *cuiWidget) {
 	n.children = append(n.children, child)
 	// child.parent = n

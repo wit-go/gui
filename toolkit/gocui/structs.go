@@ -87,7 +87,8 @@ type cuiWidget struct {
 
 	vals []string // dropdown menu options
 
-	visable bool // widget types like 'box' are 'false'
+	visable bool // track if it's currently supposed to be shown
+	isFake bool // widget types like 'box' are 'false'
 	realWidth int // the real width
 	realHeight int // the real height
 	realSize rectType  // the display size of this widget

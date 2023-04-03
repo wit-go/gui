@@ -38,6 +38,8 @@ func defaultKeybindings(g *gocui.Gui) error {
 	return nil
 }
 
+var showDebug bool = true
+
 // dump out the widgets
 func addDebugKeys(g *gocui.Gui) {
 	// dump all widget info to the log
@@ -45,6 +47,13 @@ func addDebugKeys(g *gocui.Gui) {
 		func(g *gocui.Gui, v *gocui.View) error {
 			log(logNow, "gocui.SetKeyBinding() dumpTree() START")
 			me.rootNode.dumpTree(true)
+			if (showDebug) {
+				me.rootNode.showFake()
+				showDebug = false
+			} else {
+				me.rootNode.hideFake()
+				showDebug = true
+			}
 			return nil
 	})
 

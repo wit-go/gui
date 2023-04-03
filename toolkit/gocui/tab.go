@@ -16,13 +16,28 @@ func (w *cuiWidget) hideWidgets() {
 	case toolkit.Box:
 	case toolkit.Grid:
 	default:
-		if (w.v != nil) {
-			me.baseGui.DeleteView(w.cuiName)
-			w.v = nil
-		}
+		w.deleteView()
 	}
 	for _, child := range w.children {
 		child.hideWidgets()
+	}
+}
+
+func (w *cuiWidget) hideFake() {
+	if (w.isFake) {
+		w.deleteView()
+	}
+	for _, child := range w.children {
+		child.hideFake()
+	}
+}
+
+func (w *cuiWidget) showFake() {
+	if (w.isFake) {
+		w.drawView()
+	}
+	for _, child := range w.children {
+		child.showFake()
 	}
 }
 
@@ -74,7 +89,7 @@ func (w *cuiWidget) redoTabs(draw bool) {
 		me.rootNode.logicalSize.w1 = w.realSize.w1 + 1
 		me.rootNode.logicalSize.h1 = 0
 
-		me.baseGui.DeleteView(w.cuiName)
+		w.deleteView()
 		w.v = nil
 		w.drawView()
 		w.showWidgetPlacement(logNow, "redoTabs()")
