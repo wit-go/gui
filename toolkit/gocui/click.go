@@ -10,6 +10,36 @@ import (
 	"git.wit.org/wit/gui/toolkit"
 )
 
+func (w *cuiWidget) gridBounds() {
+	for a := 0; a < w.x; a++ {
+		for b := 0; b < w.y; b++ {
+			p := w.parent
+			log(logNow, "gridBounds() (w,h)", a, b,
+				"logical(W,H)", w.logicalW[a], w.logicalH[b],
+				"p.next(W,H)", p.nextW, p.nextH)
+		}
+		log("\n")
+	}
+
+	for _, child := range w.children {
+		child.showWidgetPlacement(logNow, "gridBounds:")
+		var totalW, totalH int
+		for i, val := range w.logicalW {
+			if (i < child.parentW) {
+				log(logNow, "gridBounds() (w, logicalW[])", i, val)
+				totalW += w.logicalW[i]
+			}
+		}
+		for i, h := range w.logicalH {
+			if (i < child.parentH) {
+				totalH += h
+			}
+		}
+		log(logNow, "gridBounds()", child.id, "parent (W,H) =", child.parentW, child.parentH, 
+			"total (W,H) =", totalW, totalH, child.name)
+	}
+}
+
 func (w *cuiWidget) doWidgetClick() {
 	switch w.widgetType {
 	case toolkit.Root:
@@ -24,8 +54,9 @@ func (w *cuiWidget) doWidgetClick() {
 		w.redoBox(true)
 		w.toggleTree()
 	case toolkit.Grid:
-		w.redoBox(true)
-		w.toggleTree()
+		w.gridBounds()
+		// w.redoBox(true)
+		// w.toggleTree()
 	case toolkit.Box:
 		// w.showWidgetPlacement(logNow, "drawTree()")
 		if (w.horizontal) {

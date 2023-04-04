@@ -53,6 +53,10 @@ func setupWidget(a *toolkit.Action) *cuiWidget {
 			w.horizontal = false
 		}
 	}
+	if (a.WidgetType == toolkit.Grid) {
+		w.logicalW = make(map[int]int) // how tall each row in the grid is
+		w.logicalH = make(map[int]int) // how wide each column in the grid is
+	}
 
 	// w.showWidgetPlacement(logNow)
 	return w

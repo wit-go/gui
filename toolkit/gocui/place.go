@@ -86,9 +86,18 @@ func (w *cuiWidget) redoBox(draw bool) {
 		for _, child := range w.children {
 			// increment for the next child
 			w.nextW = p.nextW + wCount * 20
-			w.nextH = p.nextH + hCount * 4
+			w.nextH = p.nextH + hCount * 2
 			child.redoBox(draw)
 
+			// set the child's realWidth, and grid offset
+			child.parentH = hCount
+			child.parentW = wCount
+			if (w.logicalW[wCount] < child.realWidth) {
+				w.logicalW[wCount] = child.realWidth
+			}
+			if (w.logicalH[hCount] < child.realHeight) {
+				w.logicalH[hCount] = child.realHeight
+			}
 			log(logNow, "redoBox(GRID) (w,h count)", wCount, hCount, "(X,Y)", w.x, w.y, w.name)
 			child.showWidgetPlacement(logNow, "grid:")
 
@@ -156,50 +165,27 @@ func (w *cuiWidget) redoBox(draw bool) {
 		// p.nextH = w.nextH
 		w.showWidgetPlacement(logNow, "group:")
 	default:
-		w.realWidth = t + 3
-		w.realHeight = me.defaultHeight
-		w.realSize.w0 = p.nextW
-		w.realSize.h0 = p.nextH
-		w.realSize.w1 = p.nextW + w.realWidth
-		w.realSize.h1 = p.nextH + w.realHeight
-
-		w.logicalSize.w0 = p.nextW
-		w.logicalSize.h0 = p.nextH
-		w.logicalSize.w1 = p.nextW + w.realWidth
-		w.logicalSize.h1 = p.nextH + w.realHeight
-
+		w.boxedPlace(p.nextW, p.nextH)
 		w.nextW = w.realSize.w1
 		w.nextH = w.realSize.h1
 	}
 }
 
-func (w *cuiWidget) boxedPlace() {
-	t := len(w.name)
-	if (w.id == 0) {
-		w.realWidth = 0
-		w.realHeight = 0
-		return
-	}
-	p := w.parent
-	if (p == nil) {
-		log(logError, "boxedPlace() parentId widget == nil")
-		return
-	}
+func (w *cuiWidget) boxedPlace(leftW int, topH int) {
+	t := len(w.text)
 
-	w.realWidth = t + 3
+	w.realWidth = t + me.buttonPadding
 	w.realHeight = me.defaultHeight
-	w.realSize.w0 = p.nextW
-	w.realSize.h0 = p.nextH
-	w.realSize.w1 = p.nextW + w.realWidth
-	w.realSize.h1 = p.nextH + w.realHeight
 
-	w.logicalSize.w0 = p.nextW
-	w.logicalSize.h0 = p.nextH
-	w.logicalSize.w1 = p.nextW + w.realWidth
-	w.logicalSize.h1 = p.nextH + w.realHeight
+	w.realSize.w0 = leftW
+	w.realSize.h0 = topH 
+	w.realSize.w1 = leftW + w.realWidth
+	w.realSize.h1 = topH + w.realHeight
 
-	w.nextW = w.realSize.w1
-	w.nextH = w.realSize.h1
+	w.logicalSize.w0 = w.realSize.w0
+	w.logicalSize.h0 = w.realSize.h0
+	w.logicalSize.w1 = w.realSize.w1
+	w.logicalSize.h1 = w.realSize.h1
 
 	w.showWidgetPlacement(logNow, "bP widget")
 }

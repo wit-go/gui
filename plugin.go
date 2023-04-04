@@ -283,12 +283,6 @@ func newaction(a *toolkit.Action, n *Node, where *Node) {
 				where.NextY = 1
 			}
 			log(logInfo, "Action() END size (X,Y)", where.X, where.Y, "put next thing at (X,Y) =", where.NextX, where.NextY)
-			where.Name = "jwc gridlaksdfjkl"
-			where.Width = 320
-			where.Height = 240
-			// where.NextX = 5
-			// where.NextY = 7
-			// where.Dump(logInfo)
 		default:
 		}
 	}

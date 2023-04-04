@@ -47,7 +47,7 @@ func (w *cuiWidget) showWidgetPlacement(b bool, s string) {
 	log(b, "dump()", s,
 		fmt.Sprintf("(wId,pId)=(%3d,%3d)", w.id, w.parent.id),
 		fmt.Sprintf("real()=(%3d,%3d,%3d,%3d)", w.realSize.w0, w.realSize.h0, w.realSize.w1, w.realSize.h1),
-		"next()=(", w.nextW, ",", w.nextH, ")",
+		"size()=(", w.realWidth, ",", w.realHeight, ")",
 		"logical()=(", w.logicalSize.w0, ",", w.logicalSize.h0, ",", w.logicalSize.w1, ",", w.logicalSize.h1, ")",
 		w.widgetType, ",", w.name, "text=", w.text)
 

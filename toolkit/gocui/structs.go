@@ -94,6 +94,13 @@ type cuiWidget struct {
 	realSize rectType  // the display size of this widget
 	logicalSize rectType  // the logical size. Includes all the child widgets
 
+	// used to track the size of grids
+	logicalW map[int]int // how tall each row in the grid is
+	logicalH map[int]int // how wide each column in the grid is
+	// where in the parent grid this widget should go
+	parentW int
+	parentH int
+
 	nextW	int
 	nextH	int
 
