@@ -16,6 +16,6 @@ func (n *Node) NewTab(text string) *Node {
 	a.Text = text
 	newaction(&a, newNode, n)
 
-	newBox := newNode.NewBox(text, true)
+	newBox := newNode.NewBox(text + "tab hbox", true)
 	return newBox
 }

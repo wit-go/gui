@@ -141,6 +141,7 @@ func (w *cuiWidget) moveTo(leftW int, topH int) {
 
 func (w *cuiWidget) updateLogicalSizes() {
 	for _, child := range w.children {
+		// if (w.isReal)
 		child.updateLogicalSizes()
 		if (w.logicalSize.w0 > child.logicalSize.w0) {
 			w.logicalSize.w0 = child.logicalSize.w0

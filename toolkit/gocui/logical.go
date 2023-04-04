@@ -7,26 +7,9 @@ import (
 var adjusted bool = false
 
 // expands the logical size of the parents
-func (w *cuiWidget) setParentLogical(p *cuiWidget) {
-	if (w.visable) {
-		// expand the parent logicalsize to include the widget realSize
-		if (p.logicalSize.w0 > w.realSize.w0) {
-			p.logicalSize.w0 = w.realSize.w0
-			adjusted = true
-		}
-		if (p.logicalSize.h0 > w.realSize.h0) {
-			p.logicalSize.h0 = w.realSize.h0
-			adjusted = true
-		}
-		if (p.logicalSize.w1 < w.realSize.w1) {
-			p.logicalSize.w1 = w.realSize.w1
-			adjusted = true
-		}
-		if (p.logicalSize.h1 < w.realSize.h1) {
-			p.logicalSize.h1 = w.realSize.h1
-			adjusted = true
-		}
-	} else {
+func (w *cuiWidget) setParentLogical() {
+	p := w.parent
+	if (w.isFake) {
 		// expand the parent logicalsize to include the widget logicalsize
 		if (p.logicalSize.w0 > w.logicalSize.w0) {
 			p.logicalSize.w0 = w.logicalSize.w0
@@ -44,8 +27,26 @@ func (w *cuiWidget) setParentLogical(p *cuiWidget) {
 			p.logicalSize.h1 = w.logicalSize.h1
 			adjusted = true
 		}
+	} else {
+		// expand the parent logicalsize to include the widget realSize
+		if (p.logicalSize.w0 > w.realSize.w0) {
+			p.logicalSize.w0 = w.realSize.w0
+			adjusted = true
+		}
+		if (p.logicalSize.h0 > w.realSize.h0) {
+			p.logicalSize.h0 = w.realSize.h0
+			adjusted = true
+		}
+		if (p.logicalSize.w1 < w.realSize.w1) {
+			p.logicalSize.w1 = w.realSize.w1
+			adjusted = true
+		}
+		if (p.logicalSize.h1 < w.realSize.h1) {
+			p.logicalSize.h1 = w.realSize.h1
+			adjusted = true
+		}
 	}
-	if (w.visable) {
+	if (! w.isFake) {
 		// adjust the widget realSize to the top left corner of the logicalsize
 		if (w.logicalSize.w0 > w.realSize.w0) {
 			w.realSize.w0 = w.logicalSize.w0
@@ -67,6 +68,6 @@ func (w *cuiWidget) setParentLogical(p *cuiWidget) {
 	// pass the logical resizing up
 	pP := w.parent
 	if (pP != nil) {
-		p.setParentLogical(pP)
+		pP.setParentLogical()
 	}
 }

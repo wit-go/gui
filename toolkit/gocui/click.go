@@ -24,7 +24,9 @@ func (w *cuiWidget) doWidgetClick() {
 		w.redoBox(true)
 		w.toggleTree()
 	case toolkit.Grid:
+		w.setParentLogical()
 		w.gridBounds()
+		w.setParentLogical()
 		for _, child := range w.children {
 			child.showWidgetPlacement(logNow, "gridBounds:")
 			if (child.v == nil) {
