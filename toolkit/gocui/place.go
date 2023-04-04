@@ -61,8 +61,6 @@ func (w *cuiWidget) redoBox(draw bool) {
 		return
 	}
 
-	t := len(w.text)
-	w.visable = true
 	switch w.widgetType {
 	case toolkit.Window:
 		for _, child := range w.children {
@@ -73,42 +71,9 @@ func (w *cuiWidget) redoBox(draw bool) {
 			child.redoBox(draw)
 		}
 	case toolkit.Grid:
-		log("redoBox GRID", p.nextW, p.nextH, p.name)
-		log("redoBox GRID", p.nextW, p.nextH, p.name)
-		log("redoBox GRID", w.nextW, w.nextH, w.name, w.text)
-		// hmm
-
 		w.nextW = p.nextW
 		w.nextH = p.nextH
-
-		var wCount int = 0
-		var hCount int = 0
-		for _, child := range w.children {
-			// increment for the next child
-			w.nextW = p.nextW + wCount * 20
-			w.nextH = p.nextH + hCount * 2
-			child.redoBox(draw)
-
-			// set the child's realWidth, and grid offset
-			child.parentH = hCount
-			child.parentW = wCount
-			if (w.logicalW[wCount] < child.realWidth) {
-				w.logicalW[wCount] = child.realWidth
-			}
-			if (w.logicalH[hCount] < child.realHeight) {
-				w.logicalH[hCount] = child.realHeight
-			}
-			log(logNow, "redoBox(GRID) (w,h count)", wCount, hCount, "(X,Y)", w.x, w.y, w.name)
-			child.showWidgetPlacement(logNow, "grid:")
-
-			if ((wCount + 1) < w.y) {
-				wCount += 1
-			} else {
-				wCount = 0
-				hCount += 1
-			}
-		}
-		w.showWidgetPlacement(logNow, "grid:")
+		w.gridBounds()
 	case toolkit.Box:
 		w.logicalSize.w0 = p.nextW
 		w.logicalSize.h0 = p.nextH
@@ -139,18 +104,7 @@ func (w *cuiWidget) redoBox(draw bool) {
 		}
 		w.showWidgetPlacement(logNow, "box:")
 	case toolkit.Group:
-		w.realWidth = t + me.buttonPadding
-		w.realHeight = me.defaultHeight
-
-		w.realSize.w0 = p.nextW
-		w.realSize.h0 = p.nextH
-		w.realSize.w1 = w.realSize.w0 + w.realWidth
-		w.realSize.h1 = w.realHeight
-
-		w.logicalSize.w0 = w.realSize.w0
-		w.logicalSize.h0 = w.realSize.h0
-		w.logicalSize.w1 = w.realSize.w1
-		w.logicalSize.h1 = w.realSize.h1
+		w.moveTo(p.nextW, p.nextH)
 
 		w.nextW = p.nextW + me.groupPadding
 		w.nextH = p.nextH + me.buttonPadding
@@ -165,18 +119,13 @@ func (w *cuiWidget) redoBox(draw bool) {
 		// p.nextH = w.nextH
 		w.showWidgetPlacement(logNow, "group:")
 	default:
-		w.boxedPlace(p.nextW, p.nextH)
+		w.moveTo(p.nextW, p.nextH)
 		w.nextW = w.realSize.w1
 		w.nextH = w.realSize.h1
 	}
 }
 
-func (w *cuiWidget) boxedPlace(leftW int, topH int) {
-	t := len(w.text)
-
-	w.realWidth = t + me.buttonPadding
-	w.realHeight = me.defaultHeight
-
+func (w *cuiWidget) moveTo(leftW int, topH int) {
 	w.realSize.w0 = leftW
 	w.realSize.h0 = topH 
 	w.realSize.w1 = leftW + w.realWidth
@@ -187,7 +136,7 @@ func (w *cuiWidget) boxedPlace(leftW int, topH int) {
 	w.logicalSize.w1 = w.realSize.w1
 	w.logicalSize.h1 = w.realSize.h1
 
-	w.showWidgetPlacement(logNow, "bP widget")
+	w.showWidgetPlacement(logNow, "moveTo()")
 }
 
 func (w *cuiWidget) updateLogicalSizes() {

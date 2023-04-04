@@ -104,6 +104,15 @@ func buttonWindow() {
 		})
 	})
 
+	g.NewButton("NewButton(more2 d)", func () {
+		log.Println("new foobar 2. Adding button 'foobar 3'")
+		name := "d" + strconv.Itoa(counter)
+		counter += 1
+		more2.NewButton(name, func () {
+			log.Println("Got all the way to main() name =", name)
+		})
+	})
+
 	g.NewButton("NewGroup()", func () {
 		log.Println("new foobar 2. Adding button 'foobar 3'")
 		name := "neat " + strconv.Itoa(counter)

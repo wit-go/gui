@@ -11,22 +11,54 @@ import (
 )
 
 func (w *cuiWidget) gridBounds() {
+	w.showWidgetPlacement(logNow, "gridBounds:")
+	p := w.parent
+
+	/*
 	for a := 0; a < w.x; a++ {
 		for b := 0; b < w.y; b++ {
-			p := w.parent
 			log(logNow, "gridBounds() (w,h)", a, b,
 				"logical(W,H)", w.logicalW[a], w.logicalH[b],
 				"p.next(W,H)", p.nextW, p.nextH)
 		}
 		log("\n")
 	}
+	*/
+	var wCount int = 0
+	var hCount int = 0
+	for _, child := range w.children {
+		// increment for the next child
+		w.nextW = p.nextW + wCount * 20
+		w.nextH = p.nextH + hCount * 2
+		child.redoBox(true)
+
+		// set the child's realWidth, and grid offset
+		child.parentH = hCount
+		child.parentW = wCount
+		if (w.logicalW[wCount] < child.realWidth) {
+			w.logicalW[wCount] = child.realWidth
+		}
+		if (w.logicalH[hCount] < child.realHeight) {
+			w.logicalH[hCount] = child.realHeight
+		}
+		log(logNow, "redoBox(GRID) (w,h count)", wCount, hCount, "(X,Y)", w.x, w.y, w.name)
+		child.showWidgetPlacement(logNow, "grid:")
+
+		if ((wCount + 1) < w.y) {
+			wCount += 1
+		} else {
+			wCount = 0
+		hCount += 1
+		}
+	}
+
 
 	for _, child := range w.children {
-		child.showWidgetPlacement(logNow, "gridBounds:")
+		child.showWidgetPlacement(logVerbose, "gridBounds:")
 		var totalW, totalH int
 		for i, val := range w.logicalW {
 			if (i < child.parentW) {
-				log(logNow, "gridBounds() (w, logicalW[])", i, val)
+				log(logVerbose, "gridBounds() (w, logicalW[])", i, val)
 				totalW += w.logicalW[i]
 			}
 		}
@@ -35,9 +67,21 @@ func (w *cuiWidget) gridBounds() {
 				totalH += h
 			}
 		}
-		log(logNow, "gridBounds()", child.id, "parent (W,H) =", child.parentW, child.parentH, 
-			"total (W,H) =", totalW, totalH, child.name)
+
+		// the new corner to move the child to
+		realW := w.nextW + totalW
+		realH := w.nextH + totalH
+
+
+		log(logInfo, "gridBounds()", child.id, "parent (W,H) =", child.parentW, child.parentH,
+			"total (W,H) =", totalW, totalH,
+			"real (W,H) =", realW, realH)
+		child.moveTo(realW, realH)
+		child.showWidgetPlacement(logInfo, "gridBounds:")
+		log(logInfo)
 	}
+	w.updateLogicalSizes()
+	w.showWidgetPlacement(logNow, "gridBounds:")
 }
 
 func (w *cuiWidget) doWidgetClick() {
@@ -55,8 +99,16 @@ func (w *cuiWidget) doWidgetClick() {
 		w.toggleTree()
 	case toolkit.Grid:
 		w.gridBounds()
-		// w.redoBox(true)
+		for _, child := range w.children {
+			child.showWidgetPlacement(logNow, "gridBounds:")
+			if (child.v == nil) {
+				child.drawView()
+			} else {
+				child.deleteView()
+			}
+		}
 		// w.toggleTree()
+		// w.redoBox(true)
 	case toolkit.Box:
 		// w.showWidgetPlacement(logNow, "drawTree()")
 		if (w.horizontal) {
@@ -67,8 +119,6 @@ func (w *cuiWidget) doWidgetClick() {
 		w.redoBox(true)
 		w.toggleTree()
 	default:
-		// w.textResize()
-		// something
 	}
 }
 
@@ -91,7 +141,7 @@ func (w *cuiWidget) drawTree(draw bool) {
 	}
 	w.showWidgetPlacement(logNow, "drawTree()")
 	if (draw) {
-		w.textResize()
+		// w.textResize()
 		w.drawView()
 	} else {
 		w.deleteView()
@@ -188,7 +238,6 @@ func ctrlDown(g *gocui.Gui, v *gocui.View) error {
 	me.ctrlDown.realSize.w1 = found.logicalSize.w1
 	me.ctrlDown.realSize.h0 = found.logicalSize.h0
 	me.ctrlDown.realSize.h1 = found.logicalSize.h1
-	// me.ctrlDown.textResize()
 
 	if (me.ctrlDown.v == nil) {
 		me.ctrlDown.text = found.text

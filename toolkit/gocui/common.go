@@ -20,6 +20,10 @@ func setupWidget(a *toolkit.Action) *cuiWidget {
 	w.width = a.Width
 	w.height = a.Height
 
+	t := len(w.text)
+	w.realWidth = t + me.buttonPadding
+	w.realHeight = me.defaultHeight
+
 	w.widgetType = a.WidgetType
 	w.id = a.WidgetId
 	// set the name used by gocui to the id
