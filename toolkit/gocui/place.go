@@ -29,7 +29,6 @@ func (w *cuiWidget) setFake() {
 
 func findPlace(w *cuiWidget) {
 	w.isFake = false
-	w.visable = true
 	switch w.widgetType {
 	case toolkit.Root:
 		w.isFake = true
@@ -46,6 +45,75 @@ func findPlace(w *cuiWidget) {
 	default:
 		// w.redoBox(true)
 	}
+}
+
+// find the start (w,h) for child a inside a box widget
+func (w *cuiWidget) getBoxWH() {
+	p := w.parent // the parent must be a box widget
+
+	// update parent realSize
+	p.realWidth = 0
+	p.realHeight = 0
+	for _, child := range p.children {
+		p.realWidth += child.realWidth
+		p.realHeight += child.realHeight
+	}
+
+	// compute child offset
+	w.startW = p.startW
+	w.startH = p.startH
+	for _, child := range p.children {
+		if (p.horizontal) {
+			log("BOX IS HORIZONTAL (w,h)", w.startW, w.startH)
+			log("BOX IS HORIZONTAL (w,h)", w.startW, w.startH)
+			log("BOX IS HORIZONTAL (w,h)", w.startW, w.startH)
+			w.startW += child.realWidth
+		} else {
+			log("BOX IS VERTICAL (w,h)", w.startW, w.startH)
+			log("BOX IS VERTICAL (w,h)", w.startW, w.startH)
+			log("BOX IS VERTICAL (w,h)", w.startW, w.startH)
+			w.startH += child.realHeight
+		}
+		if child == w {
+			return
+		}
+	}
+	return
+}
+
+// find the start (w,h) for child a inside a Group widget
+func (w *cuiWidget) getGroupWH() {
+	p := w.parent // the parent must be a group widget
+
+	// update parent realSize
+	p.realWidth = 0
+	p.realHeight = 0
+	p.realHeight += me.buttonPadding // pad height for the group label
+	for _, child := range p.children {
+		p.realWidth += child.realWidth
+		p.realHeight += child.realHeight
+	}
+
+	// compute child offset
+	w.startW = p.startW
+	w.startH = p.startH
+	for _, child := range p.children {
+		w.startH += child.realHeight
+		if child == w {
+			return
+		}
+	}
+	return
+}
+
+// find the start (w,h) for child a inside a Grid widget
+func (w *cuiWidget) getGridWH() {
+	p := w.parent
+	w.startW = p.startW
+	w.startH = p.startH
+	w.nextW = p.startW
+	w.nextH = p.startH
+	w.gridBounds()
 }
 
 func (w *cuiWidget) redoBox(draw bool) {
@@ -126,10 +194,14 @@ func (w *cuiWidget) redoBox(draw bool) {
 }
 
 func (w *cuiWidget) moveTo(leftW int, topH int) {
-	w.realSize.w0 = leftW
-	w.realSize.h0 = topH 
-	w.realSize.w1 = leftW + w.realWidth
-	w.realSize.h1 = topH + w.realHeight
+	if (w.isFake) {
+		// don't ever move these
+	} else {
+		w.realSize.w0 = leftW
+		w.realSize.h0 = topH 
+	}
+	w.realSize.w1 = w.realSize.w0 + w.realWidth
+	w.realSize.h1 = w.realSize.h0 + w.realHeight
 
 	w.logicalSize.w0 = w.realSize.w0
 	w.logicalSize.h0 = w.realSize.h0
@@ -166,7 +238,7 @@ func (w *cuiWidget) gridBounds() {
 	for a := 0; a < w.x; a++ {
 		for b := 0; b < w.y; b++ {
 			log(logNow, "gridBounds() (w,h)", a, b,
-				"logical(W,H)", w.logicalW[a], w.logicalH[b],
+				"logical(W,H)", w.widths[a], w.heights[b],
 				"p.next(W,H)", p.nextW, p.nextH)
 		}
 		log("\n")
@@ -183,11 +255,11 @@ func (w *cuiWidget) gridBounds() {
 		// set the child's realWidth, and grid offset
 		child.parentH = hCount
 		child.parentW = wCount
-		if (w.logicalW[wCount] < child.realWidth) {
-			w.logicalW[wCount] = child.realWidth
+		if (w.widths[wCount] < child.realWidth) {
+			w.widths[wCount] = child.realWidth
 		}
-		if (w.logicalH[hCount] < child.realHeight) {
-			w.logicalH[hCount] = child.realHeight
+		if (w.heights[hCount] < child.realHeight) {
+			w.heights[hCount] = child.realHeight
 		}
 		log(logNow, "redoBox(GRID) (w,h count)", wCount, hCount, "(X,Y)", w.x, w.y, w.name)
 		child.showWidgetPlacement(logNow, "grid:")
@@ -200,17 +272,26 @@ func (w *cuiWidget) gridBounds() {
 		}
 	}
 
+	// reset the size of the whole grid
+	w.realWidth = 0
+	w.realHeight = 0
+	for _, val := range w.widths {
+		w.realWidth += val
+	}
+	for _, val := range w.heights {
+		w.realHeight += val
+	}
 
 	for _, child := range w.children {
 		child.showWidgetPlacement(logVerbose, "gridBounds:")
 		var totalW, totalH int
-		for i, val := range w.logicalW {
+		for i, val := range w.widths {
 			if (i < child.parentW) {
-				log(logVerbose, "gridBounds() (w, logicalW[])", i, val)
-				totalW += w.logicalW[i]
+				log(logVerbose, "gridBounds() (w, widths[])", i, val)
+				totalW += w.widths[i]
 			}
 		}
-		for i, h := range w.logicalH {
+		for i, h := range w.heights {
 			if (i < child.parentH) {
 				totalH += h
 			}
@@ -228,6 +309,6 @@ func (w *cuiWidget) gridBounds() {
 		child.showWidgetPlacement(logInfo, "gridBounds:")
 		log(logInfo)
 	}
-	w.updateLogicalSizes()
+	// w.updateLogicalSizes()
 	w.showWidgetPlacement(logNow, "gridBounds:")
 }

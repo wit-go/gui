@@ -29,24 +29,22 @@ func setupWidget(a *toolkit.Action) *cuiWidget {
 	// set the name used by gocui to the id
 	w.cuiName = strconv.Itoa(w.id)
 
-	w.parent = findWidget(a.ParentId, me.rootNode)
-	log(logInfo, "setupWidget() w.id =", w.id, "w.parent", w.parent, "ParentId =", a.ParentId)
-	if (w.id == 0) {
+	if w.widgetType == toolkit.Root {
+		log(logInfo, "setupWidget() FOUND ROOT w.id =", w.id, "w.parent", w.parent, "ParentId =", a.ParentId)
+		w.id = 0
 		me.rootNode = w
-		// this is the rootNode
 		return w
 	}
+
+	w.parent = findWidget(a.ParentId, me.rootNode)
+	log(logInfo, "setupWidget() w.id =", w.id, "w.parent", w.parent, "ParentId =", a.ParentId)
 	if (w.parent == nil) {
 		log(logError, "setupWidget() ERROR: PARENT = NIL w.id =", w.id, "w.parent", w.parent, "ParentId =", a.ParentId)
 		// just use the rootNode (hopefully it's not nil)
 		w.parent = me.rootNode
 		// return w
 	}
-	if (w.parent == nil) {
-		log(logError, "setupWidget() ERROR: PARENT = NIL w.id =", w.id, "w.parent", w.parent, "ParentId =", a.ParentId)
-		me.rootNode = w
-		return w
-	}
+
 	// add this widget as a child for the parent
 	w.parent.Append(w)
 
@@ -58,11 +56,9 @@ func setupWidget(a *toolkit.Action) *cuiWidget {
 		}
 	}
 	if (a.WidgetType == toolkit.Grid) {
-		w.logicalW = make(map[int]int) // how tall each row in the grid is
-		w.logicalH = make(map[int]int) // how wide each column in the grid is
+		w.widths = make(map[int]int) // how tall each row in the grid is
+		w.heights = make(map[int]int) // how wide each column in the grid is
 	}
-
-	// w.showWidgetPlacement(logNow)
 	return w
 }
 

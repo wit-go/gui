@@ -9,7 +9,7 @@ import 	(
 var logNow bool = true	// useful for active development
 var logError bool = true
 var logWarn bool = false
-var logInfo bool = false
+var logInfo bool = true
 var logVerbose bool = false
 
 func log(a ...any) {

@@ -6,6 +6,7 @@ import (
 
 var adjusted bool = false
 
+/*
 // expands the logical size of the parents
 func (w *cuiWidget) setParentLogical() {
 	p := w.parent
@@ -71,3 +72,4 @@ func (w *cuiWidget) setParentLogical() {
 		pP.setParentLogical()
 	}
 }
+*/

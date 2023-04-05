@@ -87,20 +87,29 @@ type cuiWidget struct {
 
 	vals []string // dropdown menu options
 
-	visable bool // track if it's currently supposed to be shown
+	// visable bool // track if it's currently supposed to be shown
 	isFake bool // widget types like 'box' are 'false'
-	realWidth int // the real width
-	realHeight int // the real height
+
+	// where the widget should calculate it's existance from
+	startW int
+	startH int
+
+	// the widget size to reserve or things will overlap
+	realWidth int
+	realHeight int
+
 	realSize rectType  // the display size of this widget
 	logicalSize rectType  // the logical size. Includes all the child widgets
 
 	// used to track the size of grids
-	logicalW map[int]int // how tall each row in the grid is
-	logicalH map[int]int // how wide each column in the grid is
-	// where in the parent grid this widget should go
+	widths map[int]int // how tall each row in the grid is
+	heights map[int]int // how wide each column in the grid is
+
+	// deprecate // where in the parent grid this widget should go
 	parentW int
 	parentH int
 
+	// deprecate 
 	nextW	int
 	nextH	int
 
@@ -112,10 +121,6 @@ type cuiWidget struct {
 	y int
 	width int
 	height int
-
-	//deprecate
-//	nextX	int
-//	nextY	int
 
 	// horizontal=true  means layout widgets like books on a bookshelf
 	// horizontal=false means layout widgets like books in a stack

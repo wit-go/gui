@@ -10,14 +10,69 @@ func Quit() {
 	me.baseGui.Close()
 }
 
+// set the widget start width & height
+// re-run this when things change to recalibrate the position of the gocui view rect
+func (w *cuiWidget) setStartWH() {
+	log(logInfo, "setStartWH() w.id =", w.id, "w.name", w.name)
+	switch w.widgetType {
+	case toolkit.Root:
+		log(logInfo, "setStartWH() rootNode w.id =", w.id, "w.name", w.name)
+		w.startW = 1
+		w.startH = 1
+		w.id = 0
+		w.isFake = true
+		w.setFake()
+		w.showWidgetPlacement(logNow, "Tree:")
+		return
+	case toolkit.Flag:
+		w.startW = 1
+		w.startH = 1
+		w.isFake = true
+		w.setFake()
+		w.showWidgetPlacement(logNow, "Tree:")
+		return
+	case toolkit.Window:
+		w.startW = 1
+		w.startH = 3
+		return
+	case toolkit.Tab:
+		w.startW = 1
+		w.startH = 3
+		return
+	}
+	p := w.parent
+	switch p.widgetType {
+	case toolkit.Box:
+		if (w.isFake == false) {
+			w.isFake = true
+			w.setFake()
+		}
+		w.getBoxWH()
+		return
+	case toolkit.Grid:
+		if (w.isFake == false) {
+			w.isFake = true
+			w.setFake()
+		}
+		w.getGridWH()
+		return
+	case toolkit.Group:
+		w.getGroupWH()
+		return
+	}
+}
+
 func Action(a *toolkit.Action) {
 	log(logInfo, "Action() START", a.WidgetId, a.ActionType, a.WidgetType, a.Name)
 	w := findWidget(a.WidgetId, me.rootNode)
 	switch a.ActionType {
 	case toolkit.Add:
 		w = setupWidget(a)
-		findPlace(w)
+		w.setStartWH()
+		w.moveTo(w.startW, w.startH)
 		w.drawView()
+
+		// findPlace(w)
 	case toolkit.Show:
 		if (a.B) {
 			w.drawView()

@@ -40,7 +40,6 @@ func defaultKeybindings(g *gocui.Gui) error {
 
 var showDebug bool = true
 
-// dump out the widgets
 func addDebugKeys(g *gocui.Gui) {
 	// dump all widget info to the log
 	g.SetKeybinding("", 'd', gocui.ModNone,

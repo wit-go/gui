@@ -33,23 +33,30 @@ func (w *cuiWidget) dumpTree(draw bool) {
 }
 
 func (w *cuiWidget) showWidgetPlacement(b bool, s string) {
+	var s1 string
+	var pId int
 	if (w == nil) {
 		log(logError, "WTF w == nil")
 		return
 	}
-	if (w.id == 0) {
-		log(logVerbose, "showWidgetPlacement() parent == nil ok. This is the rootNode", w.id, w.cuiName)
-		return
-	}
 	if (w.parent == nil) {
-		log(logError, "showWidgetPlacement() ERROR parent == nil", w.id, w.cuiName)
+		log(logVerbose, "showWidgetPlacement() parent == nil", w.id, w.cuiName)
+		pId = 0
+	} else {
+		pId = w.parent.id
 	}
-	log(b, "dump()", s,
-		fmt.Sprintf("(wId,pId)=(%3d,%3d)", w.id, w.parent.id),
-		fmt.Sprintf("real()=(%3d,%3d,%3d,%3d)", w.realSize.w0, w.realSize.h0, w.realSize.w1, w.realSize.h1),
-		"size()=(", w.realWidth, ",", w.realHeight, ")",
-		"logical()=(", w.logicalSize.w0, ",", w.logicalSize.h0, ",", w.logicalSize.w1, ",", w.logicalSize.h1, ")",
-		w.widgetType, ",", w.name, "text=", w.text)
+	s1 = fmt.Sprintf("(wId,pId)=(%2d,%2d) ", w.id, pId)
+	s1 += fmt.Sprintf("real()=(%2d,%2d,%2d,%2d) ", w.realSize.w0, w.realSize.h0, w.realSize.w1, w.realSize.h1)
+	s1 += fmt.Sprintf("size()=(%2d,%2d) ", w.realWidth, w.realHeight)
+
+	switch w.widgetType {
+	case toolkit.Grid:
+		s1 += fmt.Sprintf("next()=(%2d,%2d)", w.nextW, w.nextH)
+	default:
+		s1 += fmt.Sprintf("L()=(%2d,%2d,%2d,%2d)",
+			w.logicalSize.w0, w.logicalSize.h0, w.logicalSize.w1, w.logicalSize.h1)
+	}
+	log(b, s1, s, w.widgetType, ",", w.name) // , "text=", w.text)
 
 	if (w.realWidth != (w.realSize.w1 - w.realSize.w0)) {
 		log(b, "dump()", s,
