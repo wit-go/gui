@@ -15,10 +15,10 @@ func (w *cuiWidget) setFake() {
 	// setup fake labels for non-visable things off screen
 	w.realWidth = t + 2
 	w.realHeight = me.defaultHeight
-	w.realSize.w0 = fakeStartWidth
-	w.realSize.h0 = fakeStartHeight
-	w.realSize.w1 =  w.realSize.w0 + w.realWidth
-	w.realSize.h1 =  w.realSize.h0 + w.realHeight
+	w.gocuiSize.w0 = fakeStartWidth
+	w.gocuiSize.h0 = fakeStartHeight
+	w.gocuiSize.w1 =  w.gocuiSize.w0 + w.realWidth
+	w.gocuiSize.h1 =  w.gocuiSize.h0 + w.realHeight
 	fakeStartHeight += 3
 	if (fakeStartHeight > 24) {
 		fakeStartHeight = 3
@@ -51,7 +51,7 @@ func findPlace(w *cuiWidget) {
 func (w *cuiWidget) getBoxWH() {
 	p := w.parent // the parent must be a box widget
 
-	// update parent realSize
+	// update parent gocuiSize
 	p.realWidth = 0
 	p.realHeight = 0
 	for _, child := range p.children {
@@ -85,7 +85,7 @@ func (w *cuiWidget) getBoxWH() {
 func (w *cuiWidget) getGroupWH() {
 	p := w.parent // the parent must be a group widget
 
-	// update parent realSize
+	// update parent gocuiSize
 	p.realWidth = 0
 	p.realHeight = 0
 	p.realHeight += me.buttonPadding // pad height for the group label
@@ -188,8 +188,8 @@ func (w *cuiWidget) redoBox(draw bool) {
 		w.showWidgetPlacement(logNow, "group:")
 	default:
 		w.moveTo(p.nextW, p.nextH)
-		w.nextW = w.realSize.w1
-		w.nextH = w.realSize.h1
+		w.nextW = w.gocuiSize.w1
+		w.nextH = w.gocuiSize.h1
 	}
 }
 
@@ -197,16 +197,16 @@ func (w *cuiWidget) moveTo(leftW int, topH int) {
 	if (w.isFake) {
 		// don't ever move these
 	} else {
-		w.realSize.w0 = leftW
-		w.realSize.h0 = topH 
+		w.gocuiSize.w0 = leftW
+		w.gocuiSize.h0 = topH 
 	}
-	w.realSize.w1 = w.realSize.w0 + w.realWidth
-	w.realSize.h1 = w.realSize.h0 + w.realHeight
+	w.gocuiSize.w1 = w.gocuiSize.w0 + w.realWidth
+	w.gocuiSize.h1 = w.gocuiSize.h0 + w.realHeight
 
-	w.logicalSize.w0 = w.realSize.w0
-	w.logicalSize.h0 = w.realSize.h0
-	w.logicalSize.w1 = w.realSize.w1
-	w.logicalSize.h1 = w.realSize.h1
+	w.logicalSize.w0 = w.gocuiSize.w0
+	w.logicalSize.h0 = w.gocuiSize.h0
+	w.logicalSize.w1 = w.gocuiSize.w1
+	w.logicalSize.h1 = w.gocuiSize.h1
 
 	w.showWidgetPlacement(logNow, "moveTo()")
 }

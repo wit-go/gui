@@ -13,8 +13,8 @@ import (
 func (w *cuiWidget) doWidgetClick() {
 	switch w.widgetType {
 	case toolkit.Root:
+		me.rootNode.logicalSize.w1 = 1
 		me.rootNode.redoTabs(true)
-		// me.rootNode.redoFake(true)
 	case toolkit.Flag:
 		me.rootNode.redoColor(true)
 	case toolkit.Window:
@@ -137,8 +137,8 @@ func ctrlDown(g *gocui.Gui, v *gocui.View) error {
 	// find buttons that are below where the mouse button click
 	f = func(widget *cuiWidget) {
 		// if ((widget.logicalSize.w0 < w) && (w < widget.logicalSize.w1)) {
-		if ((widget.realSize.w0 <= w) && (w <= widget.realSize.w1) &&
-		(widget.realSize.h0 <= h) && (h <= widget.realSize.h1)) {
+		if ((widget.gocuiSize.w0 <= w) && (w <= widget.gocuiSize.w1) &&
+		(widget.gocuiSize.h0 <= h) && (h <= widget.gocuiSize.h1)) {
 			widgets = append(widgets, widget)
 			found = widget
 		}
@@ -165,10 +165,10 @@ func ctrlDown(g *gocui.Gui, v *gocui.View) error {
 		found = me.rootNode
 	}
 	found.updateLogicalSizes()
-	me.ctrlDown.realSize.w0 = found.logicalSize.w0
-	me.ctrlDown.realSize.w1 = found.logicalSize.w1
-	me.ctrlDown.realSize.h0 = found.logicalSize.h0
-	me.ctrlDown.realSize.h1 = found.logicalSize.h1
+	me.ctrlDown.gocuiSize.w0 = found.logicalSize.w0
+	me.ctrlDown.gocuiSize.w1 = found.logicalSize.w1
+	me.ctrlDown.gocuiSize.h0 = found.logicalSize.h0
+	me.ctrlDown.gocuiSize.h1 = found.logicalSize.h1
 
 	if (me.ctrlDown.v == nil) {
 		me.ctrlDown.text = found.text

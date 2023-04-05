@@ -32,8 +32,8 @@ func (w *cuiWidget) textResize() {
 	}
 	w.realWidth = width + 3
 	w.realHeight = me.defaultHeight + height
-	w.realSize.w1 = w.realSize.w0 + w.realWidth
-	w.realSize.h1 = w.realSize.h0 + w.realHeight
+	w.gocuiSize.w1 = w.gocuiSize.w0 + w.realWidth
+	w.gocuiSize.h1 = w.gocuiSize.h0 + w.realHeight
 	w.showWidgetPlacement(logNow, "textResize()")
 }
 
@@ -62,10 +62,10 @@ func (w *cuiWidget) drawView() {
 		return
 	}
 
-	a := w.realSize.w0
-	b := w.realSize.h0
-	c := w.realSize.w1
-	d := w.realSize.h1
+	a := w.gocuiSize.w0
+	b := w.gocuiSize.h0
+	c := w.gocuiSize.w1
+	d := w.gocuiSize.h1
 
 	w.v, err = me.baseGui.SetView(w.cuiName, a, b, c, d, 0)
 	if err == nil {

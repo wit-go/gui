@@ -43,17 +43,9 @@ func (w *cuiWidget) setStartWH() {
 	p := w.parent
 	switch p.widgetType {
 	case toolkit.Box:
-		if (w.isFake == false) {
-			w.isFake = true
-			w.setFake()
-		}
 		w.getBoxWH()
 		return
 	case toolkit.Grid:
-		if (w.isFake == false) {
-			w.isFake = true
-			w.setFake()
-		}
 		w.getGridWH()
 		return
 	case toolkit.Group:

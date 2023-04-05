@@ -98,7 +98,7 @@ type cuiWidget struct {
 	realWidth int
 	realHeight int
 
-	realSize rectType  // the display size of this widget
+	gocuiSize rectType  // the display size of this widget
 	logicalSize rectType  // the logical size. Includes all the child widgets
 
 	// used to track the size of grids

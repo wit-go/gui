@@ -49,21 +49,10 @@ func (w *cuiWidget) showWidgets() {
 }
 
 func (w *cuiWidget) redoTabs(draw bool) {
-	log(logVerbose, "redoTabs() START", w.name)
 	if (w == nil) {
 		return
 	}
-	if (w.widgetType == toolkit.Root) {
-		w.logicalSize.w0 = 0
-		w.logicalSize.h0 = 0
-		w.logicalSize.w1 = 0
-		w.logicalSize.h1 = 0
-
-		w.nextW = 1
-		w.nextH = 1
-	}
-
-	log(logVerbose, "redoTabs() about to check for window and tab ", w.name)
+	log(logVerbose, "redoTabs() START about to check for window and tab ", w.name)
 	w.text = w.name
 	t := len(w.text)
 	if ((w.widgetType == toolkit.Window) || (w.widgetType == toolkit.Tab)) {
@@ -71,10 +60,10 @@ func (w *cuiWidget) redoTabs(draw bool) {
 		w.realWidth = t + me.buttonPadding
 		w.realHeight = me.defaultHeight
 
-		w.realSize.w0 = me.rootNode.logicalSize.w1
-		w.realSize.w1 = w.realSize.w0 + w.realWidth
-		w.realSize.h0 = 0
-		w.realSize.h1 = w.realHeight
+		w.gocuiSize.w0 = me.rootNode.logicalSize.w1
+		w.gocuiSize.w1 = w.gocuiSize.w0 + w.realWidth
+		w.gocuiSize.h0 = 0
+		w.gocuiSize.h1 = w.realHeight
 
 		// start logical sizes windows and in the top left corner
 		w.logicalSize.w0 = 2
@@ -86,8 +75,8 @@ func (w *cuiWidget) redoTabs(draw bool) {
 		w.nextW = w.logicalSize.w0
 		w.nextH = w.logicalSize.h0
 
-		me.rootNode.logicalSize.w1 = w.realSize.w1
-		me.rootNode.logicalSize.h1 = w.realSize.h1
+		me.rootNode.logicalSize.w1 = w.gocuiSize.w1
+		me.rootNode.logicalSize.h1 = w.gocuiSize.h1
 
 		w.deleteView()
 		w.drawView()
