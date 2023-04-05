@@ -65,6 +65,14 @@ var (
 // the logical size of the widget
 // corner starts at in the upper left corner
 type rectType struct {
+	// where the widget should calculate it's existance from
+	startW int
+	startH int
+
+	// the actual size
+	width int
+	height int
+
 	// this is the gocui way
 	w0, h0, w1, h1 int      // left top right bottom
 }
@@ -90,7 +98,7 @@ type cuiWidget struct {
 	// visable bool // track if it's currently supposed to be shown
 	isFake bool // widget types like 'box' are 'false'
 
-	// where the widget should calculate it's existance from
+	// where the widget should add children
 	startW int
 	startH int
 

@@ -59,12 +59,13 @@ func (w *cuiWidget) setTabWH() {
 
 	for _, child := range me.rootNode.children {
 		if (child.isFake) {
-			w.showWidgetPlacement(logNow, "SETTABWH:")
 			continue
 		}
 		if (w == child) {
 			w.startW = startW
 			w.startH = startH
+			w.gocuiSize.startW = startW
+			w.gocuiSize.startH = startH
 			w.setWH()
 			w.showWidgetPlacement(logNow, "setTABWH:")
 			return
@@ -73,6 +74,8 @@ func (w *cuiWidget) setTabWH() {
 	}
 	w.startW = startW
 	w.startH = startH
+	w.gocuiSize.startW = startW
+	w.gocuiSize.startH = startH
 	w.setWH()
 	w.showWidgetPlacement(logNow, "setTabWH:")
 }
