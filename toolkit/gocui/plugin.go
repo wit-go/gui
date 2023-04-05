@@ -22,22 +22,26 @@ func (w *cuiWidget) setStartWH() {
 		w.id = 0
 		w.isFake = true
 		w.setFake()
-		w.showWidgetPlacement(logNow, "Tree:")
+		w.showWidgetPlacement(logNow, "StartWH:")
 		return
 	case toolkit.Flag:
 		w.startW = 1
 		w.startH = 1
 		w.isFake = true
 		w.setFake()
-		w.showWidgetPlacement(logNow, "Tree:")
+		w.showWidgetPlacement(logNow, "StartWH:")
 		return
 	case toolkit.Window:
 		w.startW = 1
 		w.startH = 3
+		w.setTabWH()
+		w.showWidgetPlacement(logNow, "StartWH:")
 		return
 	case toolkit.Tab:
 		w.startW = 1
 		w.startH = 3
+		w.setTabWH()
+		w.showWidgetPlacement(logNow, "StartWH:")
 		return
 	}
 	p := w.parent

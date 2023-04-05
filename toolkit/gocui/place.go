@@ -15,15 +15,15 @@ func (w *cuiWidget) setFake() {
 	// setup fake labels for non-visable things off screen
 	w.realWidth = t + 2
 	w.realHeight = me.defaultHeight
-	w.gocuiSize.w0 = fakeStartWidth
-	w.gocuiSize.h0 = fakeStartHeight
-	w.gocuiSize.w1 =  w.gocuiSize.w0 + w.realWidth
-	w.gocuiSize.h1 =  w.gocuiSize.h0 + w.realHeight
+	w.startW = fakeStartWidth
+	w.startH = fakeStartHeight
+
 	fakeStartHeight += 3
 	if (fakeStartHeight > 24) {
 		fakeStartHeight = 3
 		fakeStartWidth += 20
 	}
+	w.setWH()
 	w.showWidgetPlacement(logNow, "setFake()")
 }
 
@@ -191,6 +191,18 @@ func (w *cuiWidget) redoBox(draw bool) {
 		w.nextW = w.gocuiSize.w1
 		w.nextH = w.gocuiSize.h1
 	}
+}
+
+func (w *cuiWidget) setWH() {
+	w.gocuiSize.w0 = w.startW
+	w.gocuiSize.h0 = w.startH
+	w.gocuiSize.w1 = w.gocuiSize.w0 + w.realWidth
+	w.gocuiSize.h1 = w.gocuiSize.h0 + w.realHeight
+
+	w.logicalSize.w0 = w.gocuiSize.w0
+	w.logicalSize.h0 = w.gocuiSize.h0
+	w.logicalSize.w1 = w.gocuiSize.w1
+	w.logicalSize.h1 = w.gocuiSize.h1
 }
 
 func (w *cuiWidget) moveTo(leftW int, topH int) {
