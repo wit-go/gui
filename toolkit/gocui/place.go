@@ -168,7 +168,14 @@ func (w *cuiWidget) placeWidgets() {
 		w.nextH = p.nextH
 		w.gocuiSize.w0 = w.startW
 		w.gocuiSize.h0 = w.startH
-		w.setWH()
+		w.gocuiSize.w1 = w.gocuiSize.w0 + w.gocuiSize.width
+		w.gocuiSize.h1 = w.gocuiSize.h0 + w.gocuiSize.height
+		if (w.realWidth < w.gocuiSize.width) {
+			w.realWidth = w.gocuiSize.width
+		}
+		if (w.realHeight < w.gocuiSize.height) {
+			w.realHeight = w.gocuiSize.height
+		}
 		w.showWidgetPlacement(logNow, "place()")
 	}
 }
