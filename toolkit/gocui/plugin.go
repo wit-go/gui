@@ -37,23 +37,24 @@ func (w *cuiWidget) setStartWH() {
 	case toolkit.Box:
 		w.isFake = true
 		w.setFake()
+		w.getBoxWH()
+		w.setWH()
 		w.showWidgetPlacement(logNow, "StartWH:")
+		return
 	case toolkit.Grid:
 		w.isFake = true
 		w.setFake()
-		w.showWidgetPlacement(logNow, "StartWH:")
-	}
-	p := w.parent
-	switch p.widgetType {
-	case toolkit.Box:
-		w.getBoxWH()
-		return
-	case toolkit.Grid:
 		w.getGridWH()
+		w.setWH()
+		w.showWidgetPlacement(logNow, "StartWH:")
 		return
 	case toolkit.Group:
 		w.getGroupWH()
+		w.setWH()
+		w.showWidgetPlacement(logNow, "StartWH:")
 		return
+	default:
+		w.setWH()
 	}
 }
 
@@ -64,9 +65,8 @@ func Action(a *toolkit.Action) {
 	case toolkit.Add:
 		w = setupWidget(a)
 		w.setStartWH()
-		w.moveTo(w.startW, w.startH)
+		// w.moveTo(w.startW, w.startH)
 		w.drawView()
-
 		// findPlace(w)
 	case toolkit.Show:
 		if (a.B) {

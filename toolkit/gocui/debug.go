@@ -46,16 +46,17 @@ func (w *cuiWidget) showWidgetPlacement(b bool, s string) {
 		pId = w.parent.id
 	}
 	s1 = fmt.Sprintf("(wId,pId)=(%2d,%2d) ", w.id, pId)
-	s1 += fmt.Sprintf("W,H()=(%2d,%2d) ", w.startW, w.startH)
+	s1 += fmt.Sprintf("start()=(%2d,%2d) ", w.startW, w.startH)
+	s1 += fmt.Sprintf("size()=(%2d,%2d) ", w.realWidth, w.realHeight)
 	s1 += fmt.Sprintf("gocui()=(%2d,%2d,%2d,%2d,%2d,%2d) ",
-		w.gocuiSize.startW, w.gocuiSize.startH,
+		w.gocuiSize.width, w.gocuiSize.height,
 		w.gocuiSize.w0, w.gocuiSize.h0, w.gocuiSize.w1, w.gocuiSize.h1)
 	switch w.widgetType {
 	case toolkit.Grid:
 		s1 += fmt.Sprintf("next()=(%2d,%2d)", w.nextW, w.nextH)
 	default:
-		s1 += fmt.Sprintf("L()=(%2d,%2d,%2d,%2d)",
-			w.logicalSize.w0, w.logicalSize.h0, w.logicalSize.w1, w.logicalSize.h1)
+	//	s1 += fmt.Sprintf("L()=(%2d,%2d,%2d,%2d)",
+	//		w.logicalSize.w0, w.logicalSize.h0, w.logicalSize.w1, w.logicalSize.h1)
 	}
 	log(b, s1, s, w.widgetType, ",", w.name) // , "text=", w.text)
 

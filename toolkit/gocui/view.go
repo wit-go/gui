@@ -30,10 +30,9 @@ func (w *cuiWidget) textResize() {
 		}
 		height = i
 	}
-	w.realWidth = width + 3
-	w.realHeight = me.defaultHeight + height
-	w.gocuiSize.w1 = w.gocuiSize.w0 + w.realWidth
-	w.gocuiSize.h1 = w.gocuiSize.h0 + w.realHeight
+	w.gocuiSize.width = width + 3
+	w.gocuiSize.height = me.defaultHeight + height
+	w.setWH()
 	w.showWidgetPlacement(logNow, "textResize()")
 }
 
