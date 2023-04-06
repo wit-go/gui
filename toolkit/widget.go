@@ -110,6 +110,7 @@ const (
 
 const (
 	Add ActionType = iota
+	User // the user did something (mouse, keyboard, etc)
 	Delete
 	Get
 	Set

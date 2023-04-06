@@ -51,6 +51,8 @@ type GuiConfig struct {
 
 	ActionCh1 chan int
 	ActionCh2 chan int
+
+	guiChan chan toolkit.Action
 }
 
 // The Node is a binary tree. This is how all GUI elements are stored

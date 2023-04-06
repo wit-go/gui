@@ -23,7 +23,7 @@ type config struct {
 	rootNode *cuiWidget // the base of the binary tree. it should have id == 0
 	ctrlDown *cuiWidget // shown if you click the mouse when the ctrl key is pressed
 
-	callback func(int)
+	callback chan toolkit.Action
 	helpLabel *gocui.View
 
 	defaultBehavior bool

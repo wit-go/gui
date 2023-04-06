@@ -131,13 +131,13 @@ Creates a window helpful for debugging this package
 
 `func InitPlugins(names []string)`
 
-### func [LoadToolkit](/plugin.go#L46)
+### func [LoadToolkit](/plugin.go#L50)
 
 `func LoadToolkit(name string) bool`
 
 loads and initializes a toolkit (andlabs/ui, gocui, etc)
 
-### func [Main](/main.go#L127)
+### func [Main](/main.go#L143)
 
 `func Main(f func())`
 
@@ -159,7 +159,7 @@ This should not pass a function
 
 `func ShowDebugValues()`
 
-### func [StandardExit](/main.go#L179)
+### func [StandardExit](/main.go#L204)
 
 `func StandardExit()`
 
@@ -193,7 +193,7 @@ This struct can be used with the go-arg package
 var Config GuiConfig
 ```
 
-### type [Node](/structs.go#L58)
+### type [Node](/structs.go#L60)
 
 `type Node struct { ... }`
 
@@ -252,7 +252,7 @@ You get a window
 
 `func Start() *Node`
 
-#### func [StartS](/main.go#L113)
+#### func [StartS](/main.go#L129)
 
 `func StartS(name string) *Node`
 

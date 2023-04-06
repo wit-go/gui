@@ -34,6 +34,7 @@ func (w *cuiWidget) doWidgetClick() {
 		} else {
 			w.setCheckbox(true)
 		}
+		w.doUserEvent()
 	case toolkit.Grid:
 		me.rootNode.hideWidgets()
 		w.placeGrid()
@@ -47,8 +48,26 @@ func (w *cuiWidget) doWidgetClick() {
 		}
 		w.placeWidgets()
 		w.toggleTree()
+	case toolkit.Button:
+		w.doUserEvent()
 	default:
 	}
+}
+
+// this passes the user event back from the plugin
+func (w *cuiWidget) doUserEvent() {
+	if (me.callback == nil) {
+		log(logError, "doUserEvent() no callback channel was configured")
+		return
+	}
+	var a toolkit.Action
+	a.WidgetId = w.id
+	a.Name = w.name
+	a.Text = w.text
+	a.B = w.b
+	a.ActionType = toolkit.User
+	me.callback <- a
+	log(logNow, "END:   sent a button click callback()")
 }
 
 var toggle bool = true

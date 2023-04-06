@@ -6,6 +6,7 @@ package main
 
 import (
 	"os"
+	"git.wit.org/wit/gui/toolkit"
 )
 
 func Init() {
@@ -25,6 +26,11 @@ func Init() {
 
 	me.padW = 3
 	me.padH = 3
+}
+
+// this sets the channel to send user events back from the plugin
+func Callback(guiCallback chan toolkit.Action) {
+	me.callback = guiCallback
 }
 
 func Exit() {

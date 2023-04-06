@@ -15,7 +15,7 @@ var watchtime time.Duration = 100 // in tenths of seconds
 func Watchdog() {
 	var i = 1
 	for {
-		log(debugGui, "watchdog timer is alive. give me something to do.", i)
+		log(logInfo, "watchdog timer is alive. give me something to do.", i)
 		i += 1
 		time.Sleep(watchtime * time.Second / 10)
 	}

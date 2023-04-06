@@ -104,6 +104,22 @@ func Start() *Node {
 	return Config.rootNode
 }
 
+func doSomething() {
+	log(logNow, "doSomething()")
+}
+
+func watchCallback() {
+	log(logNow, "makeCallback() START")
+	for {
+		log(logNow, "makeCallback() for loop")
+	    	select {
+		case a := <-Config.guiChan:
+			log(logNow, "makeCallback() SELECT widget id =", a.WidgetId, a.Name)
+			sleep(.5) // TODO: remove this. added while under development
+		}
+	}
+}
+
 func (n *Node) LoadPlugin(name string) bool {
 	StartS(name)
 	Redraw(name)
@@ -129,6 +145,11 @@ func Main(f func()) {
 
 	InitPlugins([]string{"andlabs", "gocui"})
 
+	if (Config.guiChan == nil) {
+		Config.guiChan = make(chan toolkit.Action)
+		go watchCallback()
+	}
+
 	for _, aplug := range allPlugins {
 		log(debugGui, "gui.Node.NewButton() toolkit plugin =", aplug.name)
 		if (aplug.MainOk) {
@@ -140,8 +161,12 @@ func Main(f func()) {
 			continue
 		}
 		aplug.MainOk = true
+		if (aplug.Callback != nil) {
+			aplug.Callback(Config.guiChan)
+		}
 		aplug.Main(f)
 	}
+
 }
 
 /*

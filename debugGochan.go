@@ -64,6 +64,7 @@ func (n *Node) DebugGoChannels(makeWindow bool) {
 		debugWG.Done()
 	})
 	g.NewButton("close chan", func () {
+		log("close() on", debugNumberChan)
 		close(debugNumberChan)
 	})
 	g.NewButton("print", func () {

@@ -33,6 +33,10 @@ type aplug struct {
 	Quit func()
 	// NewWindow func(*toolkit.Widget)
 
+	// sets the chan for the plugin to call back too
+	Callback func(chan toolkit.Action)
+	// NewWindow func(*toolkit.Widget)
+
 	// simplifies passing to the plugin
 	// Send func(*toolkit.Widget, *toolkit.Widget)
 
@@ -83,6 +87,8 @@ func LoadToolkit(name string) bool {
 	// Sends a widget (button, checkbox, etc) and it's parent widget
 	newPlug.Action = loadFuncA(&newPlug, "Action")
 
+	newPlug.Callback = loadCallback(&newPlug, "Callback")
+
 	allPlugins = append(allPlugins, &newPlug)
 
 	log(debugPlugin, "gui.LoadToolkit() END", newPlug.name, filename)
@@ -105,6 +111,25 @@ func loadFuncE(p *aplug, funcName string) func() {
 	}
 
 	newfunc, ok = test.(func())
+	if !ok {
+		log(debugGui, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
+		return nil
+	}
+	return newfunc
+}
+
+func loadCallback(p *aplug, funcName string) func(chan toolkit.Action) {
+	var newfunc func(chan toolkit.Action)
+	var ok bool
+	var test plugin.Symbol
+
+	test, err = p.plug.Lookup(funcName)
+	if err != nil {
+		log(debugGui, "DID NOT FIND: name =", test, "err =", err)
+		return nil
+	}
+
+	newfunc, ok = test.(func(chan toolkit.Action))
 	if !ok {
 		log(debugGui, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
 		return nil
