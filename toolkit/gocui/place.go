@@ -89,16 +89,6 @@ func (w *cuiWidget) getGroupWH() {
 	return
 }
 
-// find the start (w,h) for child a inside a Grid widget
-func (w *cuiWidget) getGridWH() {
-	p := w.parent
-	w.startW = p.startW
-	w.startH = p.startH
-	w.nextW = p.startW
-	w.nextH = p.startH
-	w.drawGrid()
-}
-
 func (w *cuiWidget) drawBox() {
 	if (w == nil) {
 		return
@@ -128,11 +118,13 @@ func (w *cuiWidget) drawBox() {
 	case toolkit.Grid:
 		w.startW = p.startW
 		w.startH = p.startH
-		w.getGridWH()
+		w.drawGrid()
 		w.showWidgetPlacement(logNow, "drawBox:")
 	case toolkit.Box:
 		w.startW = p.startW
 		w.startH = p.startH
+		w.nextW = p.startW
+		w.nextH = p.startH
 		var maxW int
 		var maxH int
 		for _, child := range w.children {
@@ -159,6 +151,8 @@ func (w *cuiWidget) drawBox() {
 	case toolkit.Group:
 		w.startW = p.startW
 		w.startH = p.startH
+		w.nextW = p.startW
+		w.nextH = p.startH
 		w.gocuiSize.startW = w.startW
 		w.gocuiSize.startH = w.startH
 		w.realWidth = w.gocuiSize.width
