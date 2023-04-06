@@ -8,9 +8,7 @@ import (
 var fakeStartWidth int = 40
 var fakeStartHeight int = 3
 func (w *cuiWidget) setFake() {
-	if (w.isFake == false) {
-		return
-	}
+	w.isFake = true
 	t := len(w.name)
 	// setup fake labels for non-visable things off screen
 	w.realWidth = t + 2
@@ -27,7 +25,9 @@ func (w *cuiWidget) setFake() {
 		fakeStartWidth += 20
 	}
 	w.setWH()
-	w.showWidgetPlacement(logNow, "setFake()")
+	if (debugAction) {
+		w.drawView()
+	}
 }
 
 // set the widget start width & height
@@ -36,25 +36,17 @@ func (w *cuiWidget) addWidget() {
 	switch w.widgetType {
 	case toolkit.Root:
 		log(logInfo, "setStartWH() rootNode w.id =", w.id, "w.name", w.name)
-		w.isFake = true
 		w.setFake()
-		w.showWidgetPlacement(logNow, "StartWH:")
-		w.drawView()
 		return
 	case toolkit.Flag:
-		w.isFake = true
 		w.setFake()
-		w.showWidgetPlacement(logNow, "StartWH:")
-		w.drawView()
 		return
 	case toolkit.Window:
 		w.setTabWH()
-		w.showWidgetPlacement(logNow, "StartWH:")
 		w.drawView()
 		return
 	case toolkit.Tab:
 		w.setTabWH()
-		w.showWidgetPlacement(logNow, "StartWH:")
 		w.drawView()
 		return
 	case toolkit.Box:
@@ -62,16 +54,12 @@ func (w *cuiWidget) addWidget() {
 		w.setFake()
 		w.startW = w.parent.startW
 		w.startH = w.parent.startH
-		w.showWidgetPlacement(logNow, "StartWH:")
-		w.drawView()
 		return
 	case toolkit.Grid:
 		w.isFake = true
 		w.setFake()
 		w.startW = w.parent.startW
 		w.startH = w.parent.startH
-		w.showWidgetPlacement(logNow, "StartWH:")
-		w.drawView()
 		return
 	case toolkit.Group:
 		w.startW = w.parent.startW + 4
@@ -84,12 +72,11 @@ func (w *cuiWidget) addWidget() {
 		w.gocuiSize.startH = w.startH
 
 		w.setWH()
-		w.showWidgetPlacement(logNow, "StartWH:")
-		// w.drawView()
 		return
 	default:
 		w.startW = w.parent.startW
 		w.startH = w.parent.startH
 		w.setWH()
 	}
+	w.showWidgetPlacement(logInfo, "addWidget()")
 }

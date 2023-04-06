@@ -7,6 +7,8 @@ import (
 //	"github.com/awesome-gocui/gocui"
 )
 
+var debugAction	bool = false
+
 func actionDump(b bool, a *toolkit.Action) {
 	if (a == nil) {
 		log(b, "action = nil")

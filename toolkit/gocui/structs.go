@@ -15,8 +15,6 @@ import (
 	"git.wit.org/wit/gui/toolkit"
 )
 
-// const delta = 1
-
 // It's probably a terrible idea to call this 'me'
 var me config
 
@@ -52,20 +50,9 @@ type config struct {
 	buttonPadding int
 }
 
-/*
-// This is a map between the widgets in wit/gui and the internal structures of gocui
-var viewWidget map[*gocui.View]*toolkit.Widget
-var stringWidget map[string]*toolkit.Widget
-*/
-
 var (
-//	g *gocui.Gui
-//	Custom func(string)
-
 	initialMouseX, initialMouseY, xOffset, yOffset int
 	globalMouseDown, msgMouseDown, movingMsg bool
-
-//	err error
 )
 
 // the gocui way
@@ -83,13 +70,6 @@ type rectType struct {
 	// this is the gocui way
 	w0, h0, w1, h1 int      // left top right bottom
 }
-
-/*
-type realSizeT struct {
-	width, height int
-}
-*/
-
 
 type cuiWidget struct {
 	id int	// widget ID
@@ -161,10 +141,12 @@ func (w *cuiWidget) Write(p []byte) (n int, err error) {
 	w.tainted = true
 	w.writeMutex.Lock()
 	defer w.writeMutex.Unlock()
-	// v.makeWriteable(v.wx, v.wy)
-	// v.writeRunes(bytes.Runes(p))
+	if (w.v == nil) {
+		return
+	}
+	w.v.Clear()
 	fmt.Fprintln(w.v, p)
-	log(logNow, "widget.Write()")
+	log(logNow, "widget.Write()", p)
 
 	return len(p), nil
 }
