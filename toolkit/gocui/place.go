@@ -5,33 +5,9 @@ import (
 	"git.wit.org/wit/gui/toolkit"
 )
 
-var fakeStartWidth int = 40
-var fakeStartHeight int = 3
-func (w *cuiWidget) setFake() {
-	if (w.isFake == false) {
-		return
-	}
-	t := len(w.name)
-	// setup fake labels for non-visable things off screen
-	w.realWidth = t + 2
-	w.realHeight = me.defaultHeight
-
-	w.gocuiSize.width = t + 2
-	w.gocuiSize.height = me.defaultHeight
-	w.gocuiSize.startW = fakeStartWidth
-	w.gocuiSize.startH = fakeStartHeight
-
-	fakeStartHeight += 3
-	if (fakeStartHeight > 24) {
-		fakeStartHeight = 3
-		fakeStartWidth += 20
-	}
-	w.setWH()
-	w.showWidgetPlacement(logNow, "setFake()")
-}
-
+/*
 // find the start (w,h) for child a inside a box widget
-func (w *cuiWidget) getBoxWH() {
+func (w *cuiWidget) setBoxWH() {
 	p := w.parent // the parent must be a box widget
 
 	// update parent gocuiSize
@@ -63,6 +39,7 @@ func (w *cuiWidget) getBoxWH() {
 	}
 	return
 }
+*/
 
 // find the start (w,h) for child a inside a Group widget
 func (w *cuiWidget) getGroupWH() {
@@ -204,27 +181,6 @@ func (w *cuiWidget) moveTo(leftW int, topH int) {
 	w.setWH()
 	w.showWidgetPlacement(logNow, "moveTo()")
 }
-
-/*
-func (w *cuiWidget) updateLogicalSizes() {
-	for _, child := range w.children {
-		// if (w.isReal)
-		child.updateLogicalSizes()
-		if (w.logicalSize.w0 > child.logicalSize.w0) {
-			w.logicalSize.w0 = child.logicalSize.w0
-		}
-		if (w.logicalSize.w1 < child.logicalSize.w1) {
-			w.logicalSize.w1 = child.logicalSize.w1
-		}
-		if (w.logicalSize.h0 > child.logicalSize.h0) {
-			w.logicalSize.h0 = child.logicalSize.h0
-		}
-		if (w.logicalSize.h1 < child.logicalSize.h1) {
-			w.logicalSize.h1 = child.logicalSize.h1
-		}
-	}
-}
-*/
 
 func (w *cuiWidget) drawGrid() {
 	w.showWidgetPlacement(logNow, "gridBounds:")

@@ -10,101 +10,13 @@ func Quit() {
 	me.baseGui.Close()
 }
 
-// set the widget start width & height
-// re-run this when things change to recalibrate the position of the gocui view rect
-func (w *cuiWidget) setStartWH() {
-	log(logInfo, "setStartWH() w.id =", w.id, "w.name", w.name)
-	switch w.widgetType {
-	case toolkit.Root:
-		log(logInfo, "setStartWH() rootNode w.id =", w.id, "w.name", w.name)
-		w.isFake = true
-		w.setFake()
-		w.showWidgetPlacement(logNow, "StartWH:")
-		w.drawView()
-		return
-	case toolkit.Flag:
-		w.isFake = true
-		w.setFake()
-		w.showWidgetPlacement(logNow, "StartWH:")
-		w.drawView()
-		return
-	case toolkit.Window:
-		w.setTabWH()
-		w.showWidgetPlacement(logNow, "StartWH:")
-		w.drawView()
-		return
-	case toolkit.Tab:
-		w.setTabWH()
-		w.showWidgetPlacement(logNow, "StartWH:")
-		w.drawView()
-		return
-	case toolkit.Box:
-		w.isFake = true
-		w.setFake()
-		w.startW = w.parent.startW
-		w.startH = w.parent.startH
-		w.showWidgetPlacement(logNow, "StartWH:")
-		w.drawView()
-		return
-	case toolkit.Grid:
-		w.isFake = true
-		w.setFake()
-		w.startW = w.parent.startW
-		w.startH = w.parent.startH
-		w.showWidgetPlacement(logNow, "StartWH:")
-		w.drawView()
-		return
-	case toolkit.Group:
-		w.startW = w.parent.startW + 4
-		w.startH = w.parent.startH + 3
-
-		t := len(w.text)
-		w.gocuiSize.width = t + me.buttonPadding
-		w.gocuiSize.height = me.defaultHeight
-		w.gocuiSize.startW = w.startW
-		w.gocuiSize.startH = w.startH
-
-		w.setWH()
-		w.showWidgetPlacement(logNow, "StartWH:")
-		w.drawView()
-		return
-	default:
-		w.startW = w.parent.startW
-		w.startH = w.parent.startH
-		w.setWH()
-	}
-}
-
-/*
-func (w *cuiWidget) setStartFromParent() {
-	p := w.parent
-	switch p.widgetType {
-	case toolkit.Box:
-		w.getBoxWH()
-	case toolkit.Group:
-		w.getGroupWH()
-	case toolkit.Grid:
-		w.getGridWH()
-	default:
-		w.gocuiSize.startW = p.startW
-		w.gocuiSize.startH = p.startH
-	}
-	w.gocuiSize.startW = w.startW
-	w.gocuiSize.startH = w.startH
-
-	w.startW = w.gocuiSize.startW
-	w.startH = w.gocuiSize.startH
-	w.showWidgetPlacement(logNow, "sSFP:")
-}
-*/
-
 func Action(a *toolkit.Action) {
 	log(logInfo, "Action() START", a.WidgetId, a.ActionType, a.WidgetType, a.Name)
 	w := findWidget(a.WidgetId, me.rootNode)
 	switch a.ActionType {
 	case toolkit.Add:
-		w = setupWidget(a)
-		w.setStartWH()
+		w = makeWidget(a)
+		w.addWidget()
 	case toolkit.Show:
 		if (a.B) {
 			w.drawView()

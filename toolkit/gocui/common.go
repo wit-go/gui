@@ -6,7 +6,7 @@ import (
 //	"github.com/awesome-gocui/gocui"
 )
 
-func setupWidget(a *toolkit.Action) *cuiWidget {
+func makeWidget(a *toolkit.Action) *cuiWidget {
 	var w *cuiWidget
 	w = new(cuiWidget)
 
