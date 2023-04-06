@@ -69,6 +69,7 @@ func (w *cuiWidget) Set(val any) {
 	switch v := val.(type) {
 	case bool:
 		w.b = val.(bool)
+		w.setCheckbox(val.(bool))
 	case string:
 		w.SetText(val.(string))
 	case int:

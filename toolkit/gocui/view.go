@@ -81,7 +81,7 @@ func (w *cuiWidget) drawView() {
 	me.baseGui.SetKeybinding(w.v.Name(), gocui.MouseLeft, gocui.ModNone, click)
 
 	w.v.Wrap = true
-	fmt.Fprintln(w.v, " " + w.text)
+	fmt.Fprintln(w.v, w.text)
 
 	w.setDefaultWidgetColor()
 }

@@ -28,6 +28,12 @@ func (w *cuiWidget) doWidgetClick() {
 	case toolkit.Group:
 		w.placeWidgets()
 		w.toggleTree()
+	case toolkit.Checkbox:
+		if (w.b) {
+			w.setCheckbox(false)
+		} else {
+			w.setCheckbox(true)
+		}
 	case toolkit.Grid:
 		me.rootNode.hideWidgets()
 		w.placeGrid()
