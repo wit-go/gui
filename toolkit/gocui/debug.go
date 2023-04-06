@@ -59,6 +59,7 @@ func (w *cuiWidget) showWidgetPlacement(b bool, s string) {
 	}
 	log(b, s1, s, w.widgetType, ",", w.name) // , "text=", w.text)
 
+	/*
 	if (w.realWidth != (w.gocuiSize.w1 - w.gocuiSize.w0)) {
 		log(b, "dump()", s,
 			"badsize()=(", w.realWidth, ",", w.realHeight, ")",
@@ -71,4 +72,5 @@ func (w *cuiWidget) showWidgetPlacement(b bool, s string) {
 			"badreal()=(", w.gocuiSize.w0, ",", w.gocuiSize.h0, ",", w.gocuiSize.w1, ",", w.gocuiSize.h1, ")",
 			w.widgetType, ",", w.name)
 	}
+	*/
 }

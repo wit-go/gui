@@ -51,31 +51,27 @@ func (w *cuiWidget) showWidgets() {
 func (w *cuiWidget) setTabWH() {
 	t := len(w.text)
 
-	w.realWidth = t + me.buttonPadding
-	w.realHeight = me.defaultHeight
+	w.gocuiSize.width = t + me.buttonPadding
+	w.gocuiSize.height = me.defaultHeight
 
-	startW := 1
-	startH := 1
+	w.gocuiSize.startW = me.rootNode.startW
+	w.gocuiSize.startH = me.rootNode.startH
 
 	for _, child := range me.rootNode.children {
 		if (child.isFake) {
 			continue
 		}
 		if (w == child) {
-			w.startW = startW
-			w.startH = startH
-			w.gocuiSize.startW = startW
-			w.gocuiSize.startH = startH
 			w.setWH()
 			w.showWidgetPlacement(logNow, "setTABWH:")
 			return
 		}
-		startW += child.realWidth
+		w.gocuiSize.startW += child.realWidth
 	}
-	w.startW = startW
-	w.startH = startH
-	w.gocuiSize.startW = startW
-	w.gocuiSize.startH = startH
+
+	w.startW = me.rootNode.startW
+	w.startH = me.rootNode.startH + me.buttonPadding
+
 	w.setWH()
 	w.showWidgetPlacement(logNow, "setTabWH:")
 }

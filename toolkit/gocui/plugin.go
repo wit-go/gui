@@ -17,32 +17,31 @@ func (w *cuiWidget) setStartWH() {
 	switch w.widgetType {
 	case toolkit.Root:
 		log(logInfo, "setStartWH() rootNode w.id =", w.id, "w.name", w.name)
-		w.startW = 1
-		w.startH = 1
-		w.id = 0
 		w.isFake = true
 		w.setFake()
 		w.showWidgetPlacement(logNow, "StartWH:")
 		return
 	case toolkit.Flag:
-		w.startW = 1
-		w.startH = 1
 		w.isFake = true
 		w.setFake()
 		w.showWidgetPlacement(logNow, "StartWH:")
 		return
 	case toolkit.Window:
-		w.startW = 1
-		w.startH = 3
 		w.setTabWH()
 		w.showWidgetPlacement(logNow, "StartWH:")
 		return
 	case toolkit.Tab:
-		w.startW = 1
-		w.startH = 3
 		w.setTabWH()
 		w.showWidgetPlacement(logNow, "StartWH:")
 		return
+	case toolkit.Box:
+		w.isFake = true
+		w.setFake()
+		w.showWidgetPlacement(logNow, "StartWH:")
+	case toolkit.Grid:
+		w.isFake = true
+		w.setFake()
+		w.showWidgetPlacement(logNow, "StartWH:")
 	}
 	p := w.parent
 	switch p.widgetType {
