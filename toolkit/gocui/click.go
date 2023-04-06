@@ -13,7 +13,7 @@ import (
 func (w *cuiWidget) doWidgetClick() {
 	switch w.widgetType {
 	case toolkit.Root:
-		me.rootNode.logicalSize.w1 = 1
+		// me.rootNode.logicalSize.w1 = 1
 		me.rootNode.redoTabs(true)
 	case toolkit.Flag:
 		me.rootNode.redoColor(true)
@@ -43,9 +43,9 @@ func (w *cuiWidget) doWidgetClick() {
 	case toolkit.Box:
 		// w.showWidgetPlacement(logNow, "drawTree()")
 		if (w.horizontal) {
-			log("BOX IS HORIZONTAL", w.nextW, w.nextH, w.name)
+			log("BOX IS HORIZONTAL", w.name)
 		} else {
-			log("BOX IS VERTICAL", w.nextW, w.nextH, w.name)
+			log("BOX IS VERTICAL", w.name)
 		}
 		w.redoBox(true)
 		w.toggleTree()
@@ -164,11 +164,10 @@ func ctrlDown(g *gocui.Gui, v *gocui.View) error {
 	if (found == nil) {
 		found = me.rootNode
 	}
-	found.updateLogicalSizes()
-	me.ctrlDown.gocuiSize.w0 = found.logicalSize.w0
-	me.ctrlDown.gocuiSize.w1 = found.logicalSize.w1
-	me.ctrlDown.gocuiSize.h0 = found.logicalSize.h0
-	me.ctrlDown.gocuiSize.h1 = found.logicalSize.h1
+	me.ctrlDown.gocuiSize.startW = found.gocuiSize.startW
+	me.ctrlDown.gocuiSize.startH = found.gocuiSize.startH
+	me.ctrlDown.gocuiSize.width =  found.gocuiSize.startW
+	me.ctrlDown.gocuiSize.height = found.gocuiSize.startH
 
 	if (me.ctrlDown.v == nil) {
 		me.ctrlDown.text = found.text

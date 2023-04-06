@@ -55,23 +55,6 @@ func (w *cuiWidget) showWidgetPlacement(b bool, s string) {
 	case toolkit.Grid:
 		s1 += fmt.Sprintf("next()=(%2d,%2d)", w.nextW, w.nextH)
 	default:
-	//	s1 += fmt.Sprintf("L()=(%2d,%2d,%2d,%2d)",
-	//		w.logicalSize.w0, w.logicalSize.h0, w.logicalSize.w1, w.logicalSize.h1)
 	}
 	log(b, s1, s, w.widgetType, ",", w.name) // , "text=", w.text)
-
-	/*
-	if (w.realWidth != (w.gocuiSize.w1 - w.gocuiSize.w0)) {
-		log(b, "dump()", s,
-			"badsize()=(", w.realWidth, ",", w.realHeight, ")",
-			"badreal()=(", w.gocuiSize.w0, ",", w.gocuiSize.h0, ",", w.gocuiSize.w1, ",", w.gocuiSize.h1, ")",
-			w.widgetType, ",", w.name)
-	}
-	if (w.realHeight != (w.gocuiSize.h1 - w.gocuiSize.h0)) {
-		log(b, "dump()", s,
-			"badsize()=(", w.realWidth, ",", w.realHeight, ")",
-			"badreal()=(", w.gocuiSize.w0, ",", w.gocuiSize.h0, ",", w.gocuiSize.w1, ",", w.gocuiSize.h1, ")",
-			w.widgetType, ",", w.name)
-	}
-	*/
 }

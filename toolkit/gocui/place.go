@@ -30,26 +30,6 @@ func (w *cuiWidget) setFake() {
 	w.showWidgetPlacement(logNow, "setFake()")
 }
 
-func findPlace(w *cuiWidget) {
-	w.isFake = false
-	switch w.widgetType {
-	case toolkit.Root:
-		w.isFake = true
-		w.setFake()
-	case toolkit.Flag:
-		w.isFake = true
-		w.setFake()
-	case toolkit.Grid:
-		w.isFake = true
-		w.setFake()
-	case toolkit.Box:
-		w.isFake = true
-		w.setFake()
-	default:
-		// w.redoBox(true)
-	}
-}
-
 // find the start (w,h) for child a inside a box widget
 func (w *cuiWidget) getBoxWH() {
 	p := w.parent // the parent must be a box widget
@@ -146,11 +126,6 @@ func (w *cuiWidget) redoBox(draw bool) {
 		w.nextH = p.nextH
 		w.gridBounds()
 	case toolkit.Box:
-		w.logicalSize.w0 = p.nextW
-		w.logicalSize.h0 = p.nextH
-		w.logicalSize.w1 = p.nextW
-		w.logicalSize.h1 = p.nextH
-
 		w.nextW = p.nextW
 		w.nextH = p.nextH
 		for _, child := range w.children {
@@ -201,31 +176,20 @@ func (w *cuiWidget) setWH() {
 	w.gocuiSize.h0 = w.gocuiSize.startH
 	w.gocuiSize.w1 = w.gocuiSize.w0 + w.gocuiSize.width
 	w.gocuiSize.h1 = w.gocuiSize.h0 + w.gocuiSize.height
-
-	w.logicalSize.w0 = w.gocuiSize.w0
-	w.logicalSize.h0 = w.gocuiSize.h0
-	w.logicalSize.w1 = w.gocuiSize.w1
-	w.logicalSize.h1 = w.gocuiSize.h1
 }
 
 func (w *cuiWidget) moveTo(leftW int, topH int) {
 	if (w.isFake) {
-		// don't ever move these
-	} else {
-		w.gocuiSize.w0 = leftW
-		w.gocuiSize.h0 = topH 
+		return
 	}
-	w.gocuiSize.w1 = w.gocuiSize.w0 + w.realWidth
-	w.gocuiSize.h1 = w.gocuiSize.h0 + w.realHeight
+	w.gocuiSize.startW = leftW
+	w.gocuiSize.startH = topH
 
-	w.logicalSize.w0 = w.gocuiSize.w0
-	w.logicalSize.h0 = w.gocuiSize.h0
-	w.logicalSize.w1 = w.gocuiSize.w1
-	w.logicalSize.h1 = w.gocuiSize.h1
-
+	w.setWH()
 	w.showWidgetPlacement(logNow, "moveTo()")
 }
 
+/*
 func (w *cuiWidget) updateLogicalSizes() {
 	for _, child := range w.children {
 		// if (w.isReal)
@@ -244,21 +208,12 @@ func (w *cuiWidget) updateLogicalSizes() {
 		}
 	}
 }
+*/
 
 func (w *cuiWidget) gridBounds() {
 	w.showWidgetPlacement(logNow, "gridBounds:")
 	p := w.parent
 
-	/*
-	for a := 0; a < w.x; a++ {
-		for b := 0; b < w.y; b++ {
-			log(logNow, "gridBounds() (w,h)", a, b,
-				"logical(W,H)", w.widths[a], w.heights[b],
-				"p.next(W,H)", p.nextW, p.nextH)
-		}
-		log("\n")
-	}
-	*/
 	var wCount int = 0
 	var hCount int = 0
 	for _, child := range w.children {
