@@ -60,8 +60,8 @@ var (
 // corner starts at in the upper left corner
 type rectType struct {
 	// where the widget should calculate it's existance from
-	startW int
-	startH int
+	// startW int
+	// startH int
 
 	// the actual size
 	width int
@@ -85,9 +85,13 @@ type cuiWidget struct {
 	// visable bool // track if it's currently supposed to be shown
 	isFake bool // widget types like 'box' are 'false'
 
-	// where the widget should add children
+	// where the widget's real corner is 
 	startW int
 	startH int
+
+	// where the next child should be placed
+	nextW	int
+	nextH	int
 
 	// the widget size to reserve or things will overlap
 	realWidth int
@@ -103,10 +107,6 @@ type cuiWidget struct {
 	// deprecate // where in the parent grid this widget should go
 	parentW int
 	parentH int
-
-	// deprecate 
-	nextW	int
-	nextH	int
 
 	// things from toolkit/action
 	b bool

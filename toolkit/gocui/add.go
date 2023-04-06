@@ -16,8 +16,8 @@ func (w *cuiWidget) setFake() {
 
 	w.gocuiSize.width = t + 2
 	w.gocuiSize.height = me.defaultHeight
-	w.gocuiSize.startW = fakeStartWidth
-	w.gocuiSize.startH = fakeStartHeight
+	w.gocuiSize.w0 = fakeStartWidth
+	w.gocuiSize.h0 = fakeStartHeight
 
 	fakeStartHeight += 3
 	if (fakeStartHeight > 24) {
@@ -68,15 +68,10 @@ func (w *cuiWidget) addWidget() {
 		t := len(w.text)
 		w.gocuiSize.width = t + me.buttonPadding
 		w.gocuiSize.height = me.defaultHeight
-		w.gocuiSize.startW = w.startW
-		w.gocuiSize.startH = w.startH
-
-		w.setWH()
 		return
 	default:
 		w.startW = w.parent.startW
 		w.startH = w.parent.startH
-		w.setWH()
 	}
 	w.showWidgetPlacement(logInfo, "addWidget()")
 }

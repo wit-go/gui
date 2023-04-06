@@ -12,6 +12,8 @@ import 	(
 var title string = "Demo Plugin Window"
 var outfile string = "/tmp/guilogfile"
 
+var buttonCounter int = 5
+
 func main() {
 	// time.Sleep(5 * time.Second)
 	// var w *gui.Node
@@ -46,8 +48,6 @@ func main() {
 	gui.StandardExit()
 }
 
-var counter int = 5
-
 // This creates a window
 func buttonWindow() {
 	var w, t, g, more, more2 *gui.Node
@@ -79,17 +79,13 @@ func buttonWindow() {
 		// this set the xterm and mate-terminal window title. maybe works generally?
 		fmt.Println("\033]0;" + title + "blah \007")
 		gui.StartS("gocui")
-	})
-
-	g.NewButton("Redraw 'gocui'", func () {
-		fmt.Println("\033]0;" + title + "blah2 \007")
 		gui.Redraw("gocui")
 	})
 
 	g.NewButton("NewButton(more)", func () {
 		log.Println("new foobar 2. Adding button 'foobar 3'")
-		name := "foobar " + strconv.Itoa(counter)
-		counter += 1
+		name := "foobar " + strconv.Itoa(buttonCounter)
+		buttonCounter += 1
 		more.NewButton(name, func () {
 			log.Println("Got all the way to main() name =", name)
 		})
@@ -97,8 +93,8 @@ func buttonWindow() {
 
 	g.NewButton("NewButton(more2)", func () {
 		log.Println("new foobar 2. Adding button 'foobar 3'")
-		name := "foobar " + strconv.Itoa(counter)
-		counter += 1
+		name := "foobar " + strconv.Itoa(buttonCounter)
+		buttonCounter += 1
 		more2.NewButton(name, func () {
 			log.Println("Got all the way to main() name =", name)
 		})
@@ -106,8 +102,8 @@ func buttonWindow() {
 
 	g.NewButton("NewButton(more2 d)", func () {
 		log.Println("new foobar 2. Adding button 'foobar 3'")
-		name := "d" + strconv.Itoa(counter)
-		counter += 1
+		name := "d" + strconv.Itoa(buttonCounter)
+		buttonCounter += 1
 		more2.NewButton(name, func () {
 			log.Println("Got all the way to main() name =", name)
 		})
@@ -115,8 +111,8 @@ func buttonWindow() {
 
 	g.NewButton("NewGroup()", func () {
 		log.Println("new foobar 2. Adding button 'foobar 3'")
-		name := "neat " + strconv.Itoa(counter)
-		counter += 1
+		name := "neat " + strconv.Itoa(buttonCounter)
+		buttonCounter += 1
 		more.NewGroup(name)
 	})
 

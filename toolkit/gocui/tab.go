@@ -53,33 +53,20 @@ func (w *cuiWidget) showWidgets() {
 }
 
 func (w *cuiWidget) setTabWH() {
+	// set the start and size of the tab gocui button
 	t := len(w.text)
-
 	w.gocuiSize.width = t + me.buttonPadding
 	w.gocuiSize.height = me.defaultHeight
+	w.gocuiSize.w0 = me.rootNode.nextW
+	w.gocuiSize.h0 = me.rootNode.nextH
 
-	w.gocuiSize.startW = me.rootNode.startW
-	w.gocuiSize.startH = me.rootNode.startH
+	// move the rootNode width over for the next window or tab
+	me.rootNode.nextW += w.gocuiSize.width + me.padW
 
 	w.startW = me.rawW
 	w.startH = me.rawH
-
-	var f func (widget *cuiWidget)
-
-	// find buttons that are below where the mouse button click
-	f = func(widget *cuiWidget) {
-		if (widget == w) {
-			return
-		}
-		if ((widget.widgetType == toolkit.Window) || (widget.widgetType == toolkit.Tab)) {
-			w.gocuiSize.startW += widget.gocuiSize.width + me.padW
-		}
-
-		for _, child := range widget.children {
-			f(child)
-		}
-	}
-	f(me.rootNode)
+	w.nextW = me.rawW
+	w.nextH = me.rawH
 
 	w.setWH()
 	w.showWidgetPlacement(logNow, "setTabWH:")

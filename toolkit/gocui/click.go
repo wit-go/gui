@@ -19,18 +19,18 @@ func (w *cuiWidget) doWidgetClick() {
 		me.rootNode.redoColor(true)
 	case toolkit.Window:
 		me.rootNode.hideWidgets()
-		w.drawBox()
+		w.placeWidgets()
 		w.showWidgets()
 	case toolkit.Tab:
 		me.rootNode.hideWidgets()
-		w.drawBox()
+		w.placeWidgets()
 		w.showWidgets()
 	case toolkit.Group:
-		w.drawBox()
+		w.placeWidgets()
 		w.toggleTree()
 	case toolkit.Grid:
 		me.rootNode.hideWidgets()
-		w.drawGrid()
+		w.placeGrid()
 		w.showWidgets()
 	case toolkit.Box:
 		// w.showWidgetPlacement(logNow, "drawTree()")
@@ -39,7 +39,7 @@ func (w *cuiWidget) doWidgetClick() {
 		} else {
 			log("BOX IS VERTICAL", w.name)
 		}
-		w.drawBox()
+		w.placeWidgets()
 		w.toggleTree()
 	default:
 	}
@@ -156,31 +156,20 @@ func ctrlDown(g *gocui.Gui, v *gocui.View) error {
 	if (found == nil) {
 		found = me.rootNode
 	}
-	me.ctrlDown.gocuiSize.startW = found.startW
-	me.ctrlDown.gocuiSize.startH = found.startH
+	found.setRealSize()
 	me.ctrlDown.gocuiSize.width =  found.realWidth
 	me.ctrlDown.gocuiSize.height = found.realHeight
+	me.ctrlDown.gocuiSize.w0 = found.startW
+	me.ctrlDown.gocuiSize.h0 = found.startH
 	me.ctrlDown.setWH()
 
 	if (me.ctrlDown.v == nil) {
 		me.ctrlDown.text = found.text
-		me.ctrlDown.showWidgetPlacement(logNow, "drawTree()")
+		me.ctrlDown.showWidgetPlacement(logNow, "ctrlDown:")
 		me.ctrlDown.drawView()
 	} else {
 		me.ctrlDown.deleteView()
 	}
-
-	/*
-	v, err := g.SetView("ctrlDown", maxX/2-10, maxY/2, maxX/2+10, maxY/2+2, 0)
-	if (err != nil) {
-		log(logError, "ctrlDown() g.SetView() error:", err)
-		return
-	}
-	v.Clear()
-	v.SelBgColor = gocui.ColorCyan
-	v.SelFgColor = gocui.ColorBlack
-	fmt.Fprintln(v, l)
-	*/
 
 	log(logNow, "ctrlDown()", w, h)
 	return nil

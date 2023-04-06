@@ -1,47 +1,53 @@
 package main
 
 import (
+	"fmt"
 //	"github.com/awesome-gocui/gocui"
 	"git.wit.org/wit/gui/toolkit"
 )
 
-/*
-// find the start (w,h) for child a inside a box widget
-func (w *cuiWidget) setBoxWH() {
-	p := w.parent // the parent must be a box widget
-
-	// update parent gocuiSize
-	p.realWidth = 0
-	p.realHeight = 0
-	for _, child := range p.children {
-		p.realWidth += child.realWidth
-		p.realHeight += child.realHeight
+func (w *cuiWidget) placeBox() {
+	if (w.widgetType != toolkit.Box) {
+		return
 	}
+	w.startW = w.parent.nextW
+	w.startH = w.parent.nextH
+	w.nextW = w.parent.nextW
+	w.nextH = w.parent.nextH
+	w.realWidth = 0
+	w.realHeight = 0
 
-	// compute child offset
-	w.startW = p.startW
-	w.startH = p.startH
-	for _, child := range p.children {
-		if (p.horizontal) {
-			log("BOX IS HORIZONTAL (w,h)", w.startW, w.startH)
-			log("BOX IS HORIZONTAL (w,h)", w.startW, w.startH)
-			log("BOX IS HORIZONTAL (w,h)", w.startW, w.startH)
-			w.startW += child.realWidth
+	var maxW int
+	var maxH int
+	for _, child := range w.children {
+		w.showWidgetPlacement(logNow, "boxS()")
+		child.placeWidgets()
+		if (w.horizontal) {
+			log(logVerbose, "BOX IS HORIZONTAL")
+			// expand based on the child width
+			w.nextW += child.realWidth
+			w.realWidth += child.realWidth
 		} else {
-			log("BOX IS VERTICAL (w,h)", w.startW, w.startH)
-			log("BOX IS VERTICAL (w,h)", w.startW, w.startH)
-			log("BOX IS VERTICAL (w,h)", w.startW, w.startH)
-			w.startH += child.realHeight
+			log(logVerbose, "BOX IS VERTICAL")
+			// expand based on the child height
+			w.nextH += child.realHeight
+			w.realHeight += child.realHeight
 		}
-		if child == w {
-			return
+		if (maxW < child.realWidth) {
+			maxW = child.realWidth
+		}
+		if (maxH < child.realHeight) {
+			maxH = child.realHeight
 		}
 	}
-	return
+	if (w.horizontal) {
+		w.realHeight = maxH
+	} else {
+		w.realWidth = maxW
+	}
+	w.showWidgetPlacement(logNow, "boxE()")
 }
-*/
 
-// find the start (w,h) for child a inside a Group widget
 func (w *cuiWidget) getGroupWH() {
 	p := w.parent // the parent must be a group widget
 
@@ -66,7 +72,7 @@ func (w *cuiWidget) getGroupWH() {
 	return
 }
 
-func (w *cuiWidget) drawBox() {
+func (w *cuiWidget) placeWidgets() {
 	if (w == nil) {
 		return
 	}
@@ -75,98 +81,99 @@ func (w *cuiWidget) drawBox() {
 	}
 	p := w.parent
 	if (p == nil) {
-		log(logInfo, "redoBox()", w.id, "parent == nil")
+		log(logInfo, "place()", w.id, "parent == nil")
 		return
 	}
 
 	switch w.widgetType {
 	case toolkit.Window:
-		// draw only one thing
 		for _, child := range w.children {
-			child.drawBox()
-			return
+			w.startW = me.rawW
+			w.startH = me.rawH
+			w.nextW = me.rawW
+			w.nextH = me.rawH
+			w.showWidgetPlacement(logNow, "place()")
+			child.placeWidgets()
+			if (w.realWidth < child.realWidth) {
+				w.realWidth = child.realWidth
+			}
+			if (w.realHeight < child.realHeight) {
+				w.realHeight = child.realHeight
+			}
+			w.showWidgetPlacement(logNow, "place()")
 		}
 	case toolkit.Tab:
-		// draw only one thing
 		for _, child := range w.children {
-			child.drawBox()
-			return
+			w.startW = me.rawW
+			w.startH = me.rawH
+			w.nextW = me.rawW
+			w.nextH = me.rawH
+			w.showWidgetPlacement(logNow, "place()")
+			child.placeWidgets()
+			if (w.realWidth < child.realWidth) {
+				w.realWidth = child.realWidth
+			}
+			if (w.realHeight < child.realHeight) {
+				w.realHeight = child.realHeight
+			}
+			w.showWidgetPlacement(logNow, "place()")
 		}
 	case toolkit.Grid:
-		w.startW = p.startW
-		w.startH = p.startH
-		w.drawGrid()
-		w.showWidgetPlacement(logNow, "drawBox:")
+		w.showWidgetPlacement(logNow, "place()")
+		w.placeGrid()
+		w.showWidgetPlacement(logNow, "place()")
 	case toolkit.Box:
-		w.startW = p.startW
-		w.startH = p.startH
-		w.nextW = p.startW
-		w.nextH = p.startH
-		var maxW int
-		var maxH int
-		for _, child := range w.children {
-			child.drawBox()
-			if (w.horizontal) {
-				log("BOX IS HORIZONTAL")
-				// expand based on the child width
-				w.startW += child.realWidth
-			} else {
-				log("BOX IS VERTICAL")
-				// expand based on the child height
-				w.startH += child.realHeight
-			}
-			if (maxW < child.realWidth) {
-				maxW = child.realWidth
-			}
-			if (maxH < child.realHeight) {
-				maxH = child.realHeight
-			}
-		}
-		w.realWidth = maxW
-		w.realHeight = maxH
-		w.showWidgetPlacement(logNow, "drawBox:")
+		w.showWidgetPlacement(logNow, "place()")
+		w.placeBox()
+		w.showWidgetPlacement(logNow, "place()")
 	case toolkit.Group:
-		w.startW = p.startW
-		w.startH = p.startH
-		w.nextW = p.startW
-		w.nextH = p.startH
-		w.gocuiSize.startW = w.startW
-		w.gocuiSize.startH = w.startH
+		w.startW = p.nextW
+		w.startH = p.nextH
+		w.nextW = p.nextW
+		w.nextH = p.nextH
+
+		w.moveTo(p.nextW, p.nextH)
+
+		// set real width at the beginning
 		w.realWidth = w.gocuiSize.width
 		w.realHeight = w.gocuiSize.height
-		w.setWH()
 
-		w.startW = p.startW + 4
-		w.startH = p.startH + 3
+		// indent the widgets for a group
+		w.nextW = p.nextW + 4
+		w.nextH = p.nextH + 3
+		w.showWidgetPlacement(logNow, "place()")
 		var maxW int
-		var maxH int
 		for _, child := range w.children {
-			child.drawBox()
-			// reset nextW to straight down
-			w.startH += child.realHeight
+			child.showWidgetPlacement(logNow, "place()")
+			child.placeWidgets()
+			child.showWidgetPlacement(logNow, "place()")
+
+			// increment straight down
+			w.nextH += child.realHeight
+			w.realHeight += child.realHeight
+
+			// track largest width
 			if (maxW < child.realWidth) {
 				maxW = child.realWidth
 			}
-			if (maxH < child.realHeight) {
-				maxH = child.realHeight
-			}
+
 		}
+		// add real width of largest child
 		w.realWidth += maxW
-		w.realHeight += maxH
-		w.showWidgetPlacement(logNow, "drawBox:")
+		w.showWidgetPlacement(logNow, "place()")
 	default:
-		w.startW = p.startW
-		w.startH = p.startH
-		w.gocuiSize.startW = w.startW
-		w.gocuiSize.startH = w.startH
+		w.startW = p.nextW
+		w.startH = p.nextH
+		w.nextW = p.nextW
+		w.nextH = p.nextH
+		w.gocuiSize.w0 = w.startW
+		w.gocuiSize.h0 = w.startH
 		w.setWH()
-		w.showWidgetPlacement(logNow, "drawBox:")
+		w.showWidgetPlacement(logNow, "place()")
 	}
 }
 
 func (w *cuiWidget) setWH() {
-	w.gocuiSize.w0 = w.gocuiSize.startW
-	w.gocuiSize.h0 = w.gocuiSize.startH
 	w.gocuiSize.w1 = w.gocuiSize.w0 + w.gocuiSize.width
 	w.gocuiSize.h1 = w.gocuiSize.h0 + w.gocuiSize.height
 }
@@ -175,15 +182,22 @@ func (w *cuiWidget) moveTo(leftW int, topH int) {
 	if (w.isFake) {
 		return
 	}
-	w.gocuiSize.startW = leftW
-	w.gocuiSize.startH = topH
-
-	w.setWH()
-	w.showWidgetPlacement(logNow, "moveTo()")
+	w.gocuiSize.w0 = leftW
+	w.gocuiSize.h0 = topH
+	w.gocuiSize.w1 = w.gocuiSize.w0 + w.gocuiSize.width
+	w.gocuiSize.h1 = w.gocuiSize.h0 + w.gocuiSize.height
+	w.showWidgetPlacement(logInfo, "moveTo()")
 }
 
-func (w *cuiWidget) drawGrid() {
-	w.showWidgetPlacement(logNow, "gridBounds:")
+func (w *cuiWidget) placeGrid() {
+	w.showWidgetPlacement(logNow, "grid0:")
+	if (w.widgetType != toolkit.Grid) {
+		return
+	}
+	w.startW = w.parent.nextW
+	w.startH = w.parent.nextH
+	w.nextW = w.parent.nextW
+	w.nextH = w.parent.nextH
 
 	var wCount int = 0
 	var hCount int = 0
@@ -191,7 +205,6 @@ func (w *cuiWidget) drawGrid() {
 		// increment for the next child
 		w.nextW = w.startW + wCount * 20
 		w.nextH = w.startH + hCount * 2
-		// child.drawBox()
 
 		// set the child's realWidth, and grid offset
 		child.parentH = hCount
@@ -202,8 +215,8 @@ func (w *cuiWidget) drawGrid() {
 		if (w.heights[hCount] < child.realHeight) {
 			w.heights[hCount] = child.realHeight
 		}
-		log(logNow, "redoBox(GRID) (w,h count)", wCount, hCount, "(X,Y)", w.x, w.y, w.name)
-		child.showWidgetPlacement(logNow, "grid:")
+		log(logVerbose, "grid1: (w,h count)", wCount, hCount, "(X,Y)", w.x, w.y, w.name)
+		child.showWidgetPlacement(logNow, "grid1: " + fmt.Sprintf("next()=(%2d,%2d)", w.nextW, w.nextH))
 
 		if ((wCount + 1) < w.y) {
 			wCount += 1
@@ -224,11 +237,11 @@ func (w *cuiWidget) drawGrid() {
 	}
 
 	for _, child := range w.children {
-		child.showWidgetPlacement(logVerbose, "gridBounds:")
+		child.showWidgetPlacement(logVerbose, "grid2:")
 		var totalW, totalH int
 		for i, val := range w.widths {
 			if (i < child.parentW) {
-				log(logVerbose, "gridBounds() (w, widths[])", i, val)
+				log(logVerbose, "grid2: (w, widths[])", i, val)
 				totalW += w.widths[i]
 			}
 		}
@@ -239,18 +252,16 @@ func (w *cuiWidget) drawGrid() {
 		}
 
 		// the new corner to move the child to
-		realW := w.nextW + totalW
-		realH := w.nextH + totalH
+		w.nextW = w.startW + totalW
+		w.nextH = w.startH + totalH
 
-		log(logNow, "gridBounds()", child.id, "parent (W,H) =", child.parentW, child.parentH,
-			"total (W,H) =", totalW, totalH,
-			"real (W,H) =", realW, realH)
-		w.startW = realW
-		w.startH = realH
-		child.drawBox()
-		child.showWidgetPlacement(logInfo, "gridBounds:")
+		child.placeWidgets()
+		child.showWidgetPlacement(logInfo, "grid2:")
 		log(logInfo)
 	}
 	// w.updateLogicalSizes()
-	w.showWidgetPlacement(logNow, "gridBounds:")
+	w.showWidgetPlacement(logNow, "grid3:")
+}
+
+func (w *cuiWidget) setRealSize() {
 }
