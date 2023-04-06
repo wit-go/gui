@@ -104,10 +104,6 @@ func Start() *Node {
 	return Config.rootNode
 }
 
-func doSomething() {
-	log(logNow, "doSomething()")
-}
-
 func watchCallback() {
 	log(logNow, "makeCallback() START")
 	for {
@@ -115,8 +111,39 @@ func watchCallback() {
 	    	select {
 		case a := <-Config.guiChan:
 			log(logNow, "makeCallback() SELECT widget id =", a.WidgetId, a.Name)
-			sleep(.5) // TODO: remove this. added while under development
+			n := Config.rootNode.FindId(a.WidgetId)
+			if (n == nil) {
+				log(logError, "makeCallback() SELECT widget id =", a.WidgetId, a.Name)
+			} else {
+				go n.doUserEvent(a)
+			}
+			// this maybe a good idea?
+			// TODO: Throttle user events somehow
+			sleep(.1)
 		}
+	}
+}
+
+func (n *Node) doUserEvent(a toolkit.Action) {
+	log(logNow, "doUserEvent() node =", n.id, n.Name)
+	switch n.WidgetType {
+	case toolkit.Checkbox:
+		n.B = a.B
+		log(logNow, "doUserEvent() Check =", n.id, n.Name, n.B)
+		if (n.Custom == nil) {
+			log(debugError, "Custom() = nil. SKIPPING")
+			return
+		}
+		n.Custom()
+	case toolkit.Button:
+		log(logNow, "doUserEvent() button =", n.id, n.Name)
+		if (n.Custom == nil) {
+			log(debugError, "Custom() = nil. SKIPPING")
+			return
+		}
+		n.Custom()
+	default:
+		log(logNow, "doUserEvent() type =", n.WidgetType)
 	}
 }
 
