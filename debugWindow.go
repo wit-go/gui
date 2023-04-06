@@ -46,16 +46,16 @@ func (n *Node) DebugTab(title string) *Node {
 	cb.Set(false)
 
 	gog.NewButton("Debug Flags", func () {
-		newN.DebugFlags(makeTabs)
+		bugWin.DebugFlags(makeTabs)
 	})
 	gog.NewButton("Debug Widgets", func () {
 		DebugWidgetWindow(newN)
 	})
 	gog.NewButton("GO Language Internals", func () {
-		newN.DebugGolangWindow(makeTabs)
+		bugWin.DebugGolangWindow(makeTabs)
 	})
 	gog.NewButton("GO Channels debug", func () {
-		newN.DebugGoChannels(makeTabs)
+		bugWin.DebugGoChannels(makeTabs)
 	})
 
 	gog.NewLabel("Force Quit:")

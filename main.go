@@ -104,6 +104,12 @@ func Start() *Node {
 	return Config.rootNode
 }
 
+func (n *Node) LoadPlugin(name string) bool {
+	StartS(name)
+	Redraw(name)
+	return true
+}
+
 func StartS(name string) *Node {
 	log(logInfo, "Start() Main(f) for name =", name)
 	if (LoadToolkit(name) == false) {
