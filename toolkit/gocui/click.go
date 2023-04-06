@@ -18,28 +18,17 @@ func (w *cuiWidget) doWidgetClick() {
 	case toolkit.Flag:
 		me.rootNode.redoColor(true)
 	case toolkit.Window:
-		w.redoBox(true)
+		w.drawBox()
 		w.toggleTree()
 	case toolkit.Tab:
-		w.redoBox(true)
+		w.drawBox()
 		w.toggleTree()
 	case toolkit.Group:
-		w.redoBox(true)
+		w.drawBox()
 		w.toggleTree()
 	case toolkit.Grid:
-		// w.setParentLogical()
-		w.gridBounds()
-		// w.setParentLogical()
-		for _, child := range w.children {
-			child.showWidgetPlacement(logNow, "gridBounds:")
-			if (child.v == nil) {
-				child.drawView()
-			} else {
-				child.deleteView()
-			}
-		}
-		// w.toggleTree()
-		// w.redoBox(true)
+		w.drawGrid()
+		w.toggleTree()
 	case toolkit.Box:
 		// w.showWidgetPlacement(logNow, "drawTree()")
 		if (w.horizontal) {
@@ -47,7 +36,7 @@ func (w *cuiWidget) doWidgetClick() {
 		} else {
 			log("BOX IS VERTICAL", w.name)
 		}
-		w.redoBox(true)
+		w.drawBox()
 		w.toggleTree()
 	default:
 	}

@@ -96,10 +96,10 @@ func (w *cuiWidget) getGridWH() {
 	w.startH = p.startH
 	w.nextW = p.startW
 	w.nextH = p.startH
-	w.gridBounds()
+	w.drawGrid()
 }
 
-func (w *cuiWidget) redoBox(draw bool) {
+func (w *cuiWidget) drawBox() {
 	if (w == nil) {
 		return
 	}
@@ -114,60 +114,82 @@ func (w *cuiWidget) redoBox(draw bool) {
 
 	switch w.widgetType {
 	case toolkit.Window:
+		// draw only one thing
 		for _, child := range w.children {
-			child.redoBox(draw)
+			child.drawBox()
+			return
 		}
 	case toolkit.Tab:
+		// draw only one thing
 		for _, child := range w.children {
-			child.redoBox(draw)
+			child.drawBox()
+			return
 		}
 	case toolkit.Grid:
-		w.nextW = p.nextW
-		w.nextH = p.nextH
-		w.gridBounds()
+		w.startW = p.startW
+		w.startH = p.startH
+		w.getGridWH()
+		w.showWidgetPlacement(logNow, "drawBox:")
 	case toolkit.Box:
-		w.nextW = p.nextW
-		w.nextH = p.nextH
+		w.startW = p.startW
+		w.startH = p.startH
+		var maxW int
+		var maxH int
 		for _, child := range w.children {
-			child.redoBox(draw)
+			child.drawBox()
 			if (w.horizontal) {
-				log("BOX IS HORIZONTAL", p.nextW, p.nextW, p.name)
-				log("BOX IS HORIZONTAL", w.nextW, w.nextH, w.name)
 				log("BOX IS HORIZONTAL")
 				// expand based on the child width
-				w.nextW = child.nextW + me.horizontalPadding
-				// reset height to parent
-				w.nextH = p.nextH
+				w.startW += child.realWidth
 			} else {
-				log("BOX IS VERTICAL", p.nextW, p.nextW, p.name)
-				log("BOX IS VERTICAL", w.nextW, w.nextH, w.name)
 				log("BOX IS VERTICAL")
-				// go straight down
-				w.nextW = p.nextW
 				// expand based on the child height
-				w.nextH = child.nextH
+				w.startH += child.realHeight
+			}
+			if (maxW < child.realWidth) {
+				maxW = child.realWidth
+			}
+			if (maxH < child.realHeight) {
+				maxH = child.realHeight
 			}
 		}
-		w.showWidgetPlacement(logNow, "box:")
+		w.realWidth = maxW
+		w.realHeight = maxH
+		w.showWidgetPlacement(logNow, "drawBox:")
 	case toolkit.Group:
-		w.moveTo(p.nextW, p.nextH)
+		w.startW = p.startW
+		w.startH = p.startH
+		w.gocuiSize.startW = w.startW
+		w.gocuiSize.startH = w.startH
+		w.realWidth = w.gocuiSize.width
+		w.realHeight = w.gocuiSize.height
+		w.setWH()
 
-		w.nextW = p.nextW + me.groupPadding
-		w.nextH = p.nextH + me.buttonPadding
+		w.startW = p.startW + 4
+		w.startH = p.startH + 3
+		var maxW int
+		var maxH int
 		for _, child := range w.children {
-			child.redoBox(draw)
+			child.drawBox()
 			// reset nextW to straight down
-			w.nextW = p.nextW + 4
-			w.nextH = child.nextH
+			w.startH += child.realHeight
+			if (maxW < child.realWidth) {
+				maxW = child.realWidth
+			}
+			if (maxH < child.realHeight) {
+				maxH = child.realHeight
+			}
 		}
-		// expand the height of the parent now that the group is done
-		// p.nextW = w.nextW
-		// p.nextH = w.nextH
-		w.showWidgetPlacement(logNow, "group:")
+		w.realWidth += maxW
+		w.realHeight += maxH
+		w.showWidgetPlacement(logNow, "drawBox:")
 	default:
-		w.moveTo(p.nextW, p.nextH)
-		w.nextW = w.gocuiSize.w1
-		w.nextH = w.gocuiSize.h1
+		w.startW = p.startW
+		w.startH = p.startH
+		w.gocuiSize.startW = w.startW
+		w.gocuiSize.startH = w.startH
+		w.setWH()
+		w.showWidgetPlacement(logNow, "drawBox:")
 	}
 }
 
@@ -210,17 +232,16 @@ func (w *cuiWidget) updateLogicalSizes() {
 }
 */
 
-func (w *cuiWidget) gridBounds() {
+func (w *cuiWidget) drawGrid() {
 	w.showWidgetPlacement(logNow, "gridBounds:")
-	p := w.parent
 
 	var wCount int = 0
 	var hCount int = 0
 	for _, child := range w.children {
 		// increment for the next child
-		w.nextW = p.nextW + wCount * 20
-		w.nextH = p.nextH + hCount * 2
-		child.redoBox(true)
+		w.nextW = w.startW + wCount * 20
+		w.nextH = w.startH + hCount * 2
+		// child.drawBox()
 
 		// set the child's realWidth, and grid offset
 		child.parentH = hCount
@@ -271,11 +292,12 @@ func (w *cuiWidget) gridBounds() {
 		realW := w.nextW + totalW
 		realH := w.nextH + totalH
 
-
-		log(logInfo, "gridBounds()", child.id, "parent (W,H) =", child.parentW, child.parentH,
+		log(logNow, "gridBounds()", child.id, "parent (W,H) =", child.parentW, child.parentH,
 			"total (W,H) =", totalW, totalH,
 			"real (W,H) =", realW, realH)
-		child.moveTo(realW, realH)
+		w.startW = realW
+		w.startH = realH
+		child.drawBox()
 		child.showWidgetPlacement(logInfo, "gridBounds:")
 		log(logInfo)
 	}

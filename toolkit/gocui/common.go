@@ -23,6 +23,8 @@ func setupWidget(a *toolkit.Action) *cuiWidget {
 	t := len(w.text)
 	w.realWidth = t + me.buttonPadding
 	w.realHeight = me.defaultHeight
+	w.gocuiSize.width = t + me.buttonPadding
+	w.gocuiSize.height = me.defaultHeight
 
 	w.widgetType = a.WidgetType
 	w.id = a.WidgetId
