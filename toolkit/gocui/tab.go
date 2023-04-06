@@ -42,7 +42,11 @@ func (w *cuiWidget) showFake() {
 }
 
 func (w *cuiWidget) showWidgets() {
-	w.drawView()
+	if (w.isFake) {
+		// don't display by default
+	} else {
+		w.drawView()
+	}
 	for _, child := range w.children {
 		child.showWidgets()
 	}
@@ -57,20 +61,25 @@ func (w *cuiWidget) setTabWH() {
 	w.gocuiSize.startW = me.rootNode.startW
 	w.gocuiSize.startH = me.rootNode.startH
 
-	w.startW = w.gocuiSize.startW + 2
-	w.startH = w.gocuiSize.startH + 3
+	w.startW = me.rawW
+	w.startH = me.rawH
 
-	for _, child := range me.rootNode.children {
-		if (child.isFake) {
-			continue
-		}
-		if (w == child) {
-			w.setWH()
-			w.showWidgetPlacement(logNow, "setTABWH:")
+	var f func (widget *cuiWidget)
+
+	// find buttons that are below where the mouse button click
+	f = func(widget *cuiWidget) {
+		if (widget == w) {
 			return
 		}
-		w.gocuiSize.startW += child.realWidth
+		if ((widget.widgetType == toolkit.Window) || (widget.widgetType == toolkit.Tab)) {
+			w.gocuiSize.startW += widget.gocuiSize.width + me.padW
+		}
+
+		for _, child := range widget.children {
+			f(child)
+		}
 	}
+	f(me.rootNode)
 
 	w.setWH()
 	w.showWidgetPlacement(logNow, "setTabWH:")

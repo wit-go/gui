@@ -18,17 +18,20 @@ func (w *cuiWidget) doWidgetClick() {
 	case toolkit.Flag:
 		me.rootNode.redoColor(true)
 	case toolkit.Window:
+		me.rootNode.hideWidgets()
 		w.drawBox()
-		w.toggleTree()
+		w.showWidgets()
 	case toolkit.Tab:
+		me.rootNode.hideWidgets()
 		w.drawBox()
-		w.toggleTree()
+		w.showWidgets()
 	case toolkit.Group:
 		w.drawBox()
 		w.toggleTree()
 	case toolkit.Grid:
+		me.rootNode.hideWidgets()
 		w.drawGrid()
-		w.toggleTree()
+		w.showWidgets()
 	case toolkit.Box:
 		// w.showWidgetPlacement(logNow, "drawTree()")
 		if (w.horizontal) {
@@ -139,9 +142,9 @@ func ctrlDown(g *gocui.Gui, v *gocui.View) error {
 	f(me.rootNode)
 	var t string
 	for _, widget := range widgets {
-		log(logNow, "ctrlDown() FOUND widget", widget.id, widget.name)
+		// log(logNow, "ctrlDown() FOUND widget", widget.id, widget.name)
 		t += widget.cuiName + " " + widget.name + "\n"
-		// widget.showWidgetPlacement(logNow, "drawTree()")
+		widget.showWidgetPlacement(logNow, "ctrlDown() FOUND")
 	}
 	t = strings.TrimSpace(t)
 	if (me.ctrlDown == nil) {
@@ -153,10 +156,11 @@ func ctrlDown(g *gocui.Gui, v *gocui.View) error {
 	if (found == nil) {
 		found = me.rootNode
 	}
-	me.ctrlDown.gocuiSize.startW = found.gocuiSize.startW
-	me.ctrlDown.gocuiSize.startH = found.gocuiSize.startH
-	me.ctrlDown.gocuiSize.width =  found.gocuiSize.startW
-	me.ctrlDown.gocuiSize.height = found.gocuiSize.startH
+	me.ctrlDown.gocuiSize.startW = found.startW
+	me.ctrlDown.gocuiSize.startH = found.startH
+	me.ctrlDown.gocuiSize.width =  found.realWidth
+	me.ctrlDown.gocuiSize.height = found.realHeight
+	me.ctrlDown.setWH()
 
 	if (me.ctrlDown.v == nil) {
 		me.ctrlDown.text = found.text

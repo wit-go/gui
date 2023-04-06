@@ -11,12 +11,20 @@ import (
 func Init() {
 	log(logInfo, "Init() of awesome-gocui")
 	me.defaultWidth = 10
-	me.defaultHeight = 2
+	me.defaultHeight = 2 // this means by default one line of text in a button
 	me.defaultBehavior = true
 
 	me.horizontalPadding = 20
-	me.groupPadding = 2
-	me.buttonPadding = 2
+	me.horizontalPadding = 20
+	me.groupPadding = 4
+	me.buttonPadding = 3
+
+	// the raw beginning of each window (or tab)
+	me.rawW = 7
+	me.rawH = 3
+
+	me.padW = 3
+	me.padH = 3
 }
 
 func Exit() {

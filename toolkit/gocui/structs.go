@@ -31,7 +31,14 @@ type config struct {
 	defaultBehavior bool
 	defaultWidth int
 	defaultHeight int
-	nextW int	// where the next window or tab flag should go
+	// nextW int	// where the next window or tab flag should go
+
+	padW int
+	padH int
+
+	// where the raw corner is
+	rawW int
+	rawH int
 
 	bookshelf bool // do you want things arranged in the box like a bookshelf or a stack?
 	canvas bool // if set to true, the windows are a raw canvas
