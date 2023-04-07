@@ -47,8 +47,9 @@ type aplug struct {
 var allPlugins []*aplug
 
 // loads and initializes a toolkit (andlabs/ui, gocui, etc)
-func LoadToolkit(name string) bool {
-	var newPlug aplug
+func LoadToolkit(name string) *aplug {
+	var newPlug *aplug
+	newPlug = new(aplug)
 
 	log(debugGui, "gui.LoadToolkit() START")
 	newPlug.LoadOk = false
@@ -57,44 +58,45 @@ func LoadToolkit(name string) bool {
 		log(debugGui, "gui.LoadToolkit() already loaded toolkit plugin =", aplug.name)
 		if (aplug.name == name) {
 			log(debugGui, "gui.LoadToolkit() SKIPPING")
-			return true
+			return aplug
 		}
 	}
 
 	// locate the shared library file
 	filename := name + ".so"
-	loadPlugin(&newPlug, filename)
+	loadPlugin(newPlug, filename)
 	if (newPlug.plug == nil) {
 		log(true, "attempt to find plugin", filename, "failed")
-		return false
+		return nil
 	}
 	// newPlug.Ok = true
 	newPlug.name = name
 
 	// deprecate Init(?)
-	newPlug.Init = loadFuncE(&newPlug, "Init")
+	newPlug.Init = loadFuncE(newPlug, "Init")
 
 	// should make a goroutine that never exits
-	newPlug.Main  = loadFuncF(&newPlug, "Main")
+	newPlug.Main  = loadFuncF(newPlug, "Main")
 
 	// should send things to the goroutine above
 	// newPlug.Queue = loadFuncF(&newPlug, "Queue")
 
 	// unload the plugin and restore state
-	newPlug.Quit = loadFuncE(&newPlug, "Quit")
+	newPlug.Quit = loadFuncE(newPlug, "Quit")
 
 	// Sends instructions like "Add", "Delete", "Disable", etc
 	// Sends a widget (button, checkbox, etc) and it's parent widget
-	newPlug.Action = loadFuncA(&newPlug, "Action")
+	newPlug.Action = loadFuncA(newPlug, "Action")
 
-	newPlug.Callback = loadCallback(&newPlug, "Callback")
+	newPlug.Callback = loadCallback(newPlug, "Callback")
 
-	allPlugins = append(allPlugins, &newPlug)
+	allPlugins = append(allPlugins, newPlug)
 
 	log(debugPlugin, "gui.LoadToolkit() END", newPlug.name, filename)
 	newPlug.Init()
+	Config.rootNode.Redraw(newPlug)
 	newPlug.LoadOk = true
-	return true
+	return newPlug
 }
 
 // TODO: All these functions need to be done a smarter way

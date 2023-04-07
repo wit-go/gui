@@ -15,7 +15,14 @@ var watchtime time.Duration = 100 // in tenths of seconds
 func Watchdog() {
 	var i = 1
 	for {
-		log(logInfo, "watchdog timer is alive. give me something to do.", i)
+		log(logNow, "watchdog timer is alive. give me something to do.", i)
+		if (Config.rootNode == nil) {
+			log(logInfo, "Config.rootNode == nil", i)
+		} else {
+			if (logVerbose) {
+				Config.rootNode.ListChildren(true)
+			}
+		}
 		i += 1
 		time.Sleep(watchtime * time.Second / 10)
 	}

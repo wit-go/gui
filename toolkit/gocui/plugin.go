@@ -15,8 +15,15 @@ func Action(a *toolkit.Action) {
 	w := findWidget(a.WidgetId, me.rootNode)
 	switch a.ActionType {
 	case toolkit.Add:
-		w = makeWidget(a)
-		w.addWidget()
+		if (w == nil) {
+			w = makeWidget(a)
+			w.addWidget()
+		} else {
+			// this is done to protect the plugin being 'refreshed' with the
+			// widget binary tree. TODO: find a way to keep them in sync
+			log(logError, "Action() Add ignored for already defined widget",
+				a.WidgetId, a.ActionType, a.WidgetType, a.Name)
+		}
 	case toolkit.Show:
 		if (a.B) {
 			w.drawView()

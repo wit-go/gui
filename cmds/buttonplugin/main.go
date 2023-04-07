@@ -11,6 +11,7 @@ import 	(
 
 var title string = "Demo Plugin Window"
 var outfile string = "/tmp/guilogfile"
+var myGui *gui.Node
 
 var buttonCounter int = 5
 
@@ -27,25 +28,13 @@ func main() {
 //	gui.Init()
 
 	// buttonWindow()
-	go gui.Main(func () {
-		log.Println("START Main f()")
-		buttonWindow()
-		/*
-		log.Println("END NewWindow()")
-		log.Println("START NewGroup()")
-		g := w.NewGroup("new Group 22")
-		log.Println("END NewGroup()")
-		g.NewButton("asdjkl", func () {
-			log.Println("world")
-		})
-		*/
-		log.Println("END Main f()")
-		// gui.StandardExit(nil)
-	})
+	myGui = gui.Start()
+	time.Sleep(1 * time.Second)
+	buttonWindow()
 	log.Println("Main() END")
 	time.Sleep(1 * time.Second)
-	gui.StartS("gocui")
-	gui.Redraw("gocui")
+	// gui.StartS("gocui")
+	// gui.Redraw("gocui")
 	gui.Watchdog()
 	gui.StandardExit()
 }
@@ -82,6 +71,10 @@ func buttonWindow() {
 		fmt.Println("\033]0;" + title + "blah \007")
 		gui.StartS("gocui")
 		gui.Redraw("gocui")
+	})
+
+	g.NewButton("Load 'andlabs'", func () {
+		gui.StartS("andlabs")
 	})
 
 	g.NewButton("NewButton(more)", func () {

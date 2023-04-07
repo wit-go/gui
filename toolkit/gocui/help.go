@@ -38,9 +38,10 @@ func helplayout(g *gocui.Gui) error {
 		fmt.Fprintln(help, "d: show/hide debugging")
 		fmt.Fprintln(help, "h: hide widgets")
 		fmt.Fprintln(help, "s: show all widgets")
+		fmt.Fprintln(help, "q: quit()")
 		fmt.Fprintln(help, "p: panic()")
 		fmt.Fprintln(help, "STDOUT: /tmp/witgui.log")
-		fmt.Fprintln(help, "Ctrl-C or Q: Exit")
+		// fmt.Fprintln(help, "Ctrl-C: Exit") // TODO: fix ctrl-c handling
 		if _, err := g.SetCurrentView("help"); err != nil {
 			return err
 		}

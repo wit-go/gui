@@ -1,6 +1,7 @@
 package gui
 
 import (
+	"os"
 	// "embed"
 	"git.wit.org/wit/gui/toolkit"
 )
@@ -55,44 +56,42 @@ func doGuiChan() {
 	}
 }
 
-func InitPlugins(names []string) {
+// TODO: add logic to just load the 1st 'most common' gui toolkit
+// and allow the 'go-arg' command line args to override the defaults
+func InitPlugins(names []string) []string {
 	log(debugGui, "Starting gui.Init()")
 
 	for _, aplug := range allPlugins {
 		log(debugGui, "LoadToolkit() already loaded toolkit plugin =", aplug.name)
 		for _, name := range names {
 			if (name == aplug.name) {
-				return
+				return []string{name}
 			}
 		}
 	}
 
 	// try to load each plugin in the order passed to this function
 	for _, name := range names {
-		if (LoadToolkit(name)) {
-			// aplug.InitOk = true
-			// aplug.Init()
-			return
+		aPlug := LoadToolkit(name)
+		if (aPlug != nil) {
+			// exit because it worked!
+			return []string{name}
 		}
 	}
 
 	// the program didn't specify a plugin. Try to load one
 	// TODO: detect the OS & user preferences to load the best one
 	// TODO: commented out Init() on 02/26/2023 because I'm not sure how to run it correctly
-	if (LoadToolkit("andlabs")) {
-		// aplug.InitOk = true
-		// aplug.Init()
-		return
+	andlabsPlug := LoadToolkit("andlabs")
+	if (andlabsPlug != nil) {
+		return []string{}
 	}
 
-	if (LoadToolkit("gocui")) {
-		// aplug.InitOk = true
-		// aplug.Init()
-		return
+	gocuiPlug := LoadToolkit("andlabs")
+	if (gocuiPlug != nil) {
+		return []string{}
 	}
-
-	// Should die here? TODO: need a Node to call StandardExit
-	// StandardExit("golang wit/gui could not load a plugin TODO: do something to STDOUT (?)")
+	return []string{}
 }
 
 func Start() *Node {
@@ -173,13 +172,13 @@ func (n *Node) doUserEvent(a toolkit.Action) {
 
 func (n *Node) LoadPlugin(name string) bool {
 	StartS(name)
-	Redraw(name)
 	return true
 }
 
 func StartS(name string) *Node {
 	log(logInfo, "Start() Main(f) for name =", name)
-	if (LoadToolkit(name) == false) {
+	aplug := LoadToolkit(name)
+	if (aplug == nil) {
 		return Config.rootNode
 	}
 	// will this really work on mswindows & macos?
@@ -187,6 +186,7 @@ func StartS(name string) *Node {
 	}
 	go Main(f)
 	sleep(1) // temp hack until chan communication is setup
+	Config.rootNode.Redraw(aplug)
 	return Config.rootNode
 }
 
@@ -194,7 +194,14 @@ func StartS(name string) *Node {
 func Main(f func()) {
 	log(debugGui, "Starting gui.Main() (using gtk via andlabs/ui)")
 
-	InitPlugins([]string{"andlabs", "gocui"})
+	// TODO: this is linux only
+	// TODO: detect if this was run from the command line (parent == bash?)
+	// if DISPLAY is not set, don't even bother with loading andlabs
+	if (os.Getenv("DISPLAY") == "") {
+		InitPlugins([]string{"gocui"})
+	} else {
+		InitPlugins([]string{"andlabs", "gocui"})
+	}
 
 	if (Config.guiChan == nil) {
 		Config.guiChan = make(chan toolkit.Action)

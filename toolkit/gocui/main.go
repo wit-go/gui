@@ -34,7 +34,7 @@ func Callback(guiCallback chan toolkit.Action) {
 }
 
 func Exit() {
-	// TODO: exit correctly
+	// TODO: send exit to the plugin
 	me.baseGui.Close()
 }
 
@@ -51,4 +51,5 @@ func Main(f func()) {
 	log("This is a test log entry")
 
 	MouseMain()
+	me.baseGui.Close()
 }

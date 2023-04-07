@@ -127,13 +127,16 @@ Creates a window helpful for debugging this package
 
 `func Indent(b bool, a ...interface{})`
 
-### func [InitPlugins](/main.go#L58)
+### func [InitPlugins](/main.go#L61)
 
-`func InitPlugins(names []string)`
+`func InitPlugins(names []string) []string`
+
+TODO: add logic to just load the 1st 'most common' gui toolkit
+and allow the 'go-arg' command line args to override the defaults
 
 ### func [LoadToolkit](/plugin.go#L50)
 
-`func LoadToolkit(name string) bool`
+`func LoadToolkit(name string) *aplug`
 
 loads and initializes a toolkit (andlabs/ui, gocui, etc)
 
@@ -159,7 +162,7 @@ This should not pass a function
 
 `func ShowDebugValues()`
 
-### func [StandardExit](/main.go#L255)
+### func [StandardExit](/main.go#L262)
 
 `func StandardExit()`
 
@@ -248,11 +251,11 @@ func main() {
 You get a window
 ```
 
-#### func [Start](/main.go#L98)
+#### func [Start](/main.go#L97)
 
 `func Start() *Node`
 
-#### func [StartS](/main.go#L180)
+#### func [StartS](/main.go#L178)
 
 `func StartS(name string) *Node`
 
