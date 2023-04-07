@@ -142,6 +142,13 @@ func (n *Node) doUserEvent(a toolkit.Action) {
 			return
 		}
 		n.Custom()
+	case toolkit.Window:
+		log(logNow, "doUserEvent() window =", n.id, n.Name)
+		if (n.Custom == nil) {
+			log(debugError, "Custom() = nil. SKIPPING")
+			return
+		}
+		n.Custom()
 	default:
 		log(logNow, "doUserEvent() type =", n.WidgetType)
 	}

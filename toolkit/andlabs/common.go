@@ -6,10 +6,10 @@ import (
 
 func (t *andlabsT) commonChange(tw *toolkit.Widget, wId int) {
 	log(debugChange, "commonChange() START widget   =", t.Name, t.WidgetType)
-	if (sendToChan(wId)) {
-		log(debugChange, "commonChange() END attempted channel worked", t.Name, t.WidgetType)
-		return
-	}
+//	if (sendToChan(wId)) {
+//		log(debugChange, "commonChange() END attempted channel worked", t.Name, t.WidgetType)
+//		return
+//	}
 	if (tw == nil) {
 		log(true, "commonChange() What the fuck. there is no widget t.tw == nil")
 		return
@@ -28,11 +28,20 @@ func (t *andlabsT) commonChange(tw *toolkit.Widget, wId int) {
 	log(debugChange, "commonChange() END   Widget.Custom()", t.Name, t.WidgetType)
 }
 
-func sendToChan(i int) bool {
+func (t *andlabsT) doUserEvent() {
 	if (callback == nil) {
-		log(debugError, "commonChange() SHOULD SEND int back here, but callback == nil", i)
-		return false
+		log(debugError, "douserEvent() callback == nil", t.wId)
+		return
 	}
-	log(debugError, "commonChange() Running callback() i =", i)
-	return callback(i)
+	var a toolkit.Action
+	a.WidgetId = t.wId
+	a.Name = t.Name
+	a.S = t.s
+	a.I = t.i
+	a.B = t.b
+	a.ActionType = toolkit.User
+	log(logNow, "START: send a user event to the callback channel")
+	callback <- a
+	log(logNow, "END:   sent a user event to the callback channel")
+	return
 }

@@ -2,7 +2,7 @@ package main
 
 import (
 	"embed"
-	// "git.wit.org/wit/gui/toolkit"
+	"git.wit.org/wit/gui/toolkit"
 
 	"github.com/andlabs/ui"
 	// the _ means we only need this for the init()
@@ -20,6 +20,11 @@ func Main(f func()) {
 		// NewWindow2("helloworld2", 200, 100)
 		f()
 	})
+}
+
+// this sets the channel to send user events back from the plugin
+func Callback(guiCallback chan toolkit.Action) {
+	callback = guiCallback
 }
 
 // Other goroutines must use this to access the GUI

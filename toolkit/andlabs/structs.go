@@ -6,7 +6,8 @@ import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
 var andlabs map[int]*andlabsT
-var callback func(int) bool
+// var callback func(int) bool
+var callback chan toolkit.Action
 
 // stores the raw toolkit internals
 type andlabsT struct {

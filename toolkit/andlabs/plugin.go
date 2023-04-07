@@ -31,12 +31,14 @@ func Action(a *toolkit.Action) {
 		rawAction(a)
 	}
 
+	/*
 	if (callback == nil) {
 		if (a.Callback != nil) {
 			log(debugNow, "setting Callback", a.Callback)
 			callback = a.Callback
 		}
 	}
+	*/
 
 	// f()
 	Queue(f)
