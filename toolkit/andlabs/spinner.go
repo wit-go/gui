@@ -20,8 +20,8 @@ func (t *andlabsT) newSpinner(a *toolkit.Action) *andlabsT {
 	newt.WidgetType = toolkit.Spinner
 
 	s.OnChanged(func(s *ui.Spinbox) {
-		newt.tw.I = newt.uiSpinbox.Value()
-		newt.commonChange(newt.tw, a.WidgetId)
+		newt.i = newt.uiSpinbox.Value()
+		newt.doUserEvent()
 	})
 
 	return &newt

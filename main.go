@@ -124,31 +124,48 @@ func watchCallback() {
 	}
 }
 
+func (n *Node) doCustom() {
+	log(logNow, "doUserEvent() widget =", n.id, n.Name, n.WidgetType, n.B)
+	if (n.Custom == nil) {
+		log(debugError, "Custom() = nil. SKIPPING")
+		return
+	}
+	n.Custom()
+}
+
 func (n *Node) doUserEvent(a toolkit.Action) {
 	log(logNow, "doUserEvent() node =", n.id, n.Name)
 	switch n.WidgetType {
 	case toolkit.Checkbox:
 		n.B = a.B
-		log(logNow, "doUserEvent() Check =", n.id, n.Name, n.B)
-		if (n.Custom == nil) {
-			log(debugError, "Custom() = nil. SKIPPING")
-			return
-		}
-		n.Custom()
+		log(logNow, "doUserEvent() node =", n.id, n.Name, "set to:", n.B)
+		n.doCustom()
 	case toolkit.Button:
-		log(logNow, "doUserEvent() button =", n.id, n.Name)
-		if (n.Custom == nil) {
-			log(debugError, "Custom() = nil. SKIPPING")
-			return
-		}
-		n.Custom()
+		log(logNow, "doUserEvent() node =", n.id, n.Name, "button clicked")
+		n.doCustom()
+	case toolkit.Combobox:
+		n.S = a.S
+		log(logNow, "doUserEvent() node =", n.id, n.Name, "set to:", n.S)
+		n.doCustom()
+	case toolkit.Dropdown:
+		n.S = a.S
+		log(logNow, "doUserEvent() node =", n.id, n.Name, "set to:", n.S)
+		n.doCustom()
+	case toolkit.Textbox:
+		n.S = a.S
+		log(logNow, "doUserEvent() node =", n.id, n.Name, "set to:", n.S)
+		n.doCustom()
+	case toolkit.Spinner:
+		n.I = a.I
+		log(logNow, "doUserEvent() node =", n.id, n.Name, "set to:", n.I)
+		n.doCustom()
+	case toolkit.Slider:
+		n.I = a.I
+		log(logNow, "doUserEvent() node =", n.id, n.Name, "set to:", n.I)
+		n.doCustom()
 	case toolkit.Window:
-		log(logNow, "doUserEvent() window =", n.id, n.Name)
-		if (n.Custom == nil) {
-			log(debugError, "Custom() = nil. SKIPPING")
-			return
-		}
-		n.Custom()
+		log(logNow, "doUserEvent() node =", n.id, n.Name, "window closed")
+		n.doCustom()
 	default:
 		log(logNow, "doUserEvent() type =", n.WidgetType)
 	}

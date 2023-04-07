@@ -28,8 +28,8 @@ func (t *andlabsT) newDropdown(a *toolkit.Action) *andlabsT {
 			log(debugChange, "make map didn't work")
 			newt.text = "error"
 		}
-		newt.tw.S = newt.val[i]
-		newt.commonChange(newt.tw, a.WidgetId)
+		newt.s = newt.val[i]
+		newt.doUserEvent()
 	})
 
 	return &newt

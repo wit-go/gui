@@ -8,10 +8,8 @@ import (
 
 func (t *andlabsT) newCombobox(a *toolkit.Action) *andlabsT {
 	var newt andlabsT
-	w := a.Widget
 	log(debugToolkit, "newCombobox() START", a.Name)
 
-	newt.tw = w
 	newt.wId = a.WidgetId
 	newt.WidgetType = a.WidgetType
 	s := ui.NewEditableCombobox()
@@ -23,8 +21,8 @@ func (t *andlabsT) newCombobox(a *toolkit.Action) *andlabsT {
 	newt.val = make(map[int]string)
 
 	s.OnChanged(func(spin *ui.EditableCombobox) {
-		newt.tw.S = spin.Text()
-		newt.commonChange(newt.tw, a.WidgetId)
+		newt.s = spin.Text()
+		newt.doUserEvent()
 	})
 
 	return &newt

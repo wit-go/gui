@@ -23,14 +23,15 @@ func newButton(a *toolkit.Action) {
 	b = ui.NewButton(a.Text)
 	newt.uiButton = b
 	newt.uiControl = b
-	newt.tw = a.Widget
+	newt.wId = a.WidgetId
+	// newt.tw = a.Widget
 	newt.WidgetType = a.WidgetType
 	newt.parent = t
 
+	place(a, t, newt)
+
 	b.OnClicked(func(*ui.Button) {
-		newt.commonChange(newt.tw, a.WidgetId)
+		newt.doUserEvent()
 	})
 
-	place(a, t, newt)
-	// mapWidgetsToolkits(a, newt)
 }

@@ -20,9 +20,9 @@ func (t *andlabsT) newCheckbox(a *toolkit.Action) *andlabsT {
 	newt.uiControl = newt.uiCheckbox
 
 	newt.uiCheckbox.OnToggled(func(spin *ui.Checkbox) {
-		newt.tw.B = newt.checked()
+		newt.b = newt.checked()
 		log(debugChange, "val =", newt.tw.B)
-		newt.commonChange(newt.tw, a.WidgetId)
+		newt.doUserEvent()
 	})
 
 	return &newt

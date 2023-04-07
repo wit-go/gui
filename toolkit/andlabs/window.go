@@ -27,7 +27,6 @@ func newWindow(a *toolkit.Action) {
 	win.SetBorderless(canvas)
 	win.SetMargined(margin)
 	win.OnClosing(func(*ui.Window) bool {
-		// newt.commonChange(newt.tw, a.WidgetId)
 		newt.doUserEvent()
 		return true
 	})

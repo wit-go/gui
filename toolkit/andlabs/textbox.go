@@ -21,7 +21,6 @@ func (t *andlabsT) newTextbox(w *toolkit.Widget) *andlabsT {
 	c.OnChanged(func(spin *ui.MultilineEntry) {
 		t.s = spin.Text()
 		// this is still dangerous
-		// newt.commonChange(newt.tw)
 		log(debugChange, "Not yet safe to trigger on change for ui.MultilineEntry")
 	})
 	return &newt

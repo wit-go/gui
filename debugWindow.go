@@ -110,10 +110,10 @@ func dropdownWindow(p *Node) {
 
 	dd := p.NewDropdown("Window Dropdown")
 	dd.Custom = func() {
-		name := dd.widget.S
+		name := dd.S
 		activeWidget = mapWindows[name]
 		setActiveWidget(activeWidget)
-		log("The Window was set to", name)
+		log(true, "The Window was set to", name)
 	}
 	log(debugGui, "dd =", dd)
 	if (activeWidget == nil) {

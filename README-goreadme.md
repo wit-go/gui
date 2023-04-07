@@ -137,7 +137,7 @@ Creates a window helpful for debugging this package
 
 loads and initializes a toolkit (andlabs/ui, gocui, etc)
 
-### func [Main](/main.go#L177)
+### func [Main](/main.go#L194)
 
 `func Main(f func())`
 
@@ -159,7 +159,7 @@ This should not pass a function
 
 `func ShowDebugValues()`
 
-### func [StandardExit](/main.go#L238)
+### func [StandardExit](/main.go#L255)
 
 `func StandardExit()`
 
@@ -252,7 +252,7 @@ You get a window
 
 `func Start() *Node`
 
-#### func [StartS](/main.go#L163)
+#### func [StartS](/main.go#L180)
 
 `func StartS(name string) *Node`
 

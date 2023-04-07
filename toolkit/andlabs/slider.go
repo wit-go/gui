@@ -19,8 +19,8 @@ func (t *andlabsT) newSlider(a *toolkit.Action) *andlabsT {
 	newt.wId = a.WidgetId
 
 	s.OnChanged(func(spin *ui.Slider) {
-		newt.tw.I = newt.uiSlider.Value()
-		newt.commonChange(newt.tw, a.WidgetId)
+		newt.i = newt.uiSlider.Value()
+		newt.doUserEvent()
 	})
 
 	return &newt
