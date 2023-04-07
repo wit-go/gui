@@ -130,10 +130,6 @@ func (n *Node) dumpWidget(b bool) string {
 	}
 	info = n.WidgetType.String()
 
-	if (n.WidgetType == toolkit.Checkbox) {
-		info += " = " + strconv.FormatBool(n.widget.B)
-	}
-
 	d = strconv.Itoa(n.id) + " " + info
 
 	var tabs string

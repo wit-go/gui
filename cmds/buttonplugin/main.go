@@ -44,6 +44,8 @@ func main() {
 	})
 	log.Println("Main() END")
 	time.Sleep(1 * time.Second)
+	gui.StartS("gocui")
+	gui.Redraw("gocui")
 	gui.Watchdog()
 	gui.StandardExit()
 }
