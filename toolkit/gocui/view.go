@@ -54,6 +54,10 @@ func (w *cuiWidget) drawView() {
 		}
 	}
 
+	if (me.baseGui == nil) {
+		log(logError, "drawView() ERROR: me.baseGui == nil", w)
+		return
+	}
 	v, _ := me.baseGui.View(w.cuiName)
 	if (v != nil) {
 		log(logError, "drawView() already defined for name", w.cuiName)

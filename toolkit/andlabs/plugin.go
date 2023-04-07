@@ -23,24 +23,28 @@ func Send(p *toolkit.Widget, c *toolkit.Widget) {
 }
 
 func Action(a *toolkit.Action) {
+	log(logNow, "Action() START")
 	if (a == nil) {
 		log(debugPlugin, "Action = nil")
 		return
 	}
+	pluginChan <- *a
+	/*
 	f := func() {
 		rawAction(a)
 	}
 
 	// f()
 	Queue(f)
+	*/
+	log(logNow, "Action() END")
 }
 
 func rawAction(a *toolkit.Action) {
+	log(debugAction, "rawAction() START a.ActionType =", a.ActionType)
+	log(debugAction, "rawAction() START a.S =", a.S)
 
-	log(debugAction, "Action() START a.ActionType =", a.ActionType)
-	log(debugAction, "Action() START a.S =", a.S)
-
-	log(logInfo, "Action() START a.WidgetId =", a.WidgetId, "a.ParentId =", a.ParentId)
+	log(logNow, "rawAction() START a.WidgetId =", a.WidgetId, "a.ParentId =", a.ParentId)
 	switch a.WidgetType {
 	case toolkit.Flag:
 		flag(a)
@@ -87,12 +91,12 @@ func rawAction(a *toolkit.Action) {
 	case toolkit.Delete:
 		uiDelete(a)
 	case toolkit.Move:
-		log(debugNow, "attempt to move() =", a.ActionType, a.WidgetType)
+		log(debugNow, "rawAction() attempt to move() =", a.ActionType, a.WidgetType)
 		move(a)
 	default:
-		log(debugError, "Action() Unknown =", a.ActionType, a.WidgetType)
+		log(debugError, "rawAction() Unknown =", a.ActionType, a.WidgetType)
 	}
-	log(debugAction, "Action() END =", a.ActionType, a.WidgetType)
+	log(debugAction, "rawAction() END =", a.ActionType, a.WidgetType)
 }
 
 func flag(a *toolkit.Action) {

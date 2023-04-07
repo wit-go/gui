@@ -37,7 +37,7 @@ func (n *Node) Redraw(p *aplug) {
 }
 
 func (n *Node) redo(p *aplug) {
-	log(logNow, "redo()", n.id, n.WidgetType, n.Name)
+	log(logNow, "redo()", p.name, n.id, n.WidgetType, n.Name)
 
 	var a *toolkit.Action
 	a = new(toolkit.Action)
