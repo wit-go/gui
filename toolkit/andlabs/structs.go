@@ -20,7 +20,7 @@ type andlabsT struct {
 	Width  int
 	Height int
 
-	tw	*toolkit.Widget
+	// tw	*toolkit.Widget
 	parent	*andlabsT
 
 	uiControl ui.Control

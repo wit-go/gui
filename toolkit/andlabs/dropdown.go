@@ -8,10 +8,8 @@ import (
 
 func (t *andlabsT) newDropdown(a *toolkit.Action) *andlabsT {
 	var newt andlabsT
-	w := a.Widget
 	log(debugToolkit, "gui.Toolbox.newDropdown() START", a.Name)
 
-	newt.tw = w
 	newt.WidgetType = a.WidgetType
 	newt.wId = a.WidgetId
 	s := ui.NewCombobox()
@@ -35,7 +33,7 @@ func (t *andlabsT) newDropdown(a *toolkit.Action) *andlabsT {
 	return &newt
 }
 
-func (t *andlabsT) AddDropdownName(title string) {
+func (t *andlabsT) addDropdownName(title string) {
 	t.uiCombobox.Append(title)
 	if (t.val == nil) {
 		log(debugToolkit, "make map didn't work")
@@ -64,7 +62,7 @@ func AddDropdownName(a *toolkit.Action) {
 		listMap(debugToolkit)
 		return
 	}
-	t.AddDropdownName(a.S)
+	t.addDropdownName(a.S)
 }
 
 func SetDropdownName(a *toolkit.Action, s string) {
@@ -78,7 +76,7 @@ func SetDropdownName(a *toolkit.Action, s string) {
 	}
 	t.SetDropdown(1)
 	// TODO: send back to wit/gui goroutine with the chan
-	t.tw.S = s
+	t.s = s
 }
 
 func newDropdown(a *toolkit.Action) {

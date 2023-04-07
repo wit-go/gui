@@ -31,15 +31,6 @@ func Action(a *toolkit.Action) {
 		rawAction(a)
 	}
 
-	/*
-	if (callback == nil) {
-		if (a.Callback != nil) {
-			log(debugNow, "setting Callback", a.Callback)
-			callback = a.Callback
-		}
-	}
-	*/
-
 	// f()
 	Queue(f)
 }
@@ -48,7 +39,6 @@ func rawAction(a *toolkit.Action) {
 
 	log(debugAction, "Action() START a.ActionType =", a.ActionType)
 	log(debugAction, "Action() START a.S =", a.S)
-	log(debugAction, "Action() START a.Widget =", a.Widget)
 
 	log(logInfo, "Action() START a.WidgetId =", a.WidgetId, "a.ParentId =", a.ParentId)
 	switch a.WidgetType {
@@ -61,21 +51,21 @@ func rawAction(a *toolkit.Action) {
 	case toolkit.Add:
 		add(a)
 	case toolkit.Show:
-		a.Widget.B = true
+		a.B = true
 		show(a)
 	case toolkit.Hide:
-		a.Widget.B = false
+		a.B = false
 		show(a)
 	case toolkit.Enable:
-		a.Widget.B = true
+		a.B = true
 		enable(a)
 	case toolkit.Disable:
-		a.Widget.B = false
+		a.B = false
 		enable(a)
 	case toolkit.Get:
 		setText(a)
 	case toolkit.GetText:
-		switch a.Widget.Type {
+		switch a.WidgetType {
 		case toolkit.Textbox:
 			t := andlabs[a.WidgetId]
 			a.S = t.s
@@ -97,12 +87,12 @@ func rawAction(a *toolkit.Action) {
 	case toolkit.Delete:
 		uiDelete(a)
 	case toolkit.Move:
-		log(debugNow, "attempt to move() =", a.ActionType, a.Widget)
+		log(debugNow, "attempt to move() =", a.ActionType, a.WidgetType)
 		move(a)
 	default:
-		log(debugError, "Action() Unknown =", a.ActionType, a.Widget)
+		log(debugError, "Action() Unknown =", a.ActionType, a.WidgetType)
 	}
-	log(debugAction, "Action() END =", a.ActionType, a.Widget)
+	log(debugAction, "Action() END =", a.ActionType, a.WidgetType)
 }
 
 func flag(a *toolkit.Action) {
@@ -153,11 +143,11 @@ func setText(a *toolkit.Action) {
 		case toolkit.SetText:
 			t.uiCheckbox.SetText(a.S)
 		case toolkit.Get:
-			t.tw.B = t.uiCheckbox.Checked()
+			t.b = t.uiCheckbox.Checked()
 		case toolkit.Set:
 			// TODO: commented out while working on chan
-			// t.uiCheckbox.SetChecked(a.B)
-			t.tw.B = a.B
+			t.b = a.B
+			t.uiCheckbox.SetChecked(t.b)
 		default:
 			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.Name)
 		}
@@ -167,10 +157,6 @@ func setText(a *toolkit.Action) {
 			t.uiMultilineEntry.SetText(a.S)
 		case toolkit.SetText:
 			t.uiMultilineEntry.SetText(a.S)
-		case toolkit.Get:
-			t.tw.S = t.s
-		case toolkit.GetText:
-			t.tw.S = t.s
 		default:
 			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.Name)
 		}
@@ -181,7 +167,7 @@ func setText(a *toolkit.Action) {
 	case toolkit.Slider:
 		switch a.ActionType {
 		case toolkit.Get:
-			t.tw.I = t.uiSlider.Value()
+			t.i = t.uiSlider.Value()
 		case toolkit.Set:
 			t.uiSlider.SetValue(a.I)
 		default:
@@ -190,7 +176,7 @@ func setText(a *toolkit.Action) {
 	case toolkit.Spinner:
 		switch a.ActionType {
 		case toolkit.Get:
-			t.tw.I = t.uiSpinbox.Value()
+			t.i = t.uiSpinbox.Value()
 		case toolkit.Set:
 			t.uiSpinbox.SetValue(a.I)
 		default:
@@ -211,7 +197,7 @@ func setText(a *toolkit.Action) {
 				log(debugChange, "i, s", i, s)
 				if (a.S == s) {
 					t.uiCombobox.SetSelected(i)
-					log(debugChange, "setText() Dropdown worked.", t.tw.S)
+					log(debugChange, "setText() Dropdown worked.", t.s)
 					return
 				}
 			}
@@ -225,9 +211,9 @@ func setText(a *toolkit.Action) {
 				t.uiCombobox.SetSelected(i)
 			}
 		case toolkit.Get:
-			t.tw.S = t.s
+			// t.S = t.s
 		case toolkit.GetText:
-			t.tw.S = t.s
+			// t.S = t.s
 		default:
 			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.Name)
 		}
@@ -241,10 +227,6 @@ func setText(a *toolkit.Action) {
 		case toolkit.SetText:
 			t.uiEditableCombobox.SetText(a.S)
 			t.s = a.S
-		case toolkit.Get:
-			t.tw.S = t.s
-		case toolkit.GetText:
-			t.tw.S = t.s
 		default:
 			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.Name)
 		}

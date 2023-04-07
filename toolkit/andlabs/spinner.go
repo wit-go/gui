@@ -9,13 +9,10 @@ import (
 
 func (t *andlabsT) newSpinner(a *toolkit.Action) *andlabsT {
 	var newt andlabsT
-	w := a.Widget
-	// log(debugToolkit, "newSpinner()", w.X, w.Y)
 
 	s := ui.NewSpinbox(a.X, a.Y)
 	newt.uiSpinbox = s
 	newt.uiControl = s
-	newt.tw = w
 	newt.wId = a.WidgetId
 	newt.WidgetType = toolkit.Spinner
 

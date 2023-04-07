@@ -251,21 +251,15 @@ func loadfile(filename string) *plugin.Plugin {
 	return plug
 }
 
-// Sends a widget and what to do with it to the plugin
-// parent = n, child = c
-
-// THIS COPIES THE WIDGET STRUCT 2023/03/16 as it's not crashing. Queue() is also being used
-// never mind that comment. no it doesn't
+// 2023/04/06 Queue() is also being used and channels are being used. memcopy() only
 func newaction(a *toolkit.Action, n *Node, where *Node) {
 	if (n != nil) {
-		a.Widget = &n.widget
 		a.WidgetId = n.id
 		a.WidgetType = n.widget.Type
 		a.ActionType = a.ActionType
 	}
-	// action(&a, newNode, n)
-	// newaction(&a, newNode, n)
 
+	// TODO: redo this grid logic
 	if (where != nil) {
 		log(debugGui, "Action() START on where X,Y, Next X,Y =", where.Name, where.X, where.Y, where.NextX, where.NextY)
 		a.ParentId = where.id

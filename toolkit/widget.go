@@ -53,8 +53,7 @@ type Action struct {
 
 	// this should be the widget
 	// if the action is New, Hide, Enable, etc
-	Widget *Widget
-	Callback  func(int) bool
+	// Widget *Widget
 
 	// This is how the values are passed back and forth
 	// values from things like checkboxes & dropdown's

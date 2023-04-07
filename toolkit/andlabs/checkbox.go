@@ -8,9 +8,7 @@ import (
 
 func (t *andlabsT) newCheckbox(a *toolkit.Action) *andlabsT {
 	var newt andlabsT
-	w := a.Widget
 	log(debugToolkit, "newCheckbox()", a.Name, a.WidgetType)
-	newt.tw = w
 	newt.WidgetType = a.WidgetType
 	newt.wId = a.WidgetId
 	newt.Name = a.Name
@@ -21,7 +19,7 @@ func (t *andlabsT) newCheckbox(a *toolkit.Action) *andlabsT {
 
 	newt.uiCheckbox.OnToggled(func(spin *ui.Checkbox) {
 		newt.b = newt.checked()
-		log(debugChange, "val =", newt.tw.B)
+		log(debugChange, "val =", newt.b)
 		newt.doUserEvent()
 	})
 

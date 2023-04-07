@@ -8,26 +8,26 @@ import (
 )
 
 // func newTextbox(a *toolkit.Action) {
-func (t *andlabsT) newTextbox(w *toolkit.Widget) *andlabsT {
+func (t *andlabsT) newTextbox() *andlabsT {
 	var newt andlabsT
 
 	c := ui.NewNonWrappingMultilineEntry()
 	newt.uiMultilineEntry = c
 	newt.uiControl = c
 
-	newt.tw = w
 	newt.WidgetType = toolkit.Textbox
 
 	c.OnChanged(func(spin *ui.MultilineEntry) {
-		t.s = spin.Text()
+		newt.s = spin.Text()
 		// this is still dangerous
 		log(debugChange, "Not yet safe to trigger on change for ui.MultilineEntry")
+		newt.s = spin.Text()
+		newt.doUserEvent()
 	})
 	return &newt
 }
 
 func newTextbox(a *toolkit.Action) {
-	w := a.Widget
 	log(debugToolkit, "newCombobox()", a.Name)
 
 	t := andlabs[a.ParentId]
@@ -36,7 +36,8 @@ func newTextbox(a *toolkit.Action) {
 		listMap(debugToolkit)
 		return
 	}
-	newt := t.newTextbox(w)
+	newt := t.newTextbox()
 	newt.Name = a.Name
+	newt.wId = a.WidgetId
 	place(a, t, newt)
 }

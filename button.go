@@ -9,8 +9,6 @@ func (n *Node) NewButton(name string, custom func()) *Node {
 	a.Name = name
 	a.Text = name
 	a.ActionType = toolkit.Add
-	// deprecate this once andlabs is refactored
-	a.Callback = callback
 	newaction(&a, newNode, n)
 
 	return newNode

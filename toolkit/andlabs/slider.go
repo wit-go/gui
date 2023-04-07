@@ -9,12 +9,10 @@ import (
 
 func (t *andlabsT) newSlider(a *toolkit.Action) *andlabsT {
 	var newt andlabsT
-	w := a.Widget
 
 	s := ui.NewSlider(a.X, a.Y)
 	newt.uiSlider = s
 	newt.uiControl = s
-	newt.tw = w
 	newt.WidgetType = toolkit.Slider
 	newt.wId = a.WidgetId
 

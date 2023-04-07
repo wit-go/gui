@@ -1,6 +1,6 @@
 package main
 
-import "git.wit.org/wit/gui/toolkit"
+// import "git.wit.org/wit/gui/toolkit"
 
 var defaultBehavior bool = true
 
@@ -81,26 +81,6 @@ func (t *andlabsT) Dump(b bool) {
 	if (t.uiCheckbox != nil) {
 		log(b, "uiCheckbox  =", t.uiCheckbox)
 	}
-	widgetDump(b, t.tw)
-}
-
-func widgetDump(b bool, w *toolkit.Widget) {
-	if (w == nil) {
-		log(b, "widget = nil")
-		return
-	}
-
-	/*
-	log(b, "widget.Name        =", w.Name)
-	log(b, "widget.Type        =", w.Type)
-	log(b, "widget.Custom      =", w.Custom)
-	log(b, "widget.B           =", w.B)
-	log(b, "widget.I           =", w.I)
-	log(b, "widget.Width       =", w.Width)
-	log(b, "widget.Height      =", w.Height)
-	log(b, "widget.X           =", w.X)
-	log(b, "widget.Y           =", w.Y)
-	*/
 }
 
 /*
