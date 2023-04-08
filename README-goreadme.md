@@ -134,7 +134,7 @@ Creates a window helpful for debugging this package
 TODO: add logic to just load the 1st 'most common' gui toolkit
 and allow the 'go-arg' command line args to override the defaults
 
-### func [LoadToolkit](/plugin.go#L66)
+### func [LoadToolkit](/plugin.go#L68)
 
 `func LoadToolkit(name string) *aplug`
 
@@ -162,7 +162,7 @@ This should not pass a function
 
 `func ShowDebugValues()`
 
-### func [StandardExit](/main.go#L264)
+### func [StandardExit](/main.go#L273)
 
 `func StandardExit()`
 

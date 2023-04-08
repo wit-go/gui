@@ -48,6 +48,8 @@ type aplug struct {
 	// add button request
 	pluginChan chan toolkit.Action
 
+	PluginChannel func() chan toolkit.Action
+
 	// deprecate all this
 	// TODO: make Main() main() and never allow the user to call it
 	// run plugin.Main() when the plugin is loaded
@@ -104,7 +106,13 @@ func LoadToolkit(name string) *aplug {
 	// Sends a widget (button, checkbox, etc) and it's parent widget
 	newPlug.Action = loadFuncA(newPlug, "Action")
 
-	newPlug.Callback = loadCallback(newPlug, "Callback")
+	// this tells the toolkit plugin how to send user events back to us
+	// for things like: the user clicked on the 'Check IPv6'
+	newPlug.Callback = sendCallback(newPlug, "Callback")
+
+	// this let's us know where to send requests to the toolkit
+	// for things like: add a new button called 'Check IPv6'
+	newPlug.PluginChannel = getPluginChannel(newPlug, "PluginChannel")
 
 	allPlugins = append(allPlugins, newPlug)
 
@@ -136,7 +144,27 @@ func loadFuncE(p *aplug, funcName string) func() {
 	return newfunc
 }
 
-func loadCallback(p *aplug, funcName string) func(chan toolkit.Action) {
+//	newPlug.PluginChannel = getPluginChannel(newPlug, "PluginChannel")
+func getPluginChannel(p *aplug, funcName string) func() chan toolkit.Action {
+	var newfunc func() chan toolkit.Action
+	var ok bool
+	var test plugin.Symbol
+
+	test, err = p.plug.Lookup(funcName)
+	if err != nil {
+		log(debugGui, "DID NOT FIND: name =", test, "err =", err)
+		return nil
+	}
+
+	newfunc, ok = test.(func() chan toolkit.Action)
+	if !ok {
+		log(debugGui, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
+		return nil
+	}
+	return newfunc
+}
+
+func sendCallback(p *aplug, funcName string) func(chan toolkit.Action) {
 	var newfunc func(chan toolkit.Action)
 	var ok bool
 	var test plugin.Symbol
@@ -307,7 +335,14 @@ func newaction(a *toolkit.Action, n *Node, where *Node) {
 			log(debugPlugin, "Failed Action() == nil for", aplug.name)
 			continue
 		}
-		aplug.Action(a)
+		if (aplug.pluginChan == nil) {
+			aplug.Action(a)
+		} else {
+			log(debugNow, "Action() SEND pluginChan")
+			log(debugNow, "Action() SEND pluginChan")
+			log(debugNow, "Action() SEND pluginChan")
+			aplug.pluginChan <- *a
+		}
 	}
 	// increment where to put the next widget in a grid or table
 	if (where != nil) {

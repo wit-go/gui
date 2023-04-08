@@ -218,12 +218,21 @@ func Main(f func()) {
 		}
 		aplug.MainOk = true
 		if (aplug.Callback == nil) {
-			// TODO: don't load the module if this failed
+			// TODO: don't load the module if this failed ?
 			// if Callback() isn't set in the plugin, no information can be sent to it!
-			log(debugError, "SERIOUS ERROR: Callback() == nil. nothing will work for plugin", aplug.name)
+			log(debugError, "SERIOUS ERROR: plugin Callback() == nil. nothing will work for toolkit", aplug.name)
 		} else {
 			aplug.Callback(Config.guiChan)
 		}
+
+		if (aplug.PluginChannel == nil) {
+			// TODO: don't load the module if this failed ?
+			// if Callback() isn't set in the plugin, no information can be sent to it!
+			log(debugError, "ERROR: plugin does not implement a send channel. toolkit =", aplug.name)
+		} else {
+			aplug.pluginChan = aplug.PluginChannel()
+		}
+
 		aplug.Main(f)
 	}
 
