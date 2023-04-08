@@ -144,15 +144,11 @@ and allow the 'go-arg' command line args to override the defaults
 
 loads and initializes a toolkit (andlabs/ui, gocui, etc)
 
-### func [Main](/main.go#L197)
+### func [Main](/main.go#L198)
 
 `func Main(f func())`
 
 This should not pass a function
-
-### func [Redraw](/redraw.go#L9)
-
-`func Redraw(s string)`
 
 ### func [SetDebug](/debug.go#L28)
 
@@ -166,7 +162,7 @@ This should not pass a function
 
 `func ShowDebugValues()`
 
-### func [StandardExit](/main.go#L250)
+### func [StandardExit](/main.go#L251)
 
 `func StandardExit()`
 

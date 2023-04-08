@@ -6,32 +6,15 @@ import (
 
 // This recreates the whole GUI for a plugin
 
-func Redraw(s string) {
-	var p *aplug
-	log(logNow, "attempt to feed the binary tree to", s)
-	for _, aplug := range allPlugins {
-		log("Loaded plugin:", aplug.name, aplug.filename)
-		if (aplug.name == s) {
-			log("Found plugin:", aplug.name, aplug.filename)
-			p = aplug
-		}
-	}
-	if (p == nil) {
-		log("Plugin", s, "is not loaded")
-		return
-	}
-	Config.rootNode.Redraw(p)
-}
-
 // func (n *Node) ListChildren(dump bool, dropdown *Node, mapNodes map[string]*Node) {
-func (n *Node) Redraw(p *aplug) {
+func (n *Node) redraw(p *aplug) {
 	if (n == nil) {
 		return
 	}
 
 	n.redo(p)
 	for _, child := range n.children {
-		child.Redraw(p)
+		child.redraw(p)
 	}
 	return
 }
@@ -48,8 +31,7 @@ func (n *Node) redo(plug *aplug) {
 	a.WidgetType = n.WidgetType
 	a.WidgetId = n.id
 
-
-	// used for Windows
+	// used for new Windows
 	a.Width = n.Width
 	a.Height = n.Height
 
@@ -57,7 +39,7 @@ func (n *Node) redo(plug *aplug) {
 	a.X = n.X
 	a.Y = n.Y
 
-	// used for grids and tables
+	// implement here for grids and tables ?
 //	a.NextX = n.NextX
 //	a.NextY = n.NextY
 
@@ -72,16 +54,6 @@ func (n *Node) redo(plug *aplug) {
 		a.ParentId = n.parent.id
 	}
 
-	plug.pluginChan = plug.PluginChannel()
-
-	// plug.Action(a)
-	if (plug.pluginChan == nil) {
-		log(debugNow, "Action() ERRRRRRROR pluginChan == nil", plug.name)
-	} else {
-		log(debugNow, "Action() SEND pluginChan", plug.name)
-		log(debugNow, "Action() SEND pluginChan", plug.name)
-		log(debugNow, "Action() SEND pluginChan", plug.name)
-		plug.pluginChan <- *a
-	}
+	plug.pluginChan <- *a
 	sleep(.5)
 }

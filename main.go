@@ -184,12 +184,13 @@ func startS(name string) *Node {
 	if (aplug == nil) {
 		return Config.rootNode
 	}
+	/*
 	// will this really work on mswindows & macos?
 	f := func() {
 	}
 	go Main(f)
+	*/
 	sleep(1) // temp hack until chan communication is setup
-	Config.rootNode.Redraw(aplug)
 	return Config.rootNode
 }
 
@@ -203,8 +204,8 @@ func Main(f func()) {
 	if (os.Getenv("DISPLAY") == "") {
 		InitPlugins([]string{"gocui"})
 	} else {
-		InitPlugins([]string{"andlabs", "gocui"})
-		// InitPlugins([]string{"gocui", "andlabs"})
+		// InitPlugins([]string{"andlabs", "gocui"})
+		InitPlugins([]string{"gocui", "andlabs"})
 	}
 
 	for _, aplug := range allPlugins {

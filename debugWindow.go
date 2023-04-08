@@ -97,10 +97,6 @@ func (n *Node) DebugTab(title string) *Node {
 		startS("gocui")
 	})
 
-	g2.NewButton("Redraw(gocui)", func () {
-		Redraw("gocui")
-	})
-
 	return newN
 }
 
