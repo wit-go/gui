@@ -23,7 +23,13 @@ type config struct {
 	rootNode *cuiWidget // the base of the binary tree. it should have id == 0
 	ctrlDown *cuiWidget // shown if you click the mouse when the ctrl key is pressed
 
+	// this is the channel we send user events like
+	// mouse clicks or keyboard events back to the program
 	callback chan toolkit.Action
+
+	// this is the channel we get requests to make widgets
+	pluginChan chan toolkit.Action
+
 	helpLabel *gocui.View
 
 	defaultBehavior bool

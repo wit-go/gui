@@ -203,7 +203,8 @@ func Main(f func()) {
 	if (os.Getenv("DISPLAY") == "") {
 		InitPlugins([]string{"gocui"})
 	} else {
-		InitPlugins([]string{"gocui", "andlabs"})
+		InitPlugins([]string{"andlabs", "gocui"})
+		// InitPlugins([]string{"gocui", "andlabs"})
 	}
 
 	for _, aplug := range allPlugins {
@@ -237,30 +238,6 @@ func Main(f func()) {
 	}
 
 }
-
-/*
-This is deprecated and will be implemented more correctly with waitgroups
-
-// This should never be exposed(?)
-
-// Other goroutines must use this to access the GUI
-//
-// You can not acess / process the GUI thread directly from
-// other goroutines. This is due to the nature of how
-// Linux, MacOS and Windows work (they all work differently. suprise. surprise.)
-// For example: gui.Queue(NewWindow())
-func Queue(f func()) {
-	log(debugGui, "Sending function to gui.Main() (using gtk via andlabs/ui)")
-	// toolkit.Queue(f)
-	for _, aplug := range allPlugins {
-		log(debugGui, "NewButton() toolkit plugin =", aplug.name)
-		if (aplug.Queue == nil) {
-			continue
-		}
-		aplug.Queue(f)
-	}
-}
-*/
 
 // The window is destroyed but the application does not quit
 func (n *Node) StandardClose() {

@@ -162,7 +162,7 @@ This should not pass a function
 
 `func ShowDebugValues()`
 
-### func [StandardExit](/main.go#L273)
+### func [StandardExit](/main.go#L250)
 
 `func StandardExit()`
 

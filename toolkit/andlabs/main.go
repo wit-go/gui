@@ -11,6 +11,8 @@ import (
 
 //go:embed resources
 var res embed.FS
+
+// this is the channel we get requests to make widgets
 var pluginChan chan toolkit.Action
 
 func catchActionChannel() {

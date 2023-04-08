@@ -336,14 +336,17 @@ func newaction(a *toolkit.Action, n *Node, where *Node) {
 			continue
 		}
 		if (aplug.pluginChan == nil) {
-			log(debugNow, "Action() SEND old way")
-			log(debugNow, "Action() SEND old way")
-			log(debugNow, "Action() SEND old way")
+			log(debugNow, "Action() SEND old way", aplug.name)
+			log(debugNow, "Action() SEND old way", aplug.name)
+			log(debugNow, "Action() SEND old way", aplug.name)
 			aplug.Action(a)
+			log(debugNow, "Action() SEND trying aplug.PluginChannel()", aplug.name)
+			aplug.pluginChan = aplug.PluginChannel()
+			log(debugNow, "Action() SEND trying aplug.PluginChannel()", aplug.pluginChan)
 		} else {
-			log(debugNow, "Action() SEND pluginChan")
-			log(debugNow, "Action() SEND pluginChan")
-			log(debugNow, "Action() SEND pluginChan")
+			log(debugNow, "Action() SEND pluginChan", aplug.name)
+			log(debugNow, "Action() SEND pluginChan", aplug.name)
+			log(debugNow, "Action() SEND pluginChan", aplug.name)
 			aplug.pluginChan <- *a
 		}
 	}

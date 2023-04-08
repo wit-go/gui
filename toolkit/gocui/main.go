@@ -33,6 +33,23 @@ func Callback(guiCallback chan toolkit.Action) {
 	me.callback = guiCallback
 }
 
+func PluginChannel() chan toolkit.Action {
+	return me.pluginChan
+}
+
+func catchActionChannel() {
+	log(logNow, "makeCallback() START")
+	for {
+		log(logNow, "makeCallback() for loop")
+	    	select {
+		case a := <-me.pluginChan:
+			log(logNow, "makeCallback() SELECT widget id =", a.WidgetId, a.Name)
+			Action(&a)
+			sleep(.1)
+		}
+	}
+}
+
 func Exit() {
 	// TODO: send exit to the plugin
 	me.baseGui.Close()
@@ -50,6 +67,10 @@ func Main(f func()) {
 	setOutput(outf)
 	log("This is a test log entry")
 
+	if (me.pluginChan == nil) {
+		me.pluginChan = make(chan toolkit.Action)
+	}
+	go catchActionChannel()
 	MouseMain()
 	me.baseGui.Close()
 }
