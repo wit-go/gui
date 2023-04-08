@@ -15,7 +15,7 @@ func (t *andlabsT) ErrorWindow(msg1 string, msg2 string) {
 	ui.MsgBoxError(t.uiWindow, msg1, msg2)
 }
 
-func newWindow(a *toolkit.Action) {
+func newWindow(a toolkit.Action) {
 	var newt *andlabsT
 
 	newt = new(andlabsT)
@@ -48,8 +48,4 @@ func (t *andlabsT) SetWindowTitle(title string) {
 		win.SetTitle(title)
 		log(debugToolkit, "Setting the window title", title)
 	}
-}
-
-func doWindow(a *toolkit.Action) {
-	newWindow(a)
 }

@@ -59,7 +59,7 @@ type aplug struct {
 	// simplifies passing to the plugin
 	// Send func(*toolkit.Widget, *toolkit.Widget)
 	// should replace Send()
-	Action func(*toolkit.Action)
+	// Action func(*toolkit.Action)
 }
 
 var allPlugins []*aplug
@@ -104,7 +104,7 @@ func LoadToolkit(name string) *aplug {
 
 	// Sends instructions like "Add", "Delete", "Disable", etc
 	// Sends a widget (button, checkbox, etc) and it's parent widget
-	newPlug.Action = loadFuncA(newPlug, "Action")
+	// newPlug.Action = loadFuncA(newPlug, "Action")
 
 	// this tells the toolkit plugin how to send user events back to us
 	// for things like: the user clicked on the 'Check IPv6'
@@ -332,24 +332,15 @@ func newaction(a *toolkit.Action, n *Node, where *Node) {
 	for _, aplug := range allPlugins {
 		log(debugPlugin, "Action() aplug =", aplug.name, "Action type=", a.ActionType)
 		if (aplug.pluginChan == nil) {
-			log(debugNow, "Action() SEND old way", aplug.name)
-			log(debugNow, "Action() SEND old way", aplug.name)
-			log(debugNow, "Action() SEND old way", aplug.name)
-			if (aplug.Action == nil) {
-				log(debugPlugin, "Failed Action() == nil for", aplug.name)
-				continue
-			}
-			aplug.Action(a)
-			log(debugNow, "Action() SEND trying aplug.PluginChannel()", aplug.name)
+			log(debugNow, "Action() retrieving the aplug.PluginChannel()", aplug.name)
 			aplug.pluginChan = aplug.PluginChannel()
-			log(debugNow, "Action() SEND trying aplug.PluginChannel()", aplug.pluginChan)
-		} else {
-			log(debugNow, "Action() SEND pluginChan", aplug.name)
-			log(debugNow, "Action() SEND pluginChan", aplug.name)
-			log(debugNow, "Action() SEND pluginChan", aplug.name)
-			aplug.pluginChan <- *a
+			log(debugNow, "Action() retrieved", aplug.pluginChan)
 		}
-		sleep(.5)
+		log(debugNow, "Action() SEND pluginChan", aplug.name)
+		log(debugNow, "Action() SEND pluginChan", aplug.name)
+		log(debugNow, "Action() SEND pluginChan", aplug.name)
+		aplug.pluginChan <- *a
+		sleep(.2)
 	}
 	// increment where to put the next widget in a grid or table
 	if (where != nil) {

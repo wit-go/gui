@@ -76,12 +76,7 @@ func (n *Node) redo(plug *aplug) {
 
 	// plug.Action(a)
 	if (plug.pluginChan == nil) {
-		log(debugNow, "Action() SEND old way", plug.name)
-		log(debugNow, "Action() SEND old way", plug.name)
-		log(debugNow, "Action() SEND old way", plug.name)
-		plug.Action(a)
-		log(debugNow, "Action() SEND trying plug.PluginChannel()", plug.name)
-		log(debugNow, "Action() SEND trying plug.PluginChannel()", plug.pluginChan)
+		log(debugNow, "Action() ERRRRRRROR pluginChan == nil", plug.name)
 	} else {
 		log(debugNow, "Action() SEND pluginChan", plug.name)
 		log(debugNow, "Action() SEND pluginChan", plug.name)

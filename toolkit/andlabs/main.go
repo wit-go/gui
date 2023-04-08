@@ -15,6 +15,8 @@ var res embed.FS
 // this is the channel we get requests to make widgets
 var pluginChan chan toolkit.Action
 
+var uiMain bool = false
+
 func catchActionChannel() {
 	log(logNow, "makeCallback() START")
 	for {
@@ -25,11 +27,19 @@ func catchActionChannel() {
 			// go Action(a)
 			if (a.WidgetType == toolkit.Window) {
 				log(logNow, "makeCallback() WINDOW START")
-				go ui.Main( func() {
-					log(logNow, "ui.Main() WINDOW START DOING NOTHING")
-					newWindow(&a)
-					log(logNow, "ui.Main() WINDOW END")
-				})
+				// this is a hack for now
+				// if uiMain == true, ui.Main() has already started
+				if (uiMain) {
+					log(logNow, "WINDOW START newWindow(&a)")
+					newWindow(a)
+				} else {
+					go ui.Main( func() {
+						log(logNow, "ui.Main() WINDOW START DOING NOTHING")
+						newWindow(a)
+						log(logNow, "ui.Main() WINDOW END")
+					})
+					uiMain = true
+				}
 				sleep(.5)
 				log(logNow, "makeCallback() WINDOW END")
 			} else {
@@ -43,7 +53,7 @@ func catchActionChannel() {
 }
 
 func Main(f func()) {
-	log(debugNow, "gui.Main() START (using gtk via andlabs/ui)")
+	log(debugNow, "Main() START (using gtk via andlabs/ui)")
 	f() // support the old way. deprecate this
 }
 
@@ -79,28 +89,11 @@ func Init() {
 	// log(debugToolkit, "gui/toolkit init() Setting defaultBehavior = true")
 	setDefaultBehavior(true)
 
-	// mapWidgets = make(map[*andlabsT]*toolkit.Widget)
-	// mapToolkits = make(map[*toolkit.Widget]*andlabsT)
-
 	andlabs = make(map[int]*andlabsT)
 	pluginChan = make(chan toolkit.Action)
 
-	log(logNow, "Init() ui.Main() start")
+	log(logNow, "Init() start channel reciever")
 	go catchActionChannel()
-	/*
-	ui.Main( func() {
-		log(logNow, "gui.Main() IN (using gtk via andlabs/ui)")
-		var a toolkit.Action
-		a.Name = "jcarr"
-		a.Width = 640
-		a.Height = 480
-		a.WidgetId = 0
-		newWindow(&a)
-		// time.Sleep(1 * time.Second)
-		// NewWindow2("helloworld2", 200, 100)
-		log(logNow, "gui.Main() EXIT (using gtk via andlabs/ui)")
-	})
-	*/
 	log(logNow, "Init() END")
 }
 

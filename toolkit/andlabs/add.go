@@ -29,7 +29,7 @@ func add(a *toolkit.Action) {
 
 	// for now, window gets handled without checking where == nil)
 	if (a.WidgetType == toolkit.Window) {
-		doWindow(a)
+		newWindow(*a)
 		return
 	}
 
@@ -44,7 +44,7 @@ func add(a *toolkit.Action) {
 
 	switch a.WidgetType {
 	case toolkit.Window:
-		doWindow(a)
+		newWindow(*a)
 		return
 	case toolkit.Tab:
 		log(debugError, "add() CAME AT THIS FROM add() =", a.Name)
