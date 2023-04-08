@@ -61,8 +61,8 @@ func (n *Node) NewWindow2(title string) *Node {
 	a.ActionType = toolkit.Add
 	a.Width     = Config.Width
 	a.Height    = Config.Height
-	a.Name      = Config.Title
-	a.Text      = Config.Title
+	a.Name      = title
+	a.Text      = title
 	newaction(&a, newNode, n)
 
 	return newNode

@@ -52,7 +52,7 @@ func (n *Node) AddText(str string) {
 	newaction(&a, n, nil)
 }
 
-func (n *Node) SetText(text string) {
+func (n *Node) SetText(text string) *Node{
 	log(debugChange, "SetText() value =", text)
 
 	n.Text = text
@@ -60,6 +60,7 @@ func (n *Node) SetText(text string) {
 	a.ActionType = toolkit.SetText
 	a.S = text
 	newaction(&a, n, nil)
+	return n
 }
 
 func (n *Node) SetNext(x int, y int) {
@@ -154,52 +155,57 @@ func commonCallback(n *Node) {
 	}
 }
 
-func (n *Node) Margin() {
+func (n *Node) Margin() *Node {
 	var a toolkit.Action
 	a.ActionType = toolkit.Margin
 	newaction(&a, n, nil)
+	return n
 }
 
-func (n *Node) Unmargin() {
+func (n *Node) Unmargin() *Node {
 	var a toolkit.Action
 	a.ActionType = toolkit.Unmargin
 	newaction(&a, n, nil)
+	return n
 }
 
-func (n *Node) Pad() {
+func (n *Node) Pad() *Node {
 	var a toolkit.Action
 	a.ActionType = toolkit.Pad
 	newaction(&a, n, nil)
+	return n
 }
 
-func (n *Node) Unpad() {
+func (n *Node) Unpad() *Node {
 	var a toolkit.Action
 	a.ActionType = toolkit.Unpad
 	newaction(&a, n, nil)
+	return n
 }
 
 // is this better?
+// yes, this is better. it allows Internationalization very easily
 //  me.window = myGui.New2().Window("DNS and IPv6 Control Panel").Standard()
+//  myFunnyWindow = myGui.New().Window("Hello").Standard().SetText("Hola")
 
 func (n *Node) New2() *Node {
-	var newWin *Node
-	newWin = NewWindow()
-	log(debugError, "New2() END Main(f)")
-	return newWin
+	log(debugNow, "New2() Start")
+	return n.NewWindow2("New2")
 }
 
 func (n *Node) Window(title string) *Node {
 	log(debugError, "Window()", n)
-	n.SetText(title)
-	return n
+	return n.NewWindow2(title)
 }
 
+// This should not really do anything. as per the docs, the "Standard()" way
+// should be the default way
 func (n *Node) Standard() *Node {
-	log(debugError, "Standard()")
+	log(debugError, "Standard() not implemented yet")
 	return n
 }
 
 func (n *Node) DoMargin() *Node {
-	log(debugError, "DoMargin()")
+	log(debugError, "DoMargin() not implemented yet")
 	return n
 }
