@@ -26,6 +26,11 @@ func Init() {
 
 	me.padW = 3
 	me.padH = 3
+
+	me.pluginChan = make(chan toolkit.Action)
+
+	log(logNow, "Init() start pluginChan")
+	go catchActionChannel()
 }
 
 // this sets the channel to send user events back from the plugin
@@ -67,10 +72,6 @@ func Main(f func()) {
 	setOutput(outf)
 	log("This is a test log entry")
 
-	if (me.pluginChan == nil) {
-		me.pluginChan = make(chan toolkit.Action)
-	}
-	go catchActionChannel()
 	MouseMain()
 	me.baseGui.Close()
 }
