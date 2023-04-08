@@ -5,7 +5,7 @@ import "git.wit.org/wit/gui/toolkit"
 /*
 	generic function to create a new node on the binary tree
 */
-func (n *Node) New(title string, t toolkit.WidgetType, custom func()) *Node {
+func (n *Node) newNode(title string, t toolkit.WidgetType, custom func()) *Node {
 	var newN *Node
 
 	newN = addNode(title)

@@ -71,12 +71,12 @@ func buttonWindow() {
 	g.NewButton("Load 'gocui'", func () {
 		// this set the xterm and mate-terminal window title. maybe works generally?
 		fmt.Println("\033]0;" + title + "blah \007")
-		gui.StartS("gocui")
+		gui.LoadPlugin("gocui")
 		gui.Redraw("gocui")
 	})
 
 	g.NewButton("Load 'andlabs'", func () {
-		gui.StartS("andlabs")
+		gui.LoadPlugin("andlabs")
 	})
 
 	g.NewButton("NewButton(more)", func () {

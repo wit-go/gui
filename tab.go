@@ -8,7 +8,7 @@ import (
 // the 'tab' as a child
 
 func (n *Node) NewTab(text string) *Node {
-	newNode := n.New(text, toolkit.Tab, nil)
+	newNode := n.newNode(text, toolkit.Tab, nil)
 
 	var a toolkit.Action
 	a.ActionType = toolkit.Add

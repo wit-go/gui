@@ -6,7 +6,7 @@ import (
 
 func (n *Node) NewImage(name string) *Node {
 	var newNode *Node
-	newNode = n.New(name, toolkit.Image, nil)
+	newNode = n.newNode(name, toolkit.Image, nil)
 
 	var a toolkit.Action
 	a.ActionType = toolkit.Add

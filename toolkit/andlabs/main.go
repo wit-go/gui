@@ -26,20 +26,15 @@ func catchActionChannel() {
 			if (a.WidgetType == toolkit.Window) {
 				log(logNow, "makeCallback() WINDOW START")
 				go ui.Main( func() {
-					log(logNow, "ui.Main() WINDOW START")
-					rawAction(&a)
+					log(logNow, "ui.Main() WINDOW START DOING NOTHING")
+					newWindow(&a)
 					log(logNow, "ui.Main() WINDOW END")
 				})
 				sleep(.5)
 				log(logNow, "makeCallback() WINDOW END")
 			} else {
 				log(logNow, "makeCallback() STUFF")
-				rawAction(&a)
-				/*
-				Queue( func() {
-					rawAction(&a)
-				})
-				*/
+				rawAction(a)
 				log(logNow, "makeCallback() STUFF END")
 			}
 			// sleep(.1)

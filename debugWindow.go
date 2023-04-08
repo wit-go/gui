@@ -94,7 +94,7 @@ func (n *Node) DebugTab(title string) *Node {
 	})
 
 	g2.NewButton("load plugin 'gocui'", func () {
-		StartS("gocui")
+		startS("gocui")
 	})
 
 	g2.NewButton("Redraw(gocui)", func () {

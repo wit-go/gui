@@ -5,7 +5,7 @@ import (
 )
 
 func (n *Node) NewSpinner(name string, x int, y int) *Node {
-	newNode := n.New(name, toolkit.Spinner, func() {
+	newNode := n.newNode(name, toolkit.Spinner, func() {
 		log(debugChange, "default NewSpinner() change", name)
 	})
 

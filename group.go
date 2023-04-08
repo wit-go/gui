@@ -9,7 +9,7 @@ import (
 // pre-canned andlabs/ui gtk,macos,windows thing
 func (n *Node) NewGroup(name string) *Node {
 	var newNode *Node
-	newNode = n.New(name, toolkit.Group, nil)
+	newNode = n.newNode(name, toolkit.Group, nil)
 
 	var a toolkit.Action
 	a.ActionType = toolkit.Add

@@ -36,7 +36,7 @@ func init() {
 	Config.rootNode.WidgetType = toolkit.Root
 
 	// used to pass debugging flags to the toolkit plugins
-	Config.flag = Config.rootNode.New("flag", 0, nil)
+	Config.flag = Config.rootNode.newNode("flag", 0, nil)
 	Config.flag.WidgetType = toolkit.Flag
 
 	Config.guiChan = make(chan toolkit.Action)
@@ -173,12 +173,12 @@ func (n *Node) doUserEvent(a toolkit.Action) {
 	}
 }
 
-func (n *Node) LoadPlugin(name string) bool {
-	StartS(name)
+func LoadPlugin(name string) bool {
+	startS(name)
 	return true
 }
 
-func StartS(name string) *Node {
+func startS(name string) *Node {
 	log(logInfo, "Start() Main(f) for name =", name)
 	aplug := LoadToolkit(name)
 	if (aplug == nil) {

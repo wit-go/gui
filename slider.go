@@ -5,7 +5,7 @@ import (
 )
 
 func (n *Node) NewSlider(name string, x int, y int) *Node {
-	newNode := n.New(name, toolkit.Slider, func() {
+	newNode := n.newNode(name, toolkit.Slider, func() {
 		log(debugGui, "even newer clicker() name in NewSlider name =", name)
 	})
 

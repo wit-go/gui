@@ -22,7 +22,8 @@ func Send(p *toolkit.Widget, c *toolkit.Widget) {
 	log(debugPlugin, "Send() goodbye. not used anymore")
 }
 
-func Action(a *toolkit.Action) {
+
+func oldAction(a *toolkit.Action) {
 	log(logNow, "Action() START")
 	if (a == nil) {
 		log(debugPlugin, "Action = nil")
@@ -40,34 +41,35 @@ func Action(a *toolkit.Action) {
 	log(logNow, "Action() END")
 }
 
-func rawAction(a *toolkit.Action) {
+
+func rawAction(a toolkit.Action) {
 	log(debugAction, "rawAction() START a.ActionType =", a.ActionType)
 	log(debugAction, "rawAction() START a.S =", a.S)
 
 	log(logNow, "rawAction() START a.WidgetId =", a.WidgetId, "a.ParentId =", a.ParentId)
 	switch a.WidgetType {
 	case toolkit.Flag:
-		flag(a)
+		flag(&a)
 		return
 	}
 
 	switch a.ActionType {
 	case toolkit.Add:
-		add(a)
+		add(&a)
 	case toolkit.Show:
 		a.B = true
-		show(a)
+		show(&a)
 	case toolkit.Hide:
 		a.B = false
-		show(a)
+		show(&a)
 	case toolkit.Enable:
 		a.B = true
-		enable(a)
+		enable(&a)
 	case toolkit.Disable:
 		a.B = false
-		enable(a)
+		enable(&a)
 	case toolkit.Get:
-		setText(a)
+		setText(&a)
 	case toolkit.GetText:
 		switch a.WidgetType {
 		case toolkit.Textbox:
@@ -75,24 +77,24 @@ func rawAction(a *toolkit.Action) {
 			a.S = t.s
 		}
 	case toolkit.Set:
-		setText(a)
+		setText(&a)
 	case toolkit.SetText:
-		setText(a)
+		setText(&a)
 	case toolkit.AddText:
-		setText(a)
+		setText(&a)
 	case toolkit.Margin:
-		pad(a)
+		pad(&a)
 	case toolkit.Unmargin:
-		pad(a)
+		pad(&a)
 	case toolkit.Pad:
-		pad(a)
+		pad(&a)
 	case toolkit.Unpad:
-		pad(a)
+		pad(&a)
 	case toolkit.Delete:
-		uiDelete(a)
+		uiDelete(&a)
 	case toolkit.Move:
 		log(debugNow, "rawAction() attempt to move() =", a.ActionType, a.WidgetType)
-		move(a)
+		move(&a)
 	default:
 		log(debugError, "rawAction() Unknown =", a.ActionType, a.WidgetType)
 	}

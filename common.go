@@ -9,28 +9,44 @@ import (
 
 // functions for handling text related GUI elements
 
-func (n *Node) Show() {
+func New() *Node {
+	if (Config.rootNode == nil) {
+		log(logError, "New() ERROR: rootNode is nil")
+	}
+
+	// There should only be one of these per application
+	// This is due to restrictions by being cross platform
+	// some toolkit's on some operating systems don't support more than one
+	// Keep things simple. Do the default expected thing whenever possible
+	return startS("gocui")
+}
+
+func (n *Node) Show() *Node {
 	var a toolkit.Action
 	a.ActionType = toolkit.Show
 	newaction(&a, n, nil)
+	return n
 }
 
-func (n *Node) Hide() {
+func (n *Node) Hide() *Node {
 	var a toolkit.Action
 	a.ActionType = toolkit.Hide
 	newaction(&a, n, nil)
+	return n
 }
 
-func (n *Node) Enable() {
+func (n *Node) Enable() *Node {
 	var a toolkit.Action
 	a.ActionType = toolkit.Enable
 	newaction(&a, n, nil)
+	return n
 }
 
-func (n *Node) Disable() {
+func (n *Node) Disable() *Node {
 	var a toolkit.Action
 	a.ActionType = toolkit.Disable
 	newaction(&a, n, nil)
+	return n
 }
 
 func (n *Node) Add(str string) {
@@ -186,7 +202,7 @@ func (n *Node) Unpad() *Node {
 // is this better?
 // yes, this is better. it allows Internationalization very easily
 //  me.window = myGui.New2().Window("DNS and IPv6 Control Panel").Standard()
-//  myFunnyWindow = myGui.New().Window("Hello").Standard().SetText("Hola")
+//  myFunnyWindow = myGui.NewWindow("Hello").Standard().SetText("Hola")
 
 func (n *Node) New2() *Node {
 	log(debugNow, "New2() Start")

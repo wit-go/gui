@@ -5,7 +5,7 @@ import (
 )
 
 func (n *Node) NewLabel(text string) *Node {
-	newNode := n.New(text, toolkit.Label, nil)
+	newNode := n.newNode(text, toolkit.Label, nil)
 
 	var a toolkit.Action
 	a.ActionType = toolkit.Add

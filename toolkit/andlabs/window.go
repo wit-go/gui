@@ -30,12 +30,12 @@ func newWindow(a *toolkit.Action) {
 		newt.doUserEvent()
 		return true
 	})
-	win.Show()
 	newt.uiWindow = win
 	newt.uiControl = win
 	newt.Name = a.Name
 
 	andlabs[a.WidgetId] = newt
+	win.Show()
 	return
 }
 

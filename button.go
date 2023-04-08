@@ -3,7 +3,7 @@ package gui
 import "git.wit.org/wit/gui/toolkit"
 
 func (n *Node) NewButton(name string, custom func()) *Node {
-	newNode := n.New(name, toolkit.Button, custom)
+	newNode := n.newNode(name, toolkit.Button, custom)
 
 	var a toolkit.Action
 	a.Name = name

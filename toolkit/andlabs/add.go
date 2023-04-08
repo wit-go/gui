@@ -47,7 +47,10 @@ func add(a *toolkit.Action) {
 		doWindow(a)
 		return
 	case toolkit.Tab:
-		newTab(a)
+		log(debugError, "add() CAME AT THIS FROM add() =", a.Name)
+		log(debugError, "add() CAME AT THIS FROM add() =", a.Name)
+		log(debugError, "add() CAME AT THIS FROM add() =", a.Name)
+		newTab(*a)
 		return
 	case toolkit.Label:
 		newLabel(a)

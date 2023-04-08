@@ -5,7 +5,7 @@ import (
 )
 
 func (n *Node) NewTextbox(name string) *Node {
-	newNode := n.New(name, toolkit.Textbox, func() {
+	newNode := n.newNode(name, toolkit.Textbox, func() {
 		log(debugGui, "NewTextbox changed =", name)
 	})
 

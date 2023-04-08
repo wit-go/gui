@@ -17,7 +17,7 @@ import (
 // -----------------------------
 
 func (n *Node) NewGrid(name string, w int, h int) *Node {
-	newNode := n.New(name, toolkit.Grid, func() {
+	newNode := n.newNode(name, toolkit.Grid, func() {
 		log(debugChange, "click() NewGrid not defined =", name)
 	})
 
@@ -39,7 +39,7 @@ func (n *Node) NewGrid(name string, w int, h int) *Node {
 }
 
 func (n *Node) NewBox(name string, b bool) *Node {
-	newNode := n.New(name, toolkit.Box, nil)
+	newNode := n.newNode(name, toolkit.Box, nil)
 	newNode.B = b
 
 	var a toolkit.Action

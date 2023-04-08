@@ -32,7 +32,7 @@ func NewWindow() *Node {
 		}
 	}
 	// Windows are created off of the master node of the Binary Tree
-	newNode = Config.rootNode.New(Config.Title, toolkit.Window, custom)
+	newNode = Config.rootNode.newNode(Config.Title, toolkit.Window, custom)
 
 	log(logInfo, "NewWindow()", Config.Title)
 
@@ -53,7 +53,7 @@ func (n *Node) NewWindow2(title string) *Node {
 	var newNode *Node
 
 	// Windows are created off of the master node of the Binary Tree
-	newNode = n.New(Config.Title, toolkit.Window, StandardExit)
+	newNode = n.newNode(Config.Title, toolkit.Window, StandardExit)
 
 	log(logInfo, "NewWindow()", Config.Title)
 

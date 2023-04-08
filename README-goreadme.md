@@ -134,6 +134,10 @@ Creates a window helpful for debugging this package
 TODO: add logic to just load the 1st 'most common' gui toolkit
 and allow the 'go-arg' command line args to override the defaults
 
+### func [LoadPlugin](/main.go#L176)
+
+`func LoadPlugin(name string) bool`
+
 ### func [LoadToolkit](/plugin.go#L68)
 
 `func LoadToolkit(name string) *aplug`
@@ -203,6 +207,10 @@ var Config GuiConfig
 The Node is a binary tree. This is how all GUI elements are stored
 simply the name and the size of whatever GUI element exists
 
+#### func [New](/common.go#L12)
+
+`func New() *Node`
+
 #### func [NewWindow](/window.go#L13)
 
 `func NewWindow() *Node`
@@ -254,10 +262,6 @@ You get a window
 #### func [Start](/main.go#L100)
 
 `func Start() *Node`
-
-#### func [StartS](/main.go#L181)
-
-`func StartS(name string) *Node`
 
 ### type [Symbol](/plugin.go#L16)
 

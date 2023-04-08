@@ -303,13 +303,7 @@ func (n *Node) debugAddWidgetButton() {
 			a.AddText(name + " foo")
 			a.AddText(name + " bar")
 		case "Label":
-			newNode := activeWidget.New(name, toolkit.Label, nil)
-
-			var a toolkit.Action
-			a.ActionType = toolkit.Add
-			newaction(&a, newNode, activeWidget)
-			// return newNode
-			// activeWidget.NewLabel(name)
+			activeWidget.NewLabel(name)
 		case "Textbox":
 			activeWidget.NewTextbox(name)
 		case "Slider":

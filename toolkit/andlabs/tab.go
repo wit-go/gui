@@ -19,7 +19,7 @@ import (
 	once there is one. If you send a Window here, it will replace
 	any existing tabs rather than adding a new one
 */
-func (t *andlabsT) newTab(a *toolkit.Action) {
+func (t *andlabsT) newTab(a toolkit.Action) {
 	// var w *ui.Window
 	var newt *andlabsT
 
@@ -118,7 +118,7 @@ func (t *andlabsT) appendTab(name string) *andlabsT {
 	return &newT
 }
 
-func newTab(a *toolkit.Action) {
+func newTab(a toolkit.Action) {
 	// w := a.Widget
 	log(debugToolkit, "newTab()", a.ParentId)
 
