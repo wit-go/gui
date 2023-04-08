@@ -127,20 +127,20 @@ Creates a window helpful for debugging this package
 
 `func Indent(b bool, a ...interface{})`
 
-### func [InitPlugins](/main.go#L61)
+### func [InitPlugins](/main.go#L64)
 
 `func InitPlugins(names []string) []string`
 
 TODO: add logic to just load the 1st 'most common' gui toolkit
 and allow the 'go-arg' command line args to override the defaults
 
-### func [LoadToolkit](/plugin.go#L50)
+### func [LoadToolkit](/plugin.go#L66)
 
 `func LoadToolkit(name string) *aplug`
 
 loads and initializes a toolkit (andlabs/ui, gocui, etc)
 
-### func [Main](/main.go#L194)
+### func [Main](/main.go#L197)
 
 `func Main(f func())`
 
@@ -162,7 +162,7 @@ This should not pass a function
 
 `func ShowDebugValues()`
 
-### func [StandardExit](/main.go#L262)
+### func [StandardExit](/main.go#L264)
 
 `func StandardExit()`
 
@@ -196,7 +196,7 @@ This struct can be used with the go-arg package
 var Config GuiConfig
 ```
 
-### type [Node](/structs.go#L60)
+### type [Node](/structs.go#L61)
 
 `type Node struct { ... }`
 
@@ -251,11 +251,11 @@ func main() {
 You get a window
 ```
 
-#### func [Start](/main.go#L97)
+#### func [Start](/main.go#L100)
 
 `func Start() *Node`
 
-#### func [StartS](/main.go#L178)
+#### func [StartS](/main.go#L181)
 
 `func StartS(name string) *Node`
 

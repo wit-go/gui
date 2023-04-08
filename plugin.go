@@ -26,20 +26,36 @@ type aplug struct {
 	MainOk bool
 
 	Init func()
+
+	// This passes the go channel to the plugin
+	// the plugin then passes actions back to
+	// here where they are processed. If you wit/gui this is how
+	// you are passed information like a user clicking a button
+	// or a user changing a dropdown menu or a checkbox
+	//
+	// from this channel, the information is then passed into your
+	// Custom() function
+	//
+	// the custom functions are run from inside of your own goroutine
+	// where you initialize the gui
+	Callback func(chan toolkit.Action)
+
+	// This is how actions are sent to the plugin
+	//
+	// for example, when you you create a new button, it sends
+	// a structure to the goroutine that is handling the gui
+	// each toolkit has it's own goroutine and each one is sent this
+	// add button request
+	pluginChan chan toolkit.Action
+
+	// deprecate all this
 	// TODO: make Main() main() and never allow the user to call it
 	// run plugin.Main() when the plugin is loaded
 	Main func(func ())	// this never returns. Each plugin must have it's own goroutine
-	// Queue func(func ())	// Should this return right away? Should it wait (can it wait?)
 	Quit func()
-	// NewWindow func(*toolkit.Widget)
-
-	// sets the chan for the plugin to call back too
-	Callback func(chan toolkit.Action)
-	// NewWindow func(*toolkit.Widget)
 
 	// simplifies passing to the plugin
 	// Send func(*toolkit.Widget, *toolkit.Widget)
-
 	// should replace Send()
 	Action func(*toolkit.Action)
 }
@@ -57,7 +73,7 @@ func LoadToolkit(name string) *aplug {
 	for _, aplug := range allPlugins {
 		log(debugGui, "gui.LoadToolkit() already loaded toolkit plugin =", aplug.name)
 		if (aplug.name == name) {
-			log(debugGui, "gui.LoadToolkit() SKIPPING")
+			log(debugError, "gui.LoadToolkit() SKIPPING", name, "as you can't load it twice")
 			return aplug
 		}
 	}

@@ -52,6 +52,7 @@ type GuiConfig struct {
 	ActionCh1 chan int
 	ActionCh2 chan int
 
+	// sets the chan for the plugins to call back too
 	guiChan chan toolkit.Action
 }
 

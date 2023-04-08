@@ -38,6 +38,9 @@ func init() {
 	// used to pass debugging flags to the toolkit plugins
 	Config.flag = Config.rootNode.New("flag", 0, nil)
 	Config.flag.WidgetType = toolkit.Flag
+
+	Config.guiChan = make(chan toolkit.Action)
+	go watchCallback()
 }
 
 func doGuiChan() {
@@ -200,26 +203,25 @@ func Main(f func()) {
 	if (os.Getenv("DISPLAY") == "") {
 		InitPlugins([]string{"gocui"})
 	} else {
-		InitPlugins([]string{"andlabs", "gocui"})
-	}
-
-	if (Config.guiChan == nil) {
-		Config.guiChan = make(chan toolkit.Action)
-		go watchCallback()
+		InitPlugins([]string{"gocui", "andlabs"})
 	}
 
 	for _, aplug := range allPlugins {
-		log(debugGui, "gui.Node.NewButton() toolkit plugin =", aplug.name)
+		log(debugGui, "NewButton() toolkit plugin =", aplug.name)
 		if (aplug.MainOk) {
-			log(debugGui, "gui.Node.Main() Already Ran Main()", aplug.name)
+			log(debugGui, "Main() Already Ran Main()", aplug.name)
 			continue
 		}
 		if (aplug.Main == nil) {
-			log(debugGui, "gui.Node.Main() Main == nil", aplug.name)
+			log(debugGui, "Main() Main == nil", aplug.name)
 			continue
 		}
 		aplug.MainOk = true
-		if (aplug.Callback != nil) {
+		if (aplug.Callback == nil) {
+			// TODO: don't load the module if this failed
+			// if Callback() isn't set in the plugin, no information can be sent to it!
+			log(debugError, "SERIOUS ERROR: Callback() == nil. nothing will work for plugin", aplug.name)
+		} else {
 			aplug.Callback(Config.guiChan)
 		}
 		aplug.Main(f)
@@ -242,7 +244,7 @@ func Queue(f func()) {
 	log(debugGui, "Sending function to gui.Main() (using gtk via andlabs/ui)")
 	// toolkit.Queue(f)
 	for _, aplug := range allPlugins {
-		log(debugGui, "gui.Node.NewButton() toolkit plugin =", aplug.name)
+		log(debugGui, "NewButton() toolkit plugin =", aplug.name)
 		if (aplug.Queue == nil) {
 			continue
 		}
@@ -261,9 +263,9 @@ func (n *Node) StandardClose() {
 // TODO: properly exit the plugin since Quit() doesn't do it
 func StandardExit() {
 	log("wit/gui Standard Window Exit. running os.Exit()")
-	log("gui.Node.StandardExit() attempt to exit each toolkit plugin")
+	log("StandardExit() attempt to exit each toolkit plugin")
 	for i, aplug := range allPlugins {
-		log("gui.Node.NewButton()", i, aplug)
+		log("NewButton()", i, aplug)
 		if (aplug.Quit != nil) {
 			aplug.Quit()
 		}

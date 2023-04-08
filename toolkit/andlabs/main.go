@@ -40,7 +40,7 @@ func catchActionChannel() {
 				*/
 				log(logNow, "makeCallback() STUFF END")
 			}
-			sleep(.1)
+			// sleep(.1)
 		}
 	}
 }
