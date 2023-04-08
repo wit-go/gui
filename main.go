@@ -107,17 +107,17 @@ func Start() *Node {
 }
 
 func watchCallback() {
-	log(logNow, "makeCallback() START")
+	log(logInfo, "watchCallback() START")
 	for {
-		log(logNow, "makeCallback() for loop")
+		log(logNow, "watchCallback() restarted select for toolkit user events")
 	    	select {
 		case a := <-Config.guiChan:
-			log(logNow, "makeCallback() SELECT widget id =", a.WidgetId, a.Name)
 			n := Config.rootNode.FindId(a.WidgetId)
 			if (n == nil) {
-				log(logError, "makeCallback() SELECT widget id =", a.WidgetId, a.Name)
+				log(logError, "watchCallback() UNKNOWN widget id =", a.WidgetId, a.Name)
 			} else {
-				go n.doUserEvent(a)
+				log(logNow, "watchCallback() FOUND widget id =", n.id, n.Name)
+				n.doUserEvent(a)
 			}
 			// this maybe a good idea?
 			// TODO: Throttle user events somehow
@@ -132,7 +132,7 @@ func (n *Node) doCustom() {
 		log(debugError, "Custom() = nil. SKIPPING")
 		return
 	}
-	n.Custom()
+	go n.Custom()
 }
 
 func (n *Node) doUserEvent(a toolkit.Action) {

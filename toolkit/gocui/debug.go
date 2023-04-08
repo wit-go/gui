@@ -2,26 +2,7 @@ package main
 
 import (
 	"fmt"
-
-	"git.wit.org/wit/gui/toolkit"
-//	"github.com/awesome-gocui/gocui"
 )
-
-// var debugAction	bool = false
-
-func actionDump(b bool, a *toolkit.Action) {
-	if (a == nil) {
-		log(b, "action = nil")
-		return
-	}
-
-	log(b, "a.Name             =", a.Name)
-	log(b, "a.Text             =", a.Text)
-	log(b, "a.WidgetId         =", a.WidgetId)
-	log(b, "a.ParentId         =", a.ParentId)
-	log(b, "a.B                =", a.B)
-	log(b, "a.S                =", a.S)
-}
 
 func (w *cuiWidget) dumpTree(draw bool) {
 	if (w == nil) {

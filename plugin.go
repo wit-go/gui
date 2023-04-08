@@ -69,13 +69,13 @@ func LoadToolkit(name string) *aplug {
 	var newPlug *aplug
 	newPlug = new(aplug)
 
-	log(debugGui, "gui.LoadToolkit() START")
+	log(logInfo, "LoadToolkit() START")
 	newPlug.LoadOk = false
 
 	for _, aplug := range allPlugins {
-		log(debugGui, "gui.LoadToolkit() already loaded toolkit plugin =", aplug.name)
+		log(debugGui, "LoadToolkit() already loaded toolkit plugin =", aplug.name)
 		if (aplug.name == name) {
-			log(debugError, "gui.LoadToolkit() SKIPPING", name, "as you can't load it twice")
+			log(debugError, "LoadToolkit() SKIPPING", name, "as you can't load it twice")
 			return aplug
 		}
 	}
@@ -116,7 +116,7 @@ func LoadToolkit(name string) *aplug {
 
 	allPlugins = append(allPlugins, newPlug)
 
-	log(debugPlugin, "gui.LoadToolkit() END", newPlug.name, filename)
+	log(debugPlugin, "LoadToolkit() END", newPlug.name, filename)
 	newPlug.Init()
 	newPlug.pluginChan = newPlug.PluginChannel()
 
@@ -310,12 +310,12 @@ func newaction(a *toolkit.Action, n *Node, where *Node) {
 
 	// TODO: redo this grid logic
 	if (where != nil) {
-		log(debugGui, "Action() START on where X,Y, Next X,Y =", where.Name, where.X, where.Y, where.NextX, where.NextY)
+		log(logInfo, "Action() START on where X,Y, Next X,Y =", where.Name, where.X, where.Y, where.NextX, where.NextY)
 		a.ParentId = where.id
 		switch where.widget.Type {
 		case toolkit.Grid:
 			// where.Dump(true)
-			log(debugGui, "Action() START on Grid (X,Y)", where.X, where.Y, "put next thing at (X,Y) =", where.NextX, where.NextY)
+			log(logInfo, "Action() START on Grid (X,Y)", where.X, where.Y, "put next thing at (X,Y) =", where.NextX, where.NextY)
 			//
 			// fix values here if they are invalid. Index starts at 1
 			if (where.NextX < 1) {
@@ -327,7 +327,7 @@ func newaction(a *toolkit.Action, n *Node, where *Node) {
 			//
 			a.X = where.NextX
 			a.Y = where.NextY
-			log(debugGui, "Action() END   on Grid (X,Y)", where.X, where.Y, "put next thing at (X,Y) =", where.NextX, where.NextY)
+			log(logInfo, "Action() END   on Grid (X,Y)", where.X, where.Y, "put next thing at (X,Y) =", where.NextX, where.NextY)
 		default:
 		}
 	}
@@ -335,15 +335,13 @@ func newaction(a *toolkit.Action, n *Node, where *Node) {
 	for _, aplug := range allPlugins {
 		log(debugPlugin, "Action() aplug =", aplug.name, "Action type=", a.ActionType)
 		if (aplug.pluginChan == nil) {
-			log(debugNow, "Action() retrieving the aplug.PluginChannel()", aplug.name)
+			log(logInfo, "Action() retrieving the aplug.PluginChannel()", aplug.name)
 			aplug.pluginChan = aplug.PluginChannel()
-			log(debugNow, "Action() retrieved", aplug.pluginChan)
+			log(logInfo, "Action() retrieved", aplug.pluginChan)
 		}
-		log(debugNow, "Action() SEND pluginChan", aplug.name)
-		log(debugNow, "Action() SEND pluginChan", aplug.name)
-		log(debugNow, "Action() SEND pluginChan", aplug.name)
+		log(logInfo, "Action() SEND to pluginChan", aplug.name)
 		aplug.pluginChan <- *a
-		sleep(.2)
+		sleep(.02)
 	}
 	// increment where to put the next widget in a grid or table
 	if (where != nil) {

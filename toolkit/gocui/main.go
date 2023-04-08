@@ -9,6 +9,8 @@ import (
 	"git.wit.org/wit/gui/toolkit"
 )
 
+// sets defaults and establishes communication
+// to this toolkit from the wit/gui golang package
 func Init() {
 	log(logInfo, "Init() of awesome-gocui")
 	me.defaultWidth = 10
@@ -43,20 +45,19 @@ func PluginChannel() chan toolkit.Action {
 }
 
 func catchActionChannel() {
-	log(logNow, "makeCallback() START")
+	log(logInfo, "catchActionChannel() START")
 	for {
-		log(logNow, "makeCallback() for loop")
+		log(logInfo, "catchActionChannel() infinite for() loop restarted select on channel")
 	    	select {
 		case a := <-me.pluginChan:
-			log(logNow, "makeCallback() SELECT widget id =", a.WidgetId, a.Name)
+			log(logNow, "catchActionChannel()", a.WidgetId, a.ActionType, a.WidgetType, a.Name)
 			action(&a)
-			sleep(.1)
 		}
 	}
 }
 
 func Exit() {
-	// TODO: send exit to the plugin
+	// TODO: what should actually happen here?
 	me.baseGui.Close()
 }
 

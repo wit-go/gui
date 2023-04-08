@@ -4,7 +4,7 @@ package main
 import 	(
 	"fmt"
 	"log"
-	"time"
+//	"time"
 	"strconv"
 	"git.wit.org/wit/gui"
 )
@@ -16,24 +16,15 @@ var myGui *gui.Node
 var buttonCounter int = 5
 
 func main() {
-	// time.Sleep(5 * time.Second)
-	// var w *gui.Node
-
-	// this doesn't seem to work
-	// captureSTDOUT()
-
-	// gui.LoadToolkit("default")
-	// panic("WTF gocui not happening")
-	// gui.LoadToolkit("gocui")
-//	gui.Init()
-
-	// buttonWindow()
-	gui.SetDebug(true)
+	// This will turn on all debugging
+	// gui.SetDebug(true)
 	myGui = gui.Start()
-	time.Sleep(1 * time.Second)
+	// time.Sleep(1 * time.Second)
 	buttonWindow()
 	log.Println("Main() END")
-	time.Sleep(1 * time.Second)
+	// time.Sleep(1 * time.Second)
+
+	// This is just a optional goroutine to watch that things are alive
 	gui.Watchdog()
 	gui.StandardExit()
 }
