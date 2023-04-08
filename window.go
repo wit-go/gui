@@ -6,6 +6,27 @@ import (
 
 // This routine creates a blank window with a Title and size (W x H)
 //
+
+func (n *Node) NewWindow(title string) *Node {
+	var newNode *Node
+
+	// Windows are created off of the master node of the Binary Tree
+	newNode = n.newNode(Config.Title, toolkit.Window, StandardExit)
+
+	log(logInfo, "NewWindow()", Config.Title)
+
+	var a toolkit.Action
+	a.ActionType = toolkit.Add
+	a.Width     = Config.Width
+	a.Height    = Config.Height
+	a.Name      = title
+	a.Text      = title
+	newaction(&a, newNode, n)
+
+	return newNode
+}
+
+/*
 // This routine can not have any arguements due to the nature of how
 // it can be passed via the 'andlabs/ui' queue which, because it is
 // cross platform, must pass UI changes into the OS threads (that is
@@ -46,24 +67,4 @@ func NewWindow() *Node {
 
 	return newNode
 }
-
-// This routine creates a blank window with a Title
-// 
-func (n *Node) NewWindow2(title string) *Node {
-	var newNode *Node
-
-	// Windows are created off of the master node of the Binary Tree
-	newNode = n.newNode(Config.Title, toolkit.Window, StandardExit)
-
-	log(logInfo, "NewWindow()", Config.Title)
-
-	var a toolkit.Action
-	a.ActionType = toolkit.Add
-	a.Width     = Config.Width
-	a.Height    = Config.Height
-	a.Name      = title
-	a.Text      = title
-	newaction(&a, newNode, n)
-
-	return newNode
-}
+*/

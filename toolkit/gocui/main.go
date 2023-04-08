@@ -50,6 +50,15 @@ func catchActionChannel() {
 		log(logInfo, "catchActionChannel() infinite for() loop restarted select on channel")
 	    	select {
 		case a := <-me.pluginChan:
+			// this plugin can be loaded, but it doesn't actually do anything until
+			// the calling program sends an action to it. Then, it actually will initialize
+			// the tty and take over your console
+			if (me.baseGui == nil) {
+				log(logError,"main() was not run yet")
+				go main()
+				// probably not needed, but in here for now under development
+				sleep(1)
+			}
 			log(logNow, "catchActionChannel()", a.WidgetId, a.ActionType, a.WidgetType, a.Name)
 			action(&a)
 		}
@@ -61,8 +70,8 @@ func Exit() {
 	me.baseGui.Close()
 }
 
-func Main(f func()) {
-	log("start Init()")
+func main() {
+	log(logInfo, "main() start Init()")
 
 	outf, err := os.OpenFile("/tmp/witgui.log", os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
 	if err != nil {

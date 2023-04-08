@@ -118,10 +118,11 @@ func LoadToolkit(name string) *aplug {
 
 	log(debugPlugin, "LoadToolkit() END", newPlug.name, filename)
 	newPlug.Init()
-	newPlug.pluginChan = newPlug.PluginChannel()
 
-	// TODO: find a new way to do this that is locking, safe and accurate
-	Config.rootNode.redraw(newPlug)
+	// set the communication to the plugins
+	newPlug.pluginChan = newPlug.PluginChannel()
+	newPlug.Callback(Config.guiChan)
+
 	newPlug.LoadOk = true
 	return newPlug
 }

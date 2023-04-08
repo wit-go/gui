@@ -9,10 +9,7 @@ func (n *Node) DebugFlags(makeWindow bool) {
 	// make a new window
 	// make a new tab in the existing window
 	if (makeWindow) {
-		Config.Title = "Debug Flags"
-		Config.Width = 300
-		Config.Height = 400
-		w = NewWindow()
+		w = Config.rootNode.NewWindow("Debug Flags")
 		w.Custom = w.StandardClose
 	} else {
 		w = n.NewTab("Flags")

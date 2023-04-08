@@ -18,10 +18,7 @@ func (n *Node) DebugGoChannels(makeWindow bool) {
 	// make a new window
 	// make a new tab in the existing window
 	if (makeWindow) {
-		Config.Title = "Debug GO Channels"
-		Config.Width = 300
-		Config.Height = 400
-		w = NewWindow()
+		w = Config.rootNode.NewWindow("Debug GO Channels")
 		w.Custom = w.StandardClose
 	} else {
 		w = n.NewTab("Chan")

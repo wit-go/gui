@@ -9,18 +9,6 @@ import (
 
 // functions for handling text related GUI elements
 
-func New() *Node {
-	if (Config.rootNode == nil) {
-		log(logError, "New() ERROR: rootNode is nil")
-	}
-
-	// There should only be one of these per application
-	// This is due to restrictions by being cross platform
-	// some toolkit's on some operating systems don't support more than one
-	// Keep things simple. Do the default expected thing whenever possible
-	return startS("gocui")
-}
-
 func (n *Node) Show() *Node {
 	var a toolkit.Action
 	a.ActionType = toolkit.Show
@@ -204,14 +192,9 @@ func (n *Node) Unpad() *Node {
 //  me.window = myGui.New2().Window("DNS and IPv6 Control Panel").Standard()
 //  myFunnyWindow = myGui.NewWindow("Hello").Standard().SetText("Hola")
 
-func (n *Node) New2() *Node {
-	log(debugNow, "New2() Start")
-	return n.NewWindow2("New2")
-}
-
 func (n *Node) Window(title string) *Node {
 	log(debugError, "Window()", n)
-	return n.NewWindow2(title)
+	return n.NewWindow(title)
 }
 
 // This should not really do anything. as per the docs, the "Standard()" way

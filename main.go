@@ -2,10 +2,11 @@ package gui
 
 import (
 	"os"
-	// "embed"
+	// "embed" // reminder to not attempt this within the 'wit/gui' package
 	"git.wit.org/wit/gui/toolkit"
 )
 
+// TODO: make a fake 'plugin' channel of communication to andlabs for mswindows
 // Windows doesn't support plugins. How can I keep andlabs and only compile it on windows?
 // https://forum.heroiclabs.com/t/setting-up-goland-to-compile-plugins-on-windows/594/5
 // import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
@@ -43,6 +44,7 @@ func init() {
 	go watchCallback()
 }
 
+/*
 func doGuiChan() {
 	for {
 		select {
@@ -58,7 +60,9 @@ func doGuiChan() {
 		log(true, "doGuiChan() for()")
 	}
 }
+*/
 
+/*
 // TODO: add logic to just load the 1st 'most common' gui toolkit
 // and allow the 'go-arg' command line args to override the defaults
 func InitPlugins(names []string) []string {
@@ -96,15 +100,7 @@ func InitPlugins(names []string) []string {
 	}
 	return []string{}
 }
-
-func Start() *Node {
-	log(logInfo, "Start() Main(f)")
-	f := func() {
-	}
-	go Main(f)
-	sleep(1)
-	return Config.rootNode
-}
+*/
 
 func watchCallback() {
 	log(logInfo, "watchCallback() START")
@@ -174,26 +170,39 @@ func (n *Node) doUserEvent(a toolkit.Action) {
 }
 
 func LoadPlugin(name string) bool {
-	startS(name)
+	log(logInfo, "Start() Main(f) for name =", name)
+	newPlugin := LoadToolkit(name)
+	if (newPlugin == nil) {
+		return false
+	}
+
+	sleep(1) // temp hack until chan communication is setup
+
+	// TODO: find a new way to do this that is locking, safe and accurate
+	Config.rootNode.redraw(newPlugin)
 	return true
 }
 
-func startS(name string) *Node {
-	log(logInfo, "Start() Main(f) for name =", name)
-	aplug := LoadToolkit(name)
-	if (aplug == nil) {
+// There should only be one of these per application
+// This is due to restrictions by being cross platform
+// some toolkit's on some operating systems don't support more than one
+// Keep things simple. Do the default expected thing whenever possible
+func New() *Node {
+	if (LoadPlugin("gocui")) {
+		log(logError, "New() failed to load gocui")
+	}
+	// if DISPLAY isn't set, return since gtk can't load
+	// TODO: figure out how to check what to do in macos and mswindows
+	if (os.Getenv("DISPLAY") == "") {
 		return Config.rootNode
 	}
-	/*
-	// will this really work on mswindows & macos?
-	f := func() {
+	if (LoadPlugin("andlabs")) {
+		log(logError, "New() failed to load andlabs")
 	}
-	go Main(f)
-	*/
-	sleep(1) // temp hack until chan communication is setup
 	return Config.rootNode
 }
 
+/*
 // This should not pass a function
 func Main(f func()) {
 	log(debugGui, "Starting gui.Main() (using gtk via andlabs/ui)")
@@ -239,6 +248,7 @@ func Main(f func()) {
 	}
 
 }
+*/
 
 // The window is destroyed but the application does not quit
 func (n *Node) StandardClose() {

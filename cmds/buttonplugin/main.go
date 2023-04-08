@@ -4,7 +4,6 @@ package main
 import 	(
 	"fmt"
 	"log"
-//	"time"
 	"strconv"
 	"git.wit.org/wit/gui"
 )
@@ -18,11 +17,9 @@ var buttonCounter int = 5
 func main() {
 	// This will turn on all debugging
 	// gui.SetDebug(true)
-	myGui = gui.Start()
-	// time.Sleep(1 * time.Second)
+
+	myGui = gui.New()
 	buttonWindow()
-	log.Println("Main() END")
-	// time.Sleep(1 * time.Second)
 
 	// This is just a optional goroutine to watch that things are alive
 	gui.Watchdog()
@@ -33,11 +30,9 @@ func main() {
 func buttonWindow() {
 	var w, t, g, more, more2 *gui.Node
 
-	log.Println("buttonWindow()")
-	log.Println("buttonWindow()")
-	log.Println("buttonWindow()")
+	log.Println("buttonWindow() START")
 
-	w = myGui.NewWindow2(title).SetText("Nueva Ventana de Botones")
+	w = myGui.NewWindow(title).SetText("Nueva Ventana de Botones")
 	t = w.NewTab("buttonTab")
 	g = t.NewGroup("buttonGroup")
 	g1 := t.NewGroup("buttonGroup 2")

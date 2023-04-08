@@ -127,14 +127,7 @@ Creates a window helpful for debugging this package
 
 `func Indent(b bool, a ...interface{})`
 
-### func [InitPlugins](/main.go#L64)
-
-`func InitPlugins(names []string) []string`
-
-TODO: add logic to just load the 1st 'most common' gui toolkit
-and allow the 'go-arg' command line args to override the defaults
-
-### func [LoadPlugin](/main.go#L176)
+### func [LoadPlugin](/main.go#L172)
 
 `func LoadPlugin(name string) bool`
 
@@ -143,12 +136,6 @@ and allow the 'go-arg' command line args to override the defaults
 `func LoadToolkit(name string) *aplug`
 
 loads and initializes a toolkit (andlabs/ui, gocui, etc)
-
-### func [Main](/main.go#L198)
-
-`func Main(f func())`
-
-This should not pass a function
 
 ### func [SetDebug](/debug.go#L28)
 
@@ -162,7 +149,7 @@ This should not pass a function
 
 `func ShowDebugValues()`
 
-### func [StandardExit](/main.go#L251)
+### func [StandardExit](/main.go#L261)
 
 `func StandardExit()`
 
@@ -203,61 +190,14 @@ var Config GuiConfig
 The Node is a binary tree. This is how all GUI elements are stored
 simply the name and the size of whatever GUI element exists
 
-#### func [New](/common.go#L12)
+#### func [New](/main.go#L190)
 
 `func New() *Node`
 
-#### func [NewWindow](/window.go#L13)
-
-`func NewWindow() *Node`
-
-This routine creates a blank window with a Title and size (W x H)
-
-This routine can not have any arguements due to the nature of how
-it can be passed via the 'andlabs/ui' queue which, because it is
-cross platform, must pass UI changes into the OS threads (that is
-my guess).
-
-This example demonstrates how to create a NewWindow()
-
-Interacting with a GUI in a cross platform fashion adds some
-unusual problems. To obvuscate those, andlabs/ui starts a
-goroutine that interacts with the native gui toolkits
-on the Linux, MacOS, Windows, etc.
-
-Because of this oddity, to initialize a new window, the
-function is not passed any arguements and instead passes
-the information via the Config type.
-
-```golang
-package main
-
-import (
-	"git.wit.org/wit/gui"
-)
-
-func main() {
-	// Define the name and size
-	gui.Config.Title = "WIT GUI Window 1"
-	gui.Config.Width = 640
-	gui.Config.Height = 480
-
-	// Create the Window
-	gui.NewWindow()
-
-}
-
-```
-
- Output:
-
-```
-You get a window
-```
-
-#### func [Start](/main.go#L100)
-
-`func Start() *Node`
+There should only be one of these per application
+This is due to restrictions by being cross platform
+some toolkit's on some operating systems don't support more than one
+Keep things simple. Do the default expected thing whenever possible
 
 ### type [Symbol](/plugin.go#L16)
 

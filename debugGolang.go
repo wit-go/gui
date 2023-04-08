@@ -16,10 +16,7 @@ func (n *Node) DebugGolangWindow(makeWindow bool) {
 	// make a new window
 	// make a new tab in the existing window
 	if (makeWindow) {
-		Config.Title = "GO"
-		Config.Width = 1280
-		Config.Height = 720
-		w = NewWindow()
+		w = Config.rootNode.NewWindow("GO")
 		w.Custom = w.StandardClose
 	} else {
 		w = n.NewTab("GOLANG")

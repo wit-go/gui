@@ -60,10 +60,7 @@ func DebugWidgetWindow(w *Node) {
 	// make a new window
 	// make a new tab in the existing window
 	if (makeTabs) {
-		Config.Title = "Widgets"
-		Config.Width = 300
-		Config.Height = 400
-		bugWidget = NewWindow()
+		bugWidget = Config.rootNode.NewWindow("Widgets")
 		bugWidget.Custom = bugWidget.StandardClose
 	} else {
 		bugWidget = bugWin.NewTab("Widgets")

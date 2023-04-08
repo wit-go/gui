@@ -19,12 +19,9 @@ var myButton *Node
 	Creates a window helpful for debugging this package
 */
 func DebugWindow() {
-	Config.Title = "go.wit.org/gui debug window"
-	Config.Width = 300
-	Config.Height = 200
-	bugWin = NewWindow()
+	bugWin = Config.rootNode.NewWindow("go.wit.org/gui debug window").DebugTab("Debug Tab")
 	bugWin.Custom = bugWin.StandardClose
-	bugWin.DebugTab("Debug Tab")
+	// bugWin.DebugTab("Debug Tab")
 }
 
 func (n *Node) DebugTab(title string) *Node {
@@ -94,7 +91,7 @@ func (n *Node) DebugTab(title string) *Node {
 	})
 
 	g2.NewButton("load plugin 'gocui'", func () {
-		startS("gocui")
+		LoadPlugin("gocui")
 	})
 
 	return newN
