@@ -336,6 +336,9 @@ func newaction(a *toolkit.Action, n *Node, where *Node) {
 			continue
 		}
 		if (aplug.pluginChan == nil) {
+			log(debugNow, "Action() SEND old way")
+			log(debugNow, "Action() SEND old way")
+			log(debugNow, "Action() SEND old way")
 			aplug.Action(a)
 		} else {
 			log(debugNow, "Action() SEND pluginChan")

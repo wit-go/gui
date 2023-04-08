@@ -55,6 +55,11 @@ func Callback(guiCallback chan toolkit.Action) {
 	callback = guiCallback
 }
 
+func PluginChannel() chan toolkit.Action {
+	return pluginChan
+}
+
+
 // Other goroutines must use this to access the GUI
 //
 // You can not acess / process the GUI thread directly from
