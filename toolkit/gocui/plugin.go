@@ -10,8 +10,8 @@ func Quit() {
 	me.baseGui.Close()
 }
 
-func Action(a *toolkit.Action) {
-	log(logInfo, "Action() START", a.WidgetId, a.ActionType, a.WidgetType, a.Name)
+func action(a *toolkit.Action) {
+	log(logInfo, "action() START", a.WidgetId, a.ActionType, a.WidgetType, a.Name)
 	w := findWidget(a.WidgetId, me.rootNode)
 	switch a.ActionType {
 	case toolkit.Add:
@@ -21,7 +21,7 @@ func Action(a *toolkit.Action) {
 		} else {
 			// this is done to protect the plugin being 'refreshed' with the
 			// widget binary tree. TODO: find a way to keep them in sync
-			log(logError, "Action() Add ignored for already defined widget",
+			log(logError, "action() Add ignored for already defined widget",
 				a.WidgetId, a.ActionType, a.WidgetType, a.Name)
 		}
 	case toolkit.Show:
@@ -39,9 +39,9 @@ func Action(a *toolkit.Action) {
 	case toolkit.Move:
 		log(logNow, "attempt to move() =", a.ActionType, a.WidgetType, a.Name)
 	default:
-		log(logError, "Action() Unknown =", a.ActionType, a.WidgetType, a.Name)
+		log(logError, "action() Unknown =", a.ActionType, a.WidgetType, a.Name)
 	}
-	log(logInfo, "Action() END")
+	log(logInfo, "action() END")
 }
 
 func (w *cuiWidget) AddText(text string) {
@@ -70,8 +70,6 @@ func (w *cuiWidget) SetText(text string) {
 
 func (w *cuiWidget) Set(val any) {
 	log(logInfo, "Set() value =", val)
-	var a toolkit.Action
-	a.ActionType = toolkit.Set
 
 	switch v := val.(type) {
 	case bool:
@@ -82,6 +80,6 @@ func (w *cuiWidget) Set(val any) {
 	case int:
 		w.i = val.(int)
 	default:
-		log(logError, "Set() unknown type =", v, "a =", a)
+		log(logError, "Set() unknown type =", val, v)
 	}
 }

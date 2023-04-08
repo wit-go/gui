@@ -203,7 +203,7 @@ var Config GuiConfig
 The Node is a binary tree. This is how all GUI elements are stored
 simply the name and the size of whatever GUI element exists
 
-#### func [NewWindow](/window.go#L15)
+#### func [NewWindow](/window.go#L13)
 
 `func NewWindow() *Node`
 

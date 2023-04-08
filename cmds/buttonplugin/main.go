@@ -28,6 +28,7 @@ func main() {
 //	gui.Init()
 
 	// buttonWindow()
+	gui.SetDebug(true)
 	myGui = gui.Start()
 	time.Sleep(1 * time.Second)
 	buttonWindow()
@@ -42,11 +43,12 @@ func main() {
 // This creates a window
 func buttonWindow() {
 	var w, t, g, more, more2 *gui.Node
-	gui.Config.Title = title
-	gui.Config.Width = 640
-	gui.Config.Height = 480
 
-	w = gui.NewWindow()
+	log.Println("buttonWindow()")
+	log.Println("buttonWindow()")
+	log.Println("buttonWindow()")
+
+	w = myGui.NewWindow2(title)
 	t = w.NewTab("buttonTab")
 	g = t.NewGroup("buttonGroup")
 	g1 := t.NewGroup("buttonGroup 2")

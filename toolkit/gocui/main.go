@@ -49,7 +49,7 @@ func catchActionChannel() {
 	    	select {
 		case a := <-me.pluginChan:
 			log(logNow, "makeCallback() SELECT widget id =", a.WidgetId, a.Name)
-			Action(&a)
+			action(&a)
 			sleep(.1)
 		}
 	}

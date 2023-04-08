@@ -25,7 +25,7 @@ func (w *cuiWidget) setFake() {
 		fakeStartWidth += 20
 	}
 	w.setWH()
-	if (debugAction) {
+	if (logInfo) {
 		w.drawView()
 	}
 }

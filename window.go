@@ -4,8 +4,6 @@ import (
 	"git.wit.org/wit/gui/toolkit"
 )
 
-//import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
-
 // This routine creates a blank window with a Title and size (W x H)
 //
 // This routine can not have any arguements due to the nature of how
@@ -45,6 +43,27 @@ func NewWindow() *Node {
 	a.Name      = Config.Title
 	a.Text      = Config.Title
 	newaction(&a, newNode, Config.rootNode)
+
+	return newNode
+}
+
+// This routine creates a blank window with a Title
+// 
+func (n *Node) NewWindow2(title string) *Node {
+	var newNode *Node
+
+	// Windows are created off of the master node of the Binary Tree
+	newNode = n.New(Config.Title, toolkit.Window, StandardExit)
+
+	log(logInfo, "NewWindow()", Config.Title)
+
+	var a toolkit.Action
+	a.ActionType = toolkit.Add
+	a.Width     = Config.Width
+	a.Height    = Config.Height
+	a.Name      = Config.Title
+	a.Text      = Config.Title
+	newaction(&a, newNode, n)
 
 	return newNode
 }

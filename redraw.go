@@ -36,8 +36,8 @@ func (n *Node) Redraw(p *aplug) {
 	return
 }
 
-func (n *Node) redo(p *aplug) {
-	log(logNow, "redo()", p.name, n.id, n.WidgetType, n.Name)
+func (n *Node) redo(plug *aplug) {
+	log(logNow, "redo()", plug.name, n.id, n.WidgetType, n.Name)
 
 	var a *toolkit.Action
 	a = new(toolkit.Action)
@@ -72,5 +72,21 @@ func (n *Node) redo(p *aplug) {
 		a.ParentId = n.parent.id
 	}
 
-	p.Action(a)
+	plug.pluginChan = plug.PluginChannel()
+
+	// plug.Action(a)
+	if (plug.pluginChan == nil) {
+		log(debugNow, "Action() SEND old way", plug.name)
+		log(debugNow, "Action() SEND old way", plug.name)
+		log(debugNow, "Action() SEND old way", plug.name)
+		plug.Action(a)
+		log(debugNow, "Action() SEND trying plug.PluginChannel()", plug.name)
+		log(debugNow, "Action() SEND trying plug.PluginChannel()", plug.pluginChan)
+	} else {
+		log(debugNow, "Action() SEND pluginChan", plug.name)
+		log(debugNow, "Action() SEND pluginChan", plug.name)
+		log(debugNow, "Action() SEND pluginChan", plug.name)
+		plug.pluginChan <- *a
+	}
+	sleep(.5)
 }

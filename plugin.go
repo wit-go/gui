@@ -331,14 +331,14 @@ func newaction(a *toolkit.Action, n *Node, where *Node) {
 
 	for _, aplug := range allPlugins {
 		log(debugPlugin, "Action() aplug =", aplug.name, "Action type=", a.ActionType)
-		if (aplug.Action == nil) {
-			log(debugPlugin, "Failed Action() == nil for", aplug.name)
-			continue
-		}
 		if (aplug.pluginChan == nil) {
 			log(debugNow, "Action() SEND old way", aplug.name)
 			log(debugNow, "Action() SEND old way", aplug.name)
 			log(debugNow, "Action() SEND old way", aplug.name)
+			if (aplug.Action == nil) {
+				log(debugPlugin, "Failed Action() == nil for", aplug.name)
+				continue
+			}
 			aplug.Action(a)
 			log(debugNow, "Action() SEND trying aplug.PluginChannel()", aplug.name)
 			aplug.pluginChan = aplug.PluginChannel()
@@ -349,6 +349,7 @@ func newaction(a *toolkit.Action, n *Node, where *Node) {
 			log(debugNow, "Action() SEND pluginChan", aplug.name)
 			aplug.pluginChan <- *a
 		}
+		sleep(.5)
 	}
 	// increment where to put the next widget in a grid or table
 	if (where != nil) {

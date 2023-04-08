@@ -203,8 +203,8 @@ func Main(f func()) {
 	if (os.Getenv("DISPLAY") == "") {
 		InitPlugins([]string{"gocui"})
 	} else {
-		InitPlugins([]string{"andlabs", "gocui"})
-		// InitPlugins([]string{"gocui", "andlabs"})
+		//InitPlugins([]string{"andlabs", "gocui"})
+		InitPlugins([]string{"gocui", "andlabs"})
 	}
 
 	for _, aplug := range allPlugins {
