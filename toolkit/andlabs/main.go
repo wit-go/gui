@@ -15,47 +15,47 @@ var res embed.FS
 // this is the channel we get requests to make widgets
 var pluginChan chan toolkit.Action
 
-var uiMain bool = false
+var uiMainUndef bool = true
 
 func catchActionChannel() {
-	log(logNow, "makeCallback() START")
+	log(logNow, "catchActionChannel() START")
 	for {
-		log(logNow, "makeCallback() for loop")
+		log(logNow, "catchActionChannel() for loop")
 	    	select {
 		case a := <-pluginChan:
-			log(logNow, "makeCallback() SELECT widget id =", a.WidgetId, a.Name)
+			log(logNow, "catchActionChannel() SELECT widget id =", a.WidgetId, a.Name)
 			// go Action(a)
-			if (a.WidgetType == toolkit.Window) {
-				log(logNow, "makeCallback() WINDOW START")
-				// this is a hack for now
-				// if uiMain == true, ui.Main() has already started
-				if (uiMain) {
-					log(logNow, "WINDOW START newWindow(&a)")
-					newWindow(a)
-				} else {
-					go ui.Main( func() {
-						log(logNow, "ui.Main() WINDOW START DOING NOTHING")
-						newWindow(a)
-						log(logNow, "ui.Main() WINDOW END")
-					})
-					uiMain = true
-				}
-				sleep(.5)
-				log(logNow, "makeCallback() WINDOW END")
+			if (uiMainUndef) {
+				log(logError,"catchActionChannel() main() was not run yet")
+				log(logError,"catchActionChannel() main() was not run yet")
+				log(logError,"catchActionChannel() main() was not run yet")
+				log(logError,"catchActionChannel() ui.Main() START")
+				log(logError,"catchActionChannel() ui.Main() START")
+				log(logError,"catchActionChannel() ui.Main() START")
+				log(logError,"catchActionChannel() ui.Main() START")
+				sleep(1)
+				// ui.Main(demoUI)
+				ui.Main( func() {
+					rawAction(a)
+				})
+				// probably not needed, but in here for now under development
+				uiMainUndef = false
+				sleep(1)
 			} else {
-				log(logNow, "makeCallback() STUFF")
+				log(logNow, "catchActionChannel() STUFF", a.WidgetId, a.ActionType, a.WidgetType)
 				rawAction(a)
-				log(logNow, "makeCallback() STUFF END")
+				log(logNow, "catchActionChannel() STUFF END", a.WidgetId, a.ActionType, a.WidgetType)
 			}
-			// sleep(.1)
 		}
 	}
 }
 
-func Main(f func()) {
+/*
+func main(f func()) {
 	log(debugNow, "Main() START (using gtk via andlabs/ui)")
 	f() // support the old way. deprecate this
 }
+*/
 
 // this sets the channel to send user events back from the plugin
 func Callback(guiCallback chan toolkit.Action) {
@@ -75,7 +75,7 @@ func PluginChannel() chan toolkit.Action {
 //
 // For example: Queue(NewWindow())
 //
-func Queue(f func()) {
+func queue(f func()) {
 	log(logNow, "Sending function to ui.QueueMain()")
 	log(logNow, "using gui.Queue() in this plugin DOES BREAK. TODO: solve this with channels")
 	ui.QueueMain(f)

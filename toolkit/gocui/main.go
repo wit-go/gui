@@ -33,6 +33,10 @@ func Init() {
 
 	log(logNow, "Init() start pluginChan")
 	go catchActionChannel()
+	sleep(.1)
+	go main()
+	// probably not needed, but in here for now under development
+	sleep(.1)
 }
 
 // this sets the channel to send user events back from the plugin
@@ -50,14 +54,10 @@ func catchActionChannel() {
 		log(logInfo, "catchActionChannel() infinite for() loop restarted select on channel")
 	    	select {
 		case a := <-me.pluginChan:
-			// this plugin can be loaded, but it doesn't actually do anything until
-			// the calling program sends an action to it. Then, it actually will initialize
-			// the tty and take over your console
 			if (me.baseGui == nil) {
-				log(logError,"main() was not run yet")
-				go main()
-				// probably not needed, but in here for now under development
-				sleep(1)
+				// something went wrong initializing the gocui
+				log(logError,"ERROR: console did not initialize")
+				continue
 			}
 			log(logNow, "catchActionChannel()", a.WidgetId, a.ActionType, a.WidgetType, a.Name)
 			action(&a)

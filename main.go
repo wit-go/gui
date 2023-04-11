@@ -196,9 +196,9 @@ func New() *Node {
 	if (os.Getenv("DISPLAY") == "") {
 		return Config.rootNode
 	}
-	if (LoadPlugin("andlabs")) {
-		log(logError, "New() failed to load andlabs")
-	}
+//	if (LoadPlugin("andlabs")) {
+//		log(logError, "New() failed to load andlabs")
+//	}
 	return Config.rootNode
 }
 
