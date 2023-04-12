@@ -127,6 +127,7 @@ const (
 	Append
 	Move
 	Dump
+	Quit
 )
 
 func (s WidgetType) String() string {

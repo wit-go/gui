@@ -24,7 +24,6 @@ func newButton(a *toolkit.Action) {
 	newt.uiButton = b
 	newt.uiControl = b
 	newt.wId = a.WidgetId
-	// newt.tw = a.Widget
 	newt.WidgetType = a.WidgetType
 	newt.parent = t
 

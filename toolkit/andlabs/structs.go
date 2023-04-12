@@ -22,6 +22,7 @@ type andlabsT struct {
 
 	// tw	*toolkit.Widget
 	parent	*andlabsT
+	a	toolkit.Action
 
 	uiControl ui.Control
 

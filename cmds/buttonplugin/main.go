@@ -18,7 +18,7 @@ func main() {
 	// This will turn on all debugging
 	// gui.SetDebug(true)
 
-	myGui = gui.New()
+	myGui = gui.New().LoadToolkit("gocui")
 	buttonWindow()
 
 	// This is just a optional goroutine to watch that things are alive
@@ -55,11 +55,11 @@ func buttonWindow() {
 	g.NewButton("Load 'gocui'", func () {
 		// this set the xterm and mate-terminal window title. maybe works generally?
 		fmt.Println("\033]0;" + title + "blah \007")
-		gui.LoadPlugin("gocui")
+		myGui.LoadToolkit("gocui")
 	})
 
 	g.NewButton("Load 'andlabs'", func () {
-		gui.LoadPlugin("andlabs")
+		myGui.LoadToolkit("andlabs")
 	})
 
 	g.NewButton("NewButton(more)", func () {

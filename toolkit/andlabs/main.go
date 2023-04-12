@@ -1,6 +1,7 @@
 package main
 
 import (
+	"sync"
 	"embed"
 	"git.wit.org/wit/gui/toolkit"
 
@@ -16,14 +17,20 @@ var res embed.FS
 var pluginChan chan toolkit.Action
 
 var uiMainUndef bool = true
+var uiMain sync.Once
+var muAction sync.Mutex
 
 func catchActionChannel() {
 	log(logNow, "catchActionChannel() START")
 	for {
 		log(logNow, "catchActionChannel() for loop")
+		uiMain.Do(func() {
+			go ui.Main(demoUI)
+		})
 	    	select {
 		case a := <-pluginChan:
 			log(logNow, "catchActionChannel() SELECT widget id =", a.WidgetId, a.Name)
+			/*
 			// go Action(a)
 			if (uiMainUndef) {
 				log(logError,"catchActionChannel() main() was not run yet")
@@ -34,7 +41,7 @@ func catchActionChannel() {
 				log(logError,"catchActionChannel() ui.Main() START")
 				log(logError,"catchActionChannel() ui.Main() START")
 				sleep(1)
-				go ui.Main(demoUI)
+				// go ui.Main(demoUI)
 				// go ui.Main( func() {
 				// 	rawAction(a)
 				// })
@@ -46,6 +53,12 @@ func catchActionChannel() {
 				rawAction(a)
 				log(logNow, "catchActionChannel() STUFF END", a.WidgetId, a.ActionType, a.WidgetType)
 			}
+			*/
+			log(logNow, "catchActionChannel() STUFF", a.WidgetId, a.ActionType, a.WidgetType)
+			muAction.Lock()
+			rawAction(a)
+			muAction.Unlock()
+			log(logNow, "catchActionChannel() STUFF END", a.WidgetId, a.ActionType, a.WidgetType)
 		}
 	}
 }
@@ -90,7 +103,7 @@ func Init() {
 	setDefaultBehavior(true)
 
 	andlabs = make(map[int]*andlabsT)
-	pluginChan = make(chan toolkit.Action)
+	pluginChan = make(chan toolkit.Action, 1)
 
 	log(logNow, "Init() start channel reciever")
 	go catchActionChannel()

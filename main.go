@@ -40,7 +40,7 @@ func init() {
 	Config.flag = Config.rootNode.newNode("flag", 0, nil)
 	Config.flag.WidgetType = toolkit.Flag
 
-	Config.guiChan = make(chan toolkit.Action)
+	Config.guiChan = make(chan toolkit.Action, 1)
 	go watchCallback()
 }
 
@@ -111,18 +111,12 @@ func (n *Node) doUserEvent(a toolkit.Action) {
 	}
 }
 
-func LoadPlugin(name string) bool {
+func (n *Node) LoadToolkit(name string) *Node {
 	log(logInfo, "Start() Main(f) for name =", name)
-	newPlugin := LoadToolkit(name)
-	if (newPlugin == nil) {
-		return false
+	if (FindPlugin(name) == nil) {
+		return n
 	}
-
-	sleep(1) // temp hack until chan communication is setup
-
-	// TODO: find a new way to do this that is locking, safe and accurate
-	Config.rootNode.redraw(newPlugin)
-	return true
+	return n
 }
 
 // There should only be one of these per application
@@ -130,18 +124,22 @@ func LoadPlugin(name string) bool {
 // some toolkit's on some operating systems don't support more than one
 // Keep things simple. Do the default expected thing whenever possible
 func New() *Node {
-	if (LoadPlugin("gocui")) {
+	return Config.rootNode
+}
+
+func (n *Node) Default() *Node {
+	if (FindPlugin("gocui") == nil) {
 		log(logError, "New() failed to load gocui")
 	}
 	// if DISPLAY isn't set, return since gtk can't load
 	// TODO: figure out how to check what to do in macos and mswindows
 	if (os.Getenv("DISPLAY") == "") {
-		return Config.rootNode
+		return n
 	}
-	if (LoadPlugin("andlabs")) {
+	if (FindPlugin("andlabs") == nil) {
 		log(logError, "New() failed to load andlabs")
 	}
-	return Config.rootNode
+	return n
 }
 
 // The window is destroyed but the application does not quit
@@ -157,9 +155,6 @@ func StandardExit() {
 	log("StandardExit() attempt to exit each toolkit plugin")
 	for i, aplug := range allPlugins {
 		log("NewButton()", i, aplug)
-		if (aplug.Quit != nil) {
-			aplug.Quit()
-		}
 	}
 	exit(0)
 }

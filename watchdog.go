@@ -24,10 +24,10 @@ func Watchdog() {
 			}
 		}
 		if (i == 2) {
-			LoadPlugin("gocui")
+			Config.rootNode.LoadToolkit("gocui")
 		}
 //		if (i == 3) {
-//			LoadPlugin("andlabs")
+//			Config.rootNode.LoadToolkit("andlabs")
 //		}
 		i += 1
 		time.Sleep(watchtime * time.Second / 10)

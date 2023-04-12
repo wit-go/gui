@@ -90,8 +90,8 @@ func (n *Node) DebugTab(title string) *Node {
 		}
 	})
 
-	g2.NewButton("load plugin 'gocui'", func () {
-		LoadPlugin("gocui")
+	g2.NewButton("load toolkit 'gocui'", func () {
+		Config.rootNode.LoadToolkit("gocui")
 	})
 
 	return newN

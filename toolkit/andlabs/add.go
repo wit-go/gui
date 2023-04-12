@@ -15,21 +15,21 @@ func actionDump(b bool, a *toolkit.Action) {
 	log(b, "actionDump() ParentId =", a.ParentId)
 }
 
-func add(a *toolkit.Action) {
+func add(a toolkit.Action) {
 	if (andlabs[a.WidgetId] != nil) {
 		log(debugError, "add() error. can't make a widget that already exists. id =", a.WidgetId)
-		actionDump(debugError, a)
+		actionDump(debugError, &a)
 		return
 	}
 	if (a.WidgetId == 0) {
 		log(debugError, "add() error. w.WidgetId == 0")
-		actionDump(debugError, a)
+		actionDump(debugError, &a)
 		return
 	}
 
 	// for now, window gets handled without checking where == nil)
 	if (a.WidgetType == toolkit.Window) {
-		newWindow(*a)
+		newWindow(a)
 		return
 	}
 
@@ -44,49 +44,49 @@ func add(a *toolkit.Action) {
 
 	switch a.WidgetType {
 	case toolkit.Window:
-		newWindow(*a)
+		newWindow(a)
 		return
 	case toolkit.Tab:
 		log(debugError, "add() CAME AT THIS FROM add() =", a.Name)
 		log(debugError, "add() CAME AT THIS FROM add() =", a.Name)
 		log(debugError, "add() CAME AT THIS FROM add() =", a.Name)
-		newTab(*a)
+		newTab(a)
 		return
 	case toolkit.Label:
-		newLabel(a)
+		newLabel(&a)
 		return
 	case toolkit.Button:
-		newButton(a)
+		newButton(&a)
 		return
 	case toolkit.Grid:
-		newGrid(a)
+		newGrid(&a)
 		return
 	case toolkit.Checkbox:
-		newCheckbox(a)
+		newCheckbox(&a)
 		return
 	case toolkit.Spinner:
-		newSpinner(a)
+		newSpinner(&a)
 		return
 	case toolkit.Slider:
-		newSlider(a)
+		newSlider(&a)
 		return
 	case toolkit.Dropdown:
-		newDropdown(a)
+		newDropdown(&a)
 		return
 	case toolkit.Combobox:
-		newCombobox(a)
+		newCombobox(&a)
 		return
 	case toolkit.Textbox:
-		newTextbox(a)
+		newTextbox(&a)
 		return
 	case toolkit.Group:
-		newGroup(a)
+		newGroup(&a)
 		return
 	case toolkit.Box:
-		newBox(a)
+		newBox(&a)
 		return
 	case toolkit.Image:
-		newImage(a)
+		newImage(&a)
 		return
 	default:
 		log(debugError, "add() error TODO: ", a.WidgetType, a.Name)
@@ -122,13 +122,14 @@ func place(a *toolkit.Action, t *andlabsT, newt *andlabsT) bool {
 
 	// add the structure to the array
 	if (andlabs[a.WidgetId] == nil) {
-		log(logInfo, "newTab() MAPPED", a.WidgetId, a.ParentId)
+		log(logInfo, "place() MAPPED", a.WidgetId, a.ParentId)
 		andlabs[a.WidgetId] = newt
 		newt.WidgetType = a.WidgetType
 	} else {
-		log(debugError, "newTab() DO WHAT?", a.WidgetId, a.ParentId)
-		log(debugError, "THIS IS BAD")
+		log(debugError, "place() DO WHAT?", a.WidgetId, a.ParentId)
+		log(debugError, "place() THIS IS BAD")
 	}
+	log(logInfo, "place() DONE MAPPED", a.WidgetId, a.ParentId)
 
 	if (newt.uiControl == nil) {
 		log(debugError, "place() ERROR uiControl == nil", a.ParentId)
@@ -141,12 +142,13 @@ func place(a *toolkit.Action, t *andlabsT, newt *andlabsT) bool {
 		return false
 	}
 
+	log(logInfo, "place() switch", where.WidgetType)
 	switch where.WidgetType {
 	case toolkit.Grid:
-		log(debugGrid, "add() Grid try at Parent X,Y =", a.X, a.Y)
+		log(debugGrid, "place() Grid try at Parent X,Y =", a.X, a.Y)
 		newt.gridX = a.X
 		newt.gridY = a.Y
-		log(debugGrid, "add() Grid try at gridX,gridY", newt.gridX, newt.gridY)
+		log(debugGrid, "place() Grid try at gridX,gridY", newt.gridX, newt.gridY)
 		// at the very end, subtract 1 from X & Y since andlabs/ui starts counting at zero
 		t.uiGrid.Append(newt.uiControl,
 			newt.gridY - 1, newt.gridX - 1, 1, 1,
@@ -155,7 +157,7 @@ func place(a *toolkit.Action, t *andlabsT, newt *andlabsT) bool {
 	case toolkit.Group:
 		if (t.uiBox == nil) {
 			t.uiGroup.SetChild(newt.uiControl)
-			log(debugGrid, "add() hack Group to use this as the box?", a.Name, a.WidgetType)
+			log(debugGrid, "place() hack Group to use this as the box?", a.Name, a.WidgetType)
 			t.uiBox  = newt.uiBox
 		} else {
 			t.uiBox.Append(newt.uiControl, stretchy)
@@ -166,6 +168,8 @@ func place(a *toolkit.Action, t *andlabsT, newt *andlabsT) bool {
 		t.boxC += 1
 		return true
 	case toolkit.Box:
+		log(logInfo, "place() uiBox =", t.uiBox)
+		log(logInfo, "place() uiControl =", newt.uiControl)
 		t.uiBox.Append(newt.uiControl, stretchy)
 		t.boxC += 1
 		return true
@@ -173,7 +177,7 @@ func place(a *toolkit.Action, t *andlabsT, newt *andlabsT) bool {
 		t.uiWindow.SetChild(newt.uiControl)
 		return true
 	default:
-		log(debugError, "add() how?", a.ParentId)
+		log(debugError, "place() how?", a.ParentId)
 	}
 	return false
 }

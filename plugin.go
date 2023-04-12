@@ -21,10 +21,11 @@ type aplug struct {
 	filename string
 	plug *plugin.Plugin
 	sym *plugin.Symbol
-	LoadOk bool
+	// LoadOk bool
 	InitOk bool
-	MainOk bool
+	// MainOk bool
 
+	// startup whatever might need to be setup in the plugin
 	Init func()
 
 	// This passes the go channel to the plugin
@@ -47,35 +48,30 @@ type aplug struct {
 	// each toolkit has it's own goroutine and each one is sent this
 	// add button request
 	pluginChan chan toolkit.Action
-
 	PluginChannel func() chan toolkit.Action
 
 	// deprecate all this
 	// TODO: make Main() main() and never allow the user to call it
 	// run plugin.Main() when the plugin is loaded
-	Main func(func ())	// this never returns. Each plugin must have it's own goroutine
-	Quit func()
-
-	// simplifies passing to the plugin
-	// Send func(*toolkit.Widget, *toolkit.Widget)
-	// should replace Send()
-	// Action func(*toolkit.Action)
+	// Main func(func ())	// this never returns. Each plugin must have it's own goroutine
+	// Quit func()
 }
 
 var allPlugins []*aplug
 
 // loads and initializes a toolkit (andlabs/ui, gocui, etc)
-func LoadToolkit(name string) *aplug {
+// attempts to locate the .so file
+func FindPlugin(name string) *aplug {
 	var newPlug *aplug
 	newPlug = new(aplug)
 
-	log(logInfo, "LoadToolkit() START")
-	newPlug.LoadOk = false
+	log(logInfo, "FindPlugin() START")
+	newPlug.InitOk = false
 
 	for _, aplug := range allPlugins {
-		log(debugGui, "LoadToolkit() already loaded toolkit plugin =", aplug.name)
+		log(debugGui, "FindPlugin() already loaded toolkit plugin =", aplug.name)
 		if (aplug.name == name) {
-			log(debugError, "LoadToolkit() SKIPPING", name, "as you can't load it twice")
+			log(debugError, "FindPlugin() SKIPPING", name, "as you can't load it twice")
 			return aplug
 		}
 	}
@@ -94,13 +90,13 @@ func LoadToolkit(name string) *aplug {
 	newPlug.Init = loadFuncE(newPlug, "Init")
 
 	// should make a goroutine that never exits
-	newPlug.Main  = loadFuncF(newPlug, "Main")
+	// newPlug.Main  = loadFuncF(newPlug, "Main")
 
 	// should send things to the goroutine above
 	// newPlug.Queue = loadFuncF(&newPlug, "Queue")
 
 	// unload the plugin and restore state
-	newPlug.Quit = loadFuncE(newPlug, "Quit")
+	// newPlug.Quit = loadFuncE(newPlug, "Quit")
 
 	// Sends instructions like "Add", "Delete", "Disable", etc
 	// Sends a widget (button, checkbox, etc) and it's parent widget
@@ -116,14 +112,20 @@ func LoadToolkit(name string) *aplug {
 
 	allPlugins = append(allPlugins, newPlug)
 
-	log(debugPlugin, "LoadToolkit() END", newPlug.name, filename)
+	log(debugPlugin, "FindPlugin() END", newPlug.name, filename)
 	newPlug.Init()
 
 	// set the communication to the plugins
 	newPlug.pluginChan = newPlug.PluginChannel()
 	newPlug.Callback(Config.guiChan)
 
-	newPlug.LoadOk = true
+	newPlug.InitOk = true
+
+	sleep(1) // temp hack until chan communication is setup
+
+	// TODO: find a new way to do this that is locking, safe and accurate
+	Config.rootNode.redraw(newPlug)
+
 	return newPlug
 }
 

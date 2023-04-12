@@ -55,7 +55,7 @@ func rawAction(a toolkit.Action) {
 
 	switch a.ActionType {
 	case toolkit.Add:
-		add(&a)
+		add(a)
 	case toolkit.Show:
 		a.B = true
 		show(&a)
