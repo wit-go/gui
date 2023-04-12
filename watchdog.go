@@ -23,6 +23,12 @@ func Watchdog() {
 				Config.rootNode.ListChildren(true)
 			}
 		}
+		if (i == 2) {
+			LoadPlugin("gocui")
+		}
+//		if (i == 3) {
+//			LoadPlugin("andlabs")
+//		}
 		i += 1
 		time.Sleep(watchtime * time.Second / 10)
 	}

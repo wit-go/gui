@@ -127,7 +127,7 @@ Creates a window helpful for debugging this package
 
 `func Indent(b bool, a ...interface{})`
 
-### func [LoadPlugin](/main.go#L172)
+### func [LoadPlugin](/main.go#L114)
 
 `func LoadPlugin(name string) bool`
 
@@ -149,7 +149,7 @@ loads and initializes a toolkit (andlabs/ui, gocui, etc)
 
 `func ShowDebugValues()`
 
-### func [StandardExit](/main.go#L261)
+### func [StandardExit](/main.go#L155)
 
 `func StandardExit()`
 
@@ -190,7 +190,7 @@ var Config GuiConfig
 The Node is a binary tree. This is how all GUI elements are stored
 simply the name and the size of whatever GUI element exists
 
-#### func [New](/main.go#L190)
+#### func [New](/main.go#L132)
 
 `func New() *Node`
 

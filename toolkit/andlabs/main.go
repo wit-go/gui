@@ -34,10 +34,10 @@ func catchActionChannel() {
 				log(logError,"catchActionChannel() ui.Main() START")
 				log(logError,"catchActionChannel() ui.Main() START")
 				sleep(1)
-				// ui.Main(demoUI)
-				ui.Main( func() {
-					rawAction(a)
-				})
+				go ui.Main(demoUI)
+				// go ui.Main( func() {
+				// 	rawAction(a)
+				// })
 				// probably not needed, but in here for now under development
 				uiMainUndef = false
 				sleep(1)

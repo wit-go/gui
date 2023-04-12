@@ -44,64 +44,6 @@ func init() {
 	go watchCallback()
 }
 
-/*
-func doGuiChan() {
-	for {
-		select {
-		case <-Config.ActionCh1:
-			log(true, "CHANNEL ACTION 1  !!!!!")
-			return
-		case <-Config.ActionCh2:
-			log(true, "CHANNEL ACTION 2  !!!!!")
-			return
-		default:
-			log(true, "doGuiChan() nothing")
-		}
-		log(true, "doGuiChan() for()")
-	}
-}
-*/
-
-/*
-// TODO: add logic to just load the 1st 'most common' gui toolkit
-// and allow the 'go-arg' command line args to override the defaults
-func InitPlugins(names []string) []string {
-	log(debugGui, "Starting gui.Init()")
-
-	for _, aplug := range allPlugins {
-		log(debugGui, "LoadToolkit() already loaded toolkit plugin =", aplug.name)
-		for _, name := range names {
-			if (name == aplug.name) {
-				return []string{name}
-			}
-		}
-	}
-
-	// try to load each plugin in the order passed to this function
-	for _, name := range names {
-		aPlug := LoadToolkit(name)
-		if (aPlug != nil) {
-			// exit because it worked!
-			return []string{name}
-		}
-	}
-
-	// the program didn't specify a plugin. Try to load one
-	// TODO: detect the OS & user preferences to load the best one
-	// TODO: commented out Init() on 02/26/2023 because I'm not sure how to run it correctly
-	andlabsPlug := LoadToolkit("andlabs")
-	if (andlabsPlug != nil) {
-		return []string{}
-	}
-
-	gocuiPlug := LoadToolkit("andlabs")
-	if (gocuiPlug != nil) {
-		return []string{}
-	}
-	return []string{}
-}
-*/
-
 func watchCallback() {
 	log(logInfo, "watchCallback() START")
 	for {
@@ -196,59 +138,11 @@ func New() *Node {
 	if (os.Getenv("DISPLAY") == "") {
 		return Config.rootNode
 	}
-//	if (LoadPlugin("andlabs")) {
-//		log(logError, "New() failed to load andlabs")
-//	}
+	if (LoadPlugin("andlabs")) {
+		log(logError, "New() failed to load andlabs")
+	}
 	return Config.rootNode
 }
-
-/*
-// This should not pass a function
-func Main(f func()) {
-	log(debugGui, "Starting gui.Main() (using gtk via andlabs/ui)")
-
-	// TODO: this is linux only
-	// TODO: detect if this was run from the command line (parent == bash?)
-	// if DISPLAY is not set, don't even bother with loading andlabs
-	if (os.Getenv("DISPLAY") == "") {
-		InitPlugins([]string{"gocui"})
-	} else {
-		// InitPlugins([]string{"andlabs", "gocui"})
-		InitPlugins([]string{"gocui", "andlabs"})
-	}
-
-	for _, aplug := range allPlugins {
-		log(debugGui, "NewButton() toolkit plugin =", aplug.name)
-		if (aplug.MainOk) {
-			log(debugGui, "Main() Already Ran Main()", aplug.name)
-			continue
-		}
-		if (aplug.Main == nil) {
-			log(debugGui, "Main() Main == nil", aplug.name)
-			continue
-		}
-		aplug.MainOk = true
-		if (aplug.Callback == nil) {
-			// TODO: don't load the module if this failed ?
-			// if Callback() isn't set in the plugin, no information can be sent to it!
-			log(debugError, "SERIOUS ERROR: plugin Callback() == nil. nothing will work for toolkit", aplug.name)
-		} else {
-			aplug.Callback(Config.guiChan)
-		}
-
-		if (aplug.PluginChannel == nil) {
-			// TODO: don't load the module if this failed ?
-			// if Callback() isn't set in the plugin, no information can be sent to it!
-			log(debugError, "ERROR: plugin does not implement a send channel. toolkit =", aplug.name)
-		} else {
-			aplug.pluginChan = aplug.PluginChannel()
-		}
-
-		aplug.Main(f)
-	}
-
-}
-*/
 
 // The window is destroyed but the application does not quit
 func (n *Node) StandardClose() {
