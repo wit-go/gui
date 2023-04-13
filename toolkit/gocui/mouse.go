@@ -6,7 +6,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/awesome-gocui/gocui"
 )
@@ -60,14 +59,6 @@ func layout(g *gocui.Gui) error {
 			return err
 		}
 	}
-	if v, err := g.SetView("but2", 24, 2, 44, 4, 0); err != nil {
-		if !errors.Is(err, gocui.ErrUnknownView) {
-			return err
-		}
-		v.SelBgColor = gocui.ColorGreen
-		v.SelFgColor = gocui.ColorBlack
-		fmt.Fprintln(v, "Button 2 - line 1")
-	}
 	*/
 	helplayout(g)
 	updateHighlightedView(g)
@@ -76,29 +67,6 @@ func layout(g *gocui.Gui) error {
 
 func quit(g *gocui.Gui, v *gocui.View) error {
 	return gocui.ErrQuit
-}
-
-func showMsg(g *gocui.Gui, v *gocui.View) error {
-	var l string
-	var err error
-
-	if _, err := g.SetCurrentView(v.Name()); err != nil {
-		return err
-	}
-
-	_, cy := v.Cursor()
-	if l, err = v.Line(cy); err != nil {
-		l = ""
-	}
-
-	maxX, maxY := g.Size()
-	if v, err := g.SetView("msg", maxX/2-10, maxY/2, maxX/2+10, maxY/2+2, 0); err == nil || errors.Is(err, gocui.ErrUnknownView) {
-		v.Clear()
-		v.SelBgColor = gocui.ColorCyan
-		v.SelFgColor = gocui.ColorBlack
-		fmt.Fprintln(v, l)
-	}
-	return nil
 }
 
 func updateHighlightedView(g *gocui.Gui) {
@@ -111,45 +79,12 @@ func updateHighlightedView(g *gocui.Gui) {
 	}
 }
 
-func moveMsg(g *gocui.Gui) {
-	mx, my := g.MousePosition()
-	if !movingMsg && (mx != initialMouseX || my != initialMouseY) {
-		movingMsg = true
-	}
-	g.SetView("msg", mx-xOffset, my-yOffset, mx-xOffset+20, my-yOffset+2, 0)
-}
-
 func msgDown(g *gocui.Gui, v *gocui.View) error {
 	initialMouseX, initialMouseY = g.MousePosition()
 	if vx, vy, _, _, err := g.ViewPosition("msg"); err == nil {
 		xOffset = initialMouseX - vx
 		yOffset = initialMouseY - vy
 		msgMouseDown = true
-	}
-	return nil
-}
-
-func globalDown(g *gocui.Gui, v *gocui.View) error {
-	mx, my := g.MousePosition()
-	if vx0, vy0, vx1, vy1, err := g.ViewPosition("msg"); err == nil {
-		if mx >= vx0 && mx <= vx1 && my >= vy0 && my <= vy1 {
-			return msgDown(g, v)
-		}
-	}
-	globalMouseDown = true
-	maxX, _ := g.Size()
-	msg := fmt.Sprintf("Mouse down at: %d,%d", mx, my)
-	x := mx - len(msg)/2
-	if x < 0 {
-		x = 0
-	} else if x+len(msg)+1 > maxX-1 {
-		x = maxX - 1 - len(msg) - 1
-	}
-	if v, err := g.SetView("globalDown", x, my-1, x+len(msg)+1, my+1, 0); err != nil {
-		if !errors.Is(err, gocui.ErrUnknownView) {
-			return err
-		}
-		v.WriteString(msg)
 	}
 	return nil
 }
