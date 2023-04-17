@@ -45,6 +45,7 @@ func showMsg(g *gocui.Gui, v *gocui.View) error {
 		fmt.Fprintln(v, l)
 	}
 	// g.SetViewOnTop("msg")
-	g.SetViewOnBottom("msg")
+	g.SetViewBeneath("msg", "help", 24)
+	// g.SetViewOnBottom("msg")
 	return nil
 }
