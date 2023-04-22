@@ -83,5 +83,6 @@ func main() {
 	log("This is a test log entry")
 
 	MouseMain()
+	log(true, "MouseMain() closed")
 	me.baseGui.Close()
 }

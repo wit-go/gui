@@ -112,11 +112,27 @@ func (n *Node) doUserEvent(a toolkit.Action) {
 }
 
 func (n *Node) LoadToolkit(name string) *Node {
-	log(logInfo, "Start() Main(f) for name =", name)
+	log(logInfo, "LoadToolkit() for name =", name)
 	if (FindPlugin(name) == nil) {
 		return n
 	}
 	return n
+}
+
+func (n *Node) CloseToolkit(name string) bool {
+	log(logInfo, "CloseToolkit() for name =", name)
+	for _, aplug := range allPlugins {
+		log(debugGui, "CloseToolkit() found", aplug.name)
+		if (aplug.name == name) {
+			log(debugNow, "CloseToolkit() sending close", name)
+			var a toolkit.Action
+			a.ActionType = toolkit.CloseToolkit
+			aplug.pluginChan <- a
+			sleep(.5)
+			return true
+		}
+	}
+	return false
 }
 
 // There should only be one of these per application

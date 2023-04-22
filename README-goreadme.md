@@ -146,7 +146,7 @@ attempts to locate the .so file
 
 `func ShowDebugValues()`
 
-### func [StandardExit](/main.go#L153)
+### func [StandardExit](/main.go#L169)
 
 `func StandardExit()`
 
@@ -187,7 +187,7 @@ var Config GuiConfig
 The Node is a binary tree. This is how all GUI elements are stored
 simply the name and the size of whatever GUI element exists
 
-#### func [New](/main.go#L126)
+#### func [New](/main.go#L142)
 
 `func New() *Node`
 

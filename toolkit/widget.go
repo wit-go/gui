@@ -109,7 +109,6 @@ const (
 
 const (
 	Add ActionType = iota
-	User // the user did something (mouse, keyboard, etc)
 	Delete
 	Get
 	Set
@@ -127,7 +126,9 @@ const (
 	Append
 	Move
 	Dump
-	Quit
+	User // the user did something (mouse, keyboard, etc)
+	InitToolkit // initializes the toolkit
+	CloseToolkit // closes the toolkit
 )
 
 func (s WidgetType) String() string {
