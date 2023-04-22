@@ -64,6 +64,9 @@ github:
 doc:
 	GO111MODULE="off" godoc -v
 
+goget:
+	GO111MODULE="off" go get -v -t -u
+	make -C toolkit/gocui goget
 
 # GO111MODULE=on go install github.com/posener/goreadme/cmd/goreadme@latest (worked Oct 20 2022)
 README.md: doc.go
@@ -76,7 +79,7 @@ clean:
 plugins: plugins-gocui plugins-andlabs
 
 plugins-gocui:
-	make -C  toolkit/gocui
+	make -C toolkit/gocui
 
 plugins-andlabs:
 	cd toolkit/andlabs/ && GO111MODULE="off" go build -buildmode=plugin -o ../andlabs.so

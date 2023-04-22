@@ -1,6 +1,9 @@
 all: plugin
 	ldd ../gocui.so
 
+goget:
+	GO111MODULE="off" go get -v -t -u
+
 build:
 	GO111MODULE="off" go build
 
