@@ -1,4 +1,4 @@
-.PHONY: README.md
+.PHONY: README.md log
 
 all: README.md
 	reset
@@ -67,7 +67,7 @@ doc:
 
 # GO111MODULE=on go install github.com/posener/goreadme/cmd/goreadme@latest (worked Oct 20 2022)
 README.md: doc.go
-	goreadme -factories -types -functions -variabless > README-goreadme.md 
+	-goreadme -factories -types -functions -variabless > README-goreadme.md 
 
 clean:
 	rm -f toolkit/*.so
@@ -84,3 +84,7 @@ plugins-andlabs:
 
 objdump:
 	objdump -t toolkit/andlabs.so |less
+
+log:
+	reset
+	tail -f /tmp/witgui.* /tmp/guilogfile
