@@ -54,6 +54,8 @@ cmds-helloconsole:
 # git remote add github2 git@github.com:wit-go/gui.git
 github:
 	git push origin master
+	git push origin devel
+	git push origin --tags
 	git push github master
 	git push github devel
 	git push github --tags
