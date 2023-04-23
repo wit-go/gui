@@ -63,40 +63,7 @@ func initPlugin(name string) *aplug {
 		}
 	}
 
-	var newPlug *aplug
-	newPlug = new(aplug)
-	newPlug.InitOk = false
-
-	// locate the shared library file
-	filename := name + ".so"
-	loadPlugin(newPlug, filename)
-	if (newPlug.plug == nil) {
-		log(true, "attempt to find plugin", filename, "failed")
-		return nil
-	}
-	// newPlug.Ok = true
-	newPlug.name = name
-
-	// this tells the toolkit plugin how to send user events back to us
-	// for things like: the user clicked on the 'Check IPv6'
-	newPlug.Callback = sendCallback(newPlug, "Callback")
-
-	// this let's us know where to send requests to the toolkit
-	// for things like: add a new button called 'Check IPv6'
-	newPlug.PluginChannel = getPluginChannel(newPlug, "PluginChannel")
-
-	allPlugins = append(allPlugins, newPlug)
-
-	log(debugPlugin, "initPlugin() END", newPlug.name, filename)
-	// newPlug.Init()
-
-	// set the communication to the plugins
-	newPlug.pluginChan = newPlug.PluginChannel()
-	newPlug.Callback(Config.guiChan)
-
-	newPlug.InitOk = true
-
-	return newPlug
+	return searchPaths(name)
 }
 
 //	newPlug.PluginChannel = getPluginChannel(newPlug, "PluginChannel")
@@ -139,55 +106,78 @@ func sendCallback(p *aplug, funcName string) func(chan toolkit.Action) {
 }
 
 /*
+	TODO: clean this up. use command args?
 	This searches in the following order for the plugin .so files:
 		./toolkit/
 		~/go/src/go.wit.org/gui/toolkit/
 		/usr/lib/go-gui/
 */
-func loadPlugin(p *aplug, name string) {
+func searchPaths(name string) *aplug {
 	var filename string
+
+	// attempt to write out the file from the internal resource
+	filename = "toolkit/" + name + ".so"
+	p := tryfile(name, filename)
+	if (p != nil) {
+		return p
+	}
 
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
-		log(logError, "loadPlugin() error. exiting here?")
-		return
+		log(logError, "searchPaths() error. exiting here?")
+	} else {
+		filename = homeDir + "/go/src/git.wit.org/wit/gui/toolkit/" + name + ".so"
+		p = tryfile(name, filename)
+		if (p != nil) {
+			return p
+		}
 	}
 
-	// attempt to write out the file from the internal resource
-	filename = "toolkit/" + name
-	p.plug = loadfile(filename)
-	if (p.plug != nil) {
-		p.filename = filename
-		return
+	filename = "/usr/lib/go-gui/" + name + ".so"
+	p = tryfile(name, filename)
+	if (p != nil) {
+		return p
 	}
-
-	filename = homeDir + "/go/src/git.wit.org/wit/gui/toolkit/" + name
-	p.plug = loadfile(filename)
-	if (p.plug != nil) {
-		p.filename = filename
-		return
-	}
-
-	filename = "/usr/lib/go-gui/" + name
-	p.plug = loadfile(filename)
-	if (p.plug != nil) {
-		p.filename = filename
-		return
-	}
-	return
+	return nil
 }
 
 // load module
 // 1. open the shared object file to load the symbols
-func loadfile(filename string) *plugin.Plugin {
+func tryfile(name string, filename string) *aplug {
 	plug, err := plugin.Open(filename)
 	if err != nil {
 		log(debugGui, "plugin FAILED =", filename, err)
 		return nil
 	}
-	log(debugGui, "plugin WORKED =", filename)
-	log(true, "loading plugin", filename, "worked")
-	return plug
+	log(debugGui, "loading plugin =", filename)
+
+	var newPlug *aplug
+	newPlug = new(aplug)
+	newPlug.InitOk = false
+	newPlug.name = name
+	newPlug.filename = filename
+	newPlug.plug = plug
+
+	// this tells the toolkit plugin how to send user events back to us
+	// for things like: the user clicked on the 'Check IPv6'
+	newPlug.Callback = sendCallback(newPlug, "Callback")
+
+	// this let's us know where to send requests to the toolkit
+	// for things like: add a new button called 'Check IPv6'
+	newPlug.PluginChannel = getPluginChannel(newPlug, "PluginChannel")
+
+	allPlugins = append(allPlugins, newPlug)
+
+	log(debugPlugin, "initPlugin() END", newPlug.name, filename)
+	// newPlug.Init()
+
+	// set the communication to the plugins
+	newPlug.pluginChan = newPlug.PluginChannel()
+	newPlug.Callback(Config.guiChan)
+
+	newPlug.InitOk = true
+
+	return newPlug
 }
 
 // 2023/04/06 Queue() is also being used and channels are being used. memcopy() only

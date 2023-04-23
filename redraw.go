@@ -55,5 +55,5 @@ func (n *Node) redo(plug *aplug) {
 	}
 
 	plug.pluginChan <- *a
-	sleep(.5)
+	// sleep(.5)
 }
