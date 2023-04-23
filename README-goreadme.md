@@ -123,14 +123,7 @@ Creates a window helpful for debugging this package
 
 `func ExampleCatcher(f func())`
 
-### func [FindPlugin](/plugin.go#L64)
-
-`func FindPlugin(name string) *aplug`
-
-loads and initializes a toolkit (andlabs/ui, gocui, etc)
-attempts to locate the .so file
-
-### func [Indent](/debug.go#L120)
+### func [Indent](/debug.go#L126)
 
 `func Indent(b bool, a ...interface{})`
 
@@ -138,15 +131,15 @@ attempts to locate the .so file
 
 `func SetDebug(s bool)`
 
-### func [SetFlag](/debug.go#L44)
+### func [SetFlag](/debug.go#L50)
 
 `func SetFlag(s string, b bool)`
 
-### func [ShowDebugValues](/debug.go#L79)
+### func [ShowDebugValues](/debug.go#L85)
 
 `func ShowDebugValues()`
 
-### func [StandardExit](/main.go#L169)
+### func [StandardExit](/main.go#L180)
 
 `func StandardExit()`
 
@@ -187,7 +180,7 @@ var Config GuiConfig
 The Node is a binary tree. This is how all GUI elements are stored
 simply the name and the size of whatever GUI element exists
 
-#### func [New](/main.go#L142)
+#### func [New](/main.go#L153)
 
 `func New() *Node`
 

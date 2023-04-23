@@ -112,22 +112,33 @@ func (n *Node) doUserEvent(a toolkit.Action) {
 }
 
 func (n *Node) LoadToolkit(name string) *Node {
-	log(logInfo, "LoadToolkit() for name =", name)
-	if (FindPlugin(name) == nil) {
+	log(logInfo, "LoadToolkit() START for name =", name)
+	plug := initPlugin(name)
+	if (plug == nil) {
 		return n
 	}
+
+	log(logInfo, "LoadToolkit() sending InitToolkit action to the plugin channel")
+	var a toolkit.Action
+	a.ActionType = toolkit.InitToolkit
+	plug.pluginChan <- a
+	sleep(.5) // temp hack until chan communication is setup
+
+	// TODO: find a new way to do this that is locking, safe and accurate
+	Config.rootNode.redraw(plug)
+	log(logInfo, "LoadToolkit() END for name =", name)
 	return n
 }
 
 func (n *Node) CloseToolkit(name string) bool {
 	log(logInfo, "CloseToolkit() for name =", name)
-	for _, aplug := range allPlugins {
-		log(debugGui, "CloseToolkit() found", aplug.name)
-		if (aplug.name == name) {
+	for _, plug := range allPlugins {
+		log(debugGui, "CloseToolkit() found", plug.name)
+		if (plug.name == name) {
 			log(debugNow, "CloseToolkit() sending close", name)
 			var a toolkit.Action
 			a.ActionType = toolkit.CloseToolkit
-			aplug.pluginChan <- a
+			plug.pluginChan <- a
 			sleep(.5)
 			return true
 		}
@@ -144,7 +155,7 @@ func New() *Node {
 }
 
 func (n *Node) Default() *Node {
-	if (FindPlugin("gocui") == nil) {
+	if (n.LoadToolkit("gocui") == nil) {
 		log(logError, "New() failed to load gocui")
 	}
 	// if DISPLAY isn't set, return since gtk can't load
@@ -152,7 +163,7 @@ func (n *Node) Default() *Node {
 	if (os.Getenv("DISPLAY") == "") {
 		return n
 	}
-	if (FindPlugin("andlabs") == nil) {
+	if (n.LoadToolkit("andlabs") == nil) {
 		log(logError, "New() failed to load andlabs")
 	}
 	return n
@@ -169,8 +180,8 @@ func (n *Node) StandardClose() {
 func StandardExit() {
 	log("wit/gui Standard Window Exit. running os.Exit()")
 	log("StandardExit() attempt to exit each toolkit plugin")
-	for i, aplug := range allPlugins {
-		log("NewButton()", i, aplug)
+	for i, plug := range allPlugins {
+		log("NewButton()", i, plug)
 	}
 	exit(0)
 }

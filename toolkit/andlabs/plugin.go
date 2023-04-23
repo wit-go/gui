@@ -24,6 +24,7 @@ func Send(p *toolkit.Widget, c *toolkit.Widget) {
 }
 */
 
+/*
 func oldAction2(a *toolkit.Action) {
 	log(logNow, "Action() START")
 	if (a == nil) {
@@ -31,21 +32,30 @@ func oldAction2(a *toolkit.Action) {
 		return
 	}
 	pluginChan <- *a
-	/*
+
 	f := func() {
 		rawAction(a)
 	}
 
 	// f()
 	Queue(f)
-	*/
 	log(logNow, "Action() END")
 }
-
+*/
 
 func rawAction(a toolkit.Action) {
 	log(debugAction, "rawAction() START a.ActionType =", a.ActionType)
 	log(debugAction, "rawAction() START a.S =", a.S)
+
+	if (a.ActionType == toolkit.InitToolkit) {
+		// TODO: make sure to only do this once
+		// go uiMain.Do(func() {
+		// 	ui.Main(demoUI)
+			// go catchActionChannel()
+		// })
+		// try doing this on toolkit load in init()
+		return
+	}
 
 	log(logNow, "rawAction() START a.WidgetId =", a.WidgetId, "a.ParentId =", a.ParentId)
 	switch a.WidgetType {

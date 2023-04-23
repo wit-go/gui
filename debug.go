@@ -29,6 +29,12 @@ func SetDebug (s bool) {
 	debugGui     = s
 	debugTabs    = s
 
+	logNow = s
+	logInfo = s
+	logWarn = s
+	logError = s
+	logVerbose = s
+
 	SetFlag("Node", s)
 	SetFlag("Tabs", s)
 	SetFlag("Dump", s)

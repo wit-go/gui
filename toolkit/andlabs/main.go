@@ -24,9 +24,6 @@ func catchActionChannel() {
 	log(logNow, "catchActionChannel() START")
 	for {
 		log(logNow, "catchActionChannel() for loop")
-		uiMain.Do(func() {
-			go ui.Main(demoUI)
-		})
 	    	select {
 		case a := <-pluginChan:
 			log(logNow, "catchActionChannel() SELECT widget id =", a.WidgetId, a.Name)
@@ -95,7 +92,7 @@ func queue(f func()) {
 }
 
 // This is important. This sets the defaults for the gui. Without this, there isn't correct padding, etc
-func Init() {
+func init() {
 	log(logNow, "Init() START")
 	log(debugToolkit, "Init()")
 	// Can you pass values to a plugin init() ? Otherwise, there is no way to safely print
@@ -106,7 +103,17 @@ func Init() {
 	pluginChan = make(chan toolkit.Action, 1)
 
 	log(logNow, "Init() start channel reciever")
+	go ui.Main(func() {
+		demoUI()
+	})
 	go catchActionChannel()
+	/*
+	// go catchActionChannel()
+	go uiMain.Do(func() {
+		ui.Main(demoUI)
+		// go catchActionChannel()
+	})
+	*/
 	log(logNow, "Init() END")
 }
 

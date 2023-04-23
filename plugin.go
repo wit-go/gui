@@ -16,17 +16,14 @@ var err error
 type Symbol any
 
 type aplug struct {
-	// Ok bool
 	name string
 	filename string
 	plug *plugin.Plugin
-	sym *plugin.Symbol
-	// LoadOk bool
+	// sym *plugin.Symbol
 	InitOk bool
-	// MainOk bool
 
 	// startup whatever might need to be setup in the plugin
-	Init func()
+//	Init func()
 
 	// This passes the go channel to the plugin
 	// the plugin then passes actions back to
@@ -49,32 +46,26 @@ type aplug struct {
 	// add button request
 	pluginChan chan toolkit.Action
 	PluginChannel func() chan toolkit.Action
-
-	// deprecate all this
-	// TODO: make Main() main() and never allow the user to call it
-	// run plugin.Main() when the plugin is loaded
-	// Main func(func ())	// this never returns. Each plugin must have it's own goroutine
-	// Quit func()
 }
 
 var allPlugins []*aplug
 
 // loads and initializes a toolkit (andlabs/ui, gocui, etc)
 // attempts to locate the .so file
-func FindPlugin(name string) *aplug {
-	var newPlug *aplug
-	newPlug = new(aplug)
-
-	log(logInfo, "FindPlugin() START")
-	newPlug.InitOk = false
+func initPlugin(name string) *aplug {
+	log(logInfo, "initPlugin() START")
 
 	for _, aplug := range allPlugins {
-		log(debugGui, "FindPlugin() already loaded toolkit plugin =", aplug.name)
+		log(debugGui, "initPlugin() already loaded toolkit plugin =", aplug.name)
 		if (aplug.name == name) {
-			log(debugError, "FindPlugin() SKIPPING", name, "as you can't load it twice")
-			return aplug
+			log(debugError, "initPlugin() SKIPPING", name, "as you can't load it twice")
+			return nil
 		}
 	}
+
+	var newPlug *aplug
+	newPlug = new(aplug)
+	newPlug.InitOk = false
 
 	// locate the shared library file
 	filename := name + ".so"
@@ -86,22 +77,6 @@ func FindPlugin(name string) *aplug {
 	// newPlug.Ok = true
 	newPlug.name = name
 
-	// deprecate Init(?)
-	newPlug.Init = loadFuncE(newPlug, "Init")
-
-	// should make a goroutine that never exits
-	// newPlug.Main  = loadFuncF(newPlug, "Main")
-
-	// should send things to the goroutine above
-	// newPlug.Queue = loadFuncF(&newPlug, "Queue")
-
-	// unload the plugin and restore state
-	// newPlug.Quit = loadFuncE(newPlug, "Quit")
-
-	// Sends instructions like "Add", "Delete", "Disable", etc
-	// Sends a widget (button, checkbox, etc) and it's parent widget
-	// newPlug.Action = loadFuncA(newPlug, "Action")
-
 	// this tells the toolkit plugin how to send user events back to us
 	// for things like: the user clicked on the 'Check IPv6'
 	newPlug.Callback = sendCallback(newPlug, "Callback")
@@ -112,8 +87,8 @@ func FindPlugin(name string) *aplug {
 
 	allPlugins = append(allPlugins, newPlug)
 
-	log(debugPlugin, "FindPlugin() END", newPlug.name, filename)
-	newPlug.Init()
+	log(debugPlugin, "initPlugin() END", newPlug.name, filename)
+	// newPlug.Init()
 
 	// set the communication to the plugins
 	newPlug.pluginChan = newPlug.PluginChannel()
@@ -121,33 +96,7 @@ func FindPlugin(name string) *aplug {
 
 	newPlug.InitOk = true
 
-	sleep(1) // temp hack until chan communication is setup
-
-	// TODO: find a new way to do this that is locking, safe and accurate
-	Config.rootNode.redraw(newPlug)
-
 	return newPlug
-}
-
-// TODO: All these functions need to be done a smarter way
-// but I haven't worked out the golang syntax to make it smarter
-func loadFuncE(p *aplug, funcName string) func() {
-	var newfunc func()
-	var ok bool
-	var test plugin.Symbol
-
-	test, err = p.plug.Lookup(funcName)
-	if err != nil {
-		log(debugGui, "DID NOT FIND: name =", test, "err =", err)
-		return nil
-	}
-
-	newfunc, ok = test.(func())
-	if !ok {
-		log(debugGui, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
-		return nil
-	}
-	return newfunc
 }
 
 //	newPlug.PluginChannel = getPluginChannel(newPlug, "PluginChannel")
@@ -182,70 +131,6 @@ func sendCallback(p *aplug, funcName string) func(chan toolkit.Action) {
 	}
 
 	newfunc, ok = test.(func(chan toolkit.Action))
-	if !ok {
-		log(debugGui, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
-		return nil
-	}
-	return newfunc
-}
-
-/*
-func loadFunc2(p *aplug, funcName string) func(*toolkit.Widget, *toolkit.Widget) {
-	var newfunc func(*toolkit.Widget, *toolkit.Widget)
-	var ok bool
-	var test plugin.Symbol
-
-	test, err = p.plug.Lookup(funcName)
-	if err != nil {
-		log(debugGui, "DID NOT FIND: name =", test, "err =", err)
-		return nil
-	}
-
-	newfunc, ok = test.(func(*toolkit.Widget, *toolkit.Widget))
-	if !ok {
-		log(debugGui, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
-		return nil
-	}
-	return newfunc
-}
-*/
-
-// does this fix loadFuncE problems?
-// TODO: still need to move to channels here
-func loadFuncA(p *aplug, funcName string) func(*toolkit.Action) {
-	var newfunc func(*toolkit.Action)
-	var ok bool
-	var test plugin.Symbol
-
-	test, err = p.plug.Lookup(funcName)
-	if err != nil {
-		log(debugGui, "DID NOT FIND: name =", test, "err =", err)
-		return nil
-	}
-
-	newfunc, ok = test.(func(*toolkit.Action))
-	if !ok {
-		log(debugGui, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
-		return nil
-	}
-	return newfunc
-}
-
-// This is probably dangerous and should never be done
-// executing arbitrary functions will cause them to run inside the goroutine that
-// the GUI toolkit itself is running in. TODO: move to channels here
-func loadFuncF(p *aplug, funcName string) func(func ()) {
-	var newfunc func(func ())
-	var ok bool
-	var test plugin.Symbol
-
-	test, err = p.plug.Lookup(funcName)
-	if err != nil {
-		log(debugGui, "DID NOT FIND: name =", test, "err =", err)
-		return nil
-	}
-
-	newfunc, ok = test.(func(func ()))
 	if !ok {
 		log(debugGui, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
 		return nil

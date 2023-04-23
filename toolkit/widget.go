@@ -1,14 +1,6 @@
 package toolkit
 
-type WidgetType int
-type ActionType int
-
 // passes information between the toolkit library (plugin)
-//
-// All Toolkit interactions should be done via a channel or Queue()
-// TODO: FIGURE OUT HOW TO IMPLEMENT THIS
-// https://ieftimov.com/post/golang-datastructures-trees/
-// TODO: protobuf ?
 //
 // This is the only thing that is passed between the toolkit plugin
 //
@@ -17,29 +9,12 @@ type ActionType int
 //	Event is used too much: web dev, cloud, etc
 //	I'm using "Action". Maybe it should really be
 //	"Interaction" as per wikipedia [[User interface]]
-// Could a protobuf be used here? (Can functions be passed?)
-type Widget2 struct {
-	// Name   string
-	Type  WidgetType
+//
+// TODO: convert this to a protobuf (?)
+//
 
-	// This function is how you interact with the toolkit
-	// latest attempt. seems to work so far (2023/02/28)
-	// Hopefully this will be the barrier between the goroutines
-	// TODO: move this interaction to channels
-	Custom    func()
-
-	// re-adding an id to test channels
-	Id     int
-
-	// This is how the values are passed back and forth
-	// values from things like checkboxes & dropdown's
-	// The string is also used to set the button name
-	B	bool
-	I	int
-	// maybe safe if there is correctly working Custom() between goroutines?
-	// (still probably not, almost certainly not. not possible. layer violation?)
-	S	string // not safe to have 'S'
-}
+type WidgetType int // Button, Menu, Checkbox, etc.
+type ActionType int // Add, SetText, Click, Hide, Append, Delete, etc
 
 type Action struct {
 	ActionType ActionType
@@ -51,20 +26,13 @@ type Action struct {
 	Text string  // what is visable to the user
 	Name string  // a name useful for programming
 
-	// this should be the widget
-	// if the action is New, Hide, Enable, etc
-	// Widget *Widget
-
 	// This is how the values are passed back and forth
 	// values from things like checkboxes & dropdown's
-	// The string is also used to set the button name
 	B	bool
 	I	int
-	// maybe safe if there is correctly working Custom() between goroutines?
-	// (still probably not, almost certainly not. not possible. layer violation?)
-	S	string // not safe to have 'S'
+	S	string
 
-	A	any
+	A	any // switch to this or deprecate this? pros/cons?
 
 	// This GUI is intended for simple things
 	// We are not laying out PDF's here
