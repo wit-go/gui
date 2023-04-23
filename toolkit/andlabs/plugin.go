@@ -1,47 +1,9 @@
 package main
 
-// if you include more than just this import
-// then your plugin might be doing something un-ideal (just a guess from 2023/02/27)
-import "git.wit.org/wit/gui/toolkit"
-
-// import "github.com/andlabs/ui"
-// import _ "github.com/andlabs/ui/winmanifest"
-
-//
-// This should be called ?
-// Pass() ?
-// This handles all interaction between the wit/gui package (what golang knows about)
-// and this plugin that talks to the OS and does scary and crazy things to make
-// a GUI on whatever OS or whatever GUI toolkit you might have (GTK, QT, WASM, libcurses)
-//
-// Once you are here, you should be in a protected goroutine created by the golang wit/gui package
-//
-// TODO: make sure you can't escape this goroutine
-//
-/*
-func Send(p *toolkit.Widget, c *toolkit.Widget) {
-	log(debugPlugin, "Send() goodbye. not used anymore")
-}
-*/
-
-/*
-func oldAction2(a *toolkit.Action) {
-	log(logNow, "Action() START")
-	if (a == nil) {
-		log(debugPlugin, "Action = nil")
-		return
-	}
-	pluginChan <- *a
-
-	f := func() {
-		rawAction(a)
-	}
-
-	// f()
-	Queue(f)
-	log(logNow, "Action() END")
-}
-*/
+import (
+	"github.com/andlabs/ui"
+	"git.wit.org/wit/gui/toolkit"
+)
 
 func rawAction(a toolkit.Action) {
 	log(debugAction, "rawAction() START a.ActionType =", a.ActionType)
@@ -66,7 +28,10 @@ func rawAction(a toolkit.Action) {
 
 	switch a.ActionType {
 	case toolkit.Add:
-		add(a)
+		ui.QueueMain(func() {
+			add(a)
+		})
+		sleep(.1)
 	case toolkit.Show:
 		a.B = true
 		show(&a)

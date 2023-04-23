@@ -19,7 +19,8 @@ func main() {
 	// gui.SetDebug(true)
 
 	// myGui = gui.New().LoadToolkit("gocui")
-	myGui = gui.New().LoadToolkit("andlabs")
+	// myGui = gui.New().LoadToolkit("andlabs")
+	myGui = gui.New().Default()
 	buttonWindow()
 
 	// This is just a optional goroutine to watch that things are alive
