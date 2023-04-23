@@ -18,7 +18,8 @@ func main() {
 	// This will turn on all debugging
 	// gui.SetDebug(true)
 
-	myGui = gui.New().LoadToolkit("gocui")
+	// myGui = gui.New().LoadToolkit("gocui")
+	myGui = gui.New().LoadToolkit("andlabs")
 	buttonWindow()
 
 	// This is just a optional goroutine to watch that things are alive

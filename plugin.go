@@ -189,6 +189,7 @@ func sendCallback(p *aplug, funcName string) func(chan toolkit.Action) {
 	return newfunc
 }
 
+/*
 func loadFunc2(p *aplug, funcName string) func(*toolkit.Widget, *toolkit.Widget) {
 	var newfunc func(*toolkit.Widget, *toolkit.Widget)
 	var ok bool
@@ -207,6 +208,7 @@ func loadFunc2(p *aplug, funcName string) func(*toolkit.Widget, *toolkit.Widget)
 	}
 	return newfunc
 }
+*/
 
 // does this fix loadFuncE problems?
 // TODO: still need to move to channels here
@@ -307,7 +309,7 @@ func loadfile(filename string) *plugin.Plugin {
 func newaction(a *toolkit.Action, n *Node, where *Node) {
 	if (n != nil) {
 		a.WidgetId = n.id
-		a.WidgetType = n.widget.Type
+		a.WidgetType = n.WidgetType
 		a.ActionType = a.ActionType
 	}
 
@@ -315,7 +317,7 @@ func newaction(a *toolkit.Action, n *Node, where *Node) {
 	if (where != nil) {
 		log(logInfo, "Action() START on where X,Y, Next X,Y =", where.Name, where.X, where.Y, where.NextX, where.NextY)
 		a.ParentId = where.id
-		switch where.widget.Type {
+		switch where.WidgetType {
 		case toolkit.Grid:
 			// where.Dump(true)
 			log(logInfo, "Action() START on Grid (X,Y)", where.X, where.Y, "put next thing at (X,Y) =", where.NextX, where.NextY)
@@ -348,7 +350,7 @@ func newaction(a *toolkit.Action, n *Node, where *Node) {
 	}
 	// increment where to put the next widget in a grid or table
 	if (where != nil) {
-		switch where.widget.Type {
+		switch where.WidgetType {
 		case toolkit.Grid:
 			log(logInfo, "Action() START size (X,Y)", where.X, where.Y, "put next thing at (X,Y) =", where.NextX, where.NextY)
 			where.NextY += 1

@@ -128,7 +128,7 @@ func (n *Node) DebugGolangWindow(makeWindow bool) {
 	og = w.NewGroup("output")
 	outputTextbox = og.NewTextbox("outputBox")
 	outputTextbox.Custom = func () {
-		log("custom TextBox() for golang output a =", outputTextbox.widget.S, outputTextbox.id)
+		log("custom TextBox() for golang output a =", outputTextbox.S, outputTextbox.id)
 	}
 }
 

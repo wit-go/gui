@@ -62,7 +62,7 @@ type Node struct {
 	id     int
 	initOnce sync.Once
 
-	widget	toolkit.Widget
+	// widget	toolkit.Widget
 	WidgetType	toolkit.WidgetType
 
 //	Title  string  // what is visable to the user

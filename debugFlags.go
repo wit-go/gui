@@ -35,15 +35,15 @@ func (n *Node) DebugFlags(makeWindow bool) {
 	cb1 := g.NewCheckbox("debug Gui")
 	g.NewLabel("like verbose=1")
 	cb1.Custom = func() {
-		debugGui = cb1.widget.B
-		log(debugGui, "Custom() n.widget =", cb1.Name, cb1.widget.B)
+		debugGui = cb1.B
+		log(debugGui, "Custom() n.widget =", cb1.Name, cb1.B)
 	}
 
 	// errors. by default these always output somewhere
 	cbE := g.NewCheckbox("debug Error")
 	g.NewLabel("(bad things. default=true)")
 	cbE.Custom = func() {
-		SetFlag("Error",  cbE.widget.B)
+		SetFlag("Error",  cbE.B)
 	}
 
 	// debugging that will show you things like mouse clicks, user inputing text, etc
@@ -51,40 +51,40 @@ func (n *Node) DebugFlags(makeWindow bool) {
 	cb2 := g.NewCheckbox("debug Change")
 	g.NewLabel("keyboard and mouse events")
 	cb2.Custom = func() {
-		SetFlag("Change", cb2.widget.B)
+		SetFlag("Change", cb2.B)
 	}
 
 	// supposed to tell if you are going to dump full variable output
 	cb3 := g.NewCheckbox("debug Dump")
 	g.NewLabel("show lots of output")
 	cb3.Custom = func() {
-		SetFlag("Dump",  cbE.widget.B)
+		SetFlag("Dump",  cbE.B)
 	}
 
 	cb4 := g.NewCheckbox("debug Tabs")
 	g.NewLabel("tabs and windows")
 	cb4.Custom = func() {
-		SetFlag("Tabs",  cb4.widget.B)
+		SetFlag("Tabs",  cb4.B)
 	}
 
 	cb6 := g.NewCheckbox("debug Node")
 	g.NewLabel("the binary tree)")
 	cb6.Custom = func() {
-		SetFlag("Node",  cb6.widget.B)
+		SetFlag("Node",  cb6.B)
 	}
 
 	// should show you when things go into or come back from the plugin
 	cb5 := g.NewCheckbox("debug Plugin")
 	g.NewLabel("plugin interaction)")
 	cb5.Custom = func() {
-		SetFlag("Plugin",  cb5.widget.B)
+		SetFlag("Plugin",  cb5.B)
 	}
 
 	// turns on debugging inside the plugin toolkit
 	cb7 := g.NewCheckbox("debug Toolkit")
 	g.NewLabel("the plugin internals)")
 	cb7.Custom = func() {
-		// SetDebugToolkit(cb7.widget.B)
-		SetFlag("Toolkit", cb7.widget.B)
+		// SetDebugToolkit(cb7.B)
+		SetFlag("Toolkit", cb7.B)
 	}
 }

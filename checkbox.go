@@ -3,7 +3,7 @@ package gui
 import "git.wit.org/wit/gui/toolkit"
 
 func (n *Node) Checked() bool {
-	return n.widget.B
+	return n.B
 }
 
 func (n *Node) NewCheckbox(name string) *Node {

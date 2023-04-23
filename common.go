@@ -103,7 +103,7 @@ func (n *Node) Set(val any) {
 func (n *Node) AppendText(str string) {
 	var a toolkit.Action
 	a.ActionType = toolkit.SetText
-	tmp := n.widget.S + str
+	tmp := n.S + str
 	log(debugChange, "AppendText() value =", tmp)
 	a.S = tmp
 	n.Text = tmp
@@ -111,7 +111,7 @@ func (n *Node) AppendText(str string) {
 }
 
 func (n *Node) GetText() string {
-	return n.widget.S
+	return n.S
 }
 
 /*

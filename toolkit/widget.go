@@ -18,7 +18,7 @@ type ActionType int
 //	I'm using "Action". Maybe it should really be
 //	"Interaction" as per wikipedia [[User interface]]
 // Could a protobuf be used here? (Can functions be passed?)
-type Widget struct {
+type Widget2 struct {
 	// Name   string
 	Type  WidgetType
 

@@ -18,12 +18,13 @@ import "git.wit.org/wit/gui/toolkit"
 //
 // TODO: make sure you can't escape this goroutine
 //
+/*
 func Send(p *toolkit.Widget, c *toolkit.Widget) {
 	log(debugPlugin, "Send() goodbye. not used anymore")
 }
+*/
 
-
-func oldAction(a *toolkit.Action) {
+func oldAction2(a *toolkit.Action) {
 	log(logNow, "Action() START")
 	if (a == nil) {
 		log(debugPlugin, "Action = nil")

@@ -36,8 +36,8 @@ func (n *Node) DebugTab(title string) *Node {
 	// generally useful debugging
 	cb := gog.NewCheckbox("Seperate windows")
 	cb.Custom = func() {
-		makeTabs = cb.widget.B
-		log(debugGui, "Custom() n.widget =", cb.Name, cb.widget.B)
+		makeTabs = cb.B
+		log(debugGui, "Custom() n.widget =", cb.Name, cb.B)
 	}
 	makeTabs = false
 	cb.Set(false)
@@ -134,7 +134,7 @@ func dropdownWindowWidgets(p *Node) {
 
 	dd := p.NewDropdown("Window Widgets Dropdown")
 	dd.Custom = func() {
-		name := dd.widget.S
+		name := dd.S
 		activeWidget = mapWindows[name]
 		setActiveWidget(activeWidget)
 	}

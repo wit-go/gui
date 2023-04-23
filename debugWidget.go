@@ -45,7 +45,7 @@ func setActiveWidget(w *Node) {
 	}
 	title := "ID =" + strconv.Itoa(w.id) + " " + w.Name
 	activeLabel.SetText(title)
-	activeLabelType.SetText("widget.Type = " + w.widget.Type.String())
+	activeLabelType.SetText("widget.Type = " + w.WidgetType.String())
 	return
 }
 
@@ -121,13 +121,13 @@ func DebugWidgetWindow(w *Node) {
 	g.NewButton("AddText()", func () {
 		var a toolkit.Action
 		a.ActionType = toolkit.AddText
-		a.S = activeLabelNewName.widget.S
+		a.S = activeLabelNewName.S
 		newaction(&a, activeWidget, nil)
 	})
 	g.NewButton("SetText()", func () {
 		var a toolkit.Action
 		a.ActionType = toolkit.SetText
-		a.S = activeLabelNewName.widget.S
+		a.S = activeLabelNewName.S
 		newaction(&a, activeWidget, nil)
 	})
 	g.NewButton("Margin()", func () {
@@ -177,7 +177,7 @@ func (n *Node) debugAddWidgetButtons() {
 		a.AddText("make something for tim for qflow")
 		a.AddText("and for riscv")
 		a.Custom = func () {
-			log("custom dropdown() a =", a.Name, a.widget.S, "id=", a.id)
+			log("custom dropdown() a =", a.Name, a.S, "id=", a.id)
 		}
 	})
 	n.NewButton("Combobox", func () {
@@ -185,7 +185,7 @@ func (n *Node) debugAddWidgetButtons() {
 		a.AddText("mirrors.wit.com")
 		a.AddText("go.wit.com")
 		a.Custom = func () {
-			log("custom combobox() a =", a.Name, a.widget.S, "id=", a.id)
+			log("custom combobox() a =", a.Name, a.S, "id=", a.id)
 		}
 	})
 	n.NewButton("Grid", func () {
@@ -248,10 +248,10 @@ func (n *Node) debugAddWidgetButton() {
 	activeLabelNewType.AddText("Dialog")
 
 	n.NewButton("Add", func () {
-		name :=  activeLabelNewName.widget.S
-		newX :=  activeLabelNewX.widget.I
-		newY :=  activeLabelNewY.widget.I
-		newB :=  activeLabelNewB.widget.B
+		name :=  activeLabelNewName.S
+		newX :=  activeLabelNewX.I
+		newY :=  activeLabelNewY.I
+		newB :=  activeLabelNewB.B
 
 		if (newY == -1) {
 			name = name + " (" + strconv.Itoa(activeWidget.NextX) + "," + strconv.Itoa(activeWidget.NextY) + ")"
@@ -260,7 +260,7 @@ func (n *Node) debugAddWidgetButton() {
 			name = name + " (" + strconv.Itoa(newX) + "," + strconv.Itoa(newY) + ")"
 		}
 		log("New Name =", name)
-		log("New Type =", activeLabelNewType.widget.S)
+		log("New Type =", activeLabelNewType.S)
 		log("New X    =", newX)
 		log("New Y    =", newY)
 		log("activeWidget.NextX    =", activeWidget.NextX)
@@ -268,10 +268,10 @@ func (n *Node) debugAddWidgetButton() {
 		log(debugNow, "Add() size (X,Y)", activeWidget.X, activeWidget.Y, "put next thing at (X,Y) =", activeWidget.NextX, activeWidget.NextY)
 		activeWidget.Dump(true)
 
-		// activeWidget.widget.X = newX
-		// activeWidget.widget.Y = newY
+		// activeWidget.X = newX
+		// activeWidget.Y = newY
 
-		switch activeLabelNewType.widget.S {
+		switch activeLabelNewType.S {
 		case "Grid":
 			activeWidget.NewGrid(name, newX, newY)
 		case "Group":
@@ -286,14 +286,14 @@ func (n *Node) debugAddWidgetButton() {
 		case "Checkbox":
 			a := activeWidget.NewCheckbox(name)
 			a.Custom = func () {
-				log("custom checkox func a=", a.widget.B, "id=", a.id)
+				log("custom checkox func a=", a.B, "id=", a.id)
 			}
 		case "Dropdown":
 			a := activeWidget.NewDropdown(name)
 			a.AddText(name + " yay")
 			a.AddText(name + " haha")
 			a.Custom = func () {
-				log("WTF a=", a.widget.B, "id=", a.id)
+				log("WTF a=", a.B, "id=", a.id)
 			}
 		case "Combobox":
 			a := activeWidget.NewCombobox(name)
