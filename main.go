@@ -154,18 +154,20 @@ func New() *Node {
 	return Config.rootNode
 }
 
+// try to load andlabs, if that doesn't work, fall back to the console
 func (n *Node) Default() *Node {
-	if (n.LoadToolkit("gocui") == nil) {
-		log(logError, "New() failed to load gocui")
-	}
 	// if DISPLAY isn't set, return since gtk can't load
 	// TODO: figure out how to check what to do in macos and mswindows
 	if (os.Getenv("DISPLAY") == "") {
+		if (n.LoadToolkit("gocui") == nil) {
+			log(logError, "New() failed to load gocui")
+		}
 		return n
 	}
-	if (n.LoadToolkit("andlabs") == nil) {
-		log(logError, "New() failed to load andlabs")
+	if (n.LoadToolkit("andlabs") != nil) {
+		return n
 	}
+	n.LoadToolkit("gocui")
 	return n
 }
 

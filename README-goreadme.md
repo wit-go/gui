@@ -139,7 +139,7 @@ Creates a window helpful for debugging this package
 
 `func ShowDebugValues()`
 
-### func [StandardExit](/main.go#L180)
+### func [StandardExit](/main.go#L182)
 
 `func StandardExit()`
 
