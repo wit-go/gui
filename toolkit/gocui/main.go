@@ -11,7 +11,7 @@ import (
 
 // sets defaults and establishes communication
 // to this toolkit from the wit/gui golang package
-func Init() {
+func init() {
 	log(logInfo, "Init() of awesome-gocui")
 	me.defaultWidth = 10
 	me.defaultHeight = 2 // this means by default one line of text in a button

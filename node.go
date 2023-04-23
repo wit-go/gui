@@ -12,24 +12,6 @@ func (n *Node) newNode(title string, t toolkit.WidgetType, custom func()) *Node 
 	newN.WidgetType = t
 	newN.Custom = custom
 
-	// TODO: This should not be defined for each widget. This has to be stupid
-	// or wait a second, is this where I send something to a channel?
-	newN.Custom = func() {
-		log(debugChange, "Trying to find Window Close. widgetType =", newN.WidgetType)
-		if (newN.WidgetType == toolkit.Window) {
-			log(debugChange, "Need to delete newN here")
-			n.Delete(newN)
-		}
-		if (newN.Custom == nil) {
-			log(debugChange, "newT.Custom() == nil. Not doing anything. SEND SOMETHING TO THE CHANNEL")
-			return
-		}
-		log(debugChange, "newT.Custom() START SEND SOMETHING TO THE CHANNEL node =", newN.Name)
-		// send something to the channel here????
-		newN.Custom()
-		log(debugChange, "newT.Custom() END   SEND SOMETHING TO THE CHANNEL node =", newN.Name)
-	}
-
 	n.Append(newN)
 	newN.parent = n
 	return newN

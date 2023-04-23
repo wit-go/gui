@@ -16,7 +16,7 @@ var buttonCounter int = 5
 
 func main() {
 	// This will turn on all debugging
-	gui.SetDebug(true)
+	// gui.SetDebug(true)
 
 	// myGui = gui.New().LoadToolkit("gocui")
 	myGui = gui.New().LoadToolkit("andlabs")

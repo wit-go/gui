@@ -2,16 +2,12 @@ package main
 
 import (
 	"sync"
-	"embed"
 	"git.wit.org/wit/gui/toolkit"
 
 	"github.com/andlabs/ui"
 	// the _ means we only need this for the init()
 	_ "github.com/andlabs/ui/winmanifest"
 )
-
-//go:embed resources
-var res embed.FS
 
 // this is the channel we get requests to make widgets
 var pluginChan chan toolkit.Action
@@ -27,32 +23,10 @@ func catchActionChannel() {
 	    	select {
 		case a := <-pluginChan:
 			log(logNow, "catchActionChannel() SELECT widget id =", a.WidgetId, a.Name)
-			/*
-			// go Action(a)
-			if (uiMainUndef) {
-				log(logError,"catchActionChannel() main() was not run yet")
-				log(logError,"catchActionChannel() main() was not run yet")
-				log(logError,"catchActionChannel() main() was not run yet")
-				log(logError,"catchActionChannel() ui.Main() START")
-				log(logError,"catchActionChannel() ui.Main() START")
-				log(logError,"catchActionChannel() ui.Main() START")
-				log(logError,"catchActionChannel() ui.Main() START")
-				sleep(1)
-				// go ui.Main(demoUI)
-				// go ui.Main( func() {
-				// 	rawAction(a)
-				// })
-				// probably not needed, but in here for now under development
-				uiMainUndef = false
-				sleep(1)
-			} else {
-				log(logNow, "catchActionChannel() STUFF", a.WidgetId, a.ActionType, a.WidgetType)
-				rawAction(a)
-				log(logNow, "catchActionChannel() STUFF END", a.WidgetId, a.ActionType, a.WidgetType)
-			}
-			*/
 			log(logNow, "catchActionChannel() STUFF", a.WidgetId, a.ActionType, a.WidgetType)
 			muAction.Lock()
+			// TODO ui.QueueMain(f)
+			// TODO ui.QueueMain( func() {rawAction(a)} )
 			rawAction(a)
 			muAction.Unlock()
 			log(logNow, "catchActionChannel() STUFF END", a.WidgetId, a.ActionType, a.WidgetType)
@@ -60,13 +34,12 @@ func catchActionChannel() {
 	}
 }
 
-/*
-func main(f func()) {
-	log(debugNow, "Main() START (using gtk via andlabs/ui)")
-	f() // support the old way. deprecate this
-}
-*/
-
+// Other goroutines must use this to access the GUI
+//
+// You can not acess / process the GUI thread directly from
+// other goroutines. This is due to the nature of how
+// Linux, MacOS and Windows work (they all work differently. suprise. surprise.)
+//
 // this sets the channel to send user events back from the plugin
 func Callback(guiCallback chan toolkit.Action) {
 	callback = guiCallback
@@ -74,21 +47,6 @@ func Callback(guiCallback chan toolkit.Action) {
 
 func PluginChannel() chan toolkit.Action {
 	return pluginChan
-}
-
-
-// Other goroutines must use this to access the GUI
-//
-// You can not acess / process the GUI thread directly from
-// other goroutines. This is due to the nature of how
-// Linux, MacOS and Windows work (they all work differently. suprise. surprise.)
-//
-// For example: Queue(NewWindow())
-//
-func queue(f func()) {
-	log(logNow, "Sending function to ui.QueueMain()")
-	log(logNow, "using gui.Queue() in this plugin DOES BREAK. TODO: solve this with channels")
-	ui.QueueMain(f)
 }
 
 // This is important. This sets the defaults for the gui. Without this, there isn't correct padding, etc
@@ -107,17 +65,5 @@ func init() {
 		demoUI()
 	})
 	go catchActionChannel()
-	/*
-	// go catchActionChannel()
-	go uiMain.Do(func() {
-		ui.Main(demoUI)
-		// go catchActionChannel()
-	})
-	*/
 	log(logNow, "Init() END")
-}
-
-// TODO: properly exit the plugin since Quit() doesn't do it
-func Quit() {
-	log(debugToolkit, "Quit() TODO: close the toolkit cleanly")
 }
