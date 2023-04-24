@@ -10,6 +10,8 @@ package main
 
 import (
 	"fmt"
+	"reflect"
+	"strconv"
 	"sync"
 	"github.com/awesome-gocui/gocui"
 	"git.wit.org/wit/gui/toolkit"
@@ -37,12 +39,12 @@ type config struct {
 	defaultHeight int
 	// nextW int	// where the next window or tab flag should go
 
-	padW int
+	padW int `default:"3" dense:"2"`
 	padH int
 
-	// where the raw corner is
-	rawW int
-	rawH int
+	// the raw beginning of each window (or tab)
+	rawW int `default:"7"`
+	rawH int `default:"3"`
 
 	bookshelf bool // do you want things arranged in the box like a bookshelf or a stack?
 	canvas bool // if set to true, the windows are a raw canvas
@@ -52,8 +54,8 @@ type config struct {
 	margin bool // add space around the frames of windows
 
 	horizontalPadding int
-	groupPadding int
-	buttonPadding int
+	groupPadding int `default:"6" dense:"2"` // this is supposed to be how far to indent to the left
+	buttonPadding int `default:"4" dense:"3"` // if 3, buttons slightly overlap
 }
 
 var (
@@ -155,4 +157,44 @@ func (w *cuiWidget) Write(p []byte) (n int, err error) {
 	log(logNow, "widget.Write()", p)
 
 	return len(p), nil
+}
+
+func Set(ptr interface{}, tag string) error {
+	if reflect.TypeOf(ptr).Kind() != reflect.Ptr {
+		return fmt.Errorf("Not a pointer")
+	}
+
+	v := reflect.ValueOf(ptr).Elem()
+	t := v.Type()
+
+	for i := 0; i < t.NumField(); i++ {
+		if defaultVal := t.Field(i).Tag.Get(tag); defaultVal != "-" {
+			if err := setField(v.Field(i), defaultVal); err != nil {
+				return err
+			}
+
+		}
+	}
+	return nil
+}
+
+func setField(field reflect.Value, defaultVal string) error {
+
+	if !field.CanSet() {
+		log("Can't set value\n")
+		return fmt.Errorf("Can't set value\n")
+	}
+
+	switch field.Kind() {
+	case reflect.Int:
+		if val, err := strconv.ParseInt(defaultVal, 1, 64); err == nil {
+			field.Set(reflect.ValueOf(int(val)).Convert(field.Type()))
+		}
+	case reflect.String:
+		field.Set(reflect.ValueOf(defaultVal).Convert(field.Type()))
+	case reflect.Bool:
+		field.Set(reflect.ValueOf(defaultVal).Convert(field.Type()))
+	}
+
+	return nil
 }

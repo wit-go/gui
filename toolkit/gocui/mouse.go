@@ -35,33 +35,28 @@ func MouseMain() {
 
 func layout(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
+	mx, my := g.MousePosition()
 	if _, err := g.View("msg"); msgMouseDown && err == nil {
 		moveMsg(g)
 	}
-	if v, err := g.SetView("global", -1, -1, maxX, maxY, 0); err != nil {
+	// if v, err := g.SetView("global", -1, -1, maxX, maxY, 0); err != nil {
+	// what is this do? I made it just the top 2 lines for now. Is this useful for something?
+	if v, err := g.SetView("global", -1, -1, maxX, 2, 10); err != nil {
 		if !errors.Is(err, gocui.ErrUnknownView) {
+			log("global failed", maxX, maxY)
 			return err
 		}
 		v.Frame = false
 	}
-	/*
-	if v, err := g.SetView("but1", 2, 2, 22, 7, 0); err != nil {
-		if !errors.Is(err, gocui.ErrUnknownView) {
-			return err
-		}
-		v.SelBgColor = gocui.ColorGreen
-		v.SelFgColor = gocui.ColorBlack
-		fmt.Fprintln(v, "Button 1 - line 1")
-		fmt.Fprintln(v, "Button 1 - line 2")
-		fmt.Fprintln(v, "Button 1 - line 3")
-		fmt.Fprintln(v, "Button 1 - line 4")
-		if _, err := g.SetCurrentView("but1"); err != nil {
-			return err
-		}
-	}
-	*/
 	helplayout(g)
+	if widgetView, _ := g.View("msg"); widgetView == nil {
+		log(logInfo, "create output widget now", maxX, maxY, mx, my)
+		makeOutputWidget(g, "this is a create before a mouse click")
+	} else {
+		log(logInfo, "output widget already exists", maxX, maxY, mx, my)
+	}
 	updateHighlightedView(g)
+	log(logInfo, "layout() END", maxX, maxY, mx, my)
 	return nil
 }
 

@@ -69,6 +69,7 @@ doc:
 goget:
 	GO111MODULE="off" go get -v -t -u
 	make -C toolkit/gocui goget
+	make -C toolkit/andlabs goget
 
 # GO111MODULE=on go install github.com/posener/goreadme/cmd/goreadme@latest (worked Oct 20 2022)
 README.md: doc.go

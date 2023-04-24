@@ -107,6 +107,7 @@ func sendCallback(p *aplug, funcName string) func(chan toolkit.Action) {
 
 /*
 	TODO: clean this up. use command args?
+	TODO: use LD_LIBRARY_PATH ?
 	This searches in the following order for the plugin .so files:
 		./toolkit/
 		~/go/src/go.wit.org/gui/toolkit/
@@ -138,6 +139,12 @@ func searchPaths(name string) *aplug {
 	if (p != nil) {
 		return p
 	}
+
+	filename = "/usr/local/lib/" + name + ".so"
+	p = tryfile(name, filename)
+	if (p != nil) {
+		return p
+	}
 	return nil
 }
 
@@ -149,7 +156,7 @@ func tryfile(name string, filename string) *aplug {
 		log(debugGui, "plugin FAILED =", filename, err)
 		return nil
 	}
-	log(debugGui, "loading plugin =", filename)
+	log(debugGui, "tryfile() loading plugin =", filename)
 
 	var newPlug *aplug
 	newPlug = new(aplug)
@@ -166,17 +173,20 @@ func tryfile(name string, filename string) *aplug {
 	// for things like: add a new button called 'Check IPv6'
 	newPlug.PluginChannel = getPluginChannel(newPlug, "PluginChannel")
 
+	// add it to the list of plugins
 	allPlugins = append(allPlugins, newPlug)
 
-	log(debugPlugin, "initPlugin() END", newPlug.name, filename)
-	// newPlug.Init()
 
 	// set the communication to the plugins
 	newPlug.pluginChan = newPlug.PluginChannel()
+	if (newPlug.pluginChan == nil) {
+		log(debugError, "tryfile() ERROR PluginChannel() returned nil for plugin:", newPlug.name, filename)
+		return nil
+	}
 	newPlug.Callback(Config.guiChan)
-
 	newPlug.InitOk = true
 
+	log(debugPlugin, "tryfile() END", newPlug.name, filename)
 	return newPlug
 }
 

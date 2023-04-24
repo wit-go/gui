@@ -13,12 +13,9 @@ import (
 // to this toolkit from the wit/gui golang package
 func init() {
 	log(logInfo, "Init() of awesome-gocui")
-	me.defaultWidth = 10
-	me.defaultHeight = 2 // this means by default one line of text in a button
+	Set(&me, "default")
 	me.defaultBehavior = true
 
-	me.horizontalPadding = 20
-	me.horizontalPadding = 20
 	me.groupPadding = 4
 	me.buttonPadding = 3
 
@@ -29,14 +26,21 @@ func init() {
 	me.padW = 3
 	me.padH = 3
 
+	// todo, remove all of these
+	me.defaultWidth = 10
+	me.defaultHeight = 2 // this means by default one line of text in a button
+
+	me.horizontalPadding = 20
+	me.horizontalPadding = 20
+	// todo, remove all of these
+
 	me.pluginChan = make(chan toolkit.Action)
 
 	log(logNow, "Init() start pluginChan")
 	go catchActionChannel()
-	sleep(.1)
+	sleep(.1) // probably not needed, but in here for now under development
 	go main()
-	// probably not needed, but in here for now under development
-	sleep(.1)
+	sleep(.1) // probably not needed, but in here for now under development
 }
 
 // this sets the channel to send user events back from the plugin
