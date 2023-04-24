@@ -16,6 +16,7 @@ func moveMsg(g *gocui.Gui) {
 		movingMsg = true
 	}
 	g.SetView("msg", mx-xOffset, my-yOffset, mx-xOffset+outputW, my-yOffset+outputH, 0)
+	g.SetViewOnBottom("msg")
 }
 
 func showMsg(g *gocui.Gui, v *gocui.View) error {
@@ -53,5 +54,6 @@ func makeOutputWidget(g *gocui.Gui, stringFromMouseClick string) {
 	v.SelFgColor = gocui.ColorBlack
 	fmt.Fprintln(v, "figure out how to capture STDOUT to here\n" + stringFromMouseClick)
 	g.SetViewOnBottom("msg")
+	// g.SetViewOnBottom(v.Name())
 	return
 }

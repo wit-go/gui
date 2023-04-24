@@ -13,7 +13,10 @@ import (
 // to this toolkit from the wit/gui golang package
 func init() {
 	log(logInfo, "Init() of awesome-gocui")
-	Set(&me, "default")
+	var test config
+	Set(&test, "default")
+	log(logNow, "Init() me.rawW", me.rawW)
+	// exit("test init()")
 	me.defaultBehavior = true
 
 	me.groupPadding = 4

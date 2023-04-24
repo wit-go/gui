@@ -44,6 +44,7 @@ func (w *cuiWidget) addWidget() {
 	case toolkit.Window:
 		w.setTabWH()
 		w.drawView()
+		// w.frame = false
 		return
 	case toolkit.Tab:
 		w.setTabWH()

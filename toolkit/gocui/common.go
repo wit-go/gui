@@ -30,6 +30,8 @@ func makeWidget(a *toolkit.Action) *cuiWidget {
 	w.id = a.WidgetId
 	// set the name used by gocui to the id
 	w.cuiName = strconv.Itoa(w.id)
+	// set the gocui view.Frame = true by default
+	w.frame = true
 
 	if w.widgetType == toolkit.Root {
 		log(logInfo, "setupWidget() FOUND ROOT w.id =", w.id, "w.parent", w.parent, "ParentId =", a.ParentId)

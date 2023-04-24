@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/awesome-gocui/gocui"
-//	"git.wit.org/wit/gui/toolkit"
+	"git.wit.org/wit/gui/toolkit"
 )
 
 func splitLines(s string) []string {
@@ -85,6 +85,9 @@ func (w *cuiWidget) drawView() {
 	me.baseGui.SetKeybinding(w.v.Name(), gocui.MouseLeft, gocui.ModNone, click)
 
 	w.v.Wrap = true
+	if (w.widgetType == toolkit.Window) {
+		w.v.Frame = w.frame
+	}
 	fmt.Fprintln(w.v, w.text)
 
 	w.setDefaultWidgetColor()

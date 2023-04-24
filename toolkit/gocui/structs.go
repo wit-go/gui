@@ -131,6 +131,7 @@ type cuiWidget struct {
 
 	tainted bool
 	v *gocui.View
+	frame bool
 
 	// writeMutex protects locks the write process
 	writeMutex sync.Mutex
@@ -161,6 +162,7 @@ func (w *cuiWidget) Write(p []byte) (n int, err error) {
 
 func Set(ptr interface{}, tag string) error {
 	if reflect.TypeOf(ptr).Kind() != reflect.Ptr {
+		log("Set() Not a pointer", ptr, "with tag =", tag)
 		return fmt.Errorf("Not a pointer")
 	}
 
@@ -168,9 +170,12 @@ func Set(ptr interface{}, tag string) error {
 	t := v.Type()
 
 	for i := 0; i < t.NumField(); i++ {
+		log("Set() i =", i, t.Field(i))
 		if defaultVal := t.Field(i).Tag.Get(tag); defaultVal != "-" {
+			log("Set() tried something")
 			if err := setField(v.Field(i), defaultVal); err != nil {
-				return err
+				log("Set() failed", err)
+				// return err
 			}
 
 		}
@@ -181,7 +186,7 @@ func Set(ptr interface{}, tag string) error {
 func setField(field reflect.Value, defaultVal string) error {
 
 	if !field.CanSet() {
-		log("Can't set value\n")
+		log("setField() Can't set value", field, defaultVal)
 		return fmt.Errorf("Can't set value\n")
 	}
 
