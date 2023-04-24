@@ -23,6 +23,7 @@ import 	(
 	"runtime"
 	"runtime/pprof"
 	golog "log"
+	"fmt"
 	"time"
 	"reflect"
 	"github.com/davecgh/go-spew/spew"
@@ -41,6 +42,8 @@ var LOGOFF bool = false // turn this off, all logging stops
 var debugToolkit bool = false // does spew stuff?
 
 var Where string = "gui/log"
+
+var externalLog func(...any)
 
 type Spewt struct {
 	a bool
@@ -126,6 +129,11 @@ func Log(a ...any) {
 	}
 
 	golog.Println(a...)
+	if (externalLog == nil) {
+		// golog.Println(a...)
+	} else {
+		externalLog(fmt.Sprint(a...))
+	}
 }
 
 func loggo() {
@@ -146,4 +154,8 @@ func logindent(depth int, format string, a ...interface{}) {
 
 func SetOutput(f *os.File) {
 	golog.SetOutput(f)
+}
+
+func SetToolkitOutput(newLog func(...any)) {
+	externalLog = newLog
 }

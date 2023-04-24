@@ -19,6 +19,17 @@ var outputS []string
 func log(a ...any) {
 	witlog.Where = "wit/gocui"
 	witlog.Log(a...)
+}
+
+func sleep(a ...any) {
+	witlog.Sleep(a...)
+}
+
+func exit(a ...any) {
+	witlog.Exit(a...)
+}
+
+func newLog(a ...any) {
 	s := fmt.Sprint(a...)
 	tmp := strings.Split(s, "\n")
 	outputS = append(outputS, tmp...)
@@ -34,14 +45,7 @@ func log(a ...any) {
 	}
 }
 
-func sleep(a ...any) {
-	witlog.Sleep(a...)
-}
-
-func exit(a ...any) {
-	witlog.Exit(a...)
-}
-
 func setOutput(f *os.File) {
 	witlog.SetOutput(f)
+	witlog.SetToolkitOutput(newLog)
 }
