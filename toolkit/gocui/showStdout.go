@@ -1,7 +1,3 @@
-// Copyright 2014 The gocui Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
 package main
 
 import (
@@ -34,7 +30,6 @@ func showMsg(g *gocui.Gui, v *gocui.View) error {
 	if l, err = v.Line(cy); err != nil {
 		l = ""
 	}
-	// setOutput(me.rootNode)
 
 	makeOutputWidget(g, l)
 	return nil

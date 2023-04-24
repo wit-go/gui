@@ -12,13 +12,18 @@ func (n *Node) NewTab(text string) *Node {
 
 	if (n.WidgetType != toolkit.Window) {
 		// figure out what the actual window is
-		log(logError, "NewTab() is being requested on something that isn't a Window")
+		log(logError, "NewTab() is being requested on something that isn't a Window. node =", n)
+		log(logError, "NewTab() parent", n.parent)
+		return n.parent.NewTab(text)
+		/*
 		if (n.parent.WidgetType == toolkit.Window) {
-			return n.parent.NewTab(text)
 		} else {
+			if (n.parent.WidgetType == toolkit.Window) {
+				return n.parent.NewTab(text)
 			// TODO: find a window. any window. never give up. never die.
 			panic("NewTab did not get passed a window")
 		}
+		*/
 	}
 	newNode := n.newNode(text, toolkit.Tab, nil)
 
