@@ -13,11 +13,7 @@ import (
 // to this toolkit from the wit/gui golang package
 func init() {
 	log(logInfo, "Init() of awesome-gocui")
-	var test config
-	Set(&test, "default")
-	log(logNow, "Init() me.rawW", me.rawW)
-	// exit("test init()")
-	me.defaultBehavior = true
+	Set(&me, "default")
 
 	me.groupPadding = 4
 	me.buttonPadding = 3
@@ -25,9 +21,6 @@ func init() {
 	// the raw beginning of each window (or tab)
 	me.rawW = 7
 	me.rawH = 3
-
-	me.padW = 3
-	me.padH = 3
 
 	// todo, remove all of these
 	me.defaultWidth = 10

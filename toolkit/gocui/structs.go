@@ -34,16 +34,18 @@ type config struct {
 
 	helpLabel *gocui.View
 
-	defaultBehavior bool
+	DefaultBehavior bool `default:"true"`
 	defaultWidth int
 	defaultHeight int
 	// nextW int	// where the next window or tab flag should go
 
-	padW int `default:"3" dense:"2"`
-	padH int
+	// the amount to put between winodw tab widgets
+	TabPadW int `default:"4" dense:"2"`
+	// PadH int `default:"3" dense:"2"`
 
 	// the raw beginning of each window (or tab)
 	rawW int `default:"7"`
+	JWC int `default:"7"`
 	rawH int `default:"3"`
 
 	bookshelf bool // do you want things arranged in the box like a bookshelf or a stack?
@@ -162,7 +164,7 @@ func (w *cuiWidget) Write(p []byte) (n int, err error) {
 
 func Set(ptr interface{}, tag string) error {
 	if reflect.TypeOf(ptr).Kind() != reflect.Ptr {
-		log("Set() Not a pointer", ptr, "with tag =", tag)
+		log(logError, "Set() Not a pointer", ptr, "with tag =", tag)
 		return fmt.Errorf("Not a pointer")
 	}
 
@@ -170,15 +172,10 @@ func Set(ptr interface{}, tag string) error {
 	t := v.Type()
 
 	for i := 0; i < t.NumField(); i++ {
-		log("Set() i =", i, t.Field(i))
-		if defaultVal := t.Field(i).Tag.Get(tag); defaultVal != "-" {
-			log("Set() tried something")
-			if err := setField(v.Field(i), defaultVal); err != nil {
-				log("Set() failed", err)
-				// return err
-			}
-
-		}
+		defaultVal := t.Field(i).Tag.Get(tag)
+		// name := t.Field(i).Name
+		// log("Set() try name =", name, "defaultVal =", defaultVal)
+		setField(v.Field(i), defaultVal)
 	}
 	return nil
 }
@@ -186,19 +183,24 @@ func Set(ptr interface{}, tag string) error {
 func setField(field reflect.Value, defaultVal string) error {
 
 	if !field.CanSet() {
-		log("setField() Can't set value", field, defaultVal)
+		// log("setField() Can't set value", field, defaultVal)
 		return fmt.Errorf("Can't set value\n")
+	} else {
+		log("setField() Can set value", field, defaultVal)
 	}
 
 	switch field.Kind() {
 	case reflect.Int:
-		if val, err := strconv.ParseInt(defaultVal, 1, 64); err == nil {
-			field.Set(reflect.ValueOf(int(val)).Convert(field.Type()))
-		}
+		val, _ := strconv.Atoi(defaultVal)
+		field.Set(reflect.ValueOf(int(val)).Convert(field.Type()))
 	case reflect.String:
 		field.Set(reflect.ValueOf(defaultVal).Convert(field.Type()))
 	case reflect.Bool:
-		field.Set(reflect.ValueOf(defaultVal).Convert(field.Type()))
+		if defaultVal == "true" {
+			field.Set(reflect.ValueOf(true))
+		} else {
+			field.Set(reflect.ValueOf(false))
+		}
 	}
 
 	return nil

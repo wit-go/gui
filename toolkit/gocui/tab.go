@@ -61,7 +61,7 @@ func (w *cuiWidget) setTabWH() {
 	w.gocuiSize.h0 = me.rootNode.nextH
 
 	// move the rootNode width over for the next window or tab
-	me.rootNode.nextW += w.gocuiSize.width + me.padW
+	me.rootNode.nextW += w.gocuiSize.width + me.TabPadW
 
 	w.startW = me.rawW
 	w.startH = me.rawH
@@ -81,7 +81,7 @@ func (w *cuiWidget) setLabel() {
 	w.gocuiSize.h0 = me.rootNode.nextH
 
 	// move the rootNode width over for the next window or tab
-	me.rootNode.nextW += w.gocuiSize.width + me.padW
+	me.rootNode.nextW += w.gocuiSize.width
 
 	w.startW = me.rawW
 	w.startH = me.rawH
