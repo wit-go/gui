@@ -55,18 +55,16 @@ func (w *cuiWidget) showWidgets() {
 func (w *cuiWidget) setTabWH() {
 	// set the start and size of the tab gocui button
 	t := len(w.text)
-	w.gocuiSize.width = t + me.buttonPadding
-	w.gocuiSize.height = me.defaultHeight
+	w.gocuiSize.width = t + me.PadW
+	w.gocuiSize.height = me.DefaultHeight + me.PadH
 	w.gocuiSize.w0 = me.rootNode.nextW
 	w.gocuiSize.h0 = me.rootNode.nextH
 
+	w.realWidth = w.gocuiSize.width + me.FramePadW
+	w.realHeight = w.gocuiSize.height + me.FramePadH
+
 	// move the rootNode width over for the next window or tab
 	me.rootNode.nextW += w.gocuiSize.width + me.TabPadW
-
-	w.startW = me.rawW
-	w.startH = me.rawH
-	w.nextW = me.rawW
-	w.nextH = me.rawH
 
 	w.setWH()
 	w.showWidgetPlacement(logNow, "setTabWH:")
@@ -82,11 +80,6 @@ func (w *cuiWidget) setLabel() {
 
 	// move the rootNode width over for the next window or tab
 	me.rootNode.nextW += w.gocuiSize.width
-
-	w.startW = me.rawW
-	w.startH = me.rawH
-	w.nextW = me.rawW
-	w.nextH = me.rawH
 
 	w.setWH()
 	w.showWidgetPlacement(logNow, "setLabel:")

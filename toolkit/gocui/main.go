@@ -15,19 +15,15 @@ func init() {
 	log(logInfo, "Init() of awesome-gocui")
 	Set(&me, "default")
 
-	me.groupPadding = 4
-	me.buttonPadding = 3
-
-	// the raw beginning of each window (or tab)
-	me.rawW = 7
-	me.rawH = 3
+//	me.groupPadding = 4
+//	me.buttonPadding = 3
 
 	// todo, remove all of these
-	me.defaultWidth = 10
-	me.defaultHeight = 2 // this means by default one line of text in a button
+//	me.defaultWidth = 10
+//	me.defaultHeight = 2 // this means by default one line of text in a button
 
-	me.horizontalPadding = 20
-	me.horizontalPadding = 20
+//	me.horizontalPadding = 20
+//	me.horizontalPadding = 20
 	// todo, remove all of these
 
 	me.pluginChan = make(chan toolkit.Action)

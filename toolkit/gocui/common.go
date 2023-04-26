@@ -22,9 +22,9 @@ func makeWidget(a *toolkit.Action) *cuiWidget {
 
 	t := len(w.text)
 	w.realWidth = t + me.buttonPadding
-	w.realHeight = me.defaultHeight
+	w.realHeight = me.DefaultHeight
 	w.gocuiSize.width = t + me.buttonPadding
-	w.gocuiSize.height = me.defaultHeight
+	w.gocuiSize.height = me.DefaultHeight
 
 	w.widgetType = a.WidgetType
 	w.id = a.WidgetId
@@ -32,6 +32,11 @@ func makeWidget(a *toolkit.Action) *cuiWidget {
 	w.cuiName = strconv.Itoa(w.id)
 	// set the gocui view.Frame = true by default
 	w.frame = true
+
+	if (w.frame) {
+		w.realHeight += me.FramePadH
+		w.gocuiSize.height += me.FramePadH
+	}
 
 	if w.widgetType == toolkit.Root {
 		log(logInfo, "setupWidget() FOUND ROOT w.id =", w.id, "w.parent", w.parent, "ParentId =", a.ParentId)

@@ -5,21 +5,24 @@ import (
 	"git.wit.org/wit/gui/toolkit"
 )
 
+// TODO: make these defaults in config struct definition
 var fakeStartWidth int = 40
 var fakeStartHeight int = 3
 func (w *cuiWidget) setFake() {
 	w.isFake = true
 	t := len(w.name)
 	// setup fake labels for non-visable things off screen
-	w.realWidth = t + 2
-	w.realHeight = me.defaultHeight
 
-	w.gocuiSize.width = t + 2
-	w.gocuiSize.height = me.defaultHeight
+	w.gocuiSize.width = t + me.PadW
+	w.gocuiSize.height = me.DefaultHeight + me.PadH
 	w.gocuiSize.w0 = fakeStartWidth
 	w.gocuiSize.h0 = fakeStartHeight
 
-	fakeStartHeight += 3
+	w.realWidth = w.gocuiSize.width + me.FramePadW
+	w.realHeight = w.gocuiSize.height + me.FramePadH
+
+	fakeStartHeight += w.realHeight
+	// TODO: use the actual max hight of the terminal window
 	if (fakeStartHeight > 24) {
 		fakeStartHeight = 3
 		fakeStartWidth += 20
@@ -64,11 +67,11 @@ func (w *cuiWidget) addWidget() {
 		return
 	case toolkit.Group:
 		w.startW = w.parent.startW + 4
-		w.startH = w.parent.startH + 3
+		w.startH = w.parent.startH + me.DefaultHeight + me.FramePadH
 
 		t := len(w.text)
-		w.gocuiSize.width = t + me.buttonPadding
-		w.gocuiSize.height = me.defaultHeight
+		w.gocuiSize.width = t + me.FramePadW
+		w.gocuiSize.height = me.DefaultHeight + me.FramePadH
 		return
 	default:
 		w.startW = w.parent.startW

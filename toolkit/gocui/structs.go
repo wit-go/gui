@@ -35,18 +35,30 @@ type config struct {
 	helpLabel *gocui.View
 
 	DefaultBehavior bool `default:"true"`
-	defaultWidth int
-	defaultHeight int
-	// nextW int	// where the next window or tab flag should go
 
-	// the amount to put between winodw tab widgets
-	TabPadW int `default:"4" dense:"2"`
-	// PadH int `default:"3" dense:"2"`
+	// Buttons, Group, Tabs, Windows, etc are by default assumed to be a single line
+	// as a default, we make buttons 8 chars wide
+	DefaultWidth int `default:"8"`
+	DefaultHeight int `default:"1"`
+
+	// When the widget has a frame, like a button, it adds 2 lines runes on each side
+	// so you need 3 char spacing in each direction to not have them overlap
+	// the amount of padding when there is a frame
+	FramePadW int `default:"4" dense:"0"`
+	FramePadH int `default:"1" dense:"0"`
+
+	PadW int `default:"1" dense:"0"`
+	PadH int `default:"1" dense:"0"`
+
+	// additional amount of space to put between window & tab widgets
+	TabPadW int `default:"2" dense:"0"`
+
+	// additional amount of space to indent on a group
+	GroupPadW int `default:"6" dense:"2"`
 
 	// the raw beginning of each window (or tab)
-	rawW int `default:"7"`
-	JWC int `default:"7"`
-	rawH int `default:"3"`
+	RawW int `default:"7"`
+	RawH int `default:"3"`
 
 	bookshelf bool // do you want things arranged in the box like a bookshelf or a stack?
 	canvas bool // if set to true, the windows are a raw canvas
@@ -55,8 +67,8 @@ type config struct {
 	padded bool // add space between things like buttons
 	margin bool // add space around the frames of windows
 
-	horizontalPadding int
-	groupPadding int `default:"6" dense:"2"` // this is supposed to be how far to indent to the left
+// 	horizontalPadding int
+	// groupPadding int `default:"6" dense:"2"` // this is supposed to be how far to indent to the left
 	buttonPadding int `default:"4" dense:"3"` // if 3, buttons slightly overlap
 }
 

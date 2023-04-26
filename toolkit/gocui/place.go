@@ -88,10 +88,10 @@ func (w *cuiWidget) placeWidgets() {
 	switch w.widgetType {
 	case toolkit.Window:
 		for _, child := range w.children {
-			w.startW = me.rawW
-			w.startH = me.rawH
-			w.nextW = me.rawW
-			w.nextH = me.rawH
+			w.startW = me.RawW
+			w.startH = me.RawH
+			w.nextW = me.RawW
+			w.nextH = me.RawH
 			w.showWidgetPlacement(logNow, "place()")
 			child.placeWidgets()
 			if (w.realWidth < child.realWidth) {
@@ -104,10 +104,10 @@ func (w *cuiWidget) placeWidgets() {
 		}
 	case toolkit.Tab:
 		for _, child := range w.children {
-			w.startW = me.rawW
-			w.startH = me.rawH
-			w.nextW = me.rawW
-			w.nextH = me.rawH
+			w.startW = me.RawW
+			w.startH = me.RawH
+			w.nextW = me.RawW
+			w.nextH = me.RawH
 			w.showWidgetPlacement(logNow, "place()")
 			child.placeWidgets()
 			if (w.realWidth < child.realWidth) {
