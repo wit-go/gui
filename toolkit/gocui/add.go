@@ -80,6 +80,9 @@ func (w *cuiWidget) addWidget() {
 	default:
 		w.startW = w.parent.startW
 		w.startH = w.parent.startH
+		if w.IsCurrent() {
+			w.updateCurrent()
+		}
 	}
 	w.showWidgetPlacement(logInfo, "addWidget()")
 }

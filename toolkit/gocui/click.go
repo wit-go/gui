@@ -25,6 +25,28 @@ func updateCurrentTabs() {
 	me.rootNode.redoTabs(true)
 }
 
+// when adding a new widget, this will update the display
+// of the current widgets if that widget is supposed
+// to be in current display
+func (w *cuiWidget) updateCurrent() {
+	if w.widgetType == toolkit.Tab {
+		if w.IsCurrent() {
+			setCurrentTab(w)
+		}
+		return
+	}
+	if w.widgetType == toolkit.Window {
+		if w.IsCurrent() {
+			setCurrentWindow(w)
+		}
+		return
+	}
+	if w.widgetType == toolkit.Root {
+		return
+	}
+	w.parent.updateCurrent()
+}
+
 // shows the widgets in a window
 func setCurrentWindow(w *cuiWidget) {
 	if w.widgetType != toolkit.Window {
