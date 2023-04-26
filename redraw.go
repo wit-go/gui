@@ -31,17 +31,9 @@ func (n *Node) redo(plug *aplug) {
 	a.WidgetType = n.WidgetType
 	a.WidgetId = n.id
 
-	// used for new Windows
-//	a.Width = n.Width
-//	a.Height = n.Height
-
 	// used for anything that needs a range
 	a.X = n.X
 	a.Y = n.Y
-
-	// implement here for grids and tables ?
-//	a.NextX = n.NextX
-//	a.NextY = n.NextY
 
 	// used for values
 	a.I = n.I

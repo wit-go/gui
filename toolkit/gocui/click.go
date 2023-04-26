@@ -182,12 +182,10 @@ func ctrlDown(g *gocui.Gui, v *gocui.View) error {
 		found = me.rootNode
 	}
 	found.setRealSize()
-	me.ctrlDown.gocuiSize.width =  found.realWidth
-	me.ctrlDown.gocuiSize.height = found.realHeight
 	me.ctrlDown.gocuiSize.w0 = found.startW
 	me.ctrlDown.gocuiSize.h0 = found.startH
-	me.ctrlDown.setWH()
-
+	me.ctrlDown.gocuiSize.w1 =  me.ctrlDown.gocuiSize.w0 + found.realWidth
+	me.ctrlDown.gocuiSize.h1 =  me.ctrlDown.gocuiSize.h0 + found.realHeight
 	if (me.ctrlDown.v == nil) {
 		me.ctrlDown.text = found.text
 		me.ctrlDown.showWidgetPlacement(logNow, "ctrlDown:")

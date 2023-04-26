@@ -34,6 +34,8 @@ func (w *cuiWidget) hideFake() {
 
 func (w *cuiWidget) showFake() {
 	if (w.isFake) {
+		w.setFake()
+		w.showWidgetPlacement(logNow, "showFake:")
 		w.drawView()
 	}
 	for _, child := range w.children {
@@ -55,20 +57,22 @@ func (w *cuiWidget) showWidgets() {
 func (w *cuiWidget) setTabWH() {
 	// set the start and size of the tab gocui button
 	t := len(w.text)
-	w.gocuiSize.width = t + me.PadW
-	w.gocuiSize.height = me.DefaultHeight + me.PadH
 	w.gocuiSize.w0 = me.rootNode.nextW
 	w.gocuiSize.h0 = me.rootNode.nextH
+	w.gocuiSize.w1 = w.gocuiSize.w1 + t + me.PadW
+	w.gocuiSize.h1 = w.gocuiSize.h1 + me.DefaultHeight + me.PadH
+
+	w.realWidth = w.gocuiSize.Width()
+	w.realHeight = w.gocuiSize.Height()
 
 	if w.frame {
-		w.realWidth = w.gocuiSize.width + me.FramePadW
-		w.realHeight = w.gocuiSize.height + me.FramePadH
+		w.realWidth += me.FramePadW
+		w.realHeight += me.FramePadH
 	}
 
 	// move the rootNode width over for the next window or tab
-	me.rootNode.nextW += w.gocuiSize.width + me.TabPadW
+	me.rootNode.nextW += w.realWidth + me.TabPadW
 
-	w.setWH()
 	w.showWidgetPlacement(logNow, "setTabWH:")
 }
 

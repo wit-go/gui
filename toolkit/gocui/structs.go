@@ -53,6 +53,10 @@ type config struct {
 	// additional amount of space to put between window & tab widgets
 	TabPadW int `default:"2" dense:"0"`
 
+	// how far down to start Window or Tab headings
+	WindowH int `default:"1" dense:"0"`
+	TabH int `default:"2" dense:"0"`
+
 	// additional amount of space to indent on a group
 	GroupPadW int `default:"6" dense:"2"`
 
@@ -60,16 +64,15 @@ type config struct {
 	RawW int `default:"7"`
 	RawH int `default:"3"`
 
+	// offset for the hidden widgets
+	DevelOffsetW int `default:"20"`
+
 	bookshelf bool // do you want things arranged in the box like a bookshelf or a stack?
 	canvas bool // if set to true, the windows are a raw canvas
 	menubar bool // for windows
 	stretchy bool // expand things like buttons to the maximum size
 	padded bool // add space between things like buttons
 	margin bool // add space around the frames of windows
-
-// 	horizontalPadding int
-	// groupPadding int `default:"6" dense:"2"` // this is supposed to be how far to indent to the left
-	// buttonPadding int `default:"4" dense:"3"` // if 3, buttons slightly overlap
 }
 
 var (
@@ -85,12 +88,20 @@ type rectType struct {
 	// startW int
 	// startH int
 
-	// the actual size
-	width int
-	height int
+	// the is a shortcut to access
+//	width int  // this is always w1 - w0
+	height int // this is always h1 - h0
 
 	// this is the gocui way
 	w0, h0, w1, h1 int      // left top right bottom
+}
+
+func (r *rectType) Width() int {
+	return r.w1 - r.w0
+}
+
+func (r *rectType) Height() int {
+	return r.h1 - r.h0
 }
 
 type cuiWidget struct {

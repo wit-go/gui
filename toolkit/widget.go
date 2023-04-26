@@ -38,12 +38,6 @@ type Action struct {
 	X      int
 	Y      int
 
-	// This GUI is intended for simple things
-	// Is having an option like 640x480 really a good idea?
-	// TODO: remove Width & Height measured in pixels?
-//	Width  int
-//	Height int
-
 	// Put space around elements to improve look & feel
 	Margin	bool
 

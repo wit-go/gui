@@ -48,31 +48,6 @@ func (w *cuiWidget) placeBox() {
 	w.showWidgetPlacement(logNow, "boxE()")
 }
 
-/*
-func (w *cuiWidget) getGroupWH() {
-	p := w.parent // the parent must be a group widget
-
-	// update parent gocuiSize
-	// p.realWidth = 
-	// p.realHeight += me.DefaultHeight + me.PadH + me.FramePadH
-	for _, child := range p.children {
-		p.realWidth += child.realWidth
-		p.realHeight += child.realHeight
-	}
-
-	// compute child offset
-	w.startW = p.startW
-	w.startH = p.startH
-	for _, child := range p.children {
-		w.startH += child.realHeight
-		if child == w {
-			return
-		}
-	}
-	return
-}
-*/
-
 func (w *cuiWidget) placeWidgets() {
 	if (w == nil) {
 		return
@@ -120,29 +95,31 @@ func (w *cuiWidget) placeWidgets() {
 			w.showWidgetPlacement(logNow, "place()")
 		}
 	case toolkit.Grid:
-		w.showWidgetPlacement(logNow, "place()")
+		w.showWidgetPlacement(logNow, "placeGrid() START")
 		w.placeGrid()
-		w.showWidgetPlacement(logNow, "place()")
+		w.showWidgetPlacement(logNow, "placeGrid() END")
 	case toolkit.Box:
-		w.showWidgetPlacement(logNow, "place()")
+		w.showWidgetPlacement(logNow, "placeBox() START")
 		w.placeBox()
-		w.showWidgetPlacement(logNow, "place()")
+		w.showWidgetPlacement(logNow, "placeBox() END")
 	case toolkit.Group:
+		// move the group to the parent's next location
 		w.startW = p.nextW
 		w.startH = p.nextH
 		w.nextW = p.nextW
 		w.nextH = p.nextH
-
 		w.moveTo(p.nextW, p.nextH)
 
-		// set real width at the beginning
-		w.realWidth = w.gocuiSize.width
-		w.realHeight = w.gocuiSize.height
+		// initialize the real width to just the group gocui view
+		w.realWidth = w.gocuiSize.Width() + me.FramePadW
+		w.realHeight = w.gocuiSize.Height() + me.FramePadH
 
 		// indent the widgets for a group
-		w.nextW = p.nextW + 4
-		w.nextH = p.nextH + 3
+		w.nextW = p.nextW + me.GroupPadW
+		w.nextH = p.nextH + w.realHeight
 		w.showWidgetPlacement(logNow, "place()")
+
+		// mow move all the children aka: run place() on them
 		var maxW int
 		for _, child := range w.children {
 			child.showWidgetPlacement(logNow, "place()")
@@ -167,33 +144,42 @@ func (w *cuiWidget) placeWidgets() {
 		w.startH = p.nextH
 		w.nextW = p.nextW
 		w.nextH = p.nextH
+		newW := w.gocuiSize.Width()
+		newH := w.gocuiSize.Height()
 		w.gocuiSize.w0 = w.startW
 		w.gocuiSize.h0 = w.startH
-		w.gocuiSize.w1 = w.gocuiSize.w0 + w.gocuiSize.width
-		w.gocuiSize.h1 = w.gocuiSize.h0 + w.gocuiSize.height
-		if (w.realWidth < w.gocuiSize.width) {
-			w.realWidth = w.gocuiSize.width
+		w.gocuiSize.w1 = w.gocuiSize.w0 + newW
+		w.gocuiSize.h1 = w.gocuiSize.h0 + newH
+
+		// the realSize should not be smaller than the gocui view (?)
+		// this might not be a needed check? Maybe there are legit exceptions?
+		if (w.realWidth < newW) {
+			w.realWidth = newW
 		}
-		if (w.realHeight < w.gocuiSize.height) {
-			w.realHeight = w.gocuiSize.height
+		if (w.realHeight < newH) {
+			w.realHeight = newH
 		}
 		w.showWidgetPlacement(logNow, "place()")
 	}
 }
 
+/*
 func (w *cuiWidget) setWH() {
 	w.gocuiSize.w1 = w.gocuiSize.w0 + w.gocuiSize.width
 	w.gocuiSize.h1 = w.gocuiSize.h0 + w.gocuiSize.height
 }
+*/
 
 func (w *cuiWidget) moveTo(leftW int, topH int) {
 	if (w.isFake) {
 		return
 	}
+	newW := w.gocuiSize.Width()
+	newH := w.gocuiSize.Height()
 	w.gocuiSize.w0 = leftW
 	w.gocuiSize.h0 = topH
-	w.gocuiSize.w1 = w.gocuiSize.w0 + w.gocuiSize.width
-	w.gocuiSize.h1 = w.gocuiSize.h0 + w.gocuiSize.height
+	w.gocuiSize.w1 = w.gocuiSize.w0 + newW
+	w.gocuiSize.h1 = w.gocuiSize.h0 + newH
 	w.showWidgetPlacement(logInfo, "moveTo()")
 }
 

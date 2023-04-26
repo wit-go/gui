@@ -6,28 +6,27 @@ import (
 )
 
 // TODO: make these defaults in config struct definition
-var fakeStartWidth int = 40
-var fakeStartHeight int = 3
+var fakeStartWidth int = me.DevelOffsetW
+var fakeStartHeight int = me.TabH + me.FramePadH
 func (w *cuiWidget) setFake() {
 	w.isFake = true
 	t := len(w.name)
 	// setup fake labels for non-visable things off screen
 
-	w.gocuiSize.width = t + me.PadW
-	w.gocuiSize.height = me.DefaultHeight + me.PadH
 	w.gocuiSize.w0 = fakeStartWidth
 	w.gocuiSize.h0 = fakeStartHeight
+	w.gocuiSize.w1 = w.gocuiSize.w0 + t + me.PadW
+	w.gocuiSize.h1 = w.gocuiSize.h0 + me.DefaultHeight + me.PadH
 
-	w.realWidth = w.gocuiSize.width + me.FramePadW
-	w.realHeight = w.gocuiSize.height + me.FramePadH
+	w.realWidth = w.gocuiSize.Width() + me.FramePadW
+	w.realHeight = w.gocuiSize.Height() + me.FramePadH
 
 	fakeStartHeight += w.realHeight
 	// TODO: use the actual max hight of the terminal window
 	if (fakeStartHeight > 24) {
-		fakeStartHeight = 3
-		fakeStartWidth += 20
+		fakeStartHeight = me.TabH + me.FramePadH
+		fakeStartWidth += me.DevelOffsetW
 	}
-	w.setWH()
 	if (logInfo) {
 		w.drawView()
 	}
@@ -70,8 +69,8 @@ func (w *cuiWidget) addWidget() {
 		w.startH = w.parent.startH + me.DefaultHeight + me.FramePadH
 
 		t := len(w.text)
-		w.gocuiSize.width = t + me.FramePadW
-		w.gocuiSize.height = me.DefaultHeight + me.FramePadH
+		w.gocuiSize.w1 = w.gocuiSize.w0 + t + me.FramePadW
+		w.gocuiSize.h1 = w.gocuiSize.h0 + me.DefaultHeight + me.FramePadH
 		return
 	default:
 		w.startW = w.parent.startW

@@ -13,18 +13,9 @@ import (
 // to this toolkit from the wit/gui golang package
 func init() {
 	log(logInfo, "Init() of awesome-gocui")
+
+	// init the config struct default values
 	Set(&me, "default")
-
-//	me.groupPadding = 4
-//	me.buttonPadding = 3
-
-	// todo, remove all of these
-//	me.defaultWidth = 10
-//	me.defaultHeight = 2 // this means by default one line of text in a button
-
-//	me.horizontalPadding = 20
-//	me.horizontalPadding = 20
-	// todo, remove all of these
 
 	me.pluginChan = make(chan toolkit.Action)
 

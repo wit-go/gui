@@ -20,11 +20,11 @@ func makeWidget(a *toolkit.Action) *cuiWidget {
 
 
 	t := len(w.text)
-	w.gocuiSize.width = t + me.PadW
-	w.gocuiSize.height = me.DefaultHeight + me.PadH
+	w.gocuiSize.w1 = w.gocuiSize.w0 + t + me.PadW
+	w.gocuiSize.h1 = w.gocuiSize.h0 + me.DefaultHeight + me.PadH
 
-	w.realWidth = w.gocuiSize.width
-	w.realHeight = w.gocuiSize.height
+	w.realWidth = w.gocuiSize.Width()
+	w.realHeight = w.gocuiSize.Height()
 
 	// set the gocui view.Frame = true by default
 	w.frame = true

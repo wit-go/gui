@@ -17,10 +17,16 @@ func (w *cuiWidget) setCheckbox(b bool) {
 		w.text = "  " + w.name
 	}
 	t := len(w.text) + 1
-	w.realWidth = t
-	w.gocuiSize.width = t
+	w.gocuiSize.w1 = w.gocuiSize.w0 + t
 
-	w.setWH()
+	w.realWidth = w.gocuiSize.Width() + me.PadW
+	w.realHeight = w.gocuiSize.Height() + me.PadH
+
+	if w.frame {
+		w.realWidth += me.FramePadW
+		w.realHeight += me.FramePadH
+	}
+
 	w.deleteView()
 	w.drawView()
 }

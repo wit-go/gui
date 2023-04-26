@@ -45,8 +45,10 @@ func addDebugKeys(g *gocui.Gui) {
 	g.SetKeybinding("", 'd', gocui.ModNone,
 		func(g *gocui.Gui, v *gocui.View) error {
 			log(logNow, "gocui.SetKeyBinding() dumpTree() START")
-			me.rootNode.dumpTree(true)
+			// me.rootNode.dumpTree(true)
 			if (showDebug) {
+				fakeStartWidth = me.DevelOffsetW
+				fakeStartHeight = me.TabH + me.FramePadH
 				me.rootNode.showFake()
 				showDebug = false
 			} else {
