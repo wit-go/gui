@@ -44,16 +44,18 @@ func (w *cuiWidget) addWidget() {
 		w.setFake()
 		return
 	case toolkit.Window:
-		w.setTabWH()
-		w.showView()
+		me.current = w
+		updateCurrentTabs()
+		setCurrentWindow(w)
 		return
 	case toolkit.Tab:
-		UnsetCurrent(me.rootNode)
-		me.rootNode.hideWidgets()
-		w.isCurrent = true
-		w.parent.isCurrent = true
-		w.placeWidgets()
-		w.showWidgets()
+		// if this is the first tab, set it to the current one and stay here
+		if (me.current != nil) {
+			// there is already a current tab. just redraw the tabs
+			updateCurrentTabs()
+			return
+		}
+		setCurrentTab(w)
 		return
 	case toolkit.Box:
 		w.isFake = true
