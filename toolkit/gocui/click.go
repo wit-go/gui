@@ -35,7 +35,6 @@ func (w *cuiWidget) doWidgetClick() {
 
 		me.rootNode.nextW = 0
 		me.rootNode.nextH = 0
-		me.rootNode.redoTabs(true)
 
 		w.isCurrent = true
 		if w.hasTabs {
@@ -45,6 +44,7 @@ func (w *cuiWidget) doWidgetClick() {
 				break
 			}
 		}
+		me.rootNode.redoTabs(true)
 
 		w.placeWidgets()
 		w.showWidgets()

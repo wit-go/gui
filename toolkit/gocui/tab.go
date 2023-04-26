@@ -126,7 +126,10 @@ func (w *cuiWidget) redoTabs(draw bool) {
 	if (w.widgetType == toolkit.Tab) {
 		w.setTabWH()
 		w.deleteView()
-		w.showView()
+		// show all the tabs for the current window
+		if w.parent.isCurrent {
+			w.showView()
+		}
 	}
 
 	for _, child := range w.children {
