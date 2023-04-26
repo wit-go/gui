@@ -55,8 +55,8 @@ type config struct {
 	TabPadW int `default:"4" dense:"0"`
 
 	// how far down to start Window or Tab headings
-	WindowW int `default:"20" dense:"0"`
-	WindowH int `default:"0" dense:"0"`
+	WindowW int `default:"8" dense:"0"`
+	WindowH int `default:"-1"`
 	TabW int `default:"2" dense:"0"`
 	TabH int `default:"2" dense:"0"`
 
@@ -118,10 +118,12 @@ type cuiWidget struct {
 
 	vals []string // dropdown menu options
 
-	// visable bool // track if it's currently supposed to be shown
+	isCurrent bool // is this the currently displayed Window or Tab?
+	hasTabs bool // does the window have tabs?
 	isFake bool // widget types like 'box' are 'false'
 
 	// where the widget's real corner is 
+	// should we always compute this?
 	startW int
 	startH int
 
@@ -166,6 +168,25 @@ type cuiWidget struct {
 
 	parent	*cuiWidget
 	children []*cuiWidget
+}
+
+func (w *cuiWidget) IsCurrent() bool {
+	if (w.widgetType == toolkit.Tab) {
+		return w.isCurrent
+	}
+	if (w.widgetType == toolkit.Window) {
+		return w.isCurrent
+	}
+	if (w.widgetType == toolkit.Root) {
+		return false
+	}
+	return w.parent.IsCurrent()
+}
+
+func (w *cuiWidget) StartW() {
+}
+
+func (w *cuiWidget) StartH() {
 }
 
 // from the gocui devs:

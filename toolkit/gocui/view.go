@@ -86,8 +86,11 @@ func (w *cuiWidget) drawView() {
 	w.v.Wrap = true
 	if (w.widgetType == toolkit.Window) {
 		w.v.Frame = w.frame
+		w.v.Clear()
+		fmt.Fprint(w.v, w.text)
+	} else {
+		fmt.Fprintln(w.v, w.text)
 	}
-	fmt.Fprintln(w.v, w.text)
 
 	w.setDefaultWidgetColor()
 }

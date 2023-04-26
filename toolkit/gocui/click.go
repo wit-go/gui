@@ -21,10 +21,17 @@ func (w *cuiWidget) doWidgetClick() {
 		me.rootNode.redoColor(true)
 	case toolkit.Window:
 		me.rootNode.hideWidgets()
+		if w.hasTabs {
+			// w.isCurrent = false
+			w.isCurrent = true
+		} else {
+			w.isCurrent = true
+		}
 		w.placeWidgets()
 		w.showWidgets()
 	case toolkit.Tab:
 		me.rootNode.hideWidgets()
+		w.isCurrent = true
 		w.placeWidgets()
 		w.showWidgets()
 	case toolkit.Group:

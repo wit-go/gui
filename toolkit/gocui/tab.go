@@ -8,11 +8,12 @@ import (
 )
 
 func (w *cuiWidget) hideWidgets() {
+	w.isCurrent = false
 	switch w.widgetType {
 	case toolkit.Root:
 	case toolkit.Flag:
 	case toolkit.Window:
-	case toolkit.Tab:
+	// case toolkit.Tab:
 	case toolkit.Box:
 	case toolkit.Grid:
 	default:
@@ -47,24 +48,22 @@ func (w *cuiWidget) showWidgets() {
 	if (w.isFake) {
 		// don't display by default
 	} else {
-		w.drawView()
+		if w.IsCurrent() {
+			w.showWidgetPlacement(logNow, "current:")
+			w.drawView()
+		} else {
+			w.showWidgetPlacement(logNow, "not:")
+			// w.drawView()
+		}
 	}
 	for _, child := range w.children {
 		child.showWidgets()
 	}
 }
 
-func (w *cuiWidget) setTabWH() {
-	// set the start and size of the tab gocui button
-	if w.frame {
-		// this means it should work like a tab
-		w.gocuiSize.w0 = me.rootNode.nextW
-		w.gocuiSize.h0 = me.TabH
-	} else {
-		// this means it should just be a window label
-		w.gocuiSize.w0 = me.rootNode.nextW
-		w.gocuiSize.h0 = me.WindowH
-	}
+func (w *cuiWidget) setWindowWH() {
+	w.gocuiSize.w0 = me.rootNode.nextW
+	w.gocuiSize.h0 = me.WindowH
 
 	t := len(w.text)
 	w.gocuiSize.w1 = w.gocuiSize.w0 + t + me.PadW
@@ -73,16 +72,32 @@ func (w *cuiWidget) setTabWH() {
 	w.realWidth = w.gocuiSize.Width()
 	w.realHeight = w.gocuiSize.Height()
 
-	if w.frame {
-		w.realWidth += me.FramePadW
-		w.realHeight += me.FramePadH
+	// move the rootNode width over for the next window
+	me.rootNode.nextW += w.realWidth + me.WindowPadW
 
-		// move the rootNode width over for the next tab
-		me.rootNode.nextW += w.realWidth + me.TabPadW
-	} else {
-		// move the rootNode width over for the next window
-		me.rootNode.nextW += w.realWidth + me.WindowPadW
-	}
+	w.nextW = 4
+	w.nextH = 2
+
+	w.showWidgetPlacement(logNow, "setWindowWH:")
+}
+
+func (w *cuiWidget) setTabWH() {
+	// set the start and size of the tab gocui button
+
+	w.gocuiSize.w0 = w.parent.nextW
+	w.gocuiSize.h0 = me.TabH
+
+	t := len(w.text)
+	w.gocuiSize.w1 = w.gocuiSize.w0 + t + me.PadW
+	w.gocuiSize.h1 = w.gocuiSize.h0 + me.DefaultHeight + me.PadH
+
+	w.realWidth = w.gocuiSize.Width()
+	w.realHeight = w.gocuiSize.Height()
+
+	w.realWidth += me.FramePadW
+	w.realHeight += me.FramePadH
+
+	w.parent.nextW += w.realWidth + me.TabPadW
 
 	w.showWidgetPlacement(logNow, "setTabWH:")
 }
@@ -99,10 +114,12 @@ func (w *cuiWidget) redoTabs(draw bool) {
 		if (tabs) {
 			// window is tabs. Don't show it as a standard button
 			w.frame = false
+			w.hasTabs = true
 		} else {
 			w.frame = true
+			w.hasTabs = false
 		}
-		w.setTabWH()
+		w.setWindowWH()
 		w.deleteView()
 		w.drawView()
 	}
