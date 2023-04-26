@@ -39,9 +39,9 @@ func layout(g *gocui.Gui) error {
 	if _, err := g.View("msg"); msgMouseDown && err == nil {
 		moveMsg(g)
 	}
-	// if v, err := g.SetView("global", -1, -1, maxX, maxY, 0); err != nil {
-	// what is this do? I made it just the top 2 lines for now. Is this useful for something?
-	if v, err := g.SetView("global", -1, -1, maxX, 2, 10); err != nil {
+	// TODO: figure out what this might be useful for
+	// what is this do? I made it just 2 lines for now. Is this useful for something?
+	if v, err := g.SetView("global", 15, 5, maxX, 8, 10); err != nil {
 		if !errors.Is(err, gocui.ErrUnknownView) {
 			log("global failed", maxX, maxY)
 			return err

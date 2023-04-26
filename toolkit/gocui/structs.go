@@ -51,10 +51,13 @@ type config struct {
 	PadH int `default:"1" dense:"0"`
 
 	// additional amount of space to put between window & tab widgets
-	TabPadW int `default:"2" dense:"0"`
+	WindowPadW int `default:"8" dense:"0"`
+	TabPadW int `default:"4" dense:"0"`
 
 	// how far down to start Window or Tab headings
-	WindowH int `default:"1" dense:"0"`
+	WindowW int `default:"20" dense:"0"`
+	WindowH int `default:"0" dense:"0"`
+	TabW int `default:"2" dense:"0"`
 	TabH int `default:"2" dense:"0"`
 
 	// additional amount of space to indent on a group

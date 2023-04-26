@@ -13,7 +13,9 @@ import (
 func (w *cuiWidget) doWidgetClick() {
 	switch w.widgetType {
 	case toolkit.Root:
-		// me.rootNode.logicalSize.w1 = 1
+		// THIS IS THE BEGINING OF THE LAYOUT
+		me.rootNode.nextW = 0
+		me.rootNode.nextH = 0
 		me.rootNode.redoTabs(true)
 	case toolkit.Flag:
 		me.rootNode.redoColor(true)

@@ -56,11 +56,19 @@ func (w *cuiWidget) showWidgets() {
 
 func (w *cuiWidget) setTabWH() {
 	// set the start and size of the tab gocui button
+	if w.frame {
+		// this means it should work like a tab
+		w.gocuiSize.w0 = me.rootNode.nextW
+		w.gocuiSize.h0 = me.TabH
+	} else {
+		// this means it should just be a window label
+		w.gocuiSize.w0 = me.rootNode.nextW
+		w.gocuiSize.h0 = me.WindowH
+	}
+
 	t := len(w.text)
-	w.gocuiSize.w0 = me.rootNode.nextW
-	w.gocuiSize.h0 = me.rootNode.nextH
-	w.gocuiSize.w1 = w.gocuiSize.w1 + t + me.PadW
-	w.gocuiSize.h1 = w.gocuiSize.h1 + me.DefaultHeight + me.PadH
+	w.gocuiSize.w1 = w.gocuiSize.w0 + t + me.PadW
+	w.gocuiSize.h1 = w.gocuiSize.h0 + me.DefaultHeight + me.PadH
 
 	w.realWidth = w.gocuiSize.Width()
 	w.realHeight = w.gocuiSize.Height()
@@ -68,10 +76,13 @@ func (w *cuiWidget) setTabWH() {
 	if w.frame {
 		w.realWidth += me.FramePadW
 		w.realHeight += me.FramePadH
-	}
 
-	// move the rootNode width over for the next window or tab
-	me.rootNode.nextW += w.realWidth + me.TabPadW
+		// move the rootNode width over for the next tab
+		me.rootNode.nextW += w.realWidth + me.TabPadW
+	} else {
+		// move the rootNode width over for the next window
+		me.rootNode.nextW += w.realWidth + me.WindowPadW
+	}
 
 	w.showWidgetPlacement(logNow, "setTabWH:")
 }
@@ -92,11 +103,11 @@ func (w *cuiWidget) redoTabs(draw bool) {
 			w.frame = true
 		}
 		w.setTabWH()
-
 		w.deleteView()
 		w.drawView()
 	}
 	if (w.widgetType == toolkit.Tab) {
+		w.setTabWH()
 		w.deleteView()
 		w.drawView()
 	}
