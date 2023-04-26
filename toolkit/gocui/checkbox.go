@@ -28,5 +28,5 @@ func (w *cuiWidget) setCheckbox(b bool) {
 	}
 
 	w.deleteView()
-	w.drawView()
+	w.showView()
 }

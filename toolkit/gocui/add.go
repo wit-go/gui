@@ -28,7 +28,7 @@ func (w *cuiWidget) setFake() {
 		fakeStartWidth += me.DevelOffsetW
 	}
 	if (logInfo) {
-		w.drawView()
+		w.showView()
 	}
 }
 
@@ -45,11 +45,11 @@ func (w *cuiWidget) addWidget() {
 		return
 	case toolkit.Window:
 		w.setTabWH()
-		w.drawView()
+		w.showView()
 		return
 	case toolkit.Tab:
 		w.setTabWH()
-		w.drawView()
+		w.showView()
 		return
 	case toolkit.Box:
 		w.isFake = true

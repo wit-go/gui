@@ -37,7 +37,7 @@ func (w *cuiWidget) showFake() {
 	if (w.isFake) {
 		w.setFake()
 		w.showWidgetPlacement(logNow, "showFake:")
-		w.drawView()
+		w.showView()
 	}
 	for _, child := range w.children {
 		child.showFake()
@@ -50,7 +50,7 @@ func (w *cuiWidget) showWidgets() {
 	} else {
 		if w.IsCurrent() {
 			w.showWidgetPlacement(logNow, "current:")
-			w.drawView()
+			w.showView()
 		} else {
 			w.showWidgetPlacement(logNow, "not:")
 			// w.drawView()
@@ -121,12 +121,12 @@ func (w *cuiWidget) redoTabs(draw bool) {
 		}
 		w.setWindowWH()
 		w.deleteView()
-		w.drawView()
+		w.showView()
 	}
 	if (w.widgetType == toolkit.Tab) {
 		w.setTabWH()
 		w.deleteView()
-		w.drawView()
+		w.showView()
 	}
 
 	for _, child := range w.children {

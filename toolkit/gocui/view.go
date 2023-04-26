@@ -35,7 +35,8 @@ func (w *cuiWidget) textResize() {
 	w.showWidgetPlacement(logNow, "textResize()")
 }
 
-func (w *cuiWidget) drawView() {
+// display's the text of the widget in gocui
+func (w *cuiWidget) showView() {
 	var err error
 	if (w.cuiName == "") {
 		log(logError, "drawView() w.cuiName was not set for widget", w)

@@ -27,7 +27,7 @@ func action(a *toolkit.Action) {
 		}
 	case toolkit.Show:
 		if (a.B) {
-			w.drawView()
+			w.showView()
 		} else {
 			w.hideWidgets()
 		}
@@ -71,7 +71,7 @@ func (w *cuiWidget) SetText(text string) {
 	w.s = text
 	w.textResize()
 	w.deleteView()
-	w.drawView()
+	w.showView()
 }
 
 func (w *cuiWidget) Set(val any) {

@@ -35,7 +35,7 @@ func buttonWindow() {
 	log.Println("buttonWindow() START")
 
 	w = myGui.NewWindow(title).SetText("Nueva Ventana de Botones")
-	t = w.NewTab("buttonTab")
+	t = w.NewTab("buttonTab is this thing")
 	g = t.NewGroup("buttonGroup")
 	g1 := t.NewGroup("buttonGroup 2")
 	more = g1.NewGroup("more")

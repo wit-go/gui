@@ -58,7 +58,7 @@ type config struct {
 	WindowW int `default:"8" dense:"0"`
 	WindowH int `default:"-1"`
 	TabW int `default:"2" dense:"0"`
-	TabH int `default:"2" dense:"0"`
+	TabH int `default:"1" dense:"0"`
 
 	// additional amount of space to indent on a group
 	GroupPadW int `default:"6" dense:"2"`

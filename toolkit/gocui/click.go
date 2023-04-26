@@ -50,6 +50,8 @@ func (w *cuiWidget) doWidgetClick() {
 		w.showWidgets()
 		// THIS IS THE BEGINING OF THE LAYOUT
 	case toolkit.Tab:
+		UnsetCurrent(me.rootNode)
+
 		me.rootNode.hideWidgets()
 		w.isCurrent = true
 		w.parent.isCurrent = true
@@ -120,7 +122,7 @@ func (w *cuiWidget) drawTree(draw bool) {
 	w.showWidgetPlacement(logNow, "drawTree()")
 	if (draw) {
 		// w.textResize()
-		w.drawView()
+		w.showView()
 	} else {
 		w.deleteView()
 	}
@@ -219,7 +221,7 @@ func ctrlDown(g *gocui.Gui, v *gocui.View) error {
 	if (me.ctrlDown.v == nil) {
 		me.ctrlDown.text = found.text
 		me.ctrlDown.showWidgetPlacement(logNow, "ctrlDown:")
-		me.ctrlDown.drawView()
+		me.ctrlDown.showView()
 	} else {
 		me.ctrlDown.deleteView()
 	}
