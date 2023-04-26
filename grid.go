@@ -27,8 +27,8 @@ func (n *Node) NewGrid(name string, w int, h int) *Node {
 	a.Text = name
 	a.X = w
 	a.Y = h
-	a.Width = w
-	a.Height = h
+	// a.Width = w
+	// a.Height = h
 	newNode.X = w
 	newNode.Y = h
 	newNode.NextX = 1

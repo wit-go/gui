@@ -32,8 +32,8 @@ func (n *Node) redo(plug *aplug) {
 	a.WidgetId = n.id
 
 	// used for new Windows
-	a.Width = n.Width
-	a.Height = n.Height
+//	a.Width = n.Width
+//	a.Height = n.Height
 
 	// used for anything that needs a range
 	a.X = n.X

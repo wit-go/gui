@@ -23,7 +23,7 @@ func newWindow(a toolkit.Action) {
 	newt.wId = a.WidgetId
 
 	// menubar bool is if the OS defined border on the window should be used
-	win := ui.NewWindow(a.Name, a.Width, a.Height, menubar)
+	win := ui.NewWindow(a.Name, a.X, a.Y, menubar)
 	win.SetBorderless(canvas)
 	win.SetMargined(margin)
 	win.OnClosing(func(*ui.Window) bool {

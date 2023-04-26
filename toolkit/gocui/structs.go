@@ -69,7 +69,7 @@ type config struct {
 
 // 	horizontalPadding int
 	// groupPadding int `default:"6" dense:"2"` // this is supposed to be how far to indent to the left
-	buttonPadding int `default:"4" dense:"3"` // if 3, buttons slightly overlap
+	// buttonPadding int `default:"4" dense:"3"` // if 3, buttons slightly overlap
 }
 
 var (

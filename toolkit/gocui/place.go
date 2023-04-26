@@ -48,13 +48,13 @@ func (w *cuiWidget) placeBox() {
 	w.showWidgetPlacement(logNow, "boxE()")
 }
 
+/*
 func (w *cuiWidget) getGroupWH() {
 	p := w.parent // the parent must be a group widget
 
 	// update parent gocuiSize
-	p.realWidth = 0
-	p.realHeight = 0
-	p.realHeight += me.buttonPadding // pad height for the group label
+	// p.realWidth = 
+	// p.realHeight += me.DefaultHeight + me.PadH + me.FramePadH
 	for _, child := range p.children {
 		p.realWidth += child.realWidth
 		p.realHeight += child.realHeight
@@ -71,6 +71,7 @@ func (w *cuiWidget) getGroupWH() {
 	}
 	return
 }
+*/
 
 func (w *cuiWidget) placeWidgets() {
 	if (w == nil) {
