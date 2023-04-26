@@ -24,6 +24,7 @@ type config struct {
 	baseGui *gocui.Gui // the main gocui handle
 	rootNode *cuiWidget // the base of the binary tree. it should have id == 0
 	ctrlDown *cuiWidget // shown if you click the mouse when the ctrl key is pressed
+	current *cuiWidget // this is the current tab or window to show
 
 	// this is the channel we send user events like
 	// mouse clicks or keyboard events back to the program

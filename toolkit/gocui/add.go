@@ -48,8 +48,12 @@ func (w *cuiWidget) addWidget() {
 		w.showView()
 		return
 	case toolkit.Tab:
-		w.setTabWH()
-		w.showView()
+		UnsetCurrent(me.rootNode)
+		me.rootNode.hideWidgets()
+		w.isCurrent = true
+		w.parent.isCurrent = true
+		w.placeWidgets()
+		w.showWidgets()
 		return
 	case toolkit.Box:
 		w.isFake = true

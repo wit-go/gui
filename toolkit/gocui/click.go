@@ -19,6 +19,27 @@ func UnsetCurrent(w *cuiWidget) {
 	}
 }
 
+func updateCurrentTabs() {
+	me.rootNode.nextW = 0
+	me.rootNode.nextH = 0
+	me.rootNode.redoTabs(true)
+}
+
+// shows the widgets in a tab
+func setCurrent(w *cuiWidget) {
+	if w.widgetType != toolkit.Tab {
+		return
+	}
+	me.current = w
+	UnsetCurrent(me.rootNode)
+	me.rootNode.hideWidgets()
+	w.isCurrent = true
+	w.parent.isCurrent = true
+	updateCurrentTabs()
+	w.placeWidgets()
+	w.showWidgets()
+}
+
 func (w *cuiWidget) doWidgetClick() {
 	switch w.widgetType {
 	case toolkit.Root:
@@ -50,13 +71,7 @@ func (w *cuiWidget) doWidgetClick() {
 		w.showWidgets()
 		// THIS IS THE BEGINING OF THE LAYOUT
 	case toolkit.Tab:
-		UnsetCurrent(me.rootNode)
-
-		me.rootNode.hideWidgets()
-		w.isCurrent = true
-		w.parent.isCurrent = true
-		w.placeWidgets()
-		w.showWidgets()
+		setCurrent(w)
 	case toolkit.Group:
 		w.placeWidgets()
 		w.toggleTree()
