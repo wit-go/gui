@@ -10,6 +10,15 @@ import (
 	"git.wit.org/wit/gui/toolkit"
 )
 
+// set isCurrent = false everywhere
+func UnsetCurrent(w *cuiWidget) {
+	w.isCurrent = false
+
+	for _, child := range w.children {
+		UnsetCurrent(child)
+	}
+}
+
 func (w *cuiWidget) doWidgetClick() {
 	switch w.widgetType {
 	case toolkit.Root:
@@ -18,20 +27,32 @@ func (w *cuiWidget) doWidgetClick() {
 		me.rootNode.nextH = 0
 		me.rootNode.redoTabs(true)
 	case toolkit.Flag:
-		me.rootNode.redoColor(true)
+		// me.rootNode.redoColor(true)
+		me.rootNode.dumpTree(true)
 	case toolkit.Window:
+		UnsetCurrent(me.rootNode)
 		me.rootNode.hideWidgets()
+
+		me.rootNode.nextW = 0
+		me.rootNode.nextH = 0
+		me.rootNode.redoTabs(true)
+
+		w.isCurrent = true
 		if w.hasTabs {
-			// w.isCurrent = false
-			w.isCurrent = true
-		} else {
-			w.isCurrent = true
+			// set isCurrent = true on the first tab
+			for _, child := range w.children {
+				child.isCurrent = true
+				break
+			}
 		}
+
 		w.placeWidgets()
 		w.showWidgets()
+		// THIS IS THE BEGINING OF THE LAYOUT
 	case toolkit.Tab:
 		me.rootNode.hideWidgets()
 		w.isCurrent = true
+		w.parent.isCurrent = true
 		w.placeWidgets()
 		w.showWidgets()
 	case toolkit.Group:
