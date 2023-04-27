@@ -80,6 +80,9 @@ type config struct {
 	stretchy bool // expand things like buttons to the maximum size
 	padded bool // add space between things like buttons
 	margin bool // add space around the frames of windows
+
+	// writeMutex protects locks the write process
+	writeMutex sync.Mutex
 }
 
 var (
@@ -167,9 +170,6 @@ type cuiWidget struct {
 	v *gocui.View
 	frame bool
 
-	// writeMutex protects locks the write process
-	writeMutex sync.Mutex
-
 	parent	*cuiWidget
 	children []*cuiWidget
 }
@@ -201,8 +201,8 @@ func (w *cuiWidget) StartH() {
 
 func (w *cuiWidget) Write(p []byte) (n int, err error) {
 	w.tainted = true
-	w.writeMutex.Lock()
-	defer w.writeMutex.Unlock()
+	me.writeMutex.Lock()
+	defer me.writeMutex.Unlock()
 	if (me.logStdout.v == nil) {
 		fmt.Fprintln(outf, string(p))
 		v, _ := me.baseGui.View("msg")
@@ -217,11 +217,12 @@ func (w *cuiWidget) Write(p []byte) (n int, err error) {
 	// log(logNow, "widget.Write()", p)
 
 	s := fmt.Sprint(string(p))
-	s = strings.TrimSuffix(s, "\n")
+	s = "jwc " + strconv.Itoa(len(outputS)) + " " + strings.TrimSuffix(s, "\n")
 	tmp := strings.Split(s, "\n")
 	outputS = append(outputS, tmp...)
 	if (len(outputS) > outputH) {
-		outputS = outputS[4:]
+		l := len(outputS) - outputH
+		outputS = outputS[l:]
 	}
 	fmt.Fprintln(me.logStdout.v, strings.Join(outputS, "\n"))
 

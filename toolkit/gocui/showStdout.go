@@ -16,7 +16,7 @@ func moveMsg(g *gocui.Gui) {
 	if !movingMsg && (mx != initialMouseX || my != initialMouseY) {
 		movingMsg = true
 	}
-	g.SetView("msg", mx-xOffset, my-yOffset, mx-xOffset+outputW, my-yOffset+outputH, 0)
+	g.SetView("msg", mx-xOffset, my-yOffset, mx-xOffset+outputW, my-yOffset+outputH + me.FramePadH, 0)
 	g.SetViewOnBottom("msg")
 }
 
