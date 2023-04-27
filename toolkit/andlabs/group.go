@@ -1,23 +1,21 @@
 package main
 
 import (
-	"git.wit.org/wit/gui/toolkit"
-
 	"github.com/andlabs/ui"
 	_ "github.com/andlabs/ui/winmanifest"
 )
 
-func newGroup(a *toolkit.Action) {
-	// w := a.Widget
-	log(debugToolkit, "NewGroup()", a.Name)
+func (p *node) newGroup(n *node) {
+	log(debugToolkit, "NewGroup()", n.Name)
 
-	t := andlabs[a.ParentId]
+	t := p.tk
 	if (t == nil) {
-		log(debugToolkit, "NewGroup() toolkit struct == nil. name=", a.Name)
+		log(debugToolkit, "NewGroup() toolkit struct == nil. name=", n.Name)
 		listMap(debugToolkit)
 	}
-	newt := t.rawGroup(a.Name)
-	place(a, t, newt)
+	newt := t.rawGroup(n.Name)
+	n.tk = newt
+	p.place(n)
 }
 
 // make new Group here

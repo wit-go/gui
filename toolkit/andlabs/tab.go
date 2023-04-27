@@ -20,7 +20,6 @@ import (
 	any existing tabs rather than adding a new one
 */
 func (p *node) newTab(n *node) {
-	// var w *ui.Window
 	var newt *andlabsT
 
 	t := p.tk
@@ -58,6 +57,7 @@ func (p *node) newTab(n *node) {
 	t.Dump(debugToolkit)
 	log(debugToolkit, "newt:")
 	newt.Dump(debugToolkit)
+	n.tk = newt
 }
 
 // This sets _all_ the tabs to Margin = true
@@ -120,9 +120,11 @@ func (t *andlabsT) appendTab(name string) *andlabsT {
 	return &newT
 }
 
+/*
 func newTab(n *node) {
 	log(logInfo, "newTab() add to parent id:", n.ParentId)
 
 	p := n.parent
 	p.newTab(n)
 }
+*/

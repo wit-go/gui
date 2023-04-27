@@ -1,25 +1,23 @@
 package main
 
 import (
-	"git.wit.org/wit/gui/toolkit"
-
 	"github.com/andlabs/ui"
 	_ "github.com/andlabs/ui/winmanifest"
 )
 
 // make new Box here
-func newBox(a *toolkit.Action) {
-	log(debugToolkit, "newBox()", a.Name)
+func (p *node) newBox(n *node) {
+	log(debugToolkit, "newBox()", n.Name)
 
-	t := andlabs[a.ParentId]
+	t := p.tk
 	if (t == nil) {
-		log(debugToolkit, "newBox() toolkit struct == nil. name=", a.Name)
+		log(debugToolkit, "newBox() toolkit struct == nil. name=", n.Name)
 		listMap(debugToolkit)
 	}
-	newt := t.rawBox(a.Text, a.B)
+	newt := t.rawBox(n.Text, n.B)
 	newt.boxC = 0
-	place(a, t, newt)
-	andlabs[a.WidgetId] = newt
+	n.tk = newt
+	p.place(n)
 }
 
 // make new Box using andlabs/ui

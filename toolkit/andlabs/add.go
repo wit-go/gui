@@ -27,12 +27,13 @@ func add(a toolkit.Action) {
 	}
 	n := addWidget(&a, nil)
 
+	p := n.parent
 	switch n.WidgetType {
 	case toolkit.Window:
 		newWindow(n)
 		return
 	case toolkit.Tab:
-		newTab(n)
+		p.newTab(n)
 		return
 	case toolkit.Label:
 		newLabel(&a)
@@ -62,10 +63,10 @@ func add(a toolkit.Action) {
 		newTextbox(&a)
 		return
 	case toolkit.Group:
-		newGroup(&a)
+		p.newGroup(n)
 		return
 	case toolkit.Box:
-		newBox(&a)
+		p.newBox(n)
 		return
 	case toolkit.Image:
 		newImage(&a)
@@ -160,6 +161,62 @@ func place(a *toolkit.Action, t *andlabsT, newt *andlabsT) bool {
 		return true
 	default:
 		log(debugError, "place() how?", a.ParentId)
+	}
+	return false
+}
+func (p *node) place(n *node) bool {
+	log(logInfo, "place() START", n.WidgetType, n.Name)
+
+	if (p.tk == nil) {
+		log(logError, "p.tk == nil", p.Name, p.ParentId, p.WidgetType, p.tk)
+		log(logError, "n = ", n.Name, n.ParentId, n.WidgetType, n.tk)
+		panic("p.tk == nil")
+	}
+
+	log(logInfo, "place() switch", p.WidgetType)
+	switch p.WidgetType {
+	case toolkit.Grid:
+		log(debugGrid, "place() Grid try at Parent X,Y =", n.X, n.Y)
+		n.tk.gridX = n.X
+		n.tk.gridY = n.Y
+		log(debugGrid, "place() Grid try at gridX,gridY", n.tk.gridX, n.tk.gridY)
+		// at the very end, subtract 1 from X & Y since andlabs/ui starts counting at zero
+		p.tk.uiGrid.Append(n.tk.uiControl,
+			n.tk.gridY - 1, n.tk.gridX - 1, 1, 1,
+			false, ui.AlignFill, false, ui.AlignFill)
+		return true
+	case toolkit.Group:
+		if (p.tk.uiBox == nil) {
+			p.tk.uiGroup.SetChild(n.tk.uiControl)
+			log(debugGrid, "place() hack Group to use this as the box?", n.Name, n.WidgetType)
+			p.tk.uiBox  = n.tk.uiBox
+		} else {
+			p.tk.uiBox.Append(n.tk.uiControl, stretchy)
+		}
+		return true
+	case toolkit.Tab:
+		if (p.tk.uiTab == nil) {
+			log(logError, "p.tk.uiTab == nil", p.tk)
+			panic("p.tk.uiTab == nil")
+		}
+		if (n.tk.uiControl == nil) {
+			log(logError, "n.tk.uiControl == nil", n.tk)
+			panic("n.tk.uiControl == nil")
+		}
+		p.tk.uiTab.Append(n.Text, n.tk.uiControl)
+		p.tk.boxC += 1
+		return true
+	case toolkit.Box:
+		log(logInfo, "place() uiBox =", p.tk.uiBox)
+		log(logInfo, "place() uiControl =", n.tk.uiControl)
+		p.tk.uiBox.Append(n.tk.uiControl, stretchy)
+		p.tk.boxC += 1
+		return true
+	case toolkit.Window:
+		p.tk.uiWindow.SetChild(n.tk.uiControl)
+		return true
+	default:
+		log(debugError, "place() how? Parent =", p.WidgetId, p.WidgetType)
 	}
 	return false
 }
