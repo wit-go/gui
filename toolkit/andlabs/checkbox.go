@@ -1,20 +1,19 @@
 package main
 
 import (
-	"git.wit.org/wit/gui/toolkit"
 	"github.com/andlabs/ui"
 	_ "github.com/andlabs/ui/winmanifest"
 )
 
-func (t *andlabsT) newCheckbox(a *toolkit.Action) *andlabsT {
-	var newt andlabsT
-	log(debugToolkit, "newCheckbox()", a.Name, a.WidgetType)
-	newt.WidgetType = a.WidgetType
-	newt.wId = a.WidgetId
-	newt.Name = a.Name
-	newt.Text = a.Text
+func (p *node) newCheckbox(n *node) {
+	newt := new(andlabsT)
+	log(debugToolkit, "newCheckbox()", n.Name, n.WidgetType)
+	newt.WidgetType = n.WidgetType
+	newt.wId = n.WidgetId
+	newt.Name = n.Name
+	newt.Text = n.Text
 
-	newt.uiCheckbox = ui.NewCheckbox(a.Text)
+	newt.uiCheckbox = ui.NewCheckbox(n.Text)
 	newt.uiControl = newt.uiCheckbox
 
 	newt.uiCheckbox.OnToggled(func(spin *ui.Checkbox) {
@@ -23,13 +22,15 @@ func (t *andlabsT) newCheckbox(a *toolkit.Action) *andlabsT {
 		newt.doUserEvent()
 	})
 
-	return &newt
+	n.tk = newt
+	p.place(n)
 }
 
 func (t *andlabsT) checked() bool {
 	return t.uiCheckbox.Checked()
 }
 
+/*
 func newCheckbox(a *toolkit.Action) {
 	log(debugToolkit, "newCheckbox()", a.Name)
 
@@ -39,5 +40,5 @@ func newCheckbox(a *toolkit.Action) {
 		return
 	}
 	newt := t.newCheckbox(a)
-	place(a, t, newt)
 }
+*/

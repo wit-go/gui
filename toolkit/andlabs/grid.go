@@ -3,8 +3,6 @@ package main
 import (
 	"github.com/andlabs/ui"
 	_ "github.com/andlabs/ui/winmanifest"
-
-	"git.wit.org/wit/gui/toolkit"
 )
 
 // Grid numbering by (X,Y)
@@ -12,19 +10,18 @@ import (
 // -- (1,1) -- (2,1) -- (3,1) --
 // -- (1,2) -- (2,1) -- (3,1) --
 // -----------------------------
-func newGrid(a *toolkit.Action) {
+func (p *node) newGrid(n *node) {
 	var newt *andlabsT
-	log(debugToolkit, "newGrid()", a.WidgetId, "to", a.ParentId)
+	log(debugToolkit, "newGrid()", n.WidgetId, "to", n.ParentId)
 
 	newt = new(andlabsT)
 
 	c := ui.NewGrid()
 	newt.uiGrid = c
 	newt.uiControl = c
-	newt.WidgetType = toolkit.Grid
 	newt.gridX = 0
 	newt.gridY = 0
 
-	t := andlabs[a.ParentId]
-	place(a, t, newt)
+	n.tk = newt
+	p.place(n)
 }

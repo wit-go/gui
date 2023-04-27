@@ -42,10 +42,10 @@ func add(a toolkit.Action) {
 		p.newButton(n)
 		return
 	case toolkit.Grid:
-		newGrid(&a)
+		p.newGrid(n)
 		return
 	case toolkit.Checkbox:
-		newCheckbox(&a)
+		p.newCheckbox(n)
 		return
 	case toolkit.Spinner:
 		newSpinner(&a)
