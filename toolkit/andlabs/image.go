@@ -1,30 +1,15 @@
 package main
 
 import (
-	"git.wit.org/wit/gui/toolkit"
-
 	"github.com/andlabs/ui"
 	_ "github.com/andlabs/ui/winmanifest"
 )
 
-// make new Image here
-func newImage(a *toolkit.Action) {
-	log(debugToolkit, "newImage()", a.Name)
-
-	t := andlabs[a.ParentId]
-	if (t == nil) {
-		log(debugToolkit, "newImage() toolkit struct == nil. name=", a.Name)
-		listMap(debugToolkit)
-	}
-	newt := t.rawImage(a.Name)
-	place(a, t, newt)
-}
-
 // make new Image using andlabs/ui
-func (t *andlabsT) rawImage(title string) *andlabsT {
-	var newt andlabsT
+func (p *node) newImage(n *node) {
+	newt := new(andlabsT)
 	var img *ui.Image
-	newt.Name = title
+	newt.Name = n.Name
 
 	log(debugToolkit, "rawImage() create", newt.Name)
 
@@ -33,7 +18,8 @@ func (t *andlabsT) rawImage(title string) *andlabsT {
 	newt.uiImage = img
 	// newt.uiControl = img
 
-	return &newt
+	n.tk = newt
+	p.place(n)
 }
 /*
 	if (a.Name == "image") {

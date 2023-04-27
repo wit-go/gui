@@ -1,38 +1,22 @@
 package main
 
 import (
-	"git.wit.org/wit/gui/toolkit"
-
 	"github.com/andlabs/ui"
 	_ "github.com/andlabs/ui/winmanifest"
 )
 
-func (t *andlabsT) newSlider(a *toolkit.Action) *andlabsT {
-	var newt andlabsT
+func (p *node) newSlider(n *node) {
+	newt := new(andlabsT)
 
-	s := ui.NewSlider(a.X, a.Y)
+	s := ui.NewSlider(n.X, n.Y)
 	newt.uiSlider = s
 	newt.uiControl = s
-	newt.WidgetType = toolkit.Slider
-	newt.wId = a.WidgetId
 
 	s.OnChanged(func(spin *ui.Slider) {
 		newt.i = newt.uiSlider.Value()
 		newt.doUserEvent()
 	})
 
-	return &newt
-}
-
-func newSlider(a *toolkit.Action) {
-	var newt *andlabsT
-	log(debugToolkit, "newSlider()", a.Name)
-
-	t := andlabs[a.ParentId]
-	if (t == nil) {
-		log(debugError, "newSlider() ERROR toolkit struct == nil. name=", a.Name)
-		return
-	}
-	newt = t.newSlider(a)
-	place(a, t, newt)
+	n.tk = newt
+	p.place(n)
 }

@@ -36,7 +36,7 @@ func add(a toolkit.Action) {
 		p.newTab(n)
 		return
 	case toolkit.Label:
-		newLabel(&a)
+		p.newLabel(n)
 		return
 	case toolkit.Button:
 		p.newButton(n)
@@ -48,10 +48,10 @@ func add(a toolkit.Action) {
 		p.newCheckbox(n)
 		return
 	case toolkit.Spinner:
-		newSpinner(&a)
+		p.newSpinner(n)
 		return
 	case toolkit.Slider:
-		newSlider(&a)
+		p.newSlider(n)
 		return
 	case toolkit.Dropdown:
 		newDropdown(&a)
@@ -69,7 +69,7 @@ func add(a toolkit.Action) {
 		p.newBox(n)
 		return
 	case toolkit.Image:
-		newImage(&a)
+		p.newImage(n)
 		return
 	default:
 		log(debugError, "add() error TODO: ", n.WidgetType, n.Name)
