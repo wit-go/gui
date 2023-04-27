@@ -38,12 +38,6 @@ type node struct {
 
 // stores the raw toolkit internals
 type andlabsT struct {
-	// wId	int	// widget ID
-	// WidgetType	toolkit.WidgetType
-
-	Name   string
-	Text   string
-	// Type   toolkit.WidgetType
 	Width  int
 	Height int
 
@@ -66,8 +60,9 @@ type andlabsT struct {
 	uiWindow  *ui.Window
 	uiMultilineEntry   *ui.MultilineEntry
 	uiEditableCombobox    *ui.EditableCombobox
-	uiGrid    *ui.Grid
 	uiImage  *ui.Image
+
+	uiGrid    *ui.Grid
 	gridX	int
 	gridY	int
 
@@ -75,13 +70,8 @@ type andlabsT struct {
 	// this is probably fucked up and in many ways wrong because of unsafe goroutine threading
 	// but it's working for now due to the need for need for a correct interaction layer betten toolkits
 	c int
-	i int
-	b bool
-	s string
 	val map[int]string
 
 	// andlabs/ui only accesses widget id numbers
-	boxC int	// how many things on in a box
-	boxW map[int]int // find a widget in a box
-	text   string
+	boxC int	// how many things on in a box or how many tabs
 }

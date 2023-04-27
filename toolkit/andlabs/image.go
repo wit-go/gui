@@ -9,9 +9,8 @@ import (
 func (p *node) newImage(n *node) {
 	newt := new(andlabsT)
 	var img *ui.Image
-	newt.Name = n.Name
 
-	log(debugToolkit, "rawImage() create", newt.Name)
+	log(debugToolkit, "rawImage() create", n.Name)
 
 	img = ui.NewImage(16, 16)
 

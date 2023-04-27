@@ -1,6 +1,6 @@
 package main
 
-// import "git.wit.org/wit/gui/toolkit"
+import "git.wit.org/wit/gui/toolkit"
 
 var defaultBehavior bool = true
 
@@ -50,7 +50,7 @@ func (t *andlabsT) Dump(b bool) {
 	if ! b {
 		return
 	}
-	log(b, "Name  = ", t.Name, t.Width, t.Height)
+	log(b, "Name  = ", t.Width, t.Height)
 	if (t.uiBox != nil) {
 		log(b, "uiBox      =", t.uiBox)
 	}
@@ -88,3 +88,25 @@ func GetDebugToolkit () bool {
 	return debugToolkit
 }
 */
+
+func flag(a *toolkit.Action) {
+	// should set the checkbox to this value
+	switch a.S {
+	case "Toolkit":
+		debugToolkit = a.B
+	case "Change":
+		debugChange = a.B
+	case "Plugin":
+		debugPlugin = a.B
+	case "Flags":
+		debugFlags = a.B
+	case "Error":
+		debugError = a.B
+	case "Now":
+		debugNow = a.B
+	case "Show":
+		ShowDebug()
+	default:
+		log(debugError, "Can't set unknown flag", a.S)
+	}
+}

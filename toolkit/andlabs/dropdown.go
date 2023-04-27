@@ -22,10 +22,11 @@ func (p *node) newDropdown(n *node) {
 	cb.OnSelected(func(spin *ui.Combobox) {
 		i := spin.Selected()
 		if (newt.val == nil) {
-			log(debugChange, "make map didn't work")
-			newt.text = "error"
+			log(logError, "make map didn't work")
+			n.S = "map did not work. ui.Combobox error"
+		} else {
+			n.S = newt.val[i]
 		}
-		n.S = newt.val[i]
 		n.doUserEvent()
 	})
 

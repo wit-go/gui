@@ -12,7 +12,7 @@ func (p *node) newBox(n *node) {
 	newt := new(andlabsT)
 	var box *ui.Box
 
-	log(debugToolkit, "rawBox() create", newt.Name)
+	log(debugToolkit, "rawBox() create", n.Name)
 
 	if (n.B) {
 		box = ui.NewHorizontalBox()

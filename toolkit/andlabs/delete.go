@@ -22,7 +22,7 @@ func (n *node) destroy() {
 
 	switch n.WidgetType {
 	case toolkit.Button:
-		log(true, "Should delete Button here:", ct.Name)
+		log(true, "Should delete Button here:", n.Name)
 		log(true, "Parent:")
 		pt.Dump(true)
 		log(true, "Child:")
@@ -30,7 +30,7 @@ func (n *node) destroy() {
 		if (pt.uiBox == nil) {
 			log(true, "Don't know how to destroy this")
 		} else {
-			log(true, "Fuck it, destroy the whole box", pt.Name)
+			log(true, "Fuck it, destroy the whole box", n.parent.Name)
 			// pt.uiBox.Destroy() // You have a bug: You cannot destroy a uiControl while it still has a parent.
 			pt.uiBox.SetPadded(false)
 			pt.uiBox.Delete(4)
@@ -40,7 +40,7 @@ func (n *node) destroy() {
 		}
 
 	case toolkit.Window:
-		log(true, "Should delete Window here:", ct.Name)
+		log(true, "Should delete Window here:", n.Name)
 	default:
 		log(true, "Fuckit, let's destroy a button")
 		if (ct.uiButton != nil) {

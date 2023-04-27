@@ -13,8 +13,8 @@ func (p *node) newCheckbox(n *node) {
 	newt.uiControl = newt.uiCheckbox
 
 	newt.uiCheckbox.OnToggled(func(spin *ui.Checkbox) {
-		newt.b = newt.checked()
-		log(debugChange, "val =", newt.b)
+		n.B = newt.checked()
+		log(debugChange, "val =", n.B)
 		n.doUserEvent()
 	})
 
