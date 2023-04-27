@@ -1,9 +1,9 @@
 package main
 
 import 	(
-	"fmt"
-	"os"
-	"strings"
+	"io"
+//	"fmt"
+//	"strings"
 	witlog "git.wit.org/wit/gui/log"
 )
 
@@ -29,6 +29,7 @@ func exit(a ...any) {
 	witlog.Exit(a...)
 }
 
+/*
 func newLog(a ...any) {
 	s := fmt.Sprint(a...)
 	tmp := strings.Split(s, "\n")
@@ -44,8 +45,12 @@ func newLog(a ...any) {
 		}
 	}
 }
+*/
 
-func setOutput(f *os.File) {
-	witlog.SetOutput(f)
-	witlog.SetToolkitOutput(newLog)
+func setOutput(w io.Writer) {
+	if (w == nil) {
+		return
+	}
+	witlog.SetOutput(w)
+	// witlog.SetToolkitOutput(newLog)
 }

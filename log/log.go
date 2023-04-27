@@ -19,6 +19,7 @@ package witlog
 //
 
 import 	(
+	"io"
 	"os"
 	"runtime"
 	"runtime/pprof"
@@ -152,8 +153,8 @@ func logindent(depth int, format string, a ...interface{}) {
 	Log(debugToolkit, newFormat, a)
 }
 
-func SetOutput(f *os.File) {
-	golog.SetOutput(f)
+func SetOutput(w io.Writer) {
+	golog.SetOutput(w)
 }
 
 func SetToolkitOutput(newLog func(...any)) {

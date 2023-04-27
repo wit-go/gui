@@ -76,13 +76,13 @@ func addDebugKeys(g *gocui.Gui) {
 	g.SetKeybinding("", 'q', gocui.ModNone,
 		func(g *gocui.Gui, v *gocui.View) error {
 			me.baseGui.Close()
-			exit("forced exit() from within gocui")
+			sendBackQuit()
 			return nil
 	})
 	g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone,
 		func(g *gocui.Gui, v *gocui.View) error {
 			me.baseGui.Close()
-			exit("forced exit() from within gocui")
+			sendBackQuit()
 			return nil
 	})
 

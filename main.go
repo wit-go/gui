@@ -40,6 +40,9 @@ func init() {
 	Config.flag = Config.rootNode.newNode("flag", 0, nil)
 	Config.flag.WidgetType = toolkit.Flag
 
+	Config.flag = Config.rootNode.newNode("stdout", 0, nil)
+	Config.flag.WidgetType = toolkit.Stdout
+
 	Config.guiChan = make(chan toolkit.Action, 1)
 	go watchCallback()
 }
@@ -51,6 +54,12 @@ func watchCallback() {
 	    	select {
 		case a := <-Config.guiChan:
 			n := Config.rootNode.FindId(a.WidgetId)
+			if (a.ActionType == toolkit.UserQuit) {
+				log(logNow, "doUserEvent() node =", n.id, n.Name, "User sent Quit()")
+				n.doCustom()
+				exit("wit/gui toolkit.UserQuit")
+				break
+			}
 			if (n == nil) {
 				log(logError, "watchCallback() UNKNOWN widget id =", a.WidgetId, a.Name)
 			} else {

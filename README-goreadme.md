@@ -139,7 +139,7 @@ Creates a window helpful for debugging this package
 
 `func ShowDebugValues()`
 
-### func [StandardExit](/main.go#L182)
+### func [StandardExit](/main.go#L191)
 
 `func StandardExit()`
 
@@ -180,7 +180,7 @@ var Config GuiConfig
 The Node is a binary tree. This is how all GUI elements are stored
 simply the name and the size of whatever GUI element exists
 
-#### func [New](/main.go#L153)
+#### func [New](/main.go#L162)
 
 `func New() *Node`
 

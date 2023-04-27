@@ -13,6 +13,7 @@ import (
 	"reflect"
 	"strconv"
 	"sync"
+	"strings"
 	"github.com/awesome-gocui/gocui"
 	"git.wit.org/wit/gui/toolkit"
 )
@@ -25,6 +26,8 @@ type config struct {
 	rootNode *cuiWidget // the base of the binary tree. it should have id == 0
 	ctrlDown *cuiWidget // shown if you click the mouse when the ctrl key is pressed
 	current *cuiWidget // this is the current tab or window to show
+	logStdout *cuiWidget // where to show STDOUT
+	logStdoutV *gocui.View // where to show STDOUT
 
 	// this is the channel we send user events like
 	// mouse clicks or keyboard events back to the program
@@ -200,12 +203,27 @@ func (w *cuiWidget) Write(p []byte) (n int, err error) {
 	w.tainted = true
 	w.writeMutex.Lock()
 	defer w.writeMutex.Unlock()
-	if (w.v == nil) {
+	if (me.logStdout.v == nil) {
+		fmt.Fprintln(outf, string(p))
+		v, _ := me.baseGui.View("msg")
+		if (v != nil) {
+			fmt.Fprintln(outf, "found msg")
+			me.logStdout.v = v
+		}
 		return
 	}
-	w.v.Clear()
-	fmt.Fprintln(w.v, p)
-	log(logNow, "widget.Write()", p)
+	me.logStdout.v.Clear()
+	// fmt.Fprintln(w.v, p + "jcarr")
+	// log(logNow, "widget.Write()", p)
+
+	s := fmt.Sprint(string(p))
+	s = strings.TrimSuffix(s, "\n")
+	tmp := strings.Split(s, "\n")
+	outputS = append(outputS, tmp...)
+	if (len(outputS) > 50) {
+		outputS = outputS[10:]
+	}
+	fmt.Fprintln(me.logStdout.v, strings.Join(outputS, "\n"))
 
 	return len(p), nil
 }
@@ -221,20 +239,20 @@ func Set(ptr interface{}, tag string) error {
 
 	for i := 0; i < t.NumField(); i++ {
 		defaultVal := t.Field(i).Tag.Get(tag)
-		// name := t.Field(i).Name
+		name := t.Field(i).Name
 		// log("Set() try name =", name, "defaultVal =", defaultVal)
-		setField(v.Field(i), defaultVal)
+		setField(v.Field(i), defaultVal, name)
 	}
 	return nil
 }
 
-func setField(field reflect.Value, defaultVal string) error {
+func setField(field reflect.Value, defaultVal string, name string) error {
 
 	if !field.CanSet() {
 		// log("setField() Can't set value", field, defaultVal)
 		return fmt.Errorf("Can't set value\n")
 	} else {
-		log("setField() Can set value", field, defaultVal)
+		log("setField() Can set value", name, defaultVal)
 	}
 
 	switch field.Kind() {

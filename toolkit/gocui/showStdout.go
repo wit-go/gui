@@ -5,10 +5,11 @@ import (
 	"fmt"
 
 	"github.com/awesome-gocui/gocui"
+	"git.wit.org/wit/gui/toolkit"
 )
 
-var outputW int = 80
-var outputH int = 24
+var outputW int = 200
+var outputH int = 36
 
 func moveMsg(g *gocui.Gui) {
 	mx, my := g.MousePosition()
@@ -36,24 +37,62 @@ func showMsg(g *gocui.Gui, v *gocui.View) error {
 	return nil
 }
 
-func makeOutputWidget(g *gocui.Gui, stringFromMouseClick string) {
+func makeOutputWidget(g *gocui.Gui, stringFromMouseClick string) *gocui.View {
 	maxX, maxY := g.Size()
-	v, err := g.SetView("msg", maxX-32, maxY/2, maxX/2+outputW, maxY/2+outputH, 0)
+
+	if (me.rootNode == nil) {
+		// keep skipping this until the binary tree is initialized
+		return nil
+	}
+
+	if (me.logStdout == nil) {
+		a := new(toolkit.Action)
+		a.Name = "stdout"
+		a.Text = "stdout"
+		a.WidgetType = toolkit.Stdout
+		a.WidgetId = -3
+		a.ParentId = 0
+		me.logStdout = makeWidget(a)
+		me.logStdout.gocuiSize.w0 = maxX - 32
+		me.logStdout.gocuiSize.h0 = maxY/2
+		me.logStdout.gocuiSize.w1 = me.logStdout.gocuiSize.w0 + outputW
+		me.logStdout.gocuiSize.h1 = me.logStdout.gocuiSize.h0 + outputH
+
+		me.logStdout.realWidth = me.logStdout.gocuiSize.Width()
+		me.logStdout.realHeight = me.logStdout.gocuiSize.Height()
+	}
+	v, err := g.View("msg")
+	if (v == nil) {
+		log("this is supposed to happen. v == nil", err)
+	} else {
+		log("msg != nil. WTF now? err =", err)
+	}
+
 	// help, err := g.SetView("help", maxX-32, 0, maxX-1, 13, 0)
+	// v, err = g.SetView("msg", 3, 3, 30, 30, 0)
+
+	v, err = g.SetView("msg", maxX-32, maxY/2, maxX/2+outputW, maxY/2+outputH, 0)
 	if errors.Is(err, gocui.ErrUnknownView) {
 		log("this is supposed to happen?", err)
 	}
 
 	if (err != nil) {
 		log("create output window failed", err)
-		return
+		// return nil
 	}
 
-	v.Clear()
-	v.SelBgColor = gocui.ColorCyan
-	v.SelFgColor = gocui.ColorBlack
+	if (v == nil) {
+		log("msg == nil. WTF now? err =", err)
+		return nil
+	} else {
+		me.logStdout.v = v
+	}
+
+	me.logStdout.v.Clear()
+	me.logStdout.v.SelBgColor = gocui.ColorCyan
+	me.logStdout.v.SelFgColor = gocui.ColorBlack
 	fmt.Fprintln(v, "figure out how to capture STDOUT to here\n" + stringFromMouseClick)
 	g.SetViewOnBottom("msg")
 	// g.SetViewOnBottom(v.Name())
-	return
+	return v
 }

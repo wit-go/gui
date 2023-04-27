@@ -69,6 +69,7 @@ const (
 	Font // TODO
 	Color // TODO
 	Dialog // TODO
+	Stdout // can be used to capture and display log output
 )
 
 const (
@@ -93,6 +94,7 @@ const (
 	User // the user did something (mouse, keyboard, etc)
 	InitToolkit // initializes the toolkit
 	CloseToolkit // closes the toolkit
+	UserQuit // the user closed the GUI
 )
 
 func (s WidgetType) String() string {
@@ -141,6 +143,8 @@ func (s WidgetType) String() string {
 		return "Color"
 	case Dialog:
 		return "Dialog"
+	case Stdout:
+		return "Stdout"
 	case Unknown:
 		return "Unknown"
 	}

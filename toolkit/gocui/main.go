@@ -35,6 +35,12 @@ func PluginChannel() chan toolkit.Action {
 	return me.pluginChan
 }
 
+/*
+recieves requests from the program to do things like:
+* add new widgets
+* change the text of a label
+* etc..
+*/
 func catchActionChannel() {
 	log(logInfo, "catchActionChannel() START")
 	for {
@@ -55,21 +61,35 @@ func catchActionChannel() {
 func Exit() {
 	// TODO: what should actually happen here?
 	me.baseGui.Close()
+	sendBackQuit()
 }
 
+func sendBackQuit() {
+	// send 'Quit' back to the program (?)
+	var a toolkit.Action
+	a.ActionType = toolkit.UserQuit
+	me.callback <- a
+}
+
+var outf *os.File
+
 func main() {
+	var err error
 	log(logInfo, "main() start Init()")
 
-	outf, err := os.OpenFile("/tmp/witgui.log", os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
+	outf, err = os.OpenFile("/tmp/witgui.log", os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
 	if err != nil {
 		exit("error opening file: %v", err)
 	}
 	defer outf.Close()
 
-	setOutput(outf)
-	log("This is a test log entry")
+	// setOutput(outf)
+	// log("This is a test log entry")
 
 	MouseMain()
+
 	log(true, "MouseMain() closed")
 	me.baseGui.Close()
+
+	sendBackQuit()
 }

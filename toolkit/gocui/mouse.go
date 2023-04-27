@@ -52,6 +52,9 @@ func layout(g *gocui.Gui) error {
 	if widgetView, _ := g.View("msg"); widgetView == nil {
 		log(logInfo, "create output widget now", maxX, maxY, mx, my)
 		makeOutputWidget(g, "this is a create before a mouse click")
+		if (me.logStdout != nil) {
+			setOutput(me.logStdout)
+		}
 	} else {
 		log(logInfo, "output widget already exists", maxX, maxY, mx, my)
 	}

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
-	"errors"
+	// "fmt"
+	// "errors"
 	"strconv"
 	"strings"
 
@@ -178,7 +178,7 @@ func (w *cuiWidget) drawTree(draw bool) {
 }
 
 func click(g *gocui.Gui, v *gocui.View) error {
-	var l string
+	// var l string
 	var err error
 
 	log(logNow, "click() START", v.Name())
@@ -201,6 +201,7 @@ func click(g *gocui.Gui, v *gocui.View) error {
 		return err
 	}
 
+	/*
 	_, cy := v.Cursor()
 	if l, err = v.Line(cy); err != nil {
 		l = ""
@@ -213,6 +214,7 @@ func click(g *gocui.Gui, v *gocui.View) error {
 		v.SelFgColor = gocui.ColorBlack
 		fmt.Fprintln(v, l)
 	}
+	*/
 
 	// this seems to delete the button(?)
 	// g.SetViewOnBottom(v.Name())
