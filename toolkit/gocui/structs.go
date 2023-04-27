@@ -204,27 +204,27 @@ func (w *cuiWidget) Write(p []byte) (n int, err error) {
 	me.writeMutex.Lock()
 	defer me.writeMutex.Unlock()
 	if (me.logStdout.v == nil) {
+		// optionally write the output to /tmp
 		fmt.Fprintln(outf, string(p))
 		v, _ := me.baseGui.View("msg")
 		if (v != nil) {
 			fmt.Fprintln(outf, "found msg")
 			me.logStdout.v = v
 		}
-		return
-	}
-	me.logStdout.v.Clear()
-	// fmt.Fprintln(w.v, p + "jcarr")
-	// log(logNow, "widget.Write()", p)
+	} else {
+		// display the output in the gocui window
+		me.logStdout.v.Clear()
 
-	s := fmt.Sprint(string(p))
-	s = "jwc " + strconv.Itoa(len(outputS)) + " " + strings.TrimSuffix(s, "\n")
-	tmp := strings.Split(s, "\n")
-	outputS = append(outputS, tmp...)
-	if (len(outputS) > outputH) {
-		l := len(outputS) - outputH
-		outputS = outputS[l:]
+		s := fmt.Sprint(string(p))
+		s = strings.TrimSuffix(s, "\n")
+		tmp := strings.Split(s, "\n")
+		outputS = append(outputS, tmp...)
+		if (len(outputS) > outputH) {
+			l := len(outputS) - outputH
+			outputS = outputS[l:]
+		}
+		fmt.Fprintln(me.logStdout.v, strings.Join(outputS, "\n"))
 	}
-	fmt.Fprintln(me.logStdout.v, strings.Join(outputS, "\n"))
 
 	return len(p), nil
 }

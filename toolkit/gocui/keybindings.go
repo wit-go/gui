@@ -6,6 +6,7 @@ package main
 
 import (
 	"github.com/awesome-gocui/gocui"
+	"git.wit.org/wit/gui/toolkit"
 )
 
 func defaultKeybindings(g *gocui.Gui) error {
@@ -81,6 +82,13 @@ func addDebugKeys(g *gocui.Gui) {
 	g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone,
 		func(g *gocui.Gui, v *gocui.View) error {
 			standardExit()
+			return nil
+	})
+	g.SetKeybinding("", gocui.KeyCtrlD, gocui.ModNone,
+		func(g *gocui.Gui, v *gocui.View) error {
+			var a toolkit.Action
+			a.ActionType = toolkit.EnableDebug
+			me.callback <- a
 			return nil
 	})
 

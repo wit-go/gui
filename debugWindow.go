@@ -19,7 +19,7 @@ var myButton *Node
 	Creates a window helpful for debugging this package
 */
 func DebugWindow() {
-	bugWin = Config.rootNode.NewWindow("go.wit.org/gui debug window").DebugTab("Debug Tab")
+	bugWin = Config.rootNode.NewWindow("go.wit.com/gui debug window").DebugTab("Debug Tab")
 	bugWin.Custom = bugWin.StandardClose
 	// bugWin.DebugTab("Debug Tab")
 }

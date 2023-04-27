@@ -95,6 +95,7 @@ const (
 	InitToolkit // initializes the toolkit
 	CloseToolkit // closes the toolkit
 	UserQuit // the user closed the GUI
+	EnableDebug // open the debugging window
 )
 
 func (s WidgetType) String() string {

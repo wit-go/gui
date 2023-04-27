@@ -53,13 +53,19 @@ func watchCallback() {
 		log(logNow, "watchCallback() restarted select for toolkit user events")
 	    	select {
 		case a := <-Config.guiChan:
-			n := Config.rootNode.FindId(a.WidgetId)
 			if (a.ActionType == toolkit.UserQuit) {
-				log(logNow, "doUserEvent() node =", n.id, n.Name, "User sent Quit()")
-				n.doCustom()
+				log(logNow, "doUserEvent() User sent Quit()")
+				Config.rootNode.doCustom()
 				exit("wit/gui toolkit.UserQuit")
 				break
 			}
+			if (a.ActionType == toolkit.EnableDebug) {
+				log(logNow, "doUserEvent() Enable Debugging Window")
+				DebugWindow()
+				break
+			}
+
+			n := Config.rootNode.FindId(a.WidgetId)
 			if (n == nil) {
 				log(logError, "watchCallback() UNKNOWN widget id =", a.WidgetId, a.Name)
 			} else {

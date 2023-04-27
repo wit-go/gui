@@ -7,6 +7,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/awesome-gocui/gocui"
 )
@@ -15,33 +16,45 @@ func addHelp() {
 	me.baseGui.SetManagerFunc(helplayout)
 }
 
+var helpText []string = []string{"KEYBINDINGS",
+	"",
+	"d: show/hide debugging",
+	"h: hide widgets",
+	"s: show all widgets",
+	"q: quit()",
+	"p: panic()",
+	"o: show Stdout",
+	"l: log to /tmp/witgui.log",
+	"Ctrl-D: Enable Debugging",
+	"Ctrl-C: Exit",
+	"",
+}
+
 func helplayout(g *gocui.Gui) error {
 	var err error
 	maxX, _ := g.Size()
 
-	help, err := g.SetView("help", maxX-32, 0, maxX-1, 13, 0)
+	var newW int = 8
+	for _, s := range(helpText) {
+		if newW < len(s) {
+			newW = len(s)
+		}
+	}
+
+	help, err := g.SetView("help", maxX-(newW + me.FramePadW), 0, maxX-1, len(helpText) + me.FramePadH, 0)
 	if err != nil {
 		if !errors.Is(err, gocui.ErrUnknownView) {
 			return err
 		}
 		help.SelBgColor = gocui.ColorGreen
 		help.SelFgColor = gocui.ColorBlack
-		fmt.Fprintln(help, "KEYBINDINGS")
 		// fmt.Fprintln(help, "Enter: Click Button")
 		// fmt.Fprintln(help, "Tab/Space: Switch Buttons")
-		fmt.Fprintln(help, "")
-		// fmt.Fprintln(help, "h: Help")
 		// fmt.Fprintln(help, "Backspace: Delete Button")
 		// fmt.Fprintln(help, "Arrow keys: Move Button")
-		// fmt.Fprintln(help, "t: Move Button to the top")
-		// fmt.Fprintln(help, "b: Move Button to the button")
-		fmt.Fprintln(help, "d: show/hide debugging")
-		fmt.Fprintln(help, "h: hide widgets")
-		fmt.Fprintln(help, "s: show all widgets")
-		fmt.Fprintln(help, "q: quit()")
-		fmt.Fprintln(help, "p: panic()")
-		fmt.Fprintln(help, "STDOUT: /tmp/witgui.log")
-		// fmt.Fprintln(help, "Ctrl-C: Exit") // TODO: fix ctrl-c handling
+
+		fmt.Fprintln(help, strings.Join(helpText, "\n"))
+
 		if _, err := g.SetCurrentView("help"); err != nil {
 			return err
 		}
