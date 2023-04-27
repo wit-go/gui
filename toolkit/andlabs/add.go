@@ -54,13 +54,13 @@ func add(a toolkit.Action) {
 		p.newSlider(n)
 		return
 	case toolkit.Dropdown:
-		newDropdown(&a)
+		p.newDropdown(n)
 		return
 	case toolkit.Combobox:
-		newCombobox(&a)
+		p.newCombobox(n)
 		return
 	case toolkit.Textbox:
-		newTextbox(&a)
+		p.newTextbox(n)
 		return
 	case toolkit.Group:
 		p.newGroup(n)

@@ -3,29 +3,27 @@ package main
 import (
 	"github.com/andlabs/ui"
 	_ "github.com/andlabs/ui/winmanifest"
-	"git.wit.org/wit/gui/toolkit"
 )
 
-func (t *andlabsT) newCombobox(a *toolkit.Action) *andlabsT {
-	var newt andlabsT
-	log(debugToolkit, "newCombobox() START", a.Name)
+func (p *node) newCombobox(n *node) {
+	newt := new(andlabsT)
+	log(debugToolkit, "newCombobox() START", n.Name)
 
-	newt.wId = a.WidgetId
-	newt.WidgetType = a.WidgetType
-	s := ui.NewEditableCombobox()
-	newt.uiEditableCombobox = s
-	newt.uiControl = s
+	cb := ui.NewEditableCombobox()
+	newt.uiEditableCombobox = cb
+	newt.uiControl = cb
 
 	// initialize the index
 	newt.c = 0
 	newt.val = make(map[int]string)
 
-	s.OnChanged(func(spin *ui.EditableCombobox) {
+	cb.OnChanged(func(spin *ui.EditableCombobox) {
 		newt.s = spin.Text()
 		newt.doUserEvent()
 	})
 
-	return &newt
+	n.tk = newt
+	p.place(n)
 }
 
 func (t *andlabsT) AddComboboxName(title string) {
@@ -40,17 +38,4 @@ func (t *andlabsT) AddComboboxName(title string) {
 	// if (t.c == 0) {
 	// }
 	t.c = t.c + 1
-}
-
-func newCombobox(a *toolkit.Action) {
-	log(debugToolkit, "newCombobox()", a.Name)
-
-	t := andlabs[a.ParentId]
-	if (t == nil) {
-		log(debugToolkit, "newCombobox() toolkit struct == nil. name=", a.Name)
-		listMap(debugToolkit)
-		return
-	}
-	newt := t.newCombobox(a)
-	place(a, t, newt)
 }

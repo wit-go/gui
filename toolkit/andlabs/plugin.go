@@ -26,6 +26,8 @@ func rawAction(a toolkit.Action) {
 		return
 	}
 
+	n := rootNode.findWidgetId(a.WidgetId)
+
 	switch a.ActionType {
 	case toolkit.Add:
 		ui.QueueMain(func() {
@@ -45,7 +47,7 @@ func rawAction(a toolkit.Action) {
 		a.B = false
 		enable(&a)
 	case toolkit.Get:
-		setText(&a)
+		n.setText(&a)
 	case toolkit.GetText:
 		switch a.WidgetType {
 		case toolkit.Textbox:
@@ -53,11 +55,11 @@ func rawAction(a toolkit.Action) {
 			a.S = t.s
 		}
 	case toolkit.Set:
-		setText(&a)
+		n.setText(&a)
 	case toolkit.SetText:
-		setText(&a)
+		n.setText(&a)
 	case toolkit.AddText:
-		setText(&a)
+		n.setText(&a)
 	case toolkit.Margin:
 		pad(&a)
 	case toolkit.Unmargin:
@@ -105,7 +107,7 @@ func flag(a *toolkit.Action) {
 	}
 }
 
-func setText(a *toolkit.Action) {
+func (n *node) setText(a *toolkit.Action) {
 	t := andlabs[a.WidgetId]
 	if (t == nil) {
 		log(debugError, "setText error. andlabs[id] == nil", a.WidgetId)
@@ -167,7 +169,7 @@ func setText(a *toolkit.Action) {
 	case toolkit.Dropdown:
 		switch a.ActionType {
 		case toolkit.AddText:
-			AddDropdownName(a)
+			n.AddDropdownName(a)
 		case toolkit.Set:
 			var orig int
 			var i int = -1
