@@ -1,83 +1,8 @@
 package main
 
 import (
-	"github.com/andlabs/ui"
 	"git.wit.org/wit/gui/toolkit"
 )
-
-func rawAction(a toolkit.Action) {
-	log(debugAction, "rawAction() START a.ActionType =", a.ActionType)
-	log(debugAction, "rawAction() START a.S =", a.S)
-
-	if (a.ActionType == toolkit.InitToolkit) {
-		// TODO: make sure to only do this once
-		// go uiMain.Do(func() {
-		// 	ui.Main(demoUI)
-			// go catchActionChannel()
-		// })
-		// try doing this on toolkit load in init()
-		return
-	}
-
-	log(logNow, "rawAction() START a.WidgetId =", a.WidgetId, "a.ParentId =", a.ParentId)
-	switch a.WidgetType {
-	case toolkit.Flag:
-		flag(&a)
-		return
-	}
-
-	n := rootNode.findWidgetId(a.WidgetId)
-
-	switch a.ActionType {
-	case toolkit.Add:
-		ui.QueueMain(func() {
-			add(a)
-		})
-		sleep(.1)
-	case toolkit.Show:
-		a.B = true
-		show(&a)
-	case toolkit.Hide:
-		a.B = false
-		show(&a)
-	case toolkit.Enable:
-		a.B = true
-		enable(&a)
-	case toolkit.Disable:
-		a.B = false
-		enable(&a)
-	case toolkit.Get:
-		n.setText(&a)
-	case toolkit.GetText:
-		switch a.WidgetType {
-		case toolkit.Textbox:
-			t := andlabs[a.WidgetId]
-			a.S = t.s
-		}
-	case toolkit.Set:
-		n.setText(&a)
-	case toolkit.SetText:
-		n.setText(&a)
-	case toolkit.AddText:
-		n.setText(&a)
-	case toolkit.Margin:
-		pad(&a)
-	case toolkit.Unmargin:
-		pad(&a)
-	case toolkit.Pad:
-		pad(&a)
-	case toolkit.Unpad:
-		pad(&a)
-	case toolkit.Delete:
-		uiDelete(&a)
-	case toolkit.Move:
-		log(debugNow, "rawAction() attempt to move() =", a.ActionType, a.WidgetType)
-		move(&a)
-	default:
-		log(debugError, "rawAction() Unknown =", a.ActionType, a.WidgetType)
-	}
-	log(debugAction, "rawAction() END =", a.ActionType, a.WidgetType)
-}
 
 func flag(a *toolkit.Action) {
 	// log(debugFlags, "plugin Send() flag parent =", p.Name, p.Type)
@@ -108,15 +33,15 @@ func flag(a *toolkit.Action) {
 }
 
 func (n *node) setText(a *toolkit.Action) {
-	t := andlabs[a.WidgetId]
+	t := n.tk
 	if (t == nil) {
-		log(debugError, "setText error. andlabs[id] == nil", a.WidgetId)
+		log(debugError, "setText error. tk == nil", n.Name, n.WidgetId)
 		actionDump(debugError, a)
 		return
 	}
-	log(debugChange, "setText() Attempt on", t.WidgetType, "with", a.S)
+	log(debugChange, "setText() Attempt on", n.WidgetType, "with", a.S)
 
-	switch t.WidgetType {
+	switch n.WidgetType {
 	case toolkit.Window:
 		t.uiWindow.SetTitle(a.S)
 	case toolkit.Tab:
@@ -169,7 +94,7 @@ func (n *node) setText(a *toolkit.Action) {
 	case toolkit.Dropdown:
 		switch a.ActionType {
 		case toolkit.AddText:
-			n.AddDropdownName(a)
+			n.AddDropdownName(a.S)
 		case toolkit.Set:
 			var orig int
 			var i int = -1
@@ -215,6 +140,6 @@ func (n *node) setText(a *toolkit.Action) {
 			log(debugError, "setText() unknown", a.ActionType, "on checkbox", t.Name)
 		}
 	default:
-		log(debugError, "plugin Send() Don't know how to setText on", t.WidgetType, "yet", a.ActionType)
+		log(debugError, "plugin Send() Don't know how to setText on", n.WidgetType, "yet", a.ActionType)
 	}
 }

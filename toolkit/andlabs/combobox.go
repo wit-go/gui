@@ -18,8 +18,8 @@ func (p *node) newCombobox(n *node) {
 	newt.val = make(map[int]string)
 
 	cb.OnChanged(func(spin *ui.EditableCombobox) {
-		newt.s = spin.Text()
-		newt.doUserEvent()
+		n.S = spin.Text()
+		n.doUserEvent()
 	})
 
 	n.tk = newt

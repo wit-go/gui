@@ -13,8 +13,8 @@ func (p *node) newSpinner(n *node) {
 	newt.uiControl = s
 
 	s.OnChanged(func(s *ui.Spinbox) {
-		newt.i = newt.uiSpinbox.Value()
-		newt.doUserEvent()
+		n.I = newt.uiSpinbox.Value()
+		n.doUserEvent()
 	})
 
 	n.tk = newt

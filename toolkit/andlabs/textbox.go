@@ -13,8 +13,8 @@ func (p *node) newTextbox(n *node) {
 	newt.uiControl = e
 
 	e.OnChanged(func(spin *ui.MultilineEntry) {
-		newt.s = spin.Text()
-		newt.doUserEvent()
+		n.S = spin.Text()
+		n.doUserEvent()
 	})
 	n.tk = newt
 	p.place(n)

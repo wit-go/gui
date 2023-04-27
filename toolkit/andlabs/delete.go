@@ -6,11 +6,13 @@ import "git.wit.org/wit/gui/toolkit"
 
 // delete the child widget from the parent
 // p = parent, c = child
-func destroy(pId int, cId int) {
-	log(true, "delete()", pId, cId)
+func (n *node) destroy() {
+	pId := n.parent.WidgetId
+	cId := n.WidgetId
+	log(logNow, "delete()", pId, cId)
 
-	pt := andlabs[pId]
-	ct := andlabs[cId]
+	pt := n.parent.tk
+	ct := n.tk
 	if (ct == nil) {
 		log(true, "delete FAILED (ct = mapToolkit[c] == nil) for c", pId, cId)
 		// this pukes out a whole universe of shit
@@ -18,7 +20,7 @@ func destroy(pId int, cId int) {
 		return
 	}
 
-	switch ct.WidgetType {
+	switch n.WidgetType {
 	case toolkit.Button:
 		log(true, "Should delete Button here:", ct.Name)
 		log(true, "Parent:")
@@ -40,12 +42,6 @@ func destroy(pId int, cId int) {
 	case toolkit.Window:
 		log(true, "Should delete Window here:", ct.Name)
 	default:
-		log(true, "Don't know how to delete pt =", pt.WidgetType, pt.Name, pt.uiButton)
-		log(true, "Don't know how to delete ct =", ct.WidgetType, ct.Name, ct.uiButton)
-		log(true, "Parent:")
-		pt.Dump(true)
-		log(true, "Child:")
-		ct.Dump(true)
 		log(true, "Fuckit, let's destroy a button")
 		if (ct.uiButton != nil) {
 			pt.uiBox.Delete(4)

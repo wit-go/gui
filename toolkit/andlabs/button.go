@@ -19,12 +19,10 @@ func (p *node) newButton(n *node) {
 	b := ui.NewButton(n.Text)
 	newt.uiButton = b
 	newt.uiControl = b
-	newt.wId = n.WidgetId
-	newt.WidgetType = n.WidgetType
 	newt.parent = t
 
 	b.OnClicked(func(*ui.Button) {
-		newt.doUserEvent()
+		n.doUserEvent()
 	})
 
 	n.tk = newt

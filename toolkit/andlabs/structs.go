@@ -5,7 +5,7 @@ import "git.wit.org/wit/gui/toolkit"
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
-var andlabs map[int]*andlabsT
+// var andlabs map[int]*andlabsT
 // var callback func(int) bool
 var callback chan toolkit.Action
 
@@ -38,8 +38,8 @@ type node struct {
 
 // stores the raw toolkit internals
 type andlabsT struct {
-	wId	int	// widget ID
-	WidgetType	toolkit.WidgetType
+	// wId	int	// widget ID
+	// WidgetType	toolkit.WidgetType
 
 	Name   string
 	Text   string

@@ -1,7 +1,7 @@
 package main
 
 import (
-//	"git.wit.org/wit/gui/toolkit"
+	"git.wit.org/wit/gui/toolkit"
 
 	"github.com/andlabs/ui"
 	_ "github.com/andlabs/ui/winmanifest"
@@ -22,15 +22,15 @@ import (
 func (p *node) newTab(n *node) {
 	var newt *andlabsT
 
+	if (p.WidgetType != toolkit.Window) {
+		log(debugToolkit, "newTab() uiWindow == nil. I can't add a toolbar without window", n.WidgetId, n.ParentId)
+		return
+	}
 	t := p.tk
 
 	log(debugToolkit, "newTab() START", n.WidgetId, n.ParentId)
 
 	if (t.uiTab == nil) {
-		if (t.uiWindow == nil) {
-			log(debugToolkit, "newTab() uiWindow == nil. I can't add a toolbar without window", n.WidgetId, n.ParentId)
-			return
-		}
 		// this means you have to make a new tab
 		log(debugToolkit, "newTab() GOOD. This should be the first tab:", n.WidgetId, n.ParentId)
 		newt = rawTab(t.uiWindow, n.Text)
@@ -41,22 +41,6 @@ func (p *node) newTab(n *node) {
 		newt = t.appendTab(n.Text)
 	}
 
-	// add the structure to the array
-	if (andlabs[n.WidgetId] == nil) {
-		log(logInfo, "newTab() MAPPED", n.WidgetId, n.ParentId)
-		andlabs[n.WidgetId] = newt
-		newt.WidgetType = n.WidgetType
-	} else {
-		log(debugError, "newTab() DO WHAT?", n.WidgetId, n.ParentId)
-		log(debugError, "THIS IS BAD")
-	}
-
-	newt.Name = n.Name
-
-	log(debugToolkit, "t:")
-	t.Dump(debugToolkit)
-	log(debugToolkit, "newt:")
-	newt.Dump(debugToolkit)
 	n.tk = newt
 }
 

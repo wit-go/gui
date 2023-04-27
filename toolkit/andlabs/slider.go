@@ -13,8 +13,8 @@ func (p *node) newSlider(n *node) {
 	newt.uiControl = s
 
 	s.OnChanged(func(spin *ui.Slider) {
-		newt.i = newt.uiSlider.Value()
-		newt.doUserEvent()
+		n.I = newt.uiSlider.Value()
+		n.doUserEvent()
 	})
 
 	n.tk = newt

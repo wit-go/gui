@@ -60,7 +60,7 @@ func init() {
 	// log(debugToolkit, "gui/toolkit init() Setting defaultBehavior = true")
 	setDefaultBehavior(true)
 
-	andlabs = make(map[int]*andlabsT)
+	// andlabs = make(map[int]*andlabsT)
 	pluginChan = make(chan toolkit.Action, 1)
 
 	log(logNow, "Init() start channel reciever")
