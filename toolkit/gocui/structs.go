@@ -220,8 +220,8 @@ func (w *cuiWidget) Write(p []byte) (n int, err error) {
 	s = strings.TrimSuffix(s, "\n")
 	tmp := strings.Split(s, "\n")
 	outputS = append(outputS, tmp...)
-	if (len(outputS) > 50) {
-		outputS = outputS[10:]
+	if (len(outputS) > outputH) {
+		outputS = outputS[4:]
 	}
 	fmt.Fprintln(me.logStdout.v, strings.Join(outputS, "\n"))
 

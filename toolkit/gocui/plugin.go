@@ -1,15 +1,10 @@
 package main
 
 import (
-	"os"
 	// if you include more than just this import
 	// then your plugin might be doing something un-ideal (just a guess from 2023/02/27)
 	"git.wit.org/wit/gui/toolkit"
 )
-
-func Quit() {
-	me.baseGui.Close()
-}
 
 func action(a *toolkit.Action) {
 	log(logInfo, "action() START", a.WidgetId, a.ActionType, a.WidgetType, a.Name)
@@ -41,9 +36,7 @@ func action(a *toolkit.Action) {
 		log(logNow, "attempt to move() =", a.ActionType, a.WidgetType, a.Name)
 	case toolkit.CloseToolkit:
 		log(logNow, "attempting to close the plugin and release stdout and stderr")
-		me.baseGui.Close()
-		// defer outf.Close()
-		setOutput(os.Stdout)
+		standardExit()
 	default:
 		log(logError, "action() Unknown =", a.ActionType, a.WidgetType, a.Name)
 	}

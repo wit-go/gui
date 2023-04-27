@@ -60,10 +60,17 @@ func catchActionChannel() {
 
 func Exit() {
 	// TODO: what should actually happen here?
-	me.baseGui.Close()
-	sendBackQuit()
+	standardExit()
 }
 
+func standardExit() {
+	me.baseGui.Close()
+	outf.Close()
+	setOutput(os.Stdout)
+	sendBackQuit()
+	sleep(.5)
+	exit()
+}
 func sendBackQuit() {
 	// send 'Quit' back to the program (?)
 	var a toolkit.Action
@@ -89,7 +96,5 @@ func main() {
 	MouseMain()
 
 	log(true, "MouseMain() closed")
-	me.baseGui.Close()
-
-	sendBackQuit()
+	standardExit()
 }

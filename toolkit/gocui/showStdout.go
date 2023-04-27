@@ -8,8 +8,8 @@ import (
 	"git.wit.org/wit/gui/toolkit"
 )
 
-var outputW int = 200
-var outputH int = 36
+var outputW int = 180
+var outputH int = 24
 
 func moveMsg(g *gocui.Gui) {
 	mx, my := g.MousePosition()

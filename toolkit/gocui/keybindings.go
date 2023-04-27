@@ -75,21 +75,19 @@ func addDebugKeys(g *gocui.Gui) {
 	// exit
 	g.SetKeybinding("", 'q', gocui.ModNone,
 		func(g *gocui.Gui, v *gocui.View) error {
-			me.baseGui.Close()
-			sendBackQuit()
+			standardExit()
 			return nil
 	})
 	g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone,
 		func(g *gocui.Gui, v *gocui.View) error {
-			me.baseGui.Close()
-			sendBackQuit()
+			standardExit()
 			return nil
 	})
 
 	// panic
 	g.SetKeybinding("", 'p', gocui.ModNone,
 		func(g *gocui.Gui, v *gocui.View) error {
-			me.baseGui.Close()
+			standardExit()
 			panic("forced panic in gocui")
 			return nil
 	})
