@@ -1,7 +1,7 @@
 package main
 
 import (
-	"git.wit.org/wit/gui/toolkit"
+//	"git.wit.org/wit/gui/toolkit"
 
 	"github.com/andlabs/ui"
 	_ "github.com/andlabs/ui/winmanifest"
@@ -19,38 +19,40 @@ import (
 	once there is one. If you send a Window here, it will replace
 	any existing tabs rather than adding a new one
 */
-func (t *andlabsT) newTab(a toolkit.Action) {
+func (p *node) newTab(n *node) {
 	// var w *ui.Window
 	var newt *andlabsT
 
-	log(debugToolkit, "newTab() START", a.WidgetId, a.ParentId)
+	t := p.tk
+
+	log(debugToolkit, "newTab() START", n.WidgetId, n.ParentId)
 
 	if (t.uiTab == nil) {
 		if (t.uiWindow == nil) {
-			log(debugToolkit, "newTab() uiWindow == nil. I can't add a toolbar without window", a.WidgetId, a.ParentId)
+			log(debugToolkit, "newTab() uiWindow == nil. I can't add a toolbar without window", n.WidgetId, n.ParentId)
 			return
 		}
 		// this means you have to make a new tab
-		log(debugToolkit, "newTab() GOOD. This should be the first tab:", a.WidgetId, a.ParentId)
-		newt = rawTab(t.uiWindow, a.Text)
+		log(debugToolkit, "newTab() GOOD. This should be the first tab:", n.WidgetId, n.ParentId)
+		newt = rawTab(t.uiWindow, n.Text)
 		t.uiTab = newt.uiTab
 	} else {
 		// this means you have to append a tab
-		log(debugToolkit, "newTab() GOOD. This should be an additional tab:", a.WidgetId, a.ParentId)
-		newt = t.appendTab(a.Text)
+		log(debugToolkit, "newTab() GOOD. This should be an additional tab:", n.WidgetId, n.ParentId)
+		newt = t.appendTab(n.Text)
 	}
 
 	// add the structure to the array
-	if (andlabs[a.WidgetId] == nil) {
-		log(logInfo, "newTab() MAPPED", a.WidgetId, a.ParentId)
-		andlabs[a.WidgetId] = newt
-		newt.WidgetType = a.WidgetType
+	if (andlabs[n.WidgetId] == nil) {
+		log(logInfo, "newTab() MAPPED", n.WidgetId, n.ParentId)
+		andlabs[n.WidgetId] = newt
+		newt.WidgetType = n.WidgetType
 	} else {
-		log(debugError, "newTab() DO WHAT?", a.WidgetId, a.ParentId)
+		log(debugError, "newTab() DO WHAT?", n.WidgetId, n.ParentId)
 		log(debugError, "THIS IS BAD")
 	}
 
-	newt.Name = a.Name
+	newt.Name = n.Name
 
 	log(debugToolkit, "t:")
 	t.Dump(debugToolkit)
@@ -118,15 +120,9 @@ func (t *andlabsT) appendTab(name string) *andlabsT {
 	return &newT
 }
 
-func newTab(a toolkit.Action) {
-	// w := a.Widget
-	log(debugToolkit, "newTab()", a.ParentId)
+func newTab(n *node) {
+	log(logInfo, "newTab() add to parent id:", n.ParentId)
 
-	t := andlabs[a.ParentId]
-	if (t == nil) {
-		log(debugToolkit, "newTab() parent toolkit == nil. new tab can not be made =", a.ParentId)
-		log(debugToolkit, "look for a window? check for an existing tab?")
-		return
-	}
-	t.newTab(a)
+	p := n.parent
+	p.newTab(n)
 }

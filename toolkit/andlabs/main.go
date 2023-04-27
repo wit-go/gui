@@ -12,6 +12,9 @@ import (
 // this is the channel we get requests to make widgets
 var pluginChan chan toolkit.Action
 
+// the starting point of the binary tree
+var rootNode *node
+
 var uiMainUndef bool = true
 var uiMain sync.Once
 var muAction sync.Mutex

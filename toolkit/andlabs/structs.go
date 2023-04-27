@@ -9,6 +9,33 @@ var andlabs map[int]*andlabsT
 // var callback func(int) bool
 var callback chan toolkit.Action
 
+type node struct {
+	parent	*node
+	children []*node
+
+	WidgetId	int	// widget ID
+	WidgetType	toolkit.WidgetType
+	ParentId	int	// parent ID
+
+	Name   string
+	Text   string
+
+	// This is how the values are passed back and forth
+	// values from things like checkboxes & dropdown's
+	B	bool
+	I	int
+	S	string
+
+	A	any // switch to this or deprecate this? pros/cons?
+
+	// This is used for things like a slider(0,100)
+	X      int
+	Y      int
+
+	// the internal plugin toolkit structure
+	tk *andlabsT
+}
+
 // stores the raw toolkit internals
 type andlabsT struct {
 	wId	int	// widget ID
@@ -22,7 +49,7 @@ type andlabsT struct {
 
 	// tw	*toolkit.Widget
 	parent	*andlabsT
-	a	toolkit.Action
+	children []*andlabsT
 
 	uiControl ui.Control
 

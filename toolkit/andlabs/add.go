@@ -21,36 +21,18 @@ func add(a toolkit.Action) {
 		actionDump(debugError, &a)
 		return
 	}
-	if (a.WidgetId == 0) {
-		log(debugError, "add() error. w.WidgetId == 0")
-		actionDump(debugError, &a)
+	if (a.WidgetType == toolkit.Root) {
+		rootNode = addWidget(&a, nil)
 		return
 	}
+	n := addWidget(&a, nil)
 
-	// for now, window gets handled without checking where == nil)
-	if (a.WidgetType == toolkit.Window) {
-		newWindow(a)
-		return
-	}
-
-	if (andlabs[a.ParentId] == nil) {
-		// listMap(debugError) // memory corruption?
-		log(debugError, "add() Widget.Name =", a.Name)
-		log(debugError, "add() Widget.Type =", a.WidgetType)
-		log(debugError, "ERROR add() ERROR a.Parent map to t == nil. WidgetId =", a.WidgetId, "ParentId =", a.ParentId)
-		exit("can not add()")
-		return
-	}
-
-	switch a.WidgetType {
+	switch n.WidgetType {
 	case toolkit.Window:
-		newWindow(a)
+		newWindow(n)
 		return
 	case toolkit.Tab:
-		log(debugError, "add() CAME AT THIS FROM add() =", a.Name)
-		log(debugError, "add() CAME AT THIS FROM add() =", a.Name)
-		log(debugError, "add() CAME AT THIS FROM add() =", a.Name)
-		newTab(a)
+		newTab(n)
 		return
 	case toolkit.Label:
 		newLabel(&a)
@@ -89,7 +71,7 @@ func add(a toolkit.Action) {
 		newImage(&a)
 		return
 	default:
-		log(debugError, "add() error TODO: ", a.WidgetType, a.Name)
+		log(debugError, "add() error TODO: ", n.WidgetType, n.Name)
 	}
 }
 

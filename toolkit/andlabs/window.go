@@ -15,15 +15,15 @@ func (t *andlabsT) ErrorWindow(msg1 string, msg2 string) {
 	ui.MsgBoxError(t.uiWindow, msg1, msg2)
 }
 
-func newWindow(a toolkit.Action) {
+func newWindow(n *node) {
 	var newt *andlabsT
 
 	newt = new(andlabsT)
 	newt.WidgetType = toolkit.Window
-	newt.wId = a.WidgetId
+	newt.wId = n.WidgetId
 
 	// menubar bool is if the OS defined border on the window should be used
-	win := ui.NewWindow(a.Name, a.X, a.Y, menubar)
+	win := ui.NewWindow(n.Name, n.X, n.Y, menubar)
 	win.SetBorderless(canvas)
 	win.SetMargined(margin)
 	win.OnClosing(func(*ui.Window) bool {
@@ -32,9 +32,9 @@ func newWindow(a toolkit.Action) {
 	})
 	newt.uiWindow = win
 	newt.uiControl = win
-	newt.Name = a.Name
+	newt.Name = n.Name
 
-	andlabs[a.WidgetId] = newt
+	n.tk = newt
 	win.Show()
 	return
 }
