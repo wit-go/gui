@@ -39,7 +39,7 @@ func add(a toolkit.Action) {
 		newLabel(&a)
 		return
 	case toolkit.Button:
-		newButton(&a)
+		p.newButton(n)
 		return
 	case toolkit.Grid:
 		newGrid(&a)

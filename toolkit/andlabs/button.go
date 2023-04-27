@@ -3,34 +3,30 @@ package main
 import (
 	"github.com/andlabs/ui"
 	_ "github.com/andlabs/ui/winmanifest"
-
-	"git.wit.org/wit/gui/toolkit"
 )
 
-func newButton(a *toolkit.Action) {
-	var t, newt *andlabsT
-	var b *ui.Button
-	log(debugToolkit, "newButton()", a.Name)
+func (p *node) newButton(n *node) {
+	log(debugToolkit, "newButton()", n.Name)
 
-	t = andlabs[a.ParentId]
+	t := p.tk
 	if (t == nil) {
-		log(debugToolkit, "newButton() toolkit struct == nil. name=", a.Name)
+		log(debugToolkit, "newButton() toolkit struct == nil. name=", n.Name)
 		return
 	}
 
-	newt = new(andlabsT)
+	newt := new(andlabsT)
 
-	b = ui.NewButton(a.Text)
+	b := ui.NewButton(n.Text)
 	newt.uiButton = b
 	newt.uiControl = b
-	newt.wId = a.WidgetId
-	newt.WidgetType = a.WidgetType
+	newt.wId = n.WidgetId
+	newt.WidgetType = n.WidgetType
 	newt.parent = t
-
-	place(a, t, newt)
 
 	b.OnClicked(func(*ui.Button) {
 		newt.doUserEvent()
 	})
 
+	n.tk = newt
+	p.place(n)
 }
