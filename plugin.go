@@ -7,6 +7,7 @@ package gui
 
 import (
 	"os"
+	"embed"
 	"plugin"
 
 	"git.wit.org/wit/gui/toolkit"
@@ -204,34 +205,14 @@ func initToolkit(name string, filename string) *aplug {
 
 // 2023/04/06 Queue() is also being used and channels are being used. memcopy() only
 func newaction(a *toolkit.Action, n *Node, where *Node) {
+	// remove this
 	if (n != nil) {
 		a.WidgetId = n.id
 		a.WidgetType = n.WidgetType
 		a.ActionType = a.ActionType
 	}
-
-	// TODO: redo this grid logic
 	if (where != nil) {
-		log(logInfo, "Action() START on where X,Y, Next X,Y =", where.Name, where.X, where.Y, where.NextX, where.NextY)
 		a.ParentId = where.id
-		switch where.WidgetType {
-		case toolkit.Grid:
-			// where.Dump(true)
-			log(logInfo, "Action() START on Grid (X,Y)", where.X, where.Y, "put next thing at (X,Y) =", where.NextX, where.NextY)
-			//
-			// fix values here if they are invalid. Index starts at 1
-			if (where.NextX < 1) {
-				where.NextX = 1
-			}
-			if (where.NextY < 1) {
-				where.NextY = 1
-			}
-			//
-			a.X = where.NextX
-			a.Y = where.NextY
-			log(logInfo, "Action() END   on Grid (X,Y)", where.X, where.Y, "put next thing at (X,Y) =", where.NextX, where.NextY)
-		default:
-		}
 	}
 
 	for _, aplug := range allPlugins {
@@ -245,18 +226,73 @@ func newaction(a *toolkit.Action, n *Node, where *Node) {
 		aplug.pluginChan <- *a
 		sleep(.02)
 	}
-	// increment where to put the next widget in a grid or table
-	if (where != nil) {
-		switch where.WidgetType {
-		case toolkit.Grid:
-			log(logInfo, "Action() START size (X,Y)", where.X, where.Y, "put next thing at (X,Y) =", where.NextX, where.NextY)
-			where.NextY += 1
-			if (where.NextY > where.Y) {
-				where.NextX += 1
-				where.NextY = 1
-			}
-			log(logInfo, "Action() END size (X,Y)", where.X, where.Y, "put next thing at (X,Y) =", where.NextX, where.NextY)
-		default:
+}
+
+func (n *Node) InitEmbed(resFS embed.FS) *Node {
+	me.resFS = resFS
+	return n
+}
+
+func (n *Node) LoadToolkitEmbed(name string, b []byte) *Node {
+	for _, aplug := range allPlugins {
+		log(logInfo, "LoadToolkitEmbed() already loaded toolkit plugin =", aplug.name)
+		if (aplug.name == name) {
+			log(logError, "LoadToolkitEmbed() SKIPPING", name, "as you can't load it twice")
+			return n
 		}
 	}
+
+	f, err := os.CreateTemp("", "sample." + name + ".so")
+	if (err != nil) {
+		return n
+	}
+	defer os.Remove(f.Name())
+	f.Write(b)
+
+	p := initToolkit(name, f.Name())
+	if (p == nil) {
+		log(logError, "LoadToolkitEmbed() embedded go file failed", name)
+	}
+	return n
+}
+
+func (n *Node) ListToolkits() {
+	for _, aplug := range allPlugins {
+		log(logNow, "ListToolkits() already loaded toolkit plugin =", aplug.name)
+	}
+}
+
+func (n *Node) LoadToolkit(name string) *Node {
+	log(logInfo, "LoadToolkit() START for name =", name)
+	plug := initPlugin(name)
+	if (plug == nil) {
+		return n
+	}
+
+	log(logInfo, "LoadToolkit() sending InitToolkit action to the plugin channel")
+	var a toolkit.Action
+	a.ActionType = toolkit.InitToolkit
+	plug.pluginChan <- a
+	sleep(.5) // temp hack until chan communication is setup
+
+	// TODO: find a new way to do this that is locking, safe and accurate
+	me.rootNode.redraw(plug)
+	log(logInfo, "LoadToolkit() END for name =", name)
+	return n
+}
+
+func (n *Node) CloseToolkit(name string) bool {
+	log(logInfo, "CloseToolkit() for name =", name)
+	for _, plug := range allPlugins {
+		log(debugGui, "CloseToolkit() found", plug.name)
+		if (plug.name == name) {
+			log(debugNow, "CloseToolkit() sending close", name)
+			var a toolkit.Action
+			a.ActionType = toolkit.CloseToolkit
+			plug.pluginChan <- a
+			sleep(.5)
+			return true
+		}
+	}
+	return false
 }

@@ -139,7 +139,7 @@ Creates a window helpful for debugging this package
 
 `func ShowDebugValues()`
 
-### func [StandardExit](/main.go#L219)
+### func [StandardExit](/main.go#L149)
 
 `func StandardExit()`
 
@@ -171,7 +171,7 @@ This struct can be used with the go-arg package
 The Node is a binary tree. This is how all GUI elements are stored
 simply the name and the size of whatever GUI element exists
 
-#### func [New](/main.go#L190)
+#### func [New](/main.go#L120)
 
 `func New() *Node`
 
@@ -180,7 +180,7 @@ This is due to restrictions by being cross platform
 some toolkit's on some operating systems don't support more than one
 Keep things simple. Do the default expected thing whenever possible
 
-### type [Symbol](/plugin.go#L16)
+### type [Symbol](/plugin.go#L17)
 
 `type Symbol any`
 

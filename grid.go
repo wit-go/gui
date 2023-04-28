@@ -37,7 +37,30 @@ func (n *Node) NewGrid(name string, w int, h int) *Node {
 	newNode.Y = h
 	newNode.NextX = 1
 	newNode.NextY = 1
+
+	/*
+	// fix values here if they are invalid. Index starts at 1
+	if (where.NextX < 1) {
+		where.NextX = 1
+	}
+	if (where.NextY < 1) {
+		where.NextY = 1
+	}
+	//
+	a.X = where.NextX
+	a.Y = where.NextY
+	*/
+
 	newaction(&a, newNode, n)
+
+	/*
+	where.NextY += 1
+	if (where.NextY > where.Y) {
+		where.NextX += 1
+		where.NextY = 1
+	}
+	log(logInfo, "Action() END size (X,Y)", where.X, where.Y, "put next thing at (X,Y) =", where.NextX, where.NextY)
+	*/
 
 	return newNode
 }

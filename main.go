@@ -2,7 +2,6 @@ package gui
 
 import (
 	"os"
-	"embed"
 	"git.wit.org/wit/gui/toolkit"
 )
 
@@ -112,75 +111,6 @@ func (n *Node) doUserEvent(a toolkit.Action) {
 	default:
 		log(logNow, "doUserEvent() type =", n.WidgetType)
 	}
-}
-
-func (n *Node) InitEmbed(resFS embed.FS) *Node {
-	me.resFS = resFS
-	return n
-}
-
-func (n *Node) LoadToolkitEmbed(name string, b []byte) *Node {
-	for _, aplug := range allPlugins {
-		log(logInfo, "LoadToolkitEmbed() already loaded toolkit plugin =", aplug.name)
-		if (aplug.name == name) {
-			log(logError, "LoadToolkitEmbed() SKIPPING", name, "as you can't load it twice")
-			return n
-		}
-	}
-
-	f, err := os.CreateTemp("", "sample." + name + ".so")
-	if (err != nil) {
-		return n
-	}
-	defer os.Remove(f.Name())
-	f.Write(b)
-
-	p := initToolkit(name, f.Name())
-	if (p == nil) {
-		log(logError, "LoadToolkitEmbed() embedded go file failed", name)
-	}
-	return n
-}
-
-func (n *Node) ListToolkits() {
-	for _, aplug := range allPlugins {
-		log(logNow, "ListToolkits() already loaded toolkit plugin =", aplug.name)
-	}
-}
-
-func (n *Node) LoadToolkit(name string) *Node {
-	log(logInfo, "LoadToolkit() START for name =", name)
-	plug := initPlugin(name)
-	if (plug == nil) {
-		return n
-	}
-
-	log(logInfo, "LoadToolkit() sending InitToolkit action to the plugin channel")
-	var a toolkit.Action
-	a.ActionType = toolkit.InitToolkit
-	plug.pluginChan <- a
-	sleep(.5) // temp hack until chan communication is setup
-
-	// TODO: find a new way to do this that is locking, safe and accurate
-	me.rootNode.redraw(plug)
-	log(logInfo, "LoadToolkit() END for name =", name)
-	return n
-}
-
-func (n *Node) CloseToolkit(name string) bool {
-	log(logInfo, "CloseToolkit() for name =", name)
-	for _, plug := range allPlugins {
-		log(debugGui, "CloseToolkit() found", plug.name)
-		if (plug.name == name) {
-			log(debugNow, "CloseToolkit() sending close", name)
-			var a toolkit.Action
-			a.ActionType = toolkit.CloseToolkit
-			plug.pluginChan <- a
-			sleep(.5)
-			return true
-		}
-	}
-	return false
 }
 
 // There should only be one of these per application
