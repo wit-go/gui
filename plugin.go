@@ -115,6 +115,18 @@ func sendCallback(p *aplug, funcName string) func(chan toolkit.Action) {
 */
 func searchPaths(name string) *aplug {
 	var filename string
+	var pfile []byte
+	var err error
+
+	// first try to load the embedded plugin file
+	filename = "plugins/" + name + ".so"
+	pfile, err = Config.resFS.ReadFile(filename)
+	if (err == nil) {
+		log(logError, "write out file here", name, filename, len(pfile))
+		exit()
+	} else {
+		log(logError, filename, "was not embedded. Error:", err)
+	}
 
 	// attempt to write out the file from the internal resource
 	filename = "toolkit/" + name + ".so"
