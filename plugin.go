@@ -120,7 +120,7 @@ func searchPaths(name string) *aplug {
 
 	// first try to load the embedded plugin file
 	filename = "plugins/" + name + ".so"
-	pfile, err = Config.resFS.ReadFile(filename)
+	pfile, err = me.resFS.ReadFile(filename)
 	if (err == nil) {
 		log(logError, "write out file here", name, filename, len(pfile))
 		exit()
@@ -195,7 +195,7 @@ func initToolkit(name string, filename string) *aplug {
 		log(debugError, "initToolkit() ERROR PluginChannel() returned nil for plugin:", newPlug.name, filename)
 		return nil
 	}
-	newPlug.Callback(Config.guiChan)
+	newPlug.Callback(me.guiChan)
 	newPlug.InitOk = true
 
 	log(debugPlugin, "initToolkit() END", newPlug.name, filename)

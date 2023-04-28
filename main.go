@@ -17,21 +17,21 @@ const Yaxis = 1 // stack things vertically
 func init() {
 	log("init() has been run")
 
-	Config.counter = 0
-	Config.prefix = "wit"
+	me.counter = 0
+	me.prefix = "wit"
 
 	// Populates the top of the binary tree
-	Config.rootNode = addNode("guiBinaryTree")
-	Config.rootNode.WidgetType = toolkit.Root
+	me.rootNode = addNode("guiBinaryTree")
+	me.rootNode.WidgetType = toolkit.Root
 
 	// used to pass debugging flags to the toolkit plugins
-	Config.flag = Config.rootNode.newNode("flag", 0, nil)
-	Config.flag.WidgetType = toolkit.Flag
+	me.flag = me.rootNode.newNode("flag", 0, nil)
+	me.flag.WidgetType = toolkit.Flag
 
-	Config.flag = Config.rootNode.newNode("stdout", 0, nil)
-	Config.flag.WidgetType = toolkit.Stdout
+	me.flag = me.rootNode.newNode("stdout", 0, nil)
+	me.flag.WidgetType = toolkit.Stdout
 
-	Config.guiChan = make(chan toolkit.Action, 1)
+	me.guiChan = make(chan toolkit.Action, 1)
 	go watchCallback()
 }
 
@@ -40,10 +40,10 @@ func watchCallback() {
 	for {
 		log(logNow, "watchCallback() restarted select for toolkit user events")
 	    	select {
-		case a := <-Config.guiChan:
+		case a := <-me.guiChan:
 			if (a.ActionType == toolkit.UserQuit) {
 				log(logNow, "doUserEvent() User sent Quit()")
-				Config.rootNode.doCustom()
+				me.rootNode.doCustom()
 				exit("wit/gui toolkit.UserQuit")
 				break
 			}
@@ -53,7 +53,7 @@ func watchCallback() {
 				break
 			}
 
-			n := Config.rootNode.FindId(a.WidgetId)
+			n := me.rootNode.FindId(a.WidgetId)
 			if (n == nil) {
 				log(logError, "watchCallback() UNKNOWN widget id =", a.WidgetId, a.Name)
 			} else {
@@ -115,7 +115,7 @@ func (n *Node) doUserEvent(a toolkit.Action) {
 }
 
 func (n *Node) InitEmbed(resFS embed.FS) *Node {
-	Config.resFS = resFS
+	me.resFS = resFS
 	return n
 }
 
@@ -162,7 +162,7 @@ func (n *Node) LoadToolkit(name string) *Node {
 	sleep(.5) // temp hack until chan communication is setup
 
 	// TODO: find a new way to do this that is locking, safe and accurate
-	Config.rootNode.redraw(plug)
+	me.rootNode.redraw(plug)
 	log(logInfo, "LoadToolkit() END for name =", name)
 	return n
 }
@@ -188,7 +188,7 @@ func (n *Node) CloseToolkit(name string) bool {
 // some toolkit's on some operating systems don't support more than one
 // Keep things simple. Do the default expected thing whenever possible
 func New() *Node {
-	return Config.rootNode
+	return me.rootNode
 }
 
 // try to load andlabs, if that doesn't work, fall back to the console

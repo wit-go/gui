@@ -107,12 +107,6 @@ external things which might be useful
 * [GO Style Guide]
 ```
 
-## Variables
-
-```golang
-var Config guiConfig
-```
-
 ## Functions
 
 ### func [DebugWidgetWindow](/debugWidget.go#L52)
@@ -152,12 +146,13 @@ Creates a window helpful for debugging this package
 The window is destroyed and the application exits
 TODO: properly exit the plugin since Quit() doesn't do it
 
-### func [Watchdog](/watchdog.go#L15)
+### func [Watchdog](/watchdog.go#L16)
 
 `func Watchdog()`
 
 This program sits here.
 If you exit here, the whole thing will os.Exit()
+TODO: use Ticker
 
 This goroutine can be used like a watchdog timer
 

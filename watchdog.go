@@ -9,18 +9,19 @@ var watchtime time.Duration = 100 // in tenths of seconds
 /*
 	This program sits here.
 	If you exit here, the whole thing will os.Exit()
+	TODO: use Ticker
 
 	This goroutine can be used like a watchdog timer
 */
 func Watchdog() {
 	var i = 1
 	for {
-		log(logInfo, "watchdog timer is alive. give me something to do.", i)
-		if (Config.rootNode == nil) {
-			log(logInfo, "Config.rootNode == nil", i)
+		log(logInfo, "gui.Watchdog() is alive. give me something to do.", i)
+		if (me.rootNode == nil) {
+			log(logInfo, "me.rootNode == nil", i)
 		} else {
 			if (logVerbose) {
-				Config.rootNode.ListChildren(true)
+				me.rootNode.ListChildren(true)
 			}
 		}
 		i += 1

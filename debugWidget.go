@@ -60,7 +60,7 @@ func DebugWidgetWindow(w *Node) {
 	// make a new window
 	// make a new tab in the existing window
 	if (makeTabs) {
-		bugWidget = Config.rootNode.NewWindow("Widgets")
+		bugWidget = me.rootNode.NewWindow("Widgets")
 		bugWidget.Custom = bugWidget.StandardClose
 	} else {
 		bugWidget = bugWin.NewTab("Widgets")
@@ -162,7 +162,7 @@ func DebugWidgetWindow(w *Node) {
 	activeJunk.NewLabel("test junk")
 
 	if (activeWidget == nil) {
-		setActiveWidget(Config.rootNode)
+		setActiveWidget(me.rootNode)
 	}
 }
 

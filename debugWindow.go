@@ -19,7 +19,7 @@ var myButton *Node
 	Creates a window helpful for debugging this package
 */
 func DebugWindow() {
-	bugWin = Config.rootNode.NewWindow("go.wit.com/gui debug window").DebugTab("Debug Tab")
+	bugWin = me.rootNode.NewWindow("go.wit.com/gui debug window").DebugTab("Debug Tab")
 	bugWin.Custom = bugWin.StandardClose
 	// bugWin.DebugTab("Debug Tab")
 }
@@ -66,7 +66,7 @@ func (n *Node) DebugTab(title string) *Node {
 
 	g1.NewButton("List toolkits", func () {
 		dropdownWindow(g1)
-		Config.rootNode.ListToolkits()
+		me.rootNode.ListToolkits()
 	})
 	g1.NewButton("List Windows", func () {
 		dropdownWindow(g1)
@@ -79,7 +79,7 @@ func (n *Node) DebugTab(title string) *Node {
 
 	g2.NewButton("Node.ListChildren(true)", func () {
 		if (activeWidget == nil) {
-			activeWidget = Config.rootNode
+			activeWidget = me.rootNode
 		}
 		activeWidget.ListChildren(true)
 	})
@@ -95,7 +95,7 @@ func (n *Node) DebugTab(title string) *Node {
 	})
 
 	g2.NewButton("load toolkit 'gocui'", func () {
-		Config.rootNode.LoadToolkit("gocui")
+		me.rootNode.LoadToolkit("gocui")
 	})
 
 	return newN
@@ -120,7 +120,7 @@ func dropdownWindow(p *Node) {
 	}
 
 	// var last = ""
-	for _, child := range Config.rootNode.children {
+	for _, child := range me.rootNode.children {
 		log(logInfo, "\t\t", child.id, child.Name)
 		dd.AddDropdownName(child.Name)
 		// last = child.Name
@@ -160,5 +160,5 @@ func dropdownWindowWidgets(p *Node) {
 	}
 
 	// list everything in the binary tree
-	addDropdowns(Config.rootNode)
+	addDropdowns(me.rootNode)
 }

@@ -24,10 +24,10 @@ func addNode(title string) *Node {
 	n := new(Node)
 	n.Name = title
 	n.Text = title
-	n.id = Config.counter
+	n.id = me.counter
 	log(debugNode, "addNode = widget setid =", n.id)
 
-	Config.counter += 1
+	me.counter += 1
 	return n
 }
 

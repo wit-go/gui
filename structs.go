@@ -21,7 +21,7 @@ import (
 // For example, a "Mouse Control Panel" not the GIMP or blender.
 //
 
-var Config guiConfig
+var me guiConfig
 
 // This struct can be used with the go-arg package
 type GuiArgs struct {

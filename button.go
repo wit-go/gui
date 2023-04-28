@@ -17,7 +17,7 @@ func (n *Node) NewButton(name string, custom func()) *Node {
 // deprecate this once andlabs is refactored
 func callback(i int) bool {
 	log(debugError, "callback() for widget id =", i)
-	n := Config.rootNode.FindId(i)
+	n := me.rootNode.FindId(i)
 	log(debugError, "callback() found node =", n)
 	// running custom here means the button get's clicked twice
 	if (n.Custom == nil) {
