@@ -16,6 +16,7 @@ func (n *node) doWidgetClick() {
 		// rootNode.dumpTree(true)
 	case toolkit.Window:
 		// setCurrentWindow(w)
+		n.doUserEvent()
 	case toolkit.Tab:
 		// setCurrentTab(w)
 	case toolkit.Group:

@@ -118,7 +118,7 @@ func searchPaths(name string) *aplug {
 
 	// attempt to write out the file from the internal resource
 	filename = "toolkit/" + name + ".so"
-	p := tryfile(name, filename)
+	p := initToolkit(name, filename)
 	if (p != nil) {
 		return p
 	}
@@ -128,20 +128,20 @@ func searchPaths(name string) *aplug {
 		log(logError, "searchPaths() error. exiting here?")
 	} else {
 		filename = homeDir + "/go/src/git.wit.org/wit/gui/toolkit/" + name + ".so"
-		p = tryfile(name, filename)
+		p = initToolkit(name, filename)
 		if (p != nil) {
 			return p
 		}
 	}
 
 	filename = "/usr/lib/go-gui/" + name + ".so"
-	p = tryfile(name, filename)
+	p = initToolkit(name, filename)
 	if (p != nil) {
 		return p
 	}
 
 	filename = "/usr/local/lib/" + name + ".so"
-	p = tryfile(name, filename)
+	p = initToolkit(name, filename)
 	if (p != nil) {
 		return p
 	}
@@ -150,13 +150,13 @@ func searchPaths(name string) *aplug {
 
 // load module
 // 1. open the shared object file to load the symbols
-func tryfile(name string, filename string) *aplug {
+func initToolkit(name string, filename string) *aplug {
 	plug, err := plugin.Open(filename)
 	if err != nil {
 		log(debugGui, "plugin FAILED =", filename, err)
 		return nil
 	}
-	log(debugGui, "tryfile() loading plugin =", filename)
+	log(debugGui, "initToolkit() loading plugin =", filename)
 
 	var newPlug *aplug
 	newPlug = new(aplug)
@@ -180,13 +180,13 @@ func tryfile(name string, filename string) *aplug {
 	// set the communication to the plugins
 	newPlug.pluginChan = newPlug.PluginChannel()
 	if (newPlug.pluginChan == nil) {
-		log(debugError, "tryfile() ERROR PluginChannel() returned nil for plugin:", newPlug.name, filename)
+		log(debugError, "initToolkit() ERROR PluginChannel() returned nil for plugin:", newPlug.name, filename)
 		return nil
 	}
 	newPlug.Callback(Config.guiChan)
 	newPlug.InitOk = true
 
-	log(debugPlugin, "tryfile() END", newPlug.name, filename)
+	log(debugPlugin, "initToolkit() END", newPlug.name, filename)
 	return newPlug
 }
 

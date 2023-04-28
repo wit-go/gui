@@ -22,12 +22,16 @@ func simpleStdin() {
 		case "b":
 			log(true, "show buttons")
 			rootNode.showButtons()
+		case "d":
+			var a toolkit.Action
+			a.ActionType = toolkit.EnableDebug
+			callback <- a
 		case "":
 			fmt.Println("")
 			fmt.Println("Enter:")
 			fmt.Println("'l': list all widgets")
 			fmt.Println("'b': for buttons")
-			fmt.Println("")
+			fmt.Println("'d': enable debugging")
 		default:
 			i, _ := strconv.Atoi(s)
 			log(true, "got input:", i)

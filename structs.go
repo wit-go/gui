@@ -1,8 +1,9 @@
 package gui
 
 import (
-	"git.wit.org/wit/gui/toolkit"
 	"sync"
+	"embed"
+	"git.wit.org/wit/gui/toolkit"
 )
 
 //
@@ -52,6 +53,9 @@ type GuiConfig struct {
 
 	// sets the chan for the plugins to call back too
 	guiChan chan toolkit.Action
+
+	// option to pass in compiled plugins as embedded files
+	resFS	embed.FS
 }
 
 // The Node is a binary tree. This is how all GUI elements are stored

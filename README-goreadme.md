@@ -139,7 +139,7 @@ Creates a window helpful for debugging this package
 
 `func ShowDebugValues()`
 
-### func [StandardExit](/main.go#L197)
+### func [StandardExit](/main.go#L231)
 
 `func StandardExit()`
 
@@ -157,13 +157,13 @@ This goroutine can be used like a watchdog timer
 
 ## Types
 
-### type [GuiArgs](/structs.go#L26)
+### type [GuiArgs](/structs.go#L27)
 
 `type GuiArgs struct { ... }`
 
 This struct can be used with the go-arg package
 
-### type [GuiConfig](/structs.go#L32)
+### type [GuiConfig](/structs.go#L33)
 
 `type GuiConfig struct { ... }`
 
@@ -173,14 +173,14 @@ This struct can be used with the go-arg package
 var Config GuiConfig
 ```
 
-### type [Node](/structs.go#L59)
+### type [Node](/structs.go#L63)
 
 `type Node struct { ... }`
 
 The Node is a binary tree. This is how all GUI elements are stored
 simply the name and the size of whatever GUI element exists
 
-#### func [New](/main.go#L168)
+#### func [New](/main.go#L202)
 
 `func New() *Node`
 

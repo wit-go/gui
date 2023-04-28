@@ -64,6 +64,10 @@ func (n *Node) DebugTab(title string) *Node {
 //////////////////////// window debugging things //////////////////////////////////
 	g1 = newN.NewGroup("list things")
 
+	g1.NewButton("List toolkits", func () {
+		dropdownWindow(g1)
+		Config.rootNode.ListToolkits()
+	})
 	g1.NewButton("List Windows", func () {
 		dropdownWindow(g1)
 	})

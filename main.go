@@ -2,7 +2,7 @@ package gui
 
 import (
 	"os"
-	// "embed" // reminder to not attempt this within the 'wit/gui' package
+	"embed"
 	"git.wit.org/wit/gui/toolkit"
 )
 
@@ -123,6 +123,40 @@ func (n *Node) doUserEvent(a toolkit.Action) {
 		n.doCustom()
 	default:
 		log(logNow, "doUserEvent() type =", n.WidgetType)
+	}
+}
+
+func (n *Node) InitEmbed(resFS embed.FS) *Node {
+	Config.resFS = resFS
+	return n
+}
+
+func (n *Node) LoadToolkitEmbed(name string, b []byte) *Node {
+	for _, aplug := range allPlugins {
+		log(logInfo, "LoadToolkitEmbed() already loaded toolkit plugin =", aplug.name)
+		if (aplug.name == name) {
+			log(logError, "LoadToolkitEmbed() SKIPPING", name, "as you can't load it twice")
+			return n
+		}
+	}
+
+	f, err := os.CreateTemp("", "sample." + name + ".so")
+	if (err != nil) {
+		return n
+	}
+	defer os.Remove(f.Name())
+	f.Write(b)
+
+	p := initToolkit(name, f.Name())
+	if (p == nil) {
+		log(logError, "LoadToolkitEmbed() embedded go file failed", name)
+	}
+	return n
+}
+
+func (n *Node) ListToolkits() {
+	for _, aplug := range allPlugins {
+		log(logNow, "ListToolkits() already loaded toolkit plugin =", aplug.name)
 	}
 }
 
