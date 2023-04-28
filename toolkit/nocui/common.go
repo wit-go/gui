@@ -58,22 +58,3 @@ func addWidget(a *toolkit.Action) *node {
 	}
 	return n
 }
-
-func (n *node) doUserEvent() {
-	if (callback == nil) {
-		log(logError, "doUserEvent() callback == nil", n.WidgetId)
-		return
-	}
-	var a toolkit.Action
-	a.WidgetId = n.WidgetId
-	a.Name = n.Name
-	a.Text = n.Text
-	a.S = n.S
-	a.I = n.I
-	a.B = n.B
-	a.ActionType = toolkit.User
-	log(logInfo, "doUserEvent() START: send a user event to the callback channel")
-	callback <- a
-	log(logInfo, "doUserEvent() END:   sent a user event to the callback channel")
-	return
-}

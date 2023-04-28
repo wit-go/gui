@@ -22,7 +22,7 @@ func catchActionChannel() {
 			log(logNow, "catchActionChannel() SELECT widget id =", a.WidgetId, a.Name)
 			log(logNow, "catchActionChannel() STUFF", a.WidgetId, a.ActionType, a.WidgetType)
 			muAction.Lock()
-			action(a)
+			doAction(&a)
 			muAction.Unlock()
 			log(logNow, "catchActionChannel() STUFF END", a.WidgetId, a.ActionType, a.WidgetType)
 		}
@@ -54,5 +54,6 @@ func init() {
 
 	log(logNow, "Init() start channel reciever")
 	go catchActionChannel()
+	go simpleStdin()
 	log(logNow, "Init() END")
 }

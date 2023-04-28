@@ -81,9 +81,9 @@ func (n *node) Delete() {
 	}
 }
 
-func action(a toolkit.Action) {
-	log(logNow, "rawAction() START a.ActionType =", a.ActionType)
-	log(logNow, "rawAction() START a.S =", a.S)
+func doAction(a *toolkit.Action) {
+	log(logNow, "doAction() START a.ActionType =", a.ActionType)
+	log(logNow, "doAction() START a.S =", a.S)
 
 	if (a.ActionType == toolkit.InitToolkit) {
 		// TODO: make sure to only do this once
@@ -95,8 +95,12 @@ func action(a toolkit.Action) {
 		return
 	}
 
-	log(logNow, "rawAction() START a.WidgetId =", a.WidgetId, "a.ParentId =", a.ParentId)
+	log(logNow, "doAction() START a.WidgetId =", a.WidgetId, "a.ParentId =", a.ParentId)
 	switch a.WidgetType {
+	case toolkit.Root:
+		rootNode = addWidget(a)
+		log(logNow, "doAction() found rootNode")
+		return
 	case toolkit.Flag:
 		// flag(&a)
 		return
@@ -106,10 +110,7 @@ func action(a toolkit.Action) {
 
 	switch a.ActionType {
 	case toolkit.Add:
-		// QueueMain(func() {
-		// 	add(a)
-		// })
-		// sleep(.1)
+		addWidget(a)
 	case toolkit.Show:
 		n.show(true)
 	case toolkit.Hide:
@@ -142,11 +143,11 @@ func action(a toolkit.Action) {
 	case toolkit.Delete:
 		n.Delete()
 	case toolkit.Move:
-		log(logNow, "rawAction() attempt to move() =", a.ActionType, a.WidgetType)
+		log(logNow, "doAction() attempt to move() =", a.ActionType, a.WidgetType)
 		newParent := rootNode.findWidgetId(a.ParentId)
 		n.move(newParent)
 	default:
-		log(logError, "rawAction() Unknown =", a.ActionType, a.WidgetType)
+		log(logError, "doAction() Unknown =", a.ActionType, a.WidgetType)
 	}
-	log(logInfo, "rawAction() END =", a.ActionType, a.WidgetType)
+	log(logInfo, "doAction() END =", a.ActionType, a.WidgetType)
 }

@@ -2,12 +2,7 @@
 package main
 
 import 	(
-	"log"
 	"fmt"
-	"os"
-	"io"
-	"time"
-	"bufio"
 	arg "github.com/alexflint/go-arg"
 	"git.wit.org/wit/gui"
 )
@@ -21,14 +16,17 @@ var args struct {
 	gui.GuiArgs
 }
 
+/*
 var f1 *os.File
 var f2 *os.File
 var err error
+*/
 
 func init() {
 	arg.MustParse(&args)
 	fmt.Println(args.Foo, args.Bar, args.User)
 
+/*
 	log.Println()
 	log.Println("STDOUT is now at /tmp/guilogfile")
 	log.Println("STDOUT is now at /tmp/guilogfile")
@@ -42,8 +40,10 @@ func init() {
 
 	log.SetOutput(f1)
 	log.Println("This is a test log entry")
+*/
 }
 
+/*
 func captureSTDOUT() {
 	f2, _ = os.OpenFile("/tmp/my.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0664)
 	multiWriter := io.MultiWriter(os.Stderr, f2)
@@ -68,3 +68,4 @@ func captureSTDOUT() {
 	// hacky sleep to ensure the go routine can write before program exits
 	time.Sleep(time.Second)
 }
+*/
