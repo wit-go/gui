@@ -85,10 +85,39 @@ type config struct {
 	writeMutex sync.Mutex
 }
 
+// deprecate these
 var (
 	initialMouseX, initialMouseY, xOffset, yOffset int
 	globalMouseDown, msgMouseDown, movingMsg bool
 )
+
+// this is the standard binary tree structure for toolkits
+type node struct {
+	parent	*node
+	children []*node
+
+	WidgetId	int	// widget ID
+	WidgetType	toolkit.WidgetType
+	ParentId	int	// parent ID
+
+	Name   string
+	Text   string
+
+	// This is how the values are passed back and forth
+	// values from things like checkboxes & dropdown's
+	B	bool
+	I	int
+	S	string
+
+	A	any // switch to this or deprecate this? pros/cons?
+
+	// This is used for things like a slider(0,100)
+	X      int
+	Y      int
+
+	// the internal plugin toolkit structure
+	tk *cuiWidget
+}
 
 // the gocui way
 // the logical size of the widget

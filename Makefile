@@ -83,6 +83,7 @@ plugins: plugins-gocui plugins-andlabs
 
 plugins-gocui:
 	GO111MODULE="off" go build -v -x -C toolkit/gocui -buildmode=plugin -o ../gocui.so
+	GO111MODULE="off" go build -v -x -C toolkit/nocui -buildmode=plugin -o ../nocui.so
 
 plugins-andlabs:
 	GO111MODULE="off" go build -v -x -C toolkit/andlabs -buildmode=plugin -o ../andlabs.so
