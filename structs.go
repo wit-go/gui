@@ -24,12 +24,10 @@ var Config GuiConfig
 
 // This struct can be used with the go-arg package
 type GuiArgs struct {
-	Toolkit []string `arg:"--toolkit" help:"The order to attempt loading plugins [gocui,andlabs,gtk,qt]"`
-	GuiDebug bool `arg:"--gui-debug" help:"debug the GUI"`
-	GuiVerbose bool `arg:"--gui-verbose" help:"enable all GUI flags"`
+	GuiToolkit []string `arg:"--gui-toolkit" help:"The order to attempt loading plugins [gocui,andlabs,gtk,qt]"`
+	GuiDebug bool `arg:"--gui-debug" help:"open the GUI debugger"`
+	GuiVerbose bool `arg:"--gui-verbose" help:"enable all logging"`
 }
-
-// var verbose GuiArgs.GuiDebug
 
 type GuiConfig struct {
 	// This is the master node. The Binary Tree starts here

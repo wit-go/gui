@@ -82,11 +82,10 @@ clean:
 plugins: plugins-gocui plugins-andlabs
 
 plugins-gocui:
-	make -C toolkit/gocui
+	GO111MODULE="off" go build -v -x -C toolkit/gocui -buildmode=plugin -o ../gocui.so
 
 plugins-andlabs:
-	cd toolkit/andlabs/ && GO111MODULE="off" go build -buildmode=plugin -o ../andlabs.so
-	# make -C  toolkit/andlabs
+	GO111MODULE="off" go build -v -x -C toolkit/andlabs -buildmode=plugin -o ../andlabs.so
 
 objdump:
 	objdump -t toolkit/andlabs.so |less

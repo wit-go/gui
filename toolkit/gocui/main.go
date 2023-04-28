@@ -88,11 +88,14 @@ func main() {
 	if err != nil {
 		exit("error opening file: %v", err)
 	}
+	os.Stdout = outf
 	defer outf.Close()
 
 	// setOutput(outf)
 	// log("This is a test log entry")
 
+	ferr, _ := os.OpenFile("/tmp/witgui.err", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0664)
+	os.Stderr = ferr
 	MouseMain()
 
 	log(true, "MouseMain() closed")

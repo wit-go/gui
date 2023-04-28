@@ -9,6 +9,7 @@ import 	(
 	"time"
 	"bufio"
 	arg "github.com/alexflint/go-arg"
+	"git.wit.org/wit/gui"
 )
 
 
@@ -17,6 +18,7 @@ var args struct {
 	Bar bool
 	User string `arg:"env:USER"`
 	Demo bool `help:"run a demo"`
+	gui.GuiArgs
 }
 
 var f1 *os.File

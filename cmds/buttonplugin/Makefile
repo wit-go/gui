@@ -7,7 +7,7 @@
 #
 
 run: build
-	./buttonplugin >/tmp/witgui.log.stderr 2>&1
+	./buttonplugin --gui-toolkit gocui >/tmp/witgui.log.stderr 2>&1
 
 build-release:
 	go get -v -u -x .

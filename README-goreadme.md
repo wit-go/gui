@@ -163,7 +163,7 @@ This goroutine can be used like a watchdog timer
 
 This struct can be used with the go-arg package
 
-### type [GuiConfig](/structs.go#L34)
+### type [GuiConfig](/structs.go#L32)
 
 `type GuiConfig struct { ... }`
 
@@ -173,7 +173,7 @@ This struct can be used with the go-arg package
 var Config GuiConfig
 ```
 
-### type [Node](/structs.go#L61)
+### type [Node](/structs.go#L59)
 
 `type Node struct { ... }`
 

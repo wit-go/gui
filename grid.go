@@ -5,11 +5,17 @@ import (
 )
 
 // Grid numbering examples (H) or (W,H)
+// -----------------------
+// -- (1) -- (2) -- (3) -- (X)
+// -----------------------
+//
+//    (Y)
 // ---------
 // -- (1) --
 // -- (2) --
 // ---------
 //
+//    (X,Y)
 // -----------------------------
 // -- (1,1) -- (2,1) -- (3,1) --
 // -- (1,2) -- (2,2) -- (3,2) --
@@ -27,8 +33,6 @@ func (n *Node) NewGrid(name string, w int, h int) *Node {
 	a.Text = name
 	a.X = w
 	a.Y = h
-	// a.Width = w
-	// a.Height = h
 	newNode.X = w
 	newNode.Y = h
 	newNode.NextX = 1

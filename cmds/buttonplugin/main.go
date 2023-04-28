@@ -13,6 +13,8 @@ var outfile string = "/tmp/guilogfile"
 var myGui *gui.Node
 
 var buttonCounter int = 5
+var gridW int = 5
+var gridH int = 2
 
 func main() {
 	// This will turn on all debugging
@@ -20,7 +22,12 @@ func main() {
 
 	// myGui = gui.New().LoadToolkit("gocui")
 	// myGui = gui.New().LoadToolkit("andlabs")
-	myGui = gui.New().Default()
+	// myGui = gui.New().Default()
+	if (args.GuiToolkit == nil) {
+		myGui = gui.New().Default()
+	} else {
+		myGui = gui.New().LoadToolkit(args.GuiToolkit[0])
+	}
 	buttonWindow()
 
 	// This is just a optional goroutine to watch that things are alive
@@ -42,7 +49,7 @@ func buttonWindow() {
 	g1.NewButton("hello2", func () {
 		log.Println("world2")
 	})
-	more2 = g1.NewGrid("gridnuts", 3, 3)
+	more2 = g1.NewGrid("gridnuts", gridW, gridH)
 
 	more2.NewLabel("more2")
 

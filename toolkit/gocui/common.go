@@ -15,8 +15,8 @@ func makeWidget(a *toolkit.Action) *cuiWidget {
 	w.b = a.B
 	w.i = a.I
 	w.s = a.S
-	w.x = a.X
-	w.y = a.Y
+	w.X = a.X
+	w.Y = a.Y
 
 
 	t := len(w.text)

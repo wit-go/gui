@@ -209,10 +209,10 @@ func (w *cuiWidget) placeGrid() {
 		if (w.heights[hCount] < child.realHeight) {
 			w.heights[hCount] = child.realHeight
 		}
-		log(logVerbose, "grid1: (w,h count)", wCount, hCount, "(X,Y)", w.x, w.y, w.name)
+		log(logVerbose, "grid1: (w,h count)", wCount, hCount, "(X,Y)", w.X, w.Y, w.name)
 		child.showWidgetPlacement(logNow, "grid1: " + fmt.Sprintf("next()=(%2d,%2d)", w.nextW, w.nextH))
 
-		if ((wCount + 1) < w.y) {
+		if ((wCount + 1) < w.X) {
 			wCount += 1
 		} else {
 			wCount = 0

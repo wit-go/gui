@@ -157,8 +157,8 @@ type cuiWidget struct {
 	b bool
 	i int
 	s string
-	x int
-	y int
+	X int
+	Y int
 	width int
 	height int
 
@@ -205,10 +205,12 @@ func (w *cuiWidget) Write(p []byte) (n int, err error) {
 	defer me.writeMutex.Unlock()
 	if (me.logStdout.v == nil) {
 		// optionally write the output to /tmp
-		fmt.Fprintln(outf, string(p))
+		s := fmt.Sprint(string(p))
+		s = strings.TrimSuffix(s, "\n")
+		fmt.Fprintln(outf, s)
 		v, _ := me.baseGui.View("msg")
 		if (v != nil) {
-			fmt.Fprintln(outf, "found msg")
+			// fmt.Fprintln(outf, "found msg")
 			me.logStdout.v = v
 		}
 	} else {
