@@ -10,14 +10,14 @@ func (n *Node) NewWindow(title string) *Node {
 	var newNode *Node
 
 	// Windows are created off of the master node of the Binary Tree
-	newNode = n.newNode(Config.Title, toolkit.Window, StandardExit)
+	newNode = n.newNode(title, toolkit.Window, StandardExit)
 
-	log(logInfo, "NewWindow()", Config.Title)
+	log(logInfo, "NewWindow()", title)
 
 	var a toolkit.Action
 	a.ActionType = toolkit.Add
-	a.X         = Config.Width
-	a.Y         = Config.Height
+	a.X         = n.X
+	a.Y         = n.Y
 	a.Name      = title
 	a.Text      = title
 	newaction(&a, newNode, n)

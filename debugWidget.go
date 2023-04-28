@@ -105,11 +105,7 @@ func DebugWidgetWindow(w *Node) {
 		activeWidget.Hide()
 	})
 	g.NewButton("Dump()", func () {
-		activeWidget.Dump(true)
-
-		var a toolkit.Action
-		a.ActionType = toolkit.Dump
-		newaction(&a, activeWidget, nil)
+		activeWidget.Dump()
 	})
 
 	g = bugWidget.NewGroup("add things")
@@ -266,7 +262,7 @@ func (n *Node) debugAddWidgetButton() {
 		log("activeWidget.NextX    =", activeWidget.NextX)
 		log("activeWidget.NextY    =", activeWidget.NextY)
 		log(debugNow, "Add() size (X,Y)", activeWidget.X, activeWidget.Y, "put next thing at (X,Y) =", activeWidget.NextX, activeWidget.NextY)
-		activeWidget.Dump(true)
+		activeWidget.Dump()
 
 		// activeWidget.X = newX
 		// activeWidget.Y = newY

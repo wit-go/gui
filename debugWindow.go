@@ -121,7 +121,7 @@ func dropdownWindow(p *Node) {
 
 	// var last = ""
 	for _, child := range Config.rootNode.children {
-		log(debugGui, "\t\t", child.id, child.Width, child.Height, child.Name)
+		log(logInfo, "\t\t", child.id, child.Name)
 		dd.AddDropdownName(child.Name)
 		// last = child.Name
 		mapWindows[child.Name] = child

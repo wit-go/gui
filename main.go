@@ -14,23 +14,11 @@ import (
 const Xaxis = 0 // stack things horizontally
 const Yaxis = 1 // stack things vertically
 
-/*
-	// TODO: 2023/03/03 rethink how to get a plugin or figure out how
-	// golang packages can include a binary. Pull from /usr/go/go-gui/ ?
-	// may this plugin work when all other plugins fail
-
-	// if this is in the plugin, the packages can't work with go.mod builds
-	# don't do this in the plugin // go:embed /usr/lib/go-gui/toolkit/gocui.so
-	# don't do this in the plugin var res embed.FS
-*/
-
 func init() {
 	log("init() has been run")
 
 	Config.counter = 0
 	Config.prefix = "wit"
-	Config.Width = 640
-	Config.Height = 480
 
 	// Populates the top of the binary tree
 	Config.rootNode = addNode("guiBinaryTree")
@@ -74,7 +62,7 @@ func watchCallback() {
 			}
 			// this maybe a good idea?
 			// TODO: Throttle user events somehow
-			sleep(.1)
+			sleep(.01)
 		}
 	}
 }

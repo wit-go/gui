@@ -21,7 +21,7 @@ import (
 // For example, a "Mouse Control Panel" not the GIMP or blender.
 //
 
-var Config GuiConfig
+var Config guiConfig
 
 // This struct can be used with the go-arg package
 type GuiArgs struct {
@@ -30,32 +30,24 @@ type GuiArgs struct {
 	GuiVerbose bool `arg:"--gui-verbose" help:"enable all logging"`
 }
 
-type GuiConfig struct {
+type guiConfig struct {
 	// This is the master node. The Binary Tree starts here
 	rootNode *Node
 
 	// A node off of rootNode for passing debugging flags
 	flag	*Node
 
-	// These are shortcuts to pass default values to make a new window
-	Title      string
-	Width      int
-	Height     int
-	Exit       func(*Node)
-
-	// hacks
-	depth      int
-	counter    int  // used to make unique ID's
-	prefix     string
-
-	ActionCh1 chan int
-	ActionCh2 chan int
+	counter    int  // used to make unique WidgetId's
 
 	// sets the chan for the plugins to call back too
 	guiChan chan toolkit.Action
 
 	// option to pass in compiled plugins as embedded files
 	resFS	embed.FS
+
+	// used to beautify logging to Stdout
+	depth      int
+	prefix     string
 }
 
 // The Node is a binary tree. This is how all GUI elements are stored
@@ -64,18 +56,14 @@ type Node struct {
 	id     int
 	initOnce sync.Once
 
-	// widget	toolkit.Widget
 	WidgetType	toolkit.WidgetType
-
-//	Title  string  // what is visable to the user
-//	Desc   string  // a name useful for programming
 
 	Text string  // what is visable to the user
 	Name string  // a name useful for programming
 
-	// used for Windows
-	Width  int
-	Height int
+	// used for Windows in toolkits measured in pixels
+	width  int
+	height int
 
 	// used for anything that needs a range
 	X	int

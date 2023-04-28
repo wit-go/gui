@@ -96,16 +96,12 @@ func ShowDebugValues() {
 	SetFlag("Show", true)
 }
 
-func (n *Node) Dump(b bool) {
+func (n *Node) Dump() {
+	b := true
 	// log("Dump() dump =", b)
-	if ! b {
-		return
-	}
 	Indent(b, "NODE DUMP START")
 	Indent(b, "id           = ", n.id)
 	Indent(b, "Name         = ", n.Name)
-	Indent(b, "Width        = ", n.Width)
-	Indent(b, "Height       = ", n.Height)
 	Indent(b, "(X,Y)        = ", n.X, n.Y)
 	Indent(b, "Next (X,Y)   = ", n.NextX, n.NextY)
 
@@ -121,6 +117,11 @@ func (n *Node) Dump(b bool) {
 		Indent(b, "Custom       = ", n.Custom)
 	}
 	Indent(b, "NODE DUMP END")
+
+	var a toolkit.Action
+	a.ActionType = toolkit.Dump
+	a.WidgetId = n.id
+	newaction(&a, activeWidget, nil)
 }
 
 func Indent(b bool, a ...interface{}) {
@@ -154,7 +155,6 @@ func (n *Node) ListChildren(dump bool) {
 	}
 
 	n.dumpWidget(dump)
-	// n.Dump(dump)
 	if len(n.children) == 0 {
 		if (n.parent == nil) {
 			return
@@ -181,7 +181,6 @@ func (n *Node) ListChildren(dump bool) {
 			// can all binary tree changes to Node.parent & Node.child be forced into a singular goroutine?
 			panic("something is wrong with the wit golang gui logic and the binary tree is broken. child has no parent")
 		}
-		child.Dump(debugDump)
 		if (child.children == nil) {
 			log(debugNode, "\t\t", child.id, "has no children")
 		} else {

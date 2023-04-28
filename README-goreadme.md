@@ -107,6 +107,12 @@ external things which might be useful
 * [GO Style Guide]
 ```
 
+## Variables
+
+```golang
+var Config guiConfig
+```
+
 ## Functions
 
 ### func [DebugWidgetWindow](/debugWidget.go#L52)
@@ -123,7 +129,7 @@ Creates a window helpful for debugging this package
 
 `func ExampleCatcher(f func())`
 
-### func [Indent](/debug.go#L126)
+### func [Indent](/debug.go#L127)
 
 `func Indent(b bool, a ...interface{})`
 
@@ -139,7 +145,7 @@ Creates a window helpful for debugging this package
 
 `func ShowDebugValues()`
 
-### func [StandardExit](/main.go#L231)
+### func [StandardExit](/main.go#L219)
 
 `func StandardExit()`
 
@@ -163,24 +169,14 @@ This goroutine can be used like a watchdog timer
 
 This struct can be used with the go-arg package
 
-### type [GuiConfig](/structs.go#L33)
-
-`type GuiConfig struct { ... }`
-
-#### Variables
-
-```golang
-var Config GuiConfig
-```
-
-### type [Node](/structs.go#L63)
+### type [Node](/structs.go#L55)
 
 `type Node struct { ... }`
 
 The Node is a binary tree. This is how all GUI elements are stored
 simply the name and the size of whatever GUI element exists
 
-#### func [New](/main.go#L202)
+#### func [New](/main.go#L190)
 
 `func New() *Node`
 
