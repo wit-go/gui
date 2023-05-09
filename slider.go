@@ -4,18 +4,17 @@ import (
 	"git.wit.org/wit/gui/toolkit"
 )
 
-func (n *Node) NewSlider(name string, x int, y int) *Node {
-	newNode := n.newNode(name, toolkit.Slider, func() {
+func (parent *Node) NewSlider(name string, x int, y int) *Node {
+	newNode := parent.newNode(name, toolkit.Slider, func() {
 		log(debugGui, "even newer clicker() name in NewSlider name =", name)
 	})
 
-	var a toolkit.Action
-	a.ActionType = toolkit.Add
+	newNode.X = x
+	newNode.Y = y
+	a := newAction(newNode, toolkit.Add)
 	a.X = x
 	a.Y = y
-	a.Name = name
-	a.Text = name
-	newaction(&a, newNode, n)
+	sendAction(a, newNode, parent)
 
 	return newNode
 }

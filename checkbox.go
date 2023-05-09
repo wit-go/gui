@@ -9,11 +9,8 @@ func (n *Node) Checked() bool {
 func (n *Node) NewCheckbox(name string) *Node {
 	newNode := n.newNode(name, toolkit.Checkbox, nil)
 
-	var a toolkit.Action
-	a.ActionType = toolkit.Add
-	a.Name = name
-	a.Text = name
-	newaction(&a, newNode, n)
+	a := newAction(newNode, toolkit.Add)
+	sendAction(a, newNode, n)
 
 	return newNode
 }

@@ -2,15 +2,11 @@ package gui
 
 import "git.wit.org/wit/gui/toolkit"
 
-func (n *Node) NewButton(name string, custom func()) *Node {
-	newNode := n.newNode(name, toolkit.Button, custom)
+func (parent *Node) NewButton(name string, custom func()) *Node {
+	newNode := parent.newNode(name, toolkit.Button, custom)
 
-	var a toolkit.Action
-	a.Name = name
-	a.Text = name
-	a.ActionType = toolkit.Add
-	newaction(&a, newNode, n)
-
+	a := newAction(newNode, toolkit.Add)
+	sendAction(a, newNode, parent)
 	return newNode
 }
 

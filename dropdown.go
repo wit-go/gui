@@ -22,12 +22,8 @@ func (n *Node) SetDropdownName(name string) {
 func (n *Node) NewDropdown(name string) *Node {
 	newNode := n.newNode(name, toolkit.Dropdown, nil) 
 
-	var a toolkit.Action
-	a.ActionType = toolkit.Add
-	// a.Widget = &newNode.widget
-	// a.Where = &n.widget
-	// action(&a)
-	newaction(&a, newNode, n)
+	a := newAction(newNode, toolkit.Add)
+	sendAction(a, newNode, n)
 
 	return newNode
 }
@@ -35,12 +31,8 @@ func (n *Node) NewDropdown(name string) *Node {
 func (n *Node) NewCombobox(name string) *Node {
 	newNode := n.newNode(name, toolkit.Combobox, nil) 
 
-	var a toolkit.Action
-	a.ActionType = toolkit.Add
-	// a.Widget = &newNode.widget
-	// a.Where = &n.widget
-	// action(&a)
-	newaction(&a, newNode, n)
+	a := newAction(newNode, toolkit.Add)
+	sendAction(a, newNode, n)
 
 	return newNode
 }

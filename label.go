@@ -4,13 +4,9 @@ import (
 	"git.wit.org/wit/gui/toolkit"
 )
 
-func (n *Node) NewLabel(text string) *Node {
-	newNode := n.newNode(text, toolkit.Label, nil)
-
-	n.Name = text
-	n.Text = text
-	a := newAction(n, toolkit.Add)
-	sendAction(a, newNode, n)
-
+func (parent *Node) NewLabel(text string) *Node {
+	newNode := parent.newNode(text, toolkit.Label, nil)
+	a := newAction(newNode, toolkit.Add)
+	sendAction(a, newNode, parent)
 	return newNode
 }

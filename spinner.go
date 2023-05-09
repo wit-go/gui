@@ -4,18 +4,18 @@ import (
 	"git.wit.org/wit/gui/toolkit"
 )
 
-func (n *Node) NewSpinner(name string, x int, y int) *Node {
-	newNode := n.newNode(name, toolkit.Spinner, func() {
+func (parent *Node) NewSpinner(name string, x int, y int) *Node {
+	newNode := parent.newNode(name, toolkit.Spinner, func() {
 		log(debugChange, "default NewSpinner() change", name)
 	})
 
-	var a toolkit.Action
-	a.ActionType = toolkit.Add
+	newNode.X = x
+	newNode.Y = y
+	a := newAction(newNode, toolkit.Add)
 	a.X = x
 	a.Y = y
-	a.Name = name
-	a.Text = name
-	newaction(&a, newNode, n)
+	sendAction(a, newNode, parent)
+
 
 	return newNode
 }

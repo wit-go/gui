@@ -27,7 +27,7 @@ func (n *Node) NewGrid(name string, w int, h int) *Node {
 		log(debugChange, "click() NewGrid not defined =", name)
 	})
 
-	a := newAction(n, toolkit.Add)
+	a := newAction(newNode, toolkit.Add)
 
 	a.X = w
 	a.Y = h
