@@ -36,7 +36,7 @@ func (n *Node) NewGrid(name string, w int, h int) *Node {
 	newNode.NextW = 1
 	newNode.NextH = 1
 
-	sendAction(a, newNode, n)
+	sendAction(a)
 
 	return newNode
 }

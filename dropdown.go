@@ -23,7 +23,7 @@ func (n *Node) NewDropdown(name string) *Node {
 	newNode := n.newNode(name, toolkit.Dropdown, nil) 
 
 	a := newAction(newNode, toolkit.Add)
-	sendAction(a, newNode, n)
+	sendAction(a)
 
 	return newNode
 }
@@ -32,7 +32,7 @@ func (n *Node) NewCombobox(name string) *Node {
 	newNode := n.newNode(name, toolkit.Combobox, nil) 
 
 	a := newAction(newNode, toolkit.Add)
-	sendAction(a, newNode, n)
+	sendAction(a)
 
 	return newNode
 }

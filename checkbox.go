@@ -10,7 +10,6 @@ func (n *Node) NewCheckbox(name string) *Node {
 	newNode := n.newNode(name, toolkit.Checkbox, nil)
 
 	a := newAction(newNode, toolkit.Add)
-	sendAction(a, newNode, n)
-
+	sendAction(a)
 	return newNode
 }

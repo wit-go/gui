@@ -31,7 +31,7 @@ func (n *Node) NewTab(text string) *Node {
 	newNode := n.newNode(text, toolkit.Tab, nil)
 
 	a := newAction(newNode, toolkit.Add)
-	sendAction(a, newNode, n)
+	sendAction(a)
 
 	// by default, create a box inside the tab
 	// TODO: allow this to be configurable

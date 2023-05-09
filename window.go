@@ -15,6 +15,6 @@ func (parent *Node) NewWindow(title string) *Node {
 	log(logInfo, "NewWindow()", title)
 
 	a := newAction(newNode, toolkit.Add)
-	sendAction(a, newNode, parent)
+	sendAction(a)
 	return newNode
 }

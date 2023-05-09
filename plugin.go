@@ -222,9 +222,7 @@ func newAction(n *Node, atype toolkit.ActionType) *toolkit.Action {
 	return &a
 }
 
-// func sendAction(a *toolkit.Action) {
-func sendAction(a *toolkit.Action, n *Node, where *Node) {
-	// newaction(a, n, where)
+func sendAction(a *toolkit.Action) {
 	for _, aplug := range allPlugins {
 		log(debugPlugin, "Action() aplug =", aplug.name, "Action type=", a.ActionType)
 		if (aplug.pluginChan == nil) {

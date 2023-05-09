@@ -14,7 +14,7 @@ func (parent *Node) NewSlider(name string, x int, y int) *Node {
 	a := newAction(newNode, toolkit.Add)
 	a.X = x
 	a.Y = y
-	sendAction(a, newNode, parent)
+	sendAction(a)
 
 	return newNode
 }

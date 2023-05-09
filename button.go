@@ -6,7 +6,7 @@ func (parent *Node) NewButton(name string, custom func()) *Node {
 	newNode := parent.newNode(name, toolkit.Button, custom)
 
 	a := newAction(newNode, toolkit.Add)
-	sendAction(a, newNode, parent)
+	sendAction(a)
 	return newNode
 }
 

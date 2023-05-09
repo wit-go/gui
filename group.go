@@ -12,7 +12,7 @@ func (parent *Node) NewGroup(name string) *Node {
 	newNode = parent.newNode(name, toolkit.Group, nil)
 
 	a := newAction(newNode, toolkit.Add)
-	sendAction(a, newNode, parent)
+	sendAction(a)
 
 	newBox := newNode.NewBox("defaultGroupBox", false)
 	return newBox

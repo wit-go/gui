@@ -10,6 +10,6 @@ func (parent *Node) NewTextbox(name string) *Node {
 	})
 
 	a := newAction(newNode, toolkit.Add)
-	sendAction(a, newNode, parent)
+	sendAction(a)
 	return newNode
 }

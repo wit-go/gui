@@ -11,11 +11,8 @@ func (parent *Node) NewSpinner(name string, x int, y int) *Node {
 
 	newNode.X = x
 	newNode.Y = y
+
 	a := newAction(newNode, toolkit.Add)
-	a.X = x
-	a.Y = y
-	sendAction(a, newNode, parent)
-
-
+	sendAction(a)
 	return newNode
 }

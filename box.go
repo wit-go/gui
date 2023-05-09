@@ -9,6 +9,6 @@ func (parent *Node) NewBox(name string, b bool) *Node {
 	newNode.B = b
 
 	a := newAction(newNode, toolkit.Add)
-	sendAction(a, newNode, parent)
+	sendAction(a)
 	return newNode
 }
