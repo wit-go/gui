@@ -12,6 +12,12 @@ func (n *Node) newNode(title string, t toolkit.WidgetType, custom func()) *Node 
 	newN.WidgetType = t
 	newN.Custom = custom
 
+	if n.WidgetType == toolkit.Grid {
+		n.gridIncrement()
+	}
+	newN.AtW = n.NextW
+	newN.AtH = n.NextH
+
 	n.children = append(n.children, newN)
 	newN.parent = n
 	return newN

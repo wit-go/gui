@@ -38,6 +38,10 @@ type Action struct {
 	X      int
 	Y      int
 
+	// This is used for the widget's grid position
+	W      int
+	H      int
+
 	// Put space around elements to improve look & feel
 	Margin	bool
 

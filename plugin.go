@@ -212,6 +212,9 @@ func newAction(n *Node, atype toolkit.ActionType) *toolkit.Action {
 	a.Name = n.Name
 	a.Text = n.Text
 	a.WidgetId = n.id
+	if (n.parent != nil) {
+		a.ParentId = n.parent.id
+	}
 	a.WidgetType = n.WidgetType
 
 	return &a
@@ -233,7 +236,7 @@ func newaction(a *toolkit.Action, n *Node, where *Node) {
 	if (where != nil) {
 		a.ParentId = where.id
 		if (where.WidgetType == toolkit.Grid) {
-			placeGrid(a, n, where)
+			n.gridIncrement()
 		}
 	}
 

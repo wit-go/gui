@@ -22,8 +22,8 @@ func (n *Node) NewTab(text string) *Node {
 		log(logError, "NewTab() parent =", n.parent)
 		if (n.parent.WidgetType == toolkit.Root) {
 			// also broken
-			log(logError, "NewTab() TODO: make a window here", n)
-			panic("NewTab did not get passed a window")
+			log(logError, "NewTab() TODO: make or find a window here", n)
+			panic("NewTab() did not get passed a window")
 		}
 		// go up the binary tree until we find a window widget to add a tab too
 		return n.parent.NewTab(text)
