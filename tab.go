@@ -30,12 +30,12 @@ func (n *Node) NewTab(text string) *Node {
 	}
 	newNode := n.newNode(text, toolkit.Tab, nil)
 
-	var a toolkit.Action
-	a.ActionType = toolkit.Add
-	a.Name = text
-	a.Text = text
-	newaction(&a, newNode, n)
+	a := newAction(newNode, toolkit.Add)
+	sendAction(a, newNode, n)
 
+	// by default, create a box inside the tab
+	// TODO: allow this to be configurable
 	newBox := newNode.NewBox(text, true)
+
 	return newBox
 }

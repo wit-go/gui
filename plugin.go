@@ -212,16 +212,31 @@ func newAction(n *Node, atype toolkit.ActionType) *toolkit.Action {
 	a.Name = n.Name
 	a.Text = n.Text
 	a.WidgetId = n.id
+	a.B = n.B
+	a.X = n.X
+	a.Y = n.Y
 	if (n.parent != nil) {
 		a.ParentId = n.parent.id
 	}
 	a.WidgetType = n.WidgetType
-
 	return &a
 }
 
+// func sendAction(a *toolkit.Action) {
 func sendAction(a *toolkit.Action, n *Node, where *Node) {
-	newaction(a, n, where)
+	// newaction(a, n, where)
+	for _, aplug := range allPlugins {
+		log(debugPlugin, "Action() aplug =", aplug.name, "Action type=", a.ActionType)
+		if (aplug.pluginChan == nil) {
+			log(logInfo, "Action() retrieving the aplug.PluginChannel()", aplug.name)
+			aplug.pluginChan = aplug.PluginChannel()
+			log(logInfo, "Action() retrieved", aplug.pluginChan)
+		}
+		log(logInfo, "Action() SEND to pluginChan", aplug.name)
+		aplug.pluginChan <- *a
+		// added during debugging. might be a good idea in general for a tactile experience
+		sleep(.02)
+	}
 }
 
 // 2023/04/06 Queue() is also being used and channels are being used. memcopy() only

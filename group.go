@@ -7,16 +7,13 @@ import (
 // TODO: make a "Group" a "Grid" ?
 // probably since right now group is just a 
 // pre-canned andlabs/ui gtk,macos,windows thing
-func (n *Node) NewGroup(name string) *Node {
+func (parent *Node) NewGroup(name string) *Node {
 	var newNode *Node
-	newNode = n.newNode(name, toolkit.Group, nil)
+	newNode = parent.newNode(name, toolkit.Group, nil)
 
-	var a toolkit.Action
-	a.ActionType = toolkit.Add
-	a.Name = name
-	a.Text = name
-	newaction(&a, newNode, n)
+	a := newAction(newNode, toolkit.Add)
+	sendAction(a, newNode, parent)
 
-	newBox := newNode.NewBox("group vBox", false)
+	newBox := newNode.NewBox("defaultGroupBox", false)
 	return newBox
 }
