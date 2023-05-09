@@ -250,7 +250,7 @@ func (n *Node) debugAddWidgetButton() {
 		newB :=  activeLabelNewB.B
 
 		if (newY == -1) {
-			name = name + " (" + strconv.Itoa(activeWidget.NextX) + "," + strconv.Itoa(activeWidget.NextY) + ")"
+			name = name + " (" + strconv.Itoa(activeWidget.NextW) + "," + strconv.Itoa(activeWidget.NextH) + ")"
 		} else {
 			activeWidget.SetNext(newX, newY)
 			name = name + " (" + strconv.Itoa(newX) + "," + strconv.Itoa(newY) + ")"
@@ -259,9 +259,9 @@ func (n *Node) debugAddWidgetButton() {
 		log("New Type =", activeLabelNewType.S)
 		log("New X    =", newX)
 		log("New Y    =", newY)
-		log("activeWidget.NextX    =", activeWidget.NextX)
-		log("activeWidget.NextY    =", activeWidget.NextY)
-		log(debugNow, "Add() size (X,Y)", activeWidget.X, activeWidget.Y, "put next thing at (X,Y) =", activeWidget.NextX, activeWidget.NextY)
+		log("activeWidget.NextW    =", activeWidget.NextW)
+		log("activeWidget.NextH    =", activeWidget.NextH)
+		log(debugNow, "Add() size (X,Y)", activeWidget.X, activeWidget.Y, "put next thing at (W,H) =", activeWidget.NextW, activeWidget.NextH)
 		activeWidget.Dump()
 
 		// activeWidget.X = newX

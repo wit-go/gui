@@ -164,7 +164,7 @@ This goroutine can be used like a watchdog timer
 
 This struct can be used with the go-arg package
 
-### type [Node](/structs.go#L55)
+### type [Node](/structs.go#L57)
 
 `type Node struct { ... }`
 

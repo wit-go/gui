@@ -67,15 +67,10 @@ func (n *Node) SetText(text string) *Node{
 	return n
 }
 
-func (n *Node) SetNext(x int, y int) {
-	n.NextX = x
-	n.NextY = y
-	log(debugError, "SetNext() x,y =", n.NextX, n.NextY)
-	log(debugError, "SetNext() x,y =", n.NextX, n.NextY)
-	log(debugError, "SetNext() x,y =", n.NextX, n.NextY)
-	log(debugError, "SetNext() x,y =", n.NextX, n.NextY)
-	log(debugError, "SetNext() x,y =", n.NextX, n.NextY)
-	log(debugError, "SetNext() x,y =", n.NextX, n.NextY)
+func (n *Node) SetNext(w int, h int) {
+	n.NextW = w
+	n.NextH = h
+	log(debugNow, "SetNext() w,h =", n.NextW, n.NextH)
 }
 
 func (n *Node) Set(val any) {

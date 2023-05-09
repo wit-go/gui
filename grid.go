@@ -33,23 +33,58 @@ func (n *Node) NewGrid(name string, w int, h int) *Node {
 	a.Y = h
 	newNode.X = w
 	newNode.Y = h
-	newNode.NextX = 1
-	newNode.NextY = 1
+	newNode.NextW = 1
+	newNode.NextH = 1
 
 	sendAction(a, newNode, n)
 
 	return newNode
 }
 
-// increments where the next element in the grid should go
-func placeGrid(a *toolkit.Action, n *Node, where *Node) {
-	where.NextY += 1
-	if (where.NextY > where.Y) {
-		where.NextX += 1
-		where.NextY = 1
+// true if the grid already have a child at W,H
+func (n *Node) gridCollision(w int, h int) bool {
+	for _, child := range n.children {
+		if ((child.AtW == w) && (child.AtH == h)) {
+			return true
+		}
+	}
+	return false
+}
+
+// increments NextW & NextH
+func (n *Node) gridIncrement(w int, h int) bool {
+	for _, child := range n.children {
+		if ((child.AtW == w) && (child.AtH == h)) {
+			return true
+		}
+	}
+	return false
+}
+
+func (n *Node) At(w int, h int) *Node {
+	if (n == nil) {
+		return n
 	}
 
-	a.X = where.NextX
-	a.Y = where.NextY
-	log(logNow, "placeGrid() (X,Y)", where.X, where.Y, " next(X,Y) =", where.NextX, where.NextY)
+	n.NextW = w
+	n.NextH = h
+
+	// TODO: check for a collision here
+	if n.gridCollision(w,h) {
+		// TODO: find free next w,h
+	}
+	return n
+}
+
+// finds the next place on the grid to place the new node 'n'
+func placeGrid(a *toolkit.Action, n *Node, where *Node) {
+	where.NextH += 1
+	if (where.NextH > where.Y) {
+		where.NextW += 1
+		where.NextH = 1
+	}
+
+	a.X = where.NextW
+	a.Y = where.NextH
+	log(logNow, "placeGrid() (X,Y)", where.X, where.Y, " next(X,Y) =", where.NextW, where.NextH)
 }

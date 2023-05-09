@@ -103,7 +103,7 @@ func (n *Node) Dump() {
 	Indent(b, "id           = ", n.id)
 	Indent(b, "Name         = ", n.Name)
 	Indent(b, "(X,Y)        = ", n.X, n.Y)
-	Indent(b, "Next (X,Y)   = ", n.NextX, n.NextY)
+	Indent(b, "Next (W,H)   = ", n.NextW, n.NextH)
 
 	if (n.parent == nil) {
 		Indent(b, "parent       = nil")

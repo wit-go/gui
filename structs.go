@@ -31,6 +31,8 @@ type GuiArgs struct {
 }
 
 type guiConfig struct {
+	initOnce sync.Once
+
 	// This is the master node. The Binary Tree starts here
 	rootNode *Node
 
@@ -54,7 +56,6 @@ type guiConfig struct {
 // simply the name and the size of whatever GUI element exists
 type Node struct {
 	id     int
-	initOnce sync.Once
 
 	WidgetType	toolkit.WidgetType
 
@@ -69,9 +70,12 @@ type Node struct {
 	X	int
 	Y	int
 
-	// used for grids and tables
-	NextX	int
-	NextY	int
+	// the position of the widget in a grid
+	AtW	int
+	AtH	int
+	// where the next widget should be put in a grid
+	NextW	int
+	NextH	int
 
 	// used for values
 	I	int
