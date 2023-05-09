@@ -27,10 +27,8 @@ func (n *Node) NewGrid(name string, w int, h int) *Node {
 		log(debugChange, "click() NewGrid not defined =", name)
 	})
 
-	var a toolkit.Action
-	a.ActionType = toolkit.Add
-	a.Name = name
-	a.Text = name
+	a := newAction(n, toolkit.Add)
+
 	a.X = w
 	a.Y = h
 	newNode.X = w
@@ -38,29 +36,20 @@ func (n *Node) NewGrid(name string, w int, h int) *Node {
 	newNode.NextX = 1
 	newNode.NextY = 1
 
-	/*
-	// fix values here if they are invalid. Index starts at 1
-	if (where.NextX < 1) {
-		where.NextX = 1
-	}
-	if (where.NextY < 1) {
-		where.NextY = 1
-	}
-	//
-	a.X = where.NextX
-	a.Y = where.NextY
-	*/
+	sendAction(a, newNode, n)
 
-	newaction(&a, newNode, n)
+	return newNode
+}
 
-	/*
+// increments where the next element in the grid should go
+func placeGrid(a *toolkit.Action, n *Node, where *Node) {
 	where.NextY += 1
 	if (where.NextY > where.Y) {
 		where.NextX += 1
 		where.NextY = 1
 	}
-	log(logInfo, "Action() END size (X,Y)", where.X, where.Y, "put next thing at (X,Y) =", where.NextX, where.NextY)
-	*/
 
-	return newNode
+	a.X = where.NextX
+	a.Y = where.NextY
+	log(logNow, "placeGrid() (X,Y)", where.X, where.Y, " next(X,Y) =", where.NextX, where.NextY)
 }

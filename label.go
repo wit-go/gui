@@ -7,11 +7,10 @@ import (
 func (n *Node) NewLabel(text string) *Node {
 	newNode := n.newNode(text, toolkit.Label, nil)
 
-	var a toolkit.Action
-	a.ActionType = toolkit.Add
-	a.Name = text
-	a.Text = text
-	newaction(&a, newNode, n)
+	n.Name = text
+	n.Text = text
+	a := newAction(n, toolkit.Add)
+	sendAction(a, newNode, n)
 
 	return newNode
 }

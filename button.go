@@ -14,6 +14,7 @@ func (n *Node) NewButton(name string, custom func()) *Node {
 	return newNode
 }
 
+/*
 // deprecate this once andlabs is refactored
 func callback(i int) bool {
 	log(debugError, "callback() for widget id =", i)
@@ -27,6 +28,7 @@ func callback(i int) bool {
 	n.Custom()
 	return true
 }
+*/
 
 // find widget by number
 func (n *Node) FindId(i int) (*Node) {

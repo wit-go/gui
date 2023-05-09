@@ -203,6 +203,24 @@ func initToolkit(name string, filename string) *aplug {
 	return newPlug
 }
 
+func newAction(n *Node, atype toolkit.ActionType) *toolkit.Action {
+	var a toolkit.Action
+	a.ActionType = atype
+	if (n == nil) {
+		return &a
+	}
+	a.Name = n.Name
+	a.Text = n.Text
+	a.WidgetId = n.id
+	a.WidgetType = n.WidgetType
+
+	return &a
+}
+
+func sendAction(a *toolkit.Action, n *Node, where *Node) {
+	newaction(a, n, where)
+}
+
 // 2023/04/06 Queue() is also being used and channels are being used. memcopy() only
 func newaction(a *toolkit.Action, n *Node, where *Node) {
 	// remove this
@@ -211,8 +229,12 @@ func newaction(a *toolkit.Action, n *Node, where *Node) {
 		a.WidgetType = n.WidgetType
 		a.ActionType = a.ActionType
 	}
+	// end remove
 	if (where != nil) {
 		a.ParentId = where.id
+		if (where.WidgetType == toolkit.Grid) {
+			placeGrid(a, n, where)
+		}
 	}
 
 	for _, aplug := range allPlugins {
@@ -224,6 +246,7 @@ func newaction(a *toolkit.Action, n *Node, where *Node) {
 		}
 		log(logInfo, "Action() SEND to pluginChan", aplug.name)
 		aplug.pluginChan <- *a
+		// added during debugging. might be a good idea in general for a tactile experience
 		sleep(.02)
 	}
 }
