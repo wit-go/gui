@@ -35,6 +35,10 @@ func (n *Node) redo(plug *aplug) {
 	a.X = n.X
 	a.Y = n.Y
 
+	// grid stuff
+	a.AtW = n.AtW
+	a.AtH = n.AtH
+
 	// used for values
 	a.I = n.I
 	a.S = n.S
