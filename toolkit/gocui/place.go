@@ -257,5 +257,7 @@ func (w *cuiWidget) placeGrid() {
 	w.showWidgetPlacement(logNow, "grid3:")
 }
 
+/*
 func (w *cuiWidget) setRealSize() {
 }
+*/

@@ -93,7 +93,7 @@ var (
 
 // this is the standard binary tree structure for toolkits
 type node struct {
-	parent	*node
+	parent *node
 	children []*node
 
 	WidgetId	int	// widget ID
@@ -114,6 +114,12 @@ type node struct {
 	// This is used for things like a slider(0,100)
 	X      int
 	Y      int
+
+	// This is for the grid size & widget position
+	W      int
+	H      int
+	AtW    int
+	AtH    int
 
 	// the internal plugin toolkit structure
 	tk *cuiWidget
@@ -199,7 +205,7 @@ type cuiWidget struct {
 	v *gocui.View
 	frame bool
 
-	parent	*cuiWidget
+	parent *cuiWidget
 	children []*cuiWidget
 }
 

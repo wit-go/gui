@@ -92,6 +92,24 @@ func GetDebugToolkit () bool {
 func flag(a *toolkit.Action) {
 	// should set the checkbox to this value
 	switch a.S {
+	case "Quiet":
+		logInfo = a.B
+		logVerbose = a.B
+		logWarn = a.B
+		logError = a.B
+	case "Error":
+		logError = a.B
+	case "Info":
+		logInfo = a.B
+	case "Verbose":
+		logInfo = a.B
+		logVerbose = a.B
+		logWarn = a.B
+		logError = a.B
+		debugToolkit = a.B
+		debugChange = a.B
+		debugPlugin = a.B
+		debugFlags = a.B
 	case "Toolkit":
 		debugToolkit = a.B
 	case "Change":
@@ -100,8 +118,6 @@ func flag(a *toolkit.Action) {
 		debugPlugin = a.B
 	case "Flags":
 		debugFlags = a.B
-	case "Error":
-		debugError = a.B
 	case "Now":
 		debugNow = a.B
 	case "Show":

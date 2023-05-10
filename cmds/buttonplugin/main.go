@@ -14,7 +14,7 @@ var myGui *gui.Node
 
 var buttonCounter int = 5
 var gridW int = 5
-var gridH int = 2
+var gridH int = 3
 
 func main() {
 	// This will turn on all debugging
@@ -72,8 +72,8 @@ func buttonWindow() {
 	})
 
 	g.NewButton("NewButton(more)", func () {
-		log.Println("new foobar 2. Adding button 'foobar 3'")
 		name := "foobar " + strconv.Itoa(buttonCounter)
+		log.Println("NewButton(more) Adding button", name)
 		buttonCounter += 1
 		more.NewButton(name, func () {
 			log.Println("Got all the way to main() name =", name)
@@ -81,8 +81,8 @@ func buttonWindow() {
 	})
 
 	g.NewButton("NewButton(more2)", func () {
-		log.Println("new foobar 2. Adding button 'foobar 3'")
 		name := "foobar " + strconv.Itoa(buttonCounter)
+		log.Println("NewButton(more2) Adding button", name)
 		buttonCounter += 1
 		more2.NewButton(name, func () {
 			log.Println("Got all the way to main() name =", name)
@@ -90,8 +90,8 @@ func buttonWindow() {
 	})
 
 	g.NewButton("NewButton(more2 d)", func () {
-		log.Println("new foobar 2. Adding button 'foobar 3'")
 		name := "d" + strconv.Itoa(buttonCounter)
+		log.Println("NewButton(more2 d) Adding button", name)
 		buttonCounter += 1
 		more2.NewButton(name, func () {
 			log.Println("Got all the way to main() name =", name)
@@ -99,8 +99,8 @@ func buttonWindow() {
 	})
 
 	g.NewButton("NewGroup()", func () {
-		log.Println("new foobar 2. Adding button 'foobar 3'")
 		name := "neat " + strconv.Itoa(buttonCounter)
+		log.Println("NewGroup() Adding button", name)
 		buttonCounter += 1
 		more.NewGroup(name)
 	})

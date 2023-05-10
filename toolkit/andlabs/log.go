@@ -8,8 +8,8 @@ import 	(
 var logNow bool = true	// useful for active development
 var logError bool = true
 var logWarn bool = true
-var logInfo bool = true
-var logVerbose bool = true
+var logInfo bool = false
+var logVerbose bool = false
 
 func log(a ...any) {
 	witlog.Where = "wit/gui/andlabs"

@@ -260,7 +260,7 @@ func ctrlDown(g *gocui.Gui, v *gocui.View) error {
 	if (found == nil) {
 		found = me.rootNode
 	}
-	found.setRealSize()
+	// ? TODO: found.setRealSize()
 	me.ctrlDown.gocuiSize.w0 = found.startW
 	me.ctrlDown.gocuiSize.h0 = found.startH
 	me.ctrlDown.gocuiSize.w1 =  me.ctrlDown.gocuiSize.w0 + found.realWidth

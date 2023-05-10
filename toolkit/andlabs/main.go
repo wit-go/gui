@@ -20,19 +20,19 @@ var uiMain sync.Once
 var muAction sync.Mutex
 
 func catchActionChannel() {
-	log(logNow, "catchActionChannel() START")
+	log(logInfo, "catchActionChannel() START")
 	for {
-		log(logNow, "catchActionChannel() for loop")
+		log(logInfo, "catchActionChannel() for loop")
 	    	select {
 		case a := <-pluginChan:
-			log(logNow, "catchActionChannel() SELECT widget id =", a.WidgetId, a.Name)
-			log(logNow, "catchActionChannel() STUFF", a.WidgetId, a.ActionType, a.WidgetType)
+			log(logInfo, "catchActionChannel() SELECT widget id =", a.WidgetId, a.Name)
+			log(logInfo, "catchActionChannel() STUFF", a.WidgetId, a.ActionType, a.WidgetType)
 			muAction.Lock()
 			// TODO ui.QueueMain(f)
 			// TODO ui.QueueMain( func() {rawAction(a)} )
 			rawAction(a)
 			muAction.Unlock()
-			log(logNow, "catchActionChannel() STUFF END", a.WidgetId, a.ActionType, a.WidgetType)
+			log(logInfo, "catchActionChannel() STUFF END", a.WidgetId, a.ActionType, a.WidgetType)
 		}
 	}
 }

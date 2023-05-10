@@ -171,8 +171,8 @@ func (n *node) Delete() {
 }
 
 func rawAction(a toolkit.Action) {
-	log(logNow, "rawAction() START a.ActionType =", a.ActionType)
-	log(logNow, "rawAction() START a.S =", a.S)
+	log(logInfo, "rawAction() START a.ActionType =", a.ActionType)
+	log(logInfo, "rawAction() START a.S =", a.S)
 
 	if (a.ActionType == toolkit.InitToolkit) {
 		// TODO: make sure to only do this once
@@ -184,7 +184,7 @@ func rawAction(a toolkit.Action) {
 		return
 	}
 
-	log(logNow, "rawAction() START a.WidgetId =", a.WidgetId, "a.ParentId =", a.ParentId)
+	log(logInfo, "rawAction() START a.WidgetId =", a.WidgetId, "a.ParentId =", a.ParentId)
 	switch a.WidgetType {
 	case toolkit.Flag:
 		flag(&a)
@@ -198,7 +198,7 @@ func rawAction(a toolkit.Action) {
 		ui.QueueMain(func() {
 			add(a)
 		})
-		sleep(.1)
+		sleep(.05)
 	case toolkit.Show:
 		n.show(true)
 	case toolkit.Hide:
@@ -237,5 +237,5 @@ func rawAction(a toolkit.Action) {
 	default:
 		log(debugError, "rawAction() Unknown =", a.ActionType, a.WidgetType)
 	}
-	log(debugAction, "rawAction() END =", a.ActionType, a.WidgetType)
+	log(logInfo, "rawAction() END =", a.ActionType, a.WidgetType)
 }

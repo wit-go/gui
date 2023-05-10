@@ -66,16 +66,21 @@ type Node struct {
 	width  int
 	height int
 
-	// used for anything that needs a range
+	// used for anything that needs a range (for example: a slider)
 	X	int
 	Y	int
 
-	// the position of the widget in a grid
-	AtW	int
-	AtH	int
-	// where the next widget should be put in a grid
+	// the grid max width and height
+	// ignore max height when there is no space left?
+	W	int
+	H	int
+	// where the next widget should be put in this grid
 	NextW	int
 	NextH	int
+
+	// if this widget is in a grid, this is the position
+	AtW	int
+	AtH	int
 
 	// used for values
 	I	int

@@ -107,19 +107,19 @@ func (p *node) place(n *node) bool {
 	log(logInfo, "place() switch", p.WidgetType)
 	switch p.WidgetType {
 	case toolkit.Grid:
-		log(debugGrid, "place() Grid try at Parent X,Y =", n.X, n.Y)
+		log(logInfo, "place() Grid try at Parent X,Y =", n.X, n.Y)
 		n.tk.gridX = n.AtW - 1
 		n.tk.gridY = n.AtH - 1
-		log(debugGrid, "place() Grid try at gridX,gridY", n.tk.gridX, n.tk.gridY)
+		log(logInfo, "place() Grid try at gridX,gridY", n.tk.gridX, n.tk.gridY)
 		// at the very end, subtract 1 from X & Y since andlabs/ui starts counting at zero
 		p.tk.uiGrid.Append(n.tk.uiControl,
-			n.tk.gridY, n.tk.gridX, 1, 1,
+			n.tk.gridX, n.tk.gridY, 1, 1,
 			false, ui.AlignFill, false, ui.AlignFill)
 		return true
 	case toolkit.Group:
 		if (p.tk.uiBox == nil) {
 			p.tk.uiGroup.SetChild(n.tk.uiControl)
-			log(debugGrid, "place() hack Group to use this as the box?", n.Name, n.WidgetType)
+			log(logInfo, "place() hack Group to use this as the box?", n.Name, n.WidgetType)
 			p.tk.uiBox  = n.tk.uiBox
 		} else {
 			p.tk.uiBox.Append(n.tk.uiControl, stretchy)
