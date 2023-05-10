@@ -32,21 +32,23 @@ type Action struct {
 	I	int
 	S	string
 
-	A	any // switch to this or deprecate this? pros/cons?
-
 	// This is used for things like a slider(0,100)
 	X      int
 	Y      int
 
-	// This is used for the widget's grid position
+	// This is for the grid size & widget position
 	W      int
 	H      int
+	AtW    int
+	AtH    int
 
 	// Put space around elements to improve look & feel
 	Margin	bool
 
 	// Make widgets fill up the space available
 	Expand	bool
+
+	A	any // switch to this or deprecate this? pros/cons?
 }
 
 const (

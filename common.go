@@ -75,24 +75,21 @@ func (n *Node) SetNext(w int, h int) {
 
 func (n *Node) Set(val any) {
 	log(debugChange, "Set() value =", val)
-	var a toolkit.Action
-	a.ActionType = toolkit.Set
 
 	switch v := val.(type) {
 	case bool:
 		n.B = val.(bool)
-		a.B = val.(bool)
 	case string:
 		n.Text = val.(string)
-		a.S = val.(string)
+		n.S = val.(string)
 	case int:
 		n.I = val.(int)
-		a.I = val.(int)
 	default:
-		log(debugError, "Set() unknown type =", v, "a =", a)
+		log(debugError, "Set() unknown type =", v)
 	}
 
-	newaction(&a, n, nil)
+	a := newAction(n, toolkit.Set)
+	sendAction(a)
 }
 
 func (n *Node) AppendText(str string) {

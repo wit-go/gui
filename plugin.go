@@ -212,9 +212,17 @@ func newAction(n *Node, atype toolkit.ActionType) *toolkit.Action {
 	a.Name = n.Name
 	a.Text = n.Text
 	a.WidgetId = n.id
+
 	a.B = n.B
+	a.I = n.I
+	a.S = n.S
+
 	a.X = n.X
 	a.Y = n.Y
+
+	a.AtW = n.AtW
+	a.AtH = n.AtH
+
 	if (n.parent != nil) {
 		a.ParentId = n.parent.id
 	}
@@ -222,6 +230,7 @@ func newAction(n *Node, atype toolkit.ActionType) *toolkit.Action {
 	return &a
 }
 
+// sends the action/event to each toolkit via a golang plugin channel
 func sendAction(a *toolkit.Action) {
 	for _, aplug := range allPlugins {
 		log(debugPlugin, "Action() aplug =", aplug.name, "Action type=", a.ActionType)
