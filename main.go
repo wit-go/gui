@@ -24,10 +24,10 @@ func init() {
 	me.rootNode.WidgetType = toolkit.Root
 
 	// used to pass debugging flags to the toolkit plugins
-	me.flag = me.rootNode.newNode("flag", 0, nil)
+	me.flag = me.rootNode.newNode("flag", 0)
 	me.flag.WidgetType = toolkit.Flag
 
-	me.flag = me.rootNode.newNode("stdout", 0, nil)
+	me.flag = me.rootNode.newNode("stdout", 0)
 	me.flag.WidgetType = toolkit.Stdout
 
 	me.guiChan = make(chan toolkit.Action, 1)

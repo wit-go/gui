@@ -23,21 +23,15 @@ import (
 // -----------------------------
 
 func (n *Node) NewGrid(name string, w int, h int) *Node {
-	newNode := n.newNode(name, toolkit.Grid, func() {
-		log(debugChange, "click() NewGrid not defined =", name)
-	})
+	newNode := n.newNode(name, toolkit.Grid)
 
-	a := newAction(newNode, toolkit.Add)
-
-	a.X = w
-	a.Y = h
 	newNode.X = w
 	newNode.Y = h
 	newNode.NextW = 1
 	newNode.NextH = 1
 
+	a := newAction(newNode, toolkit.Add)
 	sendAction(a)
-
 	return newNode
 }
 

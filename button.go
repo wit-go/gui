@@ -3,7 +3,8 @@ package gui
 import "git.wit.org/wit/gui/toolkit"
 
 func (parent *Node) NewButton(name string, custom func()) *Node {
-	newNode := parent.newNode(name, toolkit.Button, custom)
+	newNode := parent.newNode(name, toolkit.Button)
+	newNode.Custom = custom
 
 	a := newAction(newNode, toolkit.Add)
 	sendAction(a)

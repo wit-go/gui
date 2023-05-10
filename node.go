@@ -5,12 +5,11 @@ import "git.wit.org/wit/gui/toolkit"
 /*
 	generic function to create a new node on the binary tree
 */
-func (n *Node) newNode(title string, t toolkit.WidgetType, custom func()) *Node {
+func (n *Node) newNode(title string, t toolkit.WidgetType) *Node {
 	var newN *Node
 
 	newN = addNode(title)
 	newN.WidgetType = t
-	newN.Custom = custom
 
 	if n.WidgetType == toolkit.Grid {
 		n.gridIncrement()

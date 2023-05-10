@@ -27,6 +27,12 @@ type node struct {
 	X      int
 	Y      int
 
+	// This is for the grid size & widget position
+	W      int
+	H      int
+	AtW    int
+	AtH    int
+
 	// the internal plugin toolkit structure
 	tk *nocuiT
 }

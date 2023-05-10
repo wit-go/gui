@@ -6,7 +6,7 @@ import (
 
 func (parent *Node) NewImage(name string) *Node {
 	var newNode *Node
-	newNode = parent.newNode(name, toolkit.Image, nil)
+	newNode = parent.newNode(name, toolkit.Image)
 
 	a := newAction(newNode, toolkit.Add)
 	sendAction(a)

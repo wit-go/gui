@@ -5,9 +5,11 @@ import (
 )
 
 func (parent *Node) NewSlider(name string, x int, y int) *Node {
-	newNode := parent.newNode(name, toolkit.Slider, func() {
+	newNode := parent.newNode(name, toolkit.Slider)
+
+	newNode.Custom = func() {
 		log(debugGui, "even newer clicker() name in NewSlider name =", name)
-	})
+	}
 
 	newNode.X = x
 	newNode.Y = y

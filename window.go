@@ -10,7 +10,8 @@ func (parent *Node) NewWindow(title string) *Node {
 	var newNode *Node
 
 	// Windows are created off of the master node of the Binary Tree
-	newNode = parent.newNode(title, toolkit.Window, StandardExit)
+	newNode = parent.newNode(title, toolkit.Window)
+	newNode.Custom = StandardExit
 
 	log(logInfo, "NewWindow()", title)
 

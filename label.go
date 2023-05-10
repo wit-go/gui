@@ -5,7 +5,7 @@ import (
 )
 
 func (parent *Node) NewLabel(text string) *Node {
-	newNode := parent.newNode(text, toolkit.Label, nil)
+	newNode := parent.newNode(text, toolkit.Label)
 	a := newAction(newNode, toolkit.Add)
 	sendAction(a)
 	return newNode

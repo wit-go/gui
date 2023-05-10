@@ -28,7 +28,7 @@ func (n *Node) NewTab(text string) *Node {
 		// go up the binary tree until we find a window widget to add a tab too
 		return n.parent.NewTab(text)
 	}
-	newNode := n.newNode(text, toolkit.Tab, nil)
+	newNode := n.newNode(text, toolkit.Tab)
 
 	a := newAction(newNode, toolkit.Add)
 	sendAction(a)

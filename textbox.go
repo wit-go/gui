@@ -5,9 +5,11 @@ import (
 )
 
 func (parent *Node) NewTextbox(name string) *Node {
-	newNode := parent.newNode(name, toolkit.Textbox, func() {
+	newNode := parent.newNode(name, toolkit.Textbox)
+
+	newNode.Custom = func() {
 		log(debugGui, "NewTextbox changed =", name)
-	})
+	}
 
 	a := newAction(newNode, toolkit.Add)
 	sendAction(a)

@@ -35,8 +35,14 @@ func addWidget(a *toolkit.Action) *node {
 	n.I = a.I
 	n.S = a.S
 	n.B = a.B
+
 	n.X = a.X
 	n.Y = a.Y
+
+	n.W = a.W
+	n.H = a.H
+	n.AtW = a.AtW
+	n.AtH = a.AtH
 
 	// store the internal toolkit information
 	n.tk = new(nocuiT)

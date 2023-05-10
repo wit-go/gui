@@ -19,8 +19,6 @@ func (p *node) newGrid(n *node) {
 	c := ui.NewGrid()
 	newt.uiGrid = c
 	newt.uiControl = c
-	newt.gridX = 0
-	newt.gridY = 0
 
 	n.tk = newt
 	p.place(n)
