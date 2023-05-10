@@ -20,31 +20,27 @@ type aplug struct {
 	name string
 	filename string
 	plug *plugin.Plugin
-	// sym *plugin.Symbol
-	InitOk bool
 
-	// startup whatever might need to be setup in the plugin
-//	Init func()
-
-	// This passes the go channel to the plugin
-	// the plugin then passes actions back to
-	// here where they are processed. If you wit/gui this is how
-	// you are passed information like a user clicking a button
+	// this tells the toolkit plugin how to send events
+	// back here
+	//
+	// This is how we are passed information like a user clicking a button
 	// or a user changing a dropdown menu or a checkbox
 	//
-	// from this channel, the information is then passed into your
+	// From this channel, the information is then passed into the main program
 	// Custom() function
 	//
-	// the custom functions are run from inside of your own goroutine
-	// where you initialize the gui
 	Callback func(chan toolkit.Action)
 
-	// This is how actions are sent to the plugin
+	// This is how actions are sent to the toolkit. 
+	// For example:
+	// If a program is using GTK, when a program tries to make a new button
+	// "Open GIMP", then it would pass an action via this channel into the toolkit
+	// plugin and the toolkit plugin would add a button to the parent widget
 	//
-	// for example, when you you create a new button, it sends
-	// a structure to the goroutine that is handling the gui
 	// each toolkit has it's own goroutine and each one is sent this
 	// add button request
+	//
 	pluginChan chan toolkit.Action
 	PluginChannel func() chan toolkit.Action
 }
@@ -173,7 +169,6 @@ func initToolkit(name string, filename string) *aplug {
 
 	var newPlug *aplug
 	newPlug = new(aplug)
-	newPlug.InitOk = false
 	newPlug.name = name
 	newPlug.filename = filename
 	newPlug.plug = plug
@@ -197,7 +192,6 @@ func initToolkit(name string, filename string) *aplug {
 		return nil
 	}
 	newPlug.Callback(me.guiChan)
-	newPlug.InitOk = true
 
 	log(debugPlugin, "initToolkit() END", newPlug.name, filename)
 	return newPlug
@@ -247,37 +241,6 @@ func sendAction(a *toolkit.Action) {
 		sleep(.02)
 	}
 }
-
-/*
-func newaction(a *toolkit.Action, n *Node, where *Node) {
-	// remove this
-	if (n != nil) {
-		a.WidgetId = n.id
-		a.WidgetType = n.WidgetType
-		a.ActionType = a.ActionType
-	}
-	// end remove
-	if (where != nil) {
-		a.ParentId = where.id
-		if (where.WidgetType == toolkit.Grid) {
-			n.gridIncrement()
-		}
-	}
-
-	for _, aplug := range allPlugins {
-		log(debugPlugin, "Action() aplug =", aplug.name, "Action type=", a.ActionType)
-		if (aplug.pluginChan == nil) {
-			log(logInfo, "Action() retrieving the aplug.PluginChannel()", aplug.name)
-			aplug.pluginChan = aplug.PluginChannel()
-			log(logInfo, "Action() retrieved", aplug.pluginChan)
-		}
-		log(logInfo, "Action() SEND to pluginChan", aplug.name)
-		aplug.pluginChan <- *a
-		// added during debugging. might be a good idea in general for a tactile experience
-		sleep(.02)
-	}
-}
-*/
 
 func (n *Node) InitEmbed(resFS embed.FS) *Node {
 	me.resFS = resFS

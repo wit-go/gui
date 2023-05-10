@@ -49,10 +49,10 @@ func (w *cuiWidget) showWidgets() {
 		// don't display by default
 	} else {
 		if w.IsCurrent() {
-			w.showWidgetPlacement(logNow, "current:")
+			w.showWidgetPlacement(logInfo, "current:")
 			w.showView()
 		} else {
-			w.showWidgetPlacement(logNow, "not:")
+			w.showWidgetPlacement(logInfo, "not:")
 			// w.drawView()
 		}
 	}
