@@ -71,15 +71,12 @@ func SetFlag (s string, b bool) {
 		log(debugGui, "Can't set unknown flag", s)
 	}
 
-	var a toolkit.Action
+	a := new(toolkit.Action)
 	a.ActionType = toolkit.Set
 	a.WidgetType = toolkit.Flag
 	a.S = s
 	a.B = b
-	// a.Widget = &newNode.widget
-	// a.Where = &n.widget
-	// action(&a)
-	newaction(&a, nil, nil)
+	sendAction(a)
 }
 
 func ShowDebugValues() {
@@ -118,10 +115,10 @@ func (n *Node) Dump() {
 	}
 	Indent(b, "NODE DUMP END")
 
-	var a toolkit.Action
+	a := new(toolkit.Action)
 	a.ActionType = toolkit.Dump
 	a.WidgetId = n.id
-	newaction(&a, activeWidget, nil)
+	sendAction(a)
 }
 
 func Indent(b bool, a ...interface{}) {

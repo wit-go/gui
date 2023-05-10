@@ -115,46 +115,38 @@ func DebugWidgetWindow(w *Node) {
 
 	g = bugWidget.NewGroup("change things")
 	g.NewButton("AddText()", func () {
-		var a toolkit.Action
-		a.ActionType = toolkit.AddText
-		a.S = activeLabelNewName.S
-		newaction(&a, activeWidget, nil)
+		activeWidget.S = activeLabelNewName.S
+		a := newAction(activeWidget, toolkit.AddText)
+		sendAction(a)
 	})
 	g.NewButton("SetText()", func () {
-		var a toolkit.Action
-		a.ActionType = toolkit.SetText
-		a.S = activeLabelNewName.S
-		newaction(&a, activeWidget, nil)
+		activeWidget.S = activeLabelNewName.S
+		a := newAction(activeWidget, toolkit.SetText)
+		sendAction(a)
 	})
 	g.NewButton("Margin()", func () {
-		var a toolkit.Action
-		a.ActionType = toolkit.Margin
-		newaction(&a, activeWidget, nil)
+		a := newAction(activeWidget, toolkit.Margin)
+		sendAction(a)
 	})
 	g.NewButton("Unmargin()", func () {
-		var a toolkit.Action
-		a.ActionType = toolkit.Unmargin
-		newaction(&a, activeWidget, nil)
+		a := newAction(activeWidget, toolkit.Unmargin)
+		sendAction(a)
 	})
 	g.NewButton("Pad()", func () {
-		var a toolkit.Action
-		a.ActionType = toolkit.Pad
-		newaction(&a, activeWidget, nil)
+		a := newAction(activeWidget, toolkit.Pad)
+		sendAction(a)
 	})
 	g.NewButton("Unpad()", func () {
-		var a toolkit.Action
-		a.ActionType = toolkit.Unpad
-		newaction(&a, activeWidget, nil)
+		a := newAction(activeWidget, toolkit.Unpad)
+		sendAction(a)
 	})
 	g.NewButton("Move(junk)", func () {
-		var a toolkit.Action
-		a.ActionType = toolkit.Move
-		newaction(&a, activeWidget, activeJunk)
+		a := newAction(activeWidget, toolkit.Move)
+		sendAction(a)
 	})
 	g.NewButton("Delete()", func () {
-		var a toolkit.Action
-		a.ActionType = toolkit.Delete
-		newaction(&a, activeWidget, activeJunk)
+		a := newAction(activeWidget, toolkit.Delete)
+		sendAction(a)
 	})
 
 	g = bugWidget.NewGroup("not working?")

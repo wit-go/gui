@@ -10,60 +10,56 @@ import (
 // functions for handling text related GUI elements
 
 func (n *Node) Show() *Node {
-	var a toolkit.Action
-	a.ActionType = toolkit.Show
-	newaction(&a, n, nil)
+	a := newAction(n, toolkit.Show)
+	sendAction(a)
 	return n
 }
 
 func (n *Node) Hide() *Node {
-	var a toolkit.Action
-	a.ActionType = toolkit.Hide
-	newaction(&a, n, nil)
+	a := newAction(n, toolkit.Hide)
+	sendAction(a)
 	return n
 }
 
 func (n *Node) Enable() *Node {
-	var a toolkit.Action
-	a.ActionType = toolkit.Enable
-	newaction(&a, n, nil)
+	a := newAction(n, toolkit.Enable)
+	sendAction(a)
 	return n
 }
 
 func (n *Node) Disable() *Node {
-	var a toolkit.Action
-	a.ActionType = toolkit.Disable
-	newaction(&a, n, nil)
+	a := newAction(n, toolkit.Disable)
+	sendAction(a)
 	return n
 }
 
 func (n *Node) Add(str string) {
 	log(debugGui, "gui.Add() value =", str)
 
-	var a toolkit.Action
-	a.ActionType = toolkit.Add
-	a.S = str
-	newaction(&a, n, nil)
+	n.S = str
+
+	a := newAction(n, toolkit.Add)
+	sendAction(a)
 }
 
 func (n *Node) AddText(str string) {
 	log(debugChange, "AddText() value =", str)
 
 	n.Text = str
-	var a toolkit.Action
-	a.ActionType = toolkit.AddText
-	a.S = str
-	newaction(&a, n, nil)
+	n.S = str
+
+	a := newAction(n, toolkit.AddText)
+	sendAction(a)
 }
 
-func (n *Node) SetText(text string) *Node{
+func (n *Node) SetText(text string) *Node {
 	log(debugChange, "SetText() value =", text)
 
 	n.Text = text
-	var a toolkit.Action
-	a.ActionType = toolkit.SetText
-	a.S = text
-	newaction(&a, n, nil)
+	n.S = text
+
+	a := newAction(n, toolkit.SetText)
+	sendAction(a)
 	return n
 }
 
@@ -93,13 +89,12 @@ func (n *Node) Set(val any) {
 }
 
 func (n *Node) AppendText(str string) {
-	var a toolkit.Action
-	a.ActionType = toolkit.SetText
 	tmp := n.S + str
-	log(debugChange, "AppendText() value =", tmp)
-	a.S = tmp
 	n.Text = tmp
-	newaction(&a, n, nil)
+	n.S = tmp
+
+	a := newAction(n, toolkit.SetText)
+	sendAction(a)
 }
 
 func (n *Node) GetText() string {
@@ -152,30 +147,26 @@ func commonCallback(n *Node) {
 }
 
 func (n *Node) Margin() *Node {
-	var a toolkit.Action
-	a.ActionType = toolkit.Margin
-	newaction(&a, n, nil)
+	a := newAction(n, toolkit.Margin)
+	sendAction(a)
 	return n
 }
 
 func (n *Node) Unmargin() *Node {
-	var a toolkit.Action
-	a.ActionType = toolkit.Unmargin
-	newaction(&a, n, nil)
+	a := newAction(n, toolkit.Unmargin)
+	sendAction(a)
 	return n
 }
 
 func (n *Node) Pad() *Node {
-	var a toolkit.Action
-	a.ActionType = toolkit.Pad
-	newaction(&a, n, nil)
+	a := newAction(n, toolkit.Pad)
+	sendAction(a)
 	return n
 }
 
 func (n *Node) Unpad() *Node {
-	var a toolkit.Action
-	a.ActionType = toolkit.Unpad
-	newaction(&a, n, nil)
+	a := newAction(n, toolkit.Unpad)
+	sendAction(a)
 	return n
 }
 

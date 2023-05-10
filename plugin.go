@@ -203,6 +203,8 @@ func initToolkit(name string, filename string) *aplug {
 	return newPlug
 }
 
+// 2023/05/09 pretty clean
+// 2023/04/06 Queue() is also being used and channels are being used. memcopy() only
 func newAction(n *Node, atype toolkit.ActionType) *toolkit.Action {
 	var a toolkit.Action
 	a.ActionType = atype
@@ -246,7 +248,7 @@ func sendAction(a *toolkit.Action) {
 	}
 }
 
-// 2023/04/06 Queue() is also being used and channels are being used. memcopy() only
+/*
 func newaction(a *toolkit.Action, n *Node, where *Node) {
 	// remove this
 	if (n != nil) {
@@ -275,6 +277,7 @@ func newaction(a *toolkit.Action, n *Node, where *Node) {
 		sleep(.02)
 	}
 }
+*/
 
 func (n *Node) InitEmbed(resFS embed.FS) *Node {
 	me.resFS = resFS
