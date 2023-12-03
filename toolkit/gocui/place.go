@@ -1,263 +1,196 @@
 package main
 
 import (
-	"fmt"
-//	"github.com/awesome-gocui/gocui"
+	"strings"
 	"git.wit.org/wit/gui/toolkit"
 )
 
-func (w *cuiWidget) placeBox() {
-	if (w.widgetType != toolkit.Box) {
+func (n *node) placeBox(startW int, startH int) {
+	if (n.WidgetType != toolkit.Box) {
 		return
 	}
-	w.startW = w.parent.nextW
-	w.startH = w.parent.nextH
-	w.nextW = w.parent.nextW
-	w.nextH = w.parent.nextH
-	w.realWidth = 0
-	w.realHeight = 0
+	n.tk.size.w0 = startW
+	n.tk.size.h0 = startH
+	n.showWidgetPlacement(logNow, "boxS()")
 
-	var maxW int
-	var maxH int
-	for _, child := range w.children {
-		w.showWidgetPlacement(logNow, "boxS()")
-		child.placeWidgets()
-		if (w.horizontal) {
-			log(logVerbose, "BOX IS HORIZONTAL")
+	newW := startW
+	newH := startH
+	for _, child := range n.children {
+		child.placeWidgets(newW, newH)
+		// n.showWidgetPlacement(logNow, "boxS()")
+		// w,h := child.logicalSize()
+		newR := child.realGocuiSize()
+		w := newR.w1 - newR.w0
+		h := newR.h1 - newR.h0
+		if (n.horizontal) {
+			log(logNow, "BOX IS HORIZONTAL", n.Name, "newWH()", newW, newH, "child()", w, h, child.Name)
 			// expand based on the child width
-			w.nextW += child.realWidth
-			w.realWidth += child.realWidth
+			newW += w
 		} else {
-			log(logVerbose, "BOX IS VERTICAL")
+			log(logNow, "BOX IS VERTICAL  ", n.Name, "newWH()", newW, newH, "child()", w, h, child.Name)
 			// expand based on the child height
-			w.nextH += child.realHeight
-			w.realHeight += child.realHeight
-		}
-		if (maxW < child.realWidth) {
-			maxW = child.realWidth
-		}
-		if (maxH < child.realHeight) {
-			maxH = child.realHeight
+			newH += h
 		}
 	}
-	if (w.horizontal) {
-		w.realHeight = maxH
-	} else {
-		w.realWidth = maxW
-	}
-	w.showWidgetPlacement(logNow, "boxE()")
+	// w,h := n.logicalSize()
+	newR := n.realGocuiSize()
+	w := newR.w1 - newR.w0
+	h := newR.h1 - newR.h0
+
+	n.tk.size.w1 = n.tk.size.w0 + w
+	n.tk.size.h1 = n.tk.size.h0 + h
+	n.showWidgetPlacement(logNow, "boxE()")
 }
 
-func (w *cuiWidget) placeWidgets() {
-	if (w == nil) {
+func (n *node) placeWidgets(startW int, startH int) {
+	if (n == nil) {
 		return
 	}
 	if (me.rootNode == nil) {
 		return
 	}
-	p := w.parent
-	if (p == nil) {
-		log(logInfo, "place()", w.id, "parent == nil")
-		return
-	}
 
-	switch w.widgetType {
+	switch n.WidgetType {
 	case toolkit.Window:
-		for _, child := range w.children {
-			w.startW = me.RawW
-			w.startH = me.RawH
-			w.nextW = me.RawW
-			w.nextH = me.RawH
-			w.showWidgetPlacement(logNow, "place()")
-			child.placeWidgets()
-			if (w.realWidth < child.realWidth) {
-				w.realWidth = child.realWidth
-			}
-			if (w.realHeight < child.realHeight) {
-				w.realHeight = child.realHeight
-			}
-			w.showWidgetPlacement(logNow, "place()")
+		for _, child := range n.children {
+			child.placeWidgets(me.RawW, me.RawH)
+			return
 		}
 	case toolkit.Tab:
-		for _, child := range w.children {
-			w.startW = me.RawW
-			w.startH = me.RawH
-			w.nextW = me.RawW
-			w.nextH = me.RawH
-			w.showWidgetPlacement(logNow, "place()")
-			child.placeWidgets()
-			if (w.realWidth < child.realWidth) {
-				w.realWidth = child.realWidth
-			}
-			if (w.realHeight < child.realHeight) {
-				w.realHeight = child.realHeight
-			}
-			w.showWidgetPlacement(logNow, "place()")
+		for _, child := range n.children {
+			child.placeWidgets(me.RawW, me.RawH)
+			return
 		}
 	case toolkit.Grid:
-		w.showWidgetPlacement(logNow, "placeGrid() START")
-		w.placeGrid()
-		w.showWidgetPlacement(logNow, "placeGrid() END")
+		n.placeGrid(startW, startH)
 	case toolkit.Box:
-		w.showWidgetPlacement(logNow, "placeBox() START")
-		w.placeBox()
-		w.showWidgetPlacement(logNow, "placeBox() END")
+		n.placeBox(startW, startH)
 	case toolkit.Group:
 		// move the group to the parent's next location
-		w.startW = p.nextW
-		w.startH = p.nextH
-		w.nextW = p.nextW
-		w.nextH = p.nextH
-		w.moveTo(p.nextW, p.nextH)
+		n.gocuiSetWH(startW, startH)
+		n.showWidgetPlacement(logNow, "group()")
 
-		// initialize the real width to just the group gocui view
-		w.realWidth = w.gocuiSize.Width() + me.FramePadW
-		w.realHeight = w.gocuiSize.Height() + me.FramePadH
-
-		// indent the widgets for a group
-		w.nextW = p.nextW + me.GroupPadW
-		w.nextH = p.nextH + w.realHeight
-		w.showWidgetPlacement(logNow, "place()")
-
-		// mow move all the children aka: run place() on them
-		var maxW int
-		for _, child := range w.children {
-			child.showWidgetPlacement(logNow, "place()")
-			child.placeWidgets()
-			child.showWidgetPlacement(logNow, "place()")
+		newW := startW + me.GroupPadW
+		newH := startH + 3 // normal hight of the group label
+		// now move all the children aka: run place() on them
+		for _, child := range n.children {
+			child.placeWidgets(newW, newH)
+			// _,h := child.logicalSize()
+			newR := child.realGocuiSize()
+			// w := newR.w1 - newR.w0
+			h := newR.h1 - newR.h0
 
 			// increment straight down
-			w.nextH += child.realHeight
-			w.realHeight += child.realHeight
-
-			// track largest width
-			if (maxW < child.realWidth) {
-				maxW = child.realWidth
-			}
-
+			newH += h
 		}
-		// add real width of largest child
-		w.realWidth += maxW
-		w.showWidgetPlacement(logNow, "place()")
 	default:
-		w.startW = p.nextW
-		w.startH = p.nextH
-		w.nextW = p.nextW
-		w.nextH = p.nextH
-		newW := w.gocuiSize.Width()
-		newH := w.gocuiSize.Height()
-		w.gocuiSize.w0 = w.startW
-		w.gocuiSize.h0 = w.startH
-		w.gocuiSize.w1 = w.gocuiSize.w0 + newW
-		w.gocuiSize.h1 = w.gocuiSize.h0 + newH
-
-		// the realSize should not be smaller than the gocui view (?)
-		// this might not be a needed check? Maybe there are legit exceptions?
-		if (w.realWidth < newW) {
-			w.realWidth = newW
-		}
-		if (w.realHeight < newH) {
-			w.realHeight = newH
-		}
-		w.showWidgetPlacement(logNow, "place()")
+		n.gocuiSetWH(startW, startH)
+		// n.moveTo(startW, startH)
 	}
 }
 
-/*
-func (w *cuiWidget) setWH() {
-	w.gocuiSize.w1 = w.gocuiSize.w0 + w.gocuiSize.width
-	w.gocuiSize.h1 = w.gocuiSize.h0 + w.gocuiSize.height
-}
-*/
-
-func (w *cuiWidget) moveTo(leftW int, topH int) {
-	if (w.isFake) {
+func (n *node) placeGrid(startW int, startH int) {
+	w := n.tk
+	w.size.w0 = startW
+	w.size.h0 = startH
+	n.showWidgetPlacement(logInfo, "grid0:")
+	if (n.WidgetType != toolkit.Grid) {
 		return
 	}
-	newW := w.gocuiSize.Width()
-	newH := w.gocuiSize.Height()
-	w.gocuiSize.w0 = leftW
-	w.gocuiSize.h0 = topH
-	w.gocuiSize.w1 = w.gocuiSize.w0 + newW
-	w.gocuiSize.h1 = w.gocuiSize.h0 + newH
-	w.showWidgetPlacement(logInfo, "moveTo()")
-}
 
-func (w *cuiWidget) placeGrid() {
-	w.showWidgetPlacement(logNow, "grid0:")
-	if (w.widgetType != toolkit.Grid) {
-		return
-	}
-	w.startW = w.parent.nextW
-	w.startH = w.parent.nextH
-	w.nextW = w.parent.nextW
-	w.nextH = w.parent.nextH
-
-	var wCount int = 0
-	var hCount int = 0
-	for _, child := range w.children {
-		// increment for the next child
-		w.nextW = w.startW + wCount * 20
-		w.nextH = w.startH + hCount * 2
+	// first compute the max sizes of the rows and columns
+	for _, child := range n.children {
+		// childW, childH := child.logicalSize()
+		newR := child.realGocuiSize()
+		childW := newR.w1 - newR.w0
+		childH := newR.h1 - newR.h0
 
 		// set the child's realWidth, and grid offset
-		child.parentH = hCount
-		child.parentW = wCount
-		if (w.widths[wCount] < child.realWidth) {
-			w.widths[wCount] = child.realWidth
+		if (w.widths[child.AtW] < childW) {
+			w.widths[child.AtW] = childW
 		}
-		if (w.heights[hCount] < child.realHeight) {
-			w.heights[hCount] = child.realHeight
+		if (w.heights[child.AtH] < childH) {
+			w.heights[child.AtH] = childH
 		}
-		log(logVerbose, "grid1: (w,h count)", wCount, hCount, "(X,Y)", w.X, w.Y, w.name)
-		child.showWidgetPlacement(logNow, "grid1: " + fmt.Sprintf("next()=(%2d,%2d)", w.nextW, w.nextH))
-
-		if ((wCount + 1) < w.X) {
-			wCount += 1
-		} else {
-			wCount = 0
-		hCount += 1
-		}
+		// child.showWidgetPlacement(logInfo, "grid: ")
+		log(logVerbose, "placeGrid:", child.Name, "child()", childW, childH, "At()", child.AtW, child.AtH)
 	}
 
-	// reset the size of the whole grid
-	w.realWidth = 0
-	w.realHeight = 0
-	for _, val := range w.widths {
-		w.realWidth += val
-	}
-	for _, val := range w.heights {
-		w.realHeight += val
-	}
+	// find the width and height offset of the grid for AtW,AtH
+	for _, child := range n.children {
+		child.showWidgetPlacement(logInfo, "grid1:")
 
-	for _, child := range w.children {
-		child.showWidgetPlacement(logVerbose, "grid2:")
 		var totalW, totalH int
-		for i, val := range w.widths {
-			if (i < child.parentW) {
-				log(logVerbose, "grid2: (w, widths[])", i, val)
-				totalW += w.widths[i]
+		for i, w := range w.widths {
+			if (i < child.AtW) {
+				totalW += w
 			}
 		}
 		for i, h := range w.heights {
-			if (i < child.parentH) {
+			if (i < child.AtH) {
 				totalH += h
 			}
 		}
 
 		// the new corner to move the child to
-		w.nextW = w.startW + totalW
-		w.nextH = w.startH + totalH
+		newW := startW + totalW
+		newH := startH + totalH
 
-		child.placeWidgets()
+		log(logVerbose, "placeGrid:", child.Name, "new()", newW, newH, "At()", child.AtW, child.AtH)
+		child.placeWidgets(newW, newH)
 		child.showWidgetPlacement(logInfo, "grid2:")
-		log(logInfo)
 	}
-	// w.updateLogicalSizes()
-	w.showWidgetPlacement(logNow, "grid3:")
+	n.showWidgetPlacement(logInfo, "grid3:")
 }
 
-/*
-func (w *cuiWidget) setRealSize() {
+// computes the real, actual size of all the gocli objects in a widget
+func (n *node) realGocuiSize() *rectType {
+	var f func (n *node, r *rectType)
+	newR := new(rectType)
+	// initialize the values to opposite
+	newR.w0 = 80
+	newR.h0 = 24
+	if me.baseGui != nil {
+		maxW, maxH := me.baseGui.Size()
+		newR.w0 = maxW
+		newR.h0 = maxH
+	}
+	newR.w1 = 0
+	newR.h1 = 0
+
+	// expand the rectangle to the biggest thing displayed
+	f = func(n *node, r *rectType) {
+		newR := n.tk.gocuiSize
+		if ! n.tk.isFake {
+			if r.w0 > newR.w0 {
+				r.w0 = newR.w0
+			}
+			if r.h0 > newR.h0 {
+				r.h0 = newR.h0
+			}
+			if r.w1 < newR.w1 {
+				r.w1 = newR.w1
+			}
+			if r.h1 < newR.h1 {
+				r.h1 = newR.h1
+			}
+		}
+		for _, child := range n.children {
+			f(child, r)
+		}
+	}
+	f(n, newR)
+	return newR
 }
-*/
+
+func (n *node) textSize() (int, int) {
+	var width, height int
+
+	for _, s := range strings.Split(n.Text, "\n") {
+		if (width < len(s)) {
+			width = len(s)
+		}
+		height += 1
+	}
+	return width, height
+}

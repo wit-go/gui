@@ -8,8 +8,9 @@ import (
 
 // ColorBlack ColorRed ColorGreen ColorYellow ColorBlue ColorMagenta ColorCyan ColorWhite
 // gocui.GetColor("#FFAA55")  // Dark Purple
-func (w *cuiWidget) setDefaultWidgetColor() {
-	log(logInfo, "setDefaultWidgetColor() on", w.widgetType, w.name)
+func (n *node) setDefaultWidgetColor() {
+	w := n.tk
+	log(logInfo, "setDefaultWidgetColor() on", n.WidgetType, n.Name)
 	v, _ := me.baseGui.View(w.cuiName)
 	if (v == nil) {
 		log(logError, "setDefaultWidgetColor() failed on view == nil")
@@ -24,7 +25,7 @@ func (w *cuiWidget) setDefaultWidgetColor() {
 
 	// v.BgColor = gocui.GetColor("#55AAFF") // super light grey
 	// v.BgColor = gocui.GetColor("#FFC0CB") // 'w3c pink' yellow
-	switch w.widgetType {
+	switch n.WidgetType {
 	case toolkit.Root:
 		v.FrameColor = gocui.ColorRed
 		v.BgColor = gocui.GetColor("#B0E0E6") // w3c 'powerder blue'
@@ -84,7 +85,8 @@ func (w *cuiWidget) SetColor(c string) {
 	}
 }
 
-func (w *cuiWidget) setDefaultHighlight() {
+func (n *node) setDefaultHighlight() {
+	w := n.tk
 	if (w.v == nil) {
 		log(logError, "SetColor() failed on view == nil")
 		return
@@ -100,16 +102,17 @@ func randColor() gocui.Attribute {
 	return gocui.GetColor(colors[i])
 }
 
-func (w *cuiWidget) redoColor(draw bool) {
+func (n *node) redoColor(draw bool) {
+	w := n.tk
 	if (w == nil) {
 		return
 	}
 
 	sleep(.05)
-	w.setDefaultHighlight()
-	// w.setDefaultWidgetColor()
+	n.setDefaultHighlight()
+	n.setDefaultWidgetColor()
 
-	for _, child := range w.children {
+	for _, child := range n.children {
 		child.redoColor(draw)
 	}
 }

@@ -8,6 +8,7 @@ all: README.md
 	@echo
 	make clean
 	make plugins
+	make cmds-buttonplugin
 
 build-dep:
 	apt install -f libgtk-3-dev
@@ -82,11 +83,11 @@ clean:
 plugins: plugins-gocui plugins-andlabs
 
 plugins-gocui:
-	GO111MODULE="off" go build -v -x -C toolkit/gocui -buildmode=plugin -o ../gocui.so
-	GO111MODULE="off" go build -v -x -C toolkit/nocui -buildmode=plugin -o ../nocui.so
+	GO111MODULE="off" go build -C toolkit/gocui -v -buildmode=plugin -o ../gocui.so
+	GO111MODULE="off" go build -C toolkit/nocui -v -buildmode=plugin -o ../nocui.so
 
 plugins-andlabs:
-	GO111MODULE="off" go build -v -x -C toolkit/andlabs -buildmode=plugin -o ../andlabs.so
+	GO111MODULE="off" go build -C toolkit/andlabs -v -buildmode=plugin -o ../andlabs.so
 
 objdump:
 	objdump -t toolkit/andlabs.so |less

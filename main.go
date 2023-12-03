@@ -123,6 +123,10 @@ func New() *Node {
 
 // try to load andlabs, if that doesn't work, fall back to the console
 func (n *Node) Default() *Node {
+	if (GuiArg.Gui != "") {
+		log(logError, "New.Default() try toolkit =", GuiArg.Gui)
+		return n.LoadToolkit(GuiArg.Gui)
+	}
 	// if DISPLAY isn't set, return since gtk can't load
 	// TODO: figure out how to check what to do in macos and mswindows
 	if (os.Getenv("DISPLAY") == "") {

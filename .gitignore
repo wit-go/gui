@@ -8,6 +8,7 @@ cmds/console-ui-helloworld/console-ui-helloworld
 cmds/debug/debug
 cmds/helloworld/helloworld
 cmds/textbox/textbox
+cmds/cloudflare/cloudflare
 cmds/*/helloconsole
 
 # temporary files when building debian packages

@@ -23,11 +23,12 @@ var me config
 
 type config struct {
 	baseGui *gocui.Gui // the main gocui handle
-	rootNode *cuiWidget // the base of the binary tree. it should have id == 0
-	ctrlDown *cuiWidget // shown if you click the mouse when the ctrl key is pressed
-	current *cuiWidget // this is the current tab or window to show
-	logStdout *cuiWidget // where to show STDOUT
-	logStdoutV *gocui.View // where to show STDOUT
+	rootNode *node // the base of the binary tree. it should have id == 0
+
+	ctrlDown *node // shown if you click the mouse when the ctrl key is pressed
+//	current *cuiWidget // this is the current tab or window to show
+	logStdout *node // where to show STDOUT
+	helpLabel *gocui.View
 
 	// this is the channel we send user events like
 	// mouse clicks or keyboard events back to the program
@@ -36,53 +37,47 @@ type config struct {
 	// this is the channel we get requests to make widgets
 	pluginChan chan toolkit.Action
 
-	helpLabel *gocui.View
-
-	DefaultBehavior bool `default:"true"`
-
-	// Buttons, Group, Tabs, Windows, etc are by default assumed to be a single line
-	// as a default, we make buttons 8 chars wide
-	DefaultWidth int `default:"8"`
-	DefaultHeight int `default:"1"`
-
 	// When the widget has a frame, like a button, it adds 2 lines runes on each side
 	// so you need 3 char spacing in each direction to not have them overlap
 	// the amount of padding when there is a frame
-	FramePadW int `default:"4" dense:"0"`
+	FramePadW int `default:"1" dense:"0"`
 	FramePadH int `default:"1" dense:"0"`
 
 	PadW int `default:"1" dense:"0"`
 	PadH int `default:"1" dense:"0"`
 
-	// additional amount of space to put between window & tab widgets
-	WindowPadW int `default:"8" dense:"0"`
-	TabPadW int `default:"4" dense:"0"`
-
 	// how far down to start Window or Tab headings
 	WindowW int `default:"8" dense:"0"`
 	WindowH int `default:"-1"`
-	TabW int `default:"2" dense:"0"`
+	TabW int `default:"5" dense:"0"`
 	TabH int `default:"1" dense:"0"`
+
+	// additional amount of space to put between window & tab widgets
+	WindowPadW int `default:"8" dense:"0"`
+	TabPadW int `default:"4" dense:"0"`
 
 	// additional amount of space to indent on a group
 	GroupPadW int `default:"6" dense:"2"`
 
 	// the raw beginning of each window (or tab)
-	RawW int `default:"7"`
-	RawH int `default:"3"`
+	RawW int `default:"1"`
+	RawH int `default:"5"`
 
 	// offset for the hidden widgets
-	DevelOffsetW int `default:"20"`
+	FakeW int `default:"20"`
 
+	padded bool // add space between things like buttons
 	bookshelf bool // do you want things arranged in the box like a bookshelf or a stack?
 	canvas bool // if set to true, the windows are a raw canvas
 	menubar bool // for windows
 	stretchy bool // expand things like buttons to the maximum size
-	padded bool // add space between things like buttons
 	margin bool // add space around the frames of windows
 
 	// writeMutex protects locks the write process
 	writeMutex sync.Mutex
+
+	// used for listWidgets() debugging
+	depth int
 }
 
 // deprecate these
@@ -121,23 +116,21 @@ type node struct {
 	AtW    int
 	AtH    int
 
+	vals []string // dropdown menu items
+
+	// horizontal=true  means layout widgets like books on a bookshelf
+	// horizontal=false means layout widgets like books in a stack
+	horizontal bool `default:false`
+
+	hasTabs bool // does the window have tabs?
+
 	// the internal plugin toolkit structure
 	tk *cuiWidget
 }
 
-// the gocui way
-// the logical size of the widget
+// this is the gocui way
 // corner starts at in the upper left corner
 type rectType struct {
-	// where the widget should calculate it's existance from
-	// startW int
-	// startH int
-
-	// the is a shortcut to access
-//	width int  // this is always w1 - w0
-	height int // this is always h1 - h0
-
-	// this is the gocui way
 	w0, h0, w1, h1 int      // left top right bottom
 }
 
@@ -150,82 +143,27 @@ func (r *rectType) Height() int {
 }
 
 type cuiWidget struct {
-	id int	// widget ID
-	// parentId int
-	widgetType   toolkit.WidgetType
-
-	name   string // a descriptive name of the widget
-	text   string // the current text being displayed
+	// the gocui package variables
+	v *gocui.View // this is nil if the widget is not displayed
 	cuiName string // what gocui uses to reference the widget
 
-	vals []string // dropdown menu options
+	// the logical size of the widget
+	// For example, 40x12 would be the center of a normal terminal
+	size rectType
+
+	// the actual gocui display view of this widget
+	// sometimes this isn't visable like with a Box or Grid
+	gocuiSize rectType
 
 	isCurrent bool // is this the currently displayed Window or Tab?
-	hasTabs bool // does the window have tabs?
 	isFake bool // widget types like 'box' are 'false'
-
-	// where the widget's real corner is 
-	// should we always compute this?
-	startW int
-	startH int
-
-	// where the next child should be placed
-	nextW	int
-	nextH	int
-
-	// the widget size to reserve or things will overlap
-	realWidth int
-	realHeight int
-
-	gocuiSize rectType  // the display size of this widget
-	// logicalSize rectType  // the logical size. Includes all the child widgets
 
 	// used to track the size of grids
 	widths map[int]int // how tall each row in the grid is
 	heights map[int]int // how wide each column in the grid is
 
-	// deprecate // where in the parent grid this widget should go
-	parentW int
-	parentH int
-
-	// things from toolkit/action
-	b bool
-	i int
-	s string
-	X int
-	Y int
-	width int
-	height int
-
-	// horizontal=true  means layout widgets like books on a bookshelf
-	// horizontal=false means layout widgets like books in a stack
-	horizontal bool `default:false`
-
 	tainted bool
-	v *gocui.View
 	frame bool
-
-	parent *cuiWidget
-	children []*cuiWidget
-}
-
-func (w *cuiWidget) IsCurrent() bool {
-	if (w.widgetType == toolkit.Tab) {
-		return w.isCurrent
-	}
-	if (w.widgetType == toolkit.Window) {
-		return w.isCurrent
-	}
-	if (w.widgetType == toolkit.Root) {
-		return false
-	}
-	return w.parent.IsCurrent()
-}
-
-func (w *cuiWidget) StartW() {
-}
-
-func (w *cuiWidget) StartH() {
 }
 
 // from the gocui devs:
@@ -238,7 +176,7 @@ func (w *cuiWidget) Write(p []byte) (n int, err error) {
 	w.tainted = true
 	me.writeMutex.Lock()
 	defer me.writeMutex.Unlock()
-	if (me.logStdout.v == nil) {
+	if (me.logStdout.tk.v == nil) {
 		// optionally write the output to /tmp
 		s := fmt.Sprint(string(p))
 		s = strings.TrimSuffix(s, "\n")
@@ -246,11 +184,11 @@ func (w *cuiWidget) Write(p []byte) (n int, err error) {
 		v, _ := me.baseGui.View("msg")
 		if (v != nil) {
 			// fmt.Fprintln(outf, "found msg")
-			me.logStdout.v = v
+			me.logStdout.tk.v = v
 		}
 	} else {
 		// display the output in the gocui window
-		me.logStdout.v.Clear()
+		me.logStdout.tk.v.Clear()
 
 		s := fmt.Sprint(string(p))
 		s = strings.TrimSuffix(s, "\n")
@@ -260,7 +198,7 @@ func (w *cuiWidget) Write(p []byte) (n int, err error) {
 			l := len(outputS) - outputH
 			outputS = outputS[l:]
 		}
-		fmt.Fprintln(me.logStdout.v, strings.Join(outputS, "\n"))
+		fmt.Fprintln(me.logStdout.tk.v, strings.Join(outputS, "\n"))
 	}
 
 	return len(p), nil

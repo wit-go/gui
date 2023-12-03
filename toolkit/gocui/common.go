@@ -3,118 +3,182 @@ package main
 import (
 	"strconv"
 	"git.wit.org/wit/gui/toolkit"
-//	"github.com/awesome-gocui/gocui"
 )
 
-func makeWidget(a *toolkit.Action) *cuiWidget {
+func makeWidget(n *node) *cuiWidget {
 	var w *cuiWidget
 	w = new(cuiWidget)
+	// Set(w, "default")
 
-	w.name = a.Name
-	w.text = a.Text
-	w.b = a.B
-	w.i = a.I
-	w.s = a.S
-
-	w.X = a.X
-	w.Y = a.Y
-
-	t := len(w.text)
-	w.gocuiSize.w1 = w.gocuiSize.w0 + t + me.PadW
-	w.gocuiSize.h1 = w.gocuiSize.h0 + me.DefaultHeight + me.PadH
-
-	w.realWidth = w.gocuiSize.Width()
-	w.realHeight = w.gocuiSize.Height()
-
-	// set the gocui view.Frame = true by default
 	w.frame = true
-	if (w.frame) {
-		w.realHeight += me.FramePadH
-		w.gocuiSize.height += me.FramePadH
-	}
 
-	w.widgetType = a.WidgetType
-	w.id = a.WidgetId
 	// set the name used by gocui to the id
-	w.cuiName = strconv.Itoa(w.id)
+	w.cuiName = strconv.Itoa(n.WidgetId)
 
-	if w.widgetType == toolkit.Root {
-		log(logInfo, "setupWidget() FOUND ROOT w.id =", w.id, "w.parent", w.parent, "ParentId =", a.ParentId)
-		w.id = 0
-		me.rootNode = w
+	if n.WidgetType == toolkit.Root {
+		log(logInfo, "setupWidget() FOUND ROOT w.id =", n.WidgetId)
+		n.WidgetId = 0
+		me.rootNode = n
 		return w
 	}
 
-	w.parent = findWidget(a.ParentId, me.rootNode)
-	log(logInfo, "setupWidget() w.id =", w.id, "w.parent", w.parent, "ParentId =", a.ParentId)
-	if (w.parent == nil) {
-		log(logError, "setupWidget() ERROR: PARENT = NIL w.id =", w.id, "w.parent", w.parent, "ParentId =", a.ParentId)
-		// just use the rootNode (hopefully it's not nil)
-		w.parent = me.rootNode
-		// return w
-	}
-
-	// add this widget as a child for the parent
-	w.parent.Append(w)
-
-	if (a.WidgetType == toolkit.Box) {
-		if (a.B) {
-			w.horizontal = true
+	if (n.WidgetType == toolkit.Box) {
+		if (n.B) {
+			n.horizontal = true
 		} else {
-			w.horizontal = false
+			n.horizontal = false
 		}
 	}
-	if (a.WidgetType == toolkit.Grid) {
+
+	if (n.WidgetType == toolkit.Grid) {
 		w.widths = make(map[int]int) // how tall each row in the grid is
 		w.heights = make(map[int]int) // how wide each column in the grid is
 	}
+
 	return w
 }
 
 func setupCtrlDownWidget() {
-	var w *cuiWidget
-	w = new(cuiWidget)
+	a := new(toolkit.Action)
+	a.Name = "ctrlDown"
+	a.WidgetType = toolkit.Dialog
+	a.WidgetId = -1
+	a.ParentId = 0
+	n := addNode(a)
 
-	w.name = "ctrlDown"
-
-	w.widgetType = toolkit.Flag
-	w.id = -1
-	me.ctrlDown = w
-	// me.rootNode.Append(w)
+	me.ctrlDown = n
 }
 
-func (w *cuiWidget) deleteView() {
+func (n *node) deleteView() {
+	w := n.tk
 	if (w.v != nil) {
-		me.baseGui.DeleteView(w.cuiName)
+		w.v.Visible = false
+		return
 	}
+	// make sure the view isn't really there
+	me.baseGui.DeleteView(w.cuiName)
 	w.v = nil
 }
 
-func (n *cuiWidget) Append(child *cuiWidget) {
-	n.children = append(n.children, child)
-	// child.parent = n
-}
-
-// find widget by number
-func findWidget(i int, w *cuiWidget) (*cuiWidget) {
-	if (w == nil) {
-		log(logVerbose, "findWidget() Trying to find i =", i, "currently checking against w.id = nil")
+// searches the binary tree for a WidgetId
+func (n *node) findWidgetId(id int) *node {
+	if (n == nil) {
 		return nil
 	}
-	log(logVerbose, "findWidget() Trying to find i =", i, "currently checking against w.id =", w.id)
 
-	if (w.id == i) {
-		log(logInfo, "findWidget() FOUND w.id ==", i, w.widgetType, w.name)
-		return w
+	if n.WidgetId == id {
+		return n
 	}
 
-	for _, child := range w.children {
-		newW := findWidget(i, child)
-		log(logVerbose, "findWidget() Trying to find i =", i, "currently checking against child.id =", child.id)
-		if (newW != nil) {
-			return newW
+	for _, child := range n.children {
+		newN := child.findWidgetId(id)
+		if (newN != nil) {
+			return newN
 		}
 	}
 	return nil
 }
 
+// searches the binary tree for a WidgetId
+func (n *node) findWidgetName(name string) *node {
+	if (n == nil) {
+		return nil
+	}
+
+	if n.tk.cuiName == name {
+		return n
+	}
+
+	for _, child := range n.children {
+		newN := child.findWidgetName(name)
+		if (newN != nil) {
+			return newN
+		}
+	}
+	return nil
+}
+
+func addNode(a *toolkit.Action) *node {
+	n := new(node)
+	n.WidgetType = a.WidgetType
+	n.WidgetId = a.WidgetId
+	n.ParentId = a.ParentId
+
+	// copy the data from the action message
+	n.Name = a.Name
+	n.Text = a.Text
+	n.I = a.I
+	n.S = a.S
+	n.B = a.B
+
+	n.X = a.X
+	n.Y = a.Y
+
+	n.W = a.W
+	n.H = a.H
+	n.AtW = a.AtW
+	n.AtH = a.AtH
+
+	// store the internal toolkit information
+	n.tk = makeWidget(n)
+
+	if (a.WidgetType == toolkit.Root) {
+		log(logInfo, "addNode() Root")
+		return n
+	}
+
+	if (me.rootNode.findWidgetId(a.WidgetId) != nil) {
+		log(logError, "addNode() WidgetId already exists", a.WidgetId)
+		return me.rootNode.findWidgetId(a.WidgetId)
+	}
+
+	// add this new widget on the binary tree
+	n.parent = me.rootNode.findWidgetId(a.ParentId)
+	if n.parent != nil {
+		n.parent.children = append(n.parent.children, n)
+		//w := n.tk
+		//w.parent = n.parent.tk
+		//w.parent.children = append(w.parent.children, w)
+	}
+	return n
+}
+
+func (n *node) IsCurrent() bool {
+	w := n.tk
+	if (n.WidgetType == toolkit.Tab) {
+		return w.isCurrent
+	}
+	if (n.WidgetType == toolkit.Window) {
+		return w.isCurrent
+	}
+	if (n.WidgetType == toolkit.Root) {
+		return false
+	}
+	return n.parent.IsCurrent()
+}
+
+func (n *node) Visible() bool {
+	if (n == nil) {
+		return false
+	}
+	if (n.tk == nil) {
+		return false
+	}
+	if (n.tk.v == nil) {
+		return false
+	}
+	return n.tk.v.Visible
+}
+
+func (n *node) SetVisible(b bool) {
+	if (n == nil) {
+		return
+	}
+	if (n.tk == nil) {
+		return
+	}
+	if (n.tk.v == nil) {
+		return
+	}
+	n.tk.v.Visible = b
+}

@@ -5,28 +5,29 @@ import (
 	"git.wit.org/wit/gui/toolkit"
 )
 
-func (w *cuiWidget) setCheckbox(b bool) {
-	if (w.widgetType != toolkit.Checkbox) {
+func (n *node) setCheckbox(b bool) {
+	w := n.tk
+	if (n.WidgetType != toolkit.Checkbox) {
 		return
 	}
 	if (b) {
-		w.b = b
-		w.text = "X " + w.name
+		n.B = b
+		n.Text = "X " + n.Name
 	} else {
-		w.b = b
-		w.text = "  " + w.name
+		n.B = b
+		n.Text = "  " + n.Name
 	}
-	t := len(w.text) + 1
+	t := len(n.Text) + 1
 	w.gocuiSize.w1 = w.gocuiSize.w0 + t
 
-	w.realWidth = w.gocuiSize.Width() + me.PadW
-	w.realHeight = w.gocuiSize.Height() + me.PadH
+//	w.realWidth = w.gocuiSize.Width() + me.PadW
+//	w.realHeight = w.gocuiSize.Height() + me.PadH
 
-	if w.frame {
-		w.realWidth += me.FramePadW
-		w.realHeight += me.FramePadH
-	}
+//	if w.frame {
+//		w.realWidth += me.FramePadW
+//		w.realHeight += me.FramePadH
+//	}
 
-	w.deleteView()
-	w.showView()
+	n.deleteView()
+	n.showView()
 }

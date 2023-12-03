@@ -8,12 +8,17 @@ import (
 
 func action(a *toolkit.Action) {
 	log(logInfo, "action() START", a.WidgetId, a.ActionType, a.WidgetType, a.Name)
-	w := findWidget(a.WidgetId, me.rootNode)
+	n := me.rootNode.findWidgetId(a.WidgetId)
+	var w *cuiWidget
+	if (n != nil) {
+		w = n.tk
+	}
 	switch a.ActionType {
 	case toolkit.Add:
 		if (w == nil) {
-			w = makeWidget(a)
-			w.addWidget()
+			n := addNode(a)
+			// w = n.tk
+			n.addWidget()
 		} else {
 			// this is done to protect the plugin being 'refreshed' with the
 			// widget binary tree. TODO: find a way to keep them in sync
@@ -22,16 +27,25 @@ func action(a *toolkit.Action) {
 		}
 	case toolkit.Show:
 		if (a.B) {
-			w.showView()
+			n.showView()
 		} else {
-			w.hideWidgets()
+			n.hideWidgets()
 		}
 	case toolkit.Set:
-		w.Set(a.A)
+		if a.WidgetType == toolkit.Flag {
+			log(logNow, "TODO: set flag here", a.ActionType, a.WidgetType, a.Name)
+			log(logNow, "TODO: n.WidgetType =", n.WidgetType, "n.Name =", a.Name)
+		} else {
+			if (a.A == nil) {
+				log(logError, "TODO: Set here. a == nil", a.ActionType, "WidgetType =", a.WidgetType, "Name =", a.Name)
+			} else {
+				n.Set(a.A)
+			}
+		}
 	case toolkit.SetText:
-		w.SetText(a.S)
+		n.SetText(a.S)
 	case toolkit.AddText:
-		w.AddText(a.S)
+		n.AddText(a.S)
 	case toolkit.Move:
 		log(logNow, "attempt to move() =", a.ActionType, a.WidgetType, a.Name)
 	case toolkit.CloseToolkit:
@@ -43,42 +57,61 @@ func action(a *toolkit.Action) {
 	log(logInfo, "action() END")
 }
 
-func (w *cuiWidget) AddText(text string) {
-	if (w == nil) {
+func (n *node) AddText(text string) {
+	if (n == nil) {
 		log(logNow, "widget is nil")
 		return
 	}
-	w.vals = append(w.vals, text)
-	for i, s := range w.vals {
-		log(logNow, "AddText()", w.name, i, s)
+	n.vals = append(n.vals, text)
+	for i, s := range n.vals {
+		log(logNow, "AddText()", n.Name, i, s)
 	}
-	w.SetText(text)
+	n.SetText(text)
 }
 
-func (w *cuiWidget) SetText(text string) {
-	if (w == nil) {
+func (n *node) SetText(text string) {
+	if (n == nil) {
 		log(logNow, "widget is nil")
 		return
 	}
-	w.text = text
-	w.s = text
-	w.textResize()
-	w.deleteView()
-	w.showView()
+	n.S = text
+	n.Text = text
+
+	n.textResize()
+	n.deleteView()
+	n.showView()
 }
 
-func (w *cuiWidget) Set(val any) {
+func (n *node) Set(val any) {
+	// w := n.tk
 	log(logInfo, "Set() value =", val)
 
 	switch v := val.(type) {
 	case bool:
-		w.b = val.(bool)
-		w.setCheckbox(val.(bool))
+		n.B = val.(bool)
+		n.setCheckbox(val.(bool))
 	case string:
-		w.SetText(val.(string))
+		n.SetText(val.(string))
 	case int:
-		w.i = val.(int)
+		n.I = val.(int)
 	default:
 		log(logError, "Set() unknown type =", val, v)
 	}
+}
+
+// this passes the user event back from the plugin
+func (n *node) doUserEvent() {
+	if (me.callback == nil) {
+		log(logError, "doUserEvent() no callback channel was configured")
+		return
+	}
+	var a toolkit.Action
+	a.WidgetId = n.WidgetId
+	a.Name = n.Name
+	a.Text = n.Text
+	a.B = n.B
+	a.ActionType = toolkit.User
+	log(logInfo, "doUserEvent() START:   send a button click callback()", a.WidgetId, a.Name)
+	me.callback <- a
+	log(logInfo, "doUserEvent() END:     sent a button click callback()", a.WidgetId, a.Name)
 }

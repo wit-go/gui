@@ -52,14 +52,12 @@ func makeOutputWidget(g *gocui.Gui, stringFromMouseClick string) *gocui.View {
 		a.WidgetType = toolkit.Stdout
 		a.WidgetId = -3
 		a.ParentId = 0
-		me.logStdout = makeWidget(a)
-		me.logStdout.gocuiSize.w0 = maxX - 32
-		me.logStdout.gocuiSize.h0 = maxY/2
-		me.logStdout.gocuiSize.w1 = me.logStdout.gocuiSize.w0 + outputW
-		me.logStdout.gocuiSize.h1 = me.logStdout.gocuiSize.h0 + outputH
-
-		me.logStdout.realWidth = me.logStdout.gocuiSize.Width()
-		me.logStdout.realHeight = me.logStdout.gocuiSize.Height()
+		n := addNode(a)
+		me.logStdout = n
+		me.logStdout.tk.gocuiSize.w0 = maxX - 32
+		me.logStdout.tk.gocuiSize.h0 = maxY/2
+		me.logStdout.tk.gocuiSize.w1 = me.logStdout.tk.gocuiSize.w0 + outputW
+		me.logStdout.tk.gocuiSize.h1 = me.logStdout.tk.gocuiSize.h0 + outputH
 	}
 	v, err := g.View("msg")
 	if (v == nil) {
@@ -78,19 +76,19 @@ func makeOutputWidget(g *gocui.Gui, stringFromMouseClick string) *gocui.View {
 
 	if (err != nil) {
 		log("create output window failed", err)
-		// return nil
+		return nil
 	}
 
 	if (v == nil) {
 		log("msg == nil. WTF now? err =", err)
 		return nil
 	} else {
-		me.logStdout.v = v
+		me.logStdout.tk.v = v
 	}
 
-	me.logStdout.v.Clear()
-	me.logStdout.v.SelBgColor = gocui.ColorCyan
-	me.logStdout.v.SelFgColor = gocui.ColorBlack
+	v.Clear()
+	v.SelBgColor = gocui.ColorCyan
+	v.SelFgColor = gocui.ColorBlack
 	fmt.Fprintln(v, "figure out how to capture STDOUT to here\n" + stringFromMouseClick)
 	g.SetViewOnBottom("msg")
 	// g.SetViewOnBottom(v.Name())

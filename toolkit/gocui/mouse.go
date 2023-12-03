@@ -6,68 +6,13 @@ package main
 
 import (
 	"errors"
-
+	"fmt"
 	"github.com/awesome-gocui/gocui"
 )
 
-func MouseMain() {
-	g, err := gocui.NewGui(gocui.OutputNormal, true)
-	if err != nil {
-		panic(err)
-	}
-	defer g.Close()
-
-	me.baseGui = g
-
-	g.Cursor = true
-	g.Mouse = true
-
-	g.SetManagerFunc(layout)
-
-	if err := defaultKeybindings(g); err != nil {
-		panic(err)
-	}
-
-	if err := g.MainLoop(); err != nil && !errors.Is(err, gocui.ErrQuit) {
-		panic(err)
-	}
-}
-
-func layout(g *gocui.Gui) error {
-	maxX, maxY := g.Size()
-	mx, my := g.MousePosition()
-	if _, err := g.View("msg"); msgMouseDown && err == nil {
-		moveMsg(g)
-	}
-	// TODO: figure out what this might be useful for
-	// what is this do? I made it just 2 lines for now. Is this useful for something?
-	if v, err := g.SetView("global", 15, 5, maxX, 8, 10); err != nil {
-		if !errors.Is(err, gocui.ErrUnknownView) {
-			log("global failed", maxX, maxY)
-			return err
-		}
-		v.Frame = false
-	}
-	helplayout(g)
-	if widgetView, _ := g.View("msg"); widgetView == nil {
-		log(logInfo, "create output widget now", maxX, maxY, mx, my)
-		makeOutputWidget(g, "this is a create before a mouse click")
-		if (me.logStdout != nil) {
-			setOutput(me.logStdout)
-		}
-	} else {
-		log(logInfo, "output widget already exists", maxX, maxY, mx, my)
-	}
-	updateHighlightedView(g)
-	log(logInfo, "layout() END", maxX, maxY, mx, my)
-	return nil
-}
-
-func quit(g *gocui.Gui, v *gocui.View) error {
-	return gocui.ErrQuit
-}
-
-func updateHighlightedView(g *gocui.Gui) {
+// this function uses the mouse position to highlight & unhighlight things
+// this is run every time the user moves the mouse over the terminal window
+func mouseMove(g *gocui.Gui) {
 	mx, my := g.MousePosition()
 	for _, view := range g.Views() {
 		view.Highlight = false
@@ -99,6 +44,31 @@ func mouseUp(g *gocui.Gui, v *gocui.View) error {
 	} else if globalMouseDown {
 		globalMouseDown = false
 		g.DeleteView("globalDown")
+	}
+	return nil
+}
+
+func mouseDown(g *gocui.Gui, v *gocui.View) error {
+	mx, my := g.MousePosition()
+	if vx0, vy0, vx1, vy1, err := g.ViewPosition("msg"); err == nil {
+		if mx >= vx0 && mx <= vx1 && my >= vy0 && my <= vy1 {
+			return msgDown(g, v)
+		}
+	}
+	globalMouseDown = true
+	maxX, _ := g.Size()
+	msg := fmt.Sprintf("Mouse really down at: %d,%d", mx, my) + "foo\n" + "bar\n"
+	x := mx - len(msg)/2
+	if x < 0 {
+		x = 0
+	} else if x+len(msg)+1 > maxX-1 {
+		x = maxX - 1 - len(msg) - 1
+	}
+	if v, err := g.SetView("globalDown", x, my-1, x+len(msg)+1, my+1, 0); err != nil {
+		if !errors.Is(err, gocui.ErrUnknownView) {
+			return err
+		}
+		v.WriteString(msg)
 	}
 	return nil
 }

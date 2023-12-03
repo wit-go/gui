@@ -1,88 +1,67 @@
 package main
 
 import (
-//	"github.com/awesome-gocui/gocui"
 	"git.wit.org/wit/gui/toolkit"
 )
 
-// TODO: make these defaults in config struct definition
-var fakeStartWidth int = me.DevelOffsetW
+var fakeStartWidth int = me.FakeW
 var fakeStartHeight int = me.TabH + me.FramePadH
-func (w *cuiWidget) setFake() {
+// setup fake labels for non-visible things off screen
+func (n *node) setFake() {
+	w := n.tk
 	w.isFake = true
-	t := len(w.name)
-	// setup fake labels for non-visable things off screen
 
-	w.gocuiSize.w0 = fakeStartWidth
-	w.gocuiSize.h0 = fakeStartHeight
-	w.gocuiSize.w1 = w.gocuiSize.w0 + t + me.PadW
-	w.gocuiSize.h1 = w.gocuiSize.h0 + me.DefaultHeight + me.PadH
+	n.gocuiSetWH(fakeStartWidth, fakeStartHeight)
 
-	w.realWidth = w.gocuiSize.Width() + me.FramePadW
-	w.realHeight = w.gocuiSize.Height() + me.FramePadH
-
-	fakeStartHeight += w.realHeight
+	fakeStartHeight += w.gocuiSize.Height()
 	// TODO: use the actual max hight of the terminal window
 	if (fakeStartHeight > 24) {
-		fakeStartHeight = me.TabH + me.FramePadH
-		fakeStartWidth += me.DevelOffsetW
+		fakeStartHeight = me.TabH
+		fakeStartWidth += me.FakeW
 	}
 	if (logInfo) {
-		w.showView()
+		n.showView()
 	}
 }
 
 // set the widget start width & height
-func (w *cuiWidget) addWidget() {
-	log(logInfo, "setStartWH() w.id =", w.id, "w.name", w.name)
-	switch w.widgetType {
+func (n *node) addWidget() {
+	nw := n.tk
+	log(logInfo, "setStartWH() w.id =", n.WidgetId, "n.name", n.Name)
+	switch n.WidgetType {
 	case toolkit.Root:
-		log(logInfo, "setStartWH() rootNode w.id =", w.id, "w.name", w.name)
-		w.setFake()
+		log(logInfo, "setStartWH() rootNode w.id =", n.WidgetId, "w.name", n.Name)
+		n.setFake()
 		return
 	case toolkit.Flag:
-		w.setFake()
+		n.setFake()
 		return
 	case toolkit.Window:
-		me.current = w
-		updateCurrentTabs()
-		setCurrentWindow(w)
+		nw.frame = false
+		redoWindows(0,0)
 		return
 	case toolkit.Tab:
-		// if this is the first tab, set it to the current one and stay here
-		if (me.current != nil) {
-			// there is already a current tab. just redraw the tabs
-			updateCurrentTabs()
-			return
-		}
-		setCurrentTab(w)
 		return
 	case toolkit.Box:
-		w.isFake = true
-		w.setFake()
-		w.startW = w.parent.startW
-		w.startH = w.parent.startH
+		nw.isFake = true
+		n.setFake()
 		return
 	case toolkit.Grid:
-		w.isFake = true
-		w.setFake()
-		w.startW = w.parent.startW
-		w.startH = w.parent.startH
+		nw.isFake = true
+		n.setFake()
 		return
 	case toolkit.Group:
-		w.startW = w.parent.startW + 4
-		w.startH = w.parent.startH + me.DefaultHeight + me.FramePadH
-
-		t := len(w.text)
-		w.gocuiSize.w1 = w.gocuiSize.w0 + t + me.FramePadW
-		w.gocuiSize.h1 = w.gocuiSize.h0 + me.DefaultHeight + me.FramePadH
+		nw.frame = false
+		return
+	case toolkit.Label:
+		nw.frame = false
 		return
 	default:
-		w.startW = w.parent.startW
-		w.startH = w.parent.startH
-		if w.IsCurrent() {
-			w.updateCurrent()
+		/*
+		if n.IsCurrent() {
+			n.updateCurrent()
 		}
+		*/
 	}
-	w.showWidgetPlacement(logInfo, "addWidget()")
+	n.showWidgetPlacement(logInfo, "addWidget()")
 }

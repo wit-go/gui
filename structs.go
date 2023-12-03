@@ -23,9 +23,11 @@ import (
 
 var me guiConfig
 
+var GuiArg GuiArgs
+
 // This struct can be used with the go-arg package
 type GuiArgs struct {
-	GuiToolkit []string `arg:"--gui-toolkit" help:"The order to attempt loading plugins [gocui,andlabs,gtk,qt]"`
+	Gui string `arg:"--gui" help:"Use this gui toolkit [andlabs,gocui,nocui]"`
 	GuiDebug bool `arg:"--gui-debug" help:"open the GUI debugger"`
 	GuiVerbose bool `arg:"--gui-verbose" help:"enable all logging"`
 }

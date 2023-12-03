@@ -12,25 +12,23 @@ import (
 	"github.com/awesome-gocui/gocui"
 )
 
-func addHelp() {
-	me.baseGui.SetManagerFunc(helplayout)
-}
-
 var helpText []string = []string{"KEYBINDINGS",
 	"",
 	"d: show/hide debugging",
-	"h: hide widgets",
-	"s: show all widgets",
+	"s/h: show/hide all widgets",
+	"L: list all widgets",
 	"q: quit()",
 	"p: panic()",
 	"o: show Stdout",
 	"l: log to /tmp/witgui.log",
-	"Ctrl-D: Enable Debugging",
+	"Ctrl-D: Toggle Debugging",
+	"Ctrl-V: Toggle Verbose Debugging",
 	"Ctrl-C: Exit",
 	"",
 }
 
-func helplayout(g *gocui.Gui) error {
+func helplayout() error {
+	g := me.baseGui
 	var err error
 	maxX, _ := g.Size()
 

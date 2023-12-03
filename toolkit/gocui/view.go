@@ -20,10 +20,11 @@ func splitLines(s string) []string {
 	return lines
 }
 
-func (w *cuiWidget) textResize() {
+func (n *node) textResize() {
+	w := n.tk
 	var width, height int
 
-	for i, s := range splitLines(w.text) {
+	for i, s := range splitLines(n.Text) {
 		log(logNow, "textResize() len =", len(s), i, s)
 		if (width < len(s)) {
 			width = len(s)
@@ -32,38 +33,52 @@ func (w *cuiWidget) textResize() {
 	}
 	w.gocuiSize.w1 = w.gocuiSize.w0 + width + me.FramePadW
 	w.gocuiSize.h1 = w.gocuiSize.h0 + height + me.FramePadH
-	w.showWidgetPlacement(logNow, "textResize()")
+	n.showWidgetPlacement(logNow, "textResize()")
 }
 
 // display's the text of the widget in gocui
-func (w *cuiWidget) showView() {
+func (n *node) showView() {
 	var err error
+	w := n.tk
+
 	if (w.cuiName == "") {
-		log(logError, "drawView() w.cuiName was not set for widget", w)
-		w.cuiName = strconv.Itoa(w.id)
+		log(logError, "showView() w.cuiName was not set for widget", w)
+		w.cuiName = strconv.Itoa(n.WidgetId)
 	}
 
-	if (w.v != nil) {
-		log(logInfo, "drawView() w.v already defined for widget", w)
-		v, _ := me.baseGui.View(w.cuiName)
-		if (v == nil) {
-			log(logError, "drawView() ERROR view does not really exist", w)
-			w.v = nil
-		} else {
-			return
-		}
+	if (w.v == nil) {
+		n.updateView()
+	}	
+	x0, y0, x1, y1, err := me.baseGui.ViewPosition(w.cuiName)
+	log(logInfo, "showView() w.v already defined for widget", n.Name, err)
+	if (x0 != w.gocuiSize.w0) || (y0 != w.gocuiSize.h0) {
+		log(logError, "showView() w.v.w0 != x0", n.Name, w.gocuiSize.w0, x0)
+		log(logError, "showView() w.v.h0 != y0", n.Name, w.gocuiSize.h0, y0)
+		n.updateView()
+		return
+	}
+	if (x1 != w.gocuiSize.w1) || (y1 != w.gocuiSize.h1) {
+		log(logError, "showView() w.v.w1 != x1", n.Name, w.gocuiSize.w1, x1)
+		log(logError, "showView() w.v.h1 != y1", n.Name, w.gocuiSize.h1, y1)
+		n.updateView()
+		return
 	}
 
+	if (w.v.Visible == false) {
+		log(logInfo, "showView() w.v.Visible set to true ", n.Name)
+		w.v.Visible = true
+	}
+}
+
+func (n *node) updateView() {
+	var err error
+	w := n.tk
 	if (me.baseGui == nil) {
-		log(logError, "drawView() ERROR: me.baseGui == nil", w)
+		log(logError, "showView() ERROR: me.baseGui == nil", w)
 		return
 	}
-	v, _ := me.baseGui.View(w.cuiName)
-	if (v != nil) {
-		log(logError, "drawView() already defined for name", w.cuiName)
-		w.v = v
-		return
-	}
+	me.baseGui.DeleteView(w.cuiName)
+	w.v = nil
 
 	a := w.gocuiSize.w0
 	b := w.gocuiSize.h0
@@ -72,12 +87,12 @@ func (w *cuiWidget) showView() {
 
 	w.v, err = me.baseGui.SetView(w.cuiName, a, b, c, d, 0)
 	if err == nil {
-		w.showWidgetPlacement(logError, "drawView()")
+		n.showWidgetPlacement(logError, "drawView()")
 		log(logError, "drawView() internal plugin error err = nil")
 		return
 	}
 	if !errors.Is(err, gocui.ErrUnknownView) {
-		w.showWidgetPlacement(logError, "drawView()")
+		n.showWidgetPlacement(logError, "drawView()")
 		log(logError, "drawView() internal plugin error error.IS()", err)
 		return
 	}
@@ -85,13 +100,68 @@ func (w *cuiWidget) showView() {
 	me.baseGui.SetKeybinding(w.v.Name(), gocui.MouseLeft, gocui.ModNone, click)
 
 	w.v.Wrap = true
-	if (w.widgetType == toolkit.Window) {
-		w.v.Frame = w.frame
-		w.v.Clear()
-		fmt.Fprint(w.v, w.text)
-	} else {
-		fmt.Fprintln(w.v, w.text)
-	}
+	w.v.Frame = w.frame
+	w.v.Clear()
+	fmt.Fprint(w.v, n.Text)
+	n.showWidgetPlacement(logNow, "Window: " + n.Text)
 
-	w.setDefaultWidgetColor()
+	n.setDefaultHighlight()
+	n.setDefaultWidgetColor()
+}
+
+func (n *node) hideWidgets() {
+	w := n.tk
+	w.isCurrent = false
+	switch n.WidgetType {
+	case toolkit.Root:
+	case toolkit.Flag:
+	case toolkit.Window:
+	case toolkit.Box:
+	case toolkit.Grid:
+	default:
+		n.deleteView()
+	}
+	for _, child := range n.children {
+		child.hideWidgets()
+	}
+}
+
+func (n *node) hideFake() {
+	w := n.tk
+	if (w.isFake) {
+		n.deleteView()
+	}
+	for _, child := range n.children {
+		child.hideFake()
+	}
+}
+
+func (n *node) showFake() {
+	w := n.tk
+	if (w.isFake) {
+		n.setFake()
+		n.showWidgetPlacement(logNow, "showFake:")
+		n.showView()
+	}
+	for _, child := range n.children {
+		child.showFake()
+	}
+}
+
+func (n *node) showWidgets() {
+	w := n.tk
+	if (w.isFake) {
+		// don't display by default
+	} else {
+		if n.IsCurrent() {
+			n.showWidgetPlacement(logInfo, "current:")
+			n.showView()
+		} else {
+			n.showWidgetPlacement(logInfo, "not:")
+			// w.drawView()
+		}
+	}
+	for _, child := range n.children {
+		child.showWidgets()
+	}
 }

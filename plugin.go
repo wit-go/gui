@@ -119,8 +119,15 @@ func searchPaths(name string) *aplug {
 	filename = "plugins/" + name + ".so"
 	pfile, err = me.resFS.ReadFile(filename)
 	if (err == nil) {
+		filename = "/tmp/" + name + ".so"
 		log(logError, "write out file here", name, filename, len(pfile))
-		exit()
+		f, _ := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0600)
+		f.Write(pfile)
+		f.Close()
+		p := initToolkit(name, filename)
+		if (p != nil) {
+			return p
+		}
 	} else {
 		log(logError, filename, "was not embedded. Error:", err)
 	}

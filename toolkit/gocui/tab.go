@@ -3,136 +3,111 @@ package main
 // implements widgets 'Window' and 'Tab'
 
 import (
+	"strings"
 	"git.wit.org/wit/gui/toolkit"
-//	"github.com/awesome-gocui/gocui"
 )
 
-func (w *cuiWidget) hideWidgets() {
-	w.isCurrent = false
-	switch w.widgetType {
-	case toolkit.Root:
-	case toolkit.Flag:
-	case toolkit.Window:
-	// case toolkit.Tab:
-	case toolkit.Box:
-	case toolkit.Grid:
-	default:
-		w.deleteView()
+func (w *cuiWidget) Width() int {
+	if w.frame {
+		return w.gocuiSize.w1 - w.gocuiSize.w0
 	}
-	for _, child := range w.children {
-		child.hideWidgets()
-	}
+	return w.gocuiSize.w1 - w.gocuiSize.w0 - 1
 }
 
-func (w *cuiWidget) hideFake() {
-	if (w.isFake) {
-		w.deleteView()
+func (w *cuiWidget) Height() int {
+	if w.frame {
+		return w.gocuiSize.h1 - w.gocuiSize.h0
 	}
-	for _, child := range w.children {
-		child.hideFake()
-	}
+	return w.gocuiSize.h1 - w.gocuiSize.h0 - 1
 }
 
-func (w *cuiWidget) showFake() {
-	if (w.isFake) {
-		w.setFake()
-		w.showWidgetPlacement(logNow, "showFake:")
-		w.showView()
-	}
-	for _, child := range w.children {
-		child.showFake()
-	}
-}
+func (n *node) gocuiSetWH(sizeW, sizeH int) {
+	w := len(n.Text)
+	lines := strings.Split(n.Text, "\n")
+	h := len(lines)
 
-func (w *cuiWidget) showWidgets() {
-	if (w.isFake) {
-		// don't display by default
+	tk := n.tk
+	if tk.isFake {
+		tk.gocuiSize.w0 = sizeW
+		tk.gocuiSize.h0 = sizeH
+		tk.gocuiSize.w1 = tk.gocuiSize.w0 + w + me.FramePadW
+		tk.gocuiSize.h1 = tk.gocuiSize.h0 + h + me.FramePadH
+		return
+	}
+
+	if tk.frame {
+		tk.size.w0 = sizeW
+		tk.size.h0 = sizeH
+		tk.gocuiSize.w0 = tk.size.w0
+		tk.gocuiSize.h0 = tk.size.h0
+		tk.gocuiSize.w1 = tk.gocuiSize.w0 + w + me.FramePadW
+		tk.gocuiSize.h1 = tk.gocuiSize.h0 + h + me.FramePadH
 	} else {
-		if w.IsCurrent() {
-			w.showWidgetPlacement(logInfo, "current:")
-			w.showView()
-		} else {
-			w.showWidgetPlacement(logInfo, "not:")
-			// w.drawView()
+		tk.size.w0 = sizeW - 1
+		tk.size.h0 = sizeH - 1
+		tk.gocuiSize.w0 = tk.size.w0
+		tk.gocuiSize.h0 = tk.size.h0
+		tk.gocuiSize.w1 = tk.gocuiSize.w0 + w + 1
+		tk.gocuiSize.h1 = tk.gocuiSize.h0 + h + 1
+	}
+}
+
+func redoWindows(nextW int, nextH int) {
+	for _, n := range me.rootNode.children {
+		if n.WidgetType != toolkit.Window {
+			continue
 		}
-	}
-	for _, child := range w.children {
-		child.showWidgets()
-	}
-}
-
-func (w *cuiWidget) setWindowWH() {
-	w.gocuiSize.w0 = me.rootNode.nextW
-	w.gocuiSize.h0 = me.WindowH
-
-	t := len(w.text)
-	w.gocuiSize.w1 = w.gocuiSize.w0 + t + me.PadW
-	w.gocuiSize.h1 = w.gocuiSize.h0 + me.DefaultHeight + me.PadH
-
-	w.realWidth = w.gocuiSize.Width()
-	w.realHeight = w.gocuiSize.Height()
-
-	// move the rootNode width over for the next window
-	me.rootNode.nextW += w.realWidth + me.WindowPadW
-
-	w.nextW = 4
-	w.nextH = 2
-
-	w.showWidgetPlacement(logNow, "setWindowWH:")
-}
-
-func (w *cuiWidget) setTabWH() {
-	// set the start and size of the tab gocui button
-
-	w.gocuiSize.w0 = w.parent.nextW
-	w.gocuiSize.h0 = me.TabH
-
-	t := len(w.text)
-	w.gocuiSize.w1 = w.gocuiSize.w0 + t + me.PadW
-	w.gocuiSize.h1 = w.gocuiSize.h0 + me.DefaultHeight + me.PadH
-
-	w.realWidth = w.gocuiSize.Width()
-	w.realHeight = w.gocuiSize.Height()
-
-	w.realWidth += me.FramePadW
-	w.realHeight += me.FramePadH
-
-	w.parent.nextW += w.realWidth + me.TabPadW
-
-	w.showWidgetPlacement(logNow, "setTabWH:")
-}
-
-func (w *cuiWidget) redoTabs(draw bool) {
-	if (w.widgetType == toolkit.Window) {
-		var tabs bool = false
-		// figure out if the window is just a bunch of tabs
-		for _, child := range w.children {
-			if (child.widgetType == toolkit.Tab) {
+		w := n.tk
+		var tabs bool
+		for _, child := range n.children {
+			if (child.WidgetType == toolkit.Tab) {
 				tabs = true
 			}
 		}
 		if (tabs) {
 			// window is tabs. Don't show it as a standard button
 			w.frame = false
-			w.hasTabs = true
+			n.hasTabs = true
 		} else {
-			w.frame = true
-			w.hasTabs = false
+			w.frame = false
+			n.hasTabs = false
 		}
-		w.setWindowWH()
-		w.deleteView()
-		w.showView()
-	}
-	if (w.widgetType == toolkit.Tab) {
-		w.setTabWH()
-		w.deleteView()
-		// show all the tabs for the current window
-		if w.parent.isCurrent {
-			w.showView()
-		}
-	}
 
-	for _, child := range w.children {
-		child.redoTabs(draw)
+		w.size.w0 = nextW
+		w.size.h0 = nextH
+		n.gocuiSetWH(nextW, nextH)
+		n.deleteView()
+		n.showView()
+
+		sizeW := w.Width() + me.WindowPadW
+		sizeH := w.Height()
+		nextW += sizeW
+		log(logNow, "redoWindows() start nextW,H =", nextW, nextH, "gocuiSize.W,H =", sizeW, sizeH, n.Name)
+
+		if n.hasTabs {
+			n.redoTabs(me.TabW, me.TabH)
+		}
+	}
+}
+
+func (p *node) redoTabs(nextW int, nextH int) {
+	for _, n := range p.children {
+		if n.WidgetType != toolkit.Tab {
+			continue
+		}
+		w := n.tk
+		w.frame = true
+
+		w.size.w0 = nextW
+		w.size.h0 = nextH
+		n.gocuiSetWH(nextW, nextH)
+		n.deleteView()
+		// setCurrentTab(n)
+		n.showView()
+
+		sizeW := w.Width() + me.TabPadW
+		sizeH := w.Height()
+		log(logNow, "redoTabs() start nextW,H =", nextW, nextH, "gocuiSize.W,H =", sizeW, sizeH, n.Name)
+		nextW += sizeW
 	}
 }

@@ -139,7 +139,7 @@ Creates a window helpful for debugging this package
 
 `func ShowDebugValues()`
 
-### func [StandardExit](/main.go#L149)
+### func [StandardExit](/main.go#L153)
 
 `func StandardExit()`
 
@@ -158,13 +158,19 @@ This goroutine can be used like a watchdog timer
 
 ## Types
 
-### type [GuiArgs](/structs.go#L27)
+### type [GuiArgs](/structs.go#L29)
 
 `type GuiArgs struct { ... }`
 
 This struct can be used with the go-arg package
 
-### type [Node](/structs.go#L57)
+#### Variables
+
+```golang
+var GuiArg GuiArgs
+```
+
+### type [Node](/structs.go#L59)
 
 `type Node struct { ... }`
 

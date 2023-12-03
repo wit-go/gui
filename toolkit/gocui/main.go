@@ -96,7 +96,7 @@ func main() {
 
 	ferr, _ := os.OpenFile("/tmp/witgui.err", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0664)
 	os.Stderr = ferr
-	MouseMain()
+	gocuiMain()
 
 	log(true, "MouseMain() closed")
 	standardExit()
