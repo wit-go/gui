@@ -129,9 +129,10 @@ func searchPaths(name string) *aplug {
 			return p
 		}
 	} else {
-		log(logError, filename, "was not embedded. Error:", err)
+		log(logError, filename, "was not embedded in the binary. Error:", err)
 	}
 
+	log(logError, "fuck off")
 	// attempt to write out the file from the internal resource
 	filename = "toolkit/" + name + ".so"
 	p := initToolkit(name, filename)
@@ -167,12 +168,20 @@ func searchPaths(name string) *aplug {
 // load module
 // 1. open the shared object file to load the symbols
 func initToolkit(name string, filename string) *aplug {
+	if _, err := os.Stat(filename); err != nil {
+		if os.IsNotExist(err) {
+			log(true, "missing plugin", name, "as filename", filename)
+			return nil
+		}
+	}
+	log(true, "Found plugin", name, "as filename", filename)
+
 	plug, err := plugin.Open(filename)
 	if err != nil {
-		log(debugGui, "plugin FAILED =", filename, err)
+		log(debugError, "plugin FAILED =", filename, err)
 		return nil
 	}
-	log(debugGui, "initToolkit() loading plugin =", filename)
+	log(debugPlugin, "initToolkit() loading plugin =", filename)
 
 	var newPlug *aplug
 	newPlug = new(aplug)

@@ -3,14 +3,18 @@
 # ignore compiled plugins
 *.so
 
-cmds/buttonplugin/buttonplugin
-cmds/console-ui-helloworld/console-ui-helloworld
-cmds/debug/debug
-cmds/helloworld/helloworld
-cmds/textbox/textbox
-cmds/cloudflare/cloudflare
-cmds/*/helloconsole
+examples/buttonplugin/buttonplugin
+examples/console-ui-helloworld/console-ui-helloworld
+examples/debug/debug
+examples/helloworld/helloworld
+examples/textbox/textbox
+examples/cloudflare/cloudflare
+examples/*/helloconsole
 
 # temporary files when building debian packages
 /*.deb
 /files
+/
+
+# ignore the generated readme
+/README-goreadme.md

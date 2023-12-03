@@ -16,7 +16,16 @@ Principles:
 	* When in doubt, search upward in the binary tree
 	* It's ok to guess. Try to do something sensible.
 
-Quick Start
+Debian Build
+
+This worked on debian sid (mate-desktop) on 2023/12/03
+I didn't record the dependances needed (gtk-dev)
+
+	export GO111MODULE="off"
+	make
+
+
+Hello World Example
 
 	// This creates a simple hello world window
 	package main
@@ -54,18 +63,7 @@ Quick Start
 		})
 	}
 
-
-Debian Build
-
-This worked on debian sid on 2022/10/20
-I didn't record the dependances needed
-
-	GO111MODULE="off" go get -v -t -u git.wit.org/wit/gui
-	cd ~/go/src/git.wit.org/wit/gui/cmds/helloworld/
-	GO111MODULE="off" go build -v -x
-	./helloworld
-
-Toolkits
+External Toolkits
 
 	* andlabs - https://github.com/andlabs/ui
 	* gocui - https://github.com/awesome-gocui/gocui
@@ -86,16 +84,12 @@ References
 Useful links and other
 external things which might be useful
 
-[Wikipedia Graphical widget]: https://en.wikipedia.org/wiki/Graphical_widget
-[Github mirror]: https://github.com/witorg/gui
-[Federated git pull]: https://github.com/forgefed/forgefed
-[GO Style Guide]: https://google.github.io/styleguide/go/index
-
-	* [Wikipedia Graphical widget]
-	* [Github mirror]
-	* [Federated git pull]
-	* [GO Style Guide]
-
+* [Wikipedia Graphical widget](https://en.wikipedia.org/wiki/Graphical_widget)
+* [GO Style Guide](https://google.github.io/styleguide/go/index) Code this way
+* [MS Windows Application Library Kit](https://github.com/lxn/walk)
+* [Federated git pull](https://github.com/forgefed/forgefed) Hopefully this will work for me with gitea
+* [Github mirror](https://github.com/wit-go/gui) This repo on mirror. Hopefully I won't have to use this.
+* [WIT GO projects](https://go.wit.org/) Attempt to model go.uber.org
 
 */
 package gui

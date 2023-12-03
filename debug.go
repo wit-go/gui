@@ -134,7 +134,7 @@ func (n *Node) dumpWidget(b bool) string {
 	}
 	info = n.WidgetType.String()
 
-	d = strconv.Itoa(n.id) + " " + info
+	d = strconv.Itoa(n.id) + " " + info + " " + n.Name
 
 	var tabs string
 	for i := 0; i < listChildrenDepth; i++ {

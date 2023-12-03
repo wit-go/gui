@@ -187,7 +187,7 @@ func (n *Node) Standard() *Node {
 	return n
 }
 
-func (n *Node) DoMargin() *Node {
+func (n *Node) SetMargin() *Node {
 	log(debugError, "DoMargin() not implemented yet")
 	return n
 }

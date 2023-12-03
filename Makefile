@@ -1,14 +1,21 @@
-.PHONY: README.md log
+.PHONY: README.md log examples
 
 all: README.md
-	reset
+	# reset
 	@echo
 	@echo "make examples     # will run all the Example demos and commands"
 	@echo "make update       # full git update of all the dependencies"
 	@echo
+	@echo This Requires working IPv6
+	@echo
+	@sleep 1
+ifeq (,$(wildcard go.mod))
+	go mod init gui
+	go mod tidy
+endif
 	make clean
 	make plugins
-	make cmds-buttonplugin
+	make examples-buttons
 
 build-dep:
 	apt install -f libgtk-3-dev
@@ -25,30 +32,30 @@ deb:
 
 examples:   \
 	all \
-	cmds-helloworld \
-	cmds-buttonplugin \
-	cmds-console-ui-helloworld \
-	cmds-textbox \
-	cmds-debug
+	examples-helloworld \
+	examples-buttons \
+	examples-console-ui-helloworld \
+	examples-textbox \
+	examples-debug
 
-cmds-buttonplugin:
-	make -C cmds/buttonplugin
+examples-buttons:
+	make -C examples/buttons
 
-cmds-console-ui-helloworld:
-	make -C cmds/console-ui-helloworld
+examples-console-ui-helloworld:
+	make -C examples/console-ui-helloworld
 
 # this is the most basic one. This syntax should always work
-cmds-helloworld:
-	make -C cmds/helloworld
+examples-helloworld:
+	make -C examples/helloworld
 
-cmds-debug:
-	-make -C cmds/debug
+examples-debug:
+	-make -C examples/debug
 
-cmds-textbox:
-	make -C cmds/textbox
+examples-textbox:
+	make -C examples/textbox
 
-cmds-helloconsole:
-	make -C cmds/plugin-consoleonly
+examples-helloconsole:
+	make -C examples/plugin-consoleonly
 
 # sync repo to the github backup
 # git remote add github git@github.com:witorg/gui.git
@@ -65,10 +72,10 @@ github:
 	@echo
 
 doc:
-	GO111MODULE="off" godoc -v
+	godoc -v
 
 goget:
-	GO111MODULE="off" go get -v -t -u
+	go get -v -t -u
 	make -C toolkit/gocui goget
 	make -C toolkit/andlabs goget
 
@@ -83,11 +90,11 @@ clean:
 plugins: plugins-gocui plugins-andlabs
 
 plugins-gocui:
-	GO111MODULE="off" go build -C toolkit/gocui -v -buildmode=plugin -o ../gocui.so
-	GO111MODULE="off" go build -C toolkit/nocui -v -buildmode=plugin -o ../nocui.so
+	go build -C toolkit/gocui -v -buildmode=plugin -o ../gocui.so
+	go build -C toolkit/nocui -v -buildmode=plugin -o ../nocui.so
 
 plugins-andlabs:
-	GO111MODULE="off" go build -C toolkit/andlabs -v -buildmode=plugin -o ../andlabs.so
+	go build -C toolkit/andlabs -v -buildmode=plugin -o ../andlabs.so
 
 objdump:
 	objdump -t toolkit/andlabs.so |less
