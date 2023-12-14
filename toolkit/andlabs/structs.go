@@ -51,6 +51,9 @@ type andlabsT struct {
 	parent	*andlabsT
 	children []*andlabsT
 
+	// used to track if a tab has a child widget yet
+	child bool
+
 	uiControl ui.Control
 
 	uiBox     *ui.Box

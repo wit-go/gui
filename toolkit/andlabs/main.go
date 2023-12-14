@@ -30,7 +30,8 @@ func catchActionChannel() {
 			muAction.Lock()
 			// TODO ui.QueueMain(f)
 			// TODO ui.QueueMain( func() {rawAction(a)} )
-			rawAction(a)
+			ui.QueueMain( func() {rawAction(a)} )
+			// rawAction(a)
 			muAction.Unlock()
 			log(logInfo, "catchActionChannel() STUFF END", a.WidgetId, a.ActionType, a.WidgetType)
 		}
@@ -57,7 +58,7 @@ func init() {
 	log(logNow, "Init() START")
 	log(debugToolkit, "Init()")
 	// Can you pass values to a plugin init() ? Otherwise, there is no way to safely print
-	// log(debugToolkit, "gui/toolkit init() Setting defaultBehavior = true")
+	// log(debugToolkit, "init() Setting defaultBehavior = true")
 	setDefaultBehavior(true)
 
 	// andlabs = make(map[int]*andlabsT)

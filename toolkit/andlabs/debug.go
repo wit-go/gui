@@ -1,6 +1,9 @@
 package main
 
-import "git.wit.org/wit/gui/toolkit"
+import (
+	"strconv"
+	"git.wit.org/wit/gui/toolkit"
+)
 
 var defaultBehavior bool = true
 
@@ -124,5 +127,42 @@ func flag(a *toolkit.Action) {
 		ShowDebug()
 	default:
 		log(debugError, "Can't set unknown flag", a.S)
+	}
+}
+
+func (n *node) dumpWidget(b bool) {
+	var info, d string
+
+	if (n == nil) {
+		log(debugError, "dumpWidget() node == nil")
+		return
+	}
+	info = n.WidgetType.String()
+
+	d = strconv.Itoa(n.WidgetId) + " " + info + " " + n.Name
+
+	var tabs string
+	for i := 0; i < listChildrenDepth; i++ {
+		tabs = tabs + defaultPadding
+	}
+	log(b, tabs + d)
+}
+
+var defaultPadding string = "  "
+var listChildrenDepth int = 0
+
+func (n *node) listChildren(dump bool) {
+	if (n == nil) {
+		return
+	}
+
+	n.dumpWidget(dump)
+	if len(n.children) == 0 {
+		return
+	}
+	for _, child := range n.children {
+		listChildrenDepth += 1
+		child.listChildren(dump)
+		listChildrenDepth -= 1
 	}
 }

@@ -11,22 +11,6 @@ func (parent *Node) NewButton(name string, custom func()) *Node {
 	return newNode
 }
 
-/*
-// deprecate this once andlabs is refactored
-func callback(i int) bool {
-	log(debugError, "callback() for widget id =", i)
-	n := me.rootNode.FindId(i)
-	log(debugError, "callback() found node =", n)
-	// running custom here means the button get's clicked twice
-	if (n.Custom == nil) {
-		log(debugError, "callback() = nil. SKIPPING")
-		return false
-	}
-	n.Custom()
-	return true
-}
-*/
-
 // find widget by number
 func (n *Node) FindId(i int) (*Node) {
 	if (n == nil) {
@@ -45,4 +29,3 @@ func (n *Node) FindId(i int) (*Node) {
 	}
 	return nil
 }
-

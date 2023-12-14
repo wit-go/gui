@@ -10,7 +10,6 @@ import (
 func (n *Node) NewTab(text string) *Node {
 	// check to make sure n is actually a window
 
-
 	if (n.WidgetType != toolkit.Window) {
 		// figure out what the actual window is
 		log(logError, "NewTab() is being requested on something that isn't a Window. node =", n)
@@ -35,7 +34,7 @@ func (n *Node) NewTab(text string) *Node {
 
 	// by default, create a box inside the tab
 	// TODO: allow this to be configurable
-	newBox := newNode.NewBox(text, true)
+	newBox := newNode.NewBox(text + " box", true)
 
 	return newBox
 }

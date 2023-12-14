@@ -31,29 +31,40 @@ func (n *node) addWidget() {
 	switch n.WidgetType {
 	case toolkit.Root:
 		log(logInfo, "setStartWH() rootNode w.id =", n.WidgetId, "w.name", n.Name)
+		nw.color = &colorRoot
 		n.setFake()
 		return
 	case toolkit.Flag:
+		nw.color = &colorFlag
 		n.setFake()
 		return
 	case toolkit.Window:
 		nw.frame = false
-		redoWindows(0,0)
+		nw.color = &colorWindow
+		// redoWindows(0,0)
 		return
 	case toolkit.Tab:
+		nw.color = &colorTab
+		// redoWindows(0,0)
 		return
+	case toolkit.Button:
+		nw.color = &colorButton
 	case toolkit.Box:
+		nw.color = &colorBox
 		nw.isFake = true
 		n.setFake()
 		return
 	case toolkit.Grid:
+		nw.color = &colorGrid
 		nw.isFake = true
 		n.setFake()
 		return
 	case toolkit.Group:
+		nw.color = &colorGroup
 		nw.frame = false
 		return
 	case toolkit.Label:
+		nw.color = &colorLabel
 		nw.frame = false
 		return
 	default:

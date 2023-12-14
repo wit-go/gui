@@ -3,86 +3,85 @@ package main
 import (
 	"math/rand"
 	"github.com/awesome-gocui/gocui"
-	"git.wit.org/wit/gui/toolkit"
 )
 
-// ColorBlack ColorRed ColorGreen ColorYellow ColorBlue ColorMagenta ColorCyan ColorWhite
-// gocui.GetColor("#FFAA55")  // Dark Purple
-func (n *node) setDefaultWidgetColor() {
-	w := n.tk
-	log(logInfo, "setDefaultWidgetColor() on", n.WidgetType, n.Name)
-	v, _ := me.baseGui.View(w.cuiName)
-	if (v == nil) {
-		log(logError, "setDefaultWidgetColor() failed on view == nil")
-		return
-	}
-	sleep(.05)
-	// v.BgColor = gocui.GetColor("#FFAA55")  // Dark Purple
-	// v.BgColor = gocui.GetColor("#88AA55") // heavy purple
-	// v.BgColor = gocui.GetColor("#111111") // crazy red
-	// v.BgColor = gocui.GetColor("#FF9911") // heavy red
-	// v.SelBgColor = gocui.GetColor("#FFEE11") // blood red
+//w.v.SelBgColor = gocui.ColorCyan
+//color.go:       w.v.SelFgColor = gocui.ColorBlack
+//color.go:               w.v.BgColor = gocui.ColorGreen
 
-	// v.BgColor = gocui.GetColor("#55AAFF") // super light grey
-	// v.BgColor = gocui.GetColor("#FFC0CB") // 'w3c pink' yellow
-	switch n.WidgetType {
-	case toolkit.Root:
-		v.FrameColor = gocui.ColorRed
-		v.BgColor = gocui.GetColor("#B0E0E6") // w3c 'powerder blue'
-	case toolkit.Flag:
-		v.FrameColor = gocui.ColorRed
-		v.BgColor = gocui.GetColor("#B0E0E6") // w3c 'powerder blue'
-	case toolkit.Window:
-		v.FgColor = gocui.ColorCyan
-		v.SelBgColor = gocui.ColorBlue
-		v.FrameColor = gocui.ColorBlue
-	case toolkit.Tab:
-		v.SelBgColor = gocui.ColorBlue
-		v.FrameColor = gocui.ColorBlue
-	case toolkit.Button:
-		v.BgColor = gocui.ColorWhite
-		v.FrameColor = gocui.ColorGreen
-		v.SelBgColor = gocui.ColorBlack
-		v.SelFgColor = gocui.ColorGreen
-	case toolkit.Label:
-		v.BgColor = gocui.GetColor("#55AAFF") // super light grey
-		v.SelBgColor = gocui.GetColor("#55AAFF") // super light grey
-	case toolkit.Box:
-		v.FrameColor = gocui.ColorRed
-		// v.BgColor = gocui.GetColor("#FFC0CB") // 'w3c pink' yellow
-		v.BgColor = gocui.GetColor("#DDDDDD") // light purple
-	case toolkit.Grid:
-		// v.FgColor = gocui.ColorCyan
-		// v.SelBgColor = gocui.ColorBlue
-		// v.FrameColor = gocui.ColorBlue
-	case toolkit.Group:
-		v.BgColor = gocui.GetColor("#55AAFF") // super light grey
-	default:
-	}
+type colorT struct {
+	frame gocui.Attribute
+	fg gocui.Attribute
+	bg gocui.Attribute
+	selFg gocui.Attribute
+	selBg gocui.Attribute
+	name string
 }
 
-// SetColor("#FFAA55") // purple
-func (w *cuiWidget) SetColor(c string) {
-	if (w.v == nil) {
-		log(logError, "SetColor() failed on view == nil")
+var none gocui.Attribute = gocui.AttrNone
+var lightPurple gocui.Attribute = gocui.GetColor("#DDDDDD") // light purple
+var darkPurple gocui.Attribute = gocui.GetColor("#FFAA55")  // Dark Purple
+var heavyPurple gocui.Attribute = gocui.GetColor("#88AA55") // heavy purple
+var powdererBlue gocui.Attribute = gocui.GetColor("#B0E0E6") // w3c 'powerder blue'
+var superLightGrey gocui.Attribute = gocui.GetColor("#55AAFF") // super light grey
+
+// Standard defined colors from gocui:
+// ColorBlack ColorRed ColorGreen ColorYellow ColorBlue ColorMagenta ColorCyan ColorWhite
+
+// v.BgColor = gocui.GetColor("#111111") // crazy red
+// v.BgColor = gocui.GetColor("#FF9911") // heavy red
+// v.SelBgColor = gocui.GetColor("#FFEE11") // blood red
+
+// v.BgColor = gocui.GetColor("#55AAFF") // super light grey
+// v.BgColor = gocui.GetColor("#FFC0CB") // 'w3c pink' yellow
+
+//                                                                 Normal Text                             On mouseover
+//                                     Widget Frame         Text              background              Text           background
+var colorWindow  colorT       = colorT{ none         ,    gocui.ColorBlue,   none            ,   none           ,   powdererBlue   ,  "normal window"}
+var colorActiveW colorT       = colorT{ none         ,    none           ,   powdererBlue    ,   none           ,   powdererBlue   ,  "active window"}
+
+var colorTab     colorT       = colorT{gocui.ColorBlue,   gocui.ColorBlue,   none            ,   none          ,    powdererBlue   ,  "normal tab"}
+var colorActiveT colorT       = colorT{gocui.ColorBlue,   none           ,   powdererBlue    ,   none          ,    powdererBlue   ,  "active tab"}
+
+var colorButton  colorT       = colorT{gocui.ColorGreen,  none          ,    gocui.ColorWhite,   gocui.ColorGreen,  gocui.ColorBlack, "normal button"}
+var colorLabel   colorT       = colorT{ none           ,  none          ,    superLightGrey  ,   none            ,  superLightGrey  , "normal label"}
+var colorGroup   colorT       = colorT{ none           ,  none          ,    superLightGrey  ,   none            ,  superLightGrey  , "normal group"}
+
+// widget debugging colors. these widgets aren't displayed unless you are debugging
+var colorRoot    colorT       = colorT{gocui.ColorRed ,   none          ,    powdererBlue  ,     none          ,    gocui.ColorBlue,  "debug root"}
+var colorFlag    colorT       = colorT{gocui.ColorRed ,   none          ,    powdererBlue  ,     none          ,    gocui.ColorGreen, "debug flag"}
+var colorBox     colorT       = colorT{gocui.ColorRed ,   none          ,    lightPurple   ,     none          ,    gocui.ColorCyan,  "debug box"}
+var colorGrid    colorT       = colorT{gocui.ColorRed ,   none          ,    lightPurple   ,     none          ,    gocui.ColorRed,   "debug grid"}
+var colorNone    colorT       = colorT{ none          ,   none          ,    none          ,     none          ,    none          ,   "debug none"}
+
+// actually sets the colors for the gocui element 
+// the user will see the colors change when this runs
+// TODO: add black/white only flag for ttyS0 
+// TODO: or fix kvm/qemu serial console & SIGWINCH.
+// TODO: and minicom and uboot and 5 million other things.
+// TODO: maybe enough of us could actually do that if we made it a goal.
+// TODO: start with riscv boards and fix it universally there
+// TODO: so just a small little 'todo' item here
+func (n *node) setColor(newColor *colorT) {
+	tk := n.tk
+	if (tk.color == newColor) {
+		// nothing to do since the colors have nto changed
 		return
 	}
-	w.v.SelBgColor = gocui.ColorCyan
-	w.v.SelFgColor = gocui.ColorBlack
-	switch c {
-	case "Green":
-		w.v.BgColor = gocui.ColorGreen
-	case "Purple":
-		w.v.BgColor = gocui.GetColor("#FFAA55")
-	case "Yellow":
-		w.v.BgColor = gocui.ColorYellow
-	case "Blue":
-		w.v.BgColor = gocui.ColorBlue
-	case "Red":
-		w.v.BgColor = gocui.ColorRed
-	default:
-		w.v.BgColor = gocui.GetColor(c)
+	tk.color = newColor
+	if (tk.v == nil) {
+		return
 	}
+	if (tk.color == nil) {
+		log(true, "Set the node to color = nil")
+		tk.color = &colorNone
+	}
+	log(true, "Set the node to color =", tk.color.name)
+	n.recreateView()
+}
+
+func (n *node) setDefaultWidgetColor() {
+	n.showView()
 }
 
 func (n *node) setDefaultHighlight() {

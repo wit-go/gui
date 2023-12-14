@@ -72,7 +72,7 @@ func dragOutputWindow() {
 func setFrame(b bool) {
 	// TODO: figure out what this might be useful for
 	// what is this do? I made it just 2 lines for now. Is this useful for something?
-	v := SetView("global", 15, 5, 80, 8, 10)
+	v := SetView("global", 5, 10, 5, 10, 0) // x0, x1, y1, y2, overlap
 	if (v == nil) {
 		log(logError, "setFrame() global failed")
 	}

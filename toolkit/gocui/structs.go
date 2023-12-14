@@ -21,14 +21,24 @@ import (
 // It's probably a terrible idea to call this 'me'
 var me config
 
+var showDebug bool = true
+var showHelp bool = true
+var redoWidgets bool = true
+
+// This is the window that is currently active
+var currentWindow *node
+
 type config struct {
 	baseGui *gocui.Gui // the main gocui handle
 	rootNode *node // the base of the binary tree. it should have id == 0
 
 	ctrlDown *node // shown if you click the mouse when the ctrl key is pressed
-//	current *cuiWidget // this is the current tab or window to show
+	currentWindow *node // this is the current tab or window to show
 	logStdout *node // where to show STDOUT
 	helpLabel *gocui.View
+	ddview *node // the gocui view to select dropdrown lists
+	ddClicked bool // the dropdown menu view was clicked
+	ddNode *node // the dropdown menu is for this widget
 
 	// this is the channel we send user events like
 	// mouse clicks or keyboard events back to the program
@@ -123,6 +133,7 @@ type node struct {
 	horizontal bool `default:false`
 
 	hasTabs bool // does the window have tabs?
+	currentTab bool // the visible tab
 
 	// the internal plugin toolkit structure
 	tk *cuiWidget
@@ -152,7 +163,7 @@ type cuiWidget struct {
 	size rectType
 
 	// the actual gocui display view of this widget
-	// sometimes this isn't visable like with a Box or Grid
+	// sometimes this isn't visible like with a Box or Grid
 	gocuiSize rectType
 
 	isCurrent bool // is this the currently displayed Window or Tab?
@@ -164,6 +175,12 @@ type cuiWidget struct {
 
 	tainted bool
 	frame bool
+
+	// for a window, this is currently selected tab
+	selectedTab *node
+
+	// what color to use
+	color *colorT
 }
 
 // from the gocui devs:

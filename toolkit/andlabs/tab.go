@@ -23,7 +23,7 @@ func (p *node) newTab(n *node) {
 	var newt *andlabsT
 
 	if (p.WidgetType != toolkit.Window) {
-		log(debugToolkit, "newTab() uiWindow == nil. I can't add a toolbar without window", n.WidgetId, n.ParentId)
+		log(debugError, "newTab() uiWindow == nil. I can't add a toolbar without window", n.WidgetId, n.ParentId)
 		return
 	}
 	t := p.tk
@@ -38,7 +38,15 @@ func (p *node) newTab(n *node) {
 	} else {
 		// this means you have to append a tab
 		log(debugToolkit, "newTab() GOOD. This should be an additional tab:", n.WidgetId, n.ParentId)
-		newt = t.appendTab(n.Text)
+		if (n.WidgetType == toolkit.Tab) {
+			// andlabs doesn't have multiple tab widgets so make a fake one?
+			// this makes a andlabsT internal structure with the parent values
+			newt = new(andlabsT)
+			newt.uiWindow = t.uiWindow
+			newt.uiTab = t.uiTab
+		} else {
+			newt = t.appendTab(n.Text)
+		}
 	}
 
 	n.tk = newt
@@ -63,7 +71,7 @@ func rawTab(w *ui.Window, name string) *andlabsT {
 		log(debugError, "UiWindow == nil. I can't add a tab without a window")
 		log(debugError, "UiWindow == nil. I can't add a tab without a window")
 		log(debugError, "UiWindow == nil. I can't add a tab without a window")
-		sleep(1)
+		// sleep(1)
 		return nil
 	}
 
@@ -77,13 +85,13 @@ func rawTab(w *ui.Window, name string) *andlabsT {
 
 func (t *andlabsT) appendTab(name string) *andlabsT {
 	var newT andlabsT
-	log(debugToolkit, "gui.toolkit.NewTab() ADD", name)
+	log(debugToolkit, "appendTab() ADD", name)
 
 	if (t.uiTab == nil) {
-		log(debugToolkit, "gui.Toolkit.UiWindow == nil. I can't add a widget without a place to put it")
+		log(debugToolkit, "UiWindow == nil. I can't add a widget without a place to put it")
 		panic("should never have happened. wit/gui/toolkit has ui.Tab == nil")
 	}
-	log(debugToolkit, "gui.toolkit.AddTab() START name =", name)
+	log(debugToolkit, "appendTab() START name =", name)
 
 	var hbox *ui.Box
 	if (defaultBehavior) {
@@ -103,12 +111,3 @@ func (t *andlabsT) appendTab(name string) *andlabsT {
 	newT.uiBox = hbox
 	return &newT
 }
-
-/*
-func newTab(n *node) {
-	log(logInfo, "newTab() add to parent id:", n.ParentId)
-
-	p := n.parent
-	p.newTab(n)
-}
-*/

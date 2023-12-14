@@ -5,6 +5,7 @@ import (
 )
 
 func (n *node) setText(a *toolkit.Action) {
+	log(debugChange, "setText() START with a.S =", a.S)
 	t := n.tk
 	if (t == nil) {
 		log(debugError, "setText error. tk == nil", n.Name, n.WidgetId)
@@ -34,9 +35,19 @@ func (n *node) setText(a *toolkit.Action) {
 	case toolkit.Textbox:
 		switch a.ActionType {
 		case toolkit.Set:
-			t.uiMultilineEntry.SetText(a.S)
+			if (t.uiEntry != nil) {
+				t.uiEntry.SetText(a.S)
+			}
+			if (t.uiMultilineEntry != nil) {
+				t.uiMultilineEntry.SetText(a.S)
+			}
 		case toolkit.SetText:
-			t.uiMultilineEntry.SetText(a.S)
+			if (t.uiEntry != nil) {
+				t.uiEntry.SetText(a.S)
+			}
+			if (t.uiMultilineEntry != nil) {
+				t.uiMultilineEntry.SetText(a.S)
+			}
 		default:
 			log(debugError, "setText() unknown", a.ActionType, "on checkbox", n.Name)
 		}
@@ -113,4 +124,5 @@ func (n *node) setText(a *toolkit.Action) {
 	default:
 		log(debugError, "plugin Send() Don't know how to setText on", n.WidgetType, "yet", a.ActionType)
 	}
+	log(debugChange, "setText() END with a.S =", a.S)
 }

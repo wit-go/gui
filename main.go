@@ -61,7 +61,7 @@ func watchCallback() {
 			}
 			// this maybe a good idea?
 			// TODO: Throttle user events somehow
-			sleep(.01)
+			// sleep(.01) // hack that throttles user events
 		}
 	}
 }

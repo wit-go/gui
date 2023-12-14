@@ -1,6 +1,7 @@
 package main
 
 import (
+	"strconv"
 	"github.com/andlabs/ui"
 	"git.wit.org/wit/gui/toolkit"
 )
@@ -20,6 +21,9 @@ func (n *node) show(b bool) {
 }
 
 func (n *node) enable(b bool) {
+	if n == nil {
+		panic("WHAT? enable was passed nil. How does this even happen?")
+	}
 	if n.tk == nil {
 		return
 	}
@@ -193,12 +197,32 @@ func rawAction(a toolkit.Action) {
 
 	n := rootNode.findWidgetId(a.WidgetId)
 
-	switch a.ActionType {
-	case toolkit.Add:
+	if (a.ActionType == toolkit.Add) {
 		ui.QueueMain(func() {
 			add(a)
 		})
-		sleep(.05)
+		// TODO: remove this artificial delay
+		// sleep(.001)
+		return
+	}
+
+	if (a.ActionType == toolkit.Dump) {
+		log(debugNow, "rawAction() Dump =", a.ActionType, a.WidgetType, n.Name)
+		rootNode.listChildren(true)
+		return
+	}
+
+	if (n == nil) {
+		rootNode.listChildren(true)
+		log(true, "rawAction() ERROR findWidgetId found nil", a.ActionType, a.WidgetType)
+		log(true, "rawAction() ERROR findWidgetId found nil for id =", a.WidgetId)
+		log(true, "rawAction() ERROR findWidgetId found nil", a.ActionType, a.WidgetType)
+		log(true, "rawAction() ERROR findWidgetId found nil for id =", a.WidgetId)
+		return
+		panic("findWidgetId found nil for id = " + strconv.Itoa(a.WidgetId))
+	}
+
+	switch a.ActionType {
 	case toolkit.Show:
 		n.show(true)
 	case toolkit.Hide:

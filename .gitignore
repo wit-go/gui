@@ -3,7 +3,7 @@
 # ignore compiled plugins
 *.so
 
-examples/buttonplugin/buttonplugin
+examples/buttons/buttons
 examples/console-ui-helloworld/console-ui-helloworld
 examples/debug/debug
 examples/helloworld/helloworld

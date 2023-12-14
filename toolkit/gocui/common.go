@@ -98,6 +98,46 @@ func (n *node) findWidgetName(name string) *node {
 	return nil
 }
 
+func (n *node) IsCurrent() bool {
+	w := n.tk
+	if (n.WidgetType == toolkit.Tab) {
+		return w.isCurrent
+	}
+	if (n.WidgetType == toolkit.Window) {
+		return w.isCurrent
+	}
+	if (n.WidgetType == toolkit.Root) {
+		return false
+	}
+	return n.parent.IsCurrent()
+}
+
+func (n *node) Visible() bool {
+	if (n == nil) {
+		return false
+	}
+	if (n.tk == nil) {
+		return false
+	}
+	if (n.tk.v == nil) {
+		return false
+	}
+	return n.tk.v.Visible
+}
+
+func (n *node) SetVisible(b bool) {
+	if (n == nil) {
+		return
+	}
+	if (n.tk == nil) {
+		return
+	}
+	if (n.tk.v == nil) {
+		return
+	}
+	n.tk.v.Visible = b
+}
+
 func addNode(a *toolkit.Action) *node {
 	n := new(node)
 	n.WidgetType = a.WidgetType
@@ -143,42 +183,29 @@ func addNode(a *toolkit.Action) *node {
 	return n
 }
 
-func (n *node) IsCurrent() bool {
-	w := n.tk
-	if (n.WidgetType == toolkit.Tab) {
-		return w.isCurrent
-	}
-	if (n.WidgetType == toolkit.Window) {
-		return w.isCurrent
-	}
-	if (n.WidgetType == toolkit.Root) {
-		return false
-	}
-	return n.parent.IsCurrent()
-}
+func addDropdown() *node {
+	n := new(node)
+	n.WidgetType = toolkit.Flag
+	n.WidgetId = -2
+	n.ParentId = 0
 
-func (n *node) Visible() bool {
-	if (n == nil) {
-		return false
-	}
-	if (n.tk == nil) {
-		return false
-	}
-	if (n.tk.v == nil) {
-		return false
-	}
-	return n.tk.v.Visible
-}
+	// copy the data from the action message
+	n.Name = "DropBox"
+	n.Text = "DropBox text"
 
-func (n *node) SetVisible(b bool) {
-	if (n == nil) {
-		return
+	// store the internal toolkit information
+	n.tk = new(cuiWidget)
+	n.tk.frame = true
+
+	// set the name used by gocui to the id
+	n.tk.cuiName = "-1 dropbox"
+
+	n.tk.color = &colorFlag
+
+	// add this new widget on the binary tree
+	n.parent = me.rootNode
+	if n.parent != nil {
+		n.parent.children = append(n.parent.children, n)
 	}
-	if (n.tk == nil) {
-		return
-	}
-	if (n.tk.v == nil) {
-		return
-	}
-	n.tk.v.Visible = b
+	return n
 }

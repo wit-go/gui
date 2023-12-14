@@ -140,9 +140,8 @@ func (n *Node) dumpWidget(b bool) string {
 	for i := 0; i < listChildrenDepth; i++ {
 		tabs = tabs + defaultPadding
 	}
-	d = tabs + d
-	logindent(b, listChildrenDepth, defaultPadding, n.id, info)
-	return d
+	logindent(b, listChildrenDepth, defaultPadding, d)
+	return tabs + d
 }
 
 // func (n *Node) ListChildren(dump bool, dropdown *Node, mapNodes map[string]*Node) {

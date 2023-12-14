@@ -132,7 +132,6 @@ func searchPaths(name string) *aplug {
 		log(logError, filename, "was not embedded in the binary. Error:", err)
 	}
 
-	log(logError, "fuck off")
 	// attempt to write out the file from the internal resource
 	filename = "toolkit/" + name + ".so"
 	p := initToolkit(name, filename)
@@ -254,7 +253,7 @@ func sendAction(a *toolkit.Action) {
 		log(logInfo, "Action() SEND to pluginChan", aplug.name)
 		aplug.pluginChan <- *a
 		// added during debugging. might be a good idea in general for a tactile experience
-		sleep(.02)
+		sleep(.02) // this delay makes it so SetText() works on initial widget creation
 	}
 }
 
@@ -303,7 +302,7 @@ func (n *Node) LoadToolkit(name string) *Node {
 	var a toolkit.Action
 	a.ActionType = toolkit.InitToolkit
 	plug.pluginChan <- a
-	sleep(.5) // temp hack until chan communication is setup
+	// sleep(.5) // temp hack until chan communication is setup
 
 	// TODO: find a new way to do this that is locking, safe and accurate
 	me.rootNode.redraw(plug)
@@ -320,7 +319,7 @@ func (n *Node) CloseToolkit(name string) bool {
 			var a toolkit.Action
 			a.ActionType = toolkit.CloseToolkit
 			plug.pluginChan <- a
-			sleep(.5)
+			// sleep(.5) // is this needed? TODO: properly close channel
 			return true
 		}
 	}

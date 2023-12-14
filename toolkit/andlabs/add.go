@@ -134,6 +134,9 @@ func (p *node) place(n *node) bool {
 			log(logError, "n.tk.uiControl == nil", n.tk)
 			panic("n.tk.uiControl == nil")
 		}
+		log(logError, "THIS SHOULD NEVER HAPPEN ??????? trying to place() node=", n.WidgetId, n.Name, n.Text, n.WidgetType)
+		log(logError, "THIS SHOULD NEVER HAPPEN ??????? trying to place() on parent=", p.WidgetId, p.Name, p.Text, p.WidgetType)
+		// panic("n.tk.uiControl == nil")
 		p.tk.uiTab.Append(n.Text, n.tk.uiControl)
 		p.tk.boxC += 1
 		return true

@@ -24,6 +24,7 @@ func mouseMove(g *gocui.Gui) {
 
 func msgDown(g *gocui.Gui, v *gocui.View) error {
 	initialMouseX, initialMouseY = g.MousePosition()
+	log(true, "msgDown() X,Y", initialMouseX, initialMouseY)
 	if vx, vy, _, _, err := g.ViewPosition("msg"); err == nil {
 		xOffset = initialMouseX - vx
 		yOffset = initialMouseY - vy
@@ -32,7 +33,58 @@ func msgDown(g *gocui.Gui, v *gocui.View) error {
 	return nil
 }
 
+func hideDDview() error {
+	w, h := me.baseGui.MousePosition()
+	log(true, "hide dropdown menu() view msgMouseDown (w,h) =", w, h)
+	if (me.ddview == nil) {
+		return gocui.ErrUnknownView
+	}
+	if (me.ddview.tk.v == nil) {
+		return gocui.ErrUnknownView
+	}
+	me.ddview.SetVisible(false)
+	return nil
+}
+
+func showDDview() error {
+	w, h := me.baseGui.MousePosition()
+	log(true, "show dropdown menu() view msgMouseDown (w,h) =", w, h)
+	if (me.ddview == nil) {
+		return gocui.ErrUnknownView
+	}
+	if (me.ddview.tk.v == nil) {
+		return gocui.ErrUnknownView
+	}
+	me.ddview.SetVisible(true)
+	return nil
+}
+
 func mouseUp(g *gocui.Gui, v *gocui.View) error {
+	w, h := g.MousePosition()
+	log(true, "mouseUp() view msgMouseDown (check here for dropdown menu click) (w,h) =", w, h)
+	if (me.ddClicked) {
+		log(true, "mouseUp() ddview is the thing that was clicked", w, h)
+		log(true, "mouseUp() find out what the string is here", w, h, me.ddview.tk.gocuiSize.h1)
+
+		if (me.ddNode != nil) {
+			value := h - me.ddview.tk.gocuiSize.h0 - 1
+			log(true, "mouseUp() me.ddview.tk.gocuiSize.h1 =", me.ddview.tk.gocuiSize.h1)
+			log(true, "mouseUp() me.ddNode.vals =", me.ddNode.vals)
+			valsLen := len(me.ddNode.vals)
+			log(true, "mouseUp() value =", value, "valsLen =", valsLen)
+			log(true, "mouseUp() me.ddNode.vals =", me.ddNode.vals)
+			if ((value >= 0) && (value < valsLen)) {
+				str := me.ddNode.vals[value]
+				log(true, "mouseUp() value =", value, "str =", str)
+			}
+		}
+	}
+	/*
+	// if there is a drop down view active, treat it like a dialog box and close it
+	if (hideDDview() == nil) {
+		return nil
+	}
+	*/
 	if msgMouseDown {
 		msgMouseDown = false
 		if movingMsg {
@@ -57,13 +109,25 @@ func mouseDown(g *gocui.Gui, v *gocui.View) error {
 	}
 	globalMouseDown = true
 	maxX, _ := g.Size()
-	msg := fmt.Sprintf("Mouse really down at: %d,%d", mx, my) + "foo\n" + "bar\n"
+	test := findUnderMouse()
+	msg := fmt.Sprintf("Mouse really down at: %d,%d", mx, my) + "foobar"
+	if (test == me.ddview) {
+		if (me.ddview.Visible()) {
+			log(true, "hide DDview() Mouse really down at:", mx, my)
+			hideDDview()
+		} else {
+			log(true, "show DDview() Mouse really down at:", mx, my)
+			showDDview()
+		}
+		return nil
+	}
 	x := mx - len(msg)/2
 	if x < 0 {
 		x = 0
 	} else if x+len(msg)+1 > maxX-1 {
 		x = maxX - 1 - len(msg) - 1
 	}
+	log(true, "mouseDown() about to write out message to 'globalDown' view. msg =", msg)
 	if v, err := g.SetView("globalDown", x, my-1, x+len(msg)+1, my+1, 0); err != nil {
 		if !errors.Is(err, gocui.ErrUnknownView) {
 			return err

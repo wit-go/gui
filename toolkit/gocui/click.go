@@ -1,17 +1,23 @@
 package main
 
 import (
+	"fmt"
 	"github.com/awesome-gocui/gocui"
 	"git.wit.org/wit/gui/toolkit"
 )
 
 // set isCurrent = false everywhere
-func UnsetCurrent(n *node) {
+func unsetCurrent(n *node) {
 	w := n.tk
 	w.isCurrent = false
 
+	if n.WidgetType == toolkit.Tab {
+		// n.tk.color = &colorTab
+		// n.setColor()
+	}
+
 	for _, child := range n.children {
-		UnsetCurrent(child)
+		unsetCurrent(child)
 	}
 }
 
@@ -22,7 +28,14 @@ func (n *node) updateCurrent() {
 	log("updateCurrent()", n.Name)
 	if n.WidgetType == toolkit.Tab {
 		if n.IsCurrent() {
+			// n.tk.color = &colorActiveT
+			n.setColor(&colorActiveT)
+			n.hideView()
+			n.showView()
 			setCurrentTab(n)
+		} else {
+			// n.tk.color = &colorTab
+			// n.setColor()
 		}
 		return
 	}
@@ -47,7 +60,7 @@ func setCurrentWindow(n *node) {
 	if n.WidgetType != toolkit.Window {
 		return
 	}
-	UnsetCurrent(me.rootNode)
+	unsetCurrent(me.rootNode)
 
 	if n.hasTabs {
 		// set isCurrent = true on the first tab
@@ -66,7 +79,7 @@ func setCurrentTab(n *node) {
 	if n.WidgetType != toolkit.Tab {
 		return
 	}
-	UnsetCurrent(me.rootNode)
+	unsetCurrent(me.rootNode)
 	w.isCurrent = true
 	p := n.parent.tk
 	p.isCurrent = true
@@ -83,14 +96,51 @@ func (n *node) doWidgetClick() {
 		// me.rootNode.redoColor(true)
 		me.rootNode.dumpTree(true)
 	case toolkit.Window:
-		me.rootNode.hideWidgets()
-		n.redoTabs(me.TabW, me.TabH)
-		if ! n.hasTabs {
-			setCurrentWindow(n)
-			n.placeWidgets(me.RawW, me.RawH)
-			n.showWidgets()
+		if (me.currentWindow == n) {
+			return
 		}
+		if (me.currentWindow != nil) {
+			unsetCurrent(me.currentWindow)
+			me.currentWindow.setColor(&colorWindow)
+			me.currentWindow.hideWidgets()
+		}
+		n.hideWidgets()
+		me.currentWindow = n
+		// setCurrentWindow(n) // probably delete this
+		n.setColor(&colorActiveW)
+		n.redoTabs(me.TabW, me.TabH)
+		for _, child := range n.children {
+			if (child.currentTab == true) {
+				log(true, "FOUND CURRENT TAB", child.Name)
+				setCurrentTab(child)
+				child.placeWidgets(me.RawW, me.RawH)
+				child.showWidgets()
+				return
+			}
+		}
+		/* FIXME: redo this
+		if ! n.hasTabs {
+		}
+		*/
 	case toolkit.Tab:
+		if (n.IsCurrent()) {
+			return // do nothing if you reclick on the already selected tab
+		}
+		// find the window and disable the active tab
+		p := n.parent
+		if (p != nil) {
+			p.hideWidgets()
+			p.redoTabs(me.TabW, me.TabH)
+			unsetCurrent(p)
+			for _, child := range p.children {
+				if child.WidgetType == toolkit.Tab {
+					child.setColor(&colorTab)
+					n.currentTab = false
+				}
+			}
+		}
+		n.currentTab = true
+		n.setColor(&colorActiveT)
 		setCurrentTab(n)
 		n.placeWidgets(me.RawW, me.RawH)
 		n.showWidgets()
@@ -118,6 +168,50 @@ func (n *node) doWidgetClick() {
 		n.toggleTree()
 	case toolkit.Button:
 		n.doUserEvent()
+	case toolkit.Dropdown:
+		log(true, "do the dropdown here")
+		if (me.ddview == nil) {
+			me.ddview = addDropdown()
+			tk := me.ddview.tk
+			tk.gocuiSize.w0 = 20
+			tk.gocuiSize.w1 = 40
+			tk.gocuiSize.h0 = 10
+			tk.gocuiSize.h1 = 25
+			tk.v, _ = me.baseGui.SetView("ddview",
+				tk.gocuiSize.w0,
+				tk.gocuiSize.h0,
+				tk.gocuiSize.w1,
+				tk.gocuiSize.h1, 0)
+			if (tk.v == nil) {
+				return
+			}
+			tk.v.Wrap = true
+			tk.v.Frame = true
+			tk.v.Clear()
+			fmt.Fprint(tk.v, "example.com\nwit.org\nwit.com")
+			me.ddview.SetVisible(true)
+			return
+		}
+		log(true, "doWidgetClick() visible =", me.ddview.Visible())
+		if (me.ddview.Visible()) {
+			me.ddview.SetVisible(false)
+			me.baseGui.DeleteView("ddview")
+			me.ddview.tk.v = nil
+		} else {
+			var dnsList string
+			for i, s := range n.vals {
+				log(logNow, "AddText()", n.Name, i, s)
+				dnsList += s + "\n"
+			}
+			me.ddNode = n
+			log(logNow, "new dns list should be set to:", dnsList)
+			me.ddview.Text = dnsList
+			me.ddview.SetText(dnsList)
+			me.ddview.SetVisible(true)
+		}
+		for i, s := range n.vals {
+			log(logNow, "AddText()", n.Name, i, s)
+		}
 	default:
 	}
 }
@@ -162,26 +256,15 @@ func click(g *gocui.Gui, v *gocui.View) error {
 	n := findUnderMouse()
 	if (n != nil) {
 		log(logNow, "click() Found widget =", n.WidgetId, n.Name, ",", n.Text)
+		if (n.Name == "DropBox") {
+			log(logNow, "click() this is the dropdown menu. set a flag here what did I click? where is the mouse?")
+			log(logNow, "click() set a global dropdown clicked flag=true here")
+			me.ddClicked = true
+		}
 		n.doWidgetClick()
 	} else {
 		log(logNow, "click() could not find node name =", v.Name())
 	}
-	/*
-	i, err := strconv.Atoi(v.Name())
-	if (err != nil) {
-		log(logError, "click() Can't find widget. error =", err)
-	} else {
-		log(logVerbose, "click() ok v.Name() =", v.Name())
-		n := me.rootNode.findWidgetId(i)
-		if (n == nil) {
-			log(logError, "click() CANT FIND VIEW in binary tree. v.Name =", v.Name())
-			return nil
-		}
-		log(logNow, "click() Found widget =", n.WidgetId, n.Name, ",", n.Text)
-		n.doWidgetClick()
-		return nil
-	}
-	*/
 
 	if _, err := g.SetCurrentView(v.Name()); err != nil {
 		return err
@@ -207,6 +290,17 @@ func findUnderMouse() *node {
 				found = n
 			}
 		}
+		if (n == me.ddview) {
+			log(true, "findUnderMouse() found ddview")
+			if n.Visible() {
+				log(true, "findUnderMouse() and ddview is visable. hide it here. TODO: find highlighted row")
+				found = n
+				// find the actual value here and set the dropdown widget
+				me.baseGui.DeleteView("ddview")
+			} else {
+				log(true, "findUnderMouse() I was lying, actually it's not found")
+			}
+		}
 
 		for _, child := range n.children {
 			f(child)
@@ -217,7 +311,7 @@ func findUnderMouse() *node {
 	// TODO: pop up menu with a list of them
 	for _, n := range widgets {
 		//log(logNow, "ctrlDown() FOUND widget", widget.id, widget.name)
-		n.showWidgetPlacement(logNow, "ctrlDown() FOUND")
+		n.showWidgetPlacement(logNow, "findUnderMouse() FOUND")
 	}
 	return found
 }
@@ -228,27 +322,6 @@ func ctrlDown(g *gocui.Gui, v *gocui.View) error {
 	// var widgets []*node
 	// var f func (n *node)
 	found = findUnderMouse()
-	/*
-	w, h := g.MousePosition()
-
-	// find buttons that are below where the mouse button click
-	f = func(n *node) {
-		widget := n.tk
-		// ignore widgets that are not visible
-		if n.Visible() {
-			if ((widget.gocuiSize.w0 <= w) && (w <= widget.gocuiSize.w1) &&
-			(widget.gocuiSize.h0 <= h) && (h <= widget.gocuiSize.h1)) {
-				widgets = append(widgets, n)
-				found = n
-			}
-		}
-
-		for _, child := range n.children {
-			f(child)
-		}
-	}
-	f(me.rootNode)
-	*/
 	if (me.ctrlDown == nil) {
 		setupCtrlDownWidget()
 		me.ctrlDown.Text = found.Name
@@ -266,9 +339,9 @@ func ctrlDown(g *gocui.Gui, v *gocui.View) error {
 	cd.gocuiSize.w1 = newR.w1
 	cd.gocuiSize.h1 = newR.h1
 	if me.ctrlDown.Visible() {
-		me.ctrlDown.deleteView()
+		me.ctrlDown.hideView()
 	} else {
-		me.ctrlDown.updateView()
+		me.ctrlDown.showView()
 	}
 	me.ctrlDown.showWidgetPlacement(logNow, "ctrlDown:")
 	return nil

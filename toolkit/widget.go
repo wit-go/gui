@@ -69,6 +69,7 @@ const (
 	Textbox	// is this a Label with edit=true
 	Slider // like a progress bar
 	Spinner // like setting the oven temperature
+	Separator // TODO
 	Image // TODO
 	Area // TODO
 	Form // TODO
@@ -138,6 +139,8 @@ func (s WidgetType) String() string {
 		return "Slider"
 	case Spinner:
 		return "Spinner"
+	case Separator:
+		return "Separator"
 	case Image:
 		return "Image"
 	case Area:

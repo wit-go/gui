@@ -16,3 +16,6 @@ update:
 log:
 	reset
 	tail -f /tmp/witgui.* /tmp/guilogfile
+
+gocui: build
+	./cloudflare -gui gocui >/tmp/witgui.log.stderr 2>&1

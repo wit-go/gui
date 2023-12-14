@@ -22,6 +22,7 @@ func defaultKeybindings(g *gocui.Gui) error {
 	if err := g.SetKeybinding("", gocui.MouseRelease, gocui.ModNone, mouseUp); err != nil {
 		return err
 	}
+	// mouseDown() runs whenever you click on an unknown view (?)
 	if err := g.SetKeybinding("", gocui.MouseLeft, gocui.ModNone, mouseDown); err != nil {
 		return err
 	}
@@ -40,10 +41,8 @@ func defaultKeybindings(g *gocui.Gui) error {
 	return nil
 }
 
-var showDebug bool = true
-
 func addDebugKeys(g *gocui.Gui) {
-	// dump all widget info to the log
+	// show debugging buttons
 	g.SetKeybinding("", 'd', gocui.ModNone,
 		func(g *gocui.Gui, v *gocui.View) error {
 			log(logNow, "gocui.SetKeyBinding() dumpTree() START")
@@ -63,9 +62,29 @@ func addDebugKeys(g *gocui.Gui) {
 	// display the help menu
 	g.SetKeybinding("", '?', gocui.ModNone,
 		func(g *gocui.Gui, v *gocui.View) error {
-			helplayout()
+			if (showHelp) {
+				helplayout()
+				showHelp = false
+			} else {
+				me.baseGui.DeleteView("help")
+				showHelp = true
+			}
 			return nil
 	})
+
+	// redraw all the widgets
+	g.SetKeybinding("", 'r', gocui.ModNone,
+		func(g *gocui.Gui, v *gocui.View) error {
+			if (redoWidgets) {
+				redoWindows(0,0)
+				redoWidgets = false
+			} else {
+				me.rootNode.hideWidgets()
+				redoWidgets = true
+			}
+			return nil
+	})
+
 	// hide all widgets
 	g.SetKeybinding("", 'h', gocui.ModNone,
 		func(g *gocui.Gui, v *gocui.View) error {

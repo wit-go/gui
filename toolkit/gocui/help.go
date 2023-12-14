@@ -14,7 +14,9 @@ import (
 
 var helpText []string = []string{"KEYBINDINGS",
 	"",
-	"d: show/hide debugging",
+	"?: toggle help",
+	"d: toggle debugging",
+	"r: redraw widgets",
 	"s/h: show/hide all widgets",
 	"L: list all widgets",
 	"q: quit()",
@@ -25,6 +27,12 @@ var helpText []string = []string{"KEYBINDINGS",
 	"Ctrl-V: Toggle Verbose Debugging",
 	"Ctrl-C: Exit",
 	"",
+}
+
+func hidehelplayout() {
+	me.baseGui.DeleteView("help")
+	// n.deleteView()
+	// child.hideFake()
 }
 
 func helplayout() error {

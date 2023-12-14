@@ -8,7 +8,19 @@ all: README.md
 	@echo
 	@echo This Requires working IPv6
 	@echo
-	@sleep 1
+ifeq ($(GO111MODULE),)
+	@echo
+	@echo If you are compiling this here, you probably want to set GO111MODULE
+	@echo
+	@echo Setting GO111MODULE means that the version you are compiling has plugins
+	@echo that get compiled against this current running version of the code
+	@echo Otherwise, the GO language plugins can complain about being compiled against
+	@echo mis-matched versions
+	@echo
+	@echo export GO111MODULE=off
+	@echo
+	sleep 3
+endif
 ifeq (,$(wildcard go.mod))
 	go mod init gui
 	go mod tidy
@@ -35,8 +47,11 @@ examples:   \
 	examples-helloworld \
 	examples-buttons \
 	examples-console-ui-helloworld \
-	examples-textbox \
-	examples-debug
+	examples-cloudflare
+
+# this is the most basic one. This syntax should always work
+examples-helloworld:
+	make -C examples/helloworld
 
 examples-buttons:
 	make -C examples/buttons
@@ -44,18 +59,8 @@ examples-buttons:
 examples-console-ui-helloworld:
 	make -C examples/console-ui-helloworld
 
-# this is the most basic one. This syntax should always work
-examples-helloworld:
-	make -C examples/helloworld
-
-examples-debug:
-	-make -C examples/debug
-
-examples-textbox:
-	make -C examples/textbox
-
-examples-helloconsole:
-	make -C examples/plugin-consoleonly
+examples-cloudflare:
+	-make -C examples/cloudflare
 
 # sync repo to the github backup
 # git remote add github git@github.com:witorg/gui.git
@@ -102,3 +107,6 @@ objdump:
 log:
 	reset
 	tail -f /tmp/witgui.* /tmp/guilogfile
+
+submit-to-docs:
+	GOPROXY=https://proxy.golang.org GO111MODULE=on go get go.wit.com/gui@v1.0.0

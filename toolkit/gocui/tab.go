@@ -103,6 +103,10 @@ func (p *node) redoTabs(nextW int, nextH int) {
 		n.gocuiSetWH(nextW, nextH)
 		n.deleteView()
 		// setCurrentTab(n)
+		// if (len(w.cuiName) < 4) {
+		// 	w.cuiName = "abcd"
+		// }
+
 		n.showView()
 
 		sizeW := w.Width() + me.TabPadW

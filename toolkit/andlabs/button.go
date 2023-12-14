@@ -6,7 +6,7 @@ import (
 )
 
 func (p *node) newButton(n *node) {
-	log(debugToolkit, "newButton()", n.Name)
+	log(debugToolkit, "newButton() START", n.Name)
 
 	t := p.tk
 	if (t == nil) {
@@ -27,4 +27,5 @@ func (p *node) newButton(n *node) {
 
 	n.tk = newt
 	p.place(n)
+	log(debugToolkit, "newButton() END", n.Name)
 }

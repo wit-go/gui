@@ -14,6 +14,8 @@ import (
 	"github.com/sourcegraph/conc/panics"
 )
 
+// this should never exit
+// TODO: clean up all this poorly named code
 func makeConc() {
 	var wg conc.WaitGroup
 	defer wg.Wait()

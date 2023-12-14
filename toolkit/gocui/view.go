@@ -36,7 +36,12 @@ func (n *node) textResize() {
 	n.showWidgetPlacement(logNow, "textResize()")
 }
 
+func (n *node) hideView() {
+	n.SetVisible(false)
+}
+
 // display's the text of the widget in gocui
+// will create a new gocui view if there isn't one or if it has been moved
 func (n *node) showView() {
 	var err error
 	w := n.tk
@@ -46,31 +51,34 @@ func (n *node) showView() {
 		w.cuiName = strconv.Itoa(n.WidgetId)
 	}
 
+	// if the gocui element doesn't exist, create it
 	if (w.v == nil) {
-		n.updateView()
+		n.recreateView()
 	}	
 	x0, y0, x1, y1, err := me.baseGui.ViewPosition(w.cuiName)
 	log(logInfo, "showView() w.v already defined for widget", n.Name, err)
+
+	// if the gocui element has changed where it is supposed to be on the screen
+	// recreate it
 	if (x0 != w.gocuiSize.w0) || (y0 != w.gocuiSize.h0) {
 		log(logError, "showView() w.v.w0 != x0", n.Name, w.gocuiSize.w0, x0)
 		log(logError, "showView() w.v.h0 != y0", n.Name, w.gocuiSize.h0, y0)
-		n.updateView()
+		n.recreateView()
 		return
 	}
 	if (x1 != w.gocuiSize.w1) || (y1 != w.gocuiSize.h1) {
 		log(logError, "showView() w.v.w1 != x1", n.Name, w.gocuiSize.w1, x1)
 		log(logError, "showView() w.v.h1 != y1", n.Name, w.gocuiSize.h1, y1)
-		n.updateView()
+		n.recreateView()
 		return
 	}
 
-	if (w.v.Visible == false) {
-		log(logInfo, "showView() w.v.Visible set to true ", n.Name)
-		w.v.Visible = true
-	}
+	n.SetVisible(true)
 }
 
-func (n *node) updateView() {
+// create or recreate the gocui widget visible
+// deletes the old view if it exists and recreates it
+func (n *node) recreateView() {
 	var err error
 	w := n.tk
 	if (me.baseGui == nil) {
@@ -105,8 +113,14 @@ func (n *node) updateView() {
 	fmt.Fprint(w.v, n.Text)
 	n.showWidgetPlacement(logNow, "Window: " + n.Text)
 
-	n.setDefaultHighlight()
-	n.setDefaultWidgetColor()
+	// if you don't do this here, it will be black & white only
+	if (w.color != nil) {
+		w.v.FrameColor = w.color.frame
+		w.v.FgColor = w.color.fg
+		w.v.BgColor = w.color.bg
+		w.v.SelFgColor = w.color.selFg
+		w.v.SelBgColor = w.color.selBg
+	}
 }
 
 func (n *node) hideWidgets() {
@@ -119,7 +133,7 @@ func (n *node) hideWidgets() {
 	case toolkit.Box:
 	case toolkit.Grid:
 	default:
-		n.deleteView()
+		n.hideView()
 	}
 	for _, child := range n.children {
 		child.hideWidgets()
@@ -129,7 +143,7 @@ func (n *node) hideWidgets() {
 func (n *node) hideFake() {
 	w := n.tk
 	if (w.isFake) {
-		n.deleteView()
+		n.hideView()
 	}
 	for _, child := range n.children {
 		child.hideFake()
@@ -153,13 +167,13 @@ func (n *node) showWidgets() {
 	if (w.isFake) {
 		// don't display by default
 	} else {
-		if n.IsCurrent() {
+		// if n.IsCurrent() {
 			n.showWidgetPlacement(logInfo, "current:")
 			n.showView()
-		} else {
-			n.showWidgetPlacement(logInfo, "not:")
+		// } else {
+		// 	n.showWidgetPlacement(logInfo, "not:")
 			// w.drawView()
-		}
+		// }
 	}
 	for _, child := range n.children {
 		child.showWidgets()
