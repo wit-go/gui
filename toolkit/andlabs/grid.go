@@ -11,10 +11,10 @@ import (
 // -- (1,2) -- (2,1) -- (3,1) --
 // -----------------------------
 func (p *node) newGrid(n *node) {
-	var newt *andlabsT
+	var newt *guiWidget
 	log(debugToolkit, "newGrid()", n.WidgetId, "to", n.ParentId)
 
-	newt = new(andlabsT)
+	newt = new(guiWidget)
 
 	c := ui.NewGrid()
 	newt.uiGrid = c

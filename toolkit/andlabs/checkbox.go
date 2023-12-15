@@ -6,7 +6,7 @@ import (
 )
 
 func (p *node) newCheckbox(n *node) {
-	newt := new(andlabsT)
+	newt := new(guiWidget)
 	log(debugToolkit, "newCheckbox()", n.Name, n.WidgetType)
 
 	newt.uiCheckbox = ui.NewCheckbox(n.Text)
@@ -22,6 +22,6 @@ func (p *node) newCheckbox(n *node) {
 	p.place(n)
 }
 
-func (t *andlabsT) checked() bool {
+func (t *guiWidget) checked() bool {
 	return t.uiCheckbox.Checked()
 }

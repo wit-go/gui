@@ -13,7 +13,7 @@ import (
 var pluginChan chan toolkit.Action
 
 // the starting point of the binary tree
-var rootNode *node
+// var rootNode *node
 
 var uiMainUndef bool = true
 var uiMain sync.Once

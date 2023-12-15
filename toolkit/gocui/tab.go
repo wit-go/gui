@@ -7,14 +7,14 @@ import (
 	"git.wit.org/wit/gui/toolkit"
 )
 
-func (w *cuiWidget) Width() int {
+func (w *guiWidget) Width() int {
 	if w.frame {
 		return w.gocuiSize.w1 - w.gocuiSize.w0
 	}
 	return w.gocuiSize.w1 - w.gocuiSize.w0 - 1
 }
 
-func (w *cuiWidget) Height() int {
+func (w *guiWidget) Height() int {
 	if w.frame {
 		return w.gocuiSize.h1 - w.gocuiSize.h0
 	}

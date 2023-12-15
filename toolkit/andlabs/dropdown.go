@@ -8,7 +8,7 @@ import (
 )
 
 func (p *node) newDropdown(n *node) {
-	newt := new(andlabsT)
+	newt := new(guiWidget)
 	log(debugToolkit, "gui.Toolbox.newDropdown() START", n.Name)
 
 	cb := ui.NewCombobox()
@@ -34,7 +34,7 @@ func (p *node) newDropdown(n *node) {
 	p.place(n)
 }
 
-func (t *andlabsT) addDropdownName(title string) {
+func (t *guiWidget) addDropdownName(title string) {
 	t.uiCombobox.Append(title)
 	if (t.val == nil) {
 		log(debugToolkit, "make map didn't work")
@@ -50,7 +50,7 @@ func (t *andlabsT) addDropdownName(title string) {
 	t.c = t.c + 1
 }
 
-func (t *andlabsT) SetDropdown(i int) {
+func (t *guiWidget) SetDropdown(i int) {
 	t.uiCombobox.SetSelected(i)
 }
 

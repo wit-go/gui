@@ -49,7 +49,7 @@ func ShowDebug () {
 	log(true, "debugError   =", debugError)
 }
 
-func (t *andlabsT) Dump(b bool) {
+func (t *guiWidget) Dump(b bool) {
 	if ! b {
 		return
 	}

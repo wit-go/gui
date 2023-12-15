@@ -6,7 +6,7 @@ import (
 )
 
 func (p *node) newSpinner(n *node) {
-	newt := new(andlabsT)
+	newt := new(guiWidget)
 
 	s := ui.NewSpinbox(n.X, n.Y)
 	newt.uiSpinbox = s

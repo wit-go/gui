@@ -1,14 +1,22 @@
 package main
 
-import "git.wit.org/wit/gui/toolkit"
+// import "git.wit.org/wit/gui/toolkit"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"
 
 // var andlabs map[int]*andlabsT
 // var callback func(int) bool
-var callback chan toolkit.Action
+// var callback chan toolkit.Action
 
+// It's probably a terrible idea to call this 'me'
+var me config
+
+type config struct {
+	rootNode *node // the base of the binary tree. it should have id == 0
+}
+
+/*
 type node struct {
 	parent	*node
 	children []*node
@@ -41,15 +49,16 @@ type node struct {
 	// the internal plugin toolkit structure
 	tk *andlabsT
 }
+*/
 
 // stores the raw toolkit internals
-type andlabsT struct {
+type guiWidget struct {
 	Width  int
 	Height int
 
 	// tw	*toolkit.Widget
-	parent	*andlabsT
-	children []*andlabsT
+	parent	*guiWidget
+	children []*guiWidget
 
 	// used to track if a tab has a child widget yet
 	child bool

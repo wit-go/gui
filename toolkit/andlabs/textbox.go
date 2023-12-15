@@ -6,7 +6,7 @@ import (
 )
 
 func (p *node) newTextbox(n *node) {
-	newt := new(andlabsT)
+	newt := new(guiWidget)
 
 	if (n.X == 1) {
 		e := ui.NewEntry()

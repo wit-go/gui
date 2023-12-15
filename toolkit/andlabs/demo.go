@@ -17,7 +17,7 @@ func BlankWindow(w *ui.Window) *ui.Box {
 	return hbox
 }
 
-func (t *andlabsT) DemoNumbersPage() {
+func (t *guiWidget) DemoNumbersPage() {
 	var w *ui.Window
 
 	log(debugToolkit, "Starting wit/gui toolkit andlabs/ui DemoNumbersPage()")

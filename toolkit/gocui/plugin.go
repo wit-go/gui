@@ -9,7 +9,7 @@ import (
 func action(a *toolkit.Action) {
 	log(logInfo, "action() START", a.WidgetId, a.ActionType, a.WidgetType, a.Name)
 	n := me.rootNode.findWidgetId(a.WidgetId)
-	var w *cuiWidget
+	var w *guiWidget
 	if (n != nil) {
 		w = n.tk
 	}
@@ -97,21 +97,4 @@ func (n *node) Set(val any) {
 	default:
 		log(logError, "Set() unknown type =", val, v)
 	}
-}
-
-// this passes the user event back from the plugin
-func (n *node) doUserEvent() {
-	if (me.callback == nil) {
-		log(logError, "doUserEvent() no callback channel was configured")
-		return
-	}
-	var a toolkit.Action
-	a.WidgetId = n.WidgetId
-	a.Name = n.Name
-	a.Text = n.Text
-	a.B = n.B
-	a.ActionType = toolkit.User
-	log(logInfo, "doUserEvent() START:   send a button click callback()", a.WidgetId, a.Name)
-	me.callback <- a
-	log(logInfo, "doUserEvent() END:     sent a button click callback()", a.WidgetId, a.Name)
 }

@@ -6,7 +6,7 @@ import (
 )
 
 func (p *node) newCombobox(n *node) {
-	newt := new(andlabsT)
+	newt := new(guiWidget)
 	log(debugToolkit, "newCombobox() START", n.Name)
 
 	cb := ui.NewEditableCombobox()
@@ -26,7 +26,7 @@ func (p *node) newCombobox(n *node) {
 	p.place(n)
 }
 
-func (t *andlabsT) AddComboboxName(title string) {
+func (t *guiWidget) AddComboboxName(title string) {
 	t.uiEditableCombobox.Append(title)
 	if (t.val == nil) {
 		log(debugToolkit, "make map didn't work")

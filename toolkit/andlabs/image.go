@@ -7,7 +7,7 @@ import (
 
 // make new Image using andlabs/ui
 func (p *node) newImage(n *node) {
-	newt := new(andlabsT)
+	newt := new(guiWidget)
 	var img *ui.Image
 
 	log(debugToolkit, "rawImage() create", n.Name)

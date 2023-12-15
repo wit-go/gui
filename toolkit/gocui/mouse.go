@@ -63,9 +63,11 @@ func mouseUp(g *gocui.Gui, v *gocui.View) error {
 	w, h := g.MousePosition()
 	log(true, "mouseUp() view msgMouseDown (check here for dropdown menu click) (w,h) =", w, h)
 	if (me.ddClicked) {
+		me.ddClicked = false
 		log(true, "mouseUp() ddview is the thing that was clicked", w, h)
 		log(true, "mouseUp() find out what the string is here", w, h, me.ddview.tk.gocuiSize.h1)
 
+		var newZone string = ""
 		if (me.ddNode != nil) {
 			value := h - me.ddview.tk.gocuiSize.h0 - 1
 			log(true, "mouseUp() me.ddview.tk.gocuiSize.h1 =", me.ddview.tk.gocuiSize.h1)
@@ -74,10 +76,19 @@ func mouseUp(g *gocui.Gui, v *gocui.View) error {
 			log(true, "mouseUp() value =", value, "valsLen =", valsLen)
 			log(true, "mouseUp() me.ddNode.vals =", me.ddNode.vals)
 			if ((value >= 0) && (value < valsLen)) {
-				str := me.ddNode.vals[value]
-				log(true, "mouseUp() value =", value, "str =", str)
+				newZone = me.ddNode.vals[value]
+				log(true, "mouseUp() value =", value, "newZone =", newZone)
 			}
 		}
+		hideDDview()
+		if (newZone != "") {
+			if (me.ddNode != nil) {
+				me.ddNode.SetText(newZone)
+				me.ddNode.S = newZone
+				me.ddNode.doUserEvent()
+			}
+		}
+		return nil
 	}
 	/*
 	// if there is a drop down view active, treat it like a dialog box and close it

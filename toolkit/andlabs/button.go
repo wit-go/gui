@@ -14,7 +14,7 @@ func (p *node) newButton(n *node) {
 		return
 	}
 
-	newt := new(andlabsT)
+	newt := new(guiWidget)
 
 	b := ui.NewButton(n.Text)
 	newt.uiButton = b

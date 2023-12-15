@@ -9,7 +9,7 @@ import (
 func (p *node) newBox(n *node) {
 	log(debugToolkit, "newBox()", n.Name)
 
-	newt := new(andlabsT)
+	newt := new(guiWidget)
 	var box *ui.Box
 
 	log(debugToolkit, "rawBox() create", n.Name)

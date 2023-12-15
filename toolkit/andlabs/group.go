@@ -8,7 +8,7 @@ import (
 func (p *node) newGroup(n *node) {
 	log(debugToolkit, "NewGroup()", n.Name)
 
-	newt := new(andlabsT)
+	newt := new(guiWidget)
 
 	log(debugToolkit, "NewGroup() create", n.Name)
 

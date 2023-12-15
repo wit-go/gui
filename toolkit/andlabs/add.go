@@ -17,10 +17,10 @@ func actionDump(b bool, a *toolkit.Action) {
 
 func add(a toolkit.Action) {
 	if (a.WidgetType == toolkit.Root) {
-		rootNode = addWidget(&a, nil)
+		me.rootNode = addWidget(&a)
 		return
 	}
-	n := addWidget(&a, nil)
+	n := addWidget(&a)
 
 	p := n.parent
 	switch n.WidgetType {

@@ -8,7 +8,7 @@ import (
 func (p *node) newLabel(n *node) {
 	log(logInfo, "NewLabel()", n.Name)
 
-	newt := new(andlabsT)
+	newt := new(guiWidget)
 	c := ui.NewLabel(n.Name)
 	newt.uiLabel = c
 	newt.uiControl = c

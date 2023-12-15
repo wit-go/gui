@@ -20,8 +20,11 @@ import (
 	any existing tabs rather than adding a new one
 */
 func (p *node) newTab(n *node) {
-	var newt *andlabsT
+	var newt *guiWidget
 
+	if (p == nil) {
+		log(debugError, "newTab() p == nil. how the fuck does this happen?", n.WidgetId, n.ParentId)
+	}
 	if (p.WidgetType != toolkit.Window) {
 		log(debugError, "newTab() uiWindow == nil. I can't add a toolbar without window", n.WidgetId, n.ParentId)
 		return
@@ -40,8 +43,8 @@ func (p *node) newTab(n *node) {
 		log(debugToolkit, "newTab() GOOD. This should be an additional tab:", n.WidgetId, n.ParentId)
 		if (n.WidgetType == toolkit.Tab) {
 			// andlabs doesn't have multiple tab widgets so make a fake one?
-			// this makes a andlabsT internal structure with the parent values
-			newt = new(andlabsT)
+			// this makes a guiWidget internal structure with the parent values
+			newt = new(guiWidget)
 			newt.uiWindow = t.uiWindow
 			newt.uiTab = t.uiTab
 		} else {
@@ -63,8 +66,8 @@ func tabSetMargined(tab *ui.Tab, b bool) {
 	}
 }
 
-func rawTab(w *ui.Window, name string) *andlabsT {
-	var newt andlabsT
+func rawTab(w *ui.Window, name string) *guiWidget {
+	var newt guiWidget
 	log(debugToolkit, "rawTab() START", name)
 
 	if (w == nil) {
@@ -83,8 +86,8 @@ func rawTab(w *ui.Window, name string) *andlabsT {
 	return &newt
 }
 
-func (t *andlabsT) appendTab(name string) *andlabsT {
-	var newT andlabsT
+func (t *guiWidget) appendTab(name string) *guiWidget {
+	var newT guiWidget
 	log(debugToolkit, "appendTab() ADD", name)
 
 	if (t.uiTab == nil) {

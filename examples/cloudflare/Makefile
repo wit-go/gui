@@ -19,3 +19,6 @@ log:
 
 gocui: build
 	./cloudflare -gui gocui >/tmp/witgui.log.stderr 2>&1
+
+quiet:
+	./cloudflare >/tmp/witgui.log.stderr 2>&1

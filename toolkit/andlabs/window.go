@@ -5,18 +5,18 @@ import (
 	_ "github.com/andlabs/ui/winmanifest"
 )
 
-func (t *andlabsT) MessageWindow(msg1 string, msg2 string) {
+func (t *guiWidget) MessageWindow(msg1 string, msg2 string) {
 	ui.MsgBox(t.uiWindow, msg1, msg2)
 }
 
-func (t *andlabsT) ErrorWindow(msg1 string, msg2 string) {
+func (t *guiWidget) ErrorWindow(msg1 string, msg2 string) {
 	ui.MsgBoxError(t.uiWindow, msg1, msg2)
 }
 
 func newWindow(n *node) {
-	var newt *andlabsT
+	var newt *guiWidget
 
-	newt = new(andlabsT)
+	newt = new(guiWidget)
 
 	// menubar bool is if the OS defined border on the window should be used
 	win := ui.NewWindow(n.Name, n.X, n.Y, menubar)

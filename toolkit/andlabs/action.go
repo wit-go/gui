@@ -195,7 +195,7 @@ func rawAction(a toolkit.Action) {
 		return
 	}
 
-	n := rootNode.findWidgetId(a.WidgetId)
+	n := me.rootNode.findWidgetId(a.WidgetId)
 
 	if (a.ActionType == toolkit.Add) {
 		ui.QueueMain(func() {
@@ -208,12 +208,12 @@ func rawAction(a toolkit.Action) {
 
 	if (a.ActionType == toolkit.Dump) {
 		log(debugNow, "rawAction() Dump =", a.ActionType, a.WidgetType, n.Name)
-		rootNode.listChildren(true)
+		me.rootNode.listChildren(true)
 		return
 	}
 
 	if (n == nil) {
-		rootNode.listChildren(true)
+		me.rootNode.listChildren(true)
 		log(true, "rawAction() ERROR findWidgetId found nil", a.ActionType, a.WidgetType)
 		log(true, "rawAction() ERROR findWidgetId found nil for id =", a.WidgetId)
 		log(true, "rawAction() ERROR findWidgetId found nil", a.ActionType, a.WidgetType)
@@ -256,7 +256,7 @@ func rawAction(a toolkit.Action) {
 		n.Delete()
 	case toolkit.Move:
 		log(debugNow, "rawAction() attempt to move() =", a.ActionType, a.WidgetType)
-		newParent := rootNode.findWidgetId(a.ParentId)
+		newParent := me.rootNode.findWidgetId(a.ParentId)
 		n.move(newParent)
 	default:
 		log(debugError, "rawAction() Unknown =", a.ActionType, a.WidgetType)

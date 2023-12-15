@@ -6,7 +6,7 @@ import (
 )
 
 func (p *node) newSlider(n *node) {
-	newt := new(andlabsT)
+	newt := new(guiWidget)
 
 	s := ui.NewSlider(n.X, n.Y)
 	newt.uiSlider = s

@@ -96,49 +96,6 @@ var (
 	globalMouseDown, msgMouseDown, movingMsg bool
 )
 
-// this is the standard binary tree structure for toolkits
-type node struct {
-	parent *node
-	children []*node
-
-	WidgetId	int	// widget ID
-	WidgetType	toolkit.WidgetType
-	ParentId	int	// parent ID
-
-	Name   string
-	Text   string
-
-	// This is how the values are passed back and forth
-	// values from things like checkboxes & dropdown's
-	B	bool
-	I	int
-	S	string
-
-	A	any // switch to this or deprecate this? pros/cons?
-
-	// This is used for things like a slider(0,100)
-	X      int
-	Y      int
-
-	// This is for the grid size & widget position
-	W      int
-	H      int
-	AtW    int
-	AtH    int
-
-	vals []string // dropdown menu items
-
-	// horizontal=true  means layout widgets like books on a bookshelf
-	// horizontal=false means layout widgets like books in a stack
-	horizontal bool `default:false`
-
-	hasTabs bool // does the window have tabs?
-	currentTab bool // the visible tab
-
-	// the internal plugin toolkit structure
-	tk *cuiWidget
-}
-
 // this is the gocui way
 // corner starts at in the upper left corner
 type rectType struct {
@@ -153,7 +110,7 @@ func (r *rectType) Height() int {
 	return r.h1 - r.h0
 }
 
-type cuiWidget struct {
+type guiWidget struct {
 	// the gocui package variables
 	v *gocui.View // this is nil if the widget is not displayed
 	cuiName string // what gocui uses to reference the widget
@@ -189,7 +146,7 @@ type cuiWidget struct {
 // of functions like fmt.Fprintf, fmt.Fprintln, io.Copy, etc. Clear must
 // be called to clear the view's buffer.
 
-func (w *cuiWidget) Write(p []byte) (n int, err error) {
+func (w *guiWidget) Write(p []byte) (n int, err error) {
 	w.tainted = true
 	me.writeMutex.Lock()
 	defer me.writeMutex.Unlock()
