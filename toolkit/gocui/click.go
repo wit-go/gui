@@ -93,8 +93,8 @@ func (n *node) doWidgetClick() {
 		log("doWidgetClick()", n.Name)
 		redoWindows(0,0)
 	case toolkit.Flag:
-		// me.rootNode.redoColor(true)
-		me.rootNode.dumpTree(true)
+		log("doWidgetClick() FLAG widget name =", n.Name)
+		log("doWidgetClick() if this is the dropdown menu, handle it here?")
 	case toolkit.Window:
 		if (me.currentWindow == n) {
 			return
@@ -155,7 +155,13 @@ func (n *node) doWidgetClick() {
 		}
 		n.doUserEvent()
 	case toolkit.Grid:
-		n.placeGrid(n.tk.size.w0, n.tk.size.h0)
+		newR := n.realGocuiSize()
+
+		// w,h := n.logicalSize()
+		// w := newR.w1 - newR.w0
+		// h := newR.h1 - newR.h0
+
+		n.placeGrid(newR.w0, newR.h0)
 		n.showWidgets()
 	case toolkit.Box:
 		// w.showWidgetPlacement(logNow, "drawTree()")
@@ -267,12 +273,14 @@ func click(g *gocui.Gui, v *gocui.View) error {
 	}
 
 	if _, err := g.SetCurrentView(v.Name()); err != nil {
+		log(logNow, "click() END err =", err)
 		return err
 	}
 
 	log(logVerbose, "click() END")
 	return nil
 }
+
 func findUnderMouse() *node {
 	var found *node
 	var widgets []*node

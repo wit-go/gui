@@ -15,7 +15,7 @@ import (
 	"sync"
 	"strings"
 	"github.com/awesome-gocui/gocui"
-	"git.wit.org/wit/gui/toolkit"
+//	"git.wit.org/wit/gui/toolkit"
 )
 
 // It's probably a terrible idea to call this 'me'
@@ -40,12 +40,14 @@ type config struct {
 	ddClicked bool // the dropdown menu view was clicked
 	ddNode *node // the dropdown menu is for this widget
 
+	/*
 	// this is the channel we send user events like
 	// mouse clicks or keyboard events back to the program
 	callback chan toolkit.Action
 
 	// this is the channel we get requests to make widgets
 	pluginChan chan toolkit.Action
+	*/
 
 	// When the widget has a frame, like a button, it adds 2 lines runes on each side
 	// so you need 3 char spacing in each direction to not have them overlap
@@ -117,7 +119,7 @@ type guiWidget struct {
 
 	// the logical size of the widget
 	// For example, 40x12 would be the center of a normal terminal
-	size rectType
+	// size rectType
 
 	// the actual gocui display view of this widget
 	// sometimes this isn't visible like with a Box or Grid

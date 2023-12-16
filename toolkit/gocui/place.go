@@ -9,8 +9,6 @@ func (n *node) placeBox(startW int, startH int) {
 	if (n.WidgetType != toolkit.Box) {
 		return
 	}
-	n.tk.size.w0 = startW
-	n.tk.size.h0 = startH
 	n.showWidgetPlacement(logNow, "boxS()")
 
 	newW := startW
@@ -18,7 +16,6 @@ func (n *node) placeBox(startW int, startH int) {
 	for _, child := range n.children {
 		child.placeWidgets(newW, newH)
 		// n.showWidgetPlacement(logNow, "boxS()")
-		// w,h := child.logicalSize()
 		newR := child.realGocuiSize()
 		w := newR.w1 - newR.w0
 		h := newR.h1 - newR.h0
@@ -32,13 +29,10 @@ func (n *node) placeBox(startW int, startH int) {
 			newH += h
 		}
 	}
-	// w,h := n.logicalSize()
-	newR := n.realGocuiSize()
-	w := newR.w1 - newR.w0
-	h := newR.h1 - newR.h0
 
-	n.tk.size.w1 = n.tk.size.w0 + w
-	n.tk.size.h1 = n.tk.size.h0 + h
+	// just compute this every time?
+	// newR := n.realGocuiSize()
+
 	n.showWidgetPlacement(logNow, "boxE()")
 }
 
@@ -75,7 +69,6 @@ func (n *node) placeWidgets(startW int, startH int) {
 		// now move all the children aka: run place() on them
 		for _, child := range n.children {
 			child.placeWidgets(newW, newH)
-			// _,h := child.logicalSize()
 			newR := child.realGocuiSize()
 			// w := newR.w1 - newR.w0
 			h := newR.h1 - newR.h0
@@ -91,8 +84,6 @@ func (n *node) placeWidgets(startW int, startH int) {
 
 func (n *node) placeGrid(startW int, startH int) {
 	w := n.tk
-	w.size.w0 = startW
-	w.size.h0 = startH
 	n.showWidgetPlacement(logInfo, "grid0:")
 	if (n.WidgetType != toolkit.Grid) {
 		return
@@ -100,7 +91,6 @@ func (n *node) placeGrid(startW int, startH int) {
 
 	// first compute the max sizes of the rows and columns
 	for _, child := range n.children {
-		// childW, childH := child.logicalSize()
 		newR := child.realGocuiSize()
 		childW := newR.w1 - newR.w0
 		childH := newR.h1 - newR.h0

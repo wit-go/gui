@@ -18,10 +18,10 @@ func simpleStdin() {
 		switch s {
 		case "l":
 			log(true, "list widgets")
-			rootNode.listWidgets()
+			me.rootNode.listWidgets()
 		case "b":
 			log(true, "show buttons")
-			rootNode.showButtons()
+			me.rootNode.showButtons()
 		case "d":
 			var a toolkit.Action
 			a.ActionType = toolkit.EnableDebug
@@ -35,7 +35,7 @@ func simpleStdin() {
 		default:
 			i, _ := strconv.Atoi(s)
 			log(true, "got input:", i)
-			n := rootNode.findWidgetId(i)
+			n := me.rootNode.findWidgetId(i)
 			if (n != nil) {
 				n.dumpWidget("found node")
 				n.doUserEvent()

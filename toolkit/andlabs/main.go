@@ -9,12 +9,6 @@ import (
 	_ "github.com/andlabs/ui/winmanifest"
 )
 
-// this is the channel we get requests to make widgets
-var pluginChan chan toolkit.Action
-
-// the starting point of the binary tree
-// var rootNode *node
-
 var uiMainUndef bool = true
 var uiMain sync.Once
 var muAction sync.Mutex
@@ -30,27 +24,12 @@ func catchActionChannel() {
 			muAction.Lock()
 			// TODO ui.QueueMain(f)
 			// TODO ui.QueueMain( func() {rawAction(a)} )
-			ui.QueueMain( func() {rawAction(a)} )
+			ui.QueueMain( func() {rawAction(&a)} )
 			// rawAction(a)
 			muAction.Unlock()
 			log(logInfo, "catchActionChannel() STUFF END", a.WidgetId, a.ActionType, a.WidgetType)
 		}
 	}
-}
-
-// Other goroutines must use this to access the GUI
-//
-// You can not acess / process the GUI thread directly from
-// other goroutines. This is due to the nature of how
-// Linux, MacOS and Windows work (they all work differently. suprise. surprise.)
-//
-// this sets the channel to send user events back from the plugin
-func Callback(guiCallback chan toolkit.Action) {
-	callback = guiCallback
-}
-
-func PluginChannel() chan toolkit.Action {
-	return pluginChan
 }
 
 // This is important. This sets the defaults for the gui. Without this, there isn't correct padding, etc

@@ -98,7 +98,7 @@ func doAction(a *toolkit.Action) {
 	log(logNow, "doAction() START a.WidgetId =", a.WidgetId, "a.ParentId =", a.ParentId)
 	switch a.WidgetType {
 	case toolkit.Root:
-		rootNode = addWidget(a)
+		me.rootNode = addNode(a)
 		log(logNow, "doAction() found rootNode")
 		return
 	case toolkit.Flag:
@@ -106,11 +106,11 @@ func doAction(a *toolkit.Action) {
 		return
 	}
 
-	n := rootNode.findWidgetId(a.WidgetId)
+	n := me.rootNode.findWidgetId(a.WidgetId)
 
 	switch a.ActionType {
 	case toolkit.Add:
-		addWidget(a)
+		addNode(a)
 	case toolkit.Show:
 		n.show(true)
 	case toolkit.Hide:
@@ -144,7 +144,7 @@ func doAction(a *toolkit.Action) {
 		n.Delete()
 	case toolkit.Move:
 		log(logNow, "doAction() attempt to move() =", a.ActionType, a.WidgetType)
-		newParent := rootNode.findWidgetId(a.ParentId)
+		newParent := me.rootNode.findWidgetId(a.ParentId)
 		n.move(newParent)
 	default:
 		log(logError, "doAction() Unknown =", a.ActionType, a.WidgetType)

@@ -36,17 +36,13 @@ func (n *node) gocuiSetWH(sizeW, sizeH int) {
 	}
 
 	if tk.frame {
-		tk.size.w0 = sizeW
-		tk.size.h0 = sizeH
-		tk.gocuiSize.w0 = tk.size.w0
-		tk.gocuiSize.h0 = tk.size.h0
+		tk.gocuiSize.w0 = sizeW
+		tk.gocuiSize.h0 = sizeH
 		tk.gocuiSize.w1 = tk.gocuiSize.w0 + w + me.FramePadW
 		tk.gocuiSize.h1 = tk.gocuiSize.h0 + h + me.FramePadH
 	} else {
-		tk.size.w0 = sizeW - 1
-		tk.size.h0 = sizeH - 1
-		tk.gocuiSize.w0 = tk.size.w0
-		tk.gocuiSize.h0 = tk.size.h0
+		tk.gocuiSize.w0 = sizeW - 1
+		tk.gocuiSize.h0 = sizeH - 1
 		tk.gocuiSize.w1 = tk.gocuiSize.w0 + w + 1
 		tk.gocuiSize.h1 = tk.gocuiSize.h0 + h + 1
 	}
@@ -73,8 +69,6 @@ func redoWindows(nextW int, nextH int) {
 			n.hasTabs = false
 		}
 
-		w.size.w0 = nextW
-		w.size.h0 = nextH
 		n.gocuiSetWH(nextW, nextH)
 		n.deleteView()
 		n.showView()
@@ -98,8 +92,6 @@ func (p *node) redoTabs(nextW int, nextH int) {
 		w := n.tk
 		w.frame = true
 
-		w.size.w0 = nextW
-		w.size.h0 = nextH
 		n.gocuiSetWH(nextW, nextH)
 		n.deleteView()
 		// setCurrentTab(n)

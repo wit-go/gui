@@ -88,11 +88,11 @@ func makeConfigTab(window *gui.Node) {
 	grid := g1.NewGrid("credsGrid", 2, 4) // width = 2
 
 	grid.NewLabel("Auth Key")
-	aw := grid.NewEntryLine(os.Getenv("CLOUDFLARE_AUTHKEY"))
+	aw := grid.NewEntryLine("CLOUDFLARE_AUTHKEY")
 	aw.SetText(os.Getenv("CLOUDFLARE_AUTHKEY"))
 
 	grid.NewLabel("Email")
-	ew := grid.NewEntryLine(os.Getenv("CLOUDFLARE_EMAIL"))
+	ew := grid.NewEntryLine("CLOUDFLARE_EMAIL")
 	ew.SetText(os.Getenv("CLOUDFLARE_EMAIL"))
 
 	var url string = "https://api.cloudflare.com/client/v4/zones/"
@@ -144,16 +144,16 @@ func showCloudflareCredentials(box *gui.Node) {
 	grid := box.NewGrid("credsGrid", 2, 4) // width = 2
 
 	grid.NewLabel("Domain")
-	domainWidget = grid.NewEntryLine(os.Getenv("CLOUDFLARE_DOMAIN"))
+	domainWidget = grid.NewEntryLine("CLOUDFLARE_DOMAIN")
 
 	grid.NewLabel("Zone ID")
-	zoneWidget = grid.NewEntryLine(os.Getenv("CLOUDFLARE_ZONEID"))
+	zoneWidget = grid.NewEntryLine("CLOUDFLARE_ZONEID")
 
 	grid.NewLabel("Auth Key")
-	authWidget = grid.NewEntryLine(os.Getenv("CLOUDFLARE_AUTHKEY"))
+	authWidget = grid.NewEntryLine("CLOUDFLARE_AUTHKEY")
 
 	grid.NewLabel("Email")
-	emailWidget = grid.NewEntryLine(os.Getenv("CLOUDFLARE_EMAIL"))
+	emailWidget = grid.NewEntryLine("CLOUDFLARE_EMAIL")
 
 	var url string = "https://api.cloudflare.com/client/v4/zones/"
 	grid.NewLabel("Cloudflare API")

@@ -5,12 +5,6 @@ import (
 	"git.wit.org/wit/gui/toolkit"
 )
 
-// this is the channel we get requests to make widgets
-var pluginChan chan toolkit.Action
-
-// the starting point of the binary tree
-var rootNode *node
-
 var muAction sync.Mutex
 
 func catchActionChannel() {
@@ -29,6 +23,7 @@ func catchActionChannel() {
 	}
 }
 
+/*
 // Other goroutines must use this to access the GUI
 //
 // You can not acess / process the GUI thread directly from
@@ -43,6 +38,7 @@ func Callback(guiCallback chan toolkit.Action) {
 func PluginChannel() chan toolkit.Action {
 	return pluginChan
 }
+*/
 
 // This is important. This sets the defaults for the gui. Without this, there isn't correct padding, etc
 func init() {

@@ -15,9 +15,12 @@ import (
 	"git.wit.org/wit/gui/toolkit"
 )
 
-// this is the channel that sends the events from the user clicking or typing
-// back to the program using this golang package
+// this is the channel we send user events like
+// mouse clicks or keyboard events back to the program
 var callback chan toolkit.Action
+
+// this is the channel we get requests to make widgets
+var pluginChan chan toolkit.Action
 
 type node struct {
 	parent	*node
@@ -80,48 +83,6 @@ func (n *node) findWidgetId(id int) *node {
 		}
 	}
 	return nil
-}
-
-func addWidget(a *toolkit.Action) *node {
-	n := new(node)
-	n.WidgetType = a.WidgetType
-	n.WidgetId = a.WidgetId
-	n.ParentId = a.ParentId
-
-	// copy the data from the action message
-	n.Name = a.Name
-	n.Text = a.Text
-	n.I = a.I
-	n.S = a.S
-	n.B = a.B
-
-	n.X = a.X
-	n.Y = a.Y
-
-	n.W = a.W
-	n.H = a.H
-	n.AtW = a.AtW
-	n.AtH = a.AtH
-
-	// store the internal toolkit information
-	n.tk = new(guiWidget)
-
-	if (a.WidgetType == toolkit.Root) {
-		log(logInfo, "addWidget() Root")
-		return n
-	}
-
-	if (me.rootNode.findWidgetId(a.WidgetId) != nil) {
-		log(logError, "addWidget() WidgetId already exists", a.WidgetId)
-		return me.rootNode.findWidgetId(a.WidgetId)
-	}
-
-	// add this new widget on the binary tree
-	n.parent = me.rootNode.findWidgetId(a.ParentId)
-	if n.parent != nil {
-		n.parent.children = append(n.parent.children, n)
-	}
-	return n
 }
 
 func (n *node) doUserEvent() {
@@ -187,4 +148,19 @@ func addNode(a *toolkit.Action) *node {
 		//w.parent.children = append(w.parent.children, w)
 	}
 	return n
+}
+
+// Other goroutines must use this to access the GUI
+//
+// You can not acess / process the GUI thread directly from
+// other goroutines. This is due to the nature of how
+// Linux, MacOS and Windows work (they all work differently. suprise. surprise.)
+//
+// this sets the channel to send user events back from the plugin
+func Callback(guiCallback chan toolkit.Action) {
+	callback = guiCallback
+}
+
+func PluginChannel() chan toolkit.Action {
+	return pluginChan
 }

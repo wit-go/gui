@@ -62,9 +62,9 @@ func makeOutputWidget(g *gocui.Gui, stringFromMouseClick string) *gocui.View {
 	}
 	v, err := g.View("msg")
 	if (v == nil) {
-		log("this is supposed to happen. v == nil", err)
+		log("makeoutputwindow() this is supposed to happen. v == nil", err)
 	} else {
-		log("msg != nil. WTF now? err =", err)
+		log("makeoutputwindow() msg != nil. WTF now? err =", err)
 	}
 
 	// help, err := g.SetView("help", maxX-32, 0, maxX-1, 13, 0)
@@ -72,16 +72,16 @@ func makeOutputWidget(g *gocui.Gui, stringFromMouseClick string) *gocui.View {
 
 	v, err = g.SetView("msg", maxX-32, maxY/2, maxX/2+outputW, maxY/2+outputH, 0)
 	if errors.Is(err, gocui.ErrUnknownView) {
-		log("this is supposed to happen?", err)
+		log("makeoutputwindow() this is supposed to happen?", err)
 	}
 
 	if (err != nil) {
-		log("create output window failed", err)
+		log("makeoutputwindow() create output window failed", err)
 		return nil
 	}
 
 	if (v == nil) {
-		log("msg == nil. WTF now? err =", err)
+		log("makeoutputwindow() msg == nil. WTF now? err =", err)
 		return nil
 	} else {
 		me.logStdout.tk.v = v

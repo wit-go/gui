@@ -174,7 +174,7 @@ func (n *node) Delete() {
 	}
 }
 
-func rawAction(a toolkit.Action) {
+func rawAction(a *toolkit.Action) {
 	log(logInfo, "rawAction() START a.ActionType =", a.ActionType)
 	log(logInfo, "rawAction() START a.S =", a.S)
 
@@ -191,7 +191,7 @@ func rawAction(a toolkit.Action) {
 	log(logInfo, "rawAction() START a.WidgetId =", a.WidgetId, "a.ParentId =", a.ParentId)
 	switch a.WidgetType {
 	case toolkit.Flag:
-		flag(&a)
+		flag(a)
 		return
 	}
 
@@ -232,18 +232,18 @@ func rawAction(a toolkit.Action) {
 	case toolkit.Disable:
 		n.enable(false)
 	case toolkit.Get:
-		n.setText(&a)
+		n.setText(a)
 	case toolkit.GetText:
 		switch a.WidgetType {
 		case toolkit.Textbox:
 			a.S = n.S
 		}
 	case toolkit.Set:
-		n.setText(&a)
+		n.setText(a)
 	case toolkit.SetText:
-		n.setText(&a)
+		n.setText(a)
 	case toolkit.AddText:
-		n.setText(&a)
+		n.setText(a)
 	case toolkit.Margin:
 		n.pad(toolkit.Unmargin)
 	case toolkit.Unmargin:

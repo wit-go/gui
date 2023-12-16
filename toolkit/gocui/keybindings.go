@@ -29,6 +29,9 @@ func defaultKeybindings(g *gocui.Gui) error {
 	if err := g.SetKeybinding("", gocui.MouseLeft, gocui.ModMouseCtrl, ctrlDown); err != nil {
 		return err
 	}
+//	if err := g.SetKeybinding(w.v.Name(), gocui.MouseLeft, gocui.ModNone, click); err != nil {
+//		return err
+//	}
 	/*
 	if err := g.SetKeybinding("", gocui.MouseLeft, gocui.ModNone, globalDown); err != nil {
 		return err
@@ -45,8 +48,6 @@ func addDebugKeys(g *gocui.Gui) {
 	// show debugging buttons
 	g.SetKeybinding("", 'd', gocui.ModNone,
 		func(g *gocui.Gui, v *gocui.View) error {
-			log(logNow, "gocui.SetKeyBinding() dumpTree() START")
-			// me.rootNode.dumpTree(true)
 			fakeStartWidth = me.FakeW
 			fakeStartHeight = me.TabH + me.FramePadH
 			if (showDebug) {
@@ -106,6 +107,13 @@ func addDebugKeys(g *gocui.Gui) {
 			return nil
 	})
 
+	// list all widgets with positions
+	g.SetKeybinding("", 'M', gocui.ModNone,
+		func(g *gocui.Gui, v *gocui.View) error {
+			me.rootNode.dumpTree(true)
+			return nil
+	})
+
 	// log to output window
 	g.SetKeybinding("", 'o', gocui.ModNone,
 		func(g *gocui.Gui, v *gocui.View) error {
@@ -136,7 +144,7 @@ func addDebugKeys(g *gocui.Gui) {
 				var a toolkit.Action
 				a.B = true
 				a.ActionType = toolkit.EnableDebug
-				me.callback <- a
+				callback <- a
 				logInfo = true
 				logVerbose = true
 			} else {

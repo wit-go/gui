@@ -17,22 +17,13 @@ func init() {
 	// init the config struct default values
 	Set(&me, "default")
 
-	me.pluginChan = make(chan toolkit.Action)
+	pluginChan = make(chan toolkit.Action)
 
 	log(logNow, "Init() start pluginChan")
 	go catchActionChannel()
 	sleep(.1) // probably not needed, but in here for now under development
 	go main()
 	sleep(.1) // probably not needed, but in here for now under development
-}
-
-// this sets the channel to send user events back from the plugin
-func Callback(guiCallback chan toolkit.Action) {
-	me.callback = guiCallback
-}
-
-func PluginChannel() chan toolkit.Action {
-	return me.pluginChan
 }
 
 /*
@@ -46,7 +37,7 @@ func catchActionChannel() {
 	for {
 		log(logInfo, "catchActionChannel() infinite for() loop restarted select on channel")
 	    	select {
-		case a := <-me.pluginChan:
+		case a := <-pluginChan:
 			if (me.baseGui == nil) {
 				// something went wrong initializing the gocui
 				log(logError,"ERROR: console did not initialize")
@@ -60,22 +51,29 @@ func catchActionChannel() {
 
 func Exit() {
 	// TODO: what should actually happen here?
+	log(true, "Exit() here. doing standardExit()")
 	standardExit()
 }
 
 func standardExit() {
+	log(true, "standardExit() doing baseGui.Close()")
 	me.baseGui.Close()
+	log(true, "standardExit() doing outf.Close()")
 	outf.Close()
-	setOutput(os.Stdout)
-	sendBackQuit()
-	sleep(.5)
+	// log(true, "standardExit() setOutput(os.Stdout)")
+	// setOutput(os.Stdout)
+	log(true, "standardExit() send back Quit()")
+	go sendBackQuit() // don't stall here in case the
+	// induces a delay in case the callback channel is broken
+	sleep(1)
+	log(true, "standardExit() exit()")
 	exit()
 }
 func sendBackQuit() {
 	// send 'Quit' back to the program (?)
 	var a toolkit.Action
 	a.ActionType = toolkit.UserQuit
-	me.callback <- a
+	callback <- a
 }
 
 var outf *os.File

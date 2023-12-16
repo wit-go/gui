@@ -15,12 +15,12 @@ func actionDump(b bool, a *toolkit.Action) {
 	log(b, "actionDump() ParentId =", a.ParentId)
 }
 
-func add(a toolkit.Action) {
+func add(a *toolkit.Action) {
 	if (a.WidgetType == toolkit.Root) {
-		me.rootNode = addWidget(&a)
+		me.rootNode = addNode(a)
 		return
 	}
-	n := addWidget(&a)
+	n := addNode(a)
 
 	p := n.parent
 	switch n.WidgetType {

@@ -22,14 +22,14 @@ func splitLines(s string) []string {
 
 func (n *node) textResize() {
 	w := n.tk
-	var width, height int
+	var width, height int = 0, 0
 
 	for i, s := range splitLines(n.Text) {
 		log(logNow, "textResize() len =", len(s), i, s)
 		if (width < len(s)) {
 			width = len(s)
 		}
-		height = i
+		height += 1
 	}
 	w.gocuiSize.w1 = w.gocuiSize.w0 + width + me.FramePadW
 	w.gocuiSize.h1 = w.gocuiSize.h0 + height + me.FramePadH
@@ -81,12 +81,22 @@ func (n *node) showView() {
 func (n *node) recreateView() {
 	var err error
 	w := n.tk
+	log(logError, "recreateView() START", n.WidgetType, n.Name)
 	if (me.baseGui == nil) {
-		log(logError, "showView() ERROR: me.baseGui == nil", w)
+		log(logError, "recreateView() ERROR: me.baseGui == nil", w)
 		return
 	}
+
+	// this deletes the button from gocui
 	me.baseGui.DeleteView(w.cuiName)
 	w.v = nil
+
+	if (n.Name == "CLOUDFLARE_EMAIL") {
+		n.showWidgetPlacement(logNow, "n.Name=" + n.Name + " n.Text=" + n.Text + " " + w.cuiName)
+		n.dumpWidget("jwc")
+		n.textResize()
+		n.showWidgetPlacement(logNow, "n.Name=" + n.Name + " n.Text=" + n.Text + " " + w.cuiName)
+	}
 
 	a := w.gocuiSize.w0
 	b := w.gocuiSize.h0
@@ -95,23 +105,33 @@ func (n *node) recreateView() {
 
 	w.v, err = me.baseGui.SetView(w.cuiName, a, b, c, d, 0)
 	if err == nil {
-		n.showWidgetPlacement(logError, "drawView()")
-		log(logError, "drawView() internal plugin error err = nil")
+		n.showWidgetPlacement(logError, "recreateView()")
+		log(logError, "recreateView() internal plugin error err = nil")
 		return
 	}
 	if !errors.Is(err, gocui.ErrUnknownView) {
-		n.showWidgetPlacement(logError, "drawView()")
-		log(logError, "drawView() internal plugin error error.IS()", err)
+		n.showWidgetPlacement(logError, "recreateView()")
+		log(logError, "recreateView() internal plugin error error.IS()", err)
 		return
 	}
 
+	// this sets up the keybinding for the name of the window
+	// does this really need to be done? I think we probably already
+	// know everything about where all the widgets are so we could bypass
+	// the gocui package and just handle all the mouse events internally here (?)
+	// for now, the w.v.Name is a string "1", "2", "3", etc from the widgetId
+
+	// set the binding for this gocui view now that it has been created
+	// gocui handles overlaps of views so it will run on the view that is clicked on
 	me.baseGui.SetKeybinding(w.v.Name(), gocui.MouseLeft, gocui.ModNone, click)
 
+	// this actually sends the text to display to gocui
 	w.v.Wrap = true
 	w.v.Frame = w.frame
 	w.v.Clear()
 	fmt.Fprint(w.v, n.Text)
-	n.showWidgetPlacement(logNow, "Window: " + n.Text)
+	// n.showWidgetPlacement(logNow, "n.Name=" + n.Name + " n.Text=" + n.Text + " " + w.cuiName)
+	// n.dumpWidget("jwc 2")
 
 	// if you don't do this here, it will be black & white only
 	if (w.color != nil) {
@@ -121,6 +141,11 @@ func (n *node) recreateView() {
 		w.v.SelFgColor = w.color.selFg
 		w.v.SelBgColor = w.color.selBg
 	}
+	if (n.Name == "CLOUDFLARE_EMAIL") {
+		n.showWidgetPlacement(logNow, "n.Name=" + n.Name + " n.Text=" + n.Text + " " + w.cuiName)
+		n.dumpTree(true)
+	}
+	log(logError, "recreateView() END")
 }
 
 func (n *node) hideWidgets() {
@@ -167,13 +192,8 @@ func (n *node) showWidgets() {
 	if (w.isFake) {
 		// don't display by default
 	} else {
-		// if n.IsCurrent() {
-			n.showWidgetPlacement(logInfo, "current:")
-			n.showView()
-		// } else {
-		// 	n.showWidgetPlacement(logInfo, "not:")
-			// w.drawView()
-		// }
+		n.showWidgetPlacement(logInfo, "current:")
+		n.showView()
 	}
 	for _, child := range n.children {
 		child.showWidgets()
