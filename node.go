@@ -1,6 +1,6 @@
 package gui
 
-import "git.wit.org/wit/gui/toolkit"
+import "go.wit.com/gui/toolkit"
 
 /*
 	generic function to create a new node on the binary tree

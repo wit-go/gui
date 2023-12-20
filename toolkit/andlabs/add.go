@@ -4,7 +4,7 @@ import (
 	"github.com/andlabs/ui"
 	_ "github.com/andlabs/ui/winmanifest"
 
-	"git.wit.org/wit/gui/toolkit"
+	"go.wit.com/gui/toolkit"
 )
 
 func actionDump(b bool, a *toolkit.Action) {

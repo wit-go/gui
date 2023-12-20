@@ -2,7 +2,7 @@
 package main
 
 import 	(
-	"git.wit.org/wit/gui"
+	"go.wit.com/gui"
 )
 
 var cloudflareURL string = "https://api.cloudflare.com/client/v4/zones/"

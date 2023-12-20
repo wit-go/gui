@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/awesome-gocui/gocui"
-	"git.wit.org/wit/gui/toolkit"
+	"go.wit.com/gui/toolkit"
 )
 
 func splitLines(s string) []string {

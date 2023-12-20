@@ -1,6 +1,6 @@
 package main
 
-// import "git.wit.org/wit/gui/toolkit"
+// import "go.wit.com/gui/toolkit"
 
 // stores the raw toolkit internals
 type guiWidget struct {

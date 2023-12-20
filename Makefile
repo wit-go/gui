@@ -84,10 +84,6 @@ goget:
 	make -C toolkit/gocui goget
 	make -C toolkit/andlabs goget
 
-# GO111MODULE=on go install github.com/posener/goreadme/cmd/goreadme@latest (worked Oct 20 2022)
-README.md: doc.go
-	-goreadme -factories -types -functions -variabless > README-goreadme.md 
-
 clean:
 	rm -f toolkit/*.so
 	cd debian && make clean

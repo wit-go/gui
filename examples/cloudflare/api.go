@@ -80,7 +80,7 @@ func getZonefile(c *configT) *DNSRecords {
 	This will talk to the cloudflare API and generate a resource record in the zonefile:
 
 	For example:
-	gitea.wit.com. 3600 IN CNAME git.wit.org.
+	gitea.wit.com. 3600 IN CNAME git.wit.com.
 	go.wit.com. 3600 IN A 1.1.1.9
 	test.wit.com. 3600 IN NS ns1.wit.com.
 */

@@ -2,7 +2,7 @@ package main
 
 import (
 	"strings"
-	"git.wit.org/wit/gui/toolkit"
+	"go.wit.com/gui/toolkit"
 )
 
 func (n *node) placeBox(startW int, startH int) {

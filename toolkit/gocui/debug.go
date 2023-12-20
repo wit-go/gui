@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"git.wit.org/wit/gui/toolkit"
+	"go.wit.com/gui/toolkit"
 )
 
 func (n *node) dumpTree(draw bool) {

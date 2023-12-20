@@ -2,13 +2,13 @@ package gui
 
 import (
 	"os"
-	"git.wit.org/wit/gui/toolkit"
+	"go.wit.com/gui/toolkit"
 )
 
 // TODO: make a fake 'plugin' channel of communication to andlabs for mswindows
 // Windows doesn't support plugins. How can I keep andlabs and only compile it on windows?
 // https://forum.heroiclabs.com/t/setting-up-goland-to-compile-plugins-on-windows/594/5
-// import toolkit "git.wit.org/wit/gui/toolkit/andlabs"
+// import toolkit "go.wit.com/gui/toolkit/andlabs"
 
 const Xaxis = 0 // stack things horizontally
 const Yaxis = 1 // stack things vertically

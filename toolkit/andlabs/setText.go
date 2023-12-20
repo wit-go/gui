@@ -1,7 +1,7 @@
 package main
 
 import (
-	"git.wit.org/wit/gui/toolkit"
+	"go.wit.com/gui/toolkit"
 )
 
 func (n *node) setText(a *toolkit.Action) {

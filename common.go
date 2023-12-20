@@ -4,7 +4,7 @@ package gui
 
 import (
 	"regexp"
-	"git.wit.org/wit/gui/toolkit"
+	"go.wit.com/gui/toolkit"
 )
 
 // functions for handling text related GUI elements

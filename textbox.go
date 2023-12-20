@@ -1,7 +1,7 @@
 package gui
 
 import (
-	"git.wit.org/wit/gui/toolkit"
+	"go.wit.com/gui/toolkit"
 )
 
 func (parent *Node) NewTextbox(name string) *Node {

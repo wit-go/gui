@@ -1,6 +1,6 @@
 package gui
 
-import "git.wit.org/wit/gui/toolkit"
+import "go.wit.com/gui/toolkit"
 
 func (n *Node) Checked() bool {
 	return n.B

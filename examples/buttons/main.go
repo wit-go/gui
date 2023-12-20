@@ -5,7 +5,7 @@ import 	(
 	"fmt"
 	"log"
 	"strconv"
-	"git.wit.org/wit/gui"
+	"go.wit.com/gui"
 )
 
 var title string = "Demo Plugin Window"

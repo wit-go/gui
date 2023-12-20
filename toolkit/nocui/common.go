@@ -12,7 +12,7 @@ package main
 */
 
 import (
-	"git.wit.org/wit/gui/toolkit"
+	"go.wit.com/gui/toolkit"
 )
 
 // this is the channel we send user events like

@@ -4,8 +4,8 @@ package main
 import 	(
 	"fmt"
 	arg "github.com/alexflint/go-arg"
-	"git.wit.org/wit/gui"
-	log "git.wit.org/wit/gui/log"
+	"go.wit.com/gui"
+	log "go.wit.com/gui/log"
 )
 
 

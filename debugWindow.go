@@ -1,7 +1,7 @@
 package gui
 
 import (
-//	"git.wit.org/wit/gui/toolkit"
+//	"go.wit.com/gui/toolkit"
 )
 
 // TODO: move all this shit into somewhere not global

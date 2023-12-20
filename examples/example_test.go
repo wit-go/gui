@@ -17,7 +17,7 @@
 package gui_test
 
 import (
-	"git.wit.org/wit/gui"
+	"go.wit.com/gui"
 )
 
 // This example demonstrates how to create a NewWindow()

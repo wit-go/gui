@@ -2,7 +2,7 @@ package main
 
 import (
 	"strconv"
-	"git.wit.org/wit/gui/toolkit"
+	"go.wit.com/gui/toolkit"
 )
 
 func initWidget(n *node) *guiWidget {

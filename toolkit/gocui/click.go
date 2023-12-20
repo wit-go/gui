@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/awesome-gocui/gocui"
-	"git.wit.org/wit/gui/toolkit"
+	"go.wit.com/gui/toolkit"
 )
 
 // set isCurrent = false everywhere
@@ -194,7 +194,7 @@ func (n *node) doWidgetClick() {
 			tk.v.Wrap = true
 			tk.v.Frame = true
 			tk.v.Clear()
-			fmt.Fprint(tk.v, "example.com\nwit.org\nwit.com")
+			fmt.Fprint(tk.v, "example.com\nwit.com")
 			me.ddview.SetVisible(true)
 			return
 		}

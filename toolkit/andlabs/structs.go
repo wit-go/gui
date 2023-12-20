@@ -1,6 +1,6 @@
 package main
 
-// import "git.wit.org/wit/gui/toolkit"
+// import "go.wit.com/gui/toolkit"
 
 import "github.com/andlabs/ui"
 import _ "github.com/andlabs/ui/winmanifest"

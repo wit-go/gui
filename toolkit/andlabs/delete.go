@@ -2,7 +2,7 @@ package main
 
 // if you include more than just this import
 // then your plugin might be doing something un-ideal (just a guess from 2023/02/27)
-import "git.wit.org/wit/gui/toolkit"
+import "go.wit.com/gui/toolkit"
 
 // delete the child widget from the parent
 // p = parent, c = child

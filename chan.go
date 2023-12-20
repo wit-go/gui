@@ -6,7 +6,7 @@ package gui
 
 import (
 	// "regexp"
-	// "git.wit.org/wit/gui/toolkit"
+	// "go.wit.com/gui/toolkit"
 	"sync"
 	"runtime"
 	"github.com/sourcegraph/conc"

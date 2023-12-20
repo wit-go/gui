@@ -4,7 +4,7 @@ import 	(
 	"io"
 //	"fmt"
 //	"strings"
-	witlog "git.wit.org/wit/gui/log"
+	witlog "go.wit.com/gui/log"
 )
 
 // various debugging flags

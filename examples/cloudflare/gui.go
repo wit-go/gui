@@ -5,7 +5,7 @@ import 	(
 	"log"
 	"strconv"
 
-	"git.wit.org/jcarr/control-panel-dns/cloudflare"
+	"go.wit.com/control-panel-dns/cloudflare"
 )
 
 func loadDNS(c *configT) {

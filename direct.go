@@ -7,7 +7,7 @@
 package gui
 
 import (
-	"git.wit.org/wit/gui/toolkit/andlabs-direct"
+	"go.wit.com/gui/toolkit/andlabs-direct"
 )
 
 func trythis() {

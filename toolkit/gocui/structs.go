@@ -15,7 +15,7 @@ import (
 	"sync"
 	"strings"
 	"github.com/awesome-gocui/gocui"
-//	"git.wit.org/wit/gui/toolkit"
+//	"go.wit.com/gui/toolkit"
 )
 
 // It's probably a terrible idea to call this 'me'

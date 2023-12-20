@@ -10,7 +10,7 @@ import (
 	"embed"
 	"plugin"
 
-	"git.wit.org/wit/gui/toolkit"
+	"go.wit.com/gui/toolkit"
 )
 
 var err error
@@ -107,7 +107,7 @@ func sendCallback(p *aplug, funcName string) func(chan toolkit.Action) {
 	TODO: use LD_LIBRARY_PATH ?
 	This searches in the following order for the plugin .so files:
 		./toolkit/
-		~/go/src/go.wit.org/gui/toolkit/
+		~/go/src/go.wit.com/gui/toolkit/
 		/usr/lib/go-gui/
 */
 func searchPaths(name string) *aplug {
@@ -143,7 +143,7 @@ func searchPaths(name string) *aplug {
 	if err != nil {
 		log(logError, "searchPaths() error. exiting here?")
 	} else {
-		filename = homeDir + "/go/src/git.wit.org/wit/gui/toolkit/" + name + ".so"
+		filename = homeDir + "/go/src/go.wit.com/gui/toolkit/" + name + ".so"
 		p = initToolkit(name, filename)
 		if (p != nil) {
 			return p

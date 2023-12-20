@@ -8,8 +8,8 @@ import 	(
 	"bufio"
 	"strings"
 
-	"git.wit.org/wit/gui"
-	"git.wit.org/jcarr/control-panel-dns/cloudflare"
+	"go.wit.com/gui"
+	"go.wit.com/control-panel-dns/cloudflare"
 )
 
 var title string = "Cloudflare DNS Control Panel"

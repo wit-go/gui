@@ -2,7 +2,7 @@ package gui
 
 import (
 	"strconv"
-	"git.wit.org/wit/gui/toolkit"
+	"go.wit.com/gui/toolkit"
 )
 
 

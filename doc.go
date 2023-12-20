@@ -22,8 +22,10 @@ This worked on debian sid (mate-desktop) on 2023/12/03
 I didn't record the dependances needed (gtk-dev)
 
 	export GO111MODULE="off"
-	make
+	go get go.wit.com/gui
 
+When I am working on toolkit plugins, then I work
+directly from ~/go/src/go.wit.com/gui/
 
 Hello World Example
 
@@ -32,24 +34,19 @@ Hello World Example
 
 	import 	(
 		"log"
-		"git.wit.org/wit/gui"
+		"go.wit.com/gui"
 	)
 
-	var window *gui.Node // This is the beginning of the binary tree of widgets
+	var myGui *gui.Node // This is the beginning of the binary tree of widgets
 
 	// go will sit here until the window exits
 	func main() {
-		gui.Init()
-		gui.Main(helloworld)
+		myGui = gui.New()
 	}
 
 	// This initializes the first window and 2 tabs
 	func helloworld() {
-		gui.Config.Title = "Hello World golang wit/gui Window"
-		gui.Config.Width = 640
-		gui.Config.Height = 480
-
-		window := gui.NewWindow()
+		window := myGui.NewWindow("hello world")
 		addTab(window, "A Simple Tab Demo")
 		addTab(window, "A Second Tab")
 	}
@@ -62,6 +59,9 @@ Hello World Example
 			log.Println("world")
 		})
 	}
+
+Hopefully this code example will remain syntactically
+consistant.
 
 External Toolkits
 
@@ -89,7 +89,7 @@ external things which might be useful
 * [MS Windows Application Library Kit](https://github.com/lxn/walk)
 * [Federated git pull](https://github.com/forgefed/forgefed) Hopefully this will work for me with gitea
 * [Github mirror](https://github.com/wit-go/gui) This repo on mirror. Hopefully I won't have to use this.
-* [WIT GO projects](https://go.wit.org/) Attempt to model go.uber.org
+* [WIT GO projects](https://go.wit.com/) Attempt to model go.uber.org
 
 */
 package gui

@@ -3,7 +3,7 @@ package main
 
 import 	(
 	"log"
-	"git.wit.org/wit/gui"
+	"go.wit.com/gui"
 )
 
 func main() {
