@@ -34,20 +34,23 @@ var zonedrop *gui.Node
 
 // Resource Record (used in a DNS zonefile)
 type RRT struct {
-	typeNode *gui.Node
-	nameNode *gui.Node
-	proxyNode *gui.Node
-	ttlNode *gui.Node
-	valueNode *gui.Node
-	saveNode *gui.Node
+	typeNode *gui.Node	// CNAME, A, AAAA, ...
+	nameNode *gui.Node	// www, mail, ...
+	proxyNode *gui.Node	// If cloudflare is a port 80 & 443 proxy
+	ttlNode *gui.Node	// just set to 1 which means automatic to cloudflare
+	valueNode *gui.Node	// 4.2.2.2, "dkim stuff", etc
+	curlNode *gui.Node	// shows you what you could run via curl
+	resultNode *gui.Node	// what the cloudflare API returned
+	saveNode *gui.Node	// button to send it to cloudflare
 
 	ID     string
 	Type   string
 	Name   string
 	Content string
+	ProxyS string
 	Proxied bool
 	Proxiable bool
-	TTL int
+	Ttl string
 }
 
 /*

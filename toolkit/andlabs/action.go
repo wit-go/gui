@@ -38,11 +38,11 @@ func (n *node) enable(b bool) {
 }
 
 func (n *node) pad(at toolkit.ActionType) {
-	log(debugError, "pad()")
+	log(logInfo, "pad() on WidgetId =", n.WidgetId)
 
 	t := n.tk
 	if (t == nil) {
-		log(debugError, "pad() toolkit struct == nil. for", n.WidgetId)
+		log(logError, "pad() toolkit struct == nil. for", n.WidgetId)
 		return
 	}
 

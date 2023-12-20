@@ -86,7 +86,8 @@ func demoUI() {
 		messageLabel.SetText("")
 	})
 
-	mainWindow.Show()
+	// this is messed up.
+	// mainWindow.Show()
 }
 
 /*

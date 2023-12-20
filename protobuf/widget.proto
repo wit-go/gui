@@ -1,0 +1,117 @@
+syntax = "proto3";
+package guiProtobuf;
+
+message Action {
+	WidgetType widgetType	= 1;
+	ActionType actionType	= 2;
+	int64	widgetId	= 3;
+	int64	parentId	= 4;
+	string	text		= 5; // what is visable to the user
+	string	name		= 6; // a name useful for programming
+
+	// This is how the values are passed back and forth
+	// values from things like checkboxes & dropdown's
+	bool	b		= 7;
+	int64	i		= 8;
+	string	s		= 9;
+
+	// This is used for things like a slider(0,100)
+	int64	x		= 10;
+	int64	y		= 11;
+
+	// This is for the grid size & widget position
+	int64	w		= 12;
+	int64	h		= 13;
+	int64	atw		= 14;
+	int64	ath		= 15;
+
+	bool	margin		= 16; // Put space around elements to improve look & feel
+	bool	expand		= 17; // Make widgets fill up the space available
+
+	repeated Response results = 18;
+	repeated Network networks = 19;
+	repeated VM vms = 20;
+
+	enum WidgetType {
+		Unknown	= 0;
+		Root	= 1;	// the master 'root' node of the binary tree
+		Flag	= 2;	// used to send configuration values to plugins
+		Window	= 3;	// in certain gui's (ncurses), these are tabs
+		Tab	= 4;	// internally, this is a window
+		Frame	= 5;	// deprecate?
+		Grid	= 6;	// like drawers in a chest
+		Group	= 7;	// like the 'Appetizers' section on a menu
+		Box	= 8;	// a vertical or horizontal stack of widgets
+		Button	= 9;
+		Checkbox = 10;	// select 'on' or 'off'
+		Dropdown = 11;
+		Combobox  = 12;	// dropdown with edit=true
+		Label = 13;
+		Textbox = 14;	// is this a Label with edit=true
+		Slider = 15;	// like a progress bar
+		Spinner = 16;	// like setting the oven temperature
+		Separator = 17;	// TODO
+		Image = 18;	// TODO
+		Area = 19;	// TODO
+		Form = 20;	// TODO
+		Font = 21;	// TODO
+		Color = 22;	// TODO
+		Dialog = 23;	// TODO
+		Stdout = 24;	// can be used to capture and display log output
+	}
+
+	enum ActionType {
+		Health	= 0;
+		Add	= 1;
+		Delete	= 2;
+		Get	= 3;
+		Set	= 4;
+		GetText	= 5;
+		SetText	= 6;
+		AddText	= 7;
+		Show	= 8;
+		Hide	= 9;
+		Enable	= 10;
+		Disable	= 11;
+		Margin	= 12;
+		Unmargin	= 13;
+		Pad	= 14;
+		Unpad	= 15;
+		Append	= 16;
+		Move	= 17;
+		Dump	= 18;
+		User	= 19; // the user did something (mouse, keyboard, etc)
+		InitToolkit	= 20; // initializes the toolkit
+		CloseToolkit	= 21; // closes the toolkit
+		UserQuit	= 22; // the user closed the GUI
+		EnableDebug	= 23; // open the debugging window
+	}
+
+	message Response {
+		// ActionType type	= 1;
+		int64	id	= 2;
+		string	name	= 3;
+		string	error	= 4;
+		repeated string snippets = 5;
+	}
+
+	message Network {
+		int64	id	= 1;
+		string	name	= 2;
+		int64	total_cpu = 3;
+		int64	total_mem = 4;
+		string	login_url = 5;
+	}
+
+	message VM {
+		int64	id	= 1;
+		string	name	= 2;
+		string	hostname = 3;
+		int64	cpus	= 4;
+		int64	memory	= 5;
+		int64	disk	= 6;
+		string	IPv6	= 7;
+		string	role	= 8;
+		string	baseImage = 9;
+	}
+}

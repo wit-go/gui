@@ -14,12 +14,12 @@ var stretchy bool // expand things like buttons to the maximum size
 var padded bool // add space between things like buttons
 var margin bool // add space around the frames of windows
 
-var debugToolkit bool = true
-var debugChange bool = true
-var debugPlugin bool = true
-var debugAction bool = true
-var debugFlags bool = true
-var debugGrid bool = true
+var debugToolkit bool = false
+var debugChange bool = false
+var debugPlugin bool = false
+var debugAction bool = false
+var debugFlags bool = false
+var debugGrid bool = false
 var debugNow bool = true
 var debugError bool = true
 

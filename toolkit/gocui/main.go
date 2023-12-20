@@ -43,7 +43,7 @@ func catchActionChannel() {
 				log(logError,"ERROR: console did not initialize")
 				continue
 			}
-			log(logNow, "catchActionChannel()", a.WidgetId, a.ActionType, a.WidgetType, a.Name)
+			log(logInfo, "catchActionChannel()", a.WidgetId, a.ActionType, a.WidgetType, a.Name)
 			action(&a)
 		}
 	}

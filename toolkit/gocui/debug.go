@@ -45,7 +45,8 @@ func (n *node) showWidgetPlacement(b bool, s string) {
 			s1 += fmt.Sprintf("At(%2d,%2d) ", n.AtW, n.AtH)
 		}
 	}
-	log(b, s1, s, n.WidgetType, ",", n.Name) // , "text=", w.text)
+	tmp := "." + n.Name + "."
+	log(b, s1, s, n.WidgetType, ",", tmp) // , "text=", w.text)
 }
 
 func (n *node) dumpWidget(pad string) {

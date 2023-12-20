@@ -170,6 +170,13 @@ func (n *Node) Unpad() *Node {
 	return n
 }
 
+func (n *Node) Expand() *Node {
+	a := newAction(n, toolkit.Pad)
+	a.Expand = true
+	sendAction(a)
+	return n
+}
+
 // is this better?
 // yes, this is better. it allows Internationalization very easily
 //  me.window = myGui.New2().Window("DNS and IPv6 Control Panel").Standard()
@@ -182,8 +189,9 @@ func (n *Node) Window(title string) *Node {
 
 // This should not really do anything. as per the docs, the "Standard()" way
 // should be the default way
+/*
 func (n *Node) Standard() *Node {
-	log(debugError, "Standard() not implemented yet")
+	log(debugInfo, "Standard() not implemented yet")
 	return n
 }
 
@@ -191,3 +199,4 @@ func (n *Node) SetMargin() *Node {
 	log(debugError, "DoMargin() not implemented yet")
 	return n
 }
+*/

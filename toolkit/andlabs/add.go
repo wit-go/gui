@@ -127,15 +127,16 @@ func (p *node) place(n *node) bool {
 		return true
 	case toolkit.Tab:
 		if (p.tk.uiTab == nil) {
-			log(logError, "p.tk.uiTab == nil", p.tk)
+			log(logError, "p.tk.uiTab == nil for n.WidgetId =", n.WidgetId, "p.tk =", p.tk)
 			panic("p.tk.uiTab == nil")
 		}
 		if (n.tk.uiControl == nil) {
-			log(logError, "n.tk.uiControl == nil", n.tk)
+			log(logError, "n.tk.uiControl == nil for n.WidgetId =", n.WidgetId, "n.tk =", n.tk)
 			panic("n.tk.uiControl == nil")
 		}
-		log(logError, "THIS SHOULD NEVER HAPPEN ??????? trying to place() node=", n.WidgetId, n.Name, n.Text, n.WidgetType)
-		log(logError, "THIS SHOULD NEVER HAPPEN ??????? trying to place() on parent=", p.WidgetId, p.Name, p.Text, p.WidgetType)
+		log(logError, "CHECK LOGIC ON THIS. APPENDING directly into a window without a tab")
+		// log(logError, "THIS SHOULD NEVER HAPPEN ??????? trying to place() node=", n.WidgetId, n.Name, n.Text, n.WidgetType)
+		// log(logError, "THIS SHOULD NEVER HAPPEN ??????? trying to place() on parent=", p.WidgetId, p.Name, p.Text, p.WidgetType)
 		// panic("n.tk.uiControl == nil")
 		p.tk.uiTab.Append(n.Text, n.tk.uiControl)
 		p.tk.boxC += 1

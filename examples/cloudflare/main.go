@@ -7,7 +7,9 @@ import 	(
 	"log"
 	"bufio"
 	"strings"
+
 	"git.wit.org/wit/gui"
+	"git.wit.org/jcarr/control-panel-dns/cloudflare"
 )
 
 var title string = "Cloudflare DNS Control Panel"
@@ -44,7 +46,8 @@ func makeCloudflareWindow() {
 	makeConfigTab(mainWindow)
 
 	t = mainWindow.NewTab("Zones")
-	g1 := t.NewGroup("zones")
+	vb := t.NewBox("vBox", false)
+	g1 := vb.NewGroup("zones")
 
 	// make dropdown list of zones
 	zonedrop = g1.NewDropdown("zone")
@@ -52,6 +55,7 @@ func makeCloudflareWindow() {
 	for d, _ := range config {
 		zonedrop.AddText(d)
 	}
+	zonedrop.AddText("stablesid.org")
 
 	zonedrop.Custom = func () {
 		domain := zonedrop.S
@@ -82,18 +86,18 @@ func makeConfigTab(window *gui.Node) {
 	vb := t.NewBox("vBox", false)
 	g1 := vb.NewGroup("Cloudflare API Config")
 
-	g1.NewLabel("If you have an API key with access to list all of /n your zone files, enter it here. \n \n Alternatively, you can set the enviroment variables: \n env $CLOUDFLARE_AUTHKEY \n env $CLOUDFLARE_EMAIL \n env $CLOUDFLARE_URL \n")
+	g1.NewLabel("If you have an API key with access to list all of /n your zone files, enter it here. \n \n Alternatively, you can set the enviroment variables: \n env $CF_API_KEY \n env $CF_API_EMAIL\n")
 
 	// make grid to display credentials
 	grid := g1.NewGrid("credsGrid", 2, 4) // width = 2
 
 	grid.NewLabel("Auth Key")
-	aw := grid.NewEntryLine("CLOUDFLARE_AUTHKEY")
-	aw.SetText(os.Getenv("CLOUDFLARE_AUTHKEY"))
+	aw := grid.NewEntryLine("CF_API_KEY")
+	aw.SetText(os.Getenv("CF_API_KEY"))
 
 	grid.NewLabel("Email")
-	ew := grid.NewEntryLine("CLOUDFLARE_EMAIL")
-	ew.SetText(os.Getenv("CLOUDFLARE_EMAIL"))
+	ew := grid.NewEntryLine("CF_API_EMAIL")
+	ew.SetText(os.Getenv("CF_API_EMAIL"))
 
 	var url string = "https://api.cloudflare.com/client/v4/zones/"
 	grid.NewLabel("Cloudflare API")
@@ -104,6 +108,10 @@ func makeConfigTab(window *gui.Node) {
 	vb.NewButton("getZones()", func () {
 		log.Println("getZones()")
 		getZones(aw.S, ew.S)
+	})
+
+	vb.NewButton("cloudflare wit.com", func () {
+		cloudflare.CreateRR(myGui, "wit.com", "3777302ac4a78cd7fa4f6d3f72086d06")
 	})
 
 	t.Pad()
@@ -144,26 +152,22 @@ func showCloudflareCredentials(box *gui.Node) {
 	grid := box.NewGrid("credsGrid", 2, 4) // width = 2
 
 	grid.NewLabel("Domain")
-	domainWidget = grid.NewEntryLine("CLOUDFLARE_DOMAIN")
+	domainWidget = grid.NewEntryLine("CF_API_DOMAIN")
 
 	grid.NewLabel("Zone ID")
-	zoneWidget = grid.NewEntryLine("CLOUDFLARE_ZONEID")
+	zoneWidget = grid.NewEntryLine("CF_API_ZONEID")
 
 	grid.NewLabel("Auth Key")
-	authWidget = grid.NewEntryLine("CLOUDFLARE_AUTHKEY")
+	authWidget = grid.NewEntryLine("CF_API_KEY")
 
 	grid.NewLabel("Email")
-	emailWidget = grid.NewEntryLine("CLOUDFLARE_EMAIL")
+	emailWidget = grid.NewEntryLine("CF_API_EMAIL")
 
 	var url string = "https://api.cloudflare.com/client/v4/zones/"
 	grid.NewLabel("Cloudflare API")
 	grid.NewLabel(url)
 
 	grid.Pad()
-
-	saveButton = box.NewButton("Save to config", func () {
-	})
-	saveButton.Disable()
 
 	loadButton = box.NewButton("Load Cloudflare DNS zonefile", func () {
 		var domain configT

@@ -4,10 +4,11 @@ package main
 import 	(
 	"os"
 	"log"
+	"fmt"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"strconv"
+//	"strconv"
 	"bytes"
 
 	"github.com/davecgh/go-spew/spew"
@@ -19,7 +20,17 @@ func doChange(dnsRow *RRT) {
 	log.Println("Content", dnsRow.Content, "vs", dnsRow.valueNode.S)
 	if (dnsRow.Content != dnsRow.valueNode.S) {
 		log.Println("UPDATE VALUE", dnsRow.nameNode.Name, dnsRow.typeNode.Name, "to", dnsRow.valueNode.S)
-		httpPut(dnsRow)
+		stuff, result := httpPut(dnsRow)
+		if (dnsRow.curlNode != nil) {
+			pretty, _ := formatJSON(stuff)
+			log.Println("http PUT curl =", pretty)
+			dnsRow.curlNode.SetText(pretty)
+		}
+		if (dnsRow.resultNode != nil) {
+			pretty, _ := formatJSON(result)
+			log.Println("http PUT result =", pretty)
+			dnsRow.resultNode.SetText(pretty)
+		}
 	}
 	dnsRow.saveNode.Disable()
 }
@@ -73,24 +84,26 @@ func getZonefile(c *configT) *DNSRecords {
 	go.wit.com. 3600 IN A 1.1.1.9
 	test.wit.com. 3600 IN NS ns1.wit.com.
 */
-func httpPut(dnsRow *RRT) {
-	var url string = cloudflareURL + os.Getenv("CLOUDFLARE_ZONEID") + "/dns_records/" + dnsRow.ID
-	var authKey string = os.Getenv("CLOUDFLARE_AUTHKEY")
-	var email string = os.Getenv("CLOUDFLARE_EMAIL")
+func httpPut(dnsRow *RRT) (string, string) {
+	var url string = cloudflareURL + os.Getenv("CF_API_ZONEID") + "/dns_records/" + dnsRow.ID
+	var authKey string = os.Getenv("CF_API_KEY")
+	var email string = os.Getenv("CF_API_EMAIL")
 
-	// make a json record to send on port 90 to cloudflare
+	// make a json record to send on port 80 to cloudflare
 	var tmp string
 	tmp = `{"content": "` + dnsRow.valueNode.S + `", `
 	tmp += `"name": "` + dnsRow.Name + `", `
 	tmp += `"type": "` + dnsRow.Type + `", `
-	tmp+= `"ttl": "` +  strconv.Itoa(dnsRow.TTL) + `", `
+	tmp+= `"ttl": "` +  "1" + `", `
 	tmp += `"comment": "WIT DNS Control Panel"`
 	tmp +=  `}`
 	data := []byte(tmp)
 
 	log.Println("http PUT url =", url)
-	log.Println("http PUT data =", data)
-	spew.Dump(data)
+	// log.Println("http PUT data =", data)
+	// spew.Dump(data)
+	pretty, _ := formatJSON(string(data))
+	log.Println("http PUT data =", pretty)
 
 	req, err := http.NewRequest(http.MethodPut, url, bytes.NewBuffer(data))
 
@@ -103,19 +116,19 @@ func httpPut(dnsRow *RRT) {
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Println(err)
-		return
+		return tmp, fmt.Sprintf("blah err =", err)
 	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println(err)
-		return
+		return tmp, fmt.Sprintf("blah err =", err)
 	}
-	log.Println("http PUT body =", body)
-	spew.Dump(body)
+	// log.Println("http PUT body =", body)
+	// spew.Dump(body)
 
-	return
+	return tmp, string(body)
 }
 
 // https://api.cloudflare.com/client/v4/zones
@@ -184,4 +197,23 @@ func getZones(auth, email string) *DNSRecords {
 	}
 
 	return &records
+}
+
+// formatJSON takes an unformatted JSON string and returns a formatted version.
+func formatJSON(unformattedJSON string) (string, error) {
+	var jsonData interface{}
+
+	// Decode the JSON string into an interface
+	err := json.Unmarshal([]byte(unformattedJSON), &jsonData)
+	if err != nil {
+		return "", err
+	}
+
+	// Re-encode the JSON with indentation for formatting
+	formattedJSON, err := json.MarshalIndent(jsonData, "", "    ")
+	if err != nil {
+		return "", err
+	}
+
+	return string(formattedJSON), nil
 }

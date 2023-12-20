@@ -11,6 +11,9 @@ examples/textbox/textbox
 examples/cloudflare/cloudflare
 examples/*/helloconsole
 
+# protobuf compiled files
+protobuf/*.pb.go
+
 # temporary files when building debian packages
 /*.deb
 /files

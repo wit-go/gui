@@ -40,13 +40,18 @@ func init() {
 	// log(debugToolkit, "init() Setting defaultBehavior = true")
 	setDefaultBehavior(true)
 
+
+	// TODO: this is messed up. run ui.Main() from the first add? Initialize it with an empty thing first?
+	// fake out the OS toolkit by making a fake window. This is probably needed for macos & windows
+	// actually, this probably breaks the macos build
+	go ui.Main(func() {
+		demoUI()
+	})
+
 	// andlabs = make(map[int]*andlabsT)
 	pluginChan = make(chan toolkit.Action, 1)
 
 	log(logNow, "Init() start channel reciever")
-	go ui.Main(func() {
-		demoUI()
-	})
 	go catchActionChannel()
 	log(logNow, "Init() END")
 }

@@ -37,17 +37,17 @@ func init() {
 func watchCallback() {
 	log(logInfo, "watchCallback() START")
 	for {
-		log(logNow, "watchCallback() restarted select for toolkit user events")
+		log(logInfo, "watchCallback() restarted select for toolkit user events")
 	    	select {
 		case a := <-me.guiChan:
 			if (a.ActionType == toolkit.UserQuit) {
-				log(logNow, "doUserEvent() User sent Quit()")
+				log(logInfo, "doUserEvent() User sent Quit()")
 				me.rootNode.doCustom()
 				exit("wit/gui toolkit.UserQuit")
 				break
 			}
 			if (a.ActionType == toolkit.EnableDebug) {
-				log(logNow, "doUserEvent() Enable Debugging Window")
+				log(logInfo, "doUserEvent() Enable Debugging Window")
 				DebugWindow()
 				break
 			}
@@ -56,7 +56,7 @@ func watchCallback() {
 			if (n == nil) {
 				log(logError, "watchCallback() UNKNOWN widget id =", a.WidgetId, a.Name)
 			} else {
-				log(logNow, "watchCallback() FOUND widget id =", n.id, n.Name)
+				log(logInfo, "watchCallback() FOUND widget id =", n.id, n.Name)
 				n.doUserEvent(a)
 			}
 			// this maybe a good idea?
@@ -67,7 +67,7 @@ func watchCallback() {
 }
 
 func (n *Node) doCustom() {
-	log(logNow, "doUserEvent() widget =", n.id, n.Name, n.WidgetType, n.B)
+	log(logInfo, "doUserEvent() widget =", n.id, n.Name, n.WidgetType, n.B)
 	if (n.Custom == nil) {
 		log(debugError, "Custom() = nil. SKIPPING")
 		return
@@ -76,40 +76,40 @@ func (n *Node) doCustom() {
 }
 
 func (n *Node) doUserEvent(a toolkit.Action) {
-	log(logNow, "doUserEvent() node =", n.id, n.Name)
+	log(logInfo, "doUserEvent() node =", n.id, n.Name)
 	switch n.WidgetType {
 	case toolkit.Checkbox:
 		n.B = a.B
-		log(logNow, "doUserEvent() node =", n.id, n.Name, "set to:", n.B)
+		log(logInfo, "doUserEvent() node =", n.id, n.Name, "set to:", n.B)
 		n.doCustom()
 	case toolkit.Button:
-		log(logNow, "doUserEvent() node =", n.id, n.Name, "button clicked")
+		log(logInfo, "doUserEvent() node =", n.id, n.Name, "button clicked")
 		n.doCustom()
 	case toolkit.Combobox:
 		n.S = a.S
-		log(logNow, "doUserEvent() node =", n.id, n.Name, "set to:", n.S)
+		log(logInfo, "doUserEvent() node =", n.id, n.Name, "set to:", n.S)
 		n.doCustom()
 	case toolkit.Dropdown:
 		n.S = a.S
-		log(logNow, "doUserEvent() node =", n.id, n.Name, "set to:", n.S)
+		log(logInfo, "doUserEvent() node =", n.id, n.Name, "set to:", n.S)
 		n.doCustom()
 	case toolkit.Textbox:
 		n.S = a.S
-		log(logNow, "doUserEvent() node =", n.id, n.Name, "set to:", n.S)
+		log(logInfo, "doUserEvent() node =", n.id, n.Name, "set to:", n.S)
 		n.doCustom()
 	case toolkit.Spinner:
 		n.I = a.I
-		log(logNow, "doUserEvent() node =", n.id, n.Name, "set to:", n.I)
+		log(logInfo, "doUserEvent() node =", n.id, n.Name, "set to:", n.I)
 		n.doCustom()
 	case toolkit.Slider:
 		n.I = a.I
-		log(logNow, "doUserEvent() node =", n.id, n.Name, "set to:", n.I)
+		log(logInfo, "doUserEvent() node =", n.id, n.Name, "set to:", n.I)
 		n.doCustom()
 	case toolkit.Window:
-		log(logNow, "doUserEvent() node =", n.id, n.Name, "window closed")
+		log(logInfo, "doUserEvent() node =", n.id, n.Name, "window closed")
 		n.doCustom()
 	default:
-		log(logNow, "doUserEvent() type =", n.WidgetType)
+		log(logInfo, "doUserEvent() type =", n.WidgetType)
 	}
 }
 

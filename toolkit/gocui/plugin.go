@@ -51,8 +51,22 @@ func action(a *toolkit.Action) {
 	case toolkit.CloseToolkit:
 		log(logNow, "attempting to close the plugin and release stdout and stderr")
 		standardExit()
+	case toolkit.Enable:
+		if n.Visible() {
+			// widget was already shown
+		} else {
+			log(logInfo, "Setting Visable to true", a.Name)
+			n.SetVisible(true)
+		}
+	case toolkit.Disable:
+		if n.Visible() {
+			log(logInfo, "Setting Visable to false", a.Name)
+			n.SetVisible(false)
+		} else {
+			// widget was already hidden
+		}
 	default:
-		log(logError, "action() Unknown =", a.ActionType, a.WidgetType, a.Name)
+		log(logError, "action() ActionType =", a.ActionType, "WidgetType =", a.WidgetType, "Name =", a.Name)
 	}
 	log(logInfo, "action() END")
 }
@@ -70,16 +84,28 @@ func (n *node) AddText(text string) {
 }
 
 func (n *node) SetText(text string) {
+	var changed bool = false
 	if (n == nil) {
 		log(logNow, "widget is nil")
 		return
 	}
-	n.S = text
-	n.Text = text
+	if (n.Text != text) {
+		n.Text = text
+		changed = true
+	}
+	if (n.S != text) {
+		n.S = text
+		changed = true
+	}
+	if (! changed) {
+		return
+	}
 
-	n.textResize()
-	n.deleteView()
-	n.showView()
+	if (n.Visible()) {
+		n.textResize()
+		n.deleteView()
+		n.showView()
+	}
 }
 
 func (n *node) Set(val any) {

@@ -20,20 +20,30 @@ func splitLines(s string) []string {
 	return lines
 }
 
-func (n *node) textResize() {
+func (n *node) textResize() bool {
 	w := n.tk
 	var width, height int = 0, 0
+	var changed bool = false
 
 	for i, s := range splitLines(n.Text) {
-		log(logNow, "textResize() len =", len(s), i, s)
+		log(logInfo, "textResize() len =", len(s), i, s)
 		if (width < len(s)) {
 			width = len(s)
 		}
 		height += 1
 	}
-	w.gocuiSize.w1 = w.gocuiSize.w0 + width + me.FramePadW
-	w.gocuiSize.h1 = w.gocuiSize.h0 + height + me.FramePadH
-	n.showWidgetPlacement(logNow, "textResize()")
+	if (w.gocuiSize.w1 != w.gocuiSize.w0 + width + me.FramePadW) {
+		w.gocuiSize.w1 = w.gocuiSize.w0 + width + me.FramePadW
+		changed = true
+	}
+	if (w.gocuiSize.h1 != w.gocuiSize.h0 + height + me.FramePadH) {
+		w.gocuiSize.h1 = w.gocuiSize.h0 + height + me.FramePadH
+		changed = true
+	}
+	if (changed) {
+		n.showWidgetPlacement(logNow, "textResize() changed")
+	}
+	return changed
 }
 
 func (n *node) hideView() {
@@ -58,17 +68,38 @@ func (n *node) showView() {
 	x0, y0, x1, y1, err := me.baseGui.ViewPosition(w.cuiName)
 	log(logInfo, "showView() w.v already defined for widget", n.Name, err)
 
+	// n.smartGocuiSize()
+	changed := n.textResize()
+
+	if (changed) {
+		log(logNow, "showView() textResize() changed. Should recreateView here wId =", w.cuiName)
+	} else {
+		log(logNow, "showView() Clear() and Fprint() here wId =", w.cuiName)
+		w.v.Clear()
+		fmt.Fprint(w.v, n.Text)
+		n.SetVisible(false)
+		n.SetVisible(true)
+		return
+	}
+
 	// if the gocui element has changed where it is supposed to be on the screen
 	// recreate it
-	if (x0 != w.gocuiSize.w0) || (y0 != w.gocuiSize.h0) {
-		log(logError, "showView() w.v.w0 != x0", n.Name, w.gocuiSize.w0, x0)
-		log(logError, "showView() w.v.h0 != y0", n.Name, w.gocuiSize.h0, y0)
+	if (x0 != w.gocuiSize.w0) {
 		n.recreateView()
 		return
 	}
-	if (x1 != w.gocuiSize.w1) || (y1 != w.gocuiSize.h1) {
-		log(logError, "showView() w.v.w1 != x1", n.Name, w.gocuiSize.w1, x1)
-		log(logError, "showView() w.v.h1 != y1", n.Name, w.gocuiSize.h1, y1)
+	if (y0 != w.gocuiSize.h0) {
+		log(logError, "showView() start hight mismatch id=", w.cuiName, "gocui h vs computed h =", w.gocuiSize.h0, y0)
+		n.recreateView()
+		return
+	}
+	if (x1 != w.gocuiSize.w1) {
+		log(logError, "showView() too wide", w.cuiName, "w,w", w.gocuiSize.w1, x1)
+		n.recreateView()
+		return
+	}
+	if (y1 != w.gocuiSize.h1) {
+		log(logError, "showView() too high", w.cuiName, "h,h", w.gocuiSize.h1, y1)
 		n.recreateView()
 		return
 	}
