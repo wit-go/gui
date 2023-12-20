@@ -1,8 +1,5 @@
 package gui
 
-// import "github.com/davecgh/go-spew/spew"
-
-
 /*
 	Get the int from the gui toolkit
 	because eventually this gui package should become it's own seperate go routine and never interact from the

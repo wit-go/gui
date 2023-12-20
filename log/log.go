@@ -15,7 +15,6 @@ package witlog
 // log("something", foo, bar)
 // var DEBUG bool = true
 // log(DEBUG, "something else", someOtherVariable)  # if DEBUG == false, return doing nothing
-// log(SPEW, "something else", someOtherVariable)   # this get's sent to spew.Dump(). Very useful for debugging!
 //
 
 import 	(
@@ -27,7 +26,6 @@ import 	(
 	"fmt"
 	"time"
 	"reflect"
-	"github.com/davecgh/go-spew/spew"
 	// "net"
 )
 
@@ -50,7 +48,6 @@ type Spewt struct {
 	a bool
 }
 
-var SPEW Spewt
 
 /*
 	sleep()		# you know what this does? sleeps for 1 second. yep. dump. easy.
@@ -116,17 +113,6 @@ func Log(a ...any) {
 			return
 		}
 		a[0] = Where
-	}
-
-	if (reflect.TypeOf(a[0]) == reflect.TypeOf(SPEW)) {
-		// a = a[1:]
-		a[0] = Where
-		if (debugToolkit) {
-			scs := spew.ConfigState{MaxDepth: 1}
-			scs.Dump(a)
-			// spew.Dump(a)
-		}
-		return
 	}
 
 	golog.Println(a...)

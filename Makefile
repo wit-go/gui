@@ -46,8 +46,7 @@ examples:   \
 	all \
 	examples-helloworld \
 	examples-buttons \
-	examples-console-ui-helloworld \
-	examples-cloudflare
+	examples-console-ui-helloworld
 
 # this is the most basic one. This syntax should always work
 examples-helloworld:
@@ -58,9 +57,6 @@ examples-buttons:
 
 examples-console-ui-helloworld:
 	make -C examples/console-ui-helloworld
-
-examples-cloudflare:
-	-make -C examples/cloudflare
 
 # sync repo to the github backup
 # git remote add github git@github.com:witorg/gui.git

@@ -4,7 +4,6 @@
 *.so
 
 examples/buttons/buttons
-examples/cloudflare/cloudflare
 examples/console-ui-helloworld/console-ui-helloworld
 examples/helloworld/helloworld
 

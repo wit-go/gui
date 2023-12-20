@@ -6,7 +6,6 @@ require (
 	github.com/alexflint/go-arg v1.4.3
 	github.com/andlabs/ui v0.0.0-20200610043537-70a69d6ae31e
 	github.com/awesome-gocui/gocui v1.1.0
-	github.com/davecgh/go-spew v1.1.1
 	github.com/golang/protobuf v1.5.3
 	github.com/sourcegraph/conc v0.3.0
 )
