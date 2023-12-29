@@ -61,8 +61,13 @@ type Node struct {
 
 	WidgetType	toolkit.WidgetType
 
+	// for NewLabel("hello"), Text = 'hello'
 	Text string  // what is visable to the user
-	Name string  // a name useful for programming
+
+	// for NewLabel("hello"), if Name = 'HELLO'
+	// this can programatically identify the widget
+	// The name must be unique
+	Name string  // a name useful for debugging
 
 	// used for Windows in toolkits measured in pixels
 	width  int
@@ -72,19 +77,21 @@ type Node struct {
 	X	int
 	Y	int
 
-	// the grid max width and height
-	// ignore max height when there is no space left?
+	// the grid widget max width and height
+	// the max height can be implemented in the toolkit plugin
+	// to restrict the number of rows to display
 	W	int
 	H	int
+
 	// where the next widget should be put in this grid
 	NextW	int
 	NextH	int
 
-	// if this widget is in a grid, this is the position
+	// if this widget is in a grid, this is the position of a widget
 	AtW	int
 	AtH	int
 
-	// used for values
+	// the current widget value.
 	I	int
 	S	string
 	B	bool

@@ -93,10 +93,10 @@ hopefully also things like libSDL, faiface/pixel, slint
 Useful links and other
 external things which might be useful
 
-[Wikipedia Graphical widget]: [https://en.wikipedia.org/wiki/Graphical_widget](https://en.wikipedia.org/wiki/Graphical_widget)
-[Github mirror]: [https://github.com/witorg/gui](https://github.com/witorg/gui)
-[Federated git pull]: [https://github.com/forgefed/forgefed](https://github.com/forgefed/forgefed)
-[GO Style Guide]: [https://google.github.io/styleguide/go/index](https://google.github.io/styleguide/go/index)
+* Wikipedia Graphical widget - [https://en.wikipedia.org/wiki/Graphical_widget](https://en.wikipedia.org/wiki/Graphical_widget)
+* Github mirror - [https://github.com/witorg/gui](https://github.com/witorg/gui)
+* Federated git pull - [https://github.com/forgefed/forgefed](https://github.com/forgefed/forgefed)
+* GO Style Guide - [https://google.github.io/styleguide/go/index](https://google.github.io/styleguide/go/index)
 
 ```go
 * [Wikipedia Graphical widget]

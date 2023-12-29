@@ -24,6 +24,25 @@ var f2 *os.File
 var err error
 */
 
+/* from gocron:
+
+// DefaultLogger is used by Cron if none is specified.
+var DefaultLogger Logger = PrintfLogger(log.New(os.Stdout, "cron: ", log.LstdFlags))
+
+// DiscardLogger can be used by callers to discard all log messages.
+var DiscardLogger Logger = PrintfLogger(log.New(ioutil.Discard, "", 0))
+
+// Logger is the interface used in this package for logging, so that any backend
+// can be plugged in. It is a subset of the github.com/go-logr/logr interface.
+type Logger interface {
+	// Info logs routine messages about cron's operation.
+	Info(msg string, keysAndValues ...interface{})
+	// Error logs an error condition.
+	Error(err error, msg string, keysAndValues ...interface{})
+}
+
+*/
+
 func init() {
 	arg.MustParse(&args)
 	fmt.Println(args.Foo, args.Bar, args.User)
@@ -34,6 +53,7 @@ func init() {
 	log.Log(true, "INIT() args.GuiArg.Gui =", gui.GuiArg.Gui)
 
 /*
+	// from: https://github.com/robfig/cron/blob/master/logger.go
 	log.Println()
 	log.Println("STDOUT is now at /tmp/guilogfile")
 	log.Println("STDOUT is now at /tmp/guilogfile")

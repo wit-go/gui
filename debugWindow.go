@@ -98,6 +98,10 @@ func (n *Node) DebugTab(title string) *Node {
 		me.rootNode.LoadToolkit("gocui")
 	})
 
+	g2.NewButton("load toolkit 'andlabs'", func () {
+		me.rootNode.LoadToolkit("andlabs")
+	})
+
 	return newN
 }
 
