@@ -2,19 +2,22 @@
 package main
 
 import 	(
-	"fmt"
 	"log"
 	"strconv"
 	"go.wit.com/gui"
+	arg "github.com/alexflint/go-arg"
 )
 
 var title string = "Demo Plugin Window"
-var outfile string = "/tmp/guilogfile"
 var myGui *gui.Node
 
 var buttonCounter int = 5
 var gridW int = 5
 var gridH int = 3
+
+func init() {
+	arg.MustParse()
+}
 
 func main() {
 	// This will turn on all debugging
@@ -35,33 +38,19 @@ func buttonWindow() {
 	log.Println("buttonWindow() START")
 
 	w = myGui.NewWindow(title).SetText("Nueva Ventana de Botones")
-	t = w.NewTab("buttonTab is this thing")
-	g = t.NewGroup("buttonGroup")
-	g1 := t.NewGroup("buttonGroup 2")
-	more = g1.NewGroup("more")
+	t = w.NewTab("buttonTab is this thing").Pad()
+	g = t.NewGroup("buttonGroup").Pad()
+	g1 := t.NewGroup("buttonGroup 2").Pad()
+	more = g1.NewGroup("more").Pad()
 	g1.NewButton("hello2", func () {
 		log.Println("world2")
 	})
-	more2 = g1.NewGrid("gridnuts", gridW, gridH)
+	more2 = g1.NewGrid("gridnuts", gridW, gridH).Pad()
 
 	more2.NewLabel("more2")
 
-	g.NewButton("this app is useful for plugin debuggin", func () {
-	})
-	g.NewLabel("STDOUT is set to: " + outfile)
-
 	g.NewButton("hello", func () {
 		log.Println("world")
-	})
-
-	g.NewButton("Load 'gocui'", func () {
-		// this set the xterm and mate-terminal window title. maybe works generally?
-		fmt.Println("\033]0;" + title + "blah \007")
-		myGui.LoadToolkit("gocui")
-	})
-
-	g.NewButton("Load 'andlabs'", func () {
-		myGui.LoadToolkit("andlabs")
 	})
 
 	g.NewButton("NewButton(more)", func () {
@@ -95,10 +84,6 @@ func buttonWindow() {
 		name := "neat " + strconv.Itoa(buttonCounter)
 		log.Println("NewGroup() Adding button", name)
 		buttonCounter += 1
-		more.NewGroup(name)
-	})
-
-	g.NewButton("gui.DebugWindow()", func () {
-		gui.DebugWindow()
+		more.NewGroup(name).Pad()
 	})
 }

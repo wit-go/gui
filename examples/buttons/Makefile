@@ -7,7 +7,10 @@
 #
 
 run: build
-	./buttons --gui andlabs
+	./buttons
+
+debug:
+	./buttons --gui andlabs --gui-debug --log-debug
 
 build-release:
 	go get -v -u -x .
