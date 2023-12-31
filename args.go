@@ -2,6 +2,8 @@ package gui
 
 import (
 	arg "github.com/alexflint/go-arg"
+
+	newlog "go.wit.com/log"
 )
 
 var argGui ArgsGui
@@ -15,6 +17,12 @@ type ArgsGui struct {
 
 func init() {
 	arg.Register(&argGui)
+
+	newlog.Register("gui", "debugGui", &debugGui)
+
+	for _, s := range newlog.ListAll() {
+		newlog.Info("go.wit.org/gui ListAll() returned:", s)
+	}
 }
 
 // returns the toolkit
