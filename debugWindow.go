@@ -8,8 +8,6 @@ import 	(
 
 // main debugging window
 var bugWin *Node
-// if there should be new windows or just tabs
-var makeTabs bool = true
 
 var mapWindows map[string]*Node
 var checkd, checkdn, checkdt, checkdtk, lb1, lb2 *Node
@@ -21,10 +19,20 @@ var myButton *Node
 func DebugWindow() {
 	bugWin = me.rootNode.NewWindow("go.wit.com/gui debug window").DebugTab("Debug Tab")
 	bugWin.Custom = bugWin.StandardClose
-	// bugWin.DebugTab("Debug Tab")
 	if newlog.ArgDebug() {
-		bugWin.DebugFlags(true)
+		newlog.SetTmp()
+		bugWin.DebugFlags()
 	}
+}
+
+// should the debugging windows be new windows or tabs
+// var makeTabs bool = true
+func (n *Node) UseTabs() bool {
+	return me.makeTabs
+}
+
+func (n *Node) SetTabs(b bool) {
+	me.makeTabs = b
 }
 
 func (n *Node) DebugTab(title string) *Node {
@@ -40,23 +48,23 @@ func (n *Node) DebugTab(title string) *Node {
 	// generally useful debugging
 	cb := gog.NewCheckbox("Seperate windows")
 	cb.Custom = func() {
-		makeTabs = cb.B
 		log(debugGui, "Custom() n.widget =", cb.Name, cb.B)
+		n.SetTabs(cb.B)
 	}
-	makeTabs = false
 	cb.Set(false)
+	n.SetTabs(false)
 
 	gog.NewButton("logging", func () {
-		bugWin.DebugFlags(makeTabs)
+		bugWin.DebugFlags()
 	})
 	gog.NewButton("Debug Widgets", func () {
 		DebugWidgetWindow(newN)
 	})
 	gog.NewButton("GO Language Internals", func () {
-		bugWin.DebugGolangWindow(makeTabs)
+		bugWin.DebugGolangWindow()
 	})
 	gog.NewButton("GO Channels debug", func () {
-		bugWin.DebugGoChannels(makeTabs)
+		bugWin.DebugGoChannels()
 	})
 
 	gog.NewLabel("Force Quit:")

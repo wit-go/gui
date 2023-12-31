@@ -41,7 +41,7 @@ func (p *Node) NewLogFlag(name string) *LogSettings {
 
 // Let's you toggle on and off the various types of debugging output
 // These checkboxes should be in the same order as the are printed
-func (n *Node) DebugFlags(makeWindow bool) {
+func (n *Node) DebugFlags() {
 	var w, g *Node
 
 	logGadgets := make(map[string]*LogSettings)
@@ -49,7 +49,7 @@ func (n *Node) DebugFlags(makeWindow bool) {
 	// Either:
 	// make a new window
 	// make a new tab in the existing window
-	if (makeWindow) {
+	if (n.UseTabs()) {
 		w = me.rootNode.NewWindow("Debug Flags")
 		w.Custom = w.StandardClose
 		w = w.NewBox("hBox", true)

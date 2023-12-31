@@ -5,6 +5,7 @@ package gui
 import (
 	"regexp"
 	"go.wit.com/gui/toolkit"
+	newlog "go.wit.com/log"
 )
 
 // functions for handling text related GUI elements
@@ -34,7 +35,7 @@ func (n *Node) Disable() *Node {
 }
 
 func (n *Node) Add(str string) {
-	log(debugGui, "gui.Add() value =", str)
+	newlog.Log(debugGui, "gui.Add() value =", str)
 
 	n.S = str
 
@@ -43,7 +44,7 @@ func (n *Node) Add(str string) {
 }
 
 func (n *Node) AddText(str string) {
-	log(debugChange, "AddText() value =", str)
+	newlog.Log(debugChange, "AddText() value =", str)
 
 	n.Text = str
 	n.S = str
@@ -53,7 +54,7 @@ func (n *Node) AddText(str string) {
 }
 
 func (n *Node) SetText(text string) *Node {
-	log(debugChange, "SetText() value =", text)
+	newlog.Log(debugChange, "SetText() value =", text)
 
 	n.Text = text
 	n.S = text
@@ -66,11 +67,11 @@ func (n *Node) SetText(text string) *Node {
 func (n *Node) SetNext(w int, h int) {
 	n.NextW = w
 	n.NextH = h
-	log(debugNow, "SetNext() w,h =", n.NextW, n.NextH)
+	newlog.Log(debugNow, "SetNext() w,h =", n.NextW, n.NextH)
 }
 
 func (n *Node) Set(val any) {
-	log(debugChange, "Set() value =", val)
+	newlog.Log(debugChange, "Set() value =", val)
 
 	switch v := val.(type) {
 	case bool:
@@ -81,7 +82,7 @@ func (n *Node) Set(val any) {
 	case int:
 		n.I = val.(int)
 	default:
-		log(debugError, "Set() unknown type =", v)
+		newlog.Log(debugError, "Set() unknown type =", v)
 	}
 
 	a := newAction(n, toolkit.Set)
@@ -98,7 +99,13 @@ func (n *Node) AppendText(str string) {
 }
 
 func (n *Node) GetText() string {
-	return n.S
+	if (n.S != n.Text) {
+		newlog.Warn("GetText() is screwed up. TODO: fix this dumb crap")
+	}
+	if (n.S != "") {
+		return n.S
+	}
+	return n.Text
 }
 
 /*
@@ -107,7 +114,7 @@ isAlpha := regexp.MustCompile(`^[A-Za-z]+$`).MatchString
 
 for _, username := range []string{"userone", "user2", "user-three"} {
     if !isAlpha(username) {
-        log(debugGui, "%q is not valid\n", username)
+        newlog.Log(debugGui, "%q is not valid\n", username)
     }
 }
 
@@ -127,11 +134,11 @@ func normalizeInt(s string) string {
 	// reg, err := regexp.Compile("[^a-zA-Z0-9]+")
 	reg, err := regexp.Compile("[^0-9]+")
 	if err != nil {
-		log(debugGui, "normalizeInt() regexp.Compile() ERROR =", err)
+		newlog.Log(debugGui, "normalizeInt() regexp.Compile() ERROR =", err)
 		return s
 	}
 	clean := reg.ReplaceAllString(s, "")
-	log(debugGui, "normalizeInt() s =", clean)
+	newlog.Log(debugGui, "normalizeInt() s =", clean)
 	return clean
 }
 
@@ -139,9 +146,9 @@ func commonCallback(n *Node) {
 	// TODO: make all of this common code to all the widgets
 	// This might be common everywhere finally (2023/03/01)
 	if (n.Custom == nil) {
-		log(debugChange, "Not Running n.Custom(n) == nil")
+		newlog.Log(debugChange, "Not Running n.Custom(n) == nil")
 	} else {
-		log(debugChange, "Running n.Custom(n)")
+		newlog.Log(debugChange, "Running n.Custom(n)")
 		n.Custom()
 	}
 }
@@ -183,7 +190,7 @@ func (n *Node) Expand() *Node {
 //  myFunnyWindow = myGui.NewWindow("Hello").Standard().SetText("Hola")
 
 func (n *Node) Window(title string) *Node {
-	log(debugError, "Window()", n)
+	newlog.Log(debugError, "Window()", n)
 	return n.NewWindow(title)
 }
 
@@ -191,12 +198,12 @@ func (n *Node) Window(title string) *Node {
 // should be the default way
 /*
 func (n *Node) Standard() *Node {
-	log(debugInfo, "Standard() not implemented yet")
+	newlog.Log(debugInfo, "Standard() not implemented yet")
 	return n
 }
 
 func (n *Node) SetMargin() *Node {
-	log(debugError, "DoMargin() not implemented yet")
+	newlog.Log(debugError, "DoMargin() not implemented yet")
 	return n
 }
 */

@@ -9,18 +9,11 @@ import (
 	"runtime/pprof"
 )
 
-func (n *Node) DebugGolangWindow(makeWindow bool) {
+func (n *Node) DebugGolangWindow() {
 	var w, g, og, outputTextbox *Node
 
-	// Either:
-	// make a new window
-	// make a new tab in the existing window
-	if (makeWindow) {
-		w = me.rootNode.NewWindow("GO")
-		w.Custom = w.StandardClose
-	} else {
-		w = n.NewTab("GOLANG")
-	}
+	w = n.NewWindow("GO")
+	w.Custom = w.StandardClose
 
 	g = w.NewGroup("Language Internals")
 

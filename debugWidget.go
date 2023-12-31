@@ -59,7 +59,7 @@ func DebugWidgetWindow(w *Node) {
 	// Either:
 	// make a new window
 	// make a new tab in the existing window
-	if (makeTabs) {
+	if (me.rootNode.UseTabs()) {
 		bugWidget = me.rootNode.NewWindow("Widgets")
 		bugWidget.Custom = bugWidget.StandardClose
 	} else {
