@@ -1,5 +1,9 @@
 package gui
 
+import 	(
+	newlog "go.wit.com/log"
+)
+
 // TODO: move all this shit into somewhere not global
 
 // main debugging window
@@ -18,6 +22,9 @@ func DebugWindow() {
 	bugWin = me.rootNode.NewWindow("go.wit.com/gui debug window").DebugTab("Debug Tab")
 	bugWin.Custom = bugWin.StandardClose
 	// bugWin.DebugTab("Debug Tab")
+	if newlog.ArgDebug() {
+		bugWin.DebugFlags(true)
+	}
 }
 
 func (n *Node) DebugTab(title string) *Node {

@@ -14,6 +14,9 @@ func (parent *Node) NewGroup(name string) *Node {
 	a := newAction(newNode, toolkit.Add)
 	sendAction(a)
 
+	// by default, always pad groups
+	newNode.Pad()
+
 	newBox := newNode.NewBox("defaultGroupBox", false)
 	return newBox
 }

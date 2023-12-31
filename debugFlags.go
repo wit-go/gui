@@ -52,11 +52,12 @@ func (n *Node) DebugFlags(makeWindow bool) {
 	if (makeWindow) {
 		w = me.rootNode.NewWindow("Debug Flags")
 		w.Custom = w.StandardClose
+		w = w.NewBox("hBox", true)
 	} else {
 		w = n.NewTab("Flags")
 	}
 
-	g = w.NewGroup("Show")
+	g = w.NewGroup("Show").Pad()
 
 	g.NewButton("log.SetTmp()", func () {
 		newlog.SetTmp()

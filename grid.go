@@ -32,6 +32,9 @@ func (n *Node) NewGrid(name string, w int, h int) *Node {
 
 	a := newAction(newNode, toolkit.Add)
 	sendAction(a)
+
+	// by default, always pad grids
+	newNode.Pad()
 	return newNode
 }
 
