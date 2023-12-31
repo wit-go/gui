@@ -1,9 +1,50 @@
 package gui
 
+import 	(
+	newlog "go.wit.com/log"
+)
+
+type LogSettings struct {
+	ready	bool
+	hidden	bool
+	err	error
+	name	string
+
+	parent	*Node // should be the root of the 'gui' package binary tree
+	window	*Node // our window for displaying the log package settings
+	group	*Node //
+	grid	*Node //
+	checkbox *Node
+	label *Node
+
+}
+
+func (ls *LogSettings) Set(b bool) {
+	newlog.Set(ls.name, b)
+	ls.checkbox.Set(b)
+}
+
+func (p *Node) NewLogFlag(name string) *LogSettings {
+	ls := new(LogSettings)
+	ls.parent = p
+	ls.ready = false
+	ls.name = name
+
+	ls.checkbox = p.NewCheckbox(name)
+	ls.label = p.NewLabel("Enable log." + name)
+	ls.checkbox.Set(newlog.Get(name))
+	ls.checkbox.Custom = func() {
+		newlog.Set(name, ls.checkbox.B)
+	}
+	return ls
+}
+
 // Let's you toggle on and off the various types of debugging output
 // These checkboxes should be in the same order as the are printed
 func (n *Node) DebugFlags(makeWindow bool) {
 	var w, g *Node
+
+	logGadgets := make(map[string]*LogSettings)
 
 	// Either:
 	// make a new window
@@ -16,6 +57,22 @@ func (n *Node) DebugFlags(makeWindow bool) {
 	}
 
 	g = w.NewGroup("Show")
+
+	g.NewButton("log.SetTmp()", func () {
+		newlog.SetTmp()
+	})
+
+	g.NewButton("log.All(true)", func () {
+		for _, lf := range logGadgets {
+			lf.Set(true)
+		}
+	})
+
+	g.NewButton("log.All(false)", func () {
+		for _, lf := range logGadgets {
+			lf.Set(false)
+		}
+	})
 
 	g.NewButton("Dump Flags", func () {
 		ShowDebugValues()
@@ -31,53 +88,18 @@ func (n *Node) DebugFlags(makeWindow bool) {
 
 	g = w.NewGroup("List")
 	g = g.NewGrid("flags grid", 2, 2)
+
+	logGadgets["INFO"] = g.NewLogFlag("INFO")
+	logGadgets["WARN"] = g.NewLogFlag("WARN")
+	logGadgets["SPEW"] = g.NewLogFlag("SPEW")
+	logGadgets["ERROR"] = g.NewLogFlag("ERROR")
+
 	// generally useful debugging
 	cb1 := g.NewCheckbox("debug Gui")
 	g.NewLabel("like verbose=1")
 	cb1.Custom = func() {
 		debugGui = cb1.B
 		log(debugGui, "Custom() n.widget =", cb1.Name, cb1.B)
-	}
-
-	// errors. by default these always output somewhere
-	cbE := g.NewCheckbox("debug Error")
-	g.NewLabel("(bad things. default=true)")
-	cbE.Custom = func() {
-		SetFlag("Error",  cbE.B)
-	}
-
-	// debugging that will show you things like mouse clicks, user inputing text, etc
-	// also set toolkit.DebugChange
-	cb2 := g.NewCheckbox("debug Change")
-	g.NewLabel("keyboard and mouse events")
-	cb2.Custom = func() {
-		SetFlag("Change", cb2.B)
-	}
-
-	// supposed to tell if you are going to dump full variable output
-	cb3 := g.NewCheckbox("debug Dump")
-	g.NewLabel("show lots of output")
-	cb3.Custom = func() {
-		SetFlag("Dump",  cbE.B)
-	}
-
-	cb4 := g.NewCheckbox("debug Tabs")
-	g.NewLabel("tabs and windows")
-	cb4.Custom = func() {
-		SetFlag("Tabs",  cb4.B)
-	}
-
-	cb6 := g.NewCheckbox("debug Node")
-	g.NewLabel("the binary tree)")
-	cb6.Custom = func() {
-		SetFlag("Node",  cb6.B)
-	}
-
-	// should show you when things go into or come back from the plugin
-	cb5 := g.NewCheckbox("debug Plugin")
-	g.NewLabel("plugin interaction)")
-	cb5.Custom = func() {
-		SetFlag("Plugin",  cb5.B)
 	}
 
 	// turns on debugging inside the plugin toolkit

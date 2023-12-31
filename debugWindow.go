@@ -1,9 +1,5 @@
 package gui
 
-import (
-//	"go.wit.com/gui/toolkit"
-)
-
 // TODO: move all this shit into somewhere not global
 
 // main debugging window
@@ -26,6 +22,7 @@ func DebugWindow() {
 
 func (n *Node) DebugTab(title string) *Node {
 	var newN, gog, g1 *Node
+	// var logSettings *gadgets.LogSettings
 
 	// time.Sleep(1 * time.Second)
 	newN = n.NewTab(title)
@@ -42,7 +39,7 @@ func (n *Node) DebugTab(title string) *Node {
 	makeTabs = false
 	cb.Set(false)
 
-	gog.NewButton("Debug Flags", func () {
+	gog.NewButton("logging", func () {
 		bugWin.DebugFlags(makeTabs)
 	})
 	gog.NewButton("Debug Widgets", func () {
