@@ -58,6 +58,12 @@ examples-buttons:
 examples-console-ui-helloworld:
 	make -C examples/console-ui-helloworld
 
+git.wit.org:
+	git push witgui master
+	git push witgui devel
+	git push witgui jcarr
+	git push witgui --tags
+
 # sync repo to the github backup
 # git remote add github git@github.com:witorg/gui.git
 # git remote add github2 git@github.com:wit-go/gui.git

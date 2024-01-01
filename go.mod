@@ -1,4 +1,4 @@
-module go.wit.com/gui
+module go.wit.com/gui/gui
 
 go 1.21.4
 
