@@ -1,7 +1,7 @@
 package gui
 
 import 	(
-	witlog "go.wit.com/gui/log"
+	witlog "go.wit.com/log"
 )
 
 // various debugging flags
@@ -13,9 +13,9 @@ var logVerbose bool = false
 
 // var log interface{}
 
-func log(a ...any) {
-	witlog.Where = "wit/gui"
-	witlog.Log(a...)
+func log(b bool, a ...any) {
+	// witlog.Where = "wit/gui"
+	witlog.Log(b, a...)
 }
 
 func sleep(a ...any) {
@@ -39,5 +39,5 @@ func logindent(b bool, depth int, format string, a ...any) {
 	// array prepend(). Why isn't this a standard function. It should be:
 	// a.prepend(debugGui, newFormat)
 	a = append([]any{b, newFormat}, a...)
-	witlog.Log(a...)
+	witlog.Log(b, a...)
 }

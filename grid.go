@@ -1,7 +1,7 @@
 package gui
 
 import (
-	"go.wit.com/gui/toolkit"
+	"go.wit.com/gui/gui/toolkit"
 )
 
 // Grid numbering examples (H) or (W,H)

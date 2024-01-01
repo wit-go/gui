@@ -10,7 +10,7 @@ import (
 	"embed"
 	"plugin"
 
-	"go.wit.com/gui/toolkit"
+	"go.wit.com/gui/gui/toolkit"
 )
 
 var err error
@@ -143,7 +143,18 @@ func searchPaths(name string) *aplug {
 	if err != nil {
 		log(logError, "searchPaths() error. exiting here?")
 	} else {
-		filename = homeDir + "/go/src/go.wit.com/gui/toolkit/" + name + ".so"
+		filename = homeDir + "/go/src/go.wit.com/gui/toolkits/" + name + ".so"
+		p = initToolkit(name, filename)
+		if (p != nil) {
+			return p
+		}
+	}
+
+	homeDir, err = os.UserHomeDir()
+	if err != nil {
+		log(logError, "searchPaths() error. exiting here?")
+	} else {
+		filename = homeDir + "/go/src/go.wit.com/toolkits/" + name + ".so"
 		p = initToolkit(name, filename)
 		if (p != nil) {
 			return p

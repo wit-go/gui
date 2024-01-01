@@ -3,7 +3,7 @@ package gui
 import (
 	"os"
 	"time"
-	"go.wit.com/gui/toolkit"
+	"go.wit.com/gui/gui/toolkit"
 )
 
 // TODO: make a fake 'plugin' channel of communication to andlabs for mswindows
@@ -15,7 +15,7 @@ const Xaxis = 0 // stack things horizontally
 const Yaxis = 1 // stack things vertically
 
 func init() {
-	log("init() has been run")
+	log(true, "init() has been run")
 
 	me.counter = 0
 	me.prefix = "wit"
@@ -175,10 +175,10 @@ func (n *Node) StandardClose() {
 // The window is destroyed and the application exits
 // TODO: properly exit the plugin since Quit() doesn't do it
 func StandardExit() {
-	log("wit/gui Standard Window Exit. running os.Exit()")
-	log("StandardExit() attempt to exit each toolkit plugin")
+	log(true, "wit/gui Standard Window Exit. running os.Exit()")
+	log(true, "StandardExit() attempt to exit each toolkit plugin")
 	for i, plug := range allPlugins {
-		log("NewButton()", i, plug)
+		log(true, "NewButton()", i, plug)
 	}
 	exit(0)
 }

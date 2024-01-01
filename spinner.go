@@ -1,7 +1,7 @@
 package gui
 
 import (
-	"go.wit.com/gui/toolkit"
+	"go.wit.com/gui/gui/toolkit"
 )
 
 func (parent *Node) NewSpinner(name string, x int, y int) *Node {

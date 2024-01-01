@@ -67,18 +67,22 @@ func (n *Node) DebugFlags() {
 		for _, lf := range logGadgets {
 			lf.Set(true)
 		}
+		newlog.All(true)
 	})
 
 	g.NewButton("log.All(false)", func () {
 		for _, lf := range logGadgets {
 			lf.Set(false)
 		}
+		newlog.All(false)
 	})
 
 	g.NewButton("Dump Flags", func () {
-		ShowDebugValues()
+		// ShowDebugValues()
+		newlog.ListFlags()
 	})
 
+	/*
 	g.NewButton("All On", func () {
 		SetDebug(true)
 	})
@@ -86,6 +90,7 @@ func (n *Node) DebugFlags() {
 	g.NewButton("All Off", func () {
 		SetDebug(false)
 	})
+	*/
 
 	g = w.NewGroup("List")
 	g = g.NewGrid("flags grid", 2, 2)

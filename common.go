@@ -4,7 +4,7 @@ package gui
 
 import (
 	"regexp"
-	"go.wit.com/gui/toolkit"
+	"go.wit.com/gui/gui/toolkit"
 	newlog "go.wit.com/log"
 )
 

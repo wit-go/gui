@@ -2,7 +2,7 @@ package gui
 
 import (
 	"strconv"
-	"go.wit.com/gui/toolkit"
+	"go.wit.com/gui/gui/toolkit"
 )
 
 
@@ -165,7 +165,7 @@ func (n *Node) debugAddWidgetButtons() {
 		a.AddText("make something for tim for qflow")
 		a.AddText("and for riscv")
 		a.Custom = func () {
-			log("custom dropdown() a =", a.Name, a.S, "id=", a.id)
+			log(true, "custom dropdown() a =", a.Name, a.S, "id=", a.id)
 		}
 	})
 	n.NewButton("Combobox", func () {
@@ -173,7 +173,7 @@ func (n *Node) debugAddWidgetButtons() {
 		a.AddText("mirrors.wit.com")
 		a.AddText("go.wit.com")
 		a.Custom = func () {
-			log("custom combobox() a =", a.Name, a.S, "id=", a.id)
+			log(true, "custom combobox() a =", a.Name, a.S, "id=", a.id)
 		}
 	})
 	n.NewButton("Grid", func () {
@@ -247,12 +247,12 @@ func (n *Node) debugAddWidgetButton() {
 			activeWidget.SetNext(newX, newY)
 			name = name + " (" + strconv.Itoa(newX) + "," + strconv.Itoa(newY) + ")"
 		}
-		log("New Name =", name)
-		log("New Type =", activeLabelNewType.S)
-		log("New X    =", newX)
-		log("New Y    =", newY)
-		log("activeWidget.NextW    =", activeWidget.NextW)
-		log("activeWidget.NextH    =", activeWidget.NextH)
+		log(true, "New Name =", name)
+		log(true, "New Type =", activeLabelNewType.S)
+		log(true, "New X    =", newX)
+		log(true, "New Y    =", newY)
+		log(true, "activeWidget.NextW    =", activeWidget.NextW)
+		log(true, "activeWidget.NextH    =", activeWidget.NextH)
 		log(debugNow, "Add() size (X,Y)", activeWidget.X, activeWidget.Y, "put next thing at (W,H) =", activeWidget.NextW, activeWidget.NextH)
 		activeWidget.Dump()
 
@@ -269,19 +269,19 @@ func (n *Node) debugAddWidgetButton() {
 		case "Button":
 			var n *Node
 			n = activeWidget.NewButton(name, func () {
-				log("got to button", name, n.id)
+				log(true, "got to button", name, n.id)
 			})
 		case "Checkbox":
 			a := activeWidget.NewCheckbox(name)
 			a.Custom = func () {
-				log("custom checkox func a=", a.B, "id=", a.id)
+				log(true, "custom checkox func a=", a.B, "id=", a.id)
 			}
 		case "Dropdown":
 			a := activeWidget.NewDropdown(name)
 			a.AddText(name + " yay")
 			a.AddText(name + " haha")
 			a.Custom = func () {
-				log("WTF a=", a.B, "id=", a.id)
+				log(true, "WTF a=", a.B, "id=", a.id)
 			}
 		case "Combobox":
 			a := activeWidget.NewCombobox(name)

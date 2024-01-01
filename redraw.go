@@ -1,7 +1,7 @@
 package gui
 
 import (
-	"go.wit.com/gui/toolkit"
+	"go.wit.com/gui/gui/toolkit"
 )
 
 // This recreates the whole GUI for a plugin

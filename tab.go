@@ -1,7 +1,7 @@
 package gui
 
 import (
-	"go.wit.com/gui/toolkit"
+	"go.wit.com/gui/gui/toolkit"
 )
 
 // This function should make a new node with the parent and

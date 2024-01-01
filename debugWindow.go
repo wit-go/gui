@@ -16,10 +16,15 @@ var myButton *Node
 /*
 	Creates a window helpful for debugging this package
 */
+func (n *Node) DebugWindow() {
+	newlog.Warn("Don't use DebugWindow() directly anymore")
+	DebugWindow() // todo, remove the non-binary tree access
+}
+
 func DebugWindow() {
 	bugWin = me.rootNode.NewWindow("go.wit.com/gui debug window").DebugTab("Debug Tab")
 	bugWin.Custom = bugWin.StandardClose
-	if newlog.ArgDebug() {
+	if ArgDebug() {
 		newlog.SetTmp()
 		bugWin.DebugFlags()
 	}
@@ -102,7 +107,7 @@ func (n *Node) DebugTab(title string) *Node {
 
 	g2.NewButton("List Plugins", func () {
 		for _, aplug := range allPlugins {
-			log("Loaded plugin:", aplug.name, aplug.filename)
+			log(true, "Loaded plugin:", aplug.name, aplug.filename)
 		}
 	})
 

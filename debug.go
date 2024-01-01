@@ -5,7 +5,7 @@ package gui
 
 import (
 	"strconv"
-	"go.wit.com/gui/toolkit"
+	"go.wit.com/gui/gui/toolkit"
 )
 
 // various debugging flags
@@ -159,9 +159,9 @@ func (n *Node) ListChildren(dump bool) {
 		if (listChildrenParent != nil) {
 			log(debugNode, "\t\t\tlistChildrenParent =",listChildrenParent.id)
 			if (listChildrenParent.id != n.parent.id) {
-				log("parent =",n.parent.id, n.parent.Name)
-				log("listChildrenParent =",listChildrenParent.id, listChildrenParent.Name)
-				log(listChildrenParent.id, "!=", n.parent.id)
+				log(true, "parent =",n.parent.id, n.parent.Name)
+				log(true, "listChildrenParent =",listChildrenParent.id, listChildrenParent.Name)
+				log(true, listChildrenParent.id, "!=", n.parent.id)
 				exit("parent.child does not match child.parent")
 			}
 		}
