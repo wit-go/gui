@@ -101,6 +101,8 @@ func (n *Node) AppendText(str string) {
 func (n *Node) GetText() string {
 	if (n.S != n.Text) {
 		newlog.Warn("GetText() is screwed up. TODO: fix this dumb crap")
+		stuff := newlog.ListFlags()
+		newlog.Warn("ListFlags() =", stuff)
 	}
 	if (n.S != "") {
 		return n.S
