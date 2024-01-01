@@ -38,7 +38,7 @@ package main
 
 import 	(
 	"log"
-	"git.wit.org/wit/gui"
+	"go.wit.com/wit/gui/gui"
 )
 
 var window *gui.Node // This is the beginning of the binary tree of widgets
@@ -94,7 +94,7 @@ Useful links and other
 external things which might be useful
 
 * Wikipedia Graphical widget - [https://en.wikipedia.org/wiki/Graphical_widget](https://en.wikipedia.org/wiki/Graphical_widget)
-* Github mirror - [https://github.com/witorg/gui](https://github.com/witorg/gui)
+* Github mirror - [https://github.com/wit-go/gui](https://github.com/wit-go/gui)
 * Federated git pull - [https://github.com/forgefed/forgefed](https://github.com/forgefed/forgefed)
 * GO Style Guide - [https://google.github.io/styleguide/go/index](https://google.github.io/styleguide/go/index)
 

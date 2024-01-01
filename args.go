@@ -21,7 +21,7 @@ func init() {
 	newlog.Register("gui", "debugGui", &debugGui)
 
 	for _, s := range newlog.ListFlags() {
-		newlog.Info("go.wit.org/gui ListFlags() returned:", s)
+		newlog.Info("go.wit.com/gui/gui ListFlags() returned:", s)
 	}
 }
 
