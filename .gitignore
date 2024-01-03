@@ -1,15 +1,1 @@
 *.swp
-
-# ignore compiled plugins
-*.so
-
-examples/buttons/buttons
-examples/console-ui-helloworld/console-ui-helloworld
-examples/helloworld/helloworld
-
-# protobuf compiled files
-protobuf/*.pb.go
-
-# temporary files when building debian packages
-/*.deb
-/files

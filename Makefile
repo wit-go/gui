@@ -37,11 +37,6 @@ update:
 	git pull
 	go get -v -t -u ./...
 
-deb:
-	cd debian && make
-	dpkg-deb -c go-wit-gui*.deb
-	-wit mirrors
-
 examples:   \
 	all \
 	examples-helloworld \
@@ -87,7 +82,6 @@ goget:
 
 clean:
 	rm -f toolkit/*.so
-	cd debian && make clean
 
 plugins: plugins-gocui plugins-andlabs
 
