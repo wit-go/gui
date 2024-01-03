@@ -98,6 +98,12 @@ func (n *Node) AppendText(str string) {
 	sendAction(a)
 }
 
+// THESE TWO FUNCTIONS ARE TERRIBLY NAMED AND NEED TO BE FIXED
+// 5 seconds worth of ideas:
+// Value() ?
+// Progname() Reference() ?
+
+// should get the value of the node
 func (n *Node) GetText() string {
 	if (n.S != n.Text) {
 		newlog.Warn("GetText() is screwed up. TODO: fix this dumb crap")
@@ -108,6 +114,14 @@ func (n *Node) GetText() string {
 		return n.S
 	}
 	return n.Text
+}
+
+// should get the value of the node
+// myButton = myGroup.NewButton("hit ball", nil).SetName("HIT")
+// myButton.GetName() should return "HIT"
+// n = Find("HIT") should return myButton
+func (n *Node) GetName() string {
+	return n.Name
 }
 
 /*

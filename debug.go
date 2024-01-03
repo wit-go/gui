@@ -144,6 +144,10 @@ func (n *Node) dumpWidget(b bool) string {
 	return tabs + d
 }
 
+func (n *Node) Children() []*Node {
+	return n.children
+}
+
 // func (n *Node) ListChildren(dump bool, dropdown *Node, mapNodes map[string]*Node) {
 func (n *Node) ListChildren(dump bool) {
 	if (n == nil) {

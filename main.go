@@ -2,7 +2,7 @@ package gui
 
 import (
 	"os"
-	"time"
+
 	"go.wit.com/gui/gui/toolkit"
 )
 
@@ -49,7 +49,7 @@ func watchCallback() {
 			}
 			if (a.ActionType == toolkit.EnableDebug) {
 				log(logInfo, "doUserEvent() Enable Debugging Window")
-				DebugWindow()
+				// DebugWindow()
 				break
 			}
 
@@ -124,9 +124,6 @@ func New() *Node {
 
 // try to load andlabs, if that doesn't work, fall back to the console
 func (n *Node) Default() *Node {
-	// start the GUI debugger if --gui-debug is true
-	checkDebug()
-
 	if (argGui.GuiPlugin != "") {
 		log(logError, "New.Default() try toolkit =", argGui.GuiPlugin)
 		return n.LoadToolkit(argGui.GuiPlugin)
@@ -144,26 +141,6 @@ func (n *Node) Default() *Node {
 	}
 	n.LoadToolkit("gocui")
 	return n
-}
-
-func checkDebug() {
-	if ! ArgDebug() {
-		return
-	}
-	f := func() {
-		log(debugGui, "wit/gui START DEBUG")
-		log(debugGui, "wit/gui START DEBUG")
-		log(debugGui, "wit/gui START DEBUG")
-		time.Sleep(2 * time.Second)
-		log(debugGui, "wit/gui START DEBUG")
-		log(debugGui, "wit/gui START DEBUG")
-		log(debugGui, "wit/gui START DEBUG")
-		DebugWindow()
-		log(debugGui, "wit/gui END DEBUG")
-		log(debugGui, "wit/gui END DEBUG")
-		log(debugGui, "wit/gui END DEBUG")
-	}
-	go f()
 }
 
 // The window is destroyed but the application does not quit
