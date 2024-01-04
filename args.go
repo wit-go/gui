@@ -58,8 +58,4 @@ func init() {
 	CHANGE.Subsystem = "gui"
 	CHANGE.Desc = "user changed something"
 	CHANGE.Register()
-
-	for _, s := range log.ListFlags() {
-		log.Info("go.wit.com/gui/gui ListFlags() returned:", s)
-	}
 }

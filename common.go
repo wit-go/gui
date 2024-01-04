@@ -108,8 +108,6 @@ func (n *Node) AppendText(str string) {
 func (n *Node) GetText() string {
 	if (n.S != n.Text) {
 		log.Warn("GetText() is screwed up. TODO: fix this dumb crap")
-		stuff := log.ListFlags()
-		log.Warn("ListFlags() =", stuff)
 	}
 	if (n.S != "") {
 		return n.S
@@ -209,6 +207,11 @@ func (n *Node) Expand() *Node {
 func (n *Node) Window(title string) *Node {
 	log.Warn("Window()", n)
 	return n.NewWindow(title)
+}
+
+func (n *Node) Ready() bool {
+	if n == nil {return false}
+	return true
 }
 
 // This should not really do anything. as per the docs, the "Standard()" way
