@@ -2,7 +2,7 @@ package gui
 
 import (
 	"go.wit.com/log"
-	"go.wit.com/gui/gui/toolkit"
+	"go.wit.com/gui/toolkits"
 )
 
 // This routine creates a blank window with a Title and size (W x H)

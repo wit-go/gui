@@ -11,7 +11,7 @@ import (
 	"plugin"
 
 	"go.wit.com/log"
-	"go.wit.com/gui/gui/toolkit"
+	"go.wit.com/gui/toolkits"
 )
 
 var err error

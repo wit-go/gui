@@ -1,6 +1,7 @@
 package gui
 
-// Lots of debugging things:
+// old debugging things. probably deprecate
+// everything should be moved to "go.wit.com/gui/debugger"
 // A function dump out the binary tree
 
 import (
@@ -8,87 +9,13 @@ import (
 	"strconv"
 
 	"go.wit.com/log"
-	"go.wit.com/gui/gui/toolkit"
+	"go.wit.com/gui/toolkits"
 )
-
-// various debugging flags
-var debugNow bool = true	// useful for active development
-var debugGui bool = false
-var debugError bool = true
-var debugDump bool = false
-var debugNode bool = false
-var debugTabs bool = false
-var debugFlags bool = false
-var debugChange bool = false	// shows user events like mouse and keyboard
-var debugPlugin	bool = false
-var debugAction	bool = false
 
 // for printing out the binary tree
 var listChildrenParent *Node
 var listChildrenDepth int = 0
 var defaultPadding = "  "
-
-func SetDebug (s bool) {
-	debugGui     = s
-	debugTabs    = s
-
-	SetFlag("Node", s)
-	SetFlag("Tabs", s)
-	SetFlag("Dump", s)
-	SetFlag("Flags", s)
-	SetFlag("Plugin", s)
-	SetFlag("Change", s)
-	SetFlag("Error", s)
-
-	// This flag is only for the internal toolkit debugging
-	SetFlag("Toolkit", s)
-}
-
-func SetFlag (s string, b bool) {
-	switch s {
-	case "Toolkit":
-		// This flag is only for internal toolkit debugging
-	case "Tabs":
-		debugTabs = b
-	case "Node":
-		debugNode = b
-	case "Dump":
-		debugDump = b
-	case "Error":
-		debugError = b
-	case "Change":
-		debugChange = b
-	case "Flags":
-		debugFlags  = b
-	case "Plugin":
-		debugPlugin  = b
-	case "Show":
-		// ShowDebugValues() // print them here?
-	default:
-		log.Log(GUI, "Can't set unknown flag", s)
-	}
-
-	a := new(toolkit.Action)
-	a.ActionType = toolkit.Set
-	a.WidgetType = toolkit.Flag
-	a.S = s
-	a.B = b
-	sendAction(a)
-}
-
-func ShowDebugValues() {
-	// The order here should match the order in the GUI
-	// TODO: get the order from the node binary tree
-	log.Log(true, "Debug        =", debugGui)
-	log.Log(true, "DebugError   =", debugError)
-	log.Log(true, "DebugChange  =", debugChange)
-	log.Log(true, "DebugDump    =", debugDump)
-	log.Log(true, "DebugTabs    =", debugTabs)
-	log.Log(true, "DebugPlugin  =", debugPlugin)
-	log.Log(true, "DebugNode    =", debugNode)
-
-	SetFlag("Show", true)
-}
 
 func (n *Node) Dump() {
 	b := true

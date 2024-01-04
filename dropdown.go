@@ -6,7 +6,7 @@ package gui
 // since it is the same. confusing names? maybe...
 
 import (
-	"go.wit.com/gui/gui/toolkit"
+	"go.wit.com/gui/toolkits"
 )
 
 // add a new entry to the dropdown name

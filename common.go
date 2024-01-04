@@ -4,8 +4,9 @@ package gui
 
 import (
 	"regexp"
-	"go.wit.com/gui/gui/toolkit"
-	newlog "go.wit.com/log"
+	"errors"
+	"go.wit.com/log"
+	"go.wit.com/gui/toolkits"
 )
 
 // functions for handling text related GUI elements
@@ -35,7 +36,7 @@ func (n *Node) Disable() *Node {
 }
 
 func (n *Node) Add(str string) {
-	newlog.Log(debugGui, "gui.Add() value =", str)
+	log.Log(GUI, "gui.Add() value =", str)
 
 	n.S = str
 
@@ -44,7 +45,7 @@ func (n *Node) Add(str string) {
 }
 
 func (n *Node) AddText(str string) {
-	newlog.Log(debugChange, "AddText() value =", str)
+	log.Log(CHANGE, "AddText() value =", str)
 
 	n.Text = str
 	n.S = str
@@ -54,7 +55,7 @@ func (n *Node) AddText(str string) {
 }
 
 func (n *Node) SetText(text string) *Node {
-	newlog.Log(debugChange, "SetText() value =", text)
+	log.Log(CHANGE, "SetText() value =", text)
 
 	n.Text = text
 	n.S = text
@@ -67,11 +68,11 @@ func (n *Node) SetText(text string) *Node {
 func (n *Node) SetNext(w int, h int) {
 	n.NextW = w
 	n.NextH = h
-	newlog.Log(debugNow, "SetNext() w,h =", n.NextW, n.NextH)
+	log.Info("SetNext() w,h =", n.NextW, n.NextH)
 }
 
 func (n *Node) Set(val any) {
-	newlog.Log(debugChange, "Set() value =", val)
+	log.Log(CHANGE, "Set() value =", val)
 
 	switch v := val.(type) {
 	case bool:
@@ -82,7 +83,7 @@ func (n *Node) Set(val any) {
 	case int:
 		n.I = val.(int)
 	default:
-		newlog.Log(debugError, "Set() unknown type =", v)
+		log.Error(errors.New("Set() unknown type"), "v =", v)
 	}
 
 	a := newAction(n, toolkit.Set)
@@ -106,9 +107,9 @@ func (n *Node) AppendText(str string) {
 // should get the value of the node
 func (n *Node) GetText() string {
 	if (n.S != n.Text) {
-		newlog.Warn("GetText() is screwed up. TODO: fix this dumb crap")
-		stuff := newlog.ListFlags()
-		newlog.Warn("ListFlags() =", stuff)
+		log.Warn("GetText() is screwed up. TODO: fix this dumb crap")
+		stuff := log.ListFlags()
+		log.Warn("ListFlags() =", stuff)
 	}
 	if (n.S != "") {
 		return n.S
@@ -130,7 +131,7 @@ isAlpha := regexp.MustCompile(`^[A-Za-z]+$`).MatchString
 
 for _, username := range []string{"userone", "user2", "user-three"} {
     if !isAlpha(username) {
-        newlog.Log(debugGui, "%q is not valid\n", username)
+        log.Log(GUI, "%q is not valid\n", username)
     }
 }
 
@@ -150,11 +151,11 @@ func normalizeInt(s string) string {
 	// reg, err := regexp.Compile("[^a-zA-Z0-9]+")
 	reg, err := regexp.Compile("[^0-9]+")
 	if err != nil {
-		newlog.Log(debugGui, "normalizeInt() regexp.Compile() ERROR =", err)
+		log.Log(GUI, "normalizeInt() regexp.Compile() ERROR =", err)
 		return s
 	}
 	clean := reg.ReplaceAllString(s, "")
-	newlog.Log(debugGui, "normalizeInt() s =", clean)
+	log.Log(GUI, "normalizeInt() s =", clean)
 	return clean
 }
 
@@ -162,9 +163,9 @@ func commonCallback(n *Node) {
 	// TODO: make all of this common code to all the widgets
 	// This might be common everywhere finally (2023/03/01)
 	if (n.Custom == nil) {
-		newlog.Log(debugChange, "Not Running n.Custom(n) == nil")
+		log.Log(CHANGE, "Not Running n.Custom(n) == nil")
 	} else {
-		newlog.Log(debugChange, "Running n.Custom(n)")
+		log.Log(CHANGE, "Running n.Custom(n)")
 		n.Custom()
 	}
 }
@@ -206,7 +207,7 @@ func (n *Node) Expand() *Node {
 //  myFunnyWindow = myGui.NewWindow("Hello").Standard().SetText("Hola")
 
 func (n *Node) Window(title string) *Node {
-	newlog.Log(debugError, "Window()", n)
+	log.Warn("Window()", n)
 	return n.NewWindow(title)
 }
 
@@ -214,12 +215,12 @@ func (n *Node) Window(title string) *Node {
 // should be the default way
 /*
 func (n *Node) Standard() *Node {
-	newlog.Log(debugInfo, "Standard() not implemented yet")
+	log.Warn("Standard() not implemented yet")
 	return n
 }
 
 func (n *Node) SetMargin() *Node {
-	newlog.Log(debugError, "DoMargin() not implemented yet")
+	log.Warn("DoMargin() not implemented yet")
 	return n
 }
 */

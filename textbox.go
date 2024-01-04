@@ -3,7 +3,7 @@ package gui
 import (
 	"go.wit.com/log"
 
-	"go.wit.com/gui/gui/toolkit"
+	"go.wit.com/gui/toolkits"
 )
 
 func (parent *Node) NewTextbox(name string) *Node {

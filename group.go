@@ -1,7 +1,7 @@
 package gui
 
 import (
-	"go.wit.com/gui/gui/toolkit"
+	"go.wit.com/gui/toolkits"
 )
 
 // TODO: make a "Group" a "Grid" ?

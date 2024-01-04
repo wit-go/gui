@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"go.wit.com/log"
-	"go.wit.com/gui/gui/toolkit"
+	"go.wit.com/gui/toolkits"
 )
 
 // TODO: make a fake 'plugin' channel of communication to andlabs for mswindows

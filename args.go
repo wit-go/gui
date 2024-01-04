@@ -6,10 +6,12 @@ import (
 	"go.wit.com/log"
 )
 
+var INFO log.LogFlag
+
 var GUI log.LogFlag
 var NODE log.LogFlag
 var PLUG log.LogFlag
-var INFO log.LogFlag
+var CHANGE log.LogFlag
 
 var argGui ArgsGui
 
@@ -26,8 +28,6 @@ func ArgToolkit() string {
 
 func init() {
 	arg.Register(&argGui)
-
-	log.Register("gui", "debugGui", &debugGui)
 
 	INFO.B = false
 	INFO.Name = "INFO"
@@ -52,6 +52,12 @@ func init() {
 	PLUG.Subsystem = "gui"
 	PLUG.Desc = "basic PLUG debugging"
 	PLUG.Register()
+
+	CHANGE.B = false
+	CHANGE.Name = "CHANGE"
+	CHANGE.Subsystem = "gui"
+	CHANGE.Desc = "user changed something"
+	CHANGE.Register()
 
 	for _, s := range log.ListFlags() {
 		log.Info("go.wit.com/gui/gui ListFlags() returned:", s)

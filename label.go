@@ -1,7 +1,7 @@
 package gui
 
 import (
-	"go.wit.com/gui/gui/toolkit"
+	"go.wit.com/gui/toolkits"
 )
 
 func (parent *Node) NewLabel(text string) *Node {

@@ -3,7 +3,7 @@ package gui
 import (
 	"sync"
 	"embed"
-	"go.wit.com/gui/gui/toolkit"
+	"go.wit.com/gui/toolkits"
 )
 
 //

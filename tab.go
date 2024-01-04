@@ -3,7 +3,7 @@ package gui
 import (
 	"go.wit.com/log"
 
-	"go.wit.com/gui/gui/toolkit"
+	"go.wit.com/gui/toolkits"
 )
 
 // This function should make a new node with the parent and
