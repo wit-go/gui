@@ -61,7 +61,7 @@ git.wit.org:
 
 # sync repo to the github backup
 # git remote add github git@github.com:wit-go/gui.git
-github:
+github: git.wit.org
 	git push origin master
 	git push origin devel
 	git push origin --tags

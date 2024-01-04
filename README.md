@@ -41,29 +41,18 @@ import 	(
 	"go.wit.com/wit/gui/gui"
 )
 
-var window *gui.Node // This is the beginning of the binary tree of widgets
+var myGui *gui.Node // This is your gui object
 
 // go will sit here until the window exits
 func main() {
-	gui.Init()
-	gui.Main(helloworld)
+	myGui = gui.Init()
 }
 
 // This initializes the first window and 2 tabs
 func helloworld() {
-	gui.Config.Title = "Hello World golang wit/gui Window"
-	gui.Config.Width = 640
-	gui.Config.Height = 480
+	window := myGui.NewWindow()
 
-	window := gui.NewWindow()
-	addTab(window, "A Simple Tab Demo")
-	addTab(window, "A Second Tab")
-}
-
-func addTab(w *gui.Node, title string) {
-	tab := w.NewTab(title)
-
-	group := tab.NewGroup("foo bar")
+	group := window.NewGroup("foo bar")
 	group.NewButton("hello", func() {
 		log.Println("world")
 	})
