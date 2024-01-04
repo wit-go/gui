@@ -2,6 +2,8 @@ package gui
 
 import (
 	"time"
+
+	"go.wit.com/log"
 )
 
 var watchtime time.Duration = 100 // in tenths of seconds
@@ -16,43 +18,8 @@ var watchtime time.Duration = 100 // in tenths of seconds
 func Watchdog() {
 	var i = 1
 	for {
-		log(logInfo, "gui.Watchdog() is alive. give me something to do.", i)
-		if (me.rootNode == nil) {
-			log(logInfo, "me.rootNode == nil", i)
-		} else {
-			if (logVerbose) {
-				me.rootNode.ListChildren(true)
-			}
-		}
+		log.Verbose("gui.Watchdog() is alive. give me something to do.", i)
 		i += 1
 		time.Sleep(watchtime * time.Second / 10)
 	}
 }
-// https://www.reddit.com/r/golang/comments/12em87q/how_to_run_periodic_tasks/
-/*
-package main
-
-import (
-	"fmt"
-	"time"
-)
-
-func main() {
-	ticker := time.NewTicker(time.Second)
-	defer ticker.Stop()
-	done := make(chan bool)
-	go func() {
-		time.Sleep(10 * time.Second)
-		done <- true
-	}()
-	for {
-		select {
-		case <-done:
-			fmt.Println("Done!")
-			return
-		case t := <-ticker.C:
-			fmt.Println("Current time: ", t)
-		}
-	}
-}
-*/

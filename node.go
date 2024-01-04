@@ -1,6 +1,9 @@
 package gui
 
-import "go.wit.com/gui/gui/toolkit"
+import (
+	"go.wit.com/log"
+	"go.wit.com/gui/gui/toolkit"
+)
 
 /*
 	generic function to create a new node on the binary tree
@@ -30,7 +33,7 @@ func addNode(title string) *Node {
 	n.Name = title
 	n.Text = title
 	n.id = me.counter
-	log(debugNode, "addNode = widget setid =", n.id)
+	log.Log(NODE, "addNode = widget setid =", n.id)
 
 	me.counter += 1
 	return n
@@ -42,12 +45,12 @@ func (n *Node) Parent() *Node {
 
 func (n *Node) Delete(d *Node) {
 	for i, child := range n.children {
-		log(debugNode, "\t", i, child.id, child.Name)
+		log.Log(NODE, "\t", i, child.id, child.Name)
 		if (child.id == d.id) {
-			log(debugNode, "\t\t Deleting this")
+			log.Log(NODE, "\t\t Deleting this")
 			n.children = append(n.children[:i], n.children[i+1:]...)
 			return
 		}
 	}
-	log(debugError, "did not find node to delete", d.id, d.Name)
+	log.Warn("did not find node to delete", d.id, d.Name)
 }

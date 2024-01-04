@@ -1,6 +1,7 @@
 package gui
 
 import (
+	"go.wit.com/log"
 	"go.wit.com/gui/gui/toolkit"
 )
 
@@ -8,7 +9,7 @@ func (parent *Node) NewSlider(name string, x int, y int) *Node {
 	newNode := parent.newNode(name, toolkit.Slider)
 
 	newNode.Custom = func() {
-		log(debugGui, "even newer clicker() name in NewSlider name =", name)
+		log.Log(GUI, "even newer clicker() name in NewSlider name =", name)
 	}
 
 	newNode.X = x

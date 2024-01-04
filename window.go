@@ -1,6 +1,7 @@
 package gui
 
 import (
+	"go.wit.com/log"
 	"go.wit.com/gui/gui/toolkit"
 )
 
@@ -13,7 +14,7 @@ func (parent *Node) NewWindow(title string) *Node {
 	newNode = parent.newNode(title, toolkit.Window)
 	newNode.Custom = StandardExit
 
-	log(logInfo, "NewWindow()", title)
+	log.Info("NewWindow()", title)
 
 	a := newAction(newNode, toolkit.Add)
 	sendAction(a)

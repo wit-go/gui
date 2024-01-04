@@ -1,6 +1,7 @@
 package gui
 
 import (
+	"go.wit.com/log"
 	"go.wit.com/gui/gui/toolkit"
 )
 
@@ -20,7 +21,7 @@ func (n *Node) redraw(p *aplug) {
 }
 
 func (n *Node) redo(plug *aplug) {
-	log(logNow, "redo()", plug.name, n.id, n.WidgetType, n.Name)
+	log.Info("redo()", plug.name, n.id, n.WidgetType, n.Name)
 
 	var a *toolkit.Action
 	a = new(toolkit.Action)

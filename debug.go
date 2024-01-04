@@ -4,7 +4,10 @@ package gui
 // A function dump out the binary tree
 
 import (
+	"errors"
 	"strconv"
+
+	"go.wit.com/log"
 	"go.wit.com/gui/gui/toolkit"
 )
 
@@ -28,12 +31,6 @@ var defaultPadding = "  "
 func SetDebug (s bool) {
 	debugGui     = s
 	debugTabs    = s
-
-	logNow = s
-	logInfo = s
-	logWarn = s
-	logError = s
-	logVerbose = s
 
 	SetFlag("Node", s)
 	SetFlag("Tabs", s)
@@ -68,7 +65,7 @@ func SetFlag (s string, b bool) {
 	case "Show":
 		// ShowDebugValues() // print them here?
 	default:
-		log(debugGui, "Can't set unknown flag", s)
+		log.Log(GUI, "Can't set unknown flag", s)
 	}
 
 	a := new(toolkit.Action)
@@ -82,20 +79,19 @@ func SetFlag (s string, b bool) {
 func ShowDebugValues() {
 	// The order here should match the order in the GUI
 	// TODO: get the order from the node binary tree
-	log(true, "Debug        =", debugGui)
-	log(true, "DebugError   =", debugError)
-	log(true, "DebugChange  =", debugChange)
-	log(true, "DebugDump    =", debugDump)
-	log(true, "DebugTabs    =", debugTabs)
-	log(true, "DebugPlugin  =", debugPlugin)
-	log(true, "DebugNode    =", debugNode)
+	log.Log(true, "Debug        =", debugGui)
+	log.Log(true, "DebugError   =", debugError)
+	log.Log(true, "DebugChange  =", debugChange)
+	log.Log(true, "DebugDump    =", debugDump)
+	log.Log(true, "DebugTabs    =", debugTabs)
+	log.Log(true, "DebugPlugin  =", debugPlugin)
+	log.Log(true, "DebugNode    =", debugNode)
 
 	SetFlag("Show", true)
 }
 
 func (n *Node) Dump() {
 	b := true
-	// log("Dump() dump =", b)
 	Indent(b, "NODE DUMP START")
 	Indent(b, "id           = ", n.id)
 	Indent(b, "Name         = ", n.Name)
@@ -129,7 +125,7 @@ func (n *Node) dumpWidget(b bool) string {
 	var info, d string
 
 	if (n == nil) {
-		log(debugError, "dumpWidget() node == nil")
+		log.Error(errors.New("dumpWidget() node == nil"))
 		return ""
 	}
 	info = n.WidgetType.String()
@@ -159,32 +155,32 @@ func (n *Node) ListChildren(dump bool) {
 		if (n.parent == nil) {
 			return
 		}
-		log(debugNode, "\t\t\tparent =",n.parent.id)
+		log.Log(NODE, "\t\t\tparent =",n.parent.id)
 		if (listChildrenParent != nil) {
-			log(debugNode, "\t\t\tlistChildrenParent =",listChildrenParent.id)
+			log.Log(NODE, "\t\t\tlistChildrenParent =",listChildrenParent.id)
 			if (listChildrenParent.id != n.parent.id) {
-				log(true, "parent =",n.parent.id, n.parent.Name)
-				log(true, "listChildrenParent =",listChildrenParent.id, listChildrenParent.Name)
-				log(true, listChildrenParent.id, "!=", n.parent.id)
-				exit("parent.child does not match child.parent")
+				log.Log(true, "parent =",n.parent.id, n.parent.Name)
+				log.Log(true, "listChildrenParent =",listChildrenParent.id, listChildrenParent.Name)
+				log.Log(true, listChildrenParent.id, "!=", n.parent.id)
+				log.Exit("parent.child does not match child.parent")
 			}
 		}
-		log(debugNode, "\t\t", n.id, "has no children")
+		log.Log(NODE, "\t\t", n.id, "has no children")
 		return
 	}
 	for _, child := range n.children {
 		if (child.parent != nil) {
-			log(debugNode, "\t\t\tparent =",child.parent.id)
+			log.Log(NODE, "\t\t\tparent =",child.parent.id)
 		} else {
-			log(debugGui, "\t\t\tno parent")
+			log.Log(GUI, "\t\t\tno parent")
 			// memory corruption? non-threadsafe access?
 			// can all binary tree changes to Node.parent & Node.child be forced into a singular goroutine?
 			panic("something is wrong with the wit golang gui logic and the binary tree is broken. child has no parent")
 		}
 		if (child.children == nil) {
-			log(debugNode, "\t\t", child.id, "has no children")
+			log.Log(NODE, "\t\t", child.id, "has no children")
 		} else {
-			log(debugNode, "\t\t\tHas children:", child.children)
+			log.Log(NODE, "\t\t\tHas children:", child.children)
 		}
 		listChildrenParent = n
 		listChildrenDepth += 1
@@ -193,4 +189,20 @@ func (n *Node) ListChildren(dump bool) {
 		listChildrenDepth -= 1
 	}
 	return
+}
+
+// b bool, print if true
+func logindent(b bool, depth int, format string, a ...any) {
+	var tabs string
+	for i := 0; i < depth; i++ {
+		tabs = tabs + format
+	}
+
+	// newFormat := tabs + strconv.Itoa(depth) + " " + format
+	newFormat := tabs + format
+
+	// array prepend(). Why isn't this a standard function. It should be:
+	// a.prepend(debugGui, newFormat)
+	a = append([]any{b, newFormat}, a...)
+	log.Log(b, a...)
 }

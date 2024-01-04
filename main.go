@@ -3,6 +3,7 @@ package gui
 import (
 	"os"
 
+	"go.wit.com/log"
 	"go.wit.com/gui/gui/toolkit"
 )
 
@@ -15,7 +16,7 @@ const Xaxis = 0 // stack things horizontally
 const Yaxis = 1 // stack things vertically
 
 func init() {
-	log(true, "init() has been run")
+	log.Log(true, "init() has been run")
 
 	me.counter = 0
 	me.prefix = "wit"
@@ -36,28 +37,29 @@ func init() {
 }
 
 func watchCallback() {
-	log(logInfo, "watchCallback() START")
+	log.Info("watchCallback() START")
 	for {
-		log(logInfo, "watchCallback() restarted select for toolkit user events")
+		log.Info("watchCallback() restarted select for toolkit user events")
 	    	select {
 		case a := <-me.guiChan:
 			if (a.ActionType == toolkit.UserQuit) {
-				log(logInfo, "doUserEvent() User sent Quit()")
+				log.Info("doUserEvent() User sent Quit()")
 				me.rootNode.doCustom()
-				exit("wit/gui toolkit.UserQuit")
+				log.Exit("wit/gui toolkit.UserQuit")
 				break
 			}
 			if (a.ActionType == toolkit.EnableDebug) {
-				log(logInfo, "doUserEvent() Enable Debugging Window")
+				log.Warn("doUserEvent() Enable Debugging Window")
+				log.Warn("doUserEvent() TODO: not implemented")
 				// DebugWindow()
 				break
 			}
 
 			n := me.rootNode.FindId(a.WidgetId)
 			if (n == nil) {
-				log(logError, "watchCallback() UNKNOWN widget id =", a.WidgetId, a.Name)
+				log.Warn("watchCallback() UNKNOWN widget id =", a.WidgetId, a.Name)
 			} else {
-				log(logInfo, "watchCallback() FOUND widget id =", n.id, n.Name)
+				log.Info("watchCallback() FOUND widget id =", n.id, n.Name)
 				n.doUserEvent(a)
 			}
 			// this maybe a good idea?
@@ -68,49 +70,49 @@ func watchCallback() {
 }
 
 func (n *Node) doCustom() {
-	log(logInfo, "doUserEvent() widget =", n.id, n.Name, n.WidgetType, n.B)
+	log.Info("doUserEvent() widget =", n.id, n.Name, n.WidgetType, n.B)
 	if (n.Custom == nil) {
-		log(debugError, "Custom() = nil. SKIPPING")
+		log.Warn("Custom() = nil. SKIPPING")
 		return
 	}
 	go n.Custom()
 }
 
 func (n *Node) doUserEvent(a toolkit.Action) {
-	log(logInfo, "doUserEvent() node =", n.id, n.Name)
+	log.Info("doUserEvent() node =", n.id, n.Name)
 	switch n.WidgetType {
 	case toolkit.Checkbox:
 		n.B = a.B
-		log(logInfo, "doUserEvent() node =", n.id, n.Name, "set to:", n.B)
+		log.Info("doUserEvent() node =", n.id, n.Name, "set to:", n.B)
 		n.doCustom()
 	case toolkit.Button:
-		log(logInfo, "doUserEvent() node =", n.id, n.Name, "button clicked")
+		log.Info("doUserEvent() node =", n.id, n.Name, "button clicked")
 		n.doCustom()
 	case toolkit.Combobox:
 		n.S = a.S
-		log(logInfo, "doUserEvent() node =", n.id, n.Name, "set to:", n.S)
+		log.Info("doUserEvent() node =", n.id, n.Name, "set to:", n.S)
 		n.doCustom()
 	case toolkit.Dropdown:
 		n.S = a.S
-		log(logInfo, "doUserEvent() node =", n.id, n.Name, "set to:", n.S)
+		log.Info("doUserEvent() node =", n.id, n.Name, "set to:", n.S)
 		n.doCustom()
 	case toolkit.Textbox:
 		n.S = a.S
-		log(logInfo, "doUserEvent() node =", n.id, n.Name, "set to:", n.S)
+		log.Info("doUserEvent() node =", n.id, n.Name, "set to:", n.S)
 		n.doCustom()
 	case toolkit.Spinner:
 		n.I = a.I
-		log(logInfo, "doUserEvent() node =", n.id, n.Name, "set to:", n.I)
+		log.Info("doUserEvent() node =", n.id, n.Name, "set to:", n.I)
 		n.doCustom()
 	case toolkit.Slider:
 		n.I = a.I
-		log(logInfo, "doUserEvent() node =", n.id, n.Name, "set to:", n.I)
+		log.Info("doUserEvent() node =", n.id, n.Name, "set to:", n.I)
 		n.doCustom()
 	case toolkit.Window:
-		log(logInfo, "doUserEvent() node =", n.id, n.Name, "window closed")
+		log.Info("doUserEvent() node =", n.id, n.Name, "window closed")
 		n.doCustom()
 	default:
-		log(logInfo, "doUserEvent() type =", n.WidgetType)
+		log.Info("doUserEvent() type =", n.WidgetType)
 	}
 }
 
@@ -125,14 +127,14 @@ func New() *Node {
 // try to load andlabs, if that doesn't work, fall back to the console
 func (n *Node) Default() *Node {
 	if (argGui.GuiPlugin != "") {
-		log(logError, "New.Default() try toolkit =", argGui.GuiPlugin)
+		log.Warn("New.Default() try toolkit =", argGui.GuiPlugin)
 		return n.LoadToolkit(argGui.GuiPlugin)
 	}
 	// if DISPLAY isn't set, return since gtk can't load
 	// TODO: figure out how to check what to do in macos and mswindows
 	if (os.Getenv("DISPLAY") == "") {
 		if (n.LoadToolkit("gocui") == nil) {
-			log(logError, "New() failed to load gocui")
+			log.Warn("New() failed to load gocui")
 		}
 		return n
 	}
@@ -145,17 +147,17 @@ func (n *Node) Default() *Node {
 
 // The window is destroyed but the application does not quit
 func (n *Node) StandardClose() {
-	log(debugGui, "wit/gui Standard Window Close. name =", n.Name)
-	log(debugGui, "wit/gui Standard Window Close. n.Custom exit =", n.Custom)
+	log.Log(GUI, "wit/gui Standard Window Close. name =", n.Name)
+	log.Log(GUI, "wit/gui Standard Window Close. n.Custom exit =", n.Custom)
 }
 
 // The window is destroyed and the application exits
 // TODO: properly exit the plugin since Quit() doesn't do it
 func StandardExit() {
-	log(true, "wit/gui Standard Window Exit. running os.Exit()")
-	log(true, "StandardExit() attempt to exit each toolkit plugin")
+	log.Log(true, "wit/gui Standard Window Exit. running os.Exit()")
+	log.Log(true, "StandardExit() attempt to exit each toolkit plugin")
 	for i, plug := range allPlugins {
-		log(true, "NewButton()", i, plug)
+		log.Log(true, "NewButton()", i, plug)
 	}
-	exit(0)
+	log.Exit(0)
 }

@@ -1,6 +1,8 @@
 package gui
 
 import (
+	"go.wit.com/log"
+
 	"go.wit.com/gui/gui/toolkit"
 )
 
@@ -12,16 +14,16 @@ func (n *Node) NewTab(text string) *Node {
 
 	if (n.WidgetType != toolkit.Window) {
 		// figure out what the actual window is
-		log(logError, "NewTab() is being requested on something that isn't a Window. node =", n)
+		log.Warn("NewTab() is being requested on something that isn't a Window. node =", n)
 		if (n.parent == nil) {
 			// TODO: find a window. any window. never give up. never die.
-			log(logError, "NewTab() TODO: make a window here", n)
+			log.Warn("NewTab() TODO: make a window here", n)
 			panic("NewTab did not get passed a window")
 		}
-		log(logError, "NewTab() parent =", n.parent)
+		log.Warn("NewTab() parent =", n.parent)
 		if (n.parent.WidgetType == toolkit.Root) {
 			// also broken
-			log(logError, "NewTab() TODO: make or find a window here", n)
+			log.Warn("NewTab() TODO: make or find a window here", n)
 			panic("NewTab() did not get passed a window")
 		}
 		// go up the binary tree until we find a window widget to add a tab too

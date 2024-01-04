@@ -10,6 +10,7 @@ import (
 	"embed"
 	"plugin"
 
+	"go.wit.com/log"
 	"go.wit.com/gui/gui/toolkit"
 )
 
@@ -50,12 +51,12 @@ var allPlugins []*aplug
 // loads and initializes a toolkit (andlabs/ui, gocui, etc)
 // attempts to locate the .so file
 func initPlugin(name string) *aplug {
-	log(logInfo, "initPlugin() START")
+	log.Log(PLUG, "initPlugin() START")
 
 	for _, aplug := range allPlugins {
-		log(debugGui, "initPlugin() already loaded toolkit plugin =", aplug.name)
+		log.Log(PLUG, "initPlugin() already loaded toolkit plugin =", aplug.name)
 		if (aplug.name == name) {
-			log(debugError, "initPlugin() SKIPPING", name, "as you can't load it twice")
+			log.Warn("initPlugin() SKIPPING", name, "as you can't load it twice")
 			return nil
 		}
 	}
@@ -71,13 +72,13 @@ func getPluginChannel(p *aplug, funcName string) func() chan toolkit.Action {
 
 	test, err = p.plug.Lookup(funcName)
 	if err != nil {
-		log(debugGui, "DID NOT FIND: name =", test, "err =", err)
+		log.Error(err, "DID NOT FIND: name =", test)
 		return nil
 	}
 
 	newfunc, ok = test.(func() chan toolkit.Action)
 	if !ok {
-		log(debugGui, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
+		log.Log(PLUG, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
 		return nil
 	}
 	return newfunc
@@ -90,13 +91,13 @@ func sendCallback(p *aplug, funcName string) func(chan toolkit.Action) {
 
 	test, err = p.plug.Lookup(funcName)
 	if err != nil {
-		log(debugGui, "DID NOT FIND: name =", test, "err =", err)
+		log.Error(err, "DID NOT FIND: name =", test)
 		return nil
 	}
 
 	newfunc, ok = test.(func(chan toolkit.Action))
 	if !ok {
-		log(debugGui, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
+		log.Log(PLUG, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
 		return nil
 	}
 	return newfunc
@@ -120,7 +121,7 @@ func searchPaths(name string) *aplug {
 	pfile, err = me.resFS.ReadFile(filename)
 	if (err == nil) {
 		filename = "/tmp/" + name + ".so"
-		log(logError, "write out file here", name, filename, len(pfile))
+		log.Error(err, "write out file here", name, filename, len(pfile))
 		f, _ := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0600)
 		f.Write(pfile)
 		f.Close()
@@ -129,7 +130,7 @@ func searchPaths(name string) *aplug {
 			return p
 		}
 	} else {
-		log(logError, filename, "was not embedded in the binary. Error:", err)
+		log.Error(err, filename, "was not embedded in the binary")
 	}
 
 	// attempt to write out the file from the internal resource
@@ -141,7 +142,7 @@ func searchPaths(name string) *aplug {
 
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
-		log(logError, "searchPaths() error. exiting here?")
+		log.Error(err, "searchPaths() error. exiting here?")
 	} else {
 		filename = homeDir + "/go/src/go.wit.com/gui/toolkits/" + name + ".so"
 		p = initToolkit(name, filename)
@@ -152,7 +153,7 @@ func searchPaths(name string) *aplug {
 
 	homeDir, err = os.UserHomeDir()
 	if err != nil {
-		log(logError, "searchPaths() error. exiting here?")
+		log.Error(err, "searchPaths() error. exiting here?")
 	} else {
 		filename = homeDir + "/go/src/go.wit.com/toolkits/" + name + ".so"
 		p = initToolkit(name, filename)
@@ -180,18 +181,18 @@ func searchPaths(name string) *aplug {
 func initToolkit(name string, filename string) *aplug {
 	if _, err := os.Stat(filename); err != nil {
 		if os.IsNotExist(err) {
-			log(true, "missing plugin", name, "as filename", filename)
+			log.Log(true, "missing plugin", name, "as filename", filename)
 			return nil
 		}
 	}
-	log(true, "Found plugin", name, "as filename", filename)
+	log.Log(true, "Found plugin", name, "as filename", filename)
 
 	plug, err := plugin.Open(filename)
 	if err != nil {
-		log(debugError, "plugin FAILED =", filename, err)
+		log.Error(err, "plugin FAILED =", filename)
 		return nil
 	}
-	log(debugPlugin, "initToolkit() loading plugin =", filename)
+	log.Log(PLUG, "initToolkit() loading plugin =", filename)
 
 	var newPlug *aplug
 	newPlug = new(aplug)
@@ -214,12 +215,12 @@ func initToolkit(name string, filename string) *aplug {
 	// set the communication to the plugins
 	newPlug.pluginChan = newPlug.PluginChannel()
 	if (newPlug.pluginChan == nil) {
-		log(debugError, "initToolkit() ERROR PluginChannel() returned nil for plugin:", newPlug.name, filename)
+		log.Warn("initToolkit() ERROR PluginChannel() returned nil for plugin:", newPlug.name, filename)
 		return nil
 	}
 	newPlug.Callback(me.guiChan)
 
-	log(debugPlugin, "initToolkit() END", newPlug.name, filename)
+	log.Log(PLUG, "initToolkit() END", newPlug.name, filename)
 	return newPlug
 }
 
@@ -255,16 +256,16 @@ func newAction(n *Node, atype toolkit.ActionType) *toolkit.Action {
 // sends the action/event to each toolkit via a golang plugin channel
 func sendAction(a *toolkit.Action) {
 	for _, aplug := range allPlugins {
-		log(debugPlugin, "Action() aplug =", aplug.name, "Action type=", a.ActionType)
+		log.Log(PLUG, "Action() aplug =", aplug.name, "Action type=", a.ActionType)
 		if (aplug.pluginChan == nil) {
-			log(logInfo, "Action() retrieving the aplug.PluginChannel()", aplug.name)
+			log.Info("Action() retrieving the aplug.PluginChannel()", aplug.name)
 			aplug.pluginChan = aplug.PluginChannel()
-			log(logInfo, "Action() retrieved", aplug.pluginChan)
+			log.Info("Action() retrieved", aplug.pluginChan)
 		}
-		log(logInfo, "Action() SEND to pluginChan", aplug.name)
+		log.Info("Action() SEND to pluginChan", aplug.name)
 		aplug.pluginChan <- *a
 		// added during debugging. might be a good idea in general for a tactile experience
-		sleep(.02) // this delay makes it so SetText() works on initial widget creation
+		log.Sleep(.02) // this delay makes it so SetText() works on initial widget creation
 	}
 }
 
@@ -275,15 +276,16 @@ func (n *Node) InitEmbed(resFS embed.FS) *Node {
 
 func (n *Node) LoadToolkitEmbed(name string, b []byte) *Node {
 	for _, aplug := range allPlugins {
-		log(logInfo, "LoadToolkitEmbed() already loaded toolkit plugin =", aplug.name)
+		log.Info("LoadToolkitEmbed() already loaded toolkit plugin =", aplug.name)
 		if (aplug.name == name) {
-			log(logError, "LoadToolkitEmbed() SKIPPING", name, "as you can't load it twice")
+			log.Warn("LoadToolkitEmbed() SKIPPING", name, "as you can't load it twice")
 			return n
 		}
 	}
 
 	f, err := os.CreateTemp("", "sample." + name + ".so")
 	if (err != nil) {
+		log.Error(err, "LoadToolkitEmbed() SKIPPING", name, "as you can't load it twice")
 		return n
 	}
 	defer os.Remove(f.Name())
@@ -291,25 +293,25 @@ func (n *Node) LoadToolkitEmbed(name string, b []byte) *Node {
 
 	p := initToolkit(name, f.Name())
 	if (p == nil) {
-		log(logError, "LoadToolkitEmbed() embedded go file failed", name)
+		log.Warn("LoadToolkitEmbed() embedded go file failed", name)
 	}
 	return n
 }
 
 func (n *Node) ListToolkits() {
 	for _, aplug := range allPlugins {
-		log(logNow, "ListToolkits() already loaded toolkit plugin =", aplug.name)
+		log.Log(PLUG, "ListToolkits() already loaded toolkit plugin =", aplug.name)
 	}
 }
 
 func (n *Node) LoadToolkit(name string) *Node {
-	log(logInfo, "LoadToolkit() START for name =", name)
+	log.Log(PLUG, "LoadToolkit() START for name =", name)
 	plug := initPlugin(name)
 	if (plug == nil) {
 		return n
 	}
 
-	log(logInfo, "LoadToolkit() sending InitToolkit action to the plugin channel")
+	log.Log(PLUG, "LoadToolkit() sending InitToolkit action to the plugin channel")
 	var a toolkit.Action
 	a.ActionType = toolkit.InitToolkit
 	plug.pluginChan <- a
@@ -317,16 +319,16 @@ func (n *Node) LoadToolkit(name string) *Node {
 
 	// TODO: find a new way to do this that is locking, safe and accurate
 	me.rootNode.redraw(plug)
-	log(logInfo, "LoadToolkit() END for name =", name)
+	log.Log(PLUG, "LoadToolkit() END for name =", name)
 	return n
 }
 
 func (n *Node) CloseToolkit(name string) bool {
-	log(logInfo, "CloseToolkit() for name =", name)
+	log.Log(PLUG, "CloseToolkit() for name =", name)
 	for _, plug := range allPlugins {
-		log(debugGui, "CloseToolkit() found", plug.name)
+		log.Log(PLUG, "CloseToolkit() found", plug.name)
 		if (plug.name == name) {
-			log(debugNow, "CloseToolkit() sending close", name)
+			log.Log(PLUG, "CloseToolkit() sending close", name)
 			var a toolkit.Action
 			a.ActionType = toolkit.CloseToolkit
 			plug.pluginChan <- a

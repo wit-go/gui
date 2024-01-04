@@ -1,6 +1,7 @@
 package gui
 
 import (
+	"go.wit.com/log"
 	"go.wit.com/gui/gui/toolkit"
 )
 
@@ -73,7 +74,7 @@ func (n *Node) At(w int, h int) *Node {
 
 	n.gridIncrement()
 	if (n.NextW != w) || (n.NextH != h) {
-		log(logError, "At() (W,H)", w, h, " was moved to avoid a collision (W,H) =", n.NextW, n.NextH)
+		log.Warn("At() (W,H)", w, h, " was moved to avoid a collision (W,H) =", n.NextW, n.NextH)
 	}
 	return n
 }
