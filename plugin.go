@@ -134,7 +134,7 @@ func searchPaths(name string) *aplug {
 	}
 
 	// attempt to write out the file from the internal resource
-	filename = "toolkit/" + name + ".so"
+	filename = "toolkits/" + name + ".so"
 	p := initToolkit(name, filename)
 	if (p != nil) {
 		return p
@@ -142,33 +142,23 @@ func searchPaths(name string) *aplug {
 
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
-		log.Error(err, "searchPaths() error. exiting here?")
-	} else {
-		filename = homeDir + "/go/src/go.wit.com/gui/toolkits/" + name + ".so"
-		p = initToolkit(name, filename)
-		if (p != nil) {
-			return p
-		}
+		log.Error(err, "os.UserHomeDir() error. giving up")
+		return nil
 	}
 
-	homeDir, err = os.UserHomeDir()
-	if err != nil {
-		log.Error(err, "searchPaths() error. exiting here?")
-	} else {
-		filename = homeDir + "/go/src/go.wit.com/toolkits/" + name + ".so"
-		p = initToolkit(name, filename)
-		if (p != nil) {
-			return p
-		}
-	}
-
-	filename = "/usr/lib/go-gui/" + name + ".so"
+	filename = homeDir + "/go/src/go.wit.com/gui/toolkits/" + name + ".so"
 	p = initToolkit(name, filename)
 	if (p != nil) {
 		return p
 	}
 
-	filename = "/usr/local/lib/" + name + ".so"
+	filename = "/usr/lib/go-gui/latest/" + name + ".so"
+	p = initToolkit(name, filename)
+	if (p != nil) {
+		return p
+	}
+
+	filename = "/usr/local/lib/gui/toolkits/" + name + ".so"
 	p = initToolkit(name, filename)
 	if (p != nil) {
 		return p
