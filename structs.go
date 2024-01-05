@@ -29,9 +29,6 @@ type guiConfig struct {
 	// This is the master node. The Binary Tree starts here
 	rootNode *Node
 
-	// if the user prefers new windows or 'windows within windows' tabs
-	makeTabs bool
-
 	// A node off of rootNode for passing debugging flags
 	flag	*Node
 

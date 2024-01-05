@@ -41,20 +41,16 @@ Hello World Example
 
 	// go will sit here until the window exits
 	func main() {
-		myGui = gui.New()
+		myGui = gui.New().Default()
+
+		helloworld()
 	}
 
-	// This initializes the first window and 2 tabs
+	// This initializes the first window, a group and a button
 	func helloworld() {
 		window := myGui.NewWindow("hello world")
-		addTab(window, "A Simple Tab Demo")
-		addTab(window, "A Second Tab")
-	}
 
-	func addTab(w *gui.Node, title string) {
-		tab := w.NewTab(title)
-
-		group := tab.NewGroup("foo bar")
+		group := window.NewGroup("foo bar")
 		group.NewButton("hello", func() {
 			log.Println("world")
 		})
