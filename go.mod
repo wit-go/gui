@@ -4,7 +4,7 @@ go 1.21.4
 
 require (
 	github.com/alexflint/go-arg v1.4.3
-	go.wit.com/gui/toolkits v0.4.1
+	go.wit.com/gui/widget v0.0.0-20240105185907-84aafa536a93
 	go.wit.com/log v0.3.1
 )
 

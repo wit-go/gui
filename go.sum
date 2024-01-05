@@ -11,8 +11,8 @@ github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/stretchr/testify v1.7.0 h1:nwc3DEeHmmLAfoZucVR881uASk0Mfjw8xYJ99tb5CcY=
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
-go.wit.com/gui/toolkits v0.4.1 h1:Kw9gTAajHwQShuK8MOj8UizGPeY5hOtDfvAxYpDXjUw=
-go.wit.com/gui/toolkits v0.4.1/go.mod h1:f2QuC3z15/JxNnwujyFkgvkYjBS1fy0ni+QQ9idZnWQ=
+go.wit.com/gui/widget v0.0.0-20240105185907-84aafa536a93 h1:zCzaHvXJJ/rWXmDc/v79VvM6W2lxxzJGfnW2lHCv3Ho=
+go.wit.com/gui/widget v0.0.0-20240105185907-84aafa536a93/go.mod h1:A6/FaiFQtAHTjgo7c4FrokXe6bXX1Cowo35b2Lgi31E=
 go.wit.com/log v0.3.1 h1:UXtgJ4dwyWL0Yv4mw6gQnlmrIQU/zz6nClCB7NGKBQs=
 go.wit.com/log v0.3.1/go.mod h1:GmsggfsKrqdZdAj26fEOlcTz6qEIazbV33uyuuktvB8=
 go.wit.com/spew v0.0.0-20240101141411-c7b8e91573c9 h1:UEX2EzLQPzLTfy/kUFQD7OXtvKn8wk/+jpDOkbl4ff4=
