@@ -3,7 +3,7 @@ package gui
 import (
 	"sync"
 	"embed"
-	"go.wit.com/gui/toolkits"
+	"go.wit.com/gui/widget"
 )
 
 //
@@ -35,7 +35,7 @@ type guiConfig struct {
 	counter    int  // used to make unique WidgetId's
 
 	// sets the chan for the plugins to call back too
-	guiChan chan toolkit.Action
+	guiChan chan widget.Action
 
 	// option to pass in compiled plugins as embedded files
 	resFS	embed.FS
@@ -50,7 +50,7 @@ type guiConfig struct {
 type Node struct {
 	id     int
 
-	WidgetType	toolkit.WidgetType
+	WidgetType	widget.WidgetType
 
 	// for NewLabel("hello"), Text = 'hello'
 	Text string  // what is visable to the user

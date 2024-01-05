@@ -11,7 +11,7 @@ import (
 	"plugin"
 
 	"go.wit.com/log"
-	"go.wit.com/gui/toolkits"
+	"go.wit.com/gui/widget"
 )
 
 var err error
@@ -31,7 +31,7 @@ type aplug struct {
 	// From this channel, the information is then passed into the main program
 	// Custom() function
 	//
-	Callback func(chan toolkit.Action)
+	Callback func(chan widget.Action)
 
 	// This is how actions are sent to the toolkit. 
 	// For example:
@@ -42,8 +42,8 @@ type aplug struct {
 	// each toolkit has it's own goroutine and each one is sent this
 	// add button request
 	//
-	pluginChan chan toolkit.Action
-	PluginChannel func() chan toolkit.Action
+	pluginChan chan widget.Action
+	PluginChannel func() chan widget.Action
 }
 
 var allPlugins []*aplug
@@ -65,8 +65,8 @@ func initPlugin(name string) *aplug {
 }
 
 //	newPlug.PluginChannel = getPluginChannel(newPlug, "PluginChannel")
-func getPluginChannel(p *aplug, funcName string) func() chan toolkit.Action {
-	var newfunc func() chan toolkit.Action
+func getPluginChannel(p *aplug, funcName string) func() chan widget.Action {
+	var newfunc func() chan widget.Action
 	var ok bool
 	var test plugin.Symbol
 
@@ -76,7 +76,7 @@ func getPluginChannel(p *aplug, funcName string) func() chan toolkit.Action {
 		return nil
 	}
 
-	newfunc, ok = test.(func() chan toolkit.Action)
+	newfunc, ok = test.(func() chan widget.Action)
 	if !ok {
 		log.Log(PLUG, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
 		return nil
@@ -84,8 +84,8 @@ func getPluginChannel(p *aplug, funcName string) func() chan toolkit.Action {
 	return newfunc
 }
 
-func sendCallback(p *aplug, funcName string) func(chan toolkit.Action) {
-	var newfunc func(chan toolkit.Action)
+func sendCallback(p *aplug, funcName string) func(chan widget.Action) {
+	var newfunc func(chan widget.Action)
 	var ok bool
 	var test plugin.Symbol
 
@@ -95,7 +95,7 @@ func sendCallback(p *aplug, funcName string) func(chan toolkit.Action) {
 		return nil
 	}
 
-	newfunc, ok = test.(func(chan toolkit.Action))
+	newfunc, ok = test.(func(chan widget.Action))
 	if !ok {
 		log.Log(PLUG, "function name =", funcName, "names didn't map correctly. Fix the plugin name =", p.name)
 		return nil
@@ -216,8 +216,8 @@ func initToolkit(name string, filename string) *aplug {
 
 // 2023/05/09 pretty clean
 // 2023/04/06 Queue() is also being used and channels are being used. memcopy() only
-func newAction(n *Node, atype toolkit.ActionType) *toolkit.Action {
-	var a toolkit.Action
+func newAction(n *Node, atype widget.ActionType) *widget.Action {
+	var a widget.Action
 	a.ActionType = atype
 	if (n == nil) {
 		return &a
@@ -244,7 +244,7 @@ func newAction(n *Node, atype toolkit.ActionType) *toolkit.Action {
 }
 
 // sends the action/event to each toolkit via a golang plugin channel
-func sendAction(a *toolkit.Action) {
+func sendAction(a *widget.Action) {
 	for _, aplug := range allPlugins {
 		log.Log(PLUG, "Action() aplug =", aplug.name, "Action type=", a.ActionType)
 		if (aplug.pluginChan == nil) {
@@ -302,8 +302,8 @@ func (n *Node) LoadToolkit(name string) *Node {
 	}
 
 	log.Log(PLUG, "LoadToolkit() sending InitToolkit action to the plugin channel")
-	var a toolkit.Action
-	a.ActionType = toolkit.InitToolkit
+	var a widget.Action
+	a.ActionType = widget.InitToolkit
 	plug.pluginChan <- a
 	// sleep(.5) // temp hack until chan communication is setup
 
@@ -319,8 +319,8 @@ func (n *Node) CloseToolkit(name string) bool {
 		log.Log(PLUG, "CloseToolkit() found", plug.name)
 		if (plug.name == name) {
 			log.Log(PLUG, "CloseToolkit() sending close", name)
-			var a toolkit.Action
-			a.ActionType = toolkit.CloseToolkit
+			var a widget.Action
+			a.ActionType = widget.CloseToolkit
 			plug.pluginChan <- a
 			// sleep(.5) // is this needed? TODO: properly close channel
 			return true

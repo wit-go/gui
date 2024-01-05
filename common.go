@@ -6,31 +6,31 @@ import (
 	"regexp"
 	"errors"
 	"go.wit.com/log"
-	"go.wit.com/gui/toolkits"
+	"go.wit.com/gui/widget"
 )
 
 // functions for handling text related GUI elements
 
 func (n *Node) Show() *Node {
-	a := newAction(n, toolkit.Show)
+	a := newAction(n, widget.Show)
 	sendAction(a)
 	return n
 }
 
 func (n *Node) Hide() *Node {
-	a := newAction(n, toolkit.Hide)
+	a := newAction(n, widget.Hide)
 	sendAction(a)
 	return n
 }
 
 func (n *Node) Enable() *Node {
-	a := newAction(n, toolkit.Enable)
+	a := newAction(n, widget.Enable)
 	sendAction(a)
 	return n
 }
 
 func (n *Node) Disable() *Node {
-	a := newAction(n, toolkit.Disable)
+	a := newAction(n, widget.Disable)
 	sendAction(a)
 	return n
 }
@@ -40,7 +40,7 @@ func (n *Node) Add(str string) {
 
 	n.S = str
 
-	a := newAction(n, toolkit.Add)
+	a := newAction(n, widget.Add)
 	sendAction(a)
 }
 
@@ -50,7 +50,7 @@ func (n *Node) AddText(str string) {
 	n.Text = str
 	n.S = str
 
-	a := newAction(n, toolkit.AddText)
+	a := newAction(n, widget.AddText)
 	sendAction(a)
 }
 
@@ -60,7 +60,7 @@ func (n *Node) SetText(text string) *Node {
 	n.Text = text
 	n.S = text
 
-	a := newAction(n, toolkit.SetText)
+	a := newAction(n, widget.SetText)
 	sendAction(a)
 	return n
 }
@@ -86,7 +86,7 @@ func (n *Node) Set(val any) {
 		log.Error(errors.New("Set() unknown type"), "v =", v)
 	}
 
-	a := newAction(n, toolkit.Set)
+	a := newAction(n, widget.Set)
 	sendAction(a)
 }
 
@@ -95,7 +95,7 @@ func (n *Node) AppendText(str string) {
 	n.Text = tmp
 	n.S = tmp
 
-	a := newAction(n, toolkit.SetText)
+	a := newAction(n, widget.SetText)
 	sendAction(a)
 }
 
@@ -169,31 +169,31 @@ func commonCallback(n *Node) {
 }
 
 func (n *Node) Margin() *Node {
-	a := newAction(n, toolkit.Margin)
+	a := newAction(n, widget.Margin)
 	sendAction(a)
 	return n
 }
 
 func (n *Node) Unmargin() *Node {
-	a := newAction(n, toolkit.Unmargin)
+	a := newAction(n, widget.Unmargin)
 	sendAction(a)
 	return n
 }
 
 func (n *Node) Pad() *Node {
-	a := newAction(n, toolkit.Pad)
+	a := newAction(n, widget.Pad)
 	sendAction(a)
 	return n
 }
 
 func (n *Node) Unpad() *Node {
-	a := newAction(n, toolkit.Unpad)
+	a := newAction(n, widget.Unpad)
 	sendAction(a)
 	return n
 }
 
 func (n *Node) Expand() *Node {
-	a := newAction(n, toolkit.Pad)
+	a := newAction(n, widget.Pad)
 	a.Expand = true
 	sendAction(a)
 	return n

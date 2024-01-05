@@ -2,19 +2,19 @@ package gui
 
 import (
 	"go.wit.com/log"
-	"go.wit.com/gui/toolkits"
+	"go.wit.com/gui/widget"
 )
 
 /*
 	generic function to create a new node on the binary tree
 */
-func (n *Node) newNode(title string, t toolkit.WidgetType) *Node {
+func (n *Node) newNode(title string, t widget.WidgetType) *Node {
 	var newN *Node
 
 	newN = addNode(title)
 	newN.WidgetType = t
 
-	if n.WidgetType == toolkit.Grid {
+	if n.WidgetType == widget.Grid {
 		n.gridIncrement()
 	}
 	newN.AtW = n.NextW

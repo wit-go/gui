@@ -6,7 +6,7 @@ package gui
 // since it is the same. confusing names? maybe...
 
 import (
-	"go.wit.com/gui/toolkits"
+	"go.wit.com/gui/widget"
 )
 
 // add a new entry to the dropdown name
@@ -20,18 +20,18 @@ func (n *Node) SetDropdownName(name string) {
 }
 
 func (n *Node) NewDropdown(name string) *Node {
-	newNode := n.newNode(name, toolkit.Dropdown) 
+	newNode := n.newNode(name, widget.Dropdown) 
 
-	a := newAction(newNode, toolkit.Add)
+	a := newAction(newNode, widget.Add)
 	sendAction(a)
 
 	return newNode
 }
 
 func (n *Node) NewCombobox(name string) *Node {
-	newNode := n.newNode(name, toolkit.Combobox) 
+	newNode := n.newNode(name, widget.Combobox) 
 
-	a := newAction(newNode, toolkit.Add)
+	a := newAction(newNode, widget.Add)
 	sendAction(a)
 
 	return newNode

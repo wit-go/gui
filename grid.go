@@ -2,7 +2,7 @@ package gui
 
 import (
 	"go.wit.com/log"
-	"go.wit.com/gui/toolkits"
+	"go.wit.com/gui/widget"
 )
 
 // Grid numbering examples (H) or (W,H)
@@ -24,14 +24,14 @@ import (
 // -----------------------------
 
 func (n *Node) NewGrid(name string, w int, h int) *Node {
-	newNode := n.newNode(name, toolkit.Grid)
+	newNode := n.newNode(name, widget.Grid)
 
 	newNode.W = w
 	newNode.H = h
 	newNode.NextW = 1
 	newNode.NextH = 1
 
-	a := newAction(newNode, toolkit.Add)
+	a := newAction(newNode, widget.Add)
 	sendAction(a)
 
 	// by default, always pad grids

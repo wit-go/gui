@@ -2,7 +2,7 @@ package gui
 
 import (
 	"go.wit.com/log"
-	"go.wit.com/gui/toolkits"
+	"go.wit.com/gui/widget"
 )
 
 // This recreates the whole GUI for a plugin
@@ -23,12 +23,12 @@ func (n *Node) redraw(p *aplug) {
 func (n *Node) redo(plug *aplug) {
 	log.Info("redo()", plug.name, n.id, n.WidgetType, n.Name)
 
-	var a *toolkit.Action
-	a = new(toolkit.Action)
+	var a *widget.Action
+	a = new(widget.Action)
 	a.Name = n.Name
 	a.Text = n.Text
 
-	a.ActionType = toolkit.Add
+	a.ActionType = widget.Add
 	a.WidgetType = n.WidgetType
 	a.WidgetId = n.id
 

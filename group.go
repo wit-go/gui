@@ -1,7 +1,7 @@
 package gui
 
 import (
-	"go.wit.com/gui/toolkits"
+	"go.wit.com/gui/widget"
 )
 
 // TODO: make a "Group" a "Grid" ?
@@ -9,9 +9,9 @@ import (
 // pre-canned andlabs/ui gtk,macos,windows thing
 func (parent *Node) NewGroup(name string) *Node {
 	var newNode *Node
-	newNode = parent.newNode(name, toolkit.Group)
+	newNode = parent.newNode(name, widget.Group)
 
-	a := newAction(newNode, toolkit.Add)
+	a := newAction(newNode, widget.Add)
 	sendAction(a)
 
 	// by default, always pad groups

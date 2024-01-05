@@ -1,12 +1,12 @@
 package gui
 
-import "go.wit.com/gui/toolkits"
+import "go.wit.com/gui/widget"
 
 func (parent *Node) NewButton(name string, custom func()) *Node {
-	newNode := parent.newNode(name, toolkit.Button)
+	newNode := parent.newNode(name, widget.Button)
 	newNode.Custom = custom
 
-	a := newAction(newNode, toolkit.Add)
+	a := newAction(newNode, widget.Add)
 	sendAction(a)
 	return newNode
 }

@@ -1,14 +1,14 @@
 package gui
 
 import (
-	"go.wit.com/gui/toolkits"
+	"go.wit.com/gui/widget"
 )
 
 func (parent *Node) NewImage(name string) *Node {
 	var newNode *Node
-	newNode = parent.newNode(name, toolkit.Image)
+	newNode = parent.newNode(name, widget.Image)
 
-	a := newAction(newNode, toolkit.Add)
+	a := newAction(newNode, widget.Add)
 	sendAction(a)
 	return newNode
 }

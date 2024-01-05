@@ -9,7 +9,7 @@ import (
 	"strconv"
 
 	"go.wit.com/log"
-	"go.wit.com/gui/toolkits"
+	"go.wit.com/gui/widget"
 )
 
 // for printing out the binary tree
@@ -38,8 +38,8 @@ func (n *Node) Dump() {
 	}
 	Indent(b, "NODE DUMP END")
 
-	a := new(toolkit.Action)
-	a.ActionType = toolkit.Dump
+	a := new(widget.Action)
+	a.ActionType = widget.Dump
 	a.WidgetId = n.id
 	sendAction(a)
 }

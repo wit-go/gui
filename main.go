@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"go.wit.com/log"
-	"go.wit.com/gui/toolkits"
+	"go.wit.com/gui/widget"
 )
 
 // TODO: make a fake 'plugin' channel of communication to andlabs for mswindows
@@ -23,16 +23,16 @@ func init() {
 
 	// Populates the top of the binary tree
 	me.rootNode = addNode("guiBinaryTree")
-	me.rootNode.WidgetType = toolkit.Root
+	me.rootNode.WidgetType = widget.Root
 
 	// used to pass debugging flags to the toolkit plugins
 	me.flag = me.rootNode.newNode("flag", 0)
-	me.flag.WidgetType = toolkit.Flag
+	me.flag.WidgetType = widget.Flag
 
 	me.flag = me.rootNode.newNode("stdout", 0)
-	me.flag.WidgetType = toolkit.Stdout
+	me.flag.WidgetType = widget.Stdout
 
-	me.guiChan = make(chan toolkit.Action, 1)
+	me.guiChan = make(chan widget.Action, 1)
 	go watchCallback()
 }
 
@@ -42,13 +42,13 @@ func watchCallback() {
 		log.Info("watchCallback() restarted select for toolkit user events")
 	    	select {
 		case a := <-me.guiChan:
-			if (a.ActionType == toolkit.UserQuit) {
+			if (a.ActionType == widget.UserQuit) {
 				log.Info("doUserEvent() User sent Quit()")
 				me.rootNode.doCustom()
 				log.Exit("wit/gui toolkit.UserQuit")
 				break
 			}
-			if (a.ActionType == toolkit.EnableDebug) {
+			if (a.ActionType == widget.EnableDebug) {
 				log.Warn("doUserEvent() Enable Debugging Window")
 				log.Warn("doUserEvent() TODO: not implemented")
 				// DebugWindow()
@@ -78,37 +78,37 @@ func (n *Node) doCustom() {
 	go n.Custom()
 }
 
-func (n *Node) doUserEvent(a toolkit.Action) {
+func (n *Node) doUserEvent(a widget.Action) {
 	log.Info("doUserEvent() node =", n.id, n.Name)
 	switch n.WidgetType {
-	case toolkit.Checkbox:
+	case widget.Checkbox:
 		n.B = a.B
 		log.Info("doUserEvent() node =", n.id, n.Name, "set to:", n.B)
 		n.doCustom()
-	case toolkit.Button:
+	case widget.Button:
 		log.Info("doUserEvent() node =", n.id, n.Name, "button clicked")
 		n.doCustom()
-	case toolkit.Combobox:
+	case widget.Combobox:
 		n.S = a.S
 		log.Info("doUserEvent() node =", n.id, n.Name, "set to:", n.S)
 		n.doCustom()
-	case toolkit.Dropdown:
+	case widget.Dropdown:
 		n.S = a.S
 		log.Info("doUserEvent() node =", n.id, n.Name, "set to:", n.S)
 		n.doCustom()
-	case toolkit.Textbox:
+	case widget.Textbox:
 		n.S = a.S
 		log.Info("doUserEvent() node =", n.id, n.Name, "set to:", n.S)
 		n.doCustom()
-	case toolkit.Spinner:
+	case widget.Spinner:
 		n.I = a.I
 		log.Info("doUserEvent() node =", n.id, n.Name, "set to:", n.I)
 		n.doCustom()
-	case toolkit.Slider:
+	case widget.Slider:
 		n.I = a.I
 		log.Info("doUserEvent() node =", n.id, n.Name, "set to:", n.I)
 		n.doCustom()
-	case toolkit.Window:
+	case widget.Window:
 		log.Info("doUserEvent() node =", n.id, n.Name, "window closed")
 		n.doCustom()
 	default:
