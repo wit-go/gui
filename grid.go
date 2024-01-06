@@ -31,8 +31,10 @@ func (n *Node) NewGrid(name string, w int, h int) *Node {
 	newNode.NextW = 1
 	newNode.NextH = 1
 
-	a := newAction(newNode, widget.Add)
-	sendAction(a)
+	if ! newNode.hidden {
+		a := newAction(newNode, widget.Add)
+		sendAction(a)
+	}
 
 	// by default, always pad grids
 	newNode.Pad()

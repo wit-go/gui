@@ -14,10 +14,12 @@ func (parent *Node) NewSlider(name string, x int, y int) *Node {
 
 	newNode.X = x
 	newNode.Y = y
-	a := newAction(newNode, widget.Add)
-	a.X = x
-	a.Y = y
-	sendAction(a)
+	if ! newNode.hidden {
+		a := newAction(newNode, widget.Add)
+		a.X = x
+		a.Y = y
+		sendAction(a)
+	}
 
 	return newNode
 }

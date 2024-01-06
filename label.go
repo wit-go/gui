@@ -6,9 +6,10 @@ import (
 
 func (parent *Node) NewLabel(text string) *Node {
 	newNode := parent.newNode(text, widget.Label)
-	a := newAction(newNode, widget.Add)
-	a.Text = text
-	a.S = text
-	sendAction(a)
+
+	if ! newNode.hidden {
+		a := newAction(newNode, widget.Add)
+		sendAction(a)
+	}
 	return newNode
 }

@@ -24,6 +24,7 @@ func init() {
 	// Populates the top of the binary tree
 	me.rootNode = addNode("guiBinaryTree")
 	me.rootNode.WidgetType = widget.Root
+	me.rootNode.hidden = false // always send the rootNode to the toolkits
 
 	// used to pass debugging flags to the toolkit plugins
 	me.flag = me.rootNode.newNode("flag", 0)

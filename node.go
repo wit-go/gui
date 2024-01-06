@@ -19,6 +19,7 @@ func (n *Node) newNode(title string, t widget.WidgetType) *Node {
 	}
 	newN.AtW = n.NextW
 	newN.AtH = n.NextH
+	newN.hidden = n.hidden // by default, use the value from above
 
 	n.children = append(n.children, newN)
 	newN.parent = n

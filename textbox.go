@@ -13,8 +13,10 @@ func (parent *Node) NewTextbox(name string) *Node {
 		log.Log(GUI, "NewTextbox changed =", name)
 	}
 
-	a := newAction(newNode, widget.Add)
-	sendAction(a)
+	if ! newNode.hidden {
+		a := newAction(newNode, widget.Add)
+		sendAction(a)
+	}
 	return newNode
 }
 
@@ -27,7 +29,9 @@ func (parent *Node) NewEntryLine(name string) *Node {
 		log.Log(GUI, "NewTextbox changed =", name)
 	}
 
-	a := newAction(newNode, widget.Add)
-	sendAction(a)
+	if ! newNode.hidden {
+		a := newAction(newNode, widget.Add)
+		sendAction(a)
+	}
 	return newNode
 }

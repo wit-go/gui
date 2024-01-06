@@ -48,7 +48,11 @@ type guiConfig struct {
 // The Node is a binary tree. This is how all GUI elements are stored
 // simply the name and the size of whatever GUI element exists
 type Node struct {
-	id     int
+	id	int // should be unique
+	hidden	bool // Sierpinski Carpet mode. It's there, but you can't see it.
+	pad	bool // the toolkit may use this. it's up to the toolkit
+	margin	bool // the toolkit may use this. it's up to the toolkit
+	expand	bool // the toolkit may use this. it's up to the toolkit
 
 	WidgetType	widget.WidgetType
 

@@ -8,7 +8,9 @@ func (parent *Node) NewBox(name string, b bool) *Node {
 	newNode := parent.newNode(name, widget.Box)
 	newNode.B = b
 
-	a := newAction(newNode, widget.Add)
-	sendAction(a)
+	if ! newNode.hidden {
+		a := newAction(newNode, widget.Add)
+		sendAction(a)
+	}
 	return newNode
 }

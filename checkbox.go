@@ -9,7 +9,9 @@ func (n *Node) Checked() bool {
 func (n *Node) NewCheckbox(name string) *Node {
 	newNode := n.newNode(name, widget.Checkbox)
 
-	a := newAction(newNode, widget.Add)
-	sendAction(a)
+	if ! newNode.hidden {
+		a := newAction(newNode, widget.Add)
+		sendAction(a)
+	}
 	return newNode
 }

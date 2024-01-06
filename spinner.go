@@ -15,7 +15,9 @@ func (parent *Node) NewSpinner(name string, x int, y int) *Node {
 	newNode.X = x
 	newNode.Y = y
 
-	a := newAction(newNode, widget.Add)
-	sendAction(a)
+	if ! newNode.hidden {
+		a := newAction(newNode, widget.Add)
+		sendAction(a)
+	}
 	return newNode
 }
