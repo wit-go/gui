@@ -1,8 +1,7 @@
 package gui
 
 import (
-	arg "github.com/alexflint/go-arg"
-
+	"go.wit.com/arg"
 	"go.wit.com/log"
 )
 
