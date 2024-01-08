@@ -19,6 +19,6 @@ func (parent *Node) NewGroup(name string) *Node {
 	// by default, always pad groups
 	newNode.Pad()
 
-	newBox := newNode.NewBox("defaultGroupBox", false)
-	return newBox
+	// newBox := newNode.NewBox("defaultGroupBox", false)
+	return newNode
 }
