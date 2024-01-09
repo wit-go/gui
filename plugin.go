@@ -171,11 +171,11 @@ func searchPaths(name string) *aplug {
 func initToolkit(name string, filename string) *aplug {
 	if _, err := os.Stat(filename); err != nil {
 		if os.IsNotExist(err) {
-			log.Log(true, "missing plugin", name, "as filename", filename)
+			log.Log(PLUG, "missing plugin", name, "as filename", filename)
 			return nil
 		}
 	}
-	log.Log(true, "Found plugin", name, "as filename", filename)
+	log.Log(PLUG, "Found plugin", name, "as filename", filename)
 
 	plug, err := plugin.Open(filename)
 	if err != nil {

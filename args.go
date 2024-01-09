@@ -6,7 +6,7 @@ import (
 )
 
 var INFO log.LogFlag
-
+var NOW log.LogFlag
 var GUI log.LogFlag
 var NODE log.LogFlag
 var PLUG log.LogFlag
@@ -28,33 +28,13 @@ func ArgToolkit() string {
 func init() {
 	arg.Register(&argGui)
 
-	INFO.B = false
-	INFO.Name = "INFO"
-	INFO.Subsystem = "gui"
-	INFO.Desc = "Enable log.Info()"
-	INFO.Register()
+	full := "go.wit.com/gui/gui"
+	short := "gui"
 
-	GUI.B = false
-	GUI.Name = "GUI"
-	GUI.Subsystem = "gui"
-	GUI.Desc = "basic GUI debugging"
-	GUI.Register()
-
-	NODE.B = false
-	NODE.Name = "NODE"
-	NODE.Subsystem = "gui"
-	NODE.Desc = "basic NODE debugging"
-	NODE.Register()
-
-	PLUG.B = false
-	PLUG.Name = "PLUG"
-	PLUG.Subsystem = "gui"
-	PLUG.Desc = "basic PLUG debugging"
-	PLUG.Register()
-
-	CHANGE.B = false
-	CHANGE.Name = "CHANGE"
-	CHANGE.Subsystem = "gui"
-	CHANGE.Desc = "user changed something"
-	CHANGE.Register()
+	NOW.NewFlag("NOW", true,  full, short, "temp debugging stuff")
+	INFO.NewFlag("INFO", false, full, short, "General Info")
+	GUI.NewFlag("GUI", false, full, short, "basic GUI internals")
+	NODE.NewFlag("NODE", false, full, short, "binary tree debugging")
+	PLUG.NewFlag("PLUG", false, full, short, "basic PLUG debuggging")
+	CHANGE.NewFlag("CHANGE", false, full, short, "user changed something")
 }

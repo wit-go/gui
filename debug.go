@@ -86,9 +86,9 @@ func (n *Node) ListChildren(dump bool) {
 		if (listChildrenParent != nil) {
 			log.Log(NODE, "\t\t\tlistChildrenParent =",listChildrenParent.id)
 			if (listChildrenParent.id != n.parent.id) {
-				log.Log(true, "parent =",n.parent.id, n.parent.Name)
-				log.Log(true, "listChildrenParent =",listChildrenParent.id, listChildrenParent.Name)
-				log.Log(true, listChildrenParent.id, "!=", n.parent.id)
+				log.Log(NOW, "parent =",n.parent.id, n.parent.Name)
+				log.Log(NOW, "listChildrenParent =",listChildrenParent.id, listChildrenParent.Name)
+				log.Log(NOW, listChildrenParent.id, "!=", n.parent.id)
 				log.Exit("parent.child does not match child.parent")
 			}
 		}
@@ -131,5 +131,5 @@ func logindent(b bool, depth int, format string, a ...any) {
 	// array prepend(). Why isn't this a standard function. It should be:
 	// a.prepend(debugGui, newFormat)
 	a = append([]any{b, newFormat}, a...)
-	log.Log(b, a...)
+	log.Log(NOW, a...)
 }

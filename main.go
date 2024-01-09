@@ -16,7 +16,7 @@ const Xaxis = 0 // stack things horizontally
 const Yaxis = 1 // stack things vertically
 
 func init() {
-	log.Log(true, "init() has been run")
+	log.Log(NOW, "init() has been run")
 
 	me.counter = 0
 	me.prefix = "wit"
@@ -155,10 +155,10 @@ func (n *Node) StandardClose() {
 // The window is destroyed and the application exits
 // TODO: properly exit the plugin since Quit() doesn't do it
 func StandardExit() {
-	log.Log(true, "wit/gui Standard Window Exit. running os.Exit()")
-	log.Log(true, "StandardExit() attempt to exit each toolkit plugin")
+	log.Log(NOW, "wit/gui Standard Window Exit. running os.Exit()")
+	log.Log(NOW, "StandardExit() attempt to exit each toolkit plugin")
 	for i, plug := range allPlugins {
-		log.Log(true, "NewButton()", i, plug)
+		log.Log(NOW, "NewButton()", i, plug)
 	}
 	log.Exit(0)
 }
