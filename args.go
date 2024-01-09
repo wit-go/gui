@@ -5,12 +5,12 @@ import (
 	"go.wit.com/log"
 )
 
-var INFO log.LogFlag
-var NOW log.LogFlag
-var GUI log.LogFlag
-var NODE log.LogFlag
-var PLUG log.LogFlag
-var CHANGE log.LogFlag
+var INFO *log.LogFlag
+var NOW *log.LogFlag
+var GUI *log.LogFlag
+var NODE *log.LogFlag
+var PLUG *log.LogFlag
+var CHANGE *log.LogFlag
 
 var argGui ArgsGui
 
@@ -31,10 +31,10 @@ func init() {
 	full := "go.wit.com/gui/gui"
 	short := "gui"
 
-	NOW.NewFlag("NOW", true,  full, short, "temp debugging stuff")
-	INFO.NewFlag("INFO", false, full, short, "General Info")
-	GUI.NewFlag("GUI", false, full, short, "basic GUI internals")
-	NODE.NewFlag("NODE", false, full, short, "binary tree debugging")
-	PLUG.NewFlag("PLUG", false, full, short, "basic PLUG debuggging")
-	CHANGE.NewFlag("CHANGE", false, full, short, "user changed something")
+	NOW = log.NewFlag("NOW", true,  full, short, "temp debugging stuff")
+	INFO = log.NewFlag("INFO", false, full, short, "General Info")
+	GUI = log.NewFlag("GUI", false, full, short, "basic GUI internals")
+	NODE = log.NewFlag("NODE", false, full, short, "binary tree debugging")
+	PLUG = log.NewFlag("PLUG", false, full, short, "basic PLUG debuggging")
+	CHANGE = log.NewFlag("CHANGE", false, full, short, "user changed something")
 }
