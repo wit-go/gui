@@ -90,6 +90,7 @@ type Node struct {
 	I	int
 	S	string
 	B	bool
+	value	any
 
 	// this function is run when there are mouse or keyboard events
 	Custom func()

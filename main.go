@@ -81,6 +81,12 @@ func (n *Node) doCustom() {
 
 func (n *Node) doUserEvent(a widget.Action) {
 	log.Info("doUserEvent() node =", n.id, n.Name)
+	if a.A != nil {
+		log.Warn("doUserEvent() a.A != nil", n.id, n.Name, "n.value =", a.A)
+		n.value = a.A
+		n.doCustom()
+		return
+	}
 	switch n.WidgetType {
 	case widget.Checkbox:
 		n.B = a.B

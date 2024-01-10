@@ -124,8 +124,11 @@ func (n *Node) AppendText(str string) {
 
 // should get the value of the node
 func (n *Node) GetText() string {
+	if n.value != nil {
+		return n.value.(string)
+	}
 	if (n.S != n.Text) {
-		log.Warn("GetText() is screwed up. TODO: fix this dumb crap")
+		log.Warn("GetText() is screwed up. TODO: fix this dumb crap. n.S =", n.S, "and n.Text =", n.Text)
 	}
 	if (n.S != "") {
 		return n.S
