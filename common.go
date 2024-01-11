@@ -4,7 +4,6 @@ package gui
 
 import (
 	"regexp"
-	"errors"
 	"go.wit.com/log"
 	"go.wit.com/gui/widget"
 )
@@ -66,44 +65,10 @@ func (n *Node) AddText(str string) {
 	}
 }
 
-func (n *Node) SetText(text string) *Node {
-	log.Log(CHANGE, "SetText() value =", text)
-
-	n.Text = text
-	n.S = text
-
-	if ! n.hidden {
-		a := newAction(n, widget.SetText)
-		sendAction(a)
-	}
-	return n
-}
-
 func (n *Node) SetNext(w int, h int) {
 	n.NextW = w
 	n.NextH = h
 	log.Info("SetNext() w,h =", n.NextW, n.NextH)
-}
-
-func (n *Node) Set(val any) {
-	log.Log(CHANGE, "Set() value =", val)
-
-	switch v := val.(type) {
-	case bool:
-		n.B = val.(bool)
-	case string:
-		n.Text = val.(string)
-		n.S = val.(string)
-	case int:
-		n.I = val.(int)
-	default:
-		log.Error(errors.New("Set() unknown type"), "v =", v)
-	}
-
-	if ! n.hidden {
-		a := newAction(n, widget.Set)
-		sendAction(a)
-	}
 }
 
 func (n *Node) AppendText(str string) {
@@ -246,7 +211,11 @@ func (n *Node) Window(title string) *Node {
 }
 
 func (n *Node) Ready() bool {
-	if n == nil {return false}
+	if n == nil {
+		log.Warn("Ready() got node == nil")
+		// TODO: figure out if you can identify the code trace to help find the root cause
+		return false
+	}
 	return true
 }
 
