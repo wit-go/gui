@@ -214,21 +214,18 @@ func initToolkit(name string, filename string) *aplug {
 	return newPlug
 }
 
+// 2024/01/11 finally moving to type any. simplify to just 'value'
 // 2023/05/09 pretty clean
-// 2023/04/06 Queue() is also being used and channels are being used. memcopy() only
+// 2023/04/06 Queue() is also being used and channels are being used.
 func newAction(n *Node, atype widget.ActionType) *widget.Action {
 	var a widget.Action
 	a.ActionType = atype
 	if (n == nil) {
 		return &a
 	}
-	a.Name = n.Name
-	a.Text = n.Text
 	a.WidgetId = n.id
-
-	a.B = n.B
-	a.I = n.I
-	a.S = n.S
+	a.ProgName = n.progname
+	a.Value = n.value
 
 	a.X = n.X
 	a.Y = n.Y

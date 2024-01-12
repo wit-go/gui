@@ -15,6 +15,8 @@ func (parent *Node) NewWindow(title string) *Node {
 	newNode.Custom = StandardExit
 
 	log.Info("NewWindow()", title)
+	newNode.progname = title
+	newNode.value = title
 
 	if ! newNode.hidden {
 		a := newAction(newNode, widget.Add)

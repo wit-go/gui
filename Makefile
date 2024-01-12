@@ -20,8 +20,8 @@ endif
 
 redomod:
 	rm -f go.*
-	go mod init
-	go mod tidy
+	GO111MODULE= go mod init
+	GO111MODULE= go mod tidy
 
 # should update every go dependancy (?)
 update:

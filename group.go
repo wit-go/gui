@@ -10,6 +10,8 @@ import (
 func (parent *Node) NewGroup(name string) *Node {
 	var newNode *Node
 	newNode = parent.newNode(name, widget.Group)
+	newNode.progname = name
+	newNode.value = name
 
 	if ! newNode.hidden {
 		a := newAction(newNode, widget.Add)

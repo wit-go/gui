@@ -15,13 +15,24 @@ import (
 // Native Windows and MacOS toolkits
 //
 // If that is the case, this code abstracts the concept of
-// windows and makes each window a 'tabs' in a single window.
+// windows and makes each window a 'tab' in a single window.
 //
 // Reminder from Goals: This is for simple GUI's.
 // For example, a "Mouse Control Panel" not the GIMP or blender.
 //
 
 var me guiConfig
+
+// Range(1, 10) includes the values 1 and 10
+// almost all toolkits use integers so there doesn't
+// seem to be a good idea to use 'type any' here as it
+// just makes things more complicated for no good reason
+type Range struct {
+	Low int
+	High int
+}
+
+type List []string
 
 type guiConfig struct {
 	initOnce sync.Once
@@ -56,13 +67,12 @@ type Node struct {
 
 	WidgetType	widget.WidgetType
 
-	// for NewLabel("hello"), Text = 'hello'
-	Text string  // what is visable to the user
+	// the current widget value.
+	value	any
 
-	// for NewLabel("hello"), if Name = 'HELLO'
 	// this can programatically identify the widget
 	// The name must be unique
-	Name string  // a name useful for debugging
+	progname string  // a name useful for debugging
 
 	// used for Windows in toolkits measured in pixels
 	width  int
@@ -86,11 +96,6 @@ type Node struct {
 	AtW	int
 	AtH	int
 
-	// the current widget value.
-	I	int
-	S	string
-	B	bool
-	value	any
 
 	// this function is run when there are mouse or keyboard events
 	Custom func()

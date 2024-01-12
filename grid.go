@@ -23,6 +23,16 @@ import (
 // -- (1,3) --       -- (3,3) --
 // -----------------------------
 
+type Grid struct {
+	Width int
+	Height int
+}
+
+type GridOffset struct {
+	X int
+	Y int
+}
+
 func (n *Node) NewGrid(name string, w int, h int) *Node {
 	newNode := n.newNode(name, widget.Grid)
 

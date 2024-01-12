@@ -21,6 +21,8 @@ func (n *Node) SetDropdownName(name string) {
 
 func (n *Node) NewDropdown(name string) *Node {
 	newNode := n.newNode(name, widget.Dropdown) 
+	newNode.progname = name
+	newNode.value = name
 
 	if ! newNode.hidden {
 		a := newAction(newNode, widget.Add)
@@ -32,6 +34,8 @@ func (n *Node) NewDropdown(name string) *Node {
 
 func (n *Node) NewCombobox(name string) *Node {
 	newNode := n.newNode(name, widget.Combobox) 
+	newNode.progname = name
+	newNode.value = name
 
 	if ! newNode.hidden {
 		a := newAction(newNode, widget.Add)

@@ -5,6 +5,8 @@ import "go.wit.com/gui/widget"
 func (parent *Node) NewButton(name string, custom func()) *Node {
 	newNode := parent.newNode(name, widget.Button)
 	newNode.Custom = custom
+	newNode.value = name
+	newNode.progname = name
 
 	if ! newNode.hidden {
 		a := newAction(newNode, widget.Add)

@@ -58,9 +58,9 @@ func watchCallback() {
 
 			n := me.rootNode.FindId(a.WidgetId)
 			if (n == nil) {
-				log.Warn("watchCallback() UNKNOWN widget id =", a.WidgetId, a.Name)
+				log.Warn("watchCallback() UNKNOWN widget id =", a.WidgetId, a.ProgName)
 			} else {
-				log.Info("watchCallback() FOUND widget id =", n.id, n.Name)
+				log.Info("watchCallback() FOUND widget id =", n.id, n.progname)
 				n.doUserEvent(a)
 			}
 			// this maybe a good idea?
@@ -71,7 +71,7 @@ func watchCallback() {
 }
 
 func (n *Node) doCustom() {
-	log.Info("doUserEvent() widget =", n.id, n.Name, n.WidgetType, n.B)
+	log.Info("doUserEvent() widget =", n.id, n.progname, n.WidgetType)
 	if (n.Custom == nil) {
 		log.Warn("Custom() = nil. SKIPPING")
 		return
@@ -80,47 +80,49 @@ func (n *Node) doCustom() {
 }
 
 func (n *Node) doUserEvent(a widget.Action) {
-	log.Info("doUserEvent() node =", n.id, n.Name)
-	if a.A != nil {
-		log.Warn("doUserEvent() a.A != nil", n.id, n.Name, "n.value =", a.A)
-		n.value = a.A
-		n.doCustom()
+	log.Info("doUserEvent() node =", n.id, n.progname)
+	if a.Value == nil {
+		log.Warn("doUserEvent() a.A == nil", n.id, n.progname)
 		return
 	}
+	n.value = a.Value
+	n.doCustom()
+	return
+	/*
 	switch n.WidgetType {
 	case widget.Checkbox:
-		n.B = a.B
-		log.Info("doUserEvent() node =", n.id, n.Name, "set to:", n.B)
+		log.Info("doUserEvent() node =", n.id, n.progname, "set to:", n.value)
 		n.doCustom()
 	case widget.Button:
-		log.Info("doUserEvent() node =", n.id, n.Name, "button clicked")
+		log.Info("doUserEvent() node =", n.id, n.progname, "button clicked")
 		n.doCustom()
 	case widget.Combobox:
 		n.S = a.S
-		log.Info("doUserEvent() node =", n.id, n.Name, "set to:", n.S)
+		log.Info("doUserEvent() node =", n.id, n.progname, "set to:", n.S)
 		n.doCustom()
 	case widget.Dropdown:
 		n.S = a.S
-		log.Info("doUserEvent() node =", n.id, n.Name, "set to:", n.S)
+		log.Info("doUserEvent() node =", n.id, n.progname, "set to:", n.S)
 		n.doCustom()
 	case widget.Textbox:
 		n.S = a.S
-		log.Info("doUserEvent() node =", n.id, n.Name, "set to:", n.S)
+		log.Info("doUserEvent() node =", n.id, n.progname, "set to:", n.S)
 		n.doCustom()
 	case widget.Spinner:
 		n.I = a.I
-		log.Info("doUserEvent() node =", n.id, n.Name, "set to:", n.I)
+		log.Info("doUserEvent() node =", n.id, n.progname, "set to:", n.I)
 		n.doCustom()
 	case widget.Slider:
 		n.I = a.I
-		log.Info("doUserEvent() node =", n.id, n.Name, "set to:", n.I)
+		log.Info("doUserEvent() node =", n.id, n.progname, "set to:", n.I)
 		n.doCustom()
 	case widget.Window:
-		log.Info("doUserEvent() node =", n.id, n.Name, "window closed")
+		log.Info("doUserEvent() node =", n.id, n.progname, "window closed")
 		n.doCustom()
 	default:
 		log.Info("doUserEvent() type =", n.WidgetType)
 	}
+	*/
 }
 
 // There should only be one of these per application
@@ -154,7 +156,7 @@ func (n *Node) Default() *Node {
 
 // The window is destroyed but the application does not quit
 func (n *Node) StandardClose() {
-	log.Log(GUI, "wit/gui Standard Window Close. name =", n.Name)
+	log.Log(GUI, "wit/gui Standard Window Close. name =", n.progname)
 	log.Log(GUI, "wit/gui Standard Window Close. n.Custom exit =", n.Custom)
 }
 

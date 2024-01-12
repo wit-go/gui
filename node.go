@@ -31,8 +31,7 @@ func (n *Node) newNode(title string, t widget.WidgetType) *Node {
 */
 func addNode(title string) *Node {
 	n := new(Node)
-	n.Name = title
-	n.Text = title
+	n.label = title
 	n.id = me.counter
 	log.Log(NODE, "addNode = widget setid =", n.id)
 
@@ -46,12 +45,12 @@ func (n *Node) Parent() *Node {
 
 func (n *Node) Delete(d *Node) {
 	for i, child := range n.children {
-		log.Log(NODE, "\t", i, child.id, child.Name)
+		log.Log(NODE, "\t", i, child.id, child.progname)
 		if (child.id == d.id) {
 			log.Log(NODE, "\t\t Deleting this")
 			n.children = append(n.children[:i], n.children[i+1:]...)
 			return
 		}
 	}
-	log.Warn("did not find node to delete", d.id, d.Name)
+	log.Warn("did not find node to delete", d.id, d.progname)
 }

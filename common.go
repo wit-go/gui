@@ -45,7 +45,7 @@ func (n *Node) Disable() *Node {
 func (n *Node) Add(str string) {
 	log.Log(GUI, "gui.Add() value =", str)
 
-	n.S = str
+	n.value = str
 
 	if ! n.hidden {
 		a := newAction(n, widget.Add)
@@ -56,8 +56,7 @@ func (n *Node) Add(str string) {
 func (n *Node) AddText(str string) {
 	log.Log(CHANGE, "AddText() value =", str)
 
-	n.Text = str
-	n.S = str
+	n.value = str
 
 	if ! n.hidden {
 		a := newAction(n, widget.AddText)
@@ -72,9 +71,8 @@ func (n *Node) SetNext(w int, h int) {
 }
 
 func (n *Node) AppendText(str string) {
-	tmp := n.S + str
-	n.Text = tmp
-	n.S = tmp
+	tmp := widget.GetString(n.value) + str
+	n.value = tmp
 
 	if ! n.hidden {
 		a := newAction(n, widget.SetText)
@@ -87,26 +85,31 @@ func (n *Node) AppendText(str string) {
 // Value() ?
 // Progname() Reference() ?
 
-// should get the value of the node
+// get a string from the widget
 func (n *Node) GetText() string {
-	if n.value != nil {
-		return n.value.(string)
-	}
-	if (n.S != n.Text) {
-		log.Warn("GetText() is screwed up. TODO: fix this dumb crap. n.S =", n.S, "and n.Text =", n.Text)
-	}
-	if (n.S != "") {
-		return n.S
-	}
-	return n.Text
+	if ! n.Ready() { return "" }
+	return widget.GetString(n.value)
 }
 
-// should get the value of the node
+// get a string from the widget
+func (n *Node) GetInt() int {
+	if ! n.Ready() { return -1 }
+	return widget.GetInt(n.value)
+}
+
+// get a string from the widget
+func (n *Node) GetBool() bool {
+	if ! n.Ready() { return false}
+	return widget.GetBool(n.value)
+}
+
+// should get the reference name used for programming and debugging
 // myButton = myGroup.NewButton("hit ball", nil).SetName("HIT")
 // myButton.GetName() should return "HIT"
 // n = Find("HIT") should return myButton
 func (n *Node) GetName() string {
-	return n.Name
+	if ! n.Ready() { return "" }
+	return n.progname
 }
 
 /*
@@ -205,9 +208,16 @@ func (n *Node) Expand() *Node {
 //  me.window = myGui.New2().Window("DNS and IPv6 Control Panel").Standard()
 //  myFunnyWindow = myGui.NewWindow("Hello").Standard().SetText("Hola")
 
+/*
 func (n *Node) Window(title string) *Node {
 	log.Warn("Window()", n)
 	return n.NewWindow(title)
+}
+*/
+
+func (n *Node) ProgName() string {
+	if ! n.Ready() { return "" }
+	return n.progname
 }
 
 func (n *Node) Ready() bool {

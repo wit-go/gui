@@ -21,7 +21,7 @@ func (n *Node) Dump() {
 	b := true
 	Indent(b, "NODE DUMP START")
 	Indent(b, "id           = ", n.id)
-	Indent(b, "Name         = ", n.Name)
+	Indent(b, "progname     = ", n.progname)
 	Indent(b, "(X,Y)        = ", n.X, n.Y)
 	Indent(b, "Next (W,H)   = ", n.NextW, n.NextH)
 
@@ -57,7 +57,7 @@ func (n *Node) dumpWidget(b bool) string {
 	}
 	info = n.WidgetType.String()
 
-	d = strconv.Itoa(n.id) + " " + info + " " + n.Name
+	d = strconv.Itoa(n.id) + " " + info + " " + n.progname
 
 	var tabs string
 	for i := 0; i < listChildrenDepth; i++ {
@@ -86,8 +86,8 @@ func (n *Node) ListChildren(dump bool) {
 		if (listChildrenParent != nil) {
 			log.Log(NODE, "\t\t\tlistChildrenParent =",listChildrenParent.id)
 			if (listChildrenParent.id != n.parent.id) {
-				log.Log(NOW, "parent =",n.parent.id, n.parent.Name)
-				log.Log(NOW, "listChildrenParent =",listChildrenParent.id, listChildrenParent.Name)
+				log.Log(NOW, "parent =",n.parent.id, n.parent.progname)
+				log.Log(NOW, "listChildrenParent =",listChildrenParent.id, listChildrenParent.progname)
 				log.Log(NOW, listChildrenParent.id, "!=", n.parent.id)
 				log.Exit("parent.child does not match child.parent")
 			}

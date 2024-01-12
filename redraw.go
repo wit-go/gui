@@ -21,12 +21,12 @@ func (n *Node) redraw(p *aplug) {
 }
 
 func (n *Node) redo(plug *aplug) {
-	log.Info("redo()", plug.name, n.id, n.WidgetType, n.Name)
+	log.Info("redo()", plug.name, n.id, n.WidgetType, n.progname)
 
 	var a *widget.Action
 	a = new(widget.Action)
-	a.Name = n.Name
-	a.Text = n.Text
+	a.ProgName = n.progname
+	a.Value = n.value
 
 	a.ActionType = widget.Add
 	a.WidgetType = n.WidgetType
@@ -39,11 +39,6 @@ func (n *Node) redo(plug *aplug) {
 	// grid stuff
 	a.AtW = n.AtW
 	a.AtH = n.AtH
-
-	// used for values
-	a.I = n.I
-	a.S = n.S
-	a.B = n.B
 
 	if (n.parent == nil) {
 		a.ParentId = 0
