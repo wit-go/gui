@@ -11,7 +11,8 @@ import (
 func (n *Node) newNode(title string, t widget.WidgetType) *Node {
 	var newN *Node
 
-	newN = addNode(title)
+	newN = addNode()
+	newN.value = title
 	newN.WidgetType = t
 
 	if n.WidgetType == widget.Grid {
@@ -29,9 +30,8 @@ func (n *Node) newNode(title string, t widget.WidgetType) *Node {
 /*
 	raw create function for a new node struct
 */
-func addNode(title string) *Node {
+func addNode() *Node {
 	n := new(Node)
-	n.label = title
 	n.id = me.counter
 	log.Log(NODE, "addNode = widget setid =", n.id)
 

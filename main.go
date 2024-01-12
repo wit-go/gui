@@ -22,7 +22,8 @@ func init() {
 	me.prefix = "wit"
 
 	// Populates the top of the binary tree
-	me.rootNode = addNode("guiBinaryTree")
+	me.rootNode = addNode()
+	me.rootNode.progname = "guiBinaryTree"
 	me.rootNode.WidgetType = widget.Root
 	me.rootNode.hidden = false // always send the rootNode to the toolkits
 
